@@ -1,0 +1,15 @@
+.title-bar {
+    -webkit-app-region: drag;
+    -webkit-user-select: none;
+    width: calc(100% - 20px);
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 3;
+}
+

@@ -1,0 +1,6 @@
+
+h1 {
+    font-weight: 400;
+    letter-spacing: var(--font-spacing);
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}

@@ -1,0 +1,21 @@
+
+.create-server-button-container {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.3;
+}
+
+.create-server-button-container:hover {
+    opacity: 0.5;
+}
+
+.create-server-button-container h3 {
+    font-size: 1.5rem;
+    letter-spacing: var(--font-spacing);
+    font-weight: 400;
+}
+

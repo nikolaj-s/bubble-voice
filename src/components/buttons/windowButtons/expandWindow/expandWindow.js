@@ -1,0 +1,28 @@
+import React from 'react'
+
+export const ExpandWindow = ({ action }) => {
+
+    const styles = {
+        container: {
+            width: 20,
+            height: 20
+        },
+        icon: {
+            width: "100%",
+            height: "100%",
+            objectFit: "contain"
+        }
+    }
+
+    const handleAction = () => {
+        action('max')
+    }
+
+    return (
+        <div id="expand-window" onClick={handleAction} style={styles.container}>
+            <svg style={styles.container} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 1H5C2.79086 1 1 2.79086 1 5V15C1 17.2091 2.79086 19 5 19H15C17.2091 19 19 17.2091 19 15V5C19 2.79086 17.2091 1 15 1Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+        </div>
+    )
+}

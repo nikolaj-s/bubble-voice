@@ -1,0 +1,12 @@
+
+.settings-category-button {
+    width: calc(100% - 20px - 8px);
+    border-radius: var(--border-radius);
+    padding: 0 10px;
+    margin: 8px 0;
+}
+
+.settings-category-button h3 {
+    font-weight: 400;
+    letter-spacing: var(--font-spacing);
+}

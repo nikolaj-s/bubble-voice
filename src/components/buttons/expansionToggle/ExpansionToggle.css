@@ -1,0 +1,13 @@
+.expansion-toggle-button {
+    cursor: pointer;
+    -webkit-app-region: no-drag;
+    pointer-events: fill;
+    padding: 10px;
+    border-radius: 50%;
+}
+
+.expansion-toggle-button svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

@@ -1,0 +1,61 @@
+.sign-in-outer-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+
+.sign-in-inner-container {
+    width: 60%;
+    height: 65%;
+    min-width: 400px;
+    min-height: 700px;
+    max-width: 800px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    display: flex;
+    justify-content: center;
+}
+
+.content-wrapper {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.sign-in-header {
+    margin-top: 0;
+}
+
+.content-wrapper h2 {
+    font-size: 2.6rem;
+    font-weight: 400;
+    letter-spacing: var(--font-spacing);
+}
+
+.sign-spacer-container {
+    width: calc(100%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 4% 0 0 0;
+    opacity: 0.5;
+}
+
+.sign-spacer-container h3 {
+    letter-spacing: var(--font-spacing);
+}
+
+.sign-spacer-container .line-spacer {
+    height: 2px;
+    background-color: black;
+    width: 45%;
+}

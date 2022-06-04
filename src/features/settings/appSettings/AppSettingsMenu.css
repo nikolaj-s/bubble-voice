@@ -1,0 +1,19 @@
+
+.app-settings-menu {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.inner-app-settings-container {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 80px;
+    justify-content: space-between;
+}

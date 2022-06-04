@@ -1,0 +1,29 @@
+.drop-down-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.drop-down-content {
+    width: 95%;
+    border-bottom-left-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+    overflow: hidden;
+    position: absolute;
+    z-index: 1;
+    top: 88px;
+}
+
+.drop-down-content li {
+    list-style: none;
+    padding: 2rem;
+    font-size: 1.4rem;
+    cursor: pointer;
+    width: calc(100% - 4rem);
+}
+
+.drop-down-content li:hover {
+    opacity: 0.5;
+}

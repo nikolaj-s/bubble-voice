@@ -1,0 +1,13 @@
+
+.side-bar-header-container {
+    display: flex;
+    width: calc(100% - 20px);
+    padding: 0 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 70px;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 3;
+}
