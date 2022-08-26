@@ -1,0 +1,23 @@
+.text-area-container {
+    width: calc(100% - 8px);
+    max-height: 400px;
+    height: 100%;
+    display: flex;
+    overflow: hidden;
+    border-radius: var(--border-radius);
+}
+
+.text-area-container textarea {
+    resize: none;
+    border: none;
+    width: calc(100% - 2rem);
+    height: 100%;
+    font-size: 1.8rem;
+    font-family: var(--font-family);
+    padding: 1rem;
+    letter-spacing: var(--font-spacing);
+}
+
+.text-area-container textarea:focus {
+    outline: none;
+}

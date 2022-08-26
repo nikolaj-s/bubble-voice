@@ -11,10 +11,13 @@ import { ShareScreenButton } from '../../components/buttons/mediaButtons/shareSc
 import { ConnectionIndicator } from '../../components/connectionIndicator/ConnectionIndicator';
 
 // state
-import { selectAudioState, selectMicrophoneState, selectScreenShareState, selectWebCamState, toggleControlState } from './ControlBarSlice';
+import { resetControlState, selectAudioState, selectingScreensState, selectMicrophoneState, selectScreenShareState, selectWebCamState, toggleControlState } from './ControlBarSlice';
 
 // style's
 import "./ControlBar.css";
+import { ScreenShareMenu } from './ScreenShareMenu/ScreenShareMenu';
+import { selectCurrentChannelId } from '../server/ServerSlice';
+import { playSoundEffect } from '../settings/soundEffects/soundEffectsSlice';
 
 export const ControlBar = () => {
 
@@ -31,39 +34,80 @@ export const ControlBar = () => {
 
     const screenShareState = useSelector(selectScreenShareState);
 
+    const current_channel_id = useSelector(selectCurrentChannelId);
+
+    const selectingScreens = useSelector(selectingScreensState);
+
     const toggleFunction = (state) => {
+        if (current_channel_id === null) return;
+        
+        dispatch(playSoundEffect('controlSoundEffect'))
+
         dispatch(toggleControlState(state))
+
+        if (state === 'audioState' && microphoneState === true) {
+            dispatch(toggleControlState('microphoneState'))
+        }
+
+        if (state === 'microphoneState' && audioState === false) {
+            dispatch(toggleControlState('audioState'))
+        }
+
     }
 
     const toggleAppSettings = () => {
         const url = window.location.hash.split('#')[1]
 
         if (url.search('/appsettings') === -1) {
-            navigate(url + "/appsettings/account")
+            if (url.includes('server-settings')) {
+                navigate(url.split('/server-settings')[0] + '/appsettings/account')
+            } else {
+                navigate(url + "/appsettings/account")
+            }
+            
         } else {
             navigate(url.split('/appsettings')[0])
         }
             
     }
 
+    React.useEffect(() => {
+        dispatch(resetControlState());
+    // eslint-disable-next-line
+    }, [current_channel_id])
+
     return (
-        <div className='control-bar-container'>
-            <SettingsButton action={toggleAppSettings} />
-            <div className='controls-wrapper'>
-                <WebCamButton 
-                action={() => {toggleFunction('webCamState')}} 
-                state={webCamState} />
-                <MicToggleButton 
-                action={() => {toggleFunction('microphoneState')}} 
-                state={microphoneState} />
-                <AudioToggleButton 
-                action={() => {toggleFunction('audioState')}} 
-                state={audioState} />
-                <ShareScreenButton 
-                action={() => {toggleFunction('screenShareState')}} 
-                state={screenShareState} />
+        <>
+            {selectingScreens ? <ScreenShareMenu /> : null}
+            <div className='control-bar-container'>
+                <SettingsButton action={toggleAppSettings} />
+                <div className='controls-wrapper'>
+                    <WebCamButton 
+                    action={() => {toggleFunction('webCamState')}} 
+                    state={webCamState} 
+                    active={current_channel_id === null}
+                    id={'web-cam-toggle-button'}
+                    />
+                    <MicToggleButton 
+                    action={() => {toggleFunction('microphoneState')}} 
+                    state={microphoneState} 
+                    active={current_channel_id === null}
+                    id={"toggle-microphone-button"}
+                    />
+                    <AudioToggleButton 
+                    action={() => {toggleFunction('audioState')}} 
+                    state={audioState} 
+                    active={current_channel_id === null}
+                    id={"mute-audio-toggle-button"}
+                    />
+                    <ShareScreenButton 
+                    action={() => {toggleFunction('screenShareState')}} 
+                    state={screenShareState} 
+                    active={current_channel_id === null}
+                    />
+                </div>
+                <ConnectionIndicator active={current_channel_id !== null} />
             </div>
-            <ConnectionIndicator />
-        </div>
+        </>
     )
 }

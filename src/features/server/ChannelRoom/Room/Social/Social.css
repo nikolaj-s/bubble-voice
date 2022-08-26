@@ -1,0 +1,42 @@
+.social-outer-container {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.social-inner-container {
+    max-width: 1400px;
+    width: 98%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    justify-content: space-between;
+}
+
+.social-messages-wrapper {
+    padding-top: 5rem;
+    height: 100%;
+    flex-grow: 2;
+    display: flex;
+    min-width: 100%;
+    flex-direction: column-reverse;
+    margin-bottom: 1rem;
+    overflow-y: auto;
+}
+
+.image-social-post-preview {
+    max-width: 400px;
+    max-height: 400px;
+    position: absolute;
+    bottom: 100px;
+    right: 2%;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}

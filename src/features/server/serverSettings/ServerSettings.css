@@ -1,0 +1,37 @@
+.server-settings-menu {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    bottom: 4px;
+    width: 100%;
+    height: calc(100% - 4px);
+    display: flex;
+    justify-content: center;
+}
+
+.inner-server-settings-container {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+    justify-content: space-between;
+}
+
+.server-settings-route-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: 3;
+}
+
+.server-settings-wrapping-container {
+    display: flex;
+    flex-direction: column;
+    width: 95%;
+    max-width: 1200px;
+}

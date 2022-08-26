@@ -1,0 +1,25 @@
+
+.image-widget-button-container {
+    width: 48%;
+    height: calc(100% - 8px);
+    border-radius: var(--border-radius);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.image-widget-button-container div {
+    display: flex;
+    width: 100px;
+    height: 100px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.image-widget-button-container h2 {
+    font-weight: 400;
+    letter-spacing: var(--font-spacing);
+}

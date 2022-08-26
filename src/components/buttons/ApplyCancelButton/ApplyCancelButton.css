@@ -1,8 +1,8 @@
 
 .apply-cancel-button-container {
-    position: absolute;
+    
     bottom: 0;
-    height: 60px;
+    min-height: 70px;
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -13,7 +13,7 @@
     border: 2px solid rgba(0, 0, 0, 0);
     border-radius: var(--border-radius);
     height: 100%;
-    width: 48%;
+    width: calc(50% - 5px);
     cursor: pointer;
     font-weight: 400;
     letter-spacing: var(--font-spacing);

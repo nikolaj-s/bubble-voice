@@ -7,3 +7,15 @@
     padding-bottom: 12px;
     position: relative;
 }
+
+.leave-server-button {
+    width: calc(100% - 125px);
+    left: 5%;
+    bottom: 25px;
+    position: absolute;
+}
+
+.leave-server-button button {
+    height: 70px;
+    object-fit: contain;
+}

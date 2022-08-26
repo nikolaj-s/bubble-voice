@@ -35,7 +35,8 @@ export const SettingsCategoryButton = ({name, link, action, active}) => {
                 border: `solid 4px ${primaryColor}`
             })
         }
-    }, [active])
+    // eslint-disable-next-line
+    }, [active, primaryColor])
 
     return (
         <motion.div 
@@ -52,7 +53,7 @@ export const SettingsCategoryButton = ({name, link, action, active}) => {
             border: `solid 4px ${active ? accentColor : primaryColor}`
         }}
         >
-            <h3>{name}</h3>
+            <h3 style={{color: textColor}}>{name}</h3>
         </motion.div>
     )
 }

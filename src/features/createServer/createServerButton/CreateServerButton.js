@@ -2,7 +2,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate, useRoutes } from 'react-router';
-import { selectAccentColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectTextColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 // component's
 import "./CreateServerButton.css";
 
@@ -12,6 +12,8 @@ import "./CreateServerButton.css";
 const ServerButton = () => {
 
     const accentColor = useSelector(selectAccentColor);
+
+    const textColor = useSelector(selectTextColor);
 
     const navigate = useNavigate();
 
@@ -26,7 +28,9 @@ const ServerButton = () => {
             backgroundColor: accentColor
         }}
         className='create-server-button-container'>
-            <h3>Create Server</h3>
+            <h3
+            style={{color: textColor}}
+            >Create Server</h3>
         </div>
     )
 }

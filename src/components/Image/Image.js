@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 // state
 import { selectPrimaryColor, selectSecondaryColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
-export const Image = ({image, key = 'one', objectFit = 'cover', position = 'relative'}) => {
+export const Image = ({image, objectFit = 'cover', position = 'relative', zIndex = 0}) => {
 
     const [loading, toggleLoading] = React.useState(true);
 
@@ -25,8 +25,8 @@ export const Image = ({image, key = 'one', objectFit = 'cover', position = 'rela
     }
 
     return (
-        <div style={{zIndex: 0, position: position, objectFit: objectFit, width: '100%', height: '100%'}}>
-            {loading && image === "" ?
+        <div style={{zIndex: zIndex, position: position, objectFit: objectFit, width: '100%', height: '100%'}}>
+            {loading && image !== "" && image !== undefined ?
             <motion.div 
             style={{
                 background: `linear-gradient(270deg, ${secondaryColor}, ${primaryColor}, ${secondaryColor})`,
@@ -42,7 +42,7 @@ export const Image = ({image, key = 'one', objectFit = 'cover', position = 'rela
             transition={{ease: 'linear', duration: 3, repeat: Infinity}}
             ></motion.div>         
             : null}
-            <motion.img style={{width: '100%', height: '100%', objectFit: objectFit}} initial={{opacity: 0}} animate={imageAnimation} onLoad={handleImageLoad} src={image} alt="Error Loading" />
+            <motion.img draggable={false} style={{width: '100%', height: '100%', objectFit: objectFit}} initial={{opacity: 0}} animate={imageAnimation} onLoad={handleImageLoad} src={image} alt="Error Loading" />
         </div>
     )
 }

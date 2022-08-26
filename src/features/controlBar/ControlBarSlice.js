@@ -7,7 +7,10 @@ const controlBarSlice = createSlice({
         microphoneState: true,
         webCamState: true,
         audioState: true,
-        screenShareState: true
+        screenShareState: true,
+        screens: [],
+        selectingScreens: false,
+        currentScreen: null
     },
     reducers: {
         toggleControlState: (state, action) => {
@@ -16,6 +19,24 @@ const controlBarSlice = createSlice({
             } else {
                 state[action.payload] = true;
             }
+        },
+        setScreens: (state, action) => {
+            state.screens = action.payload;
+        },
+        setSelectedScreen: (state, action) => {
+            state.setSelectedScreen = action.payload;
+        },
+        resetControlState: (state, action) => {
+            state.microphoneState = true;
+            state.webCamState = true;
+            state.audioState = true;
+            state.screenShareState = true;
+        },
+        setSelectingScreensState: (state, action) => {
+            state.selectingScreens = action.payload;
+        },
+        setCurrentScreen: (state, action) => {
+            state.currentScreen = action.payload;
         }
     }
 })
@@ -30,8 +51,13 @@ export const selectAudioState = state => state.controlBarSlice.audioState;
 
 export const selectScreenShareState = state => state.controlBarSlice.screenShareState;
 
+export const selectScreens = state => state.controlBarSlice.screens;
+
+export const selectCurrentScreen = state => state.controlBarSlice.currentScreen;
+
+export const selectingScreensState = state => state.controlBarSlice.selectingScreens;
 // actions
 
-export const { toggleControlState } = controlBarSlice.actions;
+export const { setCurrentScreen, setSelectingScreensState, resetControlState, toggleControlState, setScreens, setSelectedScreen } = controlBarSlice.actions;
 
 export default controlBarSlice.reducer;

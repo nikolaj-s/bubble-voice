@@ -7,19 +7,18 @@ import { Provider } from 'react-redux';
 
 import store from './store/store';
 import { HashRouter } from 'react-router-dom';
-
-
+import { AnimatePresence } from 'framer-motion';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
+  <Provider store={store}>
+    <AnimatePresence exitBeforeEnter >
       <HashRouter window={window}>
         <App />
       </HashRouter>
-    </Provider>
-  </React.StrictMode>
+    </AnimatePresence>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

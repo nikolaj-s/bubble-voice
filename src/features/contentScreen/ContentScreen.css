@@ -2,16 +2,18 @@
 
 .content-screen-container {
     width: 64%;
+    max-width: calc(100% - 20px);
+    margin: 0 10px;
+    flex-grow: 2;
     height: 100%;
     display: flex;
     flex-direction: column;
 }
 
 .content-screen-inner-container {
-    height: calc(100% - 50px - 1%);
+    height: calc(100% - 45px - 1%);
     width: 100%;
-    border-bottom-left-radius: var(--border-radius);
-    border-bottom-right-radius: var(--border-radius);
+    border-radius: var(--border-radius);
     display: flex;
     flex-direction: column;
     align-items: center;

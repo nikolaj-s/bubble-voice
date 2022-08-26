@@ -11,9 +11,12 @@ import { SettingsCategoryButton } from '../../../components/buttons/SettingsCate
 
 // state
 import { selectSecondaryColor } from './appearanceSettings/appearanceSettingsSlice';
+import { handleSignOut } from '../appSettings/accountSettings/accountSettingsSlice';
+import { signInHandleLogOutState } from '../../LoggingIn/signIn/signInSlice';
 
 // style's
 import "./AppSettingsMenu.css";
+import { clearToken } from '../../../util/Validation';
 
 const SettingsMenu = () => {
 
@@ -38,12 +41,14 @@ const SettingsMenu = () => {
         return () => {
             dispatch(setSideBarHeader(""))
         }
+    // eslint-disable-next-line
     }, [])
 
 
     const handleLogOut = () => {
-        // temp functionality
-        console.log('function sign out')
+        clearToken();
+        dispatch(handleSignOut())
+        dispatch(signInHandleLogOutState())
         navigate("/signin")
     }
 
@@ -59,6 +64,7 @@ const SettingsMenu = () => {
                 <div className='setting-buttons-wrapper'>
                     {settings.map((setting, i) => {
                         return (<SettingsCategoryButton 
+                                key={setting.name}
                                 action={navigateSettings} 
                                 name={setting.name} 
                                 link={setting.link}
@@ -75,6 +81,12 @@ const SettingsMenu = () => {
 export const AppSettingsMenu = () => useRoutes([
     { path: "createserver/appsettings/*", element: <SettingsMenu /> },
     { path: "server/:id/appsettings/*", element: <SettingsMenu />},
+    { path: "join-server/:id/appsettings/*", element: <SettingsMenu /> },
+    { path: "server/:id/create-channel-menu/appsettings/*", element: <SettingsMenu />},
+    { path: "server/:id/channel/:id/create-channel-menu/appsettings/*", element: <SettingsMenu />},
+    { path: "server/:id/channel/:id/appsettings/*", element: <SettingsMenu />},
+    { path: "server/:id/channel/:id/server-settings/:id/appsettings/*", element: <SettingsMenu />},
+    { path: "server/:id/server-settings/:id/appsettings/*", element: <SettingsMenu />},
     { path: "appsettings/*", element: <SettingsMenu />}
 ])
 

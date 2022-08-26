@@ -1,0 +1,18 @@
+.option-spacer-container {
+    width: calc(100%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2% 0;
+    opacity: 0.5;
+}
+
+.option-spacer-container h3 {
+    letter-spacing: var(--font-spacing);
+}
+
+.option-spacer-container .line-spacer {
+    height: 2px;
+    background-color: black;
+    width: 45%;
+}

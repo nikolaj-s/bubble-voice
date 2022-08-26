@@ -1,0 +1,15 @@
+
+.title-widget-button-container {
+    width: calc(100% - 1rem - 8px);
+    height: 70px;
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    padding: 0 0.5rem;
+    cursor: pointer;
+}
+
+.title-widget-button-container h2 {
+    font-weight: 400;
+    letter-spacing: var(--font-spacing);
+}

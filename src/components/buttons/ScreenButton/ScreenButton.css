@@ -1,0 +1,13 @@
+.screen-button-container {
+    width: 150px;
+    height: auto;
+    margin: 3rem 0;
+    cursor: pointer;
+    border-radius: var(--border-radius);
+}
+
+.screen-button-container p {
+    max-width: 150px;
+    word-wrap: break-word;
+    text-align: center;
+}

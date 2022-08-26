@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router';
 
 // components
 import { BubbleLogo } from '../../../components/Icons/bubbleLogo/BubbleLogo';
-import { ExpansionToggle } from '../../../components/buttons/expansionToggle/ExpansionToggle';
 import { HeaderTitle } from '../../../components/titles/headerTitle/headerTitle';
 import { selectSideBarHeader } from '../sideBarSlice';
 
@@ -26,7 +25,7 @@ export const SideBarHeader = () => {
         <div className='side-bar-header-container'>
             <BubbleLogo action={returnToServerSelect} />
             <HeaderTitle title={title} />
-            <ExpansionToggle />
+            <div style={{width: 50, flexShrink: 0}}></div>
         </div>
     )
 }

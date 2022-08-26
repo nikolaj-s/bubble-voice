@@ -1,0 +1,56 @@
+
+.channel-button-container {
+    width: calc(100% - 8px - 4%);
+    height: calc(80px - 8px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: var(--border-radius);
+    margin-bottom: 2%;
+    padding: 0 2%;
+}
+
+
+.channel-button-container h3 {
+    font-size: 1.3rem;
+    font-weight: 400;
+    letter-spacing: var(--font-spacing);
+}
+
+.channel-user-placeholder {
+    width: 95%;
+    margin-left: 5%;
+    display: flex;
+    height: 60px;
+    align-items: center;
+    margin-bottom: 2%;
+    cursor: pointer;
+}
+
+.channel-user-placeholder h3 {
+    font-size: 1.2rem;
+    font-weight: 400;
+    letter-spacing: var(--font-spacing);
+}
+
+.channel-user-placeholder-user-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 5%;
+    flex-shrink: 0;
+}
+
+.user-status-wrapper {
+    justify-self: flex-end;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: flex-end;
+    height: 100%;
+}
+
+.user-status-wrapper div {
+    margin: 0 1rem;
+}

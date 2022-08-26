@@ -1,0 +1,26 @@
+
+.listen-to-audio-container {
+    width: 100%;
+    height: 200px;
+    position: relative;
+}
+
+#mic-feed-back {
+    display: none;
+}
+
+.audio-level-bars-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 88px;
+    margin-bottom: 2%;
+}
+
+.audio-level-bars-container .pid {
+    height: 100%;
+    min-width: 10px;
+    width: 100%;
+    margin: 0 .4rem;
+    display: flex;
+}

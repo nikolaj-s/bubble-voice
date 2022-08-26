@@ -1,0 +1,20 @@
+
+.server-settings-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+    z-index: 4;
+    -webkit-app-region: no-drag;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+}
+
+.server-settings-button:hover {
+    opacity: 0.5;
+}

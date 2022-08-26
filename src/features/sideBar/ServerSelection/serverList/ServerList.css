@@ -5,4 +5,19 @@
     display: flex;
     flex-direction: column;
     position: relative;
+    min-width: 100%;
+    flex-shrink: 0;
+}
+
+.no-joined-servers {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    width: 100%;
+    text-align: center;
+    opacity: 0.5;
+    letter-spacing: var(--font-spacing);
+    cursor: default;
 }

@@ -1,0 +1,9 @@
+
+.video-widget-container {
+    width: 100%;
+    max-height: 500px;
+    background-color: black;
+    margin: 1% 0;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}

@@ -1,9 +1,11 @@
 .text-input-container {
-    height: calc(88px - 18px);
+    min-height: calc(70px - 18px);
+    max-height: calc(88px - 18px);
     width: calc(100% - 18px);
     border-radius: 15px;
     padding: 5px;
-    margin-bottom: 2%;
+    display: flex;
+    align-items: center;
 }
 
 .text-input-container input {
@@ -14,6 +16,8 @@
     font-size: 2rem;
     letter-spacing: var(--font-spacing);
     font-family: var(--font-family);
+    font-weight: 400;
+    letter-spacing: var(--font-spacing);
 }
 
 .text-input-container input:focus {

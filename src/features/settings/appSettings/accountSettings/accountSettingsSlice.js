@@ -1,25 +1,183 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+import { throwInitializationError } from "../../../initializingAppScreen/initializingAppScreenSlice";
 
+import Axios from 'axios';
+import { getToken, url } from "../../../../util/Validation";
+
+export const fetchAccount = createAsyncThunk(
+    'accountSettingsSlice/fetchAccount',
+    async (_, { rejectWithValue, dispatch }) => {
+        const token = await getToken();
+        
+        if (token) {
+            const account = await Axios({
+                method: 'GET',
+                url: `${url}/fetch-account`,
+                headers: {"TOKEN": token}
+            }).then(response => {
+                
+                if (response.data.error) return rejectWithValue({error: true})
+
+                if (response.data.success) return {success: true, account: response.data.account}
+
+                return rejectWithValue({error: true});
+            }).catch(error => {
+                dispatch(throwInitializationError("Connection Error"))
+            })
+
+            return account;
+        } else {
+            return rejectWithValue({error: true, errorMessage: "No Valid Token"});
+        }
+    }
+)
+
+export const updateAccount = createAsyncThunk(
+    'accountSettingsSlice/updateAccount',
+    async ({userImage, userBanner}, {rejectWithValue, getState}) => {
+        const token = await getToken();
+
+        const {password, newPassword, confirmNewPassword, display_name} = getState().accountSettingsSlice;
+
+        const data = new FormData();
+
+        data.append("displayName", display_name);
+
+        data.append("userImage", userImage);
+
+        data.append("userBanner", userBanner);
+
+        data.append("password", password);
+
+        data.append("newPassword", newPassword);
+
+        data.append("confirmNewPassword", confirmNewPassword);
+
+        if (!token) return rejectWithValue({error: true, errorMessage: "validation error"})
+
+        const update = await Axios({
+            method: "POST",
+            url: `${url}/update-account`,
+            headers: {"TOKEN": token},
+            data
+        }).then(response => {
+            console.log(response);
+
+            if (response.data.error) {
+                return rejectWithValue({error: true, errorMessage: response.data.errorMessage})
+            }
+
+            return response.data;
+        })
+
+        return update;
+        
+    }
+)
 
 const accountSettingsSlice = createSlice({
     name: "accountSettingsSlice",
     initialState: {
-        profileImage: "https://res.cloudinary.com/drlkgoter/image/upload/v1654194581/Screenshot_2022-05-25_162825_svbv78.png",
-        profileBanner: "https://res.cloudinary.com/drlkgoter/image/upload/v1651463736/fdru8emghbzuhatye2qy.jpg",
-        userName: "Niko"
+        user_image: "",
+        user_banner: "",
+        username: "",
+        display_name: "",
+        password: "",
+        newPassword: "",
+        confirmNewPassword: "",
+        loading: false,
+        error: false,
+        errorMessage: "",
+        change: false,
     },
     reducers: {
+        handleSignOut: (state, action) => {
+            state.user_image = "";
+            state.user_banner = "";
+            state.username = "";
+            state.display_name = "";
+        },
+        updateAccountInputState: (state, action) => {
+            state[action.payload.state] = action.payload.value;
+            state.change = true;
+        },
+        accountSettingsCloseError: (state, action) => {
+            state.error = false;
+            state.errorMessage = "";
+        },
+    },
+    extraReducers: {
+        [fetchAccount.fulfilled]: (state, action) => {
+            if (action.payload.success) {
+                state.display_name = action.payload.account.display_name;
+                state.user_image = action.payload.account.user_image;
+                state.user_banner = action.payload.account.user_banner;
+                state.username = action.payload.account.username;
+                window.location.hash = "/dashboard"
+            }
+            state.change = false;
+        },
+        [fetchAccount.rejected]: (state, action) => {
+            console.log(action)
+            if (action.payload.error) {
+                window.location.hash = "/signin"
+            }
+        },
+        [updateAccount.pending]: (state, action) => {
+            state.loading = true;
+        },
+        [updateAccount.fulfilled]: (state, action) => {
+            state.loading  = false;
 
+            state.change = false;
+
+            if (!action.payload.success) return;
+
+            const updated_info = action.payload.user;
+
+            if (updated_info.display_name) state.display_name = updated_info.display_name;
+
+            if (updated_info.user_banner) state.user_banner = updated_info.user_banner;
+
+            if (updated_info.user_image) state.user_image = updated_info.user_image;
+
+        },
+        [updateAccount.rejected]: (state, action) => {
+            state.loading = false;
+            state.error = action.payload.error;
+            state.errorMessage = action.payload.errorMessage;
+        }
     }
 })
 
+
 // selectors
+export const selectAccountSettingsStateChanged = state => state.accountSettingsSlice.change;
 
-export const selectUserName = state => state.accountSettingsSlice.userName;
+export const selectAccountSettingsPassword = state => state.accountSettingsSlice.password;
 
-export const selectProfileBanner = state => state.accountSettingsSlice.profileBanner;
+export const selectAccountSettingsNewPassword = state => state.accountSettingsSlice.newPassword;
 
-export const selectProfileImage = state => state.accountSettingsSlice.profileImage;
+export const selectAccountSettingsConfirmNewPassword = state => state.accountSettingsSlice.confirmNewPassword;
+
+export const selectAccountSettingsLoading = state => state.accountSettingsSlice.loading;
+
+export const selectAccountSettingsErrorState = state => state.accountSettingsSlice.error;
+
+export const selectAccountSettingsErrorMessage = state => state.accountSettingsSlice.errorMessage;
+
+export const selectToken = state => state.accountSettingsSlice.token;
+
+export const selectDisplayName = state => state.accountSettingsSlice.display_name;
+
+export const selectUsername = state => state.accountSettingsSlice.username;
+
+export const selectUserBanner = state => state.accountSettingsSlice.user_banner;
+
+export const selectUserImage = state => state.accountSettingsSlice.user_image;
+
+// actions
+export const { handleSignOut, updateAccountInputState, accountSettingsCloseError } = accountSettingsSlice.actions;
 
 export default accountSettingsSlice.reducer;

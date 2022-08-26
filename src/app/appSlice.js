@@ -21,7 +21,9 @@ const appSlice = createSlice({
         userSignedIn: false,
     },
     reducers: {
+        incrementLoadingPercentage: (action, payload) => {
 
+        }
     },
     extraReducers: {
         [initializeApplication.pending]: (state, action) => {
@@ -29,7 +31,6 @@ const appSlice = createSlice({
         },
         [initializeApplication.fulfilled]: (state, action) => {
             state.loadingApp = false;
-            state.currentRoute = '/signin'
         },  
         [initializeApplication.rejected]: (state, action) => {
 
@@ -40,5 +41,7 @@ const appSlice = createSlice({
 export const selectCurrentRouteState = state => state.appSlice.currentRoute;
 
 export const selectLoadingAppState = state => state.appSlice.loadingApp;
+
+
 
 export default appSlice.reducer;

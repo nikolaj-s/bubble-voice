@@ -1,0 +1,16 @@
+
+.list-widget-button-container {
+    width: 48%;
+    height: calc(100% - 8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+}
+
+.list-widget-button-container li {
+    font-size: 1.6rem;
+    font-weight: 400;
+    letter-spacing: var(--font-spacing);
+}

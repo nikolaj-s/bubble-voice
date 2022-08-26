@@ -1,6 +1,9 @@
 
 .side-bar-container {
+    min-width: 340px;
+    max-width: calc(400px - 10px);
     width: 34%;
+    margin-left: 10px;
     border-radius: var(--border-radius);
     height: 98%;
     display: flex;
@@ -12,7 +15,7 @@
 
 .inner-side-bar-container {
     width: 100%;
-    height: 100%;
+    height: calc(100% - 80px);
     display: flex;
     justify-content: center;
     position: relative;

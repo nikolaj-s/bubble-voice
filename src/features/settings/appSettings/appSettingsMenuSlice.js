@@ -8,6 +8,7 @@ const appSettingsMenuSlice = createSlice({
             {name: "Account", link: "account"},
             {name: "Appearance", link: "appearance"},
             {name: "Key Bindings", link: "keybindings"},
+            {name: "Sound", link: 'sound-settings'},
             {name: "Voice / Video", link: "voice-video"},
         ]
     }

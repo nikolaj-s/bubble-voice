@@ -1,0 +1,14 @@
+.title-widget-container {
+    display: flex;
+    height: 70px;
+    width: 100%;
+    border-radius: var(--border-radius);
+    align-items: center;
+    justify-content: center;
+    margin: 1% 0;
+}
+
+.title-widget-container h2 {
+    font-weight: 400;
+    letter-spacing: var(--font-spacing);
+}

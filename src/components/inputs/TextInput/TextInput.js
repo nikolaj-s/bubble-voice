@@ -1,42 +1,66 @@
 import { motion, useAnimation } from 'framer-motion';
 import React from 'react'
 import { useSelector } from 'react-redux';
-import { selectAccentColor, selectPrimaryColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 import "./TextInput.css";
 
-export const TextInput = ({action, placeholder, inputValue, keyCode, type = 'text', stateSelector = ""}) => {
+export const TextInput = ({action = () => {}, placeholder, inputValue, keyCode = false, type = 'text', stateSelector = "", marginBottom = '0', marginTop = '0'}) => {
 
     const color = useSelector(selectPrimaryColor);
 
     const accentColor = useSelector(selectAccentColor);
 
+    const focusColor = useSelector(selectTextColor);
+
     const animation = useAnimation();
-
-    const handleFocusAnimation = () => {
-        animation.start({
-            border: `solid 4px ${accentColor}`
-        })
-    }
-
-    const handleBlurAnimation = () => {
-        animation.start({
-            border: `4px solid ${color}`
-        })
-    }
 
     const returnInputValue = (e) => {
         action(e.target.value, stateSelector)
     }
 
     const returnKeyCode = (e) => {
-        keyCode(e.target.keyCode)
+        
+        if (keyCode === false) {
+            return
+        }
+        
+        keyCode(e.keyCode, stateSelector, e)
+    }
+
+    const handleAnimation = (e, color) => {
+
+        if (e !== false) action(e.target.value);
+    
+        animation.start({
+            border: `4px solid ${color}`
+        })
     }
 
     return (
         
-        <motion.div onBlur={handleBlurAnimation} onFocus={handleFocusAnimation} animate={animation} style={{backgroundColor: color, border: `solid 4px ${color}`}} className='text-input-container'>
-            <input onKeyUp={returnKeyCode} onChange={returnInputValue} type={type} placeholder={placeholder} value={inputValue} />
+        <motion.div
+        onBlur={(e) => {handleAnimation(e, color)}} 
+        onFocus={(e) => {handleAnimation(e, focusColor)}}
+        onMouseOver={(e) => {
+            if (e.currentTarget.children[0] !== document.activeElement) {
+                handleAnimation(false, accentColor)
+            }  
+        }}
+        onMouseOut={(e) => {
+            if (e.currentTarget.children[0] !== document.activeElement) {
+                handleAnimation(false, color)
+            }
+        }}
+        animate={animation} 
+        style={{
+            backgroundColor: color,
+            border: `solid 4px ${color}`,
+            marginBottom: marginBottom,
+            marginTop: marginTop
+        }} 
+        className='text-input-container'>
+            <input className='text-input' style={{color: focusColor}} onKeyUp={returnKeyCode} onChange={returnInputValue} type={type} placeholder={placeholder} value={inputValue} />
         </motion.div>
     )
 }

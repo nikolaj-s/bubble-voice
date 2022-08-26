@@ -1,0 +1,30 @@
+
+.loading-app-outer-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+
+.loading-app-inner-container {
+    width: 60%;
+    height: 65%;
+    min-width: 400px;
+    min-height: 700px;
+    max-width: 800px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.loading-app-inner-container .content-wrapper {
+    align-items: center;
+}

@@ -8,6 +8,6 @@
     border-top-left-radius: var(--border-radius);
     border-top-right-radius: var(--border-radius);
     border-bottom: 2px solid black;
-    margin-top: 80px;
+    margin-top: 55px;
     overflow: hidden;
 }

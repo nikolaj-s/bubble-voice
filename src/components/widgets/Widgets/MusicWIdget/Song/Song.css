@@ -1,0 +1,21 @@
+
+.song-container {
+    height: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.song-container .song-thumbnail-container {
+    width: 68px;
+    height: 68px;
+    border-radius: var(--border-radius);
+    flex-shrink: 0;
+    margin-right: 1rem;
+}
+
+.song-container p {
+    font-weight: 400;
+    letter-spacing: var(--font-spacing);
+}

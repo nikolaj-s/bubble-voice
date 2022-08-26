@@ -1,0 +1,30 @@
+
+.active-user-container {
+    flex: 1 1 auto;
+    position: relative;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 400px;
+    max-width: 700px;
+    width: calc(100% - 8px);
+}
+
+.active-user-container video {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background-color: black;
+}
+
+.active-user-profile-image-container {
+    width: 150px;
+    height: 150px;
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
+}

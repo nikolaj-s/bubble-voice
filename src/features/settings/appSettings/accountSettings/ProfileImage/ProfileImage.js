@@ -2,16 +2,16 @@
 import React from 'react'
 
 // component's
-import { ImageDropInput } from '../../../../../components/inputs/ImageDropInput/ImageDropInput'
+import { ImageInput } from '../../../../../components/inputs/ImageInput/ImageInput'
 
 // style's
 import "./ProfileImage.css";
 
-export const ProfileImage = ({profileImage, banner}) => {
+export const ProfileImage = ({userImage, userBanner, getNewUserImage, getNewUserBanner}) => {
     return (
         <div className='profile-image-container'>
-            <ImageDropInput initalImage={banner} />
-            <ImageDropInput initalImage={profileImage} zIndex='1' center={true} width={350} height={350} borderRadius="50%" />
+            <ImageInput getFile={getNewUserBanner} initalImage={userBanner} />
+            <ImageInput getFile={getNewUserImage} initalImage={userImage} zIndex='1' center={true} width={"350px"} height={"350px"} borderRadius="50%" />
         </div>
     )
 }

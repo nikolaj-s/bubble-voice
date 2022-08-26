@@ -1,0 +1,23 @@
+
+.screen-share-menu {
+    border-radius: var(--border-radius);
+    position: absolute;
+    width: calc(90% - 8px);
+    height: 500px;
+    bottom: 90px;
+    left: 5%;
+    z-index: 10;
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: auto;
+    overflow-x: hidden;
+    justify-content: space-around;
+    padding: 0 0 4rem 0;
+}
+
+.screen-share-menu h3 {
+    font-weight: 400;
+    width: 100%;
+    text-align: center;
+    letter-spacing: var(--font-spacing);
+}
