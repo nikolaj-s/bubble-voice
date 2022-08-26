@@ -37,7 +37,7 @@
     "eject": "react-scripts eject",
     "electron-dev": "set ELECTRON_START_URL=http://localhost:3000 && electron .",
     "build-electron": "robocopy electron build/electron /S",
-    "package": "electron-builder build --win -c.extraMetadata.main=build/electron/main.js --publish never"
+    "package": "electron-builder build --win -c.extraMetadata.main=build/electron/main.js --publish always"
   },
   "build": {
     "files": [
