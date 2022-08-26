@@ -55,6 +55,7 @@ function App() {
         let update = false;
 
         ipcRenderer.on('update-available', () => {
+          update = true;
           ipcRenderer.removeAllListeners('update-available')
           dispatch(incrementLoadingPercentage({percent: 10, state: 'Update Available, Starting Download'}))
         })
@@ -62,6 +63,12 @@ function App() {
         ipcRenderer.on('update-not-available', () => {
           ipcRenderer.removeAllListeners('update-not-available')
           dispatch(incrementLoadingPercentage({percent: 10, state: 'No Updates Available'}))
+        })
+
+        ipcRenderer.on('update-downloaded', () => {
+          ipcRenderer.removeAllListeners('update-downloaded');
+          dispatch(incrementLoadingPercentage({percent: 20, state: 'Update Downloaded, Restarting App'}));
+          ipcRenderer.emit('restart_and_update');
         })
 
         setTimeout(() => {

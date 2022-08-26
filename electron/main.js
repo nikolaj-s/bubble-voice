@@ -186,6 +186,10 @@ app.on('activate', () => {
 
 // handle updates
 
+ipcMain.on('restart_and_update', () => {
+  autoUpdater.quitAndInstall();
+})
+
 autoUpdater.on('checking-for-update', () => {
   console.log('checking for updates');
   win.webContents.send('checking-for-update')
@@ -193,5 +197,9 @@ autoUpdater.on('checking-for-update', () => {
 
 autoUpdater.on('update-available', () => {
   win.webContents.send('update-available');
+})
+
+autoUpdater.on('update-downloaded', () => {
+  win.webContents.send('update-downloaded');
 })
 
