@@ -40,11 +40,26 @@
     "package": "electron-builder build --win -c.extraMetadata.main=build/electron/main.js --publish always"
   },
   "build": {
+    "appId": "com.bubble.voice",
     "files": [
       "build/**/*",
       "node_modules/**/*"
     ],
-    "icon": "buildResources/icon.png"
+    "icon": "buildResources/icon.png",
+    "publish": {
+      "provider": "github",
+      "token": "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"
+    },
+    "win": {
+      "icon": "build/logo512.png",
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "allowToChangeInstallationDirectory": true
+    }
   },
   "eslintConfig": {
     "extends": [
