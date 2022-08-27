@@ -63,6 +63,7 @@ function App() {
         ipcRenderer.on('update-not-available', () => {
           ipcRenderer.removeAllListeners('update-not-available')
           dispatch(incrementLoadingPercentage({percent: 10, state: 'No Updates Available'}))
+          resolve();
         })
 
         ipcRenderer.on('update-downloaded', () => {
@@ -72,7 +73,8 @@ function App() {
         })
 
         setTimeout(() => {
-          if (!update) {
+          console.log(update)
+          if (update === false) {
             resolve();
           }
         }, 500)
