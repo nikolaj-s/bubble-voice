@@ -16,6 +16,7 @@ import { selectSecondaryColor } from '../appSettings/appearanceSettings/appearan
 // style's
 import "./SettingsRoutesWrapper.css";
 import { SoundSettings } from '../appSettings/soundSettings/SoundSettings'
+import { LocalDataSettings } from '../appSettings/localDataSettings/LocalDataSettings'
 
 
 const Wrapper = () => {
@@ -44,6 +45,7 @@ const Wrapper = () => {
             <AccountSettings />
             <AppearanceSettings />
             <KeyBindSettings />
+            <LocalDataSettings />
             <SoundSettings />
             <VoiceVideoSettings />
         </div>

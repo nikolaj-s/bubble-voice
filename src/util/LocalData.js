@@ -182,5 +182,23 @@ export const fetchSavedUserPrefs = async () => {
     }
 }
 
+export const clearLocalData = () => {
+    try {
+        const keytar = window.require('keytar');
 
+        keytar.deletePassword("USER", "PREFS");
 
+        keytar.deletePassword("APPAUDIO", "LEVEL");
+
+        keytar.deletePassword("MUSIC", "VOLUME");
+
+        keytar.deletePassword("APPEARANCE", "VISUAL");
+
+        keytar.deletePassword("VOICE/VIDEO", "SETTINGS");
+
+        keytar.deletePassword("KEY", "BINDS");
+
+    } catch (error) {
+        console.log('using web app');
+    }
+}

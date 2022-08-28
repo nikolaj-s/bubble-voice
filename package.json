@@ -1,6 +1,6 @@
 {
   "name": "bubble",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": true,
   "dependencies": {
     "@popmotion/popcorn": "^0.4.4",
@@ -46,13 +46,13 @@
       "build/**/*",
       "node_modules/**/*"
     ],
-    "icon": "build/logo512.png",
+    "icon": "build/logo512.ico",
     "publish": {
       "provider": "github",
       "token": "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"
     },
     "win": {
-      "icon": "build/logo512.png",
+      "icon": "build/logo512.ico",
       "target": "nsis"
     },
     "nsis": {
