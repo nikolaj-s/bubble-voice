@@ -1,0 +1,29 @@
+
+.update-available-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.update-available-inner-container {
+    width: 80%;
+    height: 80%;
+    display: flex;
+    padding: 5%;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: var(--border-radius);
+}
+
+.update-available-inner-container p {
+    font-weight: 400;
+    font-size: 1.5rem;
+    text-align: center;
+    letter-spacing: var(--font-spacing);
+}

@@ -206,7 +206,7 @@ export const ContextMenu = () => {
                         perms: isOwner !== -1 ? false : permissions.user_can_manage_server_groups,
                         user: `${id}-servergroup-${members[user].server_group}-channel-id-${channel_id}`,
                         isOwner: isOwner !== -1,
-                        poke: true,
+                        poke: p.className?.includes('active-user-container') ? false : true,
                         volume: true,
                     }))
 
@@ -356,9 +356,20 @@ export const ContextMenu = () => {
         saveUserPrefs();
     }
 
-    const handlePokeUser = () => {
-        console.log(selectedChannel)
-        console.log(selectedUserToManage)
+    const handlePokeUser = async () => {
+        
+        const selected_username = selectedUserToManage.split('-')[0];
+
+        const channel_id = selectedUserToManage.split('channel-id-')[1];
+
+        if (selected_username && channel_id) {
+
+            await socket.request('poke', {channel_id: channel_id, username: selected_username})
+            .catch(error => {
+                dispatch(throwServerError({errorMessage: error}));
+            })
+
+        }
     }
 
     return (

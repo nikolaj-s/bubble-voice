@@ -81,7 +81,7 @@ ipcMain.handle('GET_SOURCES', async () => {
   const captures = await desktopCapturer.getSources({ types: ['window', 'screen', 'audio']})
   .then(async sources => {
       const screens = [];
-    
+      
       for (const source of sources) {
         screens.push({
           id: source.id,
@@ -186,7 +186,7 @@ app.on('activate', () => {
 
 // handle updates
 
-ipcMain.on('restart_and_update', () => {
+ipcMain.on('restart-to-update', (event, data) => {
   autoUpdater.quitAndInstall();
 })
 

@@ -5,7 +5,7 @@ export const getMediaDevices = createAsyncThunk(
     'voiceVideoSettingsSlice/getMediaDevices',
     async (_, {rejectWithValue}) => {
         
-        const deviceList = navigator.mediaDevices.enumerateDevices()
+        const deviceList = await navigator.mediaDevices.enumerateDevices()
         .then( async (devices) => {
             const device_list = devices.map((device) => {
                 return {
@@ -14,15 +14,15 @@ export const getMediaDevices = createAsyncThunk(
                     label: device.label
                 }
             })
-
+            
             const saved_data = await fetchSavedVoiceVideoSettings()
-           
+            console.log(saved_data)
             return {device_list: device_list, saved_data: saved_data}
         })
         .catch((err) => {
             return rejectWithValue("Unable To Retrieve Devices");
         })
-        
+        console.log(deviceList)
         return deviceList;
     }
 )

@@ -51,7 +51,7 @@ export const initKeyBinds = (keys) => {
 export const fetchSavedVoiceVideoSettings = async () => {
     try {
         const keytar = window.require('keytar');
-
+        
         const saved = await keytar.getPassword("VOICE/VIDEO", "SETTINGS")
         
         return JSON.parse(saved);
@@ -174,7 +174,7 @@ export const fetchSavedUserPrefs = async () => {
         const keytar = window.require('keytar');
 
         const data = await keytar.getPassword("USER", "PREFS");
-        console.log(data)
+ 
         USER_PREFS = new Map(JSON.parse(data));
 
     } catch (error) {

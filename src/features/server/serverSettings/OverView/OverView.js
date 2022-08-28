@@ -135,6 +135,7 @@ const Wrapper = () => {
             style={{
                 width: '100%',
                 height: '100%',
+                maxHeight: '400px',
                 borderRadius: '15px',
                 overflow: 'hidden'
             }}

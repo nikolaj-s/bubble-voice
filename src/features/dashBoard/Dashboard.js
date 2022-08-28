@@ -15,6 +15,7 @@ import { ContextMenu } from "../contextMenu/ContextMenu"
 
 // style
 import "./DashBoard.css";
+import { UpdateAvailable } from '../../components/UpdateAvailable/UpdateAvailable';
 
 
 export const Dashboard = () => {
@@ -41,6 +42,7 @@ export const Dashboard = () => {
             <ContentScreen />
             <SoundEffects />
             <ContextMenu />
+            <UpdateAvailable />
         </div>
     )
 }

@@ -14,7 +14,6 @@ import { Verification } from '../features/LoggingIn/verification/Verification';
 import { Disconnected } from '../components/disconnected/Disconnected';
 
 // state
-import { initializeApplication } from './appSlice';
 import { incrementLoadingPercentage, selectRetryState } from '../features/initializingAppScreen/initializingAppScreenSlice';
 import { getMediaDevices } from '../features/settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 import { selectPrimaryColor, toggleDarkMode } from '../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
@@ -26,6 +25,7 @@ import { selectSignedUp } from '../features/LoggingIn/signUp/signUpSlice';
 import './App.css';
 import { fetchAppearanceSettings, fetchKeyBinds, fetchSavedUserPrefs, initKeyBinds } from '../util/LocalData';
 import { setSavedKeyCodes } from '../features/settings/appSettings/keyBindSettings/keyBindSettingsSlice';
+import { handleUpdateAvailable } from './appSlice';
 
 function App() {
 
@@ -43,52 +43,10 @@ function App() {
 
   const __init__ = async () => {
 
-    dispatch(initializeApplication());
-
-    dispatch(incrementLoadingPercentage({percent: 5, state: "Checking For Updates"}));
-
-    await new Promise((resolve, reject) => {
-      try {
-
-        const ipcRenderer = window.require('electron').ipcRenderer;
-
-        let update = false;
-
-        ipcRenderer.on('update-available', () => {
-          update = true;
-          ipcRenderer.removeAllListeners('update-available')
-          dispatch(incrementLoadingPercentage({percent: 10, state: 'Update Available, Starting Download'}))
-        })
-
-        ipcRenderer.on('update-not-available', () => {
-          ipcRenderer.removeAllListeners('update-not-available')
-          dispatch(incrementLoadingPercentage({percent: 10, state: 'No Updates Available'}))
-          resolve();
-        })
-
-        ipcRenderer.on('update-downloaded', () => {
-          ipcRenderer.removeAllListeners('update-downloaded');
-          dispatch(incrementLoadingPercentage({percent: 20, state: 'Update Downloaded, Restarting App'}));
-          ipcRenderer.emit('restart_and_update');
-        })
-
-        setTimeout(() => {
-          console.log(update)
-          if (update === false) {
-            resolve();
-          }
-        }, 500)
-
-      } catch (error) {
-        console.log("using web version")
-        resolve();
-      }
-    })
-
     dispatch(incrementLoadingPercentage({percent: 10, state: "Fetching Media Devices"}));
 
     dispatch(getMediaDevices());
-
+    
     await fetchSavedUserPrefs();
     
     // fetch locally stored settings
@@ -103,15 +61,19 @@ function App() {
       dispatch(toggleDarkMode(data))
     })
 
-    setTimeout(async () => {
 
-      dispatch(incrementLoadingPercentage({percent: 40, state: "Fetching Account"}));
+    dispatch(incrementLoadingPercentage({percent: 40, state: "Fetching Account"}));
+
+    setTimeout(() => {
 
       dispatch(fetchAccount());
 
-      dispatch(incrementLoadingPercentage({percent: 60, state: "Loading Account Details"}));
       
+      dispatch(incrementLoadingPercentage({percent: 60, state: "Loading Account Details"}));
+    
     }, 200)
+    
+      
   }
 
   React.useEffect(() => {
@@ -121,6 +83,35 @@ function App() {
     __init__();
     // eslint-disable-next-line
   }, [loggedIn, retryState, signedUp])
+
+  // handle listen for update
+  React.useEffect(() => {
+    setTimeout(() => {
+      let ipcRenderer;
+
+      try {
+
+        ipcRenderer = window.require('electron').ipcRenderer;
+
+        ipcRenderer.on('update-downloaded', () => {
+            
+          ipcRenderer.removeListeners('update-downloaded');
+
+          dispatch(handleUpdateAvailable(true));
+        
+        })
+
+      } catch (error) {
+        console.log("using web version")
+      }
+
+      return () => {
+        if (ipcRenderer) {
+          ipcRenderer.removeListeners('update-downloaded');
+        }
+      }
+    }, 10)
+  }, [])
 
   return (
     <div style={{backgroundColor: primaryColor}} className="App">

@@ -157,10 +157,10 @@ export class RoomClient {
             rtpCapabilities: rtpCapabilities,
             consumerTransportId: this.consumerTransport.id,
             producerId: producerId
-        }).catch(error => {
+        })
+        .catch(error => {
             console.log(error);
         })
-
         const { id, kind, rtpParameters } = data;
 
         let codecOptions = {};
@@ -207,13 +207,12 @@ export class RoomClient {
                 el.className = "";
                 el.muted = true;
                 document.getElementById(user.username).appendChild(el)
-            } else if (consumer.rtpParameters.codecs[0].mimeType === 'video/H264') {
-                console.log('video stream', consumer) 
+            } else if (consumer.rtpParameters.codecs[0].mimeType === 'video/H264' || consumer.rtpParameters.codecs[0].mimeType === 'video/rtx') {
+
                 par = document.createElement('div');
                 par.className = 'streaming-video-player-container'
                 el = document.createElement('video');
                 el.srcObject = stream;
-                console.log(stream)
                 el.className = 'stream';
                 par.id = consumer.id + 'container';
                 el.id = consumer.id;
@@ -221,7 +220,7 @@ export class RoomClient {
                 el.className = 'streaming-video-player'
                 el.playsInline = false;
                 el.muted = false;
-                el.volume = 0;
+                el.volume = 1;
                 par.appendChild(el);
                 document.getElementById(user.username).parentNode.appendChild(par)
             } else {
@@ -235,9 +234,8 @@ export class RoomClient {
                 el.playsInline = false;
                 el.muted = this.audioState;
                 el.autoplay = true;
-                el.volume = 1;
+                el.volume = user_pref_volume?.volume ? user_pref_volume.volume : 1;
                 document.getElementById(user.username).appendChild(el)
-
 
             }
 
@@ -349,15 +347,19 @@ export class RoomClient {
                 mediaConstraints = {
                     audio: {
                         mandatory: {
-                            chromeMediaSource: 'desktop',
-                            echoCancellation: true
+                          chromeMediaSource: 'desktop',
+                          chromeMediaSourceId: deviceId,
                         }
                     },
                     video: {
                         mandatory: {
                             chromeMediaSource: 'desktop',
-                            chromeMediaSourceId: deviceId
-                        }
+                            chromeMediaSourceId: deviceId,
+                            maxWidth: 1280,
+                            maxHeight: 720,
+                            maxFrameRate: 60
+                        },
+                        
                     }
                 };
                 screen = true;
@@ -383,10 +385,10 @@ export class RoomClient {
             stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
 
             const track = audio ? stream.getAudioTracks()[0] : stream.getVideoTracks()[0]
-
+            
             stream_audio = null
             
-            //if (screen) stream_audio = stream.getAudioTracks()[0];
+           // if (screen) stream_audio = stream.getAudioTracks()[0];
 
             const params = {
                 track
@@ -397,7 +399,7 @@ export class RoomClient {
                     {
                     rid: 'r0',
                     maxBitrate: 100000,
-                    //scaleResolutionDownBy: 10.0,
+                  //  scaleResolutionDownBy: 2.0,
                     scalabilityMode: 'S1T3'
                     },
                     {
