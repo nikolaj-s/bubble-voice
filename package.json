@@ -1,7 +1,7 @@
 {
   "name": "bubble",
   "version": "0.1.6",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@popmotion/popcorn": "^0.4.4",
     "@reduxjs/toolkit": "^1.8.1",
