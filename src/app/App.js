@@ -64,19 +64,16 @@ function App() {
       dispatch(toggleDarkMode(data))
     })
 
-
     dispatch(incrementLoadingPercentage({percent: 40, state: "Fetching Account"}));
 
     setTimeout(() => {
 
       dispatch(fetchAccount());
 
-      
       dispatch(incrementLoadingPercentage({percent: 60, state: "Loading Account Details"}));
     
     }, 200)
     
-      
   }
 
   React.useEffect(() => {
@@ -89,14 +86,18 @@ function App() {
 
   // handle listen for update
   React.useEffect(() => {
+    console.log('cheking for updates')
     setTimeout(() => {
+
       let ipcRenderer;
 
       try {
 
         ipcRenderer = window.require('electron').ipcRenderer;
 
-        ipcRenderer.on('update-downloaded', () => {
+        ipcRenderer.send('check-for-updates');
+
+        ipcRenderer.on('update available', () => {
             
           ipcRenderer.removeListeners('update-downloaded');
 
@@ -104,13 +105,24 @@ function App() {
         
         })
 
+        ipcRenderer.on('update not available', () => {
+          console.log('no update available');
+        })
+
+        ipcRenderer.on('error updating', (data) => {
+          console.log(data)
+        })
+
       } catch (error) {
+        console.log(error)
         console.log("using web version")
       }
 
       return () => {
         if (ipcRenderer) {
-          ipcRenderer.removeListeners('update-downloaded');
+          ipcRenderer.removeListeners('update available');
+          ipcRenderer.removeListeners('update not available');
+          ipcRenderer.removeListeners('error updating');
         }
       }
     }, 10)

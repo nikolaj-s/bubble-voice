@@ -27,7 +27,7 @@ export const ServerList = ({selectServer, serverList = [], loading = false, anim
                 return <ServerButton action={selectServer} key={servers._id} {...servers} />
             })
             }
-            <Loading loading={loading} />
+            <Loading loading={loading} error={serverList.length === 0} />
         </motion.div>
     )
 }

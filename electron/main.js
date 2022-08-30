@@ -72,9 +72,6 @@ function createWindow () {
     win.minimize();
   })
   
-  win.once('ready-to-show', () => {
-    autoUpdater.checkForUpdatesAndNotify();
-  })
 }
 
 ipcMain.handle('GET_SOURCES', async () => {
@@ -185,21 +182,26 @@ app.on('activate', () => {
 // code. You can also put them in separate files and require them here.
 
 // handle updates
+ipcMain.on('check-for-updates', async (event, data) => {
+
+  console.log('checking for update');
+
+  autoUpdater.checkForUpdatesAndNotify();
+})
 
 ipcMain.on('restart-to-update', (event, data) => {
   autoUpdater.quitAndInstall();
 })
 
-autoUpdater.on('checking-for-update', () => {
-  console.log('checking for updates');
-  win.webContents.send('checking-for-update')
+autoUpdater.on('error', (err) => {
+  win.webContents.send("error updating", {error: err})
 })
 
-autoUpdater.on('update-available', () => {
-  win.webContents.send('update-available');
+autoUpdater.on('update-not-available', () => {
+  win.webContents.send("update not available");
 })
 
 autoUpdater.on('update-downloaded', () => {
-  win.webContents.send('update-downloaded');
+  win.webContents.send('update available');
 })
 
