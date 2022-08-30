@@ -8,6 +8,8 @@ export const handleSignUp = createAsyncThunk(
     async (_, {getState, rejectWithValue}) => {
         const state = getState().signUpSlice;
 
+        if (state.username.includes('-')) return rejectWithValue({error: true, errorMessage: "Username cannot include a - character"});
+
         if (state.username.length < 1) return rejectWithValue({error: true, errorMessage: "User Name Input Cannot Be Empty"})
 
         if (state.email.length < 1) return rejectWithValue({error: true, errorMessage: "Email Input Cannot Be Empty"})

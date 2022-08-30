@@ -11,6 +11,7 @@ import { selectUsername } from '../../settings/appSettings/accountSettings/accou
 import { getToken, url } from '../../../util/Validation';
 import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
 import { selectActivateCameraKey, selectDisconnectKey, selectMuteAudioKey, selectMuteMicKey, selectPushToTalkKey } from '../../settings/appSettings/keyBindSettings/keyBindSettingsSlice';
+import { selectAudioOutput } from '../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 
 // component's
 import { ServerBanner } from '../../../components/serverBanner/ServerBanner';
@@ -48,6 +49,8 @@ const Bar = () => {
     const current_channel_id = useSelector(selectCurrentChannelId);
 
     const current_channel = useSelector(selectCurrentChannel);
+
+    const audioOutput = useSelector(selectAudioOutput);
 
     // keybinds
     const pushToTalkKey = useSelector(selectPushToTalkKey);
@@ -372,6 +375,21 @@ const Bar = () => {
         dispatch(playSoundEffect("disconnected"));
         navigate('/dashboard')
     }
+
+    // handle device output
+    React.useEffect(() => {
+        try {
+
+            const mediaElements = document.querySelectorAll('audio');
+
+            for (const el of mediaElements) {
+                el.setSinkId(audioOutput._id);
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }, [current_channel, audioOutput])
 
     return (
         <motion.div initial={{left: "100%", opacity: 0}} animate={animation} className='server-bar-container'>

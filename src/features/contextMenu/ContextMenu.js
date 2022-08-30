@@ -281,7 +281,7 @@ export const ContextMenu = () => {
 
     const assignNewPermissionGroup = async (id, user) => {
         toggleLoading(true);
-
+        console.log(id, user)
         await socket.request('assign server group', {username: user, server_group: id})
         .then(data => {
             dispatch(assignNewServerGroup({username: user, server_group: id}))

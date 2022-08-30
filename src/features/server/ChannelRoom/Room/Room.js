@@ -331,8 +331,7 @@ const Component = () => {
         }
     // eslint-disable-next-line   
     }, [pushToTalk, voiceActivityDetection, loaded, current_channel_id, microphoneState, pushToTalkActive])
-
-  
+    
     return (
         <>
             <RoomNavigation action={cycleChannelPage} page={page} />

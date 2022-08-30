@@ -1,5 +1,20 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { fetchAppAudio, setAppAudio } from "../../../util/LocalData";
 
+export const fetchSavedAppAudioSettings = createAsyncThunk(
+    'soundEffectsSlice/fetchSavedAppAudioSettings',
+    async (_) => {
+        try {
+
+            const volume = await fetchAppAudio();
+
+            return volume;
+
+        } catch (error) {
+            return {volume: 1}
+        }
+    }
+)
 
 const soundEffectsSlice = createSlice({
     name: "soundEffectsSlice",
@@ -13,6 +28,12 @@ const soundEffectsSlice = createSlice({
         },
         setSoundEffectsVolume: (state, action) => {
             state.volume = action.payload;
+            setAppAudio(action.payload);
+        }
+    },
+    extraReducers: {
+        [fetchSavedAppAudioSettings.fulfilled]: (state, action) => {
+            state.volume = action.payload.volume;
         }
     }
 })

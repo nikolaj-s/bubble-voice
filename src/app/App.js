@@ -26,6 +26,7 @@ import './App.css';
 import { fetchAppearanceSettings, fetchKeyBinds, fetchSavedUserPrefs, initKeyBinds } from '../util/LocalData';
 import { setSavedKeyCodes } from '../features/settings/appSettings/keyBindSettings/keyBindSettingsSlice';
 import { handleUpdateAvailable } from './appSlice';
+import { fetchSavedAppAudioSettings } from '../features/settings/soundEffects/soundEffectsSlice';
 
 function App() {
 
@@ -46,6 +47,8 @@ function App() {
     dispatch(incrementLoadingPercentage({percent: 10, state: "Fetching Media Devices"}));
 
     dispatch(getMediaDevices());
+
+    dispatch(fetchSavedAppAudioSettings());
     
     await fetchSavedUserPrefs();
     

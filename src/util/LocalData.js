@@ -108,8 +108,14 @@ export const fetchMusicWidgetVolume = async () => {
 
         const data = await keytar.getPassword("MUSIC", "VOLUME");
 
-        return JSON.parse(data);
+        const parsed = JSON.parse(data);
 
+        if (parsed === null) {
+            return {volume: 1}
+        } else {
+            return parsed;
+        }
+        
     } catch (error) {
         return {volume: 1}
     }
@@ -147,10 +153,16 @@ export const fetchAppAudio = async () => {
 
         const data = await keytar.getPassword("APPAUDIO", "LEVEL")
 
-        return JSON.parse(data);
-        
+        const parsed = JSON.parse(data);
+
+        if (parsed === null) {
+            return {volume: 1}
+        } else {
+            return parsed;
+        }
     } catch (error) {
         console.log("Using Web App")
+        return {volume: 1}
     }
 }
 

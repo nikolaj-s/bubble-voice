@@ -18,7 +18,7 @@ export const AssignPermissionGroupMenu = ({permission_groups, current_permission
     const assignNewGroup = (e, id) => {
         e.stopPropagation();
         
-        action(id, current_permission_group.split('servergroup-')[1])
+        action(id, current_permission_group.split('-')[0])
     }
 
     return (

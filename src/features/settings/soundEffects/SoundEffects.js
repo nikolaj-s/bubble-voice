@@ -3,6 +3,7 @@ import React from 'react'
 
 // state
 import { useDispatch, useSelector } from 'react-redux';
+import { selectAudioOutput } from '../appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 import { playSoundEffect, selectSoundEffect, selectSoundEffectVolume } from './soundEffectsSlice';
 
 const connected = require('../../../assets/connected.wav');
@@ -24,6 +25,8 @@ export const SoundEffects = () => {
     const soundEffect = useSelector(selectSoundEffect);
 
     const soundEffectsVolume = useSelector(selectSoundEffectVolume);
+
+    const audioOutput = useSelector(selectAudioOutput);
 
     const dispatch = useDispatch();
 
@@ -56,6 +59,16 @@ export const SoundEffects = () => {
     const soundEffectFinished = () => {
         dispatch(playSoundEffect(""));
     }
+
+    React.useEffect(() => {
+
+        try {
+            document.getElementById('sound-effects-source').setSinkId(audioOutput._id);
+        } catch (error) {
+            console.log(error)
+        }
+
+    }, [audioOutput])
 
     return (
         <>
