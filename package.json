@@ -48,8 +48,7 @@
     ],
     "icon": "build/logo512.ico",
     "publish": {
-      "provider": "github",
-      "token": "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"
+      "provider": "github"
     },
     "win": {
       "icon": "build/logo512.ico",
