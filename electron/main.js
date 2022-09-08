@@ -181,6 +181,11 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
+// get current version
+ipcMain.on('get_app_ver', (event) => {
+  event.sender.send('get_app_ver', {version: app.getVersion()});
+})
+
 // handle updates
 ipcMain.on('check-for-updates', async (event, data) => {
 

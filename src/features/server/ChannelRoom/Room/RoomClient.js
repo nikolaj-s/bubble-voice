@@ -195,7 +195,7 @@ export class RoomClient {
             let el;
 
             let par;
-
+            console.log(stream)
             if (consumer.rtpParameters.codecs[0].mimeType === 'video/VP8') {
                 
                 el = document.createElement('video');
@@ -206,7 +206,7 @@ export class RoomClient {
                 el.autoplay = true;
                 el.className = "";
                 el.muted = true;
-                document.getElementById(user.username).appendChild(el)
+                document.getElementById(user._id).appendChild(el)
             } else if (consumer.rtpParameters.codecs[0].mimeType === 'video/H264' || consumer.rtpParameters.codecs[0].mimeType === 'video/rtx') {
 
                 par = document.createElement('div');
@@ -222,20 +222,22 @@ export class RoomClient {
                 el.muted = false;
                 el.volume = 1;
                 par.appendChild(el);
-                document.getElementById(user.username).parentNode.appendChild(par)
+                document.getElementById(user._id).parentNode.appendChild(par)
             } else {
-                const user_pref_volume = USER_PREFS.get(user.username);
+                const user_pref_volume = USER_PREFS.get(user._id);
 
                 el = document.createElement('audio')
                 el.hidden = true;
                 el.srcObject = stream;
-                el.className = `audio-source-for-user-${user.username}`;
+                el.className = `audio-source-for-user-${user._id}`;
                 el.id = consumer.id;
                 el.playsInline = false;
                 el.muted = this.audioState;
                 el.autoplay = true;
                 el.volume = user_pref_volume?.volume ? user_pref_volume.volume : 1;
-                document.getElementById(user.username).appendChild(el)
+                console.log(user._id)
+                console.log(document.getElementById(user._id))
+                document.getElementById(user._id).appendChild(el)
 
             }
 
@@ -244,7 +246,6 @@ export class RoomClient {
             }.bind(this))
 
             consumer.on('transportclose', function () {
-                console.log(consumer.id)
                 this.removeConsumer(consumer.id);
             }.bind(this))
         }.bind(this))
@@ -345,21 +346,12 @@ export class RoomClient {
                 break
             case mediaType.screen:
                 mediaConstraints = {
-                    audio: {
-                        mandatory: {
-                          chromeMediaSource: 'desktop',
-                          chromeMediaSourceId: deviceId,
-                        }
-                    },
+                    audio: false,
                     video: {
                         mandatory: {
                             chromeMediaSource: 'desktop',
-                            chromeMediaSourceId: deviceId,
-                            maxWidth: 1280,
-                            maxHeight: 720,
-                            maxFrameRate: 60
-                        },
-                        
+                            chromeMediaSourceId: deviceId
+                        }
                     }
                 };
                 screen = true;
@@ -386,8 +378,6 @@ export class RoomClient {
 
             const track = audio ? stream.getAudioTracks()[0] : stream.getVideoTracks()[0]
             
-            stream_audio = null
-            
            // if (screen) stream_audio = stream.getAudioTracks()[0];
 
             const params = {
@@ -399,7 +389,7 @@ export class RoomClient {
                     {
                     rid: 'r0',
                     maxBitrate: 100000,
-                  //  scaleResolutionDownBy: 2.0,
+                    scaleResolutionDownBy: 2.0,
                     scalabilityMode: 'S1T3'
                     },
                     {
@@ -433,7 +423,7 @@ export class RoomClient {
                 el.className = 'stream';
                 el.autoplay = true;
                 el.className = 'videoplayer';
-                document.getElementById(this.user.username).appendChild(el);
+                document.getElementById(this.user._id).appendChild(el);
             } else if (screen) {
                 stream[type] = 'screen'
                 par = document.createElement('div');
@@ -448,7 +438,7 @@ export class RoomClient {
                 el.className = 'streaming-video-player'
                 el.playsInline = true;
                 par.appendChild(el)
-                document.getElementById(this.user.username).parentNode.appendChild(par)
+                document.getElementById(this.user._id).parentNode.appendChild(par)
             }
             
             producer.on('trackended', () => {

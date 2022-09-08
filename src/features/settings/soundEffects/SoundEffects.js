@@ -18,7 +18,7 @@ const controlSoundEffect = require('../../../assets/control-sound-effect.mp3');
 
 const channelDeleted = require('../../../assets/channel-has-been-deleted.mp3');
 
-const userPoked = require('../../../assets/you-have-been-poked.mp3')
+const userPoked = require('../../../assets/hey-wake-up.mp3')
 
 export const SoundEffects = () => {
 

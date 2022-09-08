@@ -25,7 +25,7 @@ import { selectSignedUp } from '../features/LoggingIn/signUp/signUpSlice';
 import './App.css';
 import { fetchAppearanceSettings, fetchKeyBinds, fetchSavedUserPrefs, initKeyBinds } from '../util/LocalData';
 import { setSavedKeyCodes } from '../features/settings/appSettings/keyBindSettings/keyBindSettingsSlice';
-import { handleUpdateAvailable } from './appSlice';
+import { handleUpdateAvailable, updateCurrentAppVersion } from './appSlice';
 import { fetchSavedAppAudioSettings } from '../features/settings/soundEffects/soundEffectsSlice';
 
 function App() {
@@ -95,11 +95,19 @@ function App() {
 
         ipcRenderer = window.require('electron').ipcRenderer;
 
+        ipcRenderer.send('get_app_ver');
+
+        ipcRenderer.on('get_app_ver', (event, data) => {
+          ipcRenderer.removeAllListeners('get_app_ver');
+          
+          dispatch(updateCurrentAppVersion(data.version));
+        })
+
         ipcRenderer.send('check-for-updates');
 
         ipcRenderer.on('update available', () => {
             
-          ipcRenderer.removeListeners('update-downloaded');
+          ipcRenderer.removeAllListeners('update-downloaded');
 
           dispatch(handleUpdateAvailable(true));
         
@@ -120,9 +128,10 @@ function App() {
 
       return () => {
         if (ipcRenderer) {
-          ipcRenderer.removeListeners('update available');
-          ipcRenderer.removeListeners('update not available');
-          ipcRenderer.removeListeners('error updating');
+          ipcRenderer.removeAllListeners('update available');
+          ipcRenderer.removeAllListeners('update not available');
+          ipcRenderer.removeAllListeners('error updating');
+          ipcRenderer.removeAllListeners('get_app_ver');
         }
       }
     }, 10)

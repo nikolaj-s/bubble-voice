@@ -1,5 +1,4 @@
 
-
 import { createSlice } from "@reduxjs/toolkit";
 
 const appSlice = createSlice({
@@ -8,10 +7,14 @@ const appSlice = createSlice({
         loadingApp: true,
         userSignedIn: false,
         updateAvailable: false,
+        currentVersion: ""
     },
     reducers: {
         handleUpdateAvailable: (state, action) => {
             state.updateAvailable = action.payload;
+        },
+        updateCurrentAppVersion: (state, action) => {
+            state.currentVersion = action.payload;
         }
     }
 })
@@ -22,6 +25,8 @@ export const selectLoadingAppState = state => state.appSlice.loadingApp;
 
 export const selectUpdateAvailableState = state => state.appSlice.updateAvailable;
 
-export const { handleUpdateAvailable } = appSlice.actions;
+export const selectCurrentAppVersion = state => state.appSlice.currentVersion;
+
+export const { updateCurrentAppVersion, handleUpdateAvailable } = appSlice.actions;
 
 export default appSlice.reducer;

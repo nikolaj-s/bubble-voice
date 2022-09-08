@@ -17,6 +17,7 @@ import { signInHandleLogOutState } from '../../LoggingIn/signIn/signInSlice';
 // style's
 import "./AppSettingsMenu.css";
 import { clearToken } from '../../../util/Validation';
+import { AppVersion } from '../../../components/AppVersion/AppVersion';
 
 const SettingsMenu = () => {
 
@@ -74,6 +75,7 @@ const SettingsMenu = () => {
                 </div>
                 <SettingsCategoryButton action={handleLogOut} name={"Log Out"} link={"log-out"} />   
             </div>
+            <AppVersion />
         </motion.div>
     )
 }

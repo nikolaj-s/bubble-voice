@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as mediasoupClient from 'mediasoup-client';
 
 // state
-import { updateMusicState, selectCurrentChannel, selectCurrentChannelId, selectMusicPlayingState, selectMusicQueue, selectPushToTalkActive, selectServerId, toggleLoadingChannel, updateMemberStatus } from '../../ServerSlice';
+import { updateMusicState, selectCurrentChannel, selectCurrentChannelId, selectMusicPlayingState, selectMusicQueue, selectPushToTalkActive, selectServerId, toggleLoadingChannel, updateMemberStatus, selectServerMembers } from '../../ServerSlice';
 import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPushToTalkState } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
 import { selectDisplayName, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { playSoundEffect } from '../../../settings/soundEffects/soundEffectsSlice';
@@ -73,8 +73,13 @@ const Component = () => {
     const voiceActivityDetection = useSelector(selectVoiceActivityState);
 
     const pushToTalk = useSelector(selectPushToTalkState);
+
+    const members = useSelector(selectServerMembers);
+
+    const { _id } = members.find(member => member.username === username);
     
     const user = {
+        _id: _id,
         username: username,
         display_name: displayName,
         user_banner: userBanner,
@@ -86,13 +91,11 @@ const Component = () => {
     }
 
     const init = async () => {
-        
         client = new RoomClient(socket, current_channel_id, server_id, mediasoupClient, audioDevice, videoDevice, microphoneState, webcamState, user, event, audioState)
 
         await client.join();
 
         return true
-
     }
 
     const cycleChannelPage = (page) =>  {

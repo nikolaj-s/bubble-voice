@@ -1,0 +1,13 @@
+
+.app-version-container {
+    width: 90%;
+}
+
+.app-version-container P {
+    padding: 0 0 .5rem 0;
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: var(--font-spacing);
+    opacity: 0.6;
+}

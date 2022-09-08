@@ -10,7 +10,7 @@ import { AssignPermissionGroupMenu } from '../../components/AssignPermissionGrou
 import { Loading } from '../../components/LoadingComponents/Loading/Loading';
 
 // state
-import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectContextMenuActive, selectContextMenuCordinates, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteWidget, selectEditChannelCtxState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSelectedUserCtxState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
+import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectContextMenuActive, selectContextMenuCordinates, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteWidget, selectEditChannelCtxState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSelectedUserCtxState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
 import { assignNewServerGroup, markWidgetForDeletion, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerMembers, selectUsersPermissions, setEditingChannelId, setSocialInput, throwServerError } from '../server/ServerSlice';
 
 // style
@@ -23,6 +23,7 @@ import { selectUsername } from '../settings/appSettings/accountSettings/accountS
 
 // USER PREFS
 import { saveUserPrefs, USER_PREFS } from '../../util/LocalData';
+import { CtxMenuTitle } from '../../components/titles/ctxMenuTitle/CtxMenuTitle';
 
 export const ContextMenu = () => {
 
@@ -85,6 +86,8 @@ export const ContextMenu = () => {
     const kickUser = useSelector(selectKickUser);
 
     const pokeUser = useSelector(selectPokeUser);
+
+    const memberId = useSelector(selectMemberId);
 
     const changeUserVolume = useSelector(selectChangingUsersVolumeState);
 
@@ -184,30 +187,31 @@ export const ContextMenu = () => {
                 const id = p.id.split('-')[0]
 
                 const channel_id = p.id.split('channel-id-')[1]
-                
+
                 if (!id) return;
+
+                const user = members.find(user => user._id === id);
 
                 dispatch(toggleContextMenu(true));
 
-                const isOwner = permissionGroups.findIndex(group => group._id === p.id.split('-')[1] && group.server_group_name === 'Owner')
+                const isOwner = permissionGroups.findIndex(group => group._id === user.server_group && group.server_group_name === 'Owner')
                 
-                if (id === username) {
+                if (user.username === username) {
 
                     dispatch(setContextMenuOptions({state: 'leaveChannel', value: true}));
 
                 } else {
 
                     dispatch(setContextMenuOptions({state: 'kickUser', value: isOwner !== -1 ? false : permissions.user_can_kick_user}));
-
-                    const user = members.findIndex(user => user.username === id);
                     
                     dispatch(handleUserManagementCtx({
                         ban: isOwner !== -1 ? false : permissions.user_can_ban_user,
                         perms: isOwner !== -1 ? false : permissions.user_can_manage_server_groups,
-                        user: `${id}-servergroup-${members[user].server_group}-channel-id-${channel_id}`,
+                        user: `${user.username}-servergroup-${user.server_group}-channel-id-${channel_id}`,
                         isOwner: isOwner !== -1,
                         poke: p.className?.includes('active-user-container') ? false : true,
                         volume: true,
+                        member_id: user._id
                     }))
 
                     const USER_VOLUME = USER_PREFS.get(id);
@@ -284,11 +288,13 @@ export const ContextMenu = () => {
         console.log(id, user)
         await socket.request('assign server group', {username: user, server_group: id})
         .then(data => {
+            console.log(data);
             dispatch(assignNewServerGroup({username: user, server_group: id}))
             toggleLoading(false);
             closeCtxMenu();
         })
         .catch(error => {
+            console.log(error)
             toggleLoading(false)
             closeCtxMenu();
             dispatch(throwServerError({errorMessage: error}));
@@ -328,22 +334,12 @@ export const ContextMenu = () => {
     }
 
     const handleUserVolumeChange = (value) => {
-        console.log(value)
+
         setUserVolumeLevel(value);
 
         let obj = {};
-
-        const userscurrentchannel = selectedUserToManage.split('channel-id-')[1];
-
-        const usertochangevolume = selectedUserToManage.split('-')[0]
-
-        if (userscurrentchannel === currentChannelId) {
-
-            document.getElementsByClassName(`audio-source-for-user-${usertochangevolume}`)[0].volume = value;
-
-        }
         
-        const currentUserPrefs = USER_PREFS.get(usertochangevolume);
+        const currentUserPrefs = USER_PREFS.get(memberId);
 
         if (currentUserPrefs) {
             obj = {...currentUserPrefs, volume: value}
@@ -351,9 +347,15 @@ export const ContextMenu = () => {
             obj = {volume: value}
         }
 
-        USER_PREFS.set(usertochangevolume, obj);
+        USER_PREFS.set(memberId, obj);
 
         saveUserPrefs();
+
+        try {
+            document.getElementsByClassName(`audio-source-for-user-${memberId}`)[0].volume = value;
+        } catch (error) {
+            
+        }
     }
 
     const handlePokeUser = async () => {
@@ -388,14 +390,24 @@ export const ContextMenu = () => {
             {joinChannelState ? <CtxButton action={handleJoinChannel} name={"Join Channel"} /> : null}
             {leaveChannelState ? <CtxButton action={handleLeaveChannel} name={'Leave Channel'} /> : null}
             {editChannelState ? <CtxButton action={handleEditChannel} name={"Edit Channel"} /> : null}
-            {canBanUser ? <CtxButton name={"Ban User"} /> : null}
             {isOwnerCtxState ? <CtxMenuPlaceHolder name={"Server Owner"} /> : null}
             {assignPermissions ? <AssignPermissionGroupMenu action={assignNewPermissionGroup} permission_groups={permissionGroups} current_permission_group={selectedUserToManage.split('-channel')[0]}  /> : null}
-            {audio ? <Range action={handleVolumeChange} fill={true} value={audioLevel} /> : null}
-            {changeUserVolume ? <Range action={handleUserVolumeChange} step={0.05} value={userVolumeLevel} fill={true} /> : null}
+            {audio ? 
+            <>
+            <CtxMenuTitle title={"Change Volume"} />
+            <Range action={handleVolumeChange} fill={true} value={audioLevel} />
+            </>
+             : null}
+            {changeUserVolume ? 
+            <>
+            <CtxMenuTitle title={"Change User Volume"} />
+            <Range action={handleUserVolumeChange} step={0.05} value={userVolumeLevel} fill={true} /> 
+            </>
+            : null}
             {deleteWidget ? <CtxButton action={handleDeleteWidget} name={"Delete Widget"} /> : null}
             {kickUser ? <CtxButton name="Kick User" /> : null}
             {pokeUser ? <CtxButton name="Poke User" action={handlePokeUser} /> : null}
+            {canBanUser ? <CtxButton name={"Ban User"} /> : null}
             <Loading loading={loading} />
         </motion.div>
         : null}

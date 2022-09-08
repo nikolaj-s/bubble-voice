@@ -49,13 +49,13 @@ export const WidgetPreview = ({widgets = [], editing = false, reorder}) => {
             : widgets.map((widget, key) => {
                 return (
                     <>
-                    {widget.type === 'title' ? <TitleWidget key={widget._id} widget={widget} /> : null}
-                    {widget.type === 'plainText' ? <PlainTextWidget key={widget._id} widget={widget} /> : null}
-                    {widget.type === 'list' ? <ListWidget key={widget._id} widget={widget} /> : null}
-                    {widget.type === 'image' ? <ImageWidget key={widget._id} widget={widget} /> : null}
-                    {widget.type === 'video' ? <VideoWidget key={widget._id} widget={widget} /> : null}
+                    {widget.type === 'title' ? <TitleWidget key={widget._id + key} widget={widget} /> : null}
+                    {widget.type === 'plainText' ? <PlainTextWidget key={widget._id + key} widget={widget} /> : null}
+                    {widget.type === 'list' ? <ListWidget key={widget._id + key} widget={widget} /> : null}
+                    {widget.type === 'image' ? <ImageWidget key={widget._id + key} widget={widget} /> : null}
+                    {widget.type === 'video' ? <VideoWidget key={widget._id + key} widget={widget} /> : null}
                     {widget.type === 'dynamicGallery' ? <DynamicGalleryWidget key={widget._id} widget={widget} /> : null}
-                    {widget.type === 'music' ? <MusicWidget key={widget._id} /> : null}
+                    {widget.type === 'music' ? <MusicWidget key={widget._id + key} /> : null}
                     </>
                 )
             })}

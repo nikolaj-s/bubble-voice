@@ -51,7 +51,7 @@ export const ImageWidgetButton = ({action}) => {
                 </defs>
                 </svg>
             </div>
-            <h2 style={{color: textColor}}>Single Image</h2>
+            <h2 style={{color: textColor, textAlign: 'center'}}>Single Image</h2>
         </motion.div>
     )
 }

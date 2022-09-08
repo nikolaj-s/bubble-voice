@@ -16,7 +16,7 @@ export const User = ({user}) => {
     return (
         <div 
         style={{border: `solid 4px ${user.active ? activeColor : accentColor}`}}
-        id={user.username} className='active-user-container'>
+        id={user._id} className='active-user-container'>
             <Image position='absolute' image={user.user_banner} />
             <div className='active-user-profile-image-container'>
                 <Image objectFit='cover' image={user.user_image} />

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 // state
 import { selectPrimaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
-import { CtxMenuPlaceHolder } from '../titles/ctxMenuPlaceHolder/CtxMenuPlaceHolder';
+import { CtxMenuTitle } from '../titles/ctxMenuTitle/CtxMenuTitle';
 
 // style
 import "./AssignPermissionGroupMenu.css";
@@ -23,7 +23,7 @@ export const AssignPermissionGroupMenu = ({permission_groups, current_permission
 
     return (
         <div className='assign-permission-group-menu-container'>
-            <CtxMenuPlaceHolder name={"Assign Permssions"} />
+            <CtxMenuTitle title={"Change Users Permissions"} />
             {permission_groups.map((group, key) => {
                 return (
                     group.server_group_name === 'Owner' ? null :

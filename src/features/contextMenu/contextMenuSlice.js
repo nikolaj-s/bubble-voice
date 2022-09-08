@@ -22,6 +22,7 @@ const contextMenuSlice = createSlice({
         kickUser: false,
         pokeUser: false,
         changeVolume: false,
+        _id: "",
         // copy && paste
         copy: false,
         paste: false,
@@ -59,6 +60,7 @@ const contextMenuSlice = createSlice({
             state.kickUser = false;
             state.pokeUser = false;
             state.changeVolume = false;
+            state._id = "";
         },
         handleChannelCtxState: (state, action) => {
             state.joinChannel = action.payload.join;
@@ -74,6 +76,7 @@ const contextMenuSlice = createSlice({
             state.isOwner = action.payload.isOwner;
             state.pokeUser = action.payload.poke;
             state.changeVolume = action.payload.volume;
+            state._id = action.payload.member_id;
         },
         handleCopyPasteCtxState: (state, action) => {
             state.paste = true;
@@ -119,6 +122,8 @@ export const selectKickUser = state => state.contextMenuSlice.kickUser;
 export const selectPokeUser = state => state.contextMenuSlice.pokeUser;
 
 export const selectChangingUsersVolumeState = state => state.contextMenuSlice.changeVolume;
+
+export const selectMemberId = state => state.contextMenuSlice._id;
 
 // actions
 export const { handleCopyPasteCtxState, handleUserManagementCtx, handleChannelCtxState, clearCtxState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } = contextMenuSlice.actions;

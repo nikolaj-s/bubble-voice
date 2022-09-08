@@ -9,7 +9,7 @@ import { Error } from '../../components/Error/Error';
 
 // state
 import { retryLoadingApplication, selectLoadingError, selectLoadingErrorMessage, selectLoadingPercent, selectLoadingState } from './initializingAppScreenSlice';
-import { selectSecondaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectSecondaryColor, selectTextColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./InitializingAppScreen.css";
@@ -20,6 +20,8 @@ export const InitializingAppScreen = () => {
     const dispatch = useDispatch();
 
     const secondaryColor = useSelector(selectSecondaryColor);
+
+    const textColor = useSelector(selectTextColor);
 
     const loadingState = useSelector(selectLoadingState);
 
@@ -41,8 +43,16 @@ export const InitializingAppScreen = () => {
             }}
             className='loading-app-inner-container'>
                 <div className='content-wrapper'>
-                    <h1>{loadingState}</h1>
-                    <h1>{loadingPercent} %</h1>
+                    <h1
+                    style={{
+                        color: textColor
+                    }}
+                    >{loadingState}</h1>
+                    <h1
+                    style={{
+                        color: textColor
+                    }}
+                    >{loadingPercent} %</h1>
                     <LoadingBar percent={loadingPercent} />
                 </div>
                 <AnimatePresence>

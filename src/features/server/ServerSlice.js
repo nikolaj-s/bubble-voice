@@ -140,8 +140,6 @@ const serverSlice = createSlice({
             const userIndex = state.members.findIndex(member => member.user_name === action.payload.username)
             
             if (userIndex === -1) return;
-
-            console.log(state.members[userIndex])
         },
         throwServerError: (state, action) => {
             state.error = true;

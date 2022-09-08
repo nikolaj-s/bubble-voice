@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ChannelTitle } from './ChannelTitle/ChannelTitle'
 
 // state
-import { joinChannel, leaveChannel, selectCurrentChannelId, selectServerChannels } from '../../ServerSlice';
+import { joinChannel, leaveChannel, selectCurrentChannelId, selectServerChannels, selectServerMembers } from '../../ServerSlice';
 import { ChannelButton } from '../../../../components/buttons/ChannelButton/ChannelButton';
 import { selectDisplayName, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 
@@ -35,6 +35,8 @@ export const ChannelList = () => {
 
     const currentChannelId = useSelector(selectCurrentChannelId);
 
+    const serverMembers = useSelector(selectServerMembers);
+
     const openCreateChannelMenu = () => {
         const location = window.location.hash.split('#')[1];
 
@@ -59,9 +61,12 @@ export const ChannelList = () => {
             dispatch(leaveChannel({username: username}))
         }
 
+        const { _id } = serverMembers.find(el => el.username === username);
+
         // delay joining channel to allow proper unmounting of components
         setTimeout(() => {
             const data = {
+                _id: _id,
                 username: username,
                 display_name: displayName,
                 user_image: userImage,

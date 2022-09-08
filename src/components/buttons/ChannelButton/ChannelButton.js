@@ -26,7 +26,7 @@ const User = ({user, channel_id}) => {
     const textColor = useSelector(selectTextColor);
 
     return (
-        <div id={`${user.username}-channel-user-display-channel-id-${channel_id}`} style={{zIndex: 1}} key={user.username} className='channel-user-placeholder'>
+        <div id={`${user._id}-channel-user-display-channel-id-${channel_id}`} style={{zIndex: 1}} key={user.username} className='channel-user-placeholder'>
             <div 
             style={{border: `solid 4px ${user.active ? activityColor : secondaryColor}`}}
             className='channel-user-placeholder-user-image'>
