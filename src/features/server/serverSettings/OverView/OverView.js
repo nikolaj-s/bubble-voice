@@ -28,6 +28,12 @@ const Wrapper = () => {
 
     const [newServerName, setNewServerName] = React.useState("");
 
+    const [serverPassword, setServerPassword] = React.useState("");
+
+    const [newServerPassword, setNewServerPassword] = React.useState("");
+
+    const [confirmNewServerPassword, setConfirmNewServerPassword] = React.useState("");
+
     const [update, setUpdate] = React.useState(false);
 
     const [loading, toggleLoading] = React.useState(false);
@@ -53,13 +59,24 @@ const Wrapper = () => {
         }
     }
 
+    React.useEffect(() => {
+
+        if (serverPassword.length > 1 && newServerPassword.length > 1) {
+            setUpdate(true);
+        }
+
+    }, [serverPassword, newServerPassword])
+
     const submitChange = async () => {
         try {
             toggleLoading(true);
 
             const data = {
                 server_name: newServerName === serverName ? null : newServerName,
-                server_banner: newBanner
+                server_banner: newBanner,
+                server_password: serverPassword,
+                new_server_password: newServerPassword,
+                confirm_new_server_password: confirmNewServerPassword
             }
             
             await socket.request('update server', data)
@@ -73,6 +90,10 @@ const Wrapper = () => {
                 if (data.data.server_banner) {
                     dispatch(updateServerBanner(data.data.server_banner));
                 }
+
+                setServerPassword("");
+                setNewServerPassword("");
+                setConfirmNewServerPassword("");
             })
             .catch(error => {
                 toggleLoading(false);
@@ -147,9 +168,9 @@ const Wrapper = () => {
         {permissions?.user_can_edit_server_password ?
         <>
         <InputTitle title={"Update Server Password"} />
-        <TextInput marginBottom='2%' placeholder={"Current Password"} />
-        <TextInput marginBottom='2%' placeholder={"New Password"} />
-        <TextInput placeholder={"Confirm New Password"} />
+        <TextInput action={(data) => {setServerPassword(data)}} value={serverPassword} marginBottom='2%' placeholder={"Current Password"} type="password" />
+        <TextInput action={(data) => {setNewServerPassword(data)}} value={newServerPassword} marginBottom='2%' placeholder={"New Password"} type="password" />
+        <TextInput action={(data) => {setConfirmNewServerPassword(data)}} value={confirmNewServerPassword} placeholder={"Confirm New Password"} type="password" />
         </>
         : null}
         {update ? <ApplyCancelButton cancel={handleCancel} apply={submitChange} /> : null}

@@ -45,6 +45,8 @@ export const Menu = () => {
     }
 
     const handleChannelNameInput = (value) => {
+        if (value.includes('/')) return;
+
         setChannelName(value);
     }
 

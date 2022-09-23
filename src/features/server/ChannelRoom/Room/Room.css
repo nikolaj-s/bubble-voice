@@ -15,11 +15,16 @@
     background-color: black;
     max-height: 400px;
     max-width: 700px;
-    width: 100%;
+    width: calc(100% - 8px);
+    border: solid 4px black;
+    display: flex;
+    justify-content: center;
+    align-content: center;
     overflow: hidden;
     border-radius: var(--border-radius);
     height: auto;
     display: flex;
+    cursor: pointer;
 }
 
 #live-chat-wrapper .streaming-video-player {

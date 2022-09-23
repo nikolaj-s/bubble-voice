@@ -94,9 +94,10 @@ const Settings = () => {
                 <TextInput action={handleInput} stateSelector='newPassword' marginBottom='2%' type='password' placeholder={"New Password"} inputValue={newPassword} />
                 <TextInput action={handleInput} inputValue={confirmNewPassword}stateSelector="confirmNewPassword" type='password' placeholder={"Confirm New Password"} />
 
-                <InputTitle title={"Change Banner / Profile Pic"} />
+                <InputTitle title={"Change Banner / Profile Picture"} />
 
                 <ProfileImage getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} />
+                <InputTitle title={"*Reconnect To Channel To See Changes"} />
                 {stateChanged ? <ApplyCancelButton apply={handleApply} cancel={handleCancel} /> : null}
                 
                 <SettingsSpacer />

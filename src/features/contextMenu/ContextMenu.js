@@ -8,6 +8,7 @@ import { CtxButton } from '../../components/buttons/ctxButton/CtxButton';
 import { CtxMenuPlaceHolder } from '../../components/titles/ctxMenuPlaceHolder/CtxMenuPlaceHolder'
 import { AssignPermissionGroupMenu } from '../../components/AssignPermissionGroupMenu/AssignPermissionGroupMenu'
 import { Loading } from '../../components/LoadingComponents/Loading/Loading';
+import { CtxMenuTitle } from '../../components/titles/ctxMenuTitle/CtxMenuTitle';
 
 // state
 import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectContextMenuActive, selectContextMenuCordinates, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteWidget, selectEditChannelCtxState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSelectedUserCtxState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
@@ -23,7 +24,6 @@ import { selectUsername } from '../settings/appSettings/accountSettings/accountS
 
 // USER PREFS
 import { saveUserPrefs, USER_PREFS } from '../../util/LocalData';
-import { CtxMenuTitle } from '../../components/titles/ctxMenuTitle/CtxMenuTitle';
 
 export const ContextMenu = () => {
 
@@ -118,8 +118,8 @@ export const ContextMenu = () => {
                 dispatch(setContextMenuOptions({state: "saveImage", value: true}))
                 setSelectedImage(p)
             }
-            if (p.localName === 'video' && p.className !== 'videoplayer' && p.className !== 'streaming-video-player') {
-
+            if (p.localName === 'video' && p.className !== 'stream' && p.className !== 'streaming-video-player') {
+                
                 dispatch(toggleContextMenu(true));
 
                 dispatch(setContextMenuOptions({state: 'saveVideo', value: true}))
@@ -166,8 +166,7 @@ export const ContextMenu = () => {
                 dispatch(handleCopyPasteCtxState());
             }
 
-            if (p.localName === 'video' || p.localName === 'audio') {
-                if (p.className === 'videoplayer') return;
+            if ((p.localName === 'video' || p.localName === 'audio') && p.className !== 'stream') {
 
                 dispatch(setContextMenuOptions({state: 'audio', value: true}))
             }
@@ -209,7 +208,7 @@ export const ContextMenu = () => {
                         perms: isOwner !== -1 ? false : permissions.user_can_manage_server_groups,
                         user: `${user.username}-servergroup-${user.server_group}-channel-id-${channel_id}`,
                         isOwner: isOwner !== -1,
-                        poke: p.className?.includes('active-user-container') ? false : true,
+                        poke: true,
                         volume: true,
                         member_id: user._id
                     }))
@@ -288,7 +287,6 @@ export const ContextMenu = () => {
         console.log(id, user)
         await socket.request('assign server group', {username: user, server_group: id})
         .then(data => {
-            console.log(data);
             dispatch(assignNewServerGroup({username: user, server_group: id}))
             toggleLoading(false);
             closeCtxMenu();

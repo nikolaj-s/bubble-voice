@@ -29,7 +29,8 @@ export const NotAuthorizedMessage = () => {
             style={{
                 color: textColor,
                 fontWeight: 400,
-                letterSpacing: 2
+                letterSpacing: 2,
+                textAlign: 'center'
             }}
             >You Are Not Authorized To Accesss This Feature</h3>
         </div>

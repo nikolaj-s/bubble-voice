@@ -207,6 +207,6 @@ autoUpdater.on('update-not-available', () => {
 })
 
 autoUpdater.on('update-downloaded', () => {
-  win.webContents.send('update available');
+  win.webContents.send('update-available');
 })
 

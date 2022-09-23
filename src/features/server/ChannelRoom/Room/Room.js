@@ -28,6 +28,7 @@ import { RoomNavigation } from './RoomNavigation/RoomNavigation';
 import { Social } from './Social/Social';
 import { Widgets } from './Widgets/Widgets';
 import { Music } from './Music/Music';
+import { RoomUserWrapper } from './RoomUserWrapper/RoomUserWrapper';
 
 let client;
 
@@ -76,10 +77,10 @@ const Component = () => {
 
     const members = useSelector(selectServerMembers);
 
-    const { _id } = members.find(member => member.username === username);
+    const member = members.find(member => member.username === username);
     
     const user = {
-        _id: _id,
+        _id: member?._id,
         username: username,
         display_name: displayName,
         user_banner: userBanner,
@@ -339,18 +340,11 @@ const Component = () => {
         <>
             <RoomNavigation action={cycleChannelPage} page={page} />
             <div id='live-chat-wrapper'>
-                {
-                !channel.users ? null :
-                channel.users.map((obj => {
-                    return (
-                        <UserComponent key={obj.username} user={obj} />
-                    )
-                }))}
+                <RoomUserWrapper users={channel.users} />
                 <AnimatePresence>
                     {page === "social" ? <Social /> : null}
                     {page === "widgets" ? <Widgets /> : null}
                 </AnimatePresence>
-                
             </div>
             <Music />
         </>

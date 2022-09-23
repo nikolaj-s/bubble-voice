@@ -2,7 +2,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-
 // state
 import { selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectCurrentAppVersion } from '../../app/appSlice';
@@ -21,6 +20,7 @@ export const AppVersion = () => {
             <p
             style={{color: color}}
             >App Version: {appVersion}</p>
+            <p style={{color: color}}>Copyright Bubble 2022</p>
         </div>
     )
 }

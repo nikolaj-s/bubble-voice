@@ -105,7 +105,7 @@ function App() {
 
         ipcRenderer.send('check-for-updates');
 
-        ipcRenderer.on('update available', () => {
+        ipcRenderer.on('update-available', () => {
             
           ipcRenderer.removeAllListeners('update-downloaded');
 

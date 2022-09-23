@@ -2,6 +2,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+
 // components
 import { WebCamButton } from '../../components/buttons/mediaButtons/webcamButton/WebCamButton';
 import { SettingsButton } from '../../components/buttons/settingsButton/settingsButton';
@@ -9,15 +10,18 @@ import { MicToggleButton } from '../../components/buttons/mediaButtons/micToggle
 import { AudioToggleButton } from '../../components/buttons/mediaButtons/audioToggleButton/AudioToggleButton';
 import { ShareScreenButton } from '../../components/buttons/mediaButtons/shareScreenButton/ShareScreenButton';
 import { ConnectionIndicator } from '../../components/connectionIndicator/ConnectionIndicator';
+import { ScreenShareMenu } from './ScreenShareMenu/ScreenShareMenu';
 
 // state
 import { resetControlState, selectAudioState, selectingScreensState, selectMicrophoneState, selectScreenShareState, selectWebCamState, toggleControlState } from './ControlBarSlice';
+import { selectCurrentChannelId } from '../server/ServerSlice';
+import { playSoundEffect } from '../settings/soundEffects/soundEffectsSlice';
+import { selectAccentColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style's
 import "./ControlBar.css";
-import { ScreenShareMenu } from './ScreenShareMenu/ScreenShareMenu';
-import { selectCurrentChannelId } from '../server/ServerSlice';
-import { playSoundEffect } from '../settings/soundEffects/soundEffectsSlice';
+
+
 
 export const ControlBar = () => {
 
@@ -37,6 +41,8 @@ export const ControlBar = () => {
     const current_channel_id = useSelector(selectCurrentChannelId);
 
     const selectingScreens = useSelector(selectingScreensState);
+
+    const accentColor = useSelector(selectAccentColor);
 
     const toggleFunction = (state) => {
         if (current_channel_id === null) return;
@@ -79,7 +85,9 @@ export const ControlBar = () => {
     return (
         <>
             {selectingScreens ? <ScreenShareMenu /> : null}
-            <div className='control-bar-container'>
+            <div className='control-bar-container' 
+            style={{borderTop: `solid 2px ${accentColor}`}}
+            >
                 <SettingsButton action={toggleAppSettings} />
                 <div className='controls-wrapper'>
                     <WebCamButton 

@@ -45,7 +45,9 @@ export const Social = () => {
     const displayName = useSelector(selectDisplayName);
 
     React.useEffect(() => {
+
         messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+
         if (permission.user_can_post_channel_social) document.getElementById('social-input-selector').focus()
         
         return () => {

@@ -12,11 +12,12 @@ import { selectTextColor } from '../../features/settings/appSettings/appearanceS
 
 // style
 import "./Message.css";
+import { TextParser } from './TextParser/TextParser';
 
 export const Message = ({ message }) => {
 
     const textColor = useSelector(selectTextColor);
-
+    
     return (
         <div 
         style={{
@@ -33,9 +34,7 @@ export const Message = ({ message }) => {
                 style={{color: textColor}}
                 >{message.date}</p>}
             </div>
-            {message.text ? <p
-            style={{color: textColor}}
-            >{message.text}</p> : null}
+            {message.text ? <TextParser text={message.text} /> : null}
             {message.image ? 
             <div className='message-image-container'>
                 <Image objectFit='contain' image={message.image} />
@@ -46,7 +45,6 @@ export const Message = ({ message }) => {
                 <Video id={message.local_id} video={message.video} />
             </div>
             : null}
-
         </div>
     )
 }

@@ -4,7 +4,6 @@
     width: 90%;
     height: 80px;
     min-height: 80px;
-    border-top: solid 2px black;
     display: flex;
     justify-content: space-between;
     align-items: center;

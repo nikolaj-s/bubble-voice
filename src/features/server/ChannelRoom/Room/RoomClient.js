@@ -204,7 +204,6 @@ export class RoomClient {
                 el.className = 'stream';
                 el.playsInline = false;
                 el.autoplay = true;
-                el.className = "";
                 el.muted = true;
                 document.getElementById(user._id).appendChild(el)
             } else if (consumer.rtpParameters.codecs[0].mimeType === 'video/H264' || consumer.rtpParameters.codecs[0].mimeType === 'video/rtx') {

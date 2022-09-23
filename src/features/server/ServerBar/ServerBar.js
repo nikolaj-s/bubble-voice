@@ -202,7 +202,7 @@ const Bar = () => {
 
         const activate = (e) => {
             if (active === true) return;
-            if (e.keyCode === pushToTalkKey.keyCode) {
+            if (e.keyCode === pushToTalkKey.keyCode || e.key === pushToTalkKey.key) {
                 dispatch(toggleServerPushToTalkState(true))
                 active = true;
             }
@@ -210,7 +210,7 @@ const Bar = () => {
 
         const deactivate = (e) => {
             
-            if (e.keyCode === pushToTalkKey.keyCode) {
+            if (e.keyCode === pushToTalkKey.keyCode || e.key === pushToTalkKey.key) {
                 if (active === false) return;
                 dispatch(toggleServerPushToTalkState(false))
                 active = false;
@@ -220,25 +220,26 @@ const Bar = () => {
         }
 
         const press = (e) => {
-            
-            if (e.key === muteMicKey.key) {
+            console.log(e)
+            console.log(muteMicKey)
+            if (e.keyCode === muteMicKey.keyCode || e.key === muteMicKey.key) {
                 if (pressed) return;
                 document.getElementById('toggle-microphone-button').click();
                 pressed = true;
             }
 
-            if (e.key === muteAudioKey.key) {
+            if (e.keyCode === muteAudioKey.keyCode || e.key === muteAudioKey.key) {
                 if (pressed) return;
                 document.getElementById('mute-audio-toggle-button').click();
                 pressed = true;
             }
 
-            if (e.key === webCamKey.key) {
+            if (e.keyCode === webCamKey.keyCode || e.key === webCamKey.key) {
                 if (pressed) return;
                 document.getElementById('web-cam-toggle-button').click();
             }
 
-            if (e.key === disconnectKey.key) {
+            if (e.keyCode === disconnectKey.keyCode || e.key === disconnectKey.key) {
                 if (pressed) return;
                 document.getElementById('disconnect-from-channel-button').click();
             }
@@ -256,7 +257,7 @@ const Bar = () => {
         }
 
     // eslint-disable-next-line
-    }, [])
+    }, [muteMicKey, muteAudioKey, webCamKey, disconnectKey, pushToTalkKey])
 
     // handle global keybinds for application
     React.useEffect(() => {

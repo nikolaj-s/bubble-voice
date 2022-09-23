@@ -12,6 +12,11 @@
     overflow-wrap: anywhere;
 }
 
+.message-container a {
+    color: rgb(66, 176, 176);
+    cursor: pointer;
+}
+
 .sender-info-container {
     display: flex;
     height: 40px;
