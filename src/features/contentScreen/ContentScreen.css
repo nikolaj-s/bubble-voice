@@ -11,7 +11,7 @@
 }
 
 .content-screen-inner-container {
-    height: calc(100% - 45px - 1%);
+    height: calc(100% - 45px - 10px);
     width: 100%;
     border-radius: var(--border-radius);
     display: flex;

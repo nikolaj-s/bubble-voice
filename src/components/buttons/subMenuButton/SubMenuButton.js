@@ -6,7 +6,7 @@ import { selectTextColor } from '../../../features/settings/appSettings/appearan
 // components
 import { ButtonAnimationWrapper } from '../ButtonAnimationWrapper/ButtonAnimationWrapper'
 
-export const SubMenuButton = ({position, top, left, zIndex}) => {
+export const SubMenuButton = ({position, top, left, right, zIndex}) => {
 
   const color = useSelector(selectTextColor);
 
@@ -33,6 +33,7 @@ export const SubMenuButton = ({position, top, left, zIndex}) => {
     position={position}
     top={top}
     left={left}
+    right={right}
     zIndex={zIndex}
     invert={true} action={invokeCtxMenu} >
         <svg width="20" height="20" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">

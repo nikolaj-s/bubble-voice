@@ -40,7 +40,7 @@ export const WidgetPreview = ({widgets = [], editing = false, reorder}) => {
                         {widget.type === 'video' && !widget.delete ? <VideoWidget editing={editing} key={widget._id} widget={widget} /> : null}
                         {widget.type === 'dynamicGallery' && !widget.delete ? <DynamicGalleryWidget editing={editing} key={widget._id} widget={widget} /> : null}
                         {widget.type === 'music' && !widget.delete ? <MusicWidget editing={editing} /> : null}
-                        {widget.delete ? null : <SubMenuButton position={"absolute"} zIndex={3} top={10} left={"90%"} />}
+                        {widget.delete ? null : <SubMenuButton position={"absolute"} zIndex={3} top={10} left={5} />}
                         {widget.delete ? <InputPlaceHolder margin={"1% 0"} value={"Hit Apply To Save Changes"} /> : null}
                     </Reorder.Item>
                 )

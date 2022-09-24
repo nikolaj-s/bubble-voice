@@ -8,6 +8,7 @@ import { getToken, url } from "../../../../util/Validation";
 export const fetchAccount = createAsyncThunk(
     'accountSettingsSlice/fetchAccount',
     async (_, { rejectWithValue, dispatch }) => {
+
         const token = await getToken();
         
         if (token) {
@@ -62,7 +63,6 @@ export const updateAccount = createAsyncThunk(
             headers: {"TOKEN": token},
             data
         }).then(response => {
-            console.log(response);
 
             if (response.data.error) {
                 return rejectWithValue({error: true, errorMessage: response.data.errorMessage})
@@ -119,7 +119,7 @@ const accountSettingsSlice = createSlice({
             state.change = false;
         },
         [fetchAccount.rejected]: (state, action) => {
-            console.log(action)
+            
             if (action.payload.error) {
                 window.location.hash = "/signin"
             }
@@ -132,6 +132,12 @@ const accountSettingsSlice = createSlice({
 
             state.change = false;
 
+            state.password = "";
+
+            state.newPassword = "";
+
+            state.confirmNewPassword = "";
+
             if (!action.payload.success) return;
 
             const updated_info = action.payload.user;
@@ -142,6 +148,7 @@ const accountSettingsSlice = createSlice({
 
             if (updated_info.user_image) state.user_image = updated_info.user_image;
 
+            console.log(action.payload.serverId);
         },
         [updateAccount.rejected]: (state, action) => {
             state.loading = false;
@@ -150,7 +157,6 @@ const accountSettingsSlice = createSlice({
         }
     }
 })
-
 
 // selectors
 export const selectAccountSettingsStateChanged = state => state.accountSettingsSlice.change;

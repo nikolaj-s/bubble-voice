@@ -143,6 +143,46 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
 
       keyDown = false;
     })
+
+    ioHook.on('mousedown', (key) => {
+      
+      if (keyDown) return;
+      // push to talk
+      if (key.button === keyCodes.push_to_talk?.keyCode) {
+
+        event.sender.send('push to talk', {active: true})
+
+      }
+
+      keyDown = true;
+    })
+
+    ioHook.on('mouseup', (key) => {
+      
+      if (!keyDown) return;
+      // push to talk
+      if (key.button === keyCodes.push_to_talk?.keyCode) {
+        event.sender.send('push to talk', {active: false})
+      }
+
+      if (key.button === keyCodes.mute_mic?.keyCode) {
+        event.sender.send('mute mic', {toggle: true})
+      }
+
+      if (key.button === keyCodes.mute_audio?.keyCode) {
+        event.sender.send('mute audio', {toggle: true})
+      }
+
+      if (key.button === keyCodes.activate_camera?.keyCode) {
+        event.sender.send('toggle camera', {toggle: true})
+      }
+
+      if (key.button === keyCodes.disconnect?.keyCode) {
+        event.sender.send('disconnect key', {toggle: true});
+      }
+
+      keyDown = false;
+    })
     
     ioHook.start();
   } catch (error) {
@@ -172,10 +212,25 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
+
+  const keytar = require('keytar');
+
+  keytar.getPassword("HARDWARE", "ACCELERATION")
+  .then(data => {
+
+    const parsed = JSON.parse(data);
+    
+    if (parsed?.toggled === false) {
+      app.disableHardwareAcceleration();
+    }
+
+    return;
+  }).then(() => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow()
+    }
+  })
   
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow()
-  }
 })
 
 // In this file you can include the rest of your app's specific main process

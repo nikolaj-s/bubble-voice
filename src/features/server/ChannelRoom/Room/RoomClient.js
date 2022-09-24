@@ -388,7 +388,6 @@ export class RoomClient {
                     {
                     rid: 'r0',
                     maxBitrate: 100000,
-                    scaleResolutionDownBy: 2.0,
                     scalabilityMode: 'S1T3'
                     },
                     {

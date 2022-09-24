@@ -17,7 +17,6 @@ import { Error } from '../../../../components/Error/Error';
 import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
 import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/SettingsSpacer';
 
-
 const Settings = () => {
 
     // 
@@ -92,14 +91,13 @@ const Settings = () => {
                 <InputTitle title={"Change Password"} />
                 <TextInput stateSelector='password' action={handleInput}  marginBottom='2%' type='password' placeholder={"Current Password"} inputValue={password} />
                 <TextInput action={handleInput} stateSelector='newPassword' marginBottom='2%' type='password' placeholder={"New Password"} inputValue={newPassword} />
-                <TextInput action={handleInput} inputValue={confirmNewPassword}stateSelector="confirmNewPassword" type='password' placeholder={"Confirm New Password"} />
+                <TextInput action={handleInput} inputValue={confirmNewPassword} stateSelector="confirmNewPassword" type='password' placeholder={"Confirm New Password"} />
 
                 <InputTitle title={"Change Banner / Profile Picture"} />
 
                 <ProfileImage getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} />
-                <InputTitle title={"*Reconnect To Channel To See Changes"} />
+                <InputTitle title={"*Reconnect To Server To See Changes"} />
                 {stateChanged ? <ApplyCancelButton apply={handleApply} cancel={handleCancel} /> : null}
-                
                 <SettingsSpacer />
             </div>
             <AnimatePresence>

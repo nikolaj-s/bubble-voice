@@ -17,7 +17,7 @@ export const GalleryNavigation = ({images, action, currentIndex}) => {
     const primaryColor = useSelector(selectPrimaryColor);
 
     React.useEffect(() => {
-        console.log(currentIndex)
+       
         setIndex(currentIndex);
 
     }, [currentIndex])

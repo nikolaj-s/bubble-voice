@@ -20,12 +20,21 @@ export const TextInput = ({action = () => {}, placeholder, inputValue, keyCode =
     }
 
     const returnKeyCode = (e) => {
-        
+        if (e.button === 0 || e.button === 1) return;
+
         if (keyCode === false) {
             return
         }
         
         keyCode(e.keyCode, stateSelector, e)
+    }
+
+    const handleMouseButton = (e) => {
+        if (e.button === 0 || e.button === 1) return;
+        
+        if (keyCode === false) return;
+
+        keyCode(e.button, stateSelector, {key: String(e.nativeEvent.which), nativeEvent: {key: `Mouse Button ${e.nativeEvent.which}`}, keyCode: e.nativeEvent.which})
     }
 
     const handleAnimation = (e, color) => {
@@ -60,7 +69,7 @@ export const TextInput = ({action = () => {}, placeholder, inputValue, keyCode =
             marginTop: marginTop
         }} 
         className='text-input-container'>
-            <input className='text-input' style={{color: focusColor}} onKeyUp={returnKeyCode} onChange={returnInputValue} type={type} placeholder={placeholder} value={inputValue} />
+            <input onMouseUpCapture={handleMouseButton} className='text-input' style={{color: focusColor}} onKeyUp={returnKeyCode} onChange={returnInputValue} type={type} placeholder={placeholder} value={inputValue} />
         </motion.div>
     )
 }

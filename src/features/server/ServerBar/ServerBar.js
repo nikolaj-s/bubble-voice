@@ -6,7 +6,7 @@ import { io } from "socket.io-client";
 import { useNavigate, useRoutes } from 'react-router';
 
 // state
-import { addNewChannel, addSongToQueue, assignNewServerGroup, deleteChannel, fetchPersistedMusicVolume, fetchServerDetails, leaveChannel, newMessage, selectCurrentChannel, selectCurrentChannelId, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, setServerName, skipSong, toggleMusicPlaying, toggleServerPushToTalkState, updateChannel, updateMemberStatus, updateServerBanner, updateServerGroups, userJoinsChannel, userJoinsServer, userLeavesChannel } from '../ServerSlice';
+import { addNewChannel, addSongToQueue, assignNewServerGroup, deleteChannel, fetchPersistedMusicVolume, fetchServerDetails, leaveChannel, newMessage, selectCurrentChannel, selectCurrentChannelId, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, setServerName, skipSong, toggleMusicPlaying, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateMemberStatus, updateServerBanner, updateServerGroups, userJoinsChannel, userJoinsServer, userLeavesChannel } from '../ServerSlice';
 import { selectUsername } from '../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { getToken, url } from '../../../util/Validation';
 import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
@@ -80,7 +80,6 @@ const Bar = () => {
             console.log(data);
         })
         socket.on('user joins server', (data) => {
-            console.log(data)
             dispatch(userJoinsServer(data));
         })
         socket.on('connect_failed', (data) => {
@@ -162,6 +161,10 @@ const Bar = () => {
         socket.on('poke', (data) => {
             dispatch(playSoundEffect("youHaveBeenPoked"))
         })
+
+        socket.on('new channel widget', (data) => {
+            dispatch(updateChannelWidgets(data));
+        })
     }
 
     const joiningServer = async () => {
@@ -202,7 +205,7 @@ const Bar = () => {
 
         const activate = (e) => {
             if (active === true) return;
-            if (e.keyCode === pushToTalkKey.keyCode || e.key === pushToTalkKey.key) {
+            if (e.keyCode === pushToTalkKey.keyCode || e.key === pushToTalkKey.key || e.which === pushToTalkKey.keyCode) {
                 dispatch(toggleServerPushToTalkState(true))
                 active = true;
             }
@@ -210,7 +213,7 @@ const Bar = () => {
 
         const deactivate = (e) => {
             
-            if (e.keyCode === pushToTalkKey.keyCode || e.key === pushToTalkKey.key) {
+            if (e.keyCode === pushToTalkKey.keyCode || e.key === pushToTalkKey.key || e.which === pushToTalkKey.keyCode) {
                 if (active === false) return;
                 dispatch(toggleServerPushToTalkState(false))
                 active = false;
@@ -220,30 +223,36 @@ const Bar = () => {
         }
 
         const press = (e) => {
-            console.log(e)
-            console.log(muteMicKey)
-            if (e.keyCode === muteMicKey.keyCode || e.key === muteMicKey.key) {
+            
+            if (e.keyCode === muteMicKey.keyCode || e.key === muteMicKey.key || e.which === muteMicKey.keyCode) {
                 if (pressed) return;
                 document.getElementById('toggle-microphone-button').click();
                 pressed = true;
             }
 
-            if (e.keyCode === muteAudioKey.keyCode || e.key === muteAudioKey.key) {
+            if (e.keyCode === muteAudioKey.keyCode || e.key === muteAudioKey.key || e.which === muteAudioKey.keyCode) {
                 if (pressed) return;
                 document.getElementById('mute-audio-toggle-button').click();
                 pressed = true;
             }
 
-            if (e.keyCode === webCamKey.keyCode || e.key === webCamKey.key) {
+            if (e.keyCode === webCamKey.keyCode || e.key === webCamKey.key || e.which === webCamKey.keyCode) {
                 if (pressed) return;
                 document.getElementById('web-cam-toggle-button').click();
             }
 
-            if (e.keyCode === disconnectKey.keyCode || e.key === disconnectKey.key) {
+            if (e.keyCode === disconnectKey.keyCode || e.key === disconnectKey.key || e.which === disconnectKey.keyCode) {
                 if (pressed) return;
                 document.getElementById('disconnect-from-channel-button').click();
             }
         }
+
+        window.addEventListener('mousedown', activate)
+
+        window.addEventListener('mouseup', deactivate)
+
+        window.addEventListener('mouseup', press)
+
         document.addEventListener('keydown', activate)
 
         document.addEventListener('keyup', deactivate)
@@ -252,8 +261,16 @@ const Bar = () => {
 
         return () => {
             document.removeEventListener('keydown', activate);
+            
             document.removeEventListener('keyup', deactivate);
+            
             document.removeEventListener('keypress', press);
+            
+            window.removeEventListener('mousedown', activate)
+
+            window.removeEventListener('mouseup', deactivate)
+
+            window.removeEventListener('mouseup', press)
         }
 
     // eslint-disable-next-line

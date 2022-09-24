@@ -36,7 +36,7 @@ const Settings = () => {
     }, [])
 
     const handleKeyCodeUpdate = (keyCode, state, event) => {
-        console.log(event, state)
+        
         if (event.key.includes('F')) return;
         
         const obj = {...local, [state]: {key: event.nativeEvent.key, keyCode: event.keyCode}}
@@ -44,6 +44,7 @@ const Settings = () => {
         setLocal(obj)
         
         toggleUpdate(true);
+    
     }
 
     const saveKeyBinds = () => {

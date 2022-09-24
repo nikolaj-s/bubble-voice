@@ -194,6 +194,43 @@ export const fetchSavedUserPrefs = async () => {
     }
 }
 
+// handle hardware acceleration toggle
+export const saveHardwareAcceleration = async (bool) => {
+    try {
+
+        const keytar = window.require('keytar');
+
+        await keytar.setPassword("HARDWARE", "ACCELERATION", JSON.stringify({toggled: bool}));
+
+    } catch (error) {
+        return {error: 'using web version'}
+    }
+}
+
+export const fetchHardWareAcceleration = async () => {
+    try {
+
+        const keytar = window.require('keytar');
+
+        const data = await keytar.getPassword("HARDWARE", "ACCELERATION");
+
+        const parsed = JSON.parse(data);
+
+        if (parsed === null) {
+
+            await saveHardwareAcceleration(true);
+
+            return {toggled: true}
+        } else {
+            return parsed;
+        }
+
+    } catch (error) {
+        console.log(error);
+        return {error: "using web version"};
+    }
+}
+
 export const clearLocalData = () => {
     try {
         const keytar = window.require('keytar');

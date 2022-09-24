@@ -42,6 +42,12 @@ function App() {
 
   const retryState = useSelector(selectRetryState);
 
+  const preventMouseDefaults = (e) => {
+    if (e.button === 3 || e.button === 4) {
+      e.preventDefault();
+    }
+  }
+
   const __init__ = async () => {
 
     dispatch(incrementLoadingPercentage({percent: 10, state: "Fetching Media Devices"}));
@@ -81,7 +87,13 @@ function App() {
     navigate("/")
     
     __init__();
+    // prevent mouse navigatio buttons
+    window.addEventListener('mouseup', preventMouseDefaults);
     // eslint-disable-next-line
+
+    return () => {
+      window.removeEventListener('mouseup', preventMouseDefaults);
+    }
   }, [loggedIn, retryState, signedUp])
 
   // handle listen for update

@@ -5,7 +5,7 @@
     width: 34%;
     margin-left: 10px;
     border-radius: var(--border-radius);
-    height: 98%;
+    height: calc(100% - 20px);
     display: flex;
     flex-direction: column;
     position: relative;

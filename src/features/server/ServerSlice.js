@@ -312,6 +312,15 @@ const serverSlice = createSlice({
             state.channels[index].widgets.push(action.payload.widget);
         
         },
+        updateChannelWidgets: (state, action) => {
+
+            const channel_id = state.channels.findIndex(channel => channel._id === action.payload.channel_id);
+
+            if (channel_id !== -1) {
+                state.channels[channel_id].widgets = action.payload.widgets;
+            }
+
+        },
         markWidgetForDeletion: (state, action) => {
 
             const c_index = state.channels.findIndex(channel => channel._id === state.editing_channel_id);
@@ -507,6 +516,6 @@ export const selectMusicErrorMessage = state => state.serverSlice.musicErrorMess
 export const selectMusicVolume = state => state.serverSlice.musicVolume;
 // actions
 
-export const { updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, setSocialInput, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
+export const { updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, setSocialInput, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
 
 export default serverSlice.reducer;

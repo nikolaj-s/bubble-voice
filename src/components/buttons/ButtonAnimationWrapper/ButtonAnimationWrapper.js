@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 // state
 import {selectAccentColor, selectDarkModeEnabledState, selectPrimaryColor, selectSecondaryColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 
-export const ButtonAnimationWrapper = ({action = () => {}, position = '', zIndex = 0, top = 0, left = 0, className, width = 50, height = 50, borderRadius = '15px', justifyContent = 'center', invert = false, pointerOptions = null, children, active = false, opacity = 1, id = "", margin}) => {
+export const ButtonAnimationWrapper = ({action = () => {}, position = '', zIndex = 0, top = 0, left = 0, className, width = 50, height = 50, borderRadius = '15px', justifyContent = 'center', invert = false, pointerOptions = null, children, active = false, opacity = 1, id = "", margin, right}) => {
 
     const animation = useAnimation();
 
@@ -60,7 +60,8 @@ export const ButtonAnimationWrapper = ({action = () => {}, position = '', zIndex
             top: top,
             left: left,
             zIndex: zIndex,
-            margin: margin
+            margin: margin,
+            right: right
         }}
         animate={animation}
         onMouseEnter={(e) => {handleAnimation(!invert ? primaryColor : secondaryColor, e)}}

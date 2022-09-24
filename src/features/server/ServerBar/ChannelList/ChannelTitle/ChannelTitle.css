@@ -5,13 +5,12 @@
     justify-content: space-between;
     align-items: center;
     height: 65px;
-    margin-bottom: 2%;
     margin-right: -2.5%;
     padding: 0 5%;
 }
 
 .channel-title-container h3 {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 400;
     letter-spacing: var(--font-spacing);
 }
