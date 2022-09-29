@@ -16,6 +16,7 @@ export const AppVersion = () => {
     const appVersion = useSelector(selectCurrentAppVersion);
 
     const openLink = () => {
+        
         try {
 
             const shell = window.require('electron').shell;
@@ -25,6 +26,7 @@ export const AppVersion = () => {
         } catch (error) {
             window.open(`https://github.com/nikolaj-s/bubble-voice/releases/tag/v${appVersion}`);
         }
+    
     }
 
     return (

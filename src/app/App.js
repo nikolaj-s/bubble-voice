@@ -60,14 +60,22 @@ function App() {
     
     // fetch locally stored settings
     await fetchKeyBinds().then((binds) => {
+      
       if (!binds) return;
+
       initKeyBinds(binds)
+
       dispatch(setSavedKeyCodes(binds))
+
+      return;
     })
 
     await fetchAppearanceSettings().then(data => {
       if (!data || !data.type) return;
+
       dispatch(toggleDarkMode(data))
+
+      return;
     })
 
     dispatch(incrementLoadingPercentage({percent: 40, state: "Fetching Account"}));

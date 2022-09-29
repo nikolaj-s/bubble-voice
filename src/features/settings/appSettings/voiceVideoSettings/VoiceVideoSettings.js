@@ -12,7 +12,7 @@ import { ListenToMicrophoneLevel } from './ListenToMicrophoneLevel/ListenToMicro
 import { ToggleButton } from '../../../../components/buttons/ToggleButton/ToggleButton';
 
 // state
-import { selectAudioInputList, selectAudioInput, updateSelectedDevice, selectAudioOutput, selectAudioOutputList, selectVideoInput, selectVideoInputList, selectPushToTalkState, selectVoiceActivityState, toggleVoiceActivity } from './voiceVideoSettingsSlice';
+import { selectAudioInputList, selectAudioInput, updateSelectedDevice, selectAudioOutput, selectAudioOutputList, selectVideoInput, selectVideoInputList, selectPushToTalkState, selectVoiceActivityState, toggleVoiceActivity, selectMirroredWebCamState, toggleMirroredWebCam } from './voiceVideoSettingsSlice';
 import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/SettingsSpacer';
 
 const Settings = () => {
@@ -41,12 +41,18 @@ const Settings = () => {
 
     const voiceActivity = useSelector(selectVoiceActivityState);
 
+    const mirroredWebCam = useSelector(selectMirroredWebCamState);
+
     const handleToggleVoiceState = () => {
         dispatch(toggleVoiceActivity())
     }
 
     const selectDevice = (type, device) => {
         dispatch(updateSelectedDevice({type, device}))
+    }
+
+    const handleToggleMirroredWebCamState = () => {
+        dispatch(toggleMirroredWebCam());
     }
 
     return (
@@ -63,6 +69,8 @@ const Settings = () => {
             <ToggleButton state={pushToTalk} action={handleToggleVoiceState} />
             <InputTitle title={"Enable Voice Activity Detection"} />
             <ToggleButton state={voiceActivity} action={handleToggleVoiceState} />
+            <InputTitle title={"Mirror Web Cam *must reconnect to channel for changes to take effect"} />
+            <ToggleButton state={mirroredWebCam} action={handleToggleMirroredWebCamState} />
             <SettingsSpacer />
         </div>
     )

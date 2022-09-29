@@ -3,6 +3,7 @@
     max-height: calc(100% - 400px);
     flex-shrink: 2;
     overflow-y: auto;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;

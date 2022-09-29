@@ -7,7 +7,7 @@ const mediaType = {
 }
 
 export class RoomClient {
-    constructor(socket, current_channel_id, server_id, mediasoupClient, audioInputDevice, videoInputDevice, audioInputState, videoInputState, user, dispatch, audioState) {
+    constructor(socket, current_channel_id, server_id, mediasoupClient, audioInputDevice, videoInputDevice, audioInputState, videoInputState, user, dispatch, audioState, mirrorWebCam) {
 
         this.socket = socket;
 
@@ -42,6 +42,8 @@ export class RoomClient {
         this.dispatch = dispatch;
 
         this.audioState = audioState;
+
+        this.webCamMirrorState = mirrorWebCam;
     }
 
     async loadDevice(routerRtpCapabilities) {
@@ -195,13 +197,16 @@ export class RoomClient {
             let el;
 
             let par;
-            console.log(stream)
+            console.log(user)
             if (consumer.rtpParameters.codecs[0].mimeType === 'video/VP8') {
                 
                 el = document.createElement('video');
                 el.srcObject = stream;
                 el.id = consumer.id;
-                el.className = 'stream';
+                el.className = 'stream web-cam-stream';
+                if (user.mirrorWebCam) {
+                    el.style.transform = 'scaleX(-1)'
+                }
                 el.playsInline = false;
                 el.autoplay = true;
                 el.muted = true;
@@ -212,7 +217,6 @@ export class RoomClient {
                 par.className = 'streaming-video-player-container'
                 el = document.createElement('video');
                 el.srcObject = stream;
-                el.className = 'stream';
                 par.id = consumer.id + 'container';
                 el.id = consumer.id;
                 el.autoplay = true;
@@ -418,7 +422,10 @@ export class RoomClient {
                 el.srcObject = stream;
                 el.id = producer.id;
                 el.playsInline = false;
-                el.className = 'stream';
+                if (this.webCamMirrorState) {
+                    el.style.transform = 'scaleX(-1)'
+                }
+                el.className = 'stream web-cam-stream';
                 el.autoplay = true;
                 el.className = 'videoplayer';
                 document.getElementById(this.user._id).appendChild(el);

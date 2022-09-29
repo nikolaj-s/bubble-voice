@@ -23,8 +23,8 @@ export const RoomUserWrapper = ({users}) => {
                 child.style.left = '0';
                 child.style.zIndex = '1';
             } else {
-                child.style.maxWidth = '700px';
-                child.style.maxHeight = '400px';
+                child.style.maxWidth = '600px';
+                child.style.maxHeight = 'minmax(30%, 400px)';
                 child.style.position = 'relative';
                 child.style.zIndex = '0'
             }

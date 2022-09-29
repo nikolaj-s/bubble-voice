@@ -7,10 +7,11 @@
 }
 
 .drop-down-content {
+    max-height: 300px;
+    overflow-y: auto;
     width: 95%;
     border-bottom-left-radius: var(--border-radius);
     border-bottom-right-radius: var(--border-radius);
-    overflow: hidden;
     position: absolute;
     z-index: 1;
     top: 70px;

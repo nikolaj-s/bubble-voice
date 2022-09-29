@@ -49,6 +49,7 @@ const voiceVideoSettingsSlice = createSlice({
         deviceList: [],
         pushToTalk: false,
         voiceActivity: true,
+        mirroredWebCam: false
     },
     reducers: {
         updateSelectedDevice: (state, action) => {
@@ -58,7 +59,8 @@ const voiceVideoSettingsSlice = createSlice({
                 audiooutput: state.audiooutput,
                 videoinput: state.videoinput,
                 pushToTalk: state.pushToTalk,
-                voiceActivity: state.voiceActivity
+                voiceActivity: state.voiceActivity,
+                mirroredWebCam: state.mirroredWebCam
             }
             
             saveVoiceVideoSettings(obj)
@@ -72,11 +74,26 @@ const voiceVideoSettingsSlice = createSlice({
                 audiooutput: state.audiooutput,
                 videoinput: state.videoinput,
                 pushToTalk: state.pushToTalk,
-                voiceActivity: state.voiceActivity
+                voiceActivity: state.voiceActivity,
+                mirroredWebCam: state.mirroredWebCam
             }
             
             saveVoiceVideoSettings(obj)
         },
+        toggleMirroredWebCam: (state, action) => {
+            state.mirroredWebCam = !state.mirroredWebCam;
+
+            const obj = {
+                audioinput: state.audioinput,
+                audiooutput: state.audiooutput,
+                videoinput: state.videoinput,
+                pushToTalk: state.pushToTalk,
+                voiceActivity: state.voiceActivity,
+                mirroredWebCam: state.mirroredWebCam
+            }
+            
+            saveVoiceVideoSettings(obj)
+        }
     },
     extraReducers: {
         [getMediaDevices.pending]: (state, action) => {
@@ -115,6 +132,10 @@ const voiceVideoSettingsSlice = createSlice({
             if (saved_data.audioinput) {
                 state.pushToTalk = saved_data.pushToTalk;
                 state.voiceActivity = saved_data.voiceActivity;
+            }
+
+            if (saved_data.mirroredWebCam) {
+                state.mirroredWebCam = saved_data.mirroredWebCam;
             }
         },
         [getMediaDevices.rejected]: (state, action) => {
@@ -183,7 +204,9 @@ export const selectPushToTalkState = state => state.voiceVideoSettingsSlice.push
 
 export const selectVoiceActivityState = state => state.voiceVideoSettingsSlice.voiceActivity;
 
-export const {updateSelectedDevice, toggleVoiceActivity} = voiceVideoSettingsSlice.actions;
+export const selectMirroredWebCamState = state => state.voiceVideoSettingsSlice.mirroredWebCam;
+
+export const { toggleMirroredWebCam, updateSelectedDevice, toggleVoiceActivity} = voiceVideoSettingsSlice.actions;
 
 export default voiceVideoSettingsSlice.reducer;
 

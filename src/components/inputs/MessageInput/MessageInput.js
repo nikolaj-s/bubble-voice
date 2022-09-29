@@ -11,6 +11,7 @@ import { ImageButton } from './ImageButton/ImageButton';
 // style
 import "./MessageInput.css";
 import { SendButton } from './SendButton/SendButton';
+import { CharacterCount } from './CharacterCount/CharacterCount';
 
 export const MessageInput = ({send, text, keyCode, active, image, value, persist}) => {
 
@@ -45,7 +46,11 @@ export const MessageInput = ({send, text, keyCode, active, image, value, persist
     }, [files])
 
     const handleText = (e) => {
+
+        if (e.target.value.length > 255) return;
+
         text(e.target.value)
+    
     }
 
     const handleKeyCode = (e) => {
@@ -77,6 +82,7 @@ export const MessageInput = ({send, text, keyCode, active, image, value, persist
                 onFocus={handleText}
                 id='social-input-selector' onKeyUp={handleKeyCode} onChange={handleText} value={value}  placeholder='Message' type="text" />
                 <div className='message-input-button-wrapper'>
+                    <CharacterCount count={value.length} />
                     {persist ? <ImageButton root={getRootProps({className: 'dropzone'})} /> : null}
                     <SendButton color={textColor} action={handleSend} />
                 </div>

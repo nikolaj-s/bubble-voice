@@ -1,22 +1,31 @@
 // library's
 import React from 'react'
 import { useRoutes } from 'react-router';
-import { useSelector } from 'react-redux';
+import { AnimatePresence } from 'framer-motion';
 
-// state
-import { selectTextColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+// components
+import { HomeNavigation } from '../HomeNavigation/HomeNavigation';
+import { ReleaseNotes } from '../ReleaseNotes/ReleaseNotes';
+import { Home } from '../Home/Home';
 
 // style's
 import "./NoServerSelectedDisplay.css";
 
 const NoServer = () => {
 
-  const color = useSelector(selectTextColor)
+  const [page, setPage] = React.useState('home');
+
+  const handlePageChange = (page) => {
+    setPage(page);
+  }
 
   return (
     <div className='no-server-selected-display'>
-        <h1 style={{color: color}}>No Server Selected</h1>
-        <h3 style={{color: color}}>Join or Create a Server</h3>
+        <HomeNavigation navigate={handlePageChange} page={page} />
+        <AnimatePresence>
+          {page === 'home' ? <Home /> : null}
+          {page === 'release' ? <ReleaseNotes /> : null}
+        </AnimatePresence>
     </div>
   )
 }

@@ -41,5 +41,14 @@
     outline: none;
 }
 
+.input-character-count {
+    width: 40px;
+    padding: 0 5px;
+}
+
+.input-character-count p {
+    font-size: 0.7rem;
+    opacity: 0.6;
+}
 
 

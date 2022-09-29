@@ -18,10 +18,6 @@ import { selectHeaderTitle } from './contentScreenSlice';
 // style's
 import "./ContentScreen.css";
 
-
-
-
-
 export const ContentScreen = () => {
     // color schema
     const secondaryColor = useSelector(selectSecondaryColor);

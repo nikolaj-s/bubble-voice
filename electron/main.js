@@ -1,5 +1,5 @@
 
-const { app, BrowserWindow, ipcMain, desktopCapturer, screen, globalShortcut } = require('electron')
+const { app, BrowserWindow, ipcMain, desktopCapturer, screen, globalShortcut, CommandLine } = require('electron')
 
 const { autoUpdater } = require('electron-updater')
 
@@ -10,6 +10,23 @@ const path = require('path')
 let win;
 
 let transparent;
+
+// prevent multiple instances from occuring
+const lock = app.requestSingleInstanceLock();
+
+if (!lock) {
+  app.quit()
+} else {
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
+
+    if (win) {
+      if (win.isMinimized()) win.restore();
+
+      win.focus();
+    }
+  })
+
+}
 
 function createWindow () {
 
@@ -104,26 +121,41 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
     
     let keyDown = false;
 
+    let pushToTalkActive = false;
+
     ioHook.removeAllListeners();
 
     ioHook.on('keydown', (key) => {
-      if (keyDown) return;
+
+      if (key.rawcode !== keyCodes.push_to_talk?.keyCode) return;
+
+      if (pushToTalkActive) return;
       // push to talk
+      
       if (key.rawcode === keyCodes.push_to_talk?.keyCode) {
 
         event.sender.send('push to talk', {active: true})
 
       }
 
-      keyDown = true;
+      pushToTalkActive = true;
     })
 
     ioHook.on('keyup', (key) => {
-      if (!keyDown) return;
+
+      if (key.rawcode !== keyCodes.push_to_talk?.keyCode) return;
+
+      if (!pushToTalkActive) return;
+
       // push to talk
       if (key.rawcode === keyCodes.push_to_talk?.keyCode) {
         event.sender.send('push to talk', {active: false})
       }
+
+      pushToTalkActive = false;
+    })
+
+    ioHook.on('keyup', (key) => {
 
       if (key.rawcode === keyCodes.mute_mic?.keyCode) {
         event.sender.send('mute mic', {toggle: true})
@@ -145,8 +177,11 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
     })
 
     ioHook.on('mousedown', (key) => {
+
+      if (key.button !== keyCodes.push_to_talk?.keyCode) return;
       
-      if (keyDown) return;
+      if (pushToTalkActive) return;
+
       // push to talk
       if (key.button === keyCodes.push_to_talk?.keyCode) {
 
@@ -154,16 +189,27 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
 
       }
 
-      keyDown = true;
+      pushToTalkActive = true;
+    })
+
+    ioHook.on('mouseup', (key) => {
+
+      if (key.button !== keyCodes.push_to_talk?.keyCode) return;
+
+      if (!pushToTalkActive) return;
+      // push to talk
+      
+      if (key.button === keyCodes.push_to_talk?.keyCode) {
+        event.sender.send('push to talk', {active: false})
+      }
+
+      pushToTalkActive = false;
+
     })
 
     ioHook.on('mouseup', (key) => {
       
       if (!keyDown) return;
-      // push to talk
-      if (key.button === keyCodes.push_to_talk?.keyCode) {
-        event.sender.send('push to talk', {active: false})
-      }
 
       if (key.button === keyCodes.mute_mic?.keyCode) {
         event.sender.send('mute mic', {toggle: true})

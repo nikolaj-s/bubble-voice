@@ -118,8 +118,8 @@ export const ContextMenu = () => {
                 dispatch(setContextMenuOptions({state: "saveImage", value: true}))
                 setSelectedImage(p)
             }
-            if (p.localName === 'video' && p.className !== 'stream' && p.className !== 'streaming-video-player') {
-                
+            if (p.localName === 'video' && p.className !== 'stream' && p.className !== 'streaming-video-player' && !p.className.includes('stream') && !p.className.includes('videoplayer')) {
+
                 dispatch(toggleContextMenu(true));
 
                 dispatch(setContextMenuOptions({state: 'saveVideo', value: true}))
@@ -166,9 +166,12 @@ export const ContextMenu = () => {
                 dispatch(handleCopyPasteCtxState());
             }
 
-            if ((p.localName === 'video' || p.localName === 'audio') && p.className !== 'stream') {
-
-                dispatch(setContextMenuOptions({state: 'audio', value: true}))
+            if (((p.localName === 'video' || p.localName === 'audio'))) {
+                
+                if (p.className !== 'stream' && p.className !== 'videoplayer' && p.className !== 'stream zoom-to-fill' && p.className !== 'web-cam-stream' && p.className !== 'stream web-cam-stream zoom-to-fill') {
+                    dispatch(setContextMenuOptions({state: 'audio', value: true}))
+                }
+                    
             }
 
             if (p.className?.includes('editing-single-widget')) {
@@ -185,7 +188,14 @@ export const ContextMenu = () => {
                 
                 const id = p.id.split('-')[0]
 
-                const channel_id = p.id.split('channel-id-')[1]
+                let channel_id = p.id.split('channel-id-')[1]
+
+                // handle selecting channel id on users stream
+                if (channel_id === undefined) {
+
+                    channel_id = currentChannelId;
+
+                }
 
                 if (!id) return;
 
@@ -283,8 +293,9 @@ export const ContextMenu = () => {
     }
 
     const assignNewPermissionGroup = async (id, user) => {
+        
         toggleLoading(true);
-        console.log(id, user)
+
         await socket.request('assign server group', {username: user, server_group: id})
         .then(data => {
             dispatch(assignNewServerGroup({username: user, server_group: id}))
@@ -361,7 +372,7 @@ export const ContextMenu = () => {
         const selected_username = selectedUserToManage.split('-')[0];
 
         const channel_id = selectedUserToManage.split('channel-id-')[1];
-
+        console.log(selectedUserToManage)
         if (selected_username && channel_id) {
 
             await socket.request('poke', {channel_id: channel_id, username: selected_username})

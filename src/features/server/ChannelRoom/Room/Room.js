@@ -7,7 +7,7 @@ import * as mediasoupClient from 'mediasoup-client';
 
 // state
 import { updateMusicState, selectCurrentChannel, selectCurrentChannelId, selectMusicPlayingState, selectMusicQueue, selectPushToTalkActive, selectServerId, toggleLoadingChannel, updateMemberStatus, selectServerMembers } from '../../ServerSlice';
-import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPushToTalkState } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
+import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPushToTalkState, selectMirroredWebCamState } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
 import { selectDisplayName, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { playSoundEffect } from '../../../settings/soundEffects/soundEffectsSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
@@ -70,6 +70,8 @@ const Component = () => {
 
     const pushToTalkActive = useSelector(selectPushToTalkActive);
 
+    const webCamMirroredState = useSelector(selectMirroredWebCamState);
+
     // voice activity state
     const voiceActivityDetection = useSelector(selectVoiceActivityState);
 
@@ -84,7 +86,8 @@ const Component = () => {
         username: username,
         display_name: displayName,
         user_banner: userBanner,
-        user_image: userImage
+        user_image: userImage,
+        mirrorWebCam: webCamMirroredState
     }
 
     const event = (arg) => {
@@ -92,7 +95,7 @@ const Component = () => {
     }
 
     const init = async () => {
-        client = new RoomClient(socket, current_channel_id, server_id, mediasoupClient, audioDevice, videoDevice, microphoneState, webcamState, user, event, audioState)
+        client = new RoomClient(socket, current_channel_id, server_id, mediasoupClient, audioDevice, videoDevice, microphoneState, webcamState, user, event, audioState, webCamMirroredState)
 
         await client.join();
 
@@ -215,7 +218,6 @@ const Component = () => {
                 client.toggleAudioState(false)
                 socket.emit('user status', {username: user.username, action: {muted: false}})
             } else if (audioState === false) {
-                console.log(document.querySelectorAll('audio'))
                 document.querySelectorAll('video, audio').forEach(el => el.muted = true)
                 dispatch(updateMemberStatus({username: user.username, action: {muted: true}}))
                 client.toggleAudioState(true)

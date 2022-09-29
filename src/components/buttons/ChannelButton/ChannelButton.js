@@ -5,43 +5,14 @@ import { useSelector } from 'react-redux';
 
 // components
 import { SubMenuButton } from '../subMenuButton/SubMenuButton';
+import { ChannelUserDisplay } from './ChannelUserDisplay/ChannelUserDisplay';
 
 // state
-import {  selectAccentColor, selectPrimaryColor, selectActivationColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import {  selectAccentColor, selectPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./ChannelButton.css";
-import { Image } from '../../Image/Image';
-import { MicMuted } from '../../Icons/MicMuted/MicMuted';
-import { WebCam } from '../../Icons/WebCam/WebCam';
-import { ScreenShare } from '../../Icons/ScreenShare/ScreenShare';
-import { Muted } from '../../Icons/Muted/Muted';
 
-const User = ({user, channel_id}) => {
-
-    const secondaryColor = useSelector(selectSecondaryColor);
-
-    const activityColor = useSelector(selectActivationColor);
-
-    const textColor = useSelector(selectTextColor);
-
-    return (
-        <div id={`${user._id}-channel-user-display-channel-id-${channel_id}`} style={{zIndex: 1}} key={user.username} className='channel-user-placeholder'>
-            <div 
-            style={{border: `solid 4px ${user.active ? activityColor : secondaryColor}`}}
-            className='channel-user-placeholder-user-image'>
-                <Image objectFit='cover' image={user.user_image} />
-            </div>
-            <h3 style={{color: textColor}}>{user.display_name}</h3>
-            <div className='user-status-wrapper'>
-                {user.microphone || user.microphone === undefined ? null : <MicMuted />}
-                {user.muted ? <Muted /> : null}
-                {user.webcam ? <WebCam /> : null}
-                {user.screenshare ? <ScreenShare /> : null}
-            </div>
-        </div>
-    )
-}
 
 export const ChannelButton = ({channel, action = () => {}, users}) => {
 
@@ -95,7 +66,7 @@ export const ChannelButton = ({channel, action = () => {}, users}) => {
             </motion.div>
             {usersState.map((user) => {
                 return (
-                    <User key={user.username} channel_id={channel._id} user={user} />
+                    <ChannelUserDisplay key={user.username} channel_id={channel._id} user={user} />
                 )
             })}
         </>
