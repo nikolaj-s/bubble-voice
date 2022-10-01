@@ -353,7 +353,11 @@ export class RoomClient {
                     video: {
                         mandatory: {
                             chromeMediaSource: 'desktop',
-                            chromeMediaSourceId: deviceId
+                            chromeMediaSourceId: deviceId,
+                            minWidth: 1280,
+                            maxWidth: 1920,
+                            minHeight: 720,
+                            maxHeight: 1080
                         }
                     }
                 };
@@ -392,17 +396,20 @@ export class RoomClient {
                     {
                     rid: 'r0',
                     maxBitrate: 100000,
-                    scalabilityMode: 'S1T3'
+                    scalabilityMode: 'S1T3',
+                    maxFramerate: 30.0
                     },
                     {
                     rid: 'r1',
                     maxBitrate: 300000,
-                    scalabilityMode: 'S1T3'
+                    scalabilityMode: 'S1T3',
+                    maxFramerate: 30.0
                     },
                     {
                     rid: 'r2',
-                    maxBitrate: 900000,
-                    scalabilityMode: 'S1T3'
+                    maxBitrate: 1500000,
+                    scalabilityMode: 'S1T3',
+                    maxFramerate: 30.0
                     }
                 ]
 
@@ -422,9 +429,11 @@ export class RoomClient {
                 el.srcObject = stream;
                 el.id = producer.id;
                 el.playsInline = false;
+
                 if (this.webCamMirrorState) {
                     el.style.transform = 'scaleX(-1)'
                 }
+                
                 el.className = 'stream web-cam-stream';
                 el.autoplay = true;
                 el.className = 'videoplayer';

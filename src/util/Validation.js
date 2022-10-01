@@ -1,5 +1,5 @@
 
-export const url = 'http://54.184.92.179:3016'
+export const url = 'http://35.88.11.222:3016'
 
 export const getToken = async () => {
     try {

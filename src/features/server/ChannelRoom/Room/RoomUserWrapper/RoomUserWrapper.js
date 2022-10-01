@@ -5,8 +5,6 @@ export const RoomUserWrapper = ({users}) => {
 
     const [expanded, setExpanded] = React.useState("");
 
-    const [prevExpanded, setPrevExpanded] = React.useState("")
-
     React.useEffect(() => {
 
         const parent = document.getElementById('live-chat-wrapper');
@@ -18,7 +16,7 @@ export const RoomUserWrapper = ({users}) => {
                 child.style.maxHeight = 'calc(100% - 8px)';
                 child.style.maxWidth = 'calc(100% - 8px)';
                 child.style.width = 'calc(100% - 8px)';
-                child.style.height = '100%';
+                child.style.height = 'calc(100% - 8px)';
                 child.style.top = '0';
                 child.style.left = '0';
                 child.style.zIndex = '1';
@@ -32,46 +30,39 @@ export const RoomUserWrapper = ({users}) => {
 
     }, [expanded])
 
-    const handleExpansion = (el) => {
-        if (el.id === expanded) {
-            setExpanded("");
-        } else {
-            setExpanded(el.id);
-        }
-    }
-
-    const handleStreamExpansion = (e) => {
-        const id = e.path[0].id.split('container')[0] + 'container';
-
-        if (id === expanded) {
-            setExpanded("");
-        } else {
-            setExpanded(id);
-        }
-    }
-
-    // handle expansion of streams
     React.useEffect(() => {
 
-        const streams = document.getElementsByClassName('streaming-video-player-container');
+        const parent = document.getElementById('live-chat-wrapper');
 
-        for (const stream of streams) {
-            stream.addEventListener('click', handleStreamExpansion);
-        }
+        parent.addEventListener('click', handleStreamExpansion);
 
         return () => {
-            for (const stream of streams) {
-                stream.removeEventListener('click', handleStreamExpansion);
-            }
+            parent.removeEventListener('click', handleStreamExpansion);
         }
 
-    })
+    }, [expanded])
+
+    const handleStreamExpansion = (e) => {
+
+        for (const el of e.path) {
+            
+            if ((el.id !== 'live-chat-wrapper' && el.id) && (el.className === 'active-user-container' || el.className === 'streaming-video-player-container')) {
+                if (el.id === expanded) {
+                    setExpanded("");
+                } else {
+                    setExpanded(el.id);
+                }
+            }
+            
+        }
+            
+    }
 
     return (
         <>
         {!users ? null :
         users.map(obj => {
-            return <User expand={handleExpansion} user={obj} key={obj.username} />
+            return <User user={obj} key={obj.username} />
         })
         }
         </>

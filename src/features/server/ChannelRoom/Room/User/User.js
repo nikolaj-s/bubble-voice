@@ -7,7 +7,7 @@ import { selectAccentColor, selectActivationColor } from '../../../../settings/a
 // style
 import "./User.css";
 
-export const User = ({user, expand}) => {
+export const User = ({user}) => {
 
     const accentColor = useSelector(selectAccentColor)
 
@@ -15,7 +15,6 @@ export const User = ({user, expand}) => {
 
     return (
         <div 
-        onClick={() => {expand({id: user._id})}}
         style={{border: `solid 4px ${user.active ? activeColor : accentColor}`}}
         id={user._id} className='active-user-container'>
             <Image position='absolute' image={user.user_banner} />

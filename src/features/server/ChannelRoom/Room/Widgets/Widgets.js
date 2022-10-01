@@ -25,13 +25,16 @@ export const Widgets = () => {
             backgroundColor: secondaryColor
         }}
         initial={{
-            left: "100%",
+            opacity: 0,
         }}
         animate={{
-            left: "0%"
+            opacity: 1
         }}
         exit={{
-            left: "100%"
+            opacity: 0
+        }}
+        transition={{
+            duration: 0.2
         }}
         >
             <div className='widget-preview-wrapper'>

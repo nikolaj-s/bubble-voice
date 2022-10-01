@@ -127,15 +127,18 @@ export const Social = () => {
         style={{
             backgroundColor: secondaryColor
         }}
+        transition={{
+            duration: 0.2
+        }}
         className='social-outer-container'
         initial={{
-            left: "100%",
+            opacity: 0,
         }}
         animate={{
-            left: "0%"
+            opacity: 1,
         }}
         exit={{
-            left: "100%"
+            opacity: 0,
         }}>
             <div className='social-inner-container'>
                 {image?.preview ? 

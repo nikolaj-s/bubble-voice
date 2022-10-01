@@ -32,7 +32,7 @@ export const Message = ({ message }) => {
                 <MessageLoadingIndicator />
                 : <p
                 style={{color: textColor}}
-                >{message.date}</p>}
+                >{message.date.split("T")[0]}</p>}
             </div>
             {message.text ? <TextParser text={message.text} /> : null}
             {message.image ? 

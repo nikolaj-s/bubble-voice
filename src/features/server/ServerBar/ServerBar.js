@@ -422,7 +422,7 @@ const Bar = () => {
             {current_channel_id !== null ? <DisconnectButton action={disconnect} /> : null}
             <div 
             style={{
-                width: current_channel_id ? "calc(100% - 135px)" : "90%"
+                width: current_channel_id ? "calc(100% - 125px)" : "90%"
             }}
             className='leave-server-button'>
                 <TextButton action={leaveServer} name={"Leave Server"} />

@@ -1,7 +1,7 @@
 
 .channel-button-container {
     width: calc(100% - 8px - 4%);
-    height: calc(80px - 8px);
+    height: calc(65px - 8px);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -12,7 +12,7 @@
 
 
 .channel-button-container h3 {
-    font-size: 1.3rem;
+    font-size: 1rem;
     font-weight: 400;
     letter-spacing: var(--font-spacing);
 }

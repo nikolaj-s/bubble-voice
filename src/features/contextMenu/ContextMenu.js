@@ -166,14 +166,6 @@ export const ContextMenu = () => {
                 dispatch(handleCopyPasteCtxState());
             }
 
-            if (((p.localName === 'video' || p.localName === 'audio'))) {
-                
-                if (p.className !== 'stream' && p.className !== 'videoplayer' && p.className !== 'stream zoom-to-fill' && p.className !== 'web-cam-stream' && p.className !== 'stream web-cam-stream zoom-to-fill') {
-                    dispatch(setContextMenuOptions({state: 'audio', value: true}))
-                }
-                    
-            }
-
             if (p.className?.includes('editing-single-widget')) {
                 dispatch(toggleContextMenu(true))
 

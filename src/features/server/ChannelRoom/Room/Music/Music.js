@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectMusicPlayingState, selectMusicQueue, selectMusicVolume, throwMusicError, updateMusicState } from '../../../ServerSlice';
+import { selectCurrentChannelId, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, throwMusicError, updateMusicState } from '../../../ServerSlice';
 
 export const Music = () => {
 
@@ -17,6 +17,8 @@ export const Music = () => {
     const musicPlaying = useSelector(selectMusicPlayingState);
 
     const volume = useSelector(selectMusicVolume);
+
+    const channelId = useSelector(selectCurrentChannelId);
  
     React.useEffect(() => {
 
@@ -62,7 +64,7 @@ export const Music = () => {
 
     return (
         <>
-        <audio onError={handleStreamError} onPlay={syncInitial}  id='room-music-player' autoPlay={true} src={currentlyPlaying} />
+        <audio onError={handleStreamError} onPlay={syncInitial}  id='room-music-player' autoPlay={true} src={`https://bubble-music.herokuapp.com/audio-stream?song=${currentlyPlaying}`} />
         </>
     )
 }
