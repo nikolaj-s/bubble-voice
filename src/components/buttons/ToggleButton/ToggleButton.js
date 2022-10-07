@@ -26,8 +26,6 @@ export const ToggleButton = ({state = false, action}) => {
         })
     }
 
-    
-
     return (
         <motion.div onClick={action} 
         animate={animation}

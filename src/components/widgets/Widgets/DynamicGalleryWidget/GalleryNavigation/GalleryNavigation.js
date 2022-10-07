@@ -27,6 +27,7 @@ export const GalleryNavigation = ({images, action, currentIndex}) => {
             {images.map((_, key) => {
                 return (
                     <div
+                    key={key + "gallery-nav-prev"}
                     style={{
                         width: 15,
                         height: 15,

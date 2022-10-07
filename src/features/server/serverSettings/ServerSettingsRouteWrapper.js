@@ -10,6 +10,7 @@ import { DeleteServer } from './DeleteServer.js/DeleteServer'
 import { Members } from './Members/Members'
 import { OverView } from './OverView/OverView'
 import { PermissionGroups } from './PermissionGroups/PermissionGroups'
+import { CloseSettings } from '../../../components/CloseSettings/CloseSettings'
 
 const Wrapper = () => {
 
@@ -30,6 +31,7 @@ const Wrapper = () => {
                 <PermissionGroups />
                 <BanList />
                 <DeleteServer />
+                <CloseSettings />
             </div>
         </div>
     )

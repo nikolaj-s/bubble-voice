@@ -12,16 +12,26 @@ import { ListenToMicrophoneLevel } from './ListenToMicrophoneLevel/ListenToMicro
 import { ToggleButton } from '../../../../components/buttons/ToggleButton/ToggleButton';
 
 // state
-import { selectAudioInputList, selectAudioInput, updateSelectedDevice, selectAudioOutput, selectAudioOutputList, selectVideoInput, selectVideoInputList, selectPushToTalkState, selectVoiceActivityState, toggleVoiceActivity, selectMirroredWebCamState, toggleMirroredWebCam } from './voiceVideoSettingsSlice';
+import { selectAudioInputList, selectAudioInput, updateSelectedDevice, selectAudioOutput, selectAudioOutputList, selectVideoInput, selectVideoInputList, selectPushToTalkState, selectVoiceActivityState, toggleVoiceActivity, toggleSelectedVoiceVideoState, selectMirroredWebCamState, handleSaveVoiceVideoSettings, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, updateMicInputVolume } from './voiceVideoSettingsSlice';
 import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/SettingsSpacer';
+import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
+import { Range } from '../../../../components/inputs/Range/Range';
+import { selectMicrophoneState, toggleControlState } from '../../../controlBar/ControlBarSlice';
+import { PreviewWebCam } from './PreviewWebCam/PreviewWebCam';
+import { ApplyCancelButton } from '../../../../components/buttons/ApplyCancelButton/ApplyCancelButton';
 
 const Settings = () => {
 
     const dispatch = useDispatch();
 
+    const [localMicInputVolume, setLocalMicInputVolum] = React.useState(0);
+
+    const [previewingWebCam, togglePreviewingWebCam] = React.useState(false);
+
     React.useEffect(() => {
 
         dispatch(setHeaderTitle("Voice / Video Settings"))
+
     // eslint-disable-next-line
     }, [])
 
@@ -43,34 +53,108 @@ const Settings = () => {
 
     const mirroredWebCam = useSelector(selectMirroredWebCamState);
 
+    const echoCancellation = useSelector(selectEchoCancellatio);
+
+    const noiseSuppression = useSelector(selectNoiseSuppression);
+
+    const micInputVolume = useSelector(selectMicInputVolume);
+
+    const microphoneState = useSelector(selectMicrophoneState);
+
+    React.useEffect(() => {
+
+        setLocalMicInputVolum(micInputVolume);
+
+    }, [micInputVolume])
+
+    React.useEffect(() => {
+
+        if (microphoneState === true) {
+
+            dispatch(toggleControlState('microphoneState'))
+
+        }
+
+        return () => {
+            return dispatch(toggleControlState('microphoneState'))
+        }
+    }, [])
+
     const handleToggleVoiceState = () => {
-        dispatch(toggleVoiceActivity())
+
+        dispatch(toggleVoiceActivity());
+
+        dispatch(handleSaveVoiceVideoSettings());
     }
 
     const selectDevice = (type, device) => {
-        dispatch(updateSelectedDevice({type, device}))
+
+        dispatch(updateSelectedDevice({type, device}));
+
+        dispatch(handleSaveVoiceVideoSettings());
     }
 
-    const handleToggleMirroredWebCamState = () => {
-        dispatch(toggleMirroredWebCam());
+    const handleToggleSelectedVoiceVideoState = (arg) => {
+
+        dispatch(toggleSelectedVoiceVideoState(arg));
+
+        dispatch(handleSaveVoiceVideoSettings());
+    }
+
+    const handleMicInputVolume = (val) => {
+        
+        setLocalMicInputVolum(val);
+
+    }
+
+    const saveMicInputVolume = () => {
+
+        dispatch(updateMicInputVolume(localMicInputVolume));
+
+        dispatch(handleSaveVoiceVideoSettings());
+    
+    }
+
+    const handleTogglePreviewWebCam = (bool) => {
+        togglePreviewingWebCam(bool);
     }
 
     return (
         <div className='settings-wrapper'>
+            <SettingsHeader title={"Devices"} />
             <InputTitle title={"Select Audio Input Device"} />
             <DropDownList action={selectDevice} stateType={"audioinput"} selectedItem={selectedAudioInput.label} list={selectedAudioInputList} />
             <InputTitle title={"Select Audio Output Device"} />
             <DropDownList action={selectDevice} stateType={"audiooutput"} selectedItem={selectedAudioOutput.label} list={selectedAudioOutputList} />
             <InputTitle title={"Select Video Input Device"} />
             <DropDownList action={selectDevice} stateType={"videoinput"} selectedItem={selectedVideoInput.label} list={selectedVideoInputList} />
+            
+            <SettingsHeader title={"Audio Settings"} />
             <InputTitle title={"Test Mic Input"} />
             <ListenToMicrophoneLevel />
-            <InputTitle marginTop={"0%"} title={"Enable Push To Talk"} />
+            
+            {/*
+            <InputTitle title={"Input Volume"} />
+            <Range save={saveMicInputVolume} value={localMicInputVolume} action={handleMicInputVolume} min={0} max={1} step={0.1} /> 
+            */}
+
+            <InputTitle marginTop={"0%"} title={"Enable Noise Suppression / Bi - Quad Filter"} />
+            <ToggleButton action={() => {handleToggleSelectedVoiceVideoState("noiseSuppression")}} state={noiseSuppression} />
+            <InputTitle title={"Echo Cancellation"} />
+            <ToggleButton action={() => {handleToggleSelectedVoiceVideoState("echoCancellation")}} state={echoCancellation} />
+            
+            <SettingsHeader title={"Input Mode"} />
+            <InputTitle  title={"Enable Push To Talk"} />
             <ToggleButton state={pushToTalk} action={handleToggleVoiceState} />
             <InputTitle title={"Enable Voice Activity Detection"} />
             <ToggleButton state={voiceActivity} action={handleToggleVoiceState} />
-            <InputTitle title={"Mirror Web Cam *must reconnect to channel for changes to take effect"} />
-            <ToggleButton state={mirroredWebCam} action={handleToggleMirroredWebCamState} />
+            
+            <SettingsHeader title={"Video Settings"} />
+            <InputTitle title={"Mirror Web Cam"} />
+            <ToggleButton state={mirroredWebCam} action={() => {handleToggleSelectedVoiceVideoState("mirroredWebCam")}} />
+            <InputTitle title={"Preview Webcam"} />
+            <PreviewWebCam preview={previewingWebCam} deviceId={selectedVideoInput._id} mirrored={mirroredWebCam} />
+            <ApplyCancelButton apply={() => {handleTogglePreviewWebCam(true)}} cancel={() => {handleTogglePreviewWebCam(false)}} toggled={previewingWebCam} cancelName='Stop Preview' name='Start Preview' />
             <SettingsSpacer />
         </div>
     )

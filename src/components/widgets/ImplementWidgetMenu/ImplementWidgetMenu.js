@@ -44,6 +44,18 @@ export const ImplementWidgetMenu = ({active = false, type, name, close}) => {
 
     const [errorMessage, setErrorMessage] = React.useState("");
 
+    const [option1, setOption1] = React.useState("");
+
+    const [option2, setOption2] = React.useState("");
+
+    const [option3, setOption3] = React.useState("");
+
+    const [option4, setOption4] = React.useState("");
+
+    const [option5, setOption5] = React.useState("");
+
+    const [option6, setOption6] = React.useState("");
+
     const textColor = useSelector(selectTextColor);
 
     const secondaryColor = useSelector(selectSecondaryColor);
@@ -92,9 +104,12 @@ export const ImplementWidgetMenu = ({active = false, type, name, close}) => {
 
     const addWidget = async () => {
 
-        if ((type !== 'image' && type !== 'music') && textValue.length < 3) {
+        if ((type !== 'image' && type !== 'music' && type !== 'wheel-spin') && textValue.length < 3) {
+
             toggleError(true)
+
             setErrorMessage("Text Input Cannot Be Less Than 3 Characters Long");
+
             return;
         }
 
@@ -103,9 +118,26 @@ export const ImplementWidgetMenu = ({active = false, type, name, close}) => {
         }
 
         if (type === 'image' && image.size > 1000000) {
+
             toggleError(true)
+
             setErrorMessage("Image Cannot Be Larger Than 1MB");
+
             return;
+        }
+       
+        if (type === 'wheel-spin') {
+
+            if (option1.length === 0 || option2.length === 0 || option3.length === 0 || option4.length === 0 || option5.length === 0 || option6.length === 0) {
+
+                toggleError(true);
+
+                setErrorMessage("On More Options Are Empty");
+
+                return;
+
+            }
+
         }
 
         toggleLoading(true);
@@ -150,6 +182,30 @@ export const ImplementWidgetMenu = ({active = false, type, name, close}) => {
         setErrorMessage("");
     }
 
+    const handleOptionsInput = (value, state) => {
+
+        if (value.includes(',')) return;
+
+        if (value.length > 14) return;
+
+        if (state === 'option1') {
+            setOption1(value)
+        } else if (state === 'option2') {
+            setOption2(value)
+        } else if (state === 'option3') {
+            setOption3(value)
+        } else if (state === 'option4') {
+            setOption4(value)
+        } else if (state === 'option5') {
+            setOption5(value)
+        } else if (state === 'option6') {
+            setOption6(value)
+        }
+
+        setTextValue(`${option1},${option2},${option3},${option4},${option5},${option6}`);
+
+    }
+
     return (
         <>
         <AnimatePresence>
@@ -167,7 +223,7 @@ export const ImplementWidgetMenu = ({active = false, type, name, close}) => {
                     <h2
                     style={{color: textColor}}
                     >{name}</h2>
-                    {type === 'music' ? null : 
+                    {type === 'music' || type === 'wheel-spin' ? null : 
                     <InputTitle title={inputTitle} />}
                     {type === 'title' || type === 'dynamicGallery' ? <TextInput inputValue={textValue} action={handleTextValue} placeholder={type === 'dynamicGallery' ? "Image Query" : "Text"} /> : null}
                     {type === 'plainText' || type === 'list' ? <TextArea inputValue={textValue} action={handleTextValue} placeHolder={"Text"} /> : null}
@@ -186,6 +242,16 @@ export const ImplementWidgetMenu = ({active = false, type, name, close}) => {
                     {type === 'video' ? <InputTitle title={"Loop"} /> : null}
                     {type === 'video' ? <ToggleButton state={boolState} action={handleToggleBoolState} /> : null}
                     {type === 'music' ? <MusicWidgetButton prev={true} /> : null}
+                    {type === 'wheel-spin' ? 
+                    Array.apply(null, Array(6)).map((i, key) => {
+                        return (
+                            <>
+                            <InputTitle key={`title-${key}`} title={`Option ${key + 1}`} />
+                            <TextInput key={`input-${key}`} action={handleOptionsInput} stateSelector={`option${key + 1}`} inputValue={eval(`option${key+1}`)} title={'Option'} />
+                            </>
+                        )
+                    })
+                    : null}
                     <ApplyCancelButton apply={addWidget} cancel={close} name='Add'  />
                 </div>
                 <Loading overflow={false} loading={loading} error={error} />

@@ -6,7 +6,7 @@ import { io } from "socket.io-client";
 import { useNavigate, useRoutes } from 'react-router';
 
 // state
-import { addNewChannel, addSongToQueue, assignNewServerGroup, deleteChannel, fetchPersistedMusicVolume, fetchServerDetails, leaveChannel, newMessage, selectCurrentChannel, selectCurrentChannelId, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, setServerName, skipSong, toggleMusicPlaying, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateMemberStatus, updateServerBanner, updateServerGroups, userJoinsChannel, userJoinsServer, userLeavesChannel } from '../ServerSlice';
+import { addNewChannel, addSongToQueue, assignNewServerGroup, clearServerState, deleteChannel, fetchPersistedMusicVolume, fetchServerDetails, leaveChannel, newMessage, selectCurrentChannel, selectCurrentChannelId, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, setServerName, skipSong, toggleMusicPlaying, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateMemberStatus, updateServerBanner, updateServerGroups, userJoinsChannel, userJoinsServer, userLeavesChannel } from '../ServerSlice';
 import { selectUsername } from '../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { getToken, url } from '../../../util/Validation';
 import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
@@ -111,8 +111,15 @@ const Bar = () => {
             dispatch(updateMemberStatus(data))
         })
         socket.on('new message', (data) => {
+            
             dispatch(newMessage(data));
-            dispatch(playSoundEffect(""))
+
+            if (window.location.hash.includes(data.channel_id)) {
+
+                dispatch(playSoundEffect("newMessage"))
+            
+            }
+            
         })
 
         socket.on('server update', (data) => {
@@ -160,6 +167,10 @@ const Bar = () => {
 
         socket.on('poke', (data) => {
             dispatch(playSoundEffect("youHaveBeenPoked"))
+        })
+
+        socket.on('kick', (data) => {
+            leaveServer(true)
         })
 
         socket.on('new channel widget', (data) => {
@@ -343,13 +354,15 @@ const Bar = () => {
         // clean up socket
         return () => {
             dispatch(leaveChannel({username: username}));
-            dispatch(playSoundEffect('disconnected'));
+            
             try {
                 socket.off();
                 socket.emit('left server', {server_id: server_id});
                 socket = null;
+                dispatch(clearServerState())
             } catch (error) {
                 socket = null;
+                dispatch(clearServerState())
                 return;
             }
         }
@@ -365,8 +378,6 @@ const Bar = () => {
     }, [serverSettingsOpenState])
 
     const toggleServerSettings = () => {
-
-        
 
         if (window.location.hash.includes('server-settings')) {
            
@@ -388,10 +399,13 @@ const Bar = () => {
         navigate(window.location.hash.split('#')[1].split('/channel')[0])
     }
 
-    const leaveServer = () => {
+    const leaveServer = (kicked) => {
+        
         dispatch(leaveChannel({username: username}))
-        dispatch(playSoundEffect("disconnected"));
+        dispatch(playSoundEffect(kicked ? "userKicked" : "disconnected"));
         navigate('/dashboard')
+        dispatch(clearServerState())
+    
     }
 
     // handle device output
@@ -425,7 +439,7 @@ const Bar = () => {
                 width: current_channel_id ? "calc(100% - 125px)" : "90%"
             }}
             className='leave-server-button'>
-                <TextButton action={leaveServer} name={"Leave Server"} />
+                <TextButton id='disconnect-from-server-button' action={() => {leaveServer(false)}} name={"Leave Server"} />
             </div>
         </motion.div>
     )

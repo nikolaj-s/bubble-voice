@@ -5,7 +5,7 @@ import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../..
 
 import "./TextButton.css";
 
-export const TextButton = ({name, action, textAlign = 'center', toggled = false, marginBottom, marginTop}) => {
+export const TextButton = ({name, action, textAlign = 'center', toggled = false, marginBottom, marginTop, id}) => {
 
     const color = useSelector(selectPrimaryColor);
 
@@ -41,6 +41,7 @@ export const TextButton = ({name, action, textAlign = 'center', toggled = false,
 
     return (
         <motion.button 
+        id={id}
         onMouseEnter={() => {handleAnimation(accentColor)}}
         onMouseLeave={() => {handleAnimation(color)}}
         onMouseDown={() => {handleAnimation(textColor)}}

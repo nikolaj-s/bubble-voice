@@ -375,6 +375,26 @@ export const ContextMenu = () => {
         }
     }
 
+    const handleKickUser = async () => {
+        try {
+
+            const selected_user = selectedUserToManage.split('-')[0];
+
+            const channel_id = selectedUserToManage.split('channel-id-')[1];
+
+            if (selected_user && channel_id) {
+
+                await socket.request('kick', {channel_id: channel_id, username: selected_user})
+                .catch(error => {
+                    dispatch(throwServerError({errorMessage: error}));
+                })
+
+            }
+        } catch (error) { 
+            console.log(error);
+        }
+    }
+
     return (
         <>
         {ctxActive ? 
@@ -406,7 +426,7 @@ export const ContextMenu = () => {
             </>
             : null}
             {deleteWidget ? <CtxButton action={handleDeleteWidget} name={"Delete Widget"} /> : null}
-            {kickUser ? <CtxButton name="Kick User" /> : null}
+            {kickUser ? <CtxButton name="Kick User" action={handleKickUser} /> : null}
             {pokeUser ? <CtxButton name="Poke User" action={handlePokeUser} /> : null}
             {canBanUser ? <CtxButton name={"Ban User"} /> : null}
             <Loading loading={loading} />

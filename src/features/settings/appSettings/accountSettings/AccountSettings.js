@@ -16,6 +16,7 @@ import { ProfileImage } from './ProfileImage/ProfileImage';
 import { Error } from '../../../../components/Error/Error';
 import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
 import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/SettingsSpacer';
+import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 
 const Settings = () => {
 
@@ -86,17 +87,17 @@ const Settings = () => {
     return (
         <>
             <div className='settings-wrapper'>
+                <SettingsHeader title={"User Display"} />
                 <InputTitle title={"Change Display Name"} />
                 <TextInput stateSelector='display_name' action={handleInput} inputValue={displayName} placeholder={""} />
+                <InputTitle title={"Change Banner / Profile Picture"} />
+                <ProfileImage getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} />
+                <InputTitle title={"*Reconnect To Server To See Changes"} />
+                <SettingsHeader title={"Privacy"} />
                 <InputTitle title={"Change Password"} />
                 <TextInput stateSelector='password' action={handleInput}  marginBottom='2%' type='password' placeholder={"Current Password"} inputValue={password} />
                 <TextInput action={handleInput} stateSelector='newPassword' marginBottom='2%' type='password' placeholder={"New Password"} inputValue={newPassword} />
                 <TextInput action={handleInput} inputValue={confirmNewPassword} stateSelector="confirmNewPassword" type='password' placeholder={"Confirm New Password"} />
-
-                <InputTitle title={"Change Banner / Profile Picture"} />
-
-                <ProfileImage getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} />
-                <InputTitle title={"*Reconnect To Server To See Changes"} />
                 {stateChanged ? <ApplyCancelButton apply={handleApply} cancel={handleCancel} /> : null}
                 <SettingsSpacer />
             </div>

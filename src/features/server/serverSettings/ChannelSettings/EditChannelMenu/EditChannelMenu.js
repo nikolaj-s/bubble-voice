@@ -9,7 +9,7 @@ import { InputTitle } from '../../../../../components/titles/inputTitle/InputTit
 import { TextInput } from '../../../../../components/inputs/TextInput/TextInput';
 import { ToggleButton } from '../../../../../components/buttons/ToggleButton/ToggleButton';
 import { ApplyCancelButton } from '../../../../../components/buttons/ApplyCancelButton/ApplyCancelButton'
-
+import { SettingsHeader } from '../../../../../components/titles/SettingsHeader/SettingsHeader'
 
 // state
 import { setHeaderTitle } from '../../../../contentScreen/contentScreenSlice';
@@ -163,10 +163,12 @@ const Wrapper = () => {
         <>
         {permission?.user_can_manage_channels ?
             <>
+            <SettingsHeader title={'General'} />
             <InputTitle title={"Edit Channel Name"} />
             <TextInput action={handleUpdateChannelName} inputValue={channelName} />
             <InputTitle title={"Toggle Persist Social Data *persists new data upon activation"} />
             <ToggleButton action={handleTogglePersistSocial} state={persistChannelSocial} />
+            <SettingsHeader title={"Widgets"} />
             <InputTitle title={`Widgets ${channelToEdit.widgets ? channelToEdit.widgets.length : 0} / 10`} />
             <WidgetPreview widgets={widgets} editing={true} reorder={updateWidgetOrder} />
             <TextButton action={openWidgetMenu} name={"Add Widget"} />

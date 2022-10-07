@@ -7,6 +7,7 @@ import { useRoutes } from 'react-router'
 import { ApplyCancelButton } from '../../../../components/buttons/ApplyCancelButton/ApplyCancelButton';
 import { TextInput } from '../../../../components/inputs/TextInput/TextInput';
 import { InputTitle } from '../../../../components/titles/inputTitle/InputTitle';
+import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
@@ -59,6 +60,7 @@ const Settings = () => {
 
     return (
         <div className='settings-wrapper'>
+            <SettingsHeader title={"Media Binds"} />
             <InputTitle title={"Push To Talk"} />
             <TextInput keyCode={handleKeyCodeUpdate} stateSelector='push_to_talk' inputValue={local['push_to_talk'] ? local['push_to_talk'].key : pushToTalkkey.key} />
             <InputTitle title={"Mute Mic"} />
@@ -67,6 +69,7 @@ const Settings = () => {
             <TextInput keyCode={handleKeyCodeUpdate} stateSelector='mute_audio' inputValue={local['mute_audio'] ? local['mute_audio'].key : muteAudioKey.key} />
             <InputTitle title={"Activate Camera"} />
             <TextInput keyCode={handleKeyCodeUpdate} stateSelector='activate_camera' inputValue={local['activate_camera'] ? local['activate_camera'].key : activateCameraKey.key} />
+            <SettingsHeader title={"Misc"} />
             <InputTitle title={"Disconnect"} />
             <TextInput keyCode={handleKeyCodeUpdate} stateSelector='disconnect' inputValue={local['disconnect'] ? local['disconnect'].key : disconnectKey.key} />
             {update ? <ApplyCancelButton cancel={handleCancel} apply={saveKeyBinds} name='Save' /> : null}

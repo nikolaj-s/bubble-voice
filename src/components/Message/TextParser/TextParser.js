@@ -20,11 +20,15 @@ export const TextParser = ({text}) => {
 
     return (
         <p style={{color: textColor}}>
-        {text.split(' ').map(chunk => {
+        {text.split(' ').map((chunk, key) => {
             if (text.startsWith('https:')) {
-                return <a onClick={() => {openLink(chunk)}} >{chunk}</a>
+                return <a key={chunk + key} onClick={() => {openLink(chunk)}} >{chunk}</a>
             } else {
-                return chunk
+                return (
+                <React.Fragment key={chunk + key}>
+                    {chunk + " "}
+                </React.Fragment>
+                )
             }
         })}
         </p>

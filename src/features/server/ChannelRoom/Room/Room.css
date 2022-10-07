@@ -2,8 +2,10 @@
 #live-chat-wrapper {
     height: calc(100% - 55px);
     width: 100%;
+    max-width: 100%;
     display: grid;
     justify-content: center;
+    justify-items: center;
     align-content: center;
     position: relative;
     grid-template-columns: repeat(auto-fit, minmax(30%, 600px));

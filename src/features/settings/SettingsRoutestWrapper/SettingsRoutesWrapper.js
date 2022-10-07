@@ -16,7 +16,8 @@ import { selectSecondaryColor } from '../appSettings/appearanceSettings/appearan
 // style's
 import "./SettingsRoutesWrapper.css";
 import { SoundSettings } from '../appSettings/soundSettings/SoundSettings'
-import { LocalDataSettings } from '../appSettings/localDataSettings/LocalDataSettings'
+import { CloseSettings } from '../../../components/CloseSettings/CloseSettings'
+import { MiscellaneousSettings } from '../appSettings/MiscellaneousSettings/MiscellaneousSettings'
 
 
 const Wrapper = () => {
@@ -45,9 +46,10 @@ const Wrapper = () => {
             <AccountSettings />
             <AppearanceSettings />
             <KeyBindSettings />
-            <LocalDataSettings />
+            <MiscellaneousSettings />
             <SoundSettings />
             <VoiceVideoSettings />
+            <CloseSettings />
         </div>
     )
 }

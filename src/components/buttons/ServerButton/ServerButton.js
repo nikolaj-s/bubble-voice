@@ -8,7 +8,7 @@ import { HeaderTitle } from '../../titles/headerTitle/headerTitle'
 import { useSelector } from 'react-redux'
 
 // state
-import { selectAccentColor, selectDarkModeEnabledState, selectPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
+import { selectAccentColor, selectDarkModeEnabledState, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 
 export const ServerButton = ({_id, action, server_banner, server_name, server_id}) => {
 
@@ -21,6 +21,8 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
     const textColor = useSelector(selectTextColor);
 
     const darkMode = useSelector(selectDarkModeEnabledState);
+
+    const secondaryColor = useSelector(selectSecondaryColor);
     
     const handleAnimation = (color) => {
 
@@ -31,7 +33,9 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
     }
 
     const handleAction = () => {
+
         action(server_id, server_name)
+
     }
 
     return (
@@ -39,7 +43,7 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
         id={`server-button-${server_id}`}
         animate={animation}
         style={{
-            width: "calc(100% - 28px - 8px)",
+            width: "calc(100% - 8px)",
             height: "calc(130px - 8px)",
             backgroundColor: primaryColor,
             borderRadius: 15,
@@ -48,8 +52,10 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
             margin: "2% 0 0 0",
             justifyContent: 'space-around',
             cursor: 'pointer',
-            padding: "0 14px",
-            border: `solid 4px ${darkMode ? 'rgba(0, 0, 0, 0)' : 'rgba(255, 255, 255, 0)'}`
+            padding: "0",
+            position: 'relative',
+            border: `solid 4px ${darkMode ? 'rgba(0, 0, 0, 0)' : 'rgba(255, 255, 255, 0)'}`,
+            overflow: 'hidden'
         }}
         onMouseEnter={() => {handleAnimation(accentColor)}}
         onMouseLeave={() => {handleAnimation(darkMode ? 'rgba(0, 0, 0, 0)' : 'rgba(255, 255, 255, 0)')}}
@@ -60,16 +66,42 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
         >
             <div 
             style={{
-                width: 100,
-                height: 100,
-                borderRadius: '15px',
+                width: '100%',
+                height: "100%",
+                borderRadius: '12px',
                 overflow: 'hidden',
                 flexShrink: 0,
-                marginRight: 10
+                position: 'absolute'
             }}>
                 <Image image={server_banner} />
             </div>
-            <HeaderTitle textAlign='center' title={server_name} />
+            <div
+            style={{
+                position: 'absolute',
+                zIndex: 1,
+                left: 122,
+                fontSize: '0.7rem',
+                background: 'rgba' + (secondaryColor.split('rgb')[1].split(')') + ' 0.7)'),
+                width: 'calc(100% - 122px)',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backdropFilter: 'blur(2px)',
+                borderTopRightRadius: '11px',
+                borderBottomRightRadius: '11px'
+            }}
+            >
+                <h1
+                style={{
+                    color: textColor,
+                    fontSize: '1.1rem',
+                    marginLeft: '0.2rem'
+                }}
+                >
+                    {server_name}
+                </h1>
+            </div> 
         </motion.div>
     )
 }

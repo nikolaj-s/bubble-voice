@@ -166,6 +166,38 @@ export const fetchAppAudio = async () => {
     }
 }
 
+export const setAppAudioPrefs = async (obj) => {
+    try {
+
+        const keytar = window.require('keytar');
+
+        await keytar.setPassword("APPAUDIOPREF", "AUDIOPREF", JSON.stringify(obj))
+
+    } catch (error) {
+        console.log("Using Web App")
+    }
+}
+
+export const fetchAppAudioPrefs = async () => {
+    try {
+
+        const keytar = window.require('keytar');
+
+        const data = await keytar.getPassword("APPAUDIOPREF", "AUDIOPREF");
+
+        const parsed = JSON.parse(data);
+        
+        if (parsed === null) {
+            return {}
+        } else {
+            return parsed;
+        }
+
+    } catch (error) {
+        console.log("Using Web App")
+    }
+}
+
 // USER PREFS
 
 export const saveUserPrefs = async () => {

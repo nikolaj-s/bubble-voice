@@ -4,7 +4,7 @@ import React from 'react'
 // state
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAudioOutput } from '../appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
-import { playSoundEffect, selectSoundEffect, selectSoundEffectVolume } from './soundEffectsSlice';
+import { playSoundEffect, selectSocialSoundEffect, selectSoundEffect, selectSoundEffectVolume } from './soundEffectsSlice';
 
 const connected = require('../../../assets/connected.wav');
 
@@ -18,7 +18,9 @@ const controlSoundEffect = require('../../../assets/control-sound-effect.mp3');
 
 const channelDeleted = require('../../../assets/channel-has-been-deleted.mp3');
 
-const userPoked = require('../../../assets/hey-wake-up.mp3')
+const userPoked = require('../../../assets/hey-wake-up.mp3');
+
+const userKicked = require('../../../assets/you-have-been-kicked-from-the-server.mp3');
 
 export const SoundEffects = () => {
 
@@ -30,6 +32,8 @@ export const SoundEffects = () => {
 
     const dispatch = useDispatch();
 
+    const socialSoundEffect = useSelector(selectSocialSoundEffect);
+
     const [playing, togglePlaying] = React.useState("");
 
     const soundEffects = {
@@ -39,7 +43,9 @@ export const SoundEffects = () => {
         'userDisconnected': userDisconnected,
         'controlSoundEffect': controlSoundEffect,
         'channelDeleted': channelDeleted,
-        'youHaveBeenPoked': userPoked
+        'youHaveBeenPoked': userPoked,
+        'newMessage': connected,
+        'userKicked': userKicked
     }
 
     React.useEffect(() => {
@@ -51,10 +57,12 @@ export const SoundEffects = () => {
     
     React.useEffect(() => {
 
+        if (soundEffect === 'newMessage' && socialSoundEffect === false) return; 
+
         togglePlaying(soundEffects[soundEffect]);
         
     // eslint-disable-next-line
-    }, [soundEffect])
+    }, [soundEffect, socialSoundEffect])
 
     const soundEffectFinished = () => {
         dispatch(playSoundEffect(""));

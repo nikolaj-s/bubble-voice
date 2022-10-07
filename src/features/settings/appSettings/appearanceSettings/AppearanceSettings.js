@@ -11,6 +11,7 @@ import { ToggleButton } from '../../../../components/buttons/ToggleButton/Toggle
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 import { selectAccentColor, selectDarkModeEnabledState, selectPrimaryColor, selectSecondaryColor, selectTextColor, toggleDarkMode, updateColorValue } from './appearanceSettingsSlice';
+import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 
 const Settings = () => {
 
@@ -45,6 +46,7 @@ const Settings = () => {
     }
     return (
         <div className='settings-wrapper'>
+            <SettingsHeader title={"Custom Color Scheme"} />
             <InputTitle title={"Primary Color"} />
             <TextInput stateSelector='primaryColor' action={handleInput} inputValue={primaryColor} />
             <InputTitle title={"Secondary Color"} />
@@ -53,6 +55,7 @@ const Settings = () => {
             <TextInput stateSelector='accentColor' action={handleInput}  inputValue={accentColor} />
             <InputTitle  title={"Text Color"} />
             <TextInput stateSelector='textColor' action={handleInput}  inputValue={textColor} />
+            <SettingsHeader title={"Presets"} />
             <InputTitle title={"Enable Dark Mode"} />
             <ToggleButton action={handleToggleAppearanceModes} state={darkModeState} />
         </div>

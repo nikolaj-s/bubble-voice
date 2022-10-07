@@ -8,7 +8,7 @@ import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../..
 //style
 import "./Range.css";
 
-export const Range = ({min = 0, max = 1, action, step = 0.001, value = 0, fill = false}) => {
+export const Range = ({min = 0, max = 1, action, step = 0.001, value = 0, fill = false, save = () => {}}) => {
 
     const primaryColor = useSelector(selectPrimaryColor);
 
@@ -41,14 +41,14 @@ export const Range = ({min = 0, max = 1, action, step = 0.001, value = 0, fill =
         document.getElementById('range-input').style.backgroundSize = (value - min) * 100 / (max - min) + '% 100%'
     
         // eslint-disable-next-line
-    }, [])
+    }, [value])
 
     return (
         <div 
         style={{backgroundColor: fill ? primaryColor : null}}
         className='range-container'>
-            <input id="range-input"
-            onChange={handleAction} type={"range"} min={min} max={max} step={step} value={value} />
+            <input onMouseUp={save} id="range-input"
+            onChange={handleAction}  type={"range"} min={min} max={max} step={step} value={value} />
         </div>
     )
 }

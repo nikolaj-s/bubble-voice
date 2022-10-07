@@ -5,5 +5,6 @@
     letter-spacing: var(--font-spacing);
     font-weight: 400;
     width: calc(100% - 1rem);
+    opacity: 0.8;
 }
 

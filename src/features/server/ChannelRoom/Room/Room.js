@@ -7,9 +7,9 @@ import * as mediasoupClient from 'mediasoup-client';
 
 // state
 import { updateMusicState, selectCurrentChannel, selectCurrentChannelId, selectMusicPlayingState, selectMusicQueue, selectPushToTalkActive, selectServerId, toggleLoadingChannel, updateMemberStatus, selectServerMembers } from '../../ServerSlice';
-import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPushToTalkState, selectMirroredWebCamState } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
+import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPushToTalkState, selectMirroredWebCamState, selectEchoCancellatio, selectNoiseSuppression } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
 import { selectDisplayName, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
-import { playSoundEffect } from '../../../settings/soundEffects/soundEffectsSlice';
+import { playSoundEffect, selectMuteSoundEffectsWhileMutedState } from '../../../settings/soundEffects/soundEffectsSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 import { selectAudioState, selectCurrentScreen, selectMicrophoneState, selectScreenShareState, selectWebCamState, setCurrentScreen, setScreens, setSelectingScreensState } from '../../../controlBar/ControlBarSlice';
 
@@ -72,6 +72,38 @@ const Component = () => {
 
     const webCamMirroredState = useSelector(selectMirroredWebCamState);
 
+    const soundEffectsMuted = useSelector(selectMuteSoundEffectsWhileMutedState);
+
+    // audio pref state
+    const echoCancellation = useSelector(selectEchoCancellatio);
+
+    const noiseSuppression = useSelector(selectNoiseSuppression);
+
+    React.useEffect(() => {
+        
+        if (client) {
+            client.updateAudioPrefs(noiseSuppression, echoCancellation)
+        }
+
+    }, [noiseSuppression, echoCancellation])
+
+    React.useEffect(() => {
+        let el = document.getElementById(user._id)
+        
+        if (!webcamState && el) {
+
+            let vid = el.querySelector('video')
+            
+            if (webCamMirroredState && vid) {
+               vid.style.transform = 'scaleX(-1)'
+            } else if (vid) {
+                vid.style.transform = 'scaleX(1)'
+            }
+        
+        }
+
+    }, [webCamMirroredState, webcamState])
+
     // voice activity state
     const voiceActivityDetection = useSelector(selectVoiceActivityState);
 
@@ -86,8 +118,7 @@ const Component = () => {
         username: username,
         display_name: displayName,
         user_banner: userBanner,
-        user_image: userImage,
-        mirrorWebCam: webCamMirroredState
+        user_image: userImage
     }
 
     const event = (arg) => {
@@ -95,7 +126,7 @@ const Component = () => {
     }
 
     const init = async () => {
-        client = new RoomClient(socket, current_channel_id, server_id, mediasoupClient, audioDevice, videoDevice, microphoneState, webcamState, user, event, audioState, webCamMirroredState)
+        client = new RoomClient(socket, current_channel_id, server_id, mediasoupClient, audioDevice, videoDevice, microphoneState, webcamState, user, event, audioState, webCamMirroredState, echoCancellation, noiseSuppression)
 
         await client.join();
 
@@ -218,7 +249,13 @@ const Component = () => {
                 client.toggleAudioState(false)
                 socket.emit('user status', {username: user.username, action: {muted: false}})
             } else if (audioState === false) {
-                document.querySelectorAll('video, audio').forEach(el => el.muted = true)
+                document.querySelectorAll('video, audio').forEach(el => {
+                    if (el.id === 'sound-effects-source') {
+                       return soundEffectsMuted ? el.muted = true : null
+                    } else {
+                        return el.muted;
+                    }
+                })
                 dispatch(updateMemberStatus({username: user.username, action: {muted: true}}))
                 client.toggleAudioState(true)
                 socket.emit('user status', {username: user.username, action: {muted: true}})
@@ -226,7 +263,7 @@ const Component = () => {
 
         }
     // eslint-disable-next-line
-    }, [microphoneState, webcamState, loaded, screenShareState, audioState])
+    }, [microphoneState, webcamState, loaded, screenShareState, audioState, soundEffectsMuted])
 
     // handle voice activity
 
@@ -267,39 +304,43 @@ const Component = () => {
                         scriptProcessor.connect(audioCtx.destination)
                         
                         scriptProcessor.onaudioprocess = function() {
-                            
-                            const array = new Uint8Array(analyser.frequencyBinCount);
+                            try {
+                                const array = new Uint8Array(analyser.frequencyBinCount);
 
-                            analyser.getByteFrequencyData(array);
+                                analyser.getByteFrequencyData(array);
 
-                            const arrSum = array.reduce((a, value) => a + value, 0);
+                                const arrSum = array.reduce((a, value) => a + value, 0);
 
-                            const avg = (arrSum / array.length) * 5;
+                                const avg = (arrSum / array.length) * 5;
 
-                            if (avg > 60) {
+                                if (avg > 60) {
 
-                                if (playing || microphoneState === false) return;
+                                    if (playing || microphoneState === false) return;
 
-                                playing = true;
+                                    playing = true;
 
-                                client.resumeProducer('audioType');
+                                    client.resumeProducer('audioType');
 
-                                dispatch(updateMemberStatus({username: user.username, action: {active: true}}))
-                            
-                                socket.emit('user status', {username: user.username, action: {active: true, channel_specific: true}})
+                                    dispatch(updateMemberStatus({username: user.username, action: {active: true}}))
                                 
-                            } else if (avg < 60) {
+                                    socket.emit('user status', {username: user.username, action: {active: true, channel_specific: true}})
+                                    
+                                } else if (avg < 60) {
 
-                                if (playing === false) return;
+                                    if (playing === false) return;
 
-                                playing = false;
+                                    playing = false;
 
-                                client.pauseProducer('audioType');
+                                    client.pauseProducer('audioType');
 
-                                dispatch(updateMemberStatus({username: user.username, action: {active: false}}))
+                                    dispatch(updateMemberStatus({username: user.username, action: {active: false}}))
+                                    
+                                    socket.emit('user status', {username: user.username, action: {active: false, channel_specific: true}})
                                 
-                                socket.emit('user status', {username: user.username, action: {active: false, channel_specific: true}})
-                            
+                                }
+                            } catch (error) {
+                                console.log(error)
+                                scriptProcessor.onaudioprocess = null;
                             }
                         } 
                     })
@@ -328,7 +369,9 @@ const Component = () => {
             }
         } catch (error) {
             console.log(error)
-            
+            analyser?.disconnect();
+            source?.disconnect();
+            scriptProcessor?.disconnect();
         }
         return () => {
             analyser?.disconnect();

@@ -44,6 +44,9 @@ export const ImageInput = ({
         },
         maxFiles: 1,
         onDrop: acceptedFiles => {
+
+            if (acceptedFiles.length === 0) return;
+
             setFiles(acceptedFiles.map(file => Object.assign(file, {
                 preview: URL.createObjectURL(file)
             })))
@@ -53,8 +56,9 @@ export const ImageInput = ({
 
     // clear object url to prevent memory leak
     React.useEffect(() => {
-    
-        if (files[0].size) getFile(files[0]);
+        if (files.length === 0) return;
+
+        if (files[0]?.size) getFile(files[0]);
         
         return () => files.forEach(file => URL.revokeObjectURL(file.preview));
     // eslint-disable-next-line
@@ -108,7 +112,7 @@ export const ImageInput = ({
         }}
         {...getRootProps({className: 'dropzone'})} className='image-drop-input-container'>
             <input {...getInputProps()} />
-            <Image image={files[0].preview} />
+            <Image image={files[0]?.preview} />
             <ImageIcon center={center} zIndex={zIndex} animation={iconAnimation} />
         </motion.div>
     )

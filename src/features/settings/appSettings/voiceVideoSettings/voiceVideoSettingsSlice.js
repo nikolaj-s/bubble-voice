@@ -49,39 +49,35 @@ const voiceVideoSettingsSlice = createSlice({
         deviceList: [],
         pushToTalk: false,
         voiceActivity: true,
-        mirroredWebCam: false
+        mirroredWebCam: false,
+        noiseSuppression: false,
+        echoCancellation: false,
+        micInputVolume: 1
     },
     reducers: {
+        updateMicInputVolume: (state, action) => {
+
+            state.micInputVolume = action.payload;
+        
+        },
         updateSelectedDevice: (state, action) => {
+
             state[action.payload.type] = action.payload.device;
-            const obj = {
-                audioinput: state.audioinput,
-                audiooutput: state.audiooutput,
-                videoinput: state.videoinput,
-                pushToTalk: state.pushToTalk,
-                voiceActivity: state.voiceActivity,
-                mirroredWebCam: state.mirroredWebCam
-            }
-            
-            saveVoiceVideoSettings(obj)
+
         },
         toggleVoiceActivity: (state, action) => {
+
             state.pushToTalk = !state.pushToTalk;
+
             state.voiceActivity = !state.voiceActivity;
 
-            const obj = {
-                audioinput: state.audioinput,
-                audiooutput: state.audiooutput,
-                videoinput: state.videoinput,
-                pushToTalk: state.pushToTalk,
-                voiceActivity: state.voiceActivity,
-                mirroredWebCam: state.mirroredWebCam
-            }
-            
-            saveVoiceVideoSettings(obj)
         },
-        toggleMirroredWebCam: (state, action) => {
-            state.mirroredWebCam = !state.mirroredWebCam;
+        toggleSelectedVoiceVideoState: (state, action) => {
+
+            state[action.payload] = !state[action.payload];
+            
+        },
+        handleSaveVoiceVideoSettings: (state, action) => {
 
             const obj = {
                 audioinput: state.audioinput,
@@ -89,16 +85,16 @@ const voiceVideoSettingsSlice = createSlice({
                 videoinput: state.videoinput,
                 pushToTalk: state.pushToTalk,
                 voiceActivity: state.voiceActivity,
-                mirroredWebCam: state.mirroredWebCam
+                mirroredWebCam: state.mirroredWebCam,
+                noiseSuppression: state.noiseSuppression,
+                echoCancellation: state.echoCancellation,
+                micInputVolume: state.micInputVolume
             }
             
             saveVoiceVideoSettings(obj)
         }
     },
     extraReducers: {
-        [getMediaDevices.pending]: (state, action) => {
-
-        },
         [getMediaDevices.fulfilled]: (state, action) => {
 
             const saved_data = action.payload.saved_data;
@@ -137,6 +133,19 @@ const voiceVideoSettingsSlice = createSlice({
             if (saved_data.mirroredWebCam) {
                 state.mirroredWebCam = saved_data.mirroredWebCam;
             }
+
+            if (saved_data.noiseSuppression) {
+                state.noiseSuppression = saved_data.noiseSuppression;
+            }
+
+            if (saved_data.echoCancellation) {
+                state.echoCancellation = saved_data.echoCancellation;
+            }
+
+            if (saved_data.micInputVolume) {
+                state.micInputVolume = saved_data.micInputVolume;
+            }
+
         },
         [getMediaDevices.rejected]: (state, action) => {
             state.audioinput = {
@@ -206,7 +215,13 @@ export const selectVoiceActivityState = state => state.voiceVideoSettingsSlice.v
 
 export const selectMirroredWebCamState = state => state.voiceVideoSettingsSlice.mirroredWebCam;
 
-export const { toggleMirroredWebCam, updateSelectedDevice, toggleVoiceActivity} = voiceVideoSettingsSlice.actions;
+export const selectEchoCancellatio = state => state.voiceVideoSettingsSlice.echoCancellation;
+
+export const selectNoiseSuppression = state => state.voiceVideoSettingsSlice.noiseSuppression;
+
+export const selectMicInputVolume = state => state.voiceVideoSettingsSlice.micInputVolume;
+
+export const { toggleSelectedVoiceVideoState, updateSelectedDevice, toggleVoiceActivity, handleSaveVoiceVideoSettings, updateMicInputVolume } = voiceVideoSettingsSlice.actions;
 
 export default voiceVideoSettingsSlice.reducer;
 

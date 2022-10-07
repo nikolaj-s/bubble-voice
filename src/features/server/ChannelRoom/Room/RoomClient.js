@@ -7,7 +7,7 @@ const mediaType = {
 }
 
 export class RoomClient {
-    constructor(socket, current_channel_id, server_id, mediasoupClient, audioInputDevice, videoInputDevice, audioInputState, videoInputState, user, dispatch, audioState, mirrorWebCam) {
+    constructor(socket, current_channel_id, server_id, mediasoupClient, audioInputDevice, videoInputDevice, audioInputState, videoInputState, user, dispatch, audioState, mirrorWebCam, echoCancellation = false, noiseSuppression = false) {
 
         this.socket = socket;
 
@@ -44,6 +44,18 @@ export class RoomClient {
         this.audioState = audioState;
 
         this.webCamMirrorState = mirrorWebCam;
+
+        this.noiseSuppression = noiseSuppression;
+
+        this.echoCancellation = echoCancellation;
+    }
+
+    updateAudioPrefs(noiseSuppression, echoCancellation) {
+
+        this.noiseSuppression = noiseSuppression;
+
+        this.echoCancellation = echoCancellation;
+    
     }
 
     async loadDevice(routerRtpCapabilities) {
@@ -204,9 +216,6 @@ export class RoomClient {
                 el.srcObject = stream;
                 el.id = consumer.id;
                 el.className = 'stream web-cam-stream';
-                if (user.mirrorWebCam) {
-                    el.style.transform = 'scaleX(-1)'
-                }
                 el.playsInline = false;
                 el.autoplay = true;
                 el.muted = true;
@@ -326,6 +335,8 @@ export class RoomClient {
                 mediaConstraints = {
                     audio: {
                         deviceId: deviceId ? {exact: deviceId} : deviceId,
+                        echoCancellation: this.echoCancellation,
+                        noiseSuppression: this.noiseSuppression
                     },
                     video: false,
                 }

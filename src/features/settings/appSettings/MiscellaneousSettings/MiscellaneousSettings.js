@@ -33,11 +33,12 @@ const Settings = () => {
         if (data.error) return;
 
         toggleHardwareAcceleration(data.toggled);
+    
     }
 
     React.useEffect(() => {
 
-        dispatch(setHeaderTitle("Local Data Settings"))
+        dispatch(setHeaderTitle("Miscellaneous Settings"))
 
         handleSavedHardwarePref();
 
@@ -67,8 +68,11 @@ const Settings = () => {
     }
 
     const closeErrorMessage = () => {
+        
         setError(false);
+        
         setErrorMessage("");
+    
     }
 
     return (
@@ -77,12 +81,14 @@ const Settings = () => {
             <TextButton action={handleClearLocalData} name={"Clear Data"} />
             <InputTitle title={"Toggle Hardware Acceleration"} />
             <ToggleButton action={handleToggleHardwareAcceleration} state={hardwareAcceleration} />
+            <InputTitle title={"Disable Gif Profile Pictures / Banners"} />
+            <ToggleButton />
             {error ? <Error action={closeErrorMessage} errorMessage={errorMessage} /> : null}
             <Loading loading={loading} />
         </div>
     )
 }
 
-export const LocalDataSettings = () => useRoutes([
+export const MiscellaneousSettings = () => useRoutes([
     { path: 'local-data', element: <Settings /> }
 ])

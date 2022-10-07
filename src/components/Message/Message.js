@@ -23,6 +23,7 @@ export const Message = ({ message }) => {
         style={{
             borderTop: `solid 2px ${textColor}`
         }}
+        id={message._id}
         className='message-container'>
             <div className='sender-info-container'>
                 <p

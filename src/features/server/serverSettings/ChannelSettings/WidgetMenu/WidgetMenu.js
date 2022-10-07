@@ -17,10 +17,12 @@ import { ImageWidgetButton } from '../../../../../components/widgets/WidgetButto
 import { DynamicGalleryWidgetButton } from '../../../../../components/widgets/WidgetButtons/DynamicGalleryButton/DynamicGalleryButton';
 import { VideoWidgetButton } from '../../../../../components/widgets/WidgetButtons/VideoWidgetButton/VideoWidgetButton';
 import { MusicWidgetButton } from '../../../../../components/widgets/WidgetButtons/MusicWidgetButton/MusicWidgetButton';
+import { WheelSpinButton } from '../../../../../components/widgets/WidgetButtons/WheelSpinButton/WheelSpinButton';
+import { ImplementWidgetMenu } from '../../../../../components/widgets/ImplementWidgetMenu/ImplementWidgetMenu';
+
 
 // style
 import "./WidgetMenu.css";
-import { ImplementWidgetMenu } from '../../../../../components/widgets/ImplementWidgetMenu/ImplementWidgetMenu';
 
 const Wrapper = () => {
 
@@ -89,6 +91,7 @@ const Wrapper = () => {
                 <InputTitle title={"Media Widgets"} />
                 <div className='widgets-button-wrapper'>
                     <MusicWidgetButton action={() => {openAddWidgetMenu('music', "Add Music Widget")}} />
+                    <WheelSpinButton action={() => {openAddWidgetMenu('wheel-spin', 'Add Wheel Spin Widget')}} />
                 </div>
                 <TextButton marginTop={"2%"} action={handleCancel} name="Cancel" />
                 <SettingsSpacer />

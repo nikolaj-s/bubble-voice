@@ -19,6 +19,7 @@ import { InputPlaceHolder } from '../../titles/InputPlaceHolder/InputPlaceHolder
 // style
 import "./WidgetPreview.css";
 import { MusicWidget } from '../Widgets/MusicWIdget/MusicWIdget';
+import { WheelSpinWidget } from '../Widgets/WheelSpinWidget/WheelSpinWidget';
 
 export const WidgetPreview = ({widgets = [], editing = false, reorder}) => {
 
@@ -40,6 +41,7 @@ export const WidgetPreview = ({widgets = [], editing = false, reorder}) => {
                         {widget.type === 'video' && !widget.delete ? <VideoWidget editing={editing} key={widget._id} widget={widget} /> : null}
                         {widget.type === 'dynamicGallery' && !widget.delete ? <DynamicGalleryWidget editing={editing} key={widget._id} widget={widget} /> : null}
                         {widget.type === 'music' && !widget.delete ? <MusicWidget editing={editing} /> : null}
+                        {widget.type === 'wheel-spin' && !widget.delete ? <WheelSpinWidget editing={true} key={widget._id} widget={widget} /> : null}
                         {widget.delete ? null : <SubMenuButton position={"absolute"} zIndex={3} top={10} left={5} />}
                         {widget.delete ? <InputPlaceHolder margin={"1% 0"} value={"Hit Apply To Save Changes"} /> : null}
                     </Reorder.Item>
@@ -56,6 +58,7 @@ export const WidgetPreview = ({widgets = [], editing = false, reorder}) => {
                     {widget.type === 'video' ? <VideoWidget key={widget._id + key} widget={widget} /> : null}
                     {widget.type === 'dynamicGallery' ? <DynamicGalleryWidget key={widget._id} widget={widget} /> : null}
                     {widget.type === 'music' ? <MusicWidget key={widget._id + key} /> : null}
+                    {widget.type === 'wheel-spin' ? <WheelSpinWidget key={widget._id + key} widget={widget} /> : null}
                     </>
                 )
             })}

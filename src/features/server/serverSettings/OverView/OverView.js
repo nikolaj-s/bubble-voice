@@ -17,6 +17,7 @@ import { selectServerBanner, selectServerName, selectUsersPermissions, setServer
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 import { socket } from '../../ServerBar/ServerBar';
 import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
+import { uploadImage } from '../../../../util/UploadRoute';
 
 
 const Wrapper = () => {
@@ -46,7 +47,13 @@ const Wrapper = () => {
 
     // handle local state changes
     const handleBannerChange = (image) => {
+        
+        if (!image) return;
+
+        if (image.size > 2000000) return dispatch(throwServerError({errorMessage: 'image cannot be larger than 2mb'}))
+
         setNewBanner(image)
+        
         setUpdate(true)
     }
 
@@ -71,16 +78,31 @@ const Wrapper = () => {
         try {
             toggleLoading(true);
 
+            let image;
+
+            if (newBanner) {
+
+                const upload_stat = await uploadImage(newBanner);
+
+                if (upload_stat.error) {
+                    return dispatch(throwServerError({errorMessage: image.error}));
+                }
+
+                image = upload_stat.url;
+
+            }
+            
             const data = {
                 server_name: newServerName === serverName ? null : newServerName,
-                server_banner: newBanner,
+                server_banner: image,
                 server_password: serverPassword,
                 new_server_password: newServerPassword,
                 confirm_new_server_password: confirmNewServerPassword
             }
-            
+
             await socket.request('update server', data)
             .then(data => {
+               
                 toggleLoading(false);
                 setUpdate(false);
                 if (data.data.serverName) {
