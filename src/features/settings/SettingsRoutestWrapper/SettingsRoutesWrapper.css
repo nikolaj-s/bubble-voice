@@ -6,7 +6,7 @@
     align-items: center;
     min-height: 100%;
     position: absolute;
-    z-index: 3;
+    z-index: 4;
 }
 
 .settings-wrapper {
