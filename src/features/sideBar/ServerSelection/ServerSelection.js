@@ -12,7 +12,7 @@ import { TextInput } from '../../../components/inputs/TextInput/TextInput';
 
 // style's
 import "./ServerSelection.css";
-import { setServerId, setServerName } from '../../server/ServerSlice';
+import { setServerId, setServerName, setTopPos } from '../../server/ServerSlice';
 import { setHeaderTitle } from '../../contentScreen/contentScreenSlice';
 import { searchForServers, selectLoadingServerResultsState, selectLoadingUsersServersState, selectServerList, selectServerQuery, selectServerSearchResults, setServerQuery, setSideBarHeader } from '../sideBarSlice';
 import { setServerToJoin } from '../../joinServer/joinServerSlice';
@@ -33,10 +33,18 @@ const Selection = () => {
 
     const loadingUserServerListState= useSelector(selectLoadingUsersServersState);
 
-    const selectServer = (_id, name) => {
+    const selectServer = (_id, name, top_pos) => {
+        
         dispatch(setServerId(_id))
+        dispatch(setTopPos(top_pos))
         dispatch(setServerName(name))
-        navigate(`/dashboard/server/${name}`)
+
+        setTimeout(() => {
+
+            navigate(`/dashboard/server/${name}`)
+        
+        }, 5)
+            
     }
     // handle searching for a new server
     const serverSearchResults = useSelector(selectServerSearchResults);

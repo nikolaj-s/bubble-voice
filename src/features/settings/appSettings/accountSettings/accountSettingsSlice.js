@@ -109,13 +109,13 @@ const accountSettingsSlice = createSlice({
     },
     extraReducers: {
         [fetchAccount.fulfilled]: (state, action) => {
-            if (action.payload.success) {
+            if (action.payload?.success) {
                 state.display_name = action.payload.account.display_name;
                 state.user_image = action.payload.account.user_image;
                 state.user_banner = action.payload.account.user_banner;
                 state.username = action.payload.account.username;
                 window.location.hash = "/dashboard"
-            }
+            } 
             state.change = false;
         },
         [fetchAccount.rejected]: (state, action) => {

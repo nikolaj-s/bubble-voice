@@ -65,6 +65,24 @@ export const fetchPersistedMusicVolume = createAsyncThunk(
     }
 )
 
+export const handleLeavingServer = createAsyncThunk(
+    'serverSlice/handleLeavingServer',
+    async (_, { rejectWithValue }) => {
+        try {
+            await socket.request("left server")
+            .then(res => {
+                return res;
+            })
+            .catch(error => {
+                return rejectWithValue(error.errorMessage);
+            })
+        } catch (error) {
+            console.log(error);
+            return rejectWithValue(error.errorMessage);
+        }
+    }
+)
+
 const serverSlice = createSlice({
     name: "serverSlice",
     initialState: {
@@ -72,6 +90,7 @@ const serverSlice = createSlice({
         loading: true,
         serverName: "",
         serverBanner: "",
+        top_pos: 0,
         channels: [],
         serverGroups: [],
         server: {},
@@ -102,9 +121,14 @@ const serverSlice = createSlice({
         musicPlaying: false,
         musicError: false,
         musicErrorMessage: "",
-        musicVolume: 1
+        musicVolume: 1,
+        // joining channel status
+        joiningChannel: false
     },
     reducers: {
+        setTopPos: (state, action) => {
+            state.top_pos = action.payload;
+        },
         setSocialInput: (state, action) => {
             state.textInput = action.payload;
         },
@@ -125,7 +149,7 @@ const serverSlice = createSlice({
             state.channels.push(channel);
         },
         clearServerState: (state, action) => {
-            state.server_id = "";
+            // state.server_id = "";
             state.loading = true;
             state.serverName = "";
             state.serverBanner = "";
@@ -135,6 +159,7 @@ const serverSlice = createSlice({
             state.members = [];
             state.current_channel_id = null;
             state.editing_channel_id = null;
+            state.joiningChannel = false;
         },
         setUserImages: (state, action) => {
             const userIndex = state.members.findIndex(member => member.user_name === action.payload.username)
@@ -142,8 +167,16 @@ const serverSlice = createSlice({
             if (userIndex === -1) return;
         },
         throwServerError: (state, action) => {
+            
             state.error = true;
-            state.errorMessage = action.payload.errorMessage;
+
+            if (state.errorMessage !== "") {
+                state.errorMessage = action.payload.errorMessage;
+            } else {
+                state.errorMessage = state.errorMessage + ". " + action.payload.errorMessage;
+            }
+
+            
         },
         closeServerErrorMessage: (state, action) => {
             state.error = false;
@@ -160,6 +193,12 @@ const serverSlice = createSlice({
             state.members[userIndex].display_name = action.payload.display_name;
 
             const channelIndex = state.channels.findIndex(channel => channel._id === action.payload.channel._id);
+
+            // prevent duplicating ---> check if user exists in channel
+
+            const existing = state.channels[channelIndex].users.findIndex(user => user.username === action.payload.username);
+
+            if (existing !== -1) return;
 
             state.channels[channelIndex].users.push(state.members[userIndex]);
         },
@@ -195,7 +234,9 @@ const serverSlice = createSlice({
             const url = window.location.hash.split('#')[1]
 
             if (window.location.hash.includes('/channel')) {
+
                 window.location.hash = url.split('/channel/')[0] + '/channel/' + action.payload.channel._id;
+            
             } else {
                 window.location.hash = `${url}/channel/${action.payload.channel._id}`;
             }
@@ -383,6 +424,9 @@ const serverSlice = createSlice({
             state.musicVolume = action.payload;
 
             setMusicWidgetVolume(action.payload);
+        },
+        updateJoiningChannelState: (state, action) => {
+            state.joiningChannel = action.payload;
         }
     },
     extraReducers: {
@@ -430,6 +474,29 @@ const serverSlice = createSlice({
         },
         [fetchPersistedMusicVolume.fulfilled]: (state, action) => {
             state.musicVolume = action.payload.volume;
+        },
+        [handleLeavingServer.fulfilled]: (state, action) => {
+
+            state.current_channel_id = null;
+            state.server_id = null;
+            state.loading = true;
+            state.serverName = "";
+            state.serverBanner = "";
+            state.channels = [];
+            state.serverGroups = [];
+            state.server = {};
+            state.members = [];
+            state.current_channel_id = null;
+            state.editing_channel_id = null;
+            state.joiningChannel = false;
+
+        },
+        [handleLeavingServer.rejected]: (state, action) => {
+
+            state.error = true;
+
+            state.errorMessage = action.payload;
+
         }
     }   
 })
@@ -514,8 +581,13 @@ export const selectMusicError = state => state.serverSlice.musicError;
 export const selectMusicErrorMessage = state => state.serverSlice.musicErrorMessage;
 
 export const selectMusicVolume = state => state.serverSlice.musicVolume;
+
+export const selectJoiningChannelState = state => state.serverSlice.joiningChannel;
+
+export const selectTopAnimationPoint = state => state.serverSlice.top_pos;
+
 // actions
 
-export const { clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, setSocialInput, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
+export const { setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, setSocialInput, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
 
 export default serverSlice.reducer;

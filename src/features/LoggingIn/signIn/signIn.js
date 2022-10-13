@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router';
 import { TextButton } from '../../../components/buttons/textButton/TextButton';
 import { TextInput } from '../../../components/inputs/TextInput/TextInput';
 import { selectSecondaryColor, selectTextColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
-import { SlidingVariant } from '../../../pageVariants/SlidingVariant';
 import { LoadingErrorComponent } from '../../../components/LoadingErrorComponent/LoadingErrorComponent'
 import { OptionSpacer } from '../../../components/Spacers/OptionSpacer/OptionSpacer';
 
@@ -64,9 +63,12 @@ export const SignIn = () => {
     }
 
     return (
-        <motion.div key={'sign-in-screen'} variants={SlidingVariant} initial="initial" animate="in" exit="out" className='sign-in-outer-container'>
-            <div style={{backgroundColor: secondaryColor}} className='sign-in-inner-container'>
-                <div className='content-wrapper'>
+        <div key={'sign-in-screen'} className='sign-in-outer-container'>
+            <motion.div 
+            style={{backgroundColor: secondaryColor}} className='sign-in-inner-container'>
+                <motion.div 
+                animate={{opacity: 1}} initial={{opacity: 0}} exit={{opacity: 0}}
+                className='content-wrapper'>
                     <h2 style={{marginTop: 0, paddingTop: 0, color: textColor}} className='sign-in-header'>Sign In</h2>
                     <TextInput action={handleInput} stateSelector={"email"} inputValue={email} marginBottom='2%' placeholder={"E Mail"} />
                     <TextInput keyCode={handleEnter} action={handleInput} stateSelector={"password"} inputValue={password} marginBottom='2%' placeholder={"Password"} type="password" />
@@ -74,9 +76,9 @@ export const SignIn = () => {
                     <OptionSpacer />
                     <h2 style={{color: textColor}}>Sign Up</h2>
                     <TextButton action={navigateToSignUp} name={"Create A Bubble Account"}/>
-                </div>
+                </motion.div>
                 <LoadingErrorComponent error={error} loading={loading} errorMessage={errorMessage} label={"Ok"} action={handleError} />
-            </div>
-        </motion.div>
+            </motion.div>
+        </div>
     )
 }

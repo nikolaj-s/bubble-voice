@@ -165,6 +165,7 @@ export class RoomClient {
     }
 
     async getConsumeStream(producerId) {
+
         const { rtpCapabilities } = this.device;
 
         const data = await this.socket.request('consume', {
@@ -204,51 +205,80 @@ export class RoomClient {
     async consume(producer_id, user) {
         this.getConsumeStream(producer_id)
         .then( function ({consumer, stream, kind }) {
+
             this.consumers.set(consumer.id, consumer);
 
             let el;
 
             let par;
-            console.log(user)
+            
             if (consumer.rtpParameters.codecs[0].mimeType === 'video/VP8') {
-                
+                // handle displaying web cam feed
                 el = document.createElement('video');
-                el.srcObject = stream;
-                el.id = consumer.id;
-                el.className = 'stream web-cam-stream';
-                el.playsInline = false;
-                el.autoplay = true;
-                el.muted = true;
-                document.getElementById(user._id).appendChild(el)
-            } else if (consumer.rtpParameters.codecs[0].mimeType === 'video/H264' || consumer.rtpParameters.codecs[0].mimeType === 'video/rtx') {
 
-                par = document.createElement('div');
-                par.className = 'streaming-video-player-container'
-                el = document.createElement('video');
                 el.srcObject = stream;
-                par.id = consumer.id + 'container';
+
                 el.id = consumer.id;
-                el.autoplay = true;
-                el.className = 'streaming-video-player'
+
+                el.className = 'stream web-cam-stream';
+
                 el.playsInline = false;
+
+                el.autoplay = true;
+
+                el.muted = true;
+
+                document.getElementById(user._id).appendChild(el)
+
+            } else if (consumer.rtpParameters.codecs[0].mimeType === 'video/H264' || consumer.rtpParameters.codecs[0].mimeType === 'video/rtx') {
+                // display incoming screen stream
+                par = document.createElement('div');
+
+                par.className = 'streaming-video-player-container'
+
+                el = document.createElement('video');
+
+                el.srcObject = stream;
+                
+                par.id = consumer.id + 'container';
+
+                el.id = consumer.id;
+
+                el.autoplay = true;
+
+                el.className = 'streaming-video-player'
+
+                el.playsInline = false;
+
                 el.muted = false;
+
                 el.volume = 1;
+
                 par.appendChild(el);
+
                 document.getElementById(user._id).parentNode.appendChild(par)
             } else {
+                // handle incoming audio
                 const user_pref_volume = USER_PREFS.get(user._id);
 
                 el = document.createElement('audio')
+
                 el.hidden = true;
+
                 el.srcObject = stream;
+
                 el.className = `audio-source-for-user-${user._id}`;
+
                 el.id = consumer.id;
+
                 el.playsInline = false;
+
                 el.muted = this.audioState;
+
                 el.autoplay = true;
+
                 el.volume = user_pref_volume?.volume ? user_pref_volume.volume : 1;
-                console.log(user._id)
-                console.log(document.getElementById(user._id))
+                
                 document.getElementById(user._id).appendChild(el)
 
             }
@@ -260,6 +290,7 @@ export class RoomClient {
             consumer.on('transportclose', function () {
                 this.removeConsumer(consumer.id);
             }.bind(this))
+        
         }.bind(this))
     }
 
@@ -354,7 +385,9 @@ export class RoomClient {
                             min: 360,
                             ideal: 720
                         },
-                        deviceId: deviceId
+                        deviceId: deviceId,
+                        minFrameRate: 34,
+                        maxFrameRate: 30
                     }
                 }
                 break
@@ -365,10 +398,12 @@ export class RoomClient {
                         mandatory: {
                             chromeMediaSource: 'desktop',
                             chromeMediaSourceId: deviceId,
-                            minWidth: 1280,
-                            maxWidth: 1920,
-                            minHeight: 720,
-                            maxHeight: 1080
+                            minWidth: 960,
+                            maxWidth: 1280,
+                            minHeight: 540,
+                            maxHeight: 720,
+                            maxFrameRate: 30,
+                            minFrameRate: 24
                         }
                     }
                 };
@@ -406,25 +441,29 @@ export class RoomClient {
                 params.encodings = [
                     {
                     rid: 'r0',
-                    maxBitrate: 100000,
-                    scalabilityMode: 'S1T3',
+                    maxBitrate: 300000,
+                    scalabilityMode: 'L3T2',
                     maxFramerate: 30.0
                     },
                     {
                     rid: 'r1',
                     maxBitrate: 300000,
-                    scalabilityMode: 'S1T3',
+                    scalabilityMode: 'L3T2',
                     maxFramerate: 30.0
                     },
                     {
                     rid: 'r2',
                     maxBitrate: 1500000,
-                    scalabilityMode: 'S1T3',
+                    scalabilityMode: 'L3T2',
                     maxFramerate: 30.0
                     }
                 ]
 
                 params.codec = screen ? this.device.rtpCapabilities.codecs.find(codec => codec.mimeType === 'video/H264') : this.device.rtpCapabilities.codecs.find(codec => codec.mimeType === 'video/VP8')
+                // document change video bitrate start
+                params.codecOptions = {
+                    videoGoogleStartBitrate: 2000
+                }
             }
 
             producer = await this.producerTransport.produce(params);
@@ -529,6 +568,7 @@ export class RoomClient {
 
         } catch (error) {
             console.log(error)
+            this.dispatch({type: 'error', value: error.message})
         }
     }
 

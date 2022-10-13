@@ -76,16 +76,19 @@ const Settings = () => {
     }
 
     return (
+        <>
         <div className='settings-wrapper'>
             <InputTitle title={"Clear Local Data"} />
             <TextButton action={handleClearLocalData} name={"Clear Data"} />
-            <InputTitle title={"Toggle Hardware Acceleration"} />
+            <InputTitle title={"Disable Hardware Acceleration"} />
             <ToggleButton action={handleToggleHardwareAcceleration} state={hardwareAcceleration} />
             <InputTitle title={"Disable Gif Profile Pictures / Banners"} />
             <ToggleButton />
-            {error ? <Error action={closeErrorMessage} errorMessage={errorMessage} /> : null}
+            
             <Loading loading={loading} />
         </div>
+        {error ? <Error action={closeErrorMessage} errorMessage={errorMessage} /> : null}
+        </>
     )
 }
 

@@ -1,0 +1,23 @@
+
+
+.now-playing-overlay-container {
+    width: 400px;
+    height: 180px;
+    padding: 10px;
+    border-radius: var(--border-radius);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    position: absolute;
+    flex-direction: column;
+    bottom: 10px;
+    right: 10px;
+    z-index: 2;
+}
+
+.now-playing-overlay-container h1 {
+    margin: 0;
+    padding: 0;
+    font-size: 1.2rem;
+}

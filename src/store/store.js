@@ -16,6 +16,7 @@ import verificationSlice from "../features/LoggingIn/verification/verificationSl
 import joinServerSlice from "../features/joinServer/joinServerSlice";
 import soundEffectsSlice from "../features/settings/soundEffects/soundEffectsSlice";
 import contextMenuSlice from "../features/contextMenu/contextMenuSlice";
+import RoomActionOverlaySlice from "../features/server/ChannelRoom/Room/RoomActionOverlay/RoomActionOverlaySlice";
 
 const { configureStore } = require("@reduxjs/toolkit");
 
@@ -43,6 +44,7 @@ const store = configureStore({
         // server
         createServerSlice: createServerSlice,
         joinServerSlice: joinServerSlice,
+        RoomActionOverlaySlice: RoomActionOverlaySlice,
         // sound fx
         soundEffectsSlice: soundEffectsSlice,
         // ctx menu

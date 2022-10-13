@@ -1,6 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentChannelId, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, throwMusicError, updateMusicState } from '../../../ServerSlice';
+import { addNewWidgetOverlayToQueue } from '../RoomActionOverlay/RoomActionOverlaySlice';
 
 export const Music = () => {
 
@@ -36,7 +37,18 @@ export const Music = () => {
     React.useEffect(() => {
 
         if (musicQueue[0]?.url !== currentlyPlaying) {
+
             setCurrentlyPlaying(musicQueue[0]?.url);
+
+            if (window.location.hash.includes(channelId)) {
+                if (musicQueue[0]?.url !== undefined) {
+
+                    dispatch(addNewWidgetOverlayToQueue({action: 'now-playing', image: musicQueue[0]?.thumbnail, name: musicQueue[0]?.title}));
+                
+                }
+            
+            }
+
         }    
         
     }, [musicQueue])
@@ -49,10 +61,12 @@ export const Music = () => {
     }, [volume])
 
     const syncInitial = (e) => {
-        if (musicQueue[0]?.current && init === false && e.target.src) {
-            e.target.currentTime = musicQueue[0].current;
-            setInit(true);
-        }
+        setTimeout(() => {
+            if (musicQueue[0]?.current && init === false && e.target.src) {
+                e.target.currentTime = musicQueue[0].current;
+                setInit(true);
+            }
+        }, 20)   
     }
 
     const handleStreamError = () => {

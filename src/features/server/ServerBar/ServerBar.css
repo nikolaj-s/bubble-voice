@@ -6,6 +6,7 @@
     align-items: center;
     padding-bottom: 12px;
     position: relative;
+    overflow-x: hidden;
 }
 
 .leave-server-button {

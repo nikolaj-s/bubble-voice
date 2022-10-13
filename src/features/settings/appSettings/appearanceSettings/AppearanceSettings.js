@@ -7,6 +7,7 @@ import { useRoutes } from 'react-router'
 import { TextInput } from '../../../../components/inputs/TextInput/TextInput';
 import { InputTitle } from '../../../../components/titles/inputTitle/InputTitle';
 import { ToggleButton } from '../../../../components/buttons/ToggleButton/ToggleButton';
+import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/SettingsSpacer';
 
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
@@ -58,6 +59,7 @@ const Settings = () => {
             <SettingsHeader title={"Presets"} />
             <InputTitle title={"Enable Dark Mode"} />
             <ToggleButton action={handleToggleAppearanceModes} state={darkModeState} />
+            <SettingsSpacer />
         </div>
     )
 }

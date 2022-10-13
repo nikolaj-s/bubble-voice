@@ -10,7 +10,14 @@ export const RoomUserWrapper = ({users}) => {
         const parent = document.getElementById('live-chat-wrapper');
 
         for (const child of parent.children) {
+        
             if (expanded === child.id) {
+
+                const v = child.querySelector('video');
+
+                if (v) {
+                    v.style.objectFit = 'contain'
+                }
                 // if child is of type video stream --> pop out of constraints
                 child.style.position = 'absolute';
                 child.style.maxHeight = 'calc(100% - 8px)';
@@ -20,12 +27,23 @@ export const RoomUserWrapper = ({users}) => {
                 child.style.top = '0';
                 child.style.left = '0';
                 child.style.zIndex = '1';
+        
             } else {
+                const v = child.querySelector('video');
+
+                if (v) {
+
+                    v.style.objectFit = 'cover'
+                
+                }
+
                 child.style.maxWidth = '600px';
                 child.style.maxHeight = 'minmax(30%, 400px)';
                 child.style.position = 'relative';
-                child.style.zIndex = '0'
+                child.style.zIndex = '0';
+        
             }
+        
         }
 
     }, [expanded])

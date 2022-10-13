@@ -1,0 +1,13 @@
+
+.alt-error-container {
+    display: flex;
+    height: 40px;
+    margin: 5px 0;
+    align-items: center;
+}
+
+.alt-error-container p {
+    letter-spacing: var(--font-spacing);
+    font-weight: 400;
+    margin-left: 1rem;
+}

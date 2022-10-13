@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { AltError } from '../../../../../components/AltError/AltError';
 
 // components
 import {ApplyCancelButton} from '../../../../../components/buttons/ApplyCancelButton/ApplyCancelButton'
@@ -12,7 +13,11 @@ import "./ListenToMicrophoneLevel.css";
 
 export const ListenToMicrophoneLevel = () => {
 
-    const [open, toggleOpen] = React.useState(false)
+    const [open, toggleOpen] = React.useState(false);
+
+    const [error, toggleError] = React.useState(false);
+
+    const [errorMessage, setErrorMessage] = React.useState("");
 
     const primaryColor = useSelector(selectPrimaryColor);
 
@@ -21,11 +26,20 @@ export const ListenToMicrophoneLevel = () => {
     }
 
     const stopMic = () => {
-        toggleOpen(false)
 
-        document.querySelectorAll('.pid').forEach(pid => {
-            pid.style.backgroundColor = primaryColor;
-        })
+        toggleOpen(false);
+
+        toggleError(false);
+
+        setErrorMessage("");
+
+        setTimeout(() => {
+
+            document.querySelectorAll('.pid').forEach(pid => {
+                pid.style.backgroundColor = primaryColor;
+            })
+        
+        }, 10)     
     }
 
     React.useEffect(() => {
@@ -35,12 +49,21 @@ export const ListenToMicrophoneLevel = () => {
                 stopMic();
             }
         }
+
     // eslint-disable-next-line
     }, [])
 
+    const handleThrowError = (errorMessage) => {
+
+        toggleError(true);
+
+        setErrorMessage(errorMessage);
+
+    }
+
     return (
         <div className='listen-to-audio-container'>
-            { open === false ? null : <AudioAnalyser /> }
+            { open === false ? null : <AudioAnalyser throwError={handleThrowError} /> }
             <div className='audio-level-bars-container'>
                 {[...Array(30).keys()].map(item => {
                     return (
@@ -51,6 +74,7 @@ export const ListenToMicrophoneLevel = () => {
                     )
                 }) }
             </div>
+            <AltError error={error} errorMessage={errorMessage} />
             <ApplyCancelButton toggled={open} cancel={stopMic} name={"Start"} apply={testAudio} />
         </div>
     )

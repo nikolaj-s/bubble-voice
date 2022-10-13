@@ -11,11 +11,53 @@ let win;
 
 let transparent;
 
+let hardwareAccelToggled;
+
+const fs = require('fs');
+
+const initPath = path.join(app.getPath('userData'), '../init.json');
+
+if (!fs.existsSync(initPath)) {
+
+  fs.writeFileSync(initPath, JSON.stringify({
+    toggled: false
+  }));
+
+}
+
+let data;
+
+try {
+
+  data = JSON.parse(fs.readFileSync(initPath, 'utf-8'));
+  
+  hardwareAccelToggled = data?.toggled;
+
+} catch (error) {
+
+  console.log(error)
+  
+  return;
+
+}
+
 // prevent multiple instances from occuring
+
 const lock = app.requestSingleInstanceLock();
 
+if (data?.toggled) {
+  
+  console.log(data, 'toggling harware acceleration')
+  
+  app.disableHardwareAcceleration();
+
+} 
+
+// handle preventing multiple instances running
 if (!lock) {
+
   app.quit()
+
 } else {
   app.on('second-instance', (event, commandLine, workingDirectory) => {
 
@@ -46,7 +88,11 @@ function createWindow () {
       contextIsolation: false,
     },
     titleBarStyle: 'hidden',
-    frame: false
+    frame: false,
+    x: data?.bounds?.x,
+    y: data?.bounds?.y,
+    width: data?.bounds?.width,
+    height: data?.bounds?.height,
   })
   
   const mainScreen = screen.getPrimaryDisplay();
@@ -69,6 +115,17 @@ function createWindow () {
 
   // Open the DevTools.
   process.env.ELECTRON_START_URL ? win.webContents.openDevTools() : null
+
+  win.on('close', () => {
+
+    let window_data = {
+      toggled: hardwareAccelToggled !== data?.toggled ? hardwareAccelToggled : data?.toggled,
+      bounds: win.getBounds()
+    }
+    
+    fs.writeFileSync(initPath, JSON.stringify(window_data))
+  
+  })
 
   ipcMain.on('max', () => {
     if (win.maximized) {
@@ -258,25 +315,9 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-
-  const keytar = require('keytar');
-
-  keytar.getPassword("HARDWARE", "ACCELERATION")
-  .then(data => {
-
-    const parsed = JSON.parse(data);
-    
-    if (parsed?.toggled === false) {
-      app.disableHardwareAcceleration();
-    }
-
-    return;
-  }).then(() => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow()
-    }
-  })
-  
+  if (BrowserWindow.getAllWindows().length === 0) {
+    createWindow()
+  }
 })
 
 // In this file you can include the rest of your app's specific main process
@@ -285,6 +326,12 @@ app.on('activate', () => {
 // get current version
 ipcMain.on('get_app_ver', (event) => {
   event.sender.send('get_app_ver', {version: app.getVersion()});
+})
+
+ipcMain.on('write-hardware-change', (event, args) => {
+  
+  hardwareAccelToggled = args.toggled;
+
 })
 
 // handle updates
@@ -310,4 +357,3 @@ autoUpdater.on('update-not-available', () => {
 autoUpdater.on('update-downloaded', () => {
   win.webContents.send('update-available');
 })
-

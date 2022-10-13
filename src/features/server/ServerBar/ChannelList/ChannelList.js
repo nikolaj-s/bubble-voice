@@ -2,12 +2,13 @@
 import React from 'react'
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
+import { motion, useAnimation } from 'framer-motion';
 
 // component's
 import { ChannelTitle } from './ChannelTitle/ChannelTitle'
 
 // state
-import { joinChannel, leaveChannel, selectCurrentChannelId, selectServerChannels, selectServerMembers } from '../../ServerSlice';
+import { joinChannel, leaveChannel, selectCurrentChannelId, selectJoiningChannelState, selectServerChannels, selectServerMembers } from '../../ServerSlice';
 import { ChannelButton } from '../../../../components/buttons/ChannelButton/ChannelButton';
 import { selectDisplayName, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 
@@ -20,6 +21,8 @@ export const ChannelList = () => {
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
+
+    const animaiton = useAnimation();
 
     const [localChannels, setLocalChannels] = React.useState([])
 
@@ -37,6 +40,8 @@ export const ChannelList = () => {
 
     const serverMembers = useSelector(selectServerMembers);
 
+    const joiningChannel = useSelector(selectJoiningChannelState);
+
     const openCreateChannelMenu = () => {
         const location = window.location.hash.split('#')[1];
 
@@ -49,6 +54,8 @@ export const ChannelList = () => {
     }
 
     const handleJoinChannel = (channel) => {
+
+        if (joiningChannel) return;
 
         if (currentChannelId === channel._id) return;
 
@@ -83,10 +90,34 @@ export const ChannelList = () => {
         setLocalChannels(channels);
     }, [channels])
 
+    // handle mount animation
+
+    React.useEffect(() => {
+
+        animaiton.start({
+            maxHeight: 'calc(100% - 380px)',
+            opacity: 1
+        }).then(() => {
+            animaiton.start({
+                overflowY: 'auto'
+            })
+        })
+
+
+    }, [])
+
     return (
         <>
         <ChannelTitle action={openCreateChannelMenu} />
-        <div className='channel-list-outer-container'>
+        <motion.div 
+        initial={{
+            maxHeight: 0,
+            overflowY: 'hidden',
+            opacity: 0
+        }}
+        animate={animaiton}
+        transition={{duration: 0.5}}
+        className='channel-list-outer-container'>
                 
                 <div className='channel-list-button-wrapper'>
                     <div>
@@ -97,7 +128,7 @@ export const ChannelList = () => {
                         })}
                     </div>
                 </div>
-        </div>
+        </motion.div>
         </>
             
     )

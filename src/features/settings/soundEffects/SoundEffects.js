@@ -22,6 +22,8 @@ const userPoked = require('../../../assets/hey-wake-up.mp3');
 
 const userKicked = require('../../../assets/you-have-been-kicked-from-the-server.mp3');
 
+const lostConnection = require('../../../assets/lost-connection.mp3');
+
 export const SoundEffects = () => {
 
     const soundEffect = useSelector(selectSoundEffect);
@@ -45,7 +47,8 @@ export const SoundEffects = () => {
         'channelDeleted': channelDeleted,
         'youHaveBeenPoked': userPoked,
         'newMessage': connected,
-        'userKicked': userKicked
+        'userKicked': userKicked,
+        'lostConnection': lostConnection
     }
 
     React.useEffect(() => {

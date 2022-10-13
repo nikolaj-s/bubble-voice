@@ -143,13 +143,16 @@ const Wrapper = () => {
                 
                 dispatch(playSoundEffect("channelDeleted"))
                 
-
                 dispatch(deleteChannel(response.channel_id));
 
-                window.location.hash = window.location.hash.split('/channels')[0] + '/channels';
-
-            }, 200)
+                return true;
+            }, 20)
                 
+        })
+        .then(() => {
+
+            window.location.hash = window.location.hash.split('/channel/')[0];
+
         })
         .catch(error => {
             console.log(error);

@@ -32,9 +32,9 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
         
     }
 
-    const handleAction = () => {
+    const handleAction = (e) => {
 
-        action(server_id, server_name)
+        action(server_id, server_name, e.pageY)
 
     }
 

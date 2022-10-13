@@ -1,0 +1,11 @@
+
+.message-overlay-container {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 350px;
+    height: auto;
+    backdrop-filter: blur(8px);
+    border-radius: var(--border-radius);
+    z-index: 2;
+}

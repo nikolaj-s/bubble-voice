@@ -1,8 +1,8 @@
 // library's
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { newMessage, selectCurrentChannelId, throwServerError, updateMessage } from '../../../../features/server/ServerSlice';
-import { selectDisplayName, selectUsername } from '../../../../features/settings/appSettings/accountSettings/accountSettingsSlice';
+import { selectCurrentChannelId, throwServerError } from '../../../../features/server/ServerSlice';
+import { selectDisplayName } from '../../../../features/settings/appSettings/accountSettings/accountSettingsSlice';
 import { selectAccentColor, selectPrimaryColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { useAnimation, motion } from 'framer-motion';
 
@@ -11,7 +11,7 @@ import { socket } from '../../../../features/server/ServerBar/ServerBar';
 
 import "./WheelSpinWidget.css";
 
-export const WheelSpinWidget = ({widget, editing}) => {
+export const WheelSpinWidget = ({widget, editing, initDeg = 0, onEnd = () => {}, finishingDeg, overlay = false}) => {
 
     const dispatch = useDispatch();
 
@@ -20,8 +20,6 @@ export const WheelSpinWidget = ({widget, editing}) => {
     const accentColor = useSelector(selectAccentColor);
 
     const primaryColor = useSelector(selectPrimaryColor);
-
-    const username = useSelector(selectUsername);
 
     const display_name = useSelector(selectDisplayName);
 
@@ -41,7 +39,7 @@ export const WheelSpinWidget = ({widget, editing}) => {
             transform: 'rotate(0deg)'
         })
 
-        setTimeout(() => {
+        setTimeout( async () => {
 
             let degree = 1800;
 
@@ -56,59 +54,56 @@ export const WheelSpinWidget = ({widget, editing}) => {
             animation.start({
                 transform: `rotate(${totalDegree}deg)`
             })
-            
-            const finalDegree = totalDegree - (Math.trunc(totalDegree / 360) * 360)
+        
+            const data = {
+                widget: widget,
+                username: display_name,
+                action: 'wheel-spin',
+                message: `${display_name} has spun a wheel`,
+                extra_info: totalDegree,
+                channel_id: channelId
+            }
+
+            await socket.request('widget overlay action', data)
+            .then(response => {
+                return;
+            })
+            .catch(error => {
+                dispatch(throwServerError({errorMessage: error}));
+            })
             
             setTimeout( async () => {
 
-                let landedOn;
-
-                if (finalDegree < 70) {
-                    landedOn = options[4]
-                } else if (finalDegree < 130) {
-                    landedOn = options[3]
-                } else if (finalDegree < 190) {
-                    landedOn = options[2]
-                } else if (finalDegree < 250) {
-                    landedOn = options[1]
-                } else if (finalDegree < 310) {
-                    landedOn = options[0]
-                } else if (finalDegree < 370) {
-                    landedOn = options[5]
-                }
-                
-                const data = {
-                    username: username,
-                    channel_id: channelId,
-                    content: {
-                        image: false,
-                        text: `${display_name} has spun the wheel widget and it landed on ${landedOn}!`,
-                        video: false,
-                        link: false,
-                        local_id: Math.random(5 * 30) + 1 + username,
-                        loading: true,
-                        display_name: display_name
-                    }
-                }
-
-                dispatch(newMessage(data));
-
-                await socket.request('message', data)
-                .then(response => {
-                    if (response.success) {
-                        dispatch(updateMessage(response.message));
-                    }
-                })
-                .catch(error => {
-                    dispatch(throwServerError({errorMessage: error}));
-                })
-
                 toggleSpinning(false);
+
+                onEnd();
 
             }, 6000)
         }, 50)
             
     }
+
+    React.useEffect(() => {
+
+        if (overlay) {
+
+            animation.start({
+                rotate: 0
+            }).then(() => {
+                animation.start({
+                    rotate: finishingDeg
+                })
+            })
+
+            setTimeout(() => {
+
+                onEnd();
+
+            }, 8000)
+
+        }
+
+    }, [finishingDeg, overlay])
 
     return (
         <div 

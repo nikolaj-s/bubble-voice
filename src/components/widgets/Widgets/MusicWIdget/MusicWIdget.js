@@ -50,6 +50,8 @@ export const MusicWidget = ({editing = false}) => {
     const handleAddSongToQueue = async () => {
         if (query.length === 0 || editing === true) return;
 
+        if (queue.length > 4) return dispatch(throwMusicError({error: true, errorMessage: "Song Queue Limit Has Been Reached"}));
+
         toggleLoading(true);
 
         await socket.request('add song to queue', {query: query})

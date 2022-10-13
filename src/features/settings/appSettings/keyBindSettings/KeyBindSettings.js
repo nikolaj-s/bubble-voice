@@ -6,6 +6,7 @@ import { useRoutes } from 'react-router'
 // components
 import { ApplyCancelButton } from '../../../../components/buttons/ApplyCancelButton/ApplyCancelButton';
 import { TextInput } from '../../../../components/inputs/TextInput/TextInput';
+import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/SettingsSpacer';
 import { InputTitle } from '../../../../components/titles/inputTitle/InputTitle';
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 
@@ -73,6 +74,7 @@ const Settings = () => {
             <InputTitle title={"Disconnect"} />
             <TextInput keyCode={handleKeyCodeUpdate} stateSelector='disconnect' inputValue={local['disconnect'] ? local['disconnect'].key : disconnectKey.key} />
             {update ? <ApplyCancelButton cancel={handleCancel} apply={saveKeyBinds} name='Save' /> : null}
+            <SettingsSpacer />
         </div>
     )
 }

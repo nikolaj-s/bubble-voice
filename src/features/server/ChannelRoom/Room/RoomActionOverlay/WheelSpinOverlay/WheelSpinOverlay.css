@@ -1,0 +1,34 @@
+
+.wheel-spin-overlay-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    backdrop-filter: blur(8px);
+    z-index: 2;
+}
+
+.wheel-spin-overlay-container .wheel-widget-wrapper {
+    max-width: 500px;
+}
+
+.wheel-spin-overlay-message-container {
+    margin-top: 1rem;
+    width: calc(100% - 8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 500px;
+    height: 80px;
+    border-radius: var(--border-radius);
+}
+
+.wheel-spin-overlay-container h1 {
+    margin: 0;
+    padding: 0;
+}

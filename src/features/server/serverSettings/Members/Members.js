@@ -5,6 +5,8 @@ import { MemberCard } from '../../../../components/memberCard/MemberCard';
 import { InputTitle } from '../../../../components/titles/inputTitle/InputTitle';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 import { selectServerGroups, selectServerMembers } from '../../ServerSlice';
+import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/SettingsSpacer'
+import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader'
 
 const Wrapper = () => {
 
@@ -26,6 +28,7 @@ const Wrapper = () => {
 
     return (
         <>
+        <SettingsHeader title={`Members: ${members.length}`} />
         {serverGroups.map((serverGroup, key) => {
             return (
                 <div key={serverGroup + key} >
@@ -40,6 +43,7 @@ const Wrapper = () => {
                 </div>
             )
         })}
+        <SettingsSpacer />
         </>
     )
 }

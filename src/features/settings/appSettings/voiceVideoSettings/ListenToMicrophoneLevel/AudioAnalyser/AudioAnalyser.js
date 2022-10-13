@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { selectActivationColor, selectPrimaryColor } from '../../../appearanceSettings/appearanceSettingsSlice';
 import { selectAudioInput, selectEchoCancellatio, selectMicInputVolume, selectNoiseSuppression } from '../../voiceVideoSettingsSlice';
 
-export const AudioAnalyser = ({audio}) => {
+export const AudioAnalyser = ({audio, throwError}) => {
 
     const audioInput = useSelector(selectAudioInput);
 
@@ -27,125 +27,131 @@ export const AudioAnalyser = ({audio}) => {
         compressor,
         gainNode
 
-        navigator.mediaDevices.getUserMedia({
-            audio: {
-                deviceId: {exact: audioInput._id},
-                echoCancellation: echoCancellation,
-                noiseSuppression: noiseSuppression,
-                sampleRate: 48000
-            },
-            video: false,
-            keyboard: false
-        }).then(async (audio) => {
-            let el;
+        try {
+            navigator.mediaDevices.getUserMedia({
+                audio: {
+                    deviceId: {exact: audioInput._id},
+                    echoCancellation: echoCancellation,
+                    noiseSuppression: noiseSuppression,
+                    sampleRate: 48000
+                },
+                video: false,
+                keyboard: false
+            }).then(async (audio) => {
+                let el;
 
-            el = document.createElement('audio');
+                el = document.createElement('audio');
 
-            el.id = 'testing-audio-feedback';
+                el.id = 'testing-audio-feedback';
 
-            el.hidden = true;
+                el.hidden = true;
 
-            el.controls = false;
+                el.controls = false;
 
-            el.blur();
+                el.blur();
 
-            el.autoplay = true;
+                el.autoplay = true;
 
-            audioCtx = new AudioContext();
-        
-            analyser = audioCtx.createAnalyser();
-
-            scriptProcessor = audioCtx.createScriptProcessor(2048, 1, 1)
-
-            analyser.smoothingTimeConstant = 0.8;
+                audioCtx = new AudioContext();
             
-            analyser.fftSize = 1024;
+                analyser = audioCtx.createAnalyser();
 
-            gainNode = audioCtx.createGain();
+                scriptProcessor = audioCtx.createScriptProcessor(2048, 1, 1)
 
-            if (noiseSuppression) {
-
-                compressor = audioCtx.createDynamicsCompressor();
-
-                compressor.threshold.setValueAtTime(-50, audioCtx.currentTime);
-
-                compressor.knee.setValueAtTime(40, audioCtx.currentTime);
-
-                compressor.ratio.setValueAtTime(12, audioCtx.currentTime);
-
-                compressor.attack.setValueAtTime(0, audioCtx.currentTime)
-
-                compressor.release.setValueAtTime(0.25, audioCtx.currentTime);
-                // biquad filters
-                filter = audioCtx.createBiquadFilter();
-
-                filter.Q.setValueAtTime(8.30, audioCtx.currentTime);
-
-                filter.frequency.setValueAtTime(355, audioCtx.currentTime);
-
-                filter.gain.setValueAtTime(3.0, audioCtx.currentTime);
-
-                filter.type = 'highpass';
+                analyser.smoothingTimeConstant = 0.8;
                 
-                filter.connect(compressor)
+                analyser.fftSize = 1024;
 
-                //compressor.connect(audioCtx.destination);
-                filter.connect(audioCtx.destination);
-            }  
+                gainNode = audioCtx.createGain();
 
-            gainNode.gain.setValueAtTime(0, audioCtx.currentTime)
+                if (noiseSuppression) {
 
-            analyser.connect(scriptProcessor)
+                    compressor = audioCtx.createDynamicsCompressor();
 
-            scriptProcessor.connect(audioCtx.destination)
+                    compressor.threshold.setValueAtTime(-50, audioCtx.currentTime);
 
-            source = audioCtx.createMediaStreamSource(audio);
+                    compressor.knee.setValueAtTime(40, audioCtx.currentTime);
 
-            source.connect(analyser);
+                    compressor.ratio.setValueAtTime(12, audioCtx.currentTime);
 
-            if (noiseSuppression) {
+                    compressor.attack.setValueAtTime(0, audioCtx.currentTime)
 
-               source.connect(filter)
+                    compressor.release.setValueAtTime(0.25, audioCtx.currentTime);
+                    // biquad filters
+                    filter = audioCtx.createBiquadFilter();
 
-            }
+                    filter.Q.setValueAtTime(8.30, audioCtx.currentTime);
 
-            source.connect(gainNode)
+                    filter.frequency.setValueAtTime(355, audioCtx.currentTime);
 
-            gainNode.connect(audioCtx.destination)
-            
-            el.srcObject = source.mediaStream;
+                    filter.gain.setValueAtTime(3.0, audioCtx.currentTime);
 
-            document.getElementsByClassName('listen-to-audio-container')[0].appendChild(el);
+                    filter.type = 'highpass';
+                    
+                    filter.connect(compressor)
 
-            scriptProcessor.onaudioprocess = function() {
-                
-                const array = new Uint8Array(analyser.frequencyBinCount);
+                    //compressor.connect(audioCtx.destination);
+                    filter.connect(audioCtx.destination);
+                }  
 
-                analyser.getByteFrequencyData(array);
+                gainNode.gain.setValueAtTime(0, audioCtx.currentTime)
 
-                const arrSum = array.reduce((a, value) => a + value, 0);
+                analyser.connect(scriptProcessor)
 
-                const avg = (arrSum / array.length) * 5;
+                scriptProcessor.connect(audioCtx.destination)
 
-                const pids = [...document.querySelectorAll('.pid')];
+                source = audioCtx.createMediaStreamSource(audio);
 
-                const numberOfPidsToColor = Math.round(avg / pids.length)
+                source.connect(analyser);
 
-                const pidsToColor = pids.slice(0, numberOfPidsToColor);
+                if (noiseSuppression) {
 
-                for (const pid of pids) {
-                    pid.style.backgroundColor = primaryColor;
+                source.connect(filter)
+
                 }
 
-                for (const pid of pidsToColor) {
-                    pid.style.backgroundColor = activationColor;
-                }
+                source.connect(gainNode)
 
-            }   
-        }).catch(error => {
-            console.log(error)
-        })
-            
+                gainNode.connect(audioCtx.destination)
+                
+                el.srcObject = source.mediaStream;
+
+                document.getElementsByClassName('listen-to-audio-container')[0].appendChild(el);
+
+                scriptProcessor.onaudioprocess = function() {
+                    
+                    const array = new Uint8Array(analyser.frequencyBinCount);
+
+                    analyser.getByteFrequencyData(array);
+
+                    const arrSum = array.reduce((a, value) => a + value, 0);
+
+                    const avg = (arrSum / array.length) * 5;
+
+                    const pids = [...document.querySelectorAll('.pid')];
+
+                    const numberOfPidsToColor = Math.round(avg / pids.length)
+
+                    const pidsToColor = pids.slice(0, numberOfPidsToColor);
+
+                    for (const pid of pids) {
+                        pid.style.backgroundColor = primaryColor;
+                    }
+
+                    for (const pid of pidsToColor) {
+                        pid.style.backgroundColor = activationColor;
+                    }
+
+                }   
+            }).catch(error => {
+                console.log(error)
+                throwError("Error Capturing Microphone Input");
+            })
+        } catch (error) {
+            console.log(error);
+            throwError("Error Capturing Microphone Input");
+
+        }  
 
         return () => {
 

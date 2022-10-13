@@ -4,11 +4,13 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 
 // state
-import { handleUpdateAvailable, selectUpdateAvailableState } from '../../app/appSlice'
-import { selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { fetchReleaseNotes, selectLoadingReleaseNotes, selectReleaseNotes, selectUpdateAvailableState } from '../../app/appSlice'
+import {  selectSecondaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // components
-import { ApplyCancelButton } from '../buttons/ApplyCancelButton/ApplyCancelButton';
+import { Loading } from '../LoadingComponents/Loading/Loading';
+import { TextButton } from '../buttons/textButton/TextButton';
+import { ReleaseNote } from '../../features/contentScreen/ReleaseNotes/ReleaseNote/ReleaseNote';
 
 // style
 import "./UpdateAvailable.css";
@@ -19,15 +21,13 @@ export const UpdateAvailable = () => {
 
     const updateAvailable = useSelector(selectUpdateAvailableState);
 
-    const primaryColor = useSelector(selectPrimaryColor);
-
     const secondaryColor = useSelector(selectSecondaryColor);
 
     const textColor = useSelector(selectTextColor);
 
-    const handleCancel = () => {
-        dispatch(handleUpdateAvailable(false));
-    }
+    const releaseNotes = useSelector(selectReleaseNotes);
+
+    const loadingReleaseNotes = useSelector(selectLoadingReleaseNotes);
 
     const restartNow = () => {
         try {
@@ -41,12 +41,32 @@ export const UpdateAvailable = () => {
         }
     }
 
+    React.useEffect(() => {
+
+        const el = document.getElementsByClassName('side-bar-header-container')[0]
+
+        if (el && updateAvailable) el.style.display = 'none';
+
+        if (releaseNotes.length === 0) {
+
+            dispatch(fetchReleaseNotes());
+
+        }
+
+        return () => {
+
+            if (el) el.style.display = 'flex';
+        
+        }
+
+    }, [])
+
     return (
         <>
         {updateAvailable ?
             <div 
             style={{
-                backgroundColor: primaryColor
+                backdropFilter: 'blur(10px)'
             }}
             className='update-available-container'>
                 <div 
@@ -54,12 +74,18 @@ export const UpdateAvailable = () => {
                     backgroundColor: secondaryColor
                 }}
                 className='update-available-inner-container'>
+                    <div className='new-release-note-wrapper'>
+                        {releaseNotes[0] ?
+                        <ReleaseNote data={releaseNotes[0]} />
+                        : null}
+                        <Loading loading={loadingReleaseNotes} />
+                    </div>
                     <p
                     style={{
                         color: textColor
                     }}
-                    >A new update is ready to be installed.  Would you like to restart and install now or install on next launch?</p>
-                    <ApplyCancelButton apply={restartNow} cancel={handleCancel} cancelName='Update Next Launch' name='Update Now'  />
+                    >A new update is ready to be installed, and is required for continued use of the application.</p>
+                    <TextButton marginBottom={'1rem'} action={restartNow} name={"Restart And Install"} />
                 </div>
             </div>
         : null}

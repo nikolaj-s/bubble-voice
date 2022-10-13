@@ -14,14 +14,14 @@ import { selectTextColor } from '../../features/settings/appSettings/appearanceS
 import "./Message.css";
 import { TextParser } from './TextParser/TextParser';
 
-export const Message = ({ message }) => {
+export const Message = ({ message, overlay = false }) => {
 
     const textColor = useSelector(selectTextColor);
     
     return (
         <div 
         style={{
-            borderTop: `solid 2px ${textColor}`
+            borderTop: overlay ? null : `solid 2px ${textColor}`
         }}
         id={message._id}
         className='message-container'>

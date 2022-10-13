@@ -232,8 +232,12 @@ export const saveHardwareAcceleration = async (bool) => {
 
         const keytar = window.require('keytar');
 
+        const ipcRenderer = window.require('electron').ipcRenderer;
+
         await keytar.setPassword("HARDWARE", "ACCELERATION", JSON.stringify({toggled: bool}));
 
+        ipcRenderer.send('write-hardware-change', {toggled: bool});
+        
     } catch (error) {
         return {error: 'using web version'}
     }
@@ -245,7 +249,7 @@ export const fetchHardWareAcceleration = async () => {
         const keytar = window.require('keytar');
 
         const data = await keytar.getPassword("HARDWARE", "ACCELERATION");
-
+        
         const parsed = JSON.parse(data);
 
         if (parsed === null) {

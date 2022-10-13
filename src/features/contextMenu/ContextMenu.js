@@ -422,7 +422,7 @@ export const ContextMenu = () => {
             {changeUserVolume ? 
             <>
             <CtxMenuTitle title={"Change User Volume"} />
-            <Range action={handleUserVolumeChange} step={0.05} value={userVolumeLevel} fill={true} /> 
+            <Range action={handleUserVolumeChange} step={0.005} value={userVolumeLevel} fill={true} /> 
             </>
             : null}
             {deleteWidget ? <CtxButton action={handleDeleteWidget} name={"Delete Widget"} /> : null}

@@ -6,12 +6,13 @@ import { io } from "socket.io-client";
 import { useNavigate, useRoutes } from 'react-router';
 
 // state
-import { addNewChannel, addSongToQueue, assignNewServerGroup, clearServerState, deleteChannel, fetchPersistedMusicVolume, fetchServerDetails, leaveChannel, newMessage, selectCurrentChannel, selectCurrentChannelId, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, setServerName, skipSong, toggleMusicPlaying, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateMemberStatus, updateServerBanner, updateServerGroups, userJoinsChannel, userJoinsServer, userLeavesChannel } from '../ServerSlice';
+import { addNewChannel, addSongToQueue, assignNewServerGroup, clearServerState, deleteChannel, fetchPersistedMusicVolume, fetchServerDetails, handleLeavingServer, leaveChannel, newMessage, selectCurrentChannel, selectCurrentChannelId, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, selectTopAnimationPoint, setServerName, skipSong, throwServerError, toggleMusicPlaying, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateMemberStatus, updateServerBanner, updateServerGroups, userJoinsChannel, userJoinsServer, userLeavesChannel } from '../ServerSlice';
 import { selectUsername } from '../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { getToken, url } from '../../../util/Validation';
 import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
 import { selectActivateCameraKey, selectDisconnectKey, selectMuteAudioKey, selectMuteMicKey, selectPushToTalkKey } from '../../settings/appSettings/keyBindSettings/keyBindSettingsSlice';
 import { selectAudioOutput } from '../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
+import { addNewWidgetOverlayToQueue, clearWidgetOverLay } from '../ChannelRoom/Room/RoomActionOverlay/RoomActionOverlaySlice';
 
 // component's
 import { ServerBanner } from '../../../components/serverBanner/ServerBanner';
@@ -30,6 +31,9 @@ import "./ServerBar.css"
 export let socket = null;
 
 const Bar = () => {
+
+    const socketListeners = ['new channel', 'error', 'user joins server', 'connect_failed', 'connect_error']
+
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
@@ -64,36 +68,59 @@ const Bar = () => {
     const disconnectKey = useSelector(selectDisconnectKey);
 
     const serverSettingsOpenState = useSelector(selectServerSettingsOpenState);
+
+    const topPointAnimationLocation = useSelector(selectTopAnimationPoint);
     
     const handleConnectionLost = () => {
+
         if (window.location.hash.includes('disconnected')) return;
+        
+        if (window.location.hash.includes('/channel/')) {
+
+            disconnect();
+
+        }
+        
         window.location.hash =  `/dashboard/server/${serverName}/disconnected`;
+        
         dispatch(leaveChannel({username: username}));
+        
         dispatch(playSoundEffect('disconnected'));
+
+        dispatch(clearServerState());
+
+        socket.disconnect();
+
+        // reset socket to avoid mismatch socket id errors
+        socket = null;
+        
+        joiningServer();
+
     }
 
     const sockets = () => {
+
         socket.on('new channel', (data) => {
             dispatch(addNewChannel(data));
         })
         socket.on('error', (data) => {
-            console.log(data);
+            console.log(data)
         })
         socket.on('user joins server', (data) => {
             dispatch(userJoinsServer(data));
         })
         socket.on('connect_failed', (data) => {
+            socket.off('connect_failed');
+
             handleConnectionLost();
-            console.log('server error')
+            console.log('internet connection error')
+            socket.disconnect()
         })
         socket.on('connect_error', () => {
+            socket.off('connect_error');
             handleConnectionLost();
-            console.log('server error')
-        })
-        socket.on('connect', () => {
-            if (window.location.hash.split('#')[1].includes('disconnected')) {
-                navigate(window.location.hash.split('#')[1].split('/disconnected')[0])
-            }
+            console.log('server connection error')
+            
         })
         socket.on('user joins channel', (data) => {
             dispatch(userJoinsChannel(data))
@@ -107,6 +134,15 @@ const Bar = () => {
                 dispatch(playSoundEffect("userDisconnected"))
             }
         })
+
+        socket.on('user dropped connection', (data) => {
+            dispatch(userLeavesChannel(data));
+
+            if (window.location.hash.includes(data.id)) {
+                dispatch(playSoundEffect('lostConnection'));
+            }
+        })
+
         socket.on('user status', (data) => {
             dispatch(updateMemberStatus(data))
         })
@@ -117,6 +153,8 @@ const Bar = () => {
             if (window.location.hash.includes(data.channel_id)) {
 
                 dispatch(playSoundEffect("newMessage"))
+
+                dispatch(addNewWidgetOverlayToQueue({...data.content, action: 'new-message'}));
             
             }
             
@@ -140,8 +178,10 @@ const Bar = () => {
         })
 
         socket.on('delete channel', (data) => {
-            if (data.channel_id === current_channel_id) {
+            if (window.location.hash.includes(data.channel_id)) {
+                
                 navigate(window.location.hash.split('#')[1].split('/channel')[0])
+                
                 dispatch(playSoundEffect('channelDeleted'))
             }
 
@@ -176,35 +216,116 @@ const Bar = () => {
         socket.on('new channel widget', (data) => {
             dispatch(updateChannelWidgets(data));
         })
+
+        socket.on('widget overlay', (data) => {
+
+            if (window.location.hash.includes(data.channel_id)) {
+                
+                dispatch(addNewWidgetOverlayToQueue(data));
+            
+            }
+                
+        })
     }
 
-    const joiningServer = async () => {
-        
-        const token = await getToken();
+    const joiningServer = async (tries = 0) => { 
 
-        socket = io(`${url}`, {
-            query: {
-                "TOKEN": token
-            }
-        })
+        try {
+            console.log("retrying joining server function")
 
-        socket.request = function request(type, data = {}) {
-            return new Promise((resolve, reject) => {
-                socket.emit(type, data, (data) => {
-                    if (data.error) {
-                       reject(data.errorMessage);
-                    } else {
-                       resolve(data);
-                    }
-                })
+            socket?.disconnect();
+            
+            socket = null;
+
+            const token = await getToken();
+
+            socket = io(`${url}`, {
+                query: {
+                    "TOKEN": token
+                },
+                reconnectionAttempts: 15,
+                reconnectionDelay: 5000
             })
+            
+            socket.on('connect', (data) => {
+
+                socket.request = function request(type, data = {}) {
+                    return new Promise((resolve, reject) => {
+                        socket.emit(type, data, (data) => {
+                            if (data.error) {
+                            reject(data.errorMessage);
+                            } else {
+                            resolve(data);
+                            }
+                        })
+                    })
+                }
+
+                if (window.location.hash.includes('disconnected')) {
+
+                    window.location.hash = window.location.hash.split('/disconnected')[0];
+
+                }
+
+                dispatch(fetchServerDetails());
+
+                dispatch(fetchPersistedMusicVolume());
+
+                sockets();
+            
+            })
+        
+        } catch (error) {
+
+            console.log(error);
+
+            dispatch(throwServerError("Fatal Connection Error"));
+                
         }
+    }
 
-        dispatch(fetchServerDetails());
+    const toggleServerSettings = () => {
 
-        dispatch(fetchPersistedMusicVolume());
+        if (window.location.hash.includes('server-settings')) {
+           
+            window.location.hash = window.location.hash.split('/server-settings')[0]
+            
+        } else {
+            if (window.location.hash.includes('appsettings')) {
+                window.location.hash = window.location.hash.split('/appsettings')[0] + "/server-settings/overview"
+            } else {
+                window.location.hash = window.location.hash + '/server-settings/overview'
+            }
+            
+        }
+    }
 
-        sockets();
+    const disconnect = () => {
+        
+        dispatch(leaveChannel({username: username}));
+        
+        dispatch(playSoundEffect('disconnected'));
+        
+        dispatch(clearWidgetOverLay());
+
+        navigate(window.location.hash.split('#')[1].split('/channel')[0])
+    
+    }
+
+    const leaveServer = (kicked) => {
+
+        dispatch(playSoundEffect(kicked ? "userKicked" : "disconnected"));
+        
+        dispatch(clearWidgetOverLay());
+
+        dispatch(handleLeavingServer())
+
+        navigate('/dashboard')
+
+        socket.disconnect();
+
+        socket = null;
+    
     }
 
     // handle window focused
@@ -332,22 +453,23 @@ const Bar = () => {
     }, [])
 
     React.useEffect(() => {
-        
+
+        console.log('rejoining')
         
         if (socket !== null) {
+
             socket = null;
+        
         }
 
-        animation.start({
-            left: '0%',
-            opacity: 1
-        })
-
         dispatch(setHeaderTitle('Select Channel'));
+
         dispatch(setSideBarHeader(""))
         
         if (socket === null) {
+
             joiningServer();
+        
         }
 
         
@@ -377,37 +499,6 @@ const Bar = () => {
     // eslint-disable-next-line
     }, [serverSettingsOpenState])
 
-    const toggleServerSettings = () => {
-
-        if (window.location.hash.includes('server-settings')) {
-           
-            window.location.hash = window.location.hash.split('/server-settings')[0]
-            
-        } else {
-            if (window.location.hash.includes('appsettings')) {
-                window.location.hash = window.location.hash.split('/appsettings')[0] + "/server-settings/overview"
-            } else {
-                window.location.hash = window.location.hash + '/server-settings/overview'
-            }
-            
-        }
-    }
-
-    const disconnect = () => {
-        dispatch(leaveChannel({username: username}));
-        dispatch(playSoundEffect('disconnected'));
-        navigate(window.location.hash.split('#')[1].split('/channel')[0])
-    }
-
-    const leaveServer = (kicked) => {
-        
-        dispatch(leaveChannel({username: username}))
-        dispatch(playSoundEffect(kicked ? "userKicked" : "disconnected"));
-        navigate('/dashboard')
-        dispatch(clearServerState())
-    
-    }
-
     // handle device output
     React.useEffect(() => {
         try {
@@ -422,25 +513,46 @@ const Bar = () => {
             console.log(error)
         }
     }, [current_channel, audioOutput])
+    
+    // handle on mount animation
+    React.useEffect(() => {
 
+        animation.start({
+            top: 0,
+            maxWidth: '100%',
+            overflowY: 'auto',
+            maxHeight: null
+        })
+
+    }, [])
     return (
-        <motion.div initial={{left: "100%", opacity: 0}} animate={animation} className='server-bar-container'>
+        <motion.div initial={{
+            position: 'absolute',
+            top: topPointAnimationLocation,
+            maxHeight: 130,
+            maxWidth: '90%',
+            overflowY: 'hidden'
+            }} animate={animation}
+            transition={{duration: 0.3}} 
+            className='server-bar-container'>
             <ServerSettingsButton action={toggleServerSettings} />
+            <ServerBanner serverImage={serverBanner} serverName={serverName} />
             {loading ? <Loading loading={loading} /> :
             <>
-            <ServerBanner serverImage={serverBanner} serverName={serverName} />
             <ChannelList />
             <ServerSettingsMenu />
             </>
             }
             {current_channel_id !== null ? <DisconnectButton action={disconnect} /> : null}
-            <div 
+            <motion.div 
+            initial={{display: 'none'}}
+            animate={{display: 'flex'}}
             style={{
                 width: current_channel_id ? "calc(100% - 125px)" : "90%"
             }}
             className='leave-server-button'>
                 <TextButton id='disconnect-from-server-button' action={() => {leaveServer(false)}} name={"Leave Server"} />
-            </div>
+            </motion.div>
         </motion.div>
     )
 }

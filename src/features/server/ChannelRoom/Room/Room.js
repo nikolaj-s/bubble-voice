@@ -6,15 +6,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as mediasoupClient from 'mediasoup-client';
 
 // state
-import { updateMusicState, selectCurrentChannel, selectCurrentChannelId, selectMusicPlayingState, selectMusicQueue, selectPushToTalkActive, selectServerId, toggleLoadingChannel, updateMemberStatus, selectServerMembers } from '../../ServerSlice';
+import { updateMusicState, selectCurrentChannel, selectCurrentChannelId, selectMusicPlayingState, selectMusicQueue, selectPushToTalkActive, selectServerId, toggleLoadingChannel, updateMemberStatus, selectServerMembers, throwServerError, updateJoiningChannelState } from '../../ServerSlice';
 import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPushToTalkState, selectMirroredWebCamState, selectEchoCancellatio, selectNoiseSuppression } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
 import { selectDisplayName, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { playSoundEffect, selectMuteSoundEffectsWhileMutedState } from '../../../settings/soundEffects/soundEffectsSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 import { selectAudioState, selectCurrentScreen, selectMicrophoneState, selectScreenShareState, selectWebCamState, setCurrentScreen, setScreens, setSelectingScreensState } from '../../../controlBar/ControlBarSlice';
-
-// components
-import { User as UserComponent } from './User/User';
 
 // style
 import "./Room.css";
@@ -29,14 +26,18 @@ import { Social } from './Social/Social';
 import { Widgets } from './Widgets/Widgets';
 import { Music } from './Music/Music';
 import { RoomUserWrapper } from './RoomUserWrapper/RoomUserWrapper';
+import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
+import { RoomActionOverlay } from './RoomActionOverlay/RoomActionOverlay';
 
 let client;
 
 const Component = () => {
-
+    
     const dispatch = useDispatch();
 
     const [loaded, setLoaded] = React.useState(false);
+
+    const [loading, toggleLoading] = React.useState(true);
 
     const [page, setPage] = React.useState("voice");
     // state 
@@ -122,7 +123,11 @@ const Component = () => {
     }
 
     const event = (arg) => {
-        if (arg.action === 'playSoundEffect') return dispatch(playSoundEffect(arg.value))
+        
+        if (arg.action === 'playSoundEffect') return dispatch(playSoundEffect(arg.value));
+
+        if (arg.action === 'error') return dispatch(throwServerError({errorMessage: arg.value}));
+    
     }
 
     const init = async () => {
@@ -144,50 +149,69 @@ const Component = () => {
             const ipcRenderer = window.require('electron').ipcRenderer;
 
             ipcRenderer.invoke("GET_SOURCES").then((result) => {
+
                 dispatch(setScreens(result))
+
                 dispatch(setSelectingScreensState(true));
 
-                
                 return true
             })
             
             
         } catch (error) {
-            console.log(error)
-
+            
+            dispatch(throwServerError({errorMessage: "Fatal error fetching screens to share"}));
             
         }
 
     }
+
     // handle initial channel join, and init of roomClient
     React.useEffect(() => {
 
-        init().then( async () => {
-            setLoaded(true);
+        toggleLoading(true);
 
-            await socket.request('fetch current music info')
-            .then(data => {
+        dispatch(updateJoiningChannelState(true));
 
-                if (data.music_info) {
-                    dispatch(updateMusicState({playing: data.music_info.playing, queue: data.music_info.queue}))
-                }
+        setTimeout(() => {
+
+            init().then( async () => {
+                setLoaded(true);
+
+                await socket.request('fetch current music info')
+                .then(data => {
+
+                    if (data.music_info) {
+                        dispatch(updateMusicState({playing: data.music_info.playing, queue: data.music_info.queue}))
+                    }
+                    
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+
+                toggleLoading(false);
+
+                setTimeout(() => {
+
+                    dispatch(updateJoiningChannelState(false));
                 
+                }, 500)
+                    
             })
-            .catch(error => {
-                console.log(error)
-            })
-        })
-       
-        dispatch(setHeaderTitle(channel.channel_name));
+        
+            dispatch(setHeaderTitle(channel.channel_name));
+        
+        }, 100) 
 
         return () => {
             dispatch(setHeaderTitle('Select Channel'))
             dispatch(toggleLoadingChannel(true))
             dispatch(setScreens([]))
             dispatch(setSelectingScreensState(false));
-            dispatch(setCurrentScreen(null))
+            dispatch(setCurrentScreen(null));
             setLoaded(false);
-            client.exit();
+            client?.exit();
             if (socket) {
                 console.log('channel left/ channel change')
             }
@@ -210,6 +234,8 @@ const Component = () => {
     // handle change of user control state
     React.useEffect(() => {
         if (client && loaded === true) {
+
+            // handle microphone state changes
             if (microphoneState) {
                 client.produce('audioType', audioDevice._id);
                 dispatch(updateMemberStatus({username: user.username, action: {microphone: true}}))
@@ -249,15 +275,27 @@ const Component = () => {
                 client.toggleAudioState(false)
                 socket.emit('user status', {username: user.username, action: {muted: false}})
             } else if (audioState === false) {
-                document.querySelectorAll('video, audio').forEach(el => {
-                    if (el.id === 'sound-effects-source') {
-                       return soundEffectsMuted ? el.muted = true : null
+                const audio_sources_to_mute = document.querySelectorAll('video, audio');
+
+                for (const el of audio_sources_to_mute) {
+
+                    if (soundEffectsMuted === false) {
+
+                        if (el.id !== 'sound-effects-source') {
+                            el.muted = true;
+                        } 
+
+                        continue;
                     } else {
-                        return el.muted;
+                        el.muted = true;
                     }
-                })
+
+                }
+
                 dispatch(updateMemberStatus({username: user.username, action: {muted: true}}))
+                
                 client.toggleAudioState(true)
+                
                 socket.emit('user status', {username: user.username, action: {muted: true}})
             }
 
@@ -372,6 +410,8 @@ const Component = () => {
             analyser?.disconnect();
             source?.disconnect();
             scriptProcessor?.disconnect();
+
+            dispatch(throwServerError({errorMessage: "Error processing microphone input"}))
         }
         return () => {
             analyser?.disconnect();
@@ -390,8 +430,10 @@ const Component = () => {
                     {page === "social" ? <Social /> : null}
                     {page === "widgets" ? <Widgets /> : null}
                 </AnimatePresence>
+                <RoomActionOverlay />
             </div>
             <Music />
+            <Loading loading={loading} />
         </>
     )
 }

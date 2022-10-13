@@ -3,6 +3,7 @@ import { AnimatePresence } from 'framer-motion'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
+import { motion } from 'framer-motion';
 
 // component's
 import { TextButton } from '../../../components/buttons/textButton/TextButton'
@@ -62,11 +63,17 @@ export const SignUp = () => {
     }
 
     return (
-        <div className='sign-in-outer-container' >
-            <div style={{
+        <div 
+        className='sign-in-outer-container' >
+            <div 
+            style={{
                 backgroundColor: secondaryColor
             }} className='sign-in-inner-container'>
-                <div className='content-wrapper'>
+                <motion.div 
+                animate={{opacity: 1}}
+                initial={{opacity: 0}}
+                exit={{opacity: 0}}
+                className='content-wrapper'>
                     <h2 style={{color: textColor}}>Sign Up</h2>
                     <TextInput value={username} action={handleInput} stateSelector="username" marginBottom='2%' placeholder={"Username"} />
                     <TextInput value={email} action={handleInput} stateSelector="email" marginBottom='2%' placeholder={"E Mail"} />
@@ -75,7 +82,7 @@ export const SignUp = () => {
                     <TextButton action={handleSignUpFunc} name={"Create Account"} />
                     <InputTitle title={"Already have an account?"} />
                     <TextButton action={navigateToSignIn} name={"Sign In"} />
-                </div>
+                </motion.div>
                 <AnimatePresence>
                     {error ? <Error action={handleError} errorMessage={errorMessage} buttonLabel={"Ok"} /> : null}
                     <Loading loading={loading} error={error} />
