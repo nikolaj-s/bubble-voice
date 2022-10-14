@@ -86,8 +86,10 @@ const Wrapper = () => {
         if (newServerGroupName.length < 4) return dispatch(throwServerError({errorMessage: "Server Group Name Must Be Longer Than 4 Characters"}))
 
         for (const perm of perms) {
-            if (perm.server_group_name === newServerGroupName) {
+            if (perm.server_group_name.toLowerCase() === newServerGroupName.toLowerCase()) {
+                
                 return dispatch(throwServerError({errorMessage: "Server Group With That Name Already Exists"}));
+            
             }
         }
 

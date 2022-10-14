@@ -521,15 +521,16 @@ const Bar = () => {
             top: 0,
             maxWidth: '100%',
             overflowY: 'auto',
-            maxHeight: null
+            height: '100%'
         })
 
     }, [])
+    
     return (
         <motion.div initial={{
             position: 'absolute',
             top: topPointAnimationLocation,
-            maxHeight: 130,
+            height: '130px',
             maxWidth: '90%',
             overflowY: 'hidden'
             }} animate={animation}

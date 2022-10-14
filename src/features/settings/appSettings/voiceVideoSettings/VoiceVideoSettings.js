@@ -19,6 +19,7 @@ import { Range } from '../../../../components/inputs/Range/Range';
 import { selectMicrophoneState, toggleControlState } from '../../../controlBar/ControlBarSlice';
 import { PreviewWebCam } from './PreviewWebCam/PreviewWebCam';
 import { ApplyCancelButton } from '../../../../components/buttons/ApplyCancelButton/ApplyCancelButton';
+import { AltError } from '../../../../components/AltError/AltError';
 
 const Settings = () => {
 
@@ -133,12 +134,10 @@ const Settings = () => {
             <InputTitle title={"Test Mic Input"} />
             <ListenToMicrophoneLevel />
             
-            {/*
             <InputTitle title={"Input Volume"} />
-            <Range save={saveMicInputVolume} value={localMicInputVolume} action={handleMicInputVolume} min={0} max={1} step={0.1} /> 
-            */}
-
-            <InputTitle marginTop={"0%"} title={"Enable Noise Suppression / Bi - Quad Filter"} />
+            <Range save={saveMicInputVolume} value={localMicInputVolume} action={handleMicInputVolume} min={1} max={8} step={0.001} /> 
+            <AltError error={true} errorMessage="Having Noise Suppresion on and increasing microphone volume will cause microphone quality issues." />
+            <InputTitle title={"Enable Noise Suppression / Bi - Quad Filter"} />
             <ToggleButton action={() => {handleToggleSelectedVoiceVideoState("noiseSuppression")}} state={noiseSuppression} />
             <InputTitle title={"Echo Cancellation"} />
             <ToggleButton action={() => {handleToggleSelectedVoiceVideoState("echoCancellation")}} state={echoCancellation} />

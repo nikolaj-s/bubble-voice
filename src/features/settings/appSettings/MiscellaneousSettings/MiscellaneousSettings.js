@@ -9,6 +9,7 @@ import { InputTitle } from '../../../../components/titles/inputTitle/InputTitle'
 import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
 import { Error } from '../../../../components/Error/Error';
 import { ToggleButton } from '../../../../components/buttons/ToggleButton/ToggleButton';
+import { AltError } from '../../../../components/AltError/AltError';
 
 // state
 import { clearLocalData, fetchHardWareAcceleration, saveHardwareAcceleration } from '../../../../util/LocalData';
@@ -25,6 +26,8 @@ const Settings = () => {
     const [error, setError] = React.useState(false);
 
     const [errorMessage, setErrorMessage] = React.useState("");
+
+    const [restartNotice, setRestartNotice] = React.useState(false);
 
     const handleSavedHardwarePref = async () => {
 
@@ -59,9 +62,7 @@ const Settings = () => {
 
         toggleHardwareAcceleration(!hardwareAcceleration);
 
-        setError(true);
-
-        setErrorMessage("You Must Restart The App For This Change To Take Effect");
+        setRestartNotice(true);
 
         saveHardwareAcceleration(!hardwareAcceleration);
         
@@ -82,6 +83,7 @@ const Settings = () => {
             <TextButton action={handleClearLocalData} name={"Clear Data"} />
             <InputTitle title={"Disable Hardware Acceleration"} />
             <ToggleButton action={handleToggleHardwareAcceleration} state={hardwareAcceleration} />
+            <AltError marginTop={'2%'} errorMessage={"Toggling Harware Acceleration Requires An App Restart"} error={restartNotice} />
             <InputTitle title={"Disable Gif Profile Pictures / Banners"} />
             <ToggleButton />
             

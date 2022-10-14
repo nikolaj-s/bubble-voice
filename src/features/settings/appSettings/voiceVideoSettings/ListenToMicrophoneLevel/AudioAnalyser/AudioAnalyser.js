@@ -26,7 +26,7 @@ export const AudioAnalyser = ({audio, throwError}) => {
         filter,
         compressor,
         gainNode
-
+        
         try {
             navigator.mediaDevices.getUserMedia({
                 audio: {
@@ -62,57 +62,25 @@ export const AudioAnalyser = ({audio, throwError}) => {
                 
                 analyser.fftSize = 1024;
 
-                gainNode = audioCtx.createGain();
+                gainNode = audioCtx.createGain(); 
 
-                if (noiseSuppression) {
-
-                    compressor = audioCtx.createDynamicsCompressor();
-
-                    compressor.threshold.setValueAtTime(-50, audioCtx.currentTime);
-
-                    compressor.knee.setValueAtTime(40, audioCtx.currentTime);
-
-                    compressor.ratio.setValueAtTime(12, audioCtx.currentTime);
-
-                    compressor.attack.setValueAtTime(0, audioCtx.currentTime)
-
-                    compressor.release.setValueAtTime(0.25, audioCtx.currentTime);
-                    // biquad filters
-                    filter = audioCtx.createBiquadFilter();
-
-                    filter.Q.setValueAtTime(8.30, audioCtx.currentTime);
-
-                    filter.frequency.setValueAtTime(355, audioCtx.currentTime);
-
-                    filter.gain.setValueAtTime(3.0, audioCtx.currentTime);
-
-                    filter.type = 'highpass';
-                    
-                    filter.connect(compressor)
-
-                    //compressor.connect(audioCtx.destination);
-                    filter.connect(audioCtx.destination);
-                }  
-
-                gainNode.gain.setValueAtTime(0, audioCtx.currentTime)
+                gainNode.gain.value = micInputVolume;
 
                 analyser.connect(scriptProcessor)
-
-                scriptProcessor.connect(audioCtx.destination)
 
                 source = audioCtx.createMediaStreamSource(audio);
 
                 source.connect(analyser);
 
-                if (noiseSuppression) {
-
-                source.connect(filter)
-
-                }
-
                 source.connect(gainNode)
 
                 gainNode.connect(audioCtx.destination)
+
+                scriptProcessor.connect(gainNode)
+
+                analyser.connect(gainNode)
+
+                scriptProcessor.connect(audioCtx.destination)
                 
                 el.srcObject = source.mediaStream;
 
@@ -126,9 +94,9 @@ export const AudioAnalyser = ({audio, throwError}) => {
 
                     const arrSum = array.reduce((a, value) => a + value, 0);
 
-                    const avg = (arrSum / array.length) * 5;
-
                     const pids = [...document.querySelectorAll('.pid')];
+
+                    const avg = (arrSum / array.length) * pids.length;
 
                     const numberOfPidsToColor = Math.round(avg / pids.length)
 
@@ -162,13 +130,13 @@ export const AudioAnalyser = ({audio, throwError}) => {
             }
 
             if (source && analyser) {
-                analyser.disconnect();
+                analyser?.disconnect();
                 filter?.disconnect();
                 gainNode?.disconnect();
                 compressor?.disconnect();
-                source.disconnect();
-                scriptProcessor.disconnect();
-                document.getElementById('testing-audio-feedback').remove();
+                source?.disconnect();
+                scriptProcessor?.disconnect();
+                document.getElementById('testing-audio-feedback')?.remove();
             }
             
         }

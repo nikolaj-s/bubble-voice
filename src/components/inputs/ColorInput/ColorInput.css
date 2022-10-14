@@ -1,0 +1,36 @@
+
+.color-picker-input-container {
+    width: calc(100% - 8px);
+    height: 60px;
+    display: flex;
+    flex-shrink: 0;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: var(--border-radius);
+    position: relative;
+}
+
+.color-picker-input-container .color-picker-input {
+    height: 120%;
+    object-fit: cover;
+    width: 105%;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 60%;
+    position: absolute;
+    opacity: 0;
+}
+
+.color-picker-input:focus {
+    outline: none;
+}
+
+.color-picker-input:active {
+    outline: none;
+}

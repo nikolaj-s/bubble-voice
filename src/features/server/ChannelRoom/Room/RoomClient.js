@@ -7,7 +7,7 @@ const mediaType = {
 }
 
 export class RoomClient {
-    constructor(socket, current_channel_id, server_id, mediasoupClient, audioInputDevice, videoInputDevice, audioInputState, videoInputState, user, dispatch, audioState, mirrorWebCam, echoCancellation = false, noiseSuppression = false) {
+    constructor(socket, current_channel_id, server_id, mediasoupClient, audioInputDevice, videoInputDevice, audioInputState, videoInputState, user, dispatch, audioState, mirrorWebCam, echoCancellation = false, noiseSuppression = false, microphoneInputVolume = 1) {
 
         this.socket = socket;
 
@@ -48,13 +48,17 @@ export class RoomClient {
         this.noiseSuppression = noiseSuppression;
 
         this.echoCancellation = echoCancellation;
+
+        this.microphoneInputVolume = microphoneInputVolume;
     }
 
-    updateAudioPrefs(noiseSuppression, echoCancellation) {
+    updateAudioPrefs(noiseSuppression, echoCancellation, microphoneInputVolume) {
 
         this.noiseSuppression = noiseSuppression;
 
         this.echoCancellation = echoCancellation;
+
+        this.microphoneInputVolume = microphoneInputVolume;
     
     }
 
@@ -165,133 +169,156 @@ export class RoomClient {
     }
 
     async getConsumeStream(producerId) {
+        try {
+            const { rtpCapabilities } = this.device;
 
-        const { rtpCapabilities } = this.device;
+            const data = await this.socket.request('consume', {
+                rtpCapabilities: rtpCapabilities,
+                consumerTransportId: this.consumerTransport.id,
+                producerId: producerId
+            })
+            .catch(error => {
+                console.log(error);
+            })
+            const { id, kind, rtpParameters } = data;
 
-        const data = await this.socket.request('consume', {
-            rtpCapabilities: rtpCapabilities,
-            consumerTransportId: this.consumerTransport.id,
-            producerId: producerId
-        })
-        .catch(error => {
+            let codecOptions = {};
+
+            const consumer = await this.consumerTransport.consume({
+                id,
+                producerId,
+                kind,
+                rtpParameters,
+                codecOptions
+            })
+
+            const stream = new MediaStream();
+
+            stream.addTrack(consumer.track);
+
+            const user = this.user
+
+            return {
+                consumer,
+                stream,
+                kind,
+                user
+            }
+        
+        } catch (error) {
             console.log(error);
-        })
-        const { id, kind, rtpParameters } = data;
 
-        let codecOptions = {};
+            console.log('sdp error is being thrown here')
+            
+            this.dispatch({action: 'error', value: "ERROR: SDP/UDP Layer Verification of connection failed, please reconnect to server or restart app to solve issue, this is a temporary work around"});
 
-        const consumer = await this.consumerTransport.consume({
-            id,
-            producerId,
-            kind,
-            rtpParameters,
-            codecOptions
-        })
-
-        const stream = new MediaStream();
-
-        stream.addTrack(consumer.track);
-
-        const user = this.user
-
-        return {
-            consumer,
-            stream,
-            kind,
-            user
+            this.exit();
         }
     }
 
     async consume(producer_id, user) {
-        this.getConsumeStream(producer_id)
-        .then( function ({consumer, stream, kind }) {
+        try {
+            this.getConsumeStream(producer_id)
+            .then( function (data) {
+                
+                let consumer = data?.consumer;
 
-            this.consumers.set(consumer.id, consumer);
+                if (consumer === undefined) return;
 
-            let el;
+                let stream = data?.stream;
 
-            let par;
+                this.consumers.set(consumer.id, consumer);
+
+                let el;
+
+                let par;
+                
+                if (consumer.rtpParameters.codecs[0].mimeType === 'video/VP8') {
+                    // handle displaying web cam feed
+                    el = document.createElement('video');
+
+                    el.srcObject = stream;
+
+                    el.id = consumer.id;
+
+                    el.className = 'stream web-cam-stream';
+
+                    el.playsInline = false;
+
+                    el.autoplay = true;
+
+                    el.muted = true;
+
+                    document.getElementById(user._id).appendChild(el)
+
+                } else if (consumer.rtpParameters.codecs[0].mimeType === 'video/H264' || consumer.rtpParameters.codecs[0].mimeType === 'video/rtx') {
+                    // display incoming screen stream
+                    par = document.createElement('div');
+
+                    par.className = 'streaming-video-player-container'
+
+                    el = document.createElement('video');
+
+                    el.srcObject = stream;
+                    
+                    par.id = consumer.id + 'container';
+
+                    el.id = consumer.id;
+
+                    el.autoplay = true;
+
+                    el.className = 'streaming-video-player'
+
+                    el.playsInline = false;
+
+                    el.muted = false;
+
+                    el.volume = 1;
+
+                    par.appendChild(el);
+
+                    document.getElementById(user._id).parentNode.appendChild(par)
+                } else {
+                    // handle incoming audio
+                    const user_pref_volume = USER_PREFS.get(user._id);
+
+                    el = document.createElement('audio')
+
+                    el.hidden = true;
+
+                    el.srcObject = stream;
+
+                    el.className = `audio-source-for-user-${user._id}`;
+
+                    el.id = consumer.id;
+
+                    el.playsInline = false;
+
+                    el.muted = this.audioState;
+
+                    el.autoplay = true;
+
+                    el.volume = user_pref_volume?.volume ? user_pref_volume.volume : 1;
+                    
+                    document.getElementById(user._id).appendChild(el)
+
+                }
+
+                consumer.on('trackended', function () {
+                    this.removeConsumer(consumer.id);
+                }.bind(this))
+
+                consumer.on('transportclose', function () {
+                    this.removeConsumer(consumer.id);
+                }.bind(this))
             
-            if (consumer.rtpParameters.codecs[0].mimeType === 'video/VP8') {
-                // handle displaying web cam feed
-                el = document.createElement('video');
-
-                el.srcObject = stream;
-
-                el.id = consumer.id;
-
-                el.className = 'stream web-cam-stream';
-
-                el.playsInline = false;
-
-                el.autoplay = true;
-
-                el.muted = true;
-
-                document.getElementById(user._id).appendChild(el)
-
-            } else if (consumer.rtpParameters.codecs[0].mimeType === 'video/H264' || consumer.rtpParameters.codecs[0].mimeType === 'video/rtx') {
-                // display incoming screen stream
-                par = document.createElement('div');
-
-                par.className = 'streaming-video-player-container'
-
-                el = document.createElement('video');
-
-                el.srcObject = stream;
-                
-                par.id = consumer.id + 'container';
-
-                el.id = consumer.id;
-
-                el.autoplay = true;
-
-                el.className = 'streaming-video-player'
-
-                el.playsInline = false;
-
-                el.muted = false;
-
-                el.volume = 1;
-
-                par.appendChild(el);
-
-                document.getElementById(user._id).parentNode.appendChild(par)
-            } else {
-                // handle incoming audio
-                const user_pref_volume = USER_PREFS.get(user._id);
-
-                el = document.createElement('audio')
-
-                el.hidden = true;
-
-                el.srcObject = stream;
-
-                el.className = `audio-source-for-user-${user._id}`;
-
-                el.id = consumer.id;
-
-                el.playsInline = false;
-
-                el.muted = this.audioState;
-
-                el.autoplay = true;
-
-                el.volume = user_pref_volume?.volume ? user_pref_volume.volume : 1;
-                
-                document.getElementById(user._id).appendChild(el)
-
-            }
-
-            consumer.on('trackended', function () {
-                this.removeConsumer(consumer.id);
             }.bind(this))
 
-            consumer.on('transportclose', function () {
-                this.removeConsumer(consumer.id);
-            }.bind(this))
-        
-        }.bind(this))
+        } catch (error) {
+            console.log(error);
+            console.log('sdp error is being thown on consume')
+            this.dispatch({action: 'error', value: "ERROR: SDP/UDP Layer Verification of connection failed, please reconnect to server or restart app to solve issue, this is a temporary work around"});
+        }
     }
 
     removeConsumer(consumer_id) {
@@ -426,10 +453,31 @@ export class RoomClient {
 
         let stream_audio;
 
+        let microphone_stream;
+
         try {
             stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
+            
+            if (audio) {
 
-            const track = audio ? stream.getAudioTracks()[0] : stream.getVideoTracks()[0]
+                let audCtx = new AudioContext();
+
+                let audCtxSrc = audCtx.createMediaStreamSource(stream);
+
+                let dst = audCtx.createMediaStreamDestination();
+
+                let gainNode = audCtx.createGain();
+
+                gainNode.gain.value = this.microphoneInputVolume;
+                
+                [audCtxSrc, gainNode, dst].reduce((a, b) => a && a.connect(b));
+
+                microphone_stream = dst.stream;
+            
+            }
+
+            const track = audio ? microphone_stream.getAudioTracks()[0] : stream.getVideoTracks()[0]
+            
             
            // if (screen) stream_audio = stream.getAudioTracks()[0];
 
@@ -566,9 +614,13 @@ export class RoomClient {
                 })
             }
 
+            this.dispatch({action: 'webcam-loading-state', value: false})
+
         } catch (error) {
             console.log(error)
-            this.dispatch({type: 'error', value: error.message})
+            this.dispatch({action: 'webcam-loading-state', value: false})
+
+            this.dispatch({action: 'error', value: error.message})
         }
     }
 
@@ -647,7 +699,7 @@ export class RoomClient {
             this.dispatch({action: "playSoundEffect", value: "connected"});
         }.bind(this))
         .catch(error => {
-            console.log(error);
+            this.dispatch({action: 'sdp-error'});
         })
 
         

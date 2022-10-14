@@ -31,7 +31,7 @@
 
 .new-release-note-wrapper {
     flex-grow: 2;
-    width: calc(100% - 1rem);
+    width: calc(100% - 2rem);
     overflow-y: auto;
     position: relative;
     margin-left: 1rem;

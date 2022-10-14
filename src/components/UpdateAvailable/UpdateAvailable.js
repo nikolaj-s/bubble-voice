@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 // state
 import { fetchReleaseNotes, selectLoadingReleaseNotes, selectReleaseNotes, selectUpdateAvailableState } from '../../app/appSlice'
-import {  selectSecondaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import {  selectAccentColor, selectSecondaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // components
 import { Loading } from '../LoadingComponents/Loading/Loading';
@@ -22,6 +22,8 @@ export const UpdateAvailable = () => {
     const updateAvailable = useSelector(selectUpdateAvailableState);
 
     const secondaryColor = useSelector(selectSecondaryColor);
+
+    const accentColor = useSelector(selectAccentColor);
 
     const textColor = useSelector(selectTextColor);
 
@@ -59,7 +61,7 @@ export const UpdateAvailable = () => {
         
         }
 
-    }, [])
+    }, [updateAvailable])
 
     return (
         <>
@@ -71,7 +73,8 @@ export const UpdateAvailable = () => {
             className='update-available-container'>
                 <div 
                 style={{
-                    backgroundColor: secondaryColor
+                    backgroundColor: secondaryColor,
+                    border: `solid 4px ${accentColor}`
                 }}
                 className='update-available-inner-container'>
                     <div className='new-release-note-wrapper'>

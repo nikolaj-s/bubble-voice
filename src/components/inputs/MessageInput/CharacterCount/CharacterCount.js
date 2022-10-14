@@ -1,3 +1,4 @@
+import { useAnimation, motion } from 'framer-motion';
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { selectTextColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
@@ -6,11 +7,30 @@ export const CharacterCount = ({count = 0}) => {
 
     const textColor = useSelector(selectTextColor);
 
+    const animation = useAnimation();
+
+    React.useEffect(() => {
+
+        if (count > 254) {
+            animation.start({
+                color: 'rgb(255, 0, 0)',
+                fontSize: '0.9rem'
+            })
+        } else {
+            animation.start({
+                color: textColor,
+                fontSize: null
+            })
+        }
+
+    }, [count])
+
     return (
         <div className='input-character-count'>
-            <p
+            <motion.p
+            animate={animation}
             style={{color: textColor}}
-            >{count} / 255</p>
+            >{count} / 255</motion.p>
         </div>
     )
 }

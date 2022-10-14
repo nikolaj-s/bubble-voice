@@ -18,6 +18,32 @@ export const Error = ({errorMessage, action, buttonLabel = "Close"}) => {
 
     const textColor = useSelector(selectTextColor);
 
+    React.useEffect(() => {
+
+        try {
+            setTimeout(() => {
+                
+                document.getElementsByClassName('content-screen-inner-container')[0].scrollTo(0, 0)
+                
+                document.getElementsByClassName('content-screen-inner-container')[0].style.overflowY = 'hidden'
+            }, 10)  
+            
+
+        } catch (error) {
+            return;
+        }
+
+        return () => {
+            try {
+
+                document.getElementsByClassName('content-screen-inner-container')[0].style.overflowY = 'auto'
+
+            } catch (error) {
+                return;
+            }
+        }
+    }, [])
+
     return (
         <motion.div 
         style={{

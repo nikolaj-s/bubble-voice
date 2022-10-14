@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 // state
 import { selectTextColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
-export const LoadingSuccess = () => {
+export const LoadingSuccess = ({width = 75, height =  75}) => {
 
     const textColor = useSelector(selectTextColor)
 
@@ -16,8 +16,8 @@ export const LoadingSuccess = () => {
         animate={{opacity: 1}}
         exit={{opacity: 0}}
         style={{
-            width: 75,
-            height: 75
+            width: width,
+            height: height
         }}
         className='loading-icon-atr'
         >

@@ -170,12 +170,7 @@ const serverSlice = createSlice({
             
             state.error = true;
 
-            if (state.errorMessage !== "") {
-                state.errorMessage = action.payload.errorMessage;
-            } else {
-                state.errorMessage = state.errorMessage + ". " + action.payload.errorMessage;
-            }
-
+            state.errorMessage = action.payload.errorMessage;
             
         },
         closeServerErrorMessage: (state, action) => {

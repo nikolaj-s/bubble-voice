@@ -1,9 +1,10 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { selectTextColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
+import { Loading } from '../../../LoadingComponents/Loading/Loading'
 import { ButtonAnimationWrapper } from '../../ButtonAnimationWrapper/ButtonAnimationWrapper'
 
-export const WebCamButton = ({action, state, active, id}) => {
+export const WebCamButton = ({action, state, active, id, loading = true}) => {
 
   const color = useSelector(selectTextColor);
 
@@ -11,9 +12,10 @@ export const WebCamButton = ({action, state, active, id}) => {
     <ButtonAnimationWrapper action={action}
     width={30}
     height={30}
-    active={active}
+    active={active || loading}
     opacity={0.5}
     id={id}
+    position={'relative'}
     >
         {state ?
         <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -25,6 +27,7 @@ export const WebCamButton = ({action, state, active, id}) => {
         <rect y="7.82861" width="4" height="53" rx="2" transform="rotate(-45 0 7.82861)" fill={color} />
         </svg>
         }
+        <Loading success_size={{width: 30, height: 30}} loading={loading} />
     </ButtonAnimationWrapper>
   )
 }

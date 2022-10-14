@@ -16,7 +16,7 @@ import { selectSecondaryColor } from '../../../features/settings/appSettings/app
 import "./Loading.css";
 
 
-export const Loading = ({loading = false, error = false, overflow = true}) => {
+export const Loading = ({loading = false, error = false, overflow = true, success_size = {width: 75, height: 75}}) => {
 
     const [localLoading, toggleLoading] = React.useState(false);
 
@@ -89,7 +89,7 @@ export const Loading = ({loading = false, error = false, overflow = true}) => {
         className='loading-container' >
             
                 {localLoading ? <LoadingSpinner key={"loading-spinner"} /> : null}
-                {success ? <LoadingSuccess key={"loading-success"} /> : null}
+                {success ? <LoadingSuccess width={success_size.width} height={success_size.height} key={"loading-success"} /> : null}
                 {localError ? <LoadingError key={"loading-error"} /> : null}
            
         </motion.div>

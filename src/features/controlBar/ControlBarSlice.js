@@ -10,9 +10,15 @@ const controlBarSlice = createSlice({
         screenShareState: true,
         screens: [],
         selectingScreens: false,
-        currentScreen: null
+        currentScreen: null,
+        loadingWebCam: false
     },
     reducers: {
+        toggleLoadingWebCam: (state, action) => {
+
+            state.loadingWebCam = action.payload;
+
+        },
         toggleControlState: (state, action) => {
             if (state[action.payload] === true) {
                 state[action.payload] = false;
@@ -56,8 +62,10 @@ export const selectScreens = state => state.controlBarSlice.screens;
 export const selectCurrentScreen = state => state.controlBarSlice.currentScreen;
 
 export const selectingScreensState = state => state.controlBarSlice.selectingScreens;
+
+export const selectLoadingWebCam = state => state.controlBarSlice.loadingWebCam;
 // actions
 
-export const { setCurrentScreen, setSelectingScreensState, resetControlState, toggleControlState, setScreens, setSelectedScreen } = controlBarSlice.actions;
+export const { toggleLoadingWebCam, setCurrentScreen, setSelectingScreensState, resetControlState, toggleControlState, setScreens, setSelectedScreen } = controlBarSlice.actions;
 
 export default controlBarSlice.reducer;

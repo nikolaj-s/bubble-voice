@@ -24,16 +24,16 @@ import { WheelSpinWidget } from '../Widgets/WheelSpinWidget/WheelSpinWidget';
 export const WidgetPreview = ({widgets = [], editing = false, reorder}) => {
 
     const textColor = useSelector(selectTextColor);
-
+    
     return (
         <div className='widgets-preview-container'>
             {widgets.length === 0 ? 
             <h3 style={{color: textColor}}>This Channel Has No Widgets</h3> :
             editing ?
-            <Reorder.Group className='editing-widgets-preview-container' values={widgets} onReorder={reorder} >
+            <Reorder.Group transition={{duration: 0.5}} as="div" className='editing-widgets-preview-container' values={widgets} onReorder={reorder} >
                 {widgets.map((widget, key) => {
                 return (
-                    <Reorder.Item transition={widget.delete ? {duration: 0} : null} className={`${widget.type} editing-single-widget"`} id={widget._id} key={widget._id} value={widget} >
+                    <Reorder.Item as="div" className={`${widget.type} editing-single-widget"`} id={widget._id} key={widget._id + key} value={widget} >
                         {widget.type === 'title' && !widget.delete ? <TitleWidget editing={editing} key={widget._id} widget={widget} /> : null}
                         {widget.type === 'plainText' && !widget.delete ? <PlainTextWidget editing={editing} key={widget._id} widget={widget} /> : null}
                         {widget.type === 'list' && !widget.delete ? <ListWidget editing={editing} key={widget._id} widget={widget} /> : null}

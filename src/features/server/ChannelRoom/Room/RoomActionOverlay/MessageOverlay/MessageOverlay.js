@@ -18,7 +18,7 @@ export const MessageOverlay = ({data, onEnd}) => {
 
             onEnd();
 
-        }, 2000)
+        }, 3500)
     }, [data])
 
     return (

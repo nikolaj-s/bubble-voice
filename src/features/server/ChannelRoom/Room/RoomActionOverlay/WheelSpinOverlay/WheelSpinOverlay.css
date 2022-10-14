@@ -24,11 +24,15 @@
     align-items: center;
     justify-content: center;
     max-width: 500px;
-    height: 80px;
+    height: auto;
     border-radius: var(--border-radius);
 }
 
 .wheel-spin-overlay-container h1 {
     margin: 0;
-    padding: 0;
+    padding: 1rem 0;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 400;
+    letter-spacing: var(--font-spacing);
 }

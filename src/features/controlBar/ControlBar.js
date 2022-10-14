@@ -13,7 +13,7 @@ import { ConnectionIndicator } from '../../components/connectionIndicator/Connec
 import { ScreenShareMenu } from './ScreenShareMenu/ScreenShareMenu';
 
 // state
-import { resetControlState, selectAudioState, selectingScreensState, selectMicrophoneState, selectScreenShareState, selectWebCamState, toggleControlState } from './ControlBarSlice';
+import { resetControlState, selectAudioState, selectingScreensState, selectLoadingWebCam, selectMicrophoneState, selectScreenShareState, selectWebCamState, toggleControlState, toggleLoadingWebCam } from './ControlBarSlice';
 import { selectCurrentChannelId } from '../server/ServerSlice';
 import { playSoundEffect } from '../settings/soundEffects/soundEffectsSlice';
 import { selectAccentColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
@@ -44,19 +44,32 @@ export const ControlBar = () => {
 
     const accentColor = useSelector(selectAccentColor);
 
+    const loadingWebCam = useSelector(selectLoadingWebCam);
+
     const toggleFunction = (state) => {
+        console.log(state)
         if (current_channel_id === null) return;
+
+        if (state === 'webCamState' && loadingWebCam) return;
+
+        if (state === 'webCamState' && webCamState === true) dispatch(toggleLoadingWebCam(true))
         
         dispatch(playSoundEffect('controlSoundEffect'))
 
         dispatch(toggleControlState(state))
 
-        if (state === 'audioState' && microphoneState === true) {
+        if (state === 'audioState' && microphoneState) {
+
+            dispatch(toggleControlState('microphoneState'))
+        
+        } else if (state === 'audioState' && (microphoneState === false && audioState === false)) {
             dispatch(toggleControlState('microphoneState'))
         }
 
         if (state === 'microphoneState' && audioState === false) {
+            
             dispatch(toggleControlState('audioState'))
+        
         }
 
     }
@@ -95,6 +108,7 @@ export const ControlBar = () => {
                     state={webCamState} 
                     active={current_channel_id === null}
                     id={'web-cam-toggle-button'}
+                    loading={loadingWebCam}
                     />
                     <MicToggleButton 
                     action={() => {toggleFunction('microphoneState')}} 

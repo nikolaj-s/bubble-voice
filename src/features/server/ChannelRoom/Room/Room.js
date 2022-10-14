@@ -7,11 +7,11 @@ import * as mediasoupClient from 'mediasoup-client';
 
 // state
 import { updateMusicState, selectCurrentChannel, selectCurrentChannelId, selectMusicPlayingState, selectMusicQueue, selectPushToTalkActive, selectServerId, toggleLoadingChannel, updateMemberStatus, selectServerMembers, throwServerError, updateJoiningChannelState } from '../../ServerSlice';
-import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPushToTalkState, selectMirroredWebCamState, selectEchoCancellatio, selectNoiseSuppression } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
+import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPushToTalkState, selectMirroredWebCamState, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
 import { selectDisplayName, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { playSoundEffect, selectMuteSoundEffectsWhileMutedState } from '../../../settings/soundEffects/soundEffectsSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { selectAudioState, selectCurrentScreen, selectMicrophoneState, selectScreenShareState, selectWebCamState, setCurrentScreen, setScreens, setSelectingScreensState } from '../../../controlBar/ControlBarSlice';
+import { selectAudioState, selectCurrentScreen, selectMicrophoneState, selectScreenShareState, selectWebCamState, setCurrentScreen, setScreens, setSelectingScreensState, toggleLoadingWebCam } from '../../../controlBar/ControlBarSlice';
 
 // style
 import "./Room.css";
@@ -75,6 +75,8 @@ const Component = () => {
 
     const soundEffectsMuted = useSelector(selectMuteSoundEffectsWhileMutedState);
 
+    const microphoneInputVolume = useSelector(selectMicInputVolume);
+
     // audio pref state
     const echoCancellation = useSelector(selectEchoCancellatio);
 
@@ -83,10 +85,12 @@ const Component = () => {
     React.useEffect(() => {
         
         if (client) {
-            client.updateAudioPrefs(noiseSuppression, echoCancellation)
+
+            client.updateAudioPrefs(noiseSuppression, echoCancellation, microphoneInputVolume)
+        
         }
 
-    }, [noiseSuppression, echoCancellation])
+    }, [noiseSuppression, echoCancellation, microphoneInputVolume])
 
     React.useEffect(() => {
         let el = document.getElementById(user._id)
@@ -127,15 +131,23 @@ const Component = () => {
         if (arg.action === 'playSoundEffect') return dispatch(playSoundEffect(arg.value));
 
         if (arg.action === 'error') return dispatch(throwServerError({errorMessage: arg.value}));
+        
+        if (arg.action === 'webcam-loading-state') return dispatch(toggleLoadingWebCam(false));
+       // if (arg.action === 'sdp-error') return init(1000);
     
     }
 
-    const init = async () => {
-        client = new RoomClient(socket, current_channel_id, server_id, mediasoupClient, audioDevice, videoDevice, microphoneState, webcamState, user, event, audioState, webCamMirroredState, echoCancellation, noiseSuppression)
+    const init = async (delay = 100) => {
+
+        client = null;
+
+        client = new RoomClient(socket, current_channel_id, server_id, mediasoupClient, audioDevice, videoDevice, microphoneState, webcamState, user, event, audioState, webCamMirroredState, echoCancellation, noiseSuppression, microphoneInputVolume)
 
         await client.join();
 
         return true
+        
+            
     }
 
     const cycleChannelPage = (page) =>  {
@@ -313,7 +325,8 @@ const Component = () => {
         let audioCtx,
             analyser,
             source,
-            scriptProcessor
+            scriptProcessor,
+            gainNode
 
         try {
             if (client && loaded === true && microphoneState === true) {
@@ -324,6 +337,8 @@ const Component = () => {
                     }).then((audio) => {
 
                         audioCtx = new AudioContext();
+
+                       // gainNode = audioCtx.createGain();
                     
                         analyser = audioCtx.createAnalyser();
                         
@@ -335,11 +350,15 @@ const Component = () => {
                         
                         analyser.fftSize = 1024;
 
+                      //  gainNode.gain.value = microphoneInputVolume ? microphoneInputVolume : 0;
+
+                      //  source.connect(gainNode);
+
                         source.connect(analyser);
 
-                        analyser.connect(scriptProcessor)
+                        analyser.connect(scriptProcessor);
 
-                        scriptProcessor.connect(audioCtx.destination)
+                        scriptProcessor.connect(audioCtx.destination);
                         
                         scriptProcessor.onaudioprocess = function() {
                             try {
@@ -432,6 +451,7 @@ const Component = () => {
                 </AnimatePresence>
                 <RoomActionOverlay />
             </div>
+            <audio hidden={true} id={'microphone-input-source'} />
             <Music />
             <Loading loading={loading} />
         </>

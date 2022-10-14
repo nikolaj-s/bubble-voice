@@ -16,7 +16,7 @@ import { Disconnected } from '../components/disconnected/Disconnected';
 // state
 import { incrementLoadingPercentage, selectRetryState } from '../features/initializingAppScreen/initializingAppScreenSlice';
 import { getMediaDevices } from '../features/settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
-import { selectPrimaryColor, toggleDarkMode } from '../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, toggleDarkMode, updatePersistedAppTheme } from '../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { fetchAccount } from '../features/settings/appSettings/accountSettings/accountSettingsSlice';
 import { selectLoggedIn } from '../features/LoggingIn/signIn/signInSlice';
 import { selectSignedUp } from '../features/LoggingIn/signUp/signUpSlice';
@@ -70,13 +70,7 @@ function App() {
       return;
     })
 
-    await fetchAppearanceSettings().then(data => {
-      if (!data || !data.type) return;
-
-      dispatch(toggleDarkMode(data))
-
-      return;
-    })
+    dispatch(updatePersistedAppTheme());
 
     dispatch(incrementLoadingPercentage({percent: 40, state: "Fetching Account"}));
 

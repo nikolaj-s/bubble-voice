@@ -61,7 +61,7 @@ export const ButtonAnimationWrapper = ({action = () => {}, position = '', zIndex
             left: left,
             zIndex: zIndex,
             margin: margin,
-            right: right
+            right: right,
         }}
         animate={animation}
         onMouseEnter={(e) => {handleAnimation(!invert ? primaryColor : secondaryColor, e)}}

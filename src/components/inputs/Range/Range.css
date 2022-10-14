@@ -8,10 +8,10 @@
 
 .range-container input {
     -webkit-appearance: none;
-    border-radius: var(--border-radius);
+    border-radius: 4px;
     cursor: pointer;
     width: 100%;
-    height: 20px;
+    height: 10px;
     background-color: var(--range-main-background);
     background-image: linear-gradient(var(--range-main-thumb), var(--range-main-thumb));
     background-repeat: no-repeat;

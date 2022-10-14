@@ -29,7 +29,7 @@
     list-style: none;
 }
 
-.editing-widgets-preview-container li {
+.editing-widgets-preview-container div {
     text-decoration: none;
     width: 100%;
     cursor: grab;
@@ -50,6 +50,7 @@
 .editing-widgets-preview-container .image {
     width: 100%;
     cursor: grab;
+    object-fit: contain;
 }
 
 .editing-widgets-preview-container .list {
@@ -58,4 +59,8 @@
 }
 .editing-widgets-preview-container .video {
     width: 100%;
+}
+
+.editing-widgets-preview-container .inner-music-widget-container {
+    max-width: 95%;
 }
