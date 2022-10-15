@@ -10,6 +10,7 @@ import { TextInput } from '../../../../../components/inputs/TextInput/TextInput'
 import { ToggleButton } from '../../../../../components/buttons/ToggleButton/ToggleButton';
 import { ApplyCancelButton } from '../../../../../components/buttons/ApplyCancelButton/ApplyCancelButton'
 import { SettingsHeader } from '../../../../../components/titles/SettingsHeader/SettingsHeader'
+import { ImageInput } from '../../../../../components/inputs/ImageInput/ImageInput';
 
 // state
 import { setHeaderTitle } from '../../../../contentScreen/contentScreenSlice';
@@ -22,6 +23,7 @@ import { WidgetPreview } from '../../../../../components/widgets/WidgetPreview/W
 import { socket } from '../../../ServerBar/ServerBar';
 import { Loading } from '../../../../../components/LoadingComponents/Loading/Loading';
 import { playSoundEffect } from '../../../../settings/soundEffects/soundEffectsSlice';
+import { ChannelBackgroundInput } from './ChannelBackgroundInput/ChannelBackgroundInput';
 
 const Wrapper = () => {
 
@@ -38,6 +40,8 @@ const Wrapper = () => {
     const [initMount, setInitMount] = React.useState(false);
 
     const [loading, toggleLoading] = React.useState(false);
+
+    const [channelBackground, setChannelBackground] = React.useState(false);
 
     const channelToEdit = useSelector(selectChannelToEdit);
 
@@ -111,10 +115,13 @@ const Wrapper = () => {
     }
 
     const handleUpdateChannel = async () => {
-        
+
+        if (channelBackground?.size > 900000) return dispatch(throwServerError({errorMessage: 'image cannot be larger than 1mb'}));
+
         handleToggleLoading(true);
 
-        await socket.request('update channel', {...channelToEdit, widgets: widgets, persist_social: persistChannelSocial, channel_name: channelName})
+        await socket.request('update channel', 
+        {...channelToEdit, widgets: widgets, persist_social: persistChannelSocial, channel_name: channelName, file: channelBackground})
         .then(response => {
 
             dispatch(updateChannel(response.channel))
@@ -123,6 +130,7 @@ const Wrapper = () => {
 
             toggleEdited(false);
 
+            setChannelBackground(false);
         })
         .catch(error => {
             console.log(error);
@@ -162,6 +170,14 @@ const Wrapper = () => {
         handleToggleLoading(false);
     }
 
+    const handleSettingChannelBackground = (data) => {
+        if (data.size > 900000) return dispatch(throwServerError({errorMessage: 'image cannot be larger than 1mb'}));
+        
+        setChannelBackground(data);
+
+        toggleEdited(true);
+    }
+console.log(channelToEdit)
     return (
         <>
         {permission?.user_can_manage_channels ?
@@ -171,8 +187,11 @@ const Wrapper = () => {
             <TextInput action={handleUpdateChannelName} inputValue={channelName} />
             <InputTitle title={"Toggle Persist Social Data *persists new data upon activation"} />
             <ToggleButton action={handleTogglePersistSocial} state={persistChannelSocial} />
+            <SettingsHeader title={"Channel Background"} />
+            <InputTitle title={"Image"} />
+            <ChannelBackgroundInput initialImage={channelToEdit?.channel_background} getFile={handleSettingChannelBackground} />
             <SettingsHeader title={"Widgets"} />
-            <InputTitle title={`Widgets ${channelToEdit.widgets ? channelToEdit.widgets.length : 0} / 10`} />
+            <InputTitle title={`Widgets ${channelToEdit.widgets ? channelToEdit.widgets.length : 0} / 15`} />
             <WidgetPreview widgets={widgets} editing={true} reorder={updateWidgetOrder} />
             <TextButton action={openWidgetMenu} name={"Add Widget"} />
             <InputTitle title={"Delete Channel"} />

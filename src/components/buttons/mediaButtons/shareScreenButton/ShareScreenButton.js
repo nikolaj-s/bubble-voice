@@ -9,8 +9,8 @@ export const ShareScreenButton = ({action, state, active}) => {
 
   return (
     <ButtonAnimationWrapper action={action}
-    width={30}
-    height={30}
+    width={25}
+    height={25}
     active={active}
     opacity={0.5}
     >

@@ -136,7 +136,7 @@ const Settings = () => {
             
             <InputTitle title={"Input Volume"} />
             <Range save={saveMicInputVolume} value={localMicInputVolume} action={handleMicInputVolume} min={1} max={8} step={0.001} /> 
-            <AltError error={true} errorMessage="Having Noise Suppresion on and increasing microphone volume will cause microphone quality issues." />
+            <AltError error={true} marginTop={"4%"} errorMessage="Having Noise Suppresion on and increasing microphone volume will cause microphone quality issues." />
             <InputTitle title={"Enable Noise Suppression / Bi - Quad Filter"} />
             <ToggleButton action={() => {handleToggleSelectedVoiceVideoState("noiseSuppression")}} state={noiseSuppression} />
             <InputTitle title={"Echo Cancellation"} />

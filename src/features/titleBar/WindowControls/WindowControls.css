@@ -1,6 +1,6 @@
 .window-controls-container {
     position: fixed;
-    z-index: 999;
+    z-index: 30;
     right: 10px;
     display: flex;
     justify-content: space-between;

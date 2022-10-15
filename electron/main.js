@@ -1,5 +1,5 @@
 
-const { app, BrowserWindow, ipcMain, desktopCapturer, screen, globalShortcut, CommandLine } = require('electron')
+const { app, BrowserWindow, ipcMain, desktopCapturer, screen, shell } = require('electron')
 
 const { autoUpdater } = require('electron-updater')
 
@@ -112,6 +112,12 @@ function createWindow () {
 
   //load the index.html from a url
   win.loadURL(startUrl);
+
+  win.webContents.on('new-window', (event, url) => {
+      event.preventDefault();
+
+      shell.openExternal(url);
+  }) 
 
   // Open the DevTools.
   process.env.ELECTRON_START_URL ? win.webContents.openDevTools() : null

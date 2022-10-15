@@ -21,7 +21,8 @@ export const ImageInput = ({
     borderRadius = "15px",
     center = false,
     zIndex = "0",
-    getFile = () => {}
+    getFile = () => {},
+    blur = false
 }) => {
 
     // state
@@ -113,6 +114,21 @@ export const ImageInput = ({
         {...getRootProps({className: 'dropzone'})} className='image-drop-input-container'>
             <input {...getInputProps()} />
             <Image image={files[0]?.preview} />
+            {blur ? 
+            <div
+            style={{
+                position: 'absolute',
+                width: '100%',
+                height: '100%',
+                top: 0,
+                left: 0,
+                backdropFilter: 'blur(8px)',
+                zIndex: 1,
+                objectFit: 'contain',
+                borderRadius: 10
+            }}
+            ></div>
+            : null}
             <ImageIcon center={center} zIndex={zIndex} animation={iconAnimation} />
         </motion.div>
     )

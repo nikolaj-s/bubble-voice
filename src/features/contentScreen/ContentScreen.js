@@ -17,6 +17,7 @@ import { selectHeaderTitle } from './contentScreenSlice';
 
 // style's
 import "./ContentScreen.css";
+import { Disconnected } from '../../components/disconnected/Disconnected';
 
 export const ContentScreen = () => {
     // color schema
@@ -30,6 +31,7 @@ export const ContentScreen = () => {
         <motion.div className='content-screen-container' >
             <HeaderTitle title={headerTitleState} spacing={true} />
             <div style={{backgroundColor: secondaryColor}} className='content-screen-inner-container'>
+                <Disconnected />
                 <NoServerSelectedDisplay />
                 <SettingsRoutesWrapper />
                 <CreateServerMenu />

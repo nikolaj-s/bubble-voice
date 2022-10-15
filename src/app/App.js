@@ -155,7 +155,6 @@ function App() {
     <div style={{backgroundColor: primaryColor}} className="App">
       <TitleBar />
       <SplashScreen />
-      <Disconnected />
       <Routes>
         <Route path={"/"} element={<InitializingAppScreen />} />
         <Route path={"/dashboard/*"} element={<Dashboard key={'dashboard'} />} />

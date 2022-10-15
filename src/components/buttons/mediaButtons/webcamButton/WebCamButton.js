@@ -10,8 +10,8 @@ export const WebCamButton = ({action, state, active, id, loading = true}) => {
 
   return (
     <ButtonAnimationWrapper action={action}
-    width={30}
-    height={30}
+    width={25}
+    height={25}
     active={active || loading}
     opacity={0.5}
     id={id}

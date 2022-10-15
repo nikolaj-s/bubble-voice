@@ -16,7 +16,7 @@ export const SideBarHeader = () => {
     const navigate = useNavigate();
 
     const returnToServerSelect = () => {
-        navigate('/dashboard')
+        return;
     }
 
     const title = useSelector(selectSideBarHeader);

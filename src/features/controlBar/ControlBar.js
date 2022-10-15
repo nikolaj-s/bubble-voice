@@ -47,7 +47,9 @@ export const ControlBar = () => {
     const loadingWebCam = useSelector(selectLoadingWebCam);
 
     const toggleFunction = (state) => {
-        console.log(state)
+        
+        if (window.location.hash.includes("/appsettings/voice-video")) return;
+
         if (current_channel_id === null) return;
 
         if (state === 'webCamState' && loadingWebCam) return;

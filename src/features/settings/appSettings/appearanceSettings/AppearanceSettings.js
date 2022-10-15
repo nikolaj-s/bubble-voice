@@ -10,7 +10,7 @@ import { DropDownList } from '../../../../components/DropDownList/DropDownList'
 
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { changeTheme, saveTheme, selectAccentColor, selectActivationColor, selectAppearanceChangeMade, selectCurrentTheme, selectDarkModeEnabledState, selectPrimaryColor, selectSecondaryColor, selectTextColor, selectThemeOptions, toggleDarkMode, updateColorValue } from './appearanceSettingsSlice';
+import { changeTheme, saveTheme, selectAccentColor, selectActivationColor, selectAppearanceChangeMade, selectCurrentTheme, selectPrimaryColor, selectSecondaryColor, selectTextColor, selectThemeOptions, toggleDarkMode, updateColorValue } from './appearanceSettingsSlice';
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 import { ColorInput } from '../../../../components/inputs/ColorInput/ColorInput';
 import { TextButton } from '../../../../components/buttons/textButton/TextButton';
@@ -33,8 +33,6 @@ const Settings = () => {
     const accentColor = useSelector(selectAccentColor);
 
     const textColor = useSelector(selectTextColor);
-
-    const darkModeState = useSelector(selectDarkModeEnabledState);
 
     const activationColor = useSelector(selectActivationColor);
 
@@ -60,6 +58,9 @@ const Settings = () => {
     
     return (
         <div className='settings-wrapper'>
+            <SettingsHeader title={"Presets"} />
+            <InputTitle title={"Change Preset"} />
+            <DropDownList action={handleToggleAppearanceModes} selectedItem={currentTheme.label} list={themeOptions} />
             <SettingsHeader title={"Custom Color Scheme"} />
             <InputTitle title={"Primary Color"} />
             <ColorInput rgb={primaryColor} selector='primaryColor' action={handleInput} />
@@ -71,9 +72,6 @@ const Settings = () => {
             <ColorInput rgb={textColor} selector='textColor' action={handleInput} />
             <InputTitle title={"Activation Color"} />
             <ColorInput selector="activationColor" action={handleInput} rgb={activationColor} />
-            <SettingsHeader title={"Presets"} />
-            <InputTitle title={"Change Preset"} />
-            <DropDownList action={handleToggleAppearanceModes} selectedItem={currentTheme.label} list={themeOptions} />
             {changeMade ? <TextButton marginTop={"2%"} action={handleSaveAppearanceChanges} name="Save Changes" /> : null}
             <SettingsSpacer />
         </div>

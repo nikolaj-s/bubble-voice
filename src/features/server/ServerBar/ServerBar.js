@@ -81,7 +81,11 @@ const Bar = () => {
 
         }
         
-        window.location.hash =  `/dashboard/server/${serverName}/disconnected`;
+        const new_redirect = `/dashboard/server/${serverName}/disconnected`;
+
+        console.log(new_redirect)
+
+        window.location.hash =  new_redirect;
         
         dispatch(leaveChannel({username: username}));
         

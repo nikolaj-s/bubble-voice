@@ -9,8 +9,8 @@ export const ConnectionIndicator = ({active}) => {
 
     return (
         <div style={{
-            width: 40,
-            height: 40,
+            width: 35,
+            height: 35,
             padding: "5px 0 0 5px",
             opacity: active ? 1 : 0.2
         }}>

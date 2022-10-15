@@ -97,11 +97,11 @@ const appearanceSettingsSlice = createSlice({
                         activationColor: "rgb(58, 235, 52)",
                     },
                     custom: {
-                        primaryColor: state.primaryColor,
-                        secondaryColor: state.secondaryColor,
-                        accentColor: state.accentColor,
-                        textColor: state.textColor,
-                        activationColor: state.activationColor,
+                        primaryColor: state.current_theme.state !== 'custom' ? state.color_themes['custom'].primaryColor : state.primaryColor,
+                        secondaryColor: state.current_theme.state !== 'custom' ? state.color_themes['custom'].secondaryColor : state.secondaryColor,
+                        accentColor: state.current_theme.state !== 'custom' ? state.color_themes['custom'].accentColor : state.accentColor,
+                        textColor: state.current_theme.state !== 'custom' ? state.color_themes['custom'].textColor : state.textColor,
+                        activationColor: state.current_theme.state !== 'custom' ? state.color_themes['custom'].activationColor : state.activationColor,
                     }
                 },
                 current_theme: state.current_theme

@@ -37,12 +37,22 @@ export const Message = ({ message, overlay = false }) => {
             </div>
             {message.text ? <TextParser text={message.text} /> : null}
             {message.image ? 
-            <div className='message-image-container'>
-                <Image objectFit='contain' image={message.image} />
+            <div 
+            style={{
+                height: 500,
+                backgroundColor: 'black'
+            }}
+            className='message-image-container'>
+                <Image loadingState='lazy' objectFit='contain' image={message.image} />
             </div>
             : null}
             {message.video ? 
-            <div className='message-video-container'>
+            <div 
+            style={{
+                backgroundColor: 'black',
+                height: 500
+            }}
+            className='message-video-container'>
                 <Video id={message.local_id} video={message.video} />
             </div>
             : null}

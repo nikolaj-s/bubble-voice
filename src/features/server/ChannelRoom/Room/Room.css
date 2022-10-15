@@ -8,6 +8,7 @@
     justify-items: center;
     align-content: center;
     position: relative;
+    z-index: 1;
     grid-template-columns: repeat(auto-fit, minmax(200px, 600px));
     grid-auto-rows: minmax(150px, 400px);
     grid-gap: 5px;

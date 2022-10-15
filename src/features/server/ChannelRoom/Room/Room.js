@@ -28,6 +28,7 @@ import { Music } from './Music/Music';
 import { RoomUserWrapper } from './RoomUserWrapper/RoomUserWrapper';
 import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
 import { RoomActionOverlay } from './RoomActionOverlay/RoomActionOverlay';
+import { ChannelBackground } from './ChannelBackground/ChannelBackground';
 
 let client;
 
@@ -450,10 +451,13 @@ const Component = () => {
                     {page === "widgets" ? <Widgets /> : null}
                 </AnimatePresence>
                 <RoomActionOverlay />
+                
             </div>
+            <ChannelBackground channel_background={channel.channel_background} />
             <audio hidden={true} id={'microphone-input-source'} />
             <Music />
             <Loading loading={loading} />
+
         </>
     )
 }

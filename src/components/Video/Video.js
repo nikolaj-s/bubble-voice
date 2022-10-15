@@ -10,7 +10,7 @@ import { PlayButton } from '../buttons/PlayButton/PlayButton';
 // style's
 import "./Video.css";
 
-export const Video = ({ video, id, looping = false, objectFit = 'contain' }) => {
+export const Video = ({ video, id, looping = false, objectFit = 'contain', height = "100%"}) => {
 
     const [muted, toggleMuted] = React.useState(true);
     
@@ -43,8 +43,13 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain' }) => 
     }
 
     return (
-        <div className='message-video-container'>
+        <div 
+        style={{
+            height: height
+        }}
+        className='message-video-container'>
             <video 
+            loading="lazy"
             style={{objectFit: objectFit}}
             muted={looping ? true : false}
             onEnded={onVideoEnd} autoPlay={looping ? true : false} id={video + id} controls={false} src={video} loop={looping} />

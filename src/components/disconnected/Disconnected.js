@@ -56,9 +56,9 @@ const Wrapper = () => {
 }
 
 export const Disconnected = () => useRoutes([
-    {path: "/dashboard/server/:id/create-channel-menu/disconnected/*", element: <Wrapper />},
-    {path: "/dashboard/server/:id/channel/:id/create-channel-menu/disconnected/*", element: <Wrapper />},
-    {path: "/dashboard/server/:id/channel/:id/disconnected/*", element: <Wrapper />},
-    {path: "/dashboard/server/:id/disconnected/*", element: <Wrapper />},
-    {path: "/dashboard/disconnected/*", element: <Wrapper />}
+    {path: "/server/:id/create-channel-menu/disconnected/*", element: <Wrapper />},
+    {path: "/server/:id/channel/:id/create-channel-menu/disconnected/*", element: <Wrapper />},
+    {path: "/server/:id/channel/:id/disconnected/*", element: <Wrapper />},
+    {path: "/server/:id/disconnected/*", element: <Wrapper />},
+    {path: "/disconnected/*", element: <Wrapper />}
 ])
