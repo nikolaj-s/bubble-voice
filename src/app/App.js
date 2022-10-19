@@ -23,10 +23,11 @@ import { selectSignedUp } from '../features/LoggingIn/signUp/signUpSlice';
 
 // style
 import './App.css';
-import { fetchAppearanceSettings, fetchKeyBinds, fetchSavedUserPrefs, initKeyBinds } from '../util/LocalData';
+import { fetchKeyBinds, fetchSavedUserPrefs, initKeyBinds } from '../util/LocalData';
 import { setSavedKeyCodes } from '../features/settings/appSettings/keyBindSettings/keyBindSettingsSlice';
 import { handleUpdateAvailable, updateCurrentAppVersion } from './appSlice';
 import { fetchSavedAppAudioSettings } from '../features/settings/soundEffects/soundEffectsSlice';
+import { fetchMiscellaneousSettings, fetchSavedHardwareAcceleration } from '../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 function App() {
 
@@ -54,7 +55,11 @@ function App() {
 
     dispatch(getMediaDevices());
 
+    dispatch(fetchMiscellaneousSettings());
+
     dispatch(fetchSavedAppAudioSettings());
+
+    dispatch(fetchSavedHardwareAcceleration());
     
     await fetchSavedUserPrefs();
     

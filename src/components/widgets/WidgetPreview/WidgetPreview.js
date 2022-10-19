@@ -30,10 +30,14 @@ export const WidgetPreview = ({widgets = [], editing = false, reorder}) => {
             {widgets.length === 0 ? 
             <h3 style={{color: textColor}}>This Channel Has No Widgets</h3> :
             editing ?
-            <Reorder.Group transition={{duration: 0.5}} as="div" className='editing-widgets-preview-container' values={widgets} onReorder={reorder} >
+            <Reorder.Group transition={{duration: 0}} as="div" className='editing-widgets-preview-container' values={widgets} onReorder={reorder} >
                 {widgets.map((widget, key) => {
                 return (
-                    <Reorder.Item as="div" className={`${widget.type} editing-single-widget"`} id={widget._id} key={widget._id + key} value={widget} >
+                    <Reorder.Item
+                    dragMomentum={true}
+                    dragTransition={{ bounceStiffness: 600, bounceDamping: 10 }}
+                    transition={widget.delete ? {duration: 0} : {}}
+                    as="div" className={`${widget.type} editing-single-widget"`} id={widget._id} key={widget._id + key} value={widget} >
                         {widget.type === 'title' && !widget.delete ? <TitleWidget editing={editing} key={widget._id} widget={widget} /> : null}
                         {widget.type === 'plainText' && !widget.delete ? <PlainTextWidget editing={editing} key={widget._id} widget={widget} /> : null}
                         {widget.type === 'list' && !widget.delete ? <ListWidget editing={editing} key={widget._id} widget={widget} /> : null}
@@ -42,7 +46,7 @@ export const WidgetPreview = ({widgets = [], editing = false, reorder}) => {
                         {widget.type === 'dynamicGallery' && !widget.delete ? <DynamicGalleryWidget editing={editing} key={widget._id} widget={widget} /> : null}
                         {widget.type === 'music' && !widget.delete ? <MusicWidget editing={editing} /> : null}
                         {widget.type === 'wheel-spin' && !widget.delete ? <WheelSpinWidget editing={true} key={widget._id} widget={widget} /> : null}
-                        {widget.delete ? null : <SubMenuButton position={"absolute"} zIndex={3} top={10} left={5} />}
+                        {widget.delete ? null : <SubMenuButton position={"absolute"} zIndex={3} top={15} left={8} />}
                         {widget.delete ? <InputPlaceHolder margin={"1% 0"} value={"Hit Apply To Save Changes"} /> : null}
                     </Reorder.Item>
                 )

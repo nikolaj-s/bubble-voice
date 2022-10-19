@@ -6,6 +6,7 @@
     align-items: center;
     border-radius: var(--border-radius);
     padding: 0 1rem;
+    transition: 0s;
 }
 
 .input-placeholder-container h3 {

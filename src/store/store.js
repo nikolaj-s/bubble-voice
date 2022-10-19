@@ -17,6 +17,7 @@ import joinServerSlice from "../features/joinServer/joinServerSlice";
 import soundEffectsSlice from "../features/settings/soundEffects/soundEffectsSlice";
 import contextMenuSlice from "../features/contextMenu/contextMenuSlice";
 import RoomActionOverlaySlice from "../features/server/ChannelRoom/Room/RoomActionOverlay/RoomActionOverlaySlice";
+import MiscellaneousSettingsSlice from "../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice";
 
 const { configureStore } = require("@reduxjs/toolkit");
 
@@ -41,6 +42,7 @@ const store = configureStore({
         accountSettingsSlice: accountSettingsSlice,
         keyBindSettingsSlice: keyBindSettingsSlice,
         voiceVideoSettingsSlice: voiceVideoSettingsSlice,
+        MiscellaneousSettingsSlice: MiscellaneousSettingsSlice,
         // server
         createServerSlice: createServerSlice,
         joinServerSlice: joinServerSlice,

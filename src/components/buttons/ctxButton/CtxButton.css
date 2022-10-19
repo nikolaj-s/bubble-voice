@@ -17,5 +17,5 @@
 }
 
 .ctx-button-container:hover {
-    filter: invert();
+    filter: contrast(50%);
 }

@@ -11,7 +11,7 @@ import { Loading } from '../../components/LoadingComponents/Loading/Loading';
 import { CtxMenuTitle } from '../../components/titles/ctxMenuTitle/CtxMenuTitle';
 
 // state
-import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectContextMenuActive, selectContextMenuCordinates, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteWidget, selectEditChannelCtxState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSelectedUserCtxState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
+import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteWidget, selectEditChannelCtxState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSelectedUserCtxState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
 import { assignNewServerGroup, markWidgetForDeletion, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerMembers, selectUsersPermissions, setEditingChannelId, setSocialInput, throwServerError } from '../server/ServerSlice';
 
 // style
@@ -24,6 +24,9 @@ import { selectUsername } from '../settings/appSettings/accountSettings/accountS
 
 // USER PREFS
 import { saveUserPrefs, USER_PREFS } from '../../util/LocalData';
+import { BoolButton } from '../../components/buttons/BoolButton/BoolButton';
+import { miscSettingsChannelSpecificStateChange, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents } from '../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { MoveUser } from '../../components/buttons/MoveUser/MoveUser';
 
 export const ContextMenu = () => {
 
@@ -74,6 +77,13 @@ export const ContextMenu = () => {
 
     const selectedChannelName = useSelector(selectCtxSelectedChannelName);
 
+    const channelSpecificSettingsState = useSelector(selectChannelSpecificStateSettings);
+
+    const disableMessagePopup = useSelector(selectMiscSettingsDisableMessagePopUp);
+
+    const hideChannelBackground = useSelector(selectMiscSettingsHideChannelBackground);
+
+    const hideNonVideoParticapents = useSelector(selectMiscSettingsHideNonVideoParticapents);
     // user management
     const canBanUser = useSelector(selectBanUserCtxState);
 
@@ -90,6 +100,8 @@ export const ContextMenu = () => {
     const memberId = useSelector(selectMemberId);
 
     const changeUserVolume = useSelector(selectChangingUsersVolumeState);
+
+    const moveUserState = useSelector(selectMoveUserState);
 
     // copy paste state
     const pasteCtxState = useSelector(selectPasteCtxState);
@@ -212,7 +224,8 @@ export const ContextMenu = () => {
                         isOwner: isOwner !== -1,
                         poke: true,
                         volume: true,
-                        member_id: user._id
+                        member_id: user._id,
+                        move: permissions.user_can_kick_user
                     }))
 
                     const USER_VOLUME = USER_PREFS.get(id);
@@ -225,12 +238,17 @@ export const ContextMenu = () => {
                 }
 
             }
+            if (e.path[0].id === 'live-chat-wrapper') {
+                dispatch(toggleContextMenu(true))
+
+                dispatch(setContextMenuOptions({state: "channelSpecificSettings", value: true}));
+            }
   
         }  
             
         dispatch(setCtxCordinates({x: (e.view.innerWidth - e.pageX) < 400 ? (e.pageX - 300) : e.pageX, y: e.pageY}))
 
-        setOrigin((e.view.innerHeight - e.pageY) < 400 ? true : false)
+        setOrigin((e.view.innerHeight - e.pageY) < 600 ? true : false)
     // eslint-disable-next-line
     }, [ctxCordinates, ctxActive, permissions, currentChannelId, channels, members])
 
@@ -375,6 +393,19 @@ export const ContextMenu = () => {
         }
     }
 
+    const handleMoveUser = async (arg) => {
+        const selected_username = selectedUserToManage.split('-')[0];
+
+        const channel_id = selectedUserToManage.split('channel-id-')[1];
+        console.log(arg)
+        if (selected_username && arg) {
+            await socket.request('move user', {channel_id: channel_id, username: selected_username, to_move: arg})
+            .catch(error => {
+                dispatch(throwServerError({errorMessage: error}));
+            })
+        }
+    }
+
     const handleKickUser = async () => {
         try {
 
@@ -395,6 +426,10 @@ export const ContextMenu = () => {
         }
     }
 
+    const handleChannelSpecificStateChange = (state) => {
+        dispatch(miscSettingsChannelSpecificStateChange(state));
+    }
+
     return (
         <>
         {ctxActive ? 
@@ -402,7 +437,7 @@ export const ContextMenu = () => {
         style={{
             top: ctxCordinates.y,
             left: ctxCordinates.x,
-            translateY: origin ? '-100%' : '0'
+            translateY: '-50%'
         }}
         className='ctx-menu-container'>
             {saveImage ? <CtxButton action={() => {handleSave(true)}} name={"Save Image"} /> : null}
@@ -426,9 +461,14 @@ export const ContextMenu = () => {
             </>
             : null}
             {deleteWidget ? <CtxButton action={handleDeleteWidget} name={"Delete Widget"} /> : null}
+            {moveUserState ? <MoveUser move={handleMoveUser} /> : null}
             {kickUser ? <CtxButton name="Kick User" action={handleKickUser} /> : null}
             {pokeUser ? <CtxButton name="Poke User" action={handlePokeUser} /> : null}
             {canBanUser ? <CtxButton name={"Ban User"} /> : null}
+            {channelSpecificSettingsState ? <CtxMenuTitle title={"Room Preferences"} /> : null}
+            {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideChannelBackground")}} state={hideChannelBackground} name={"Hide Channel Background"} /> : null}
+            {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideNonVideoParticapents")}} state={hideNonVideoParticapents} name={"Hide Non Video Participants"} /> : null}
+            {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("disableMessagePopUp")}} state={disableMessagePopup} name={"Disable Message Overlay"} /> : null}
             <Loading loading={loading} />
         </motion.div>
         : null}

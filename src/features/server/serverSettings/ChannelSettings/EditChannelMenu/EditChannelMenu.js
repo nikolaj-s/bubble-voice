@@ -24,6 +24,7 @@ import { socket } from '../../../ServerBar/ServerBar';
 import { Loading } from '../../../../../components/LoadingComponents/Loading/Loading';
 import { playSoundEffect } from '../../../../settings/soundEffects/soundEffectsSlice';
 import { ChannelBackgroundInput } from './ChannelBackgroundInput/ChannelBackgroundInput';
+import { Range } from '../../../../../components/inputs/Range/Range';
 
 const Wrapper = () => {
 
@@ -43,6 +44,8 @@ const Wrapper = () => {
 
     const [channelBackground, setChannelBackground] = React.useState(false);
 
+    const [backgroundBlur, setBackgroundBlur] = React.useState(0);
+
     const channelToEdit = useSelector(selectChannelToEdit);
 
     const permission = useSelector(selectUsersPermissions);
@@ -54,6 +57,16 @@ const Wrapper = () => {
         setChannelName(channelToEdit.channel_name);
 
         setPersistChannelSocial(channelToEdit.persist_social)
+
+        if (channelToEdit.background_blur) {
+
+            setBackgroundBlur(channelToEdit.background_blur);
+        
+        } else {
+
+            setBackgroundBlur(10)
+        
+        }
 
         return () => {
             dispatch(setHeaderTitle(""));
@@ -121,7 +134,7 @@ const Wrapper = () => {
         handleToggleLoading(true);
 
         await socket.request('update channel', 
-        {...channelToEdit, widgets: widgets, persist_social: persistChannelSocial, channel_name: channelName, file: channelBackground})
+        {...channelToEdit, widgets: widgets, persist_social: persistChannelSocial, channel_name: channelName, file: channelBackground, background_blur: backgroundBlur})
         .then(response => {
 
             dispatch(updateChannel(response.channel))
@@ -176,8 +189,16 @@ const Wrapper = () => {
         setChannelBackground(data);
 
         toggleEdited(true);
+    
     }
-console.log(channelToEdit)
+
+    const handleBlurChange = (value) => {
+
+        setBackgroundBlur(value);
+
+        toggleEdited(true);
+    }
+
     return (
         <>
         {permission?.user_can_manage_channels ?
@@ -189,7 +210,9 @@ console.log(channelToEdit)
             <ToggleButton action={handleTogglePersistSocial} state={persistChannelSocial} />
             <SettingsHeader title={"Channel Background"} />
             <InputTitle title={"Image"} />
-            <ChannelBackgroundInput initialImage={channelToEdit?.channel_background} getFile={handleSettingChannelBackground} />
+            <ChannelBackgroundInput blur={backgroundBlur} initialImage={channelToEdit?.channel_background} getFile={handleSettingChannelBackground} />
+            <InputTitle title={"Blur Amount"} />
+            <Range action={handleBlurChange} value={backgroundBlur}  min={0} max={10} step={1} />
             <SettingsHeader title={"Widgets"} />
             <InputTitle title={`Widgets ${channelToEdit.widgets ? channelToEdit.widgets.length : 0} / 15`} />
             <WidgetPreview widgets={widgets} editing={true} reorder={updateWidgetOrder} />

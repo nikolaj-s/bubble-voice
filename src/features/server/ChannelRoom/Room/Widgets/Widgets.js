@@ -7,9 +7,13 @@ import { useSelector } from 'react-redux';
 import { selectSecondaryColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectCurrentChannel } from '../../../ServerSlice';
 
+// components
+import { SettingsSpacer } from '../../../../../components/Spacers/SettingsSpacer/SettingsSpacer'
+import { WidgetPreview } from '../../../../../components/widgets/WidgetPreview/WidgetPreview';
+
 // style
 import "./Widgets.css";
-import { WidgetPreview } from '../../../../../components/widgets/WidgetPreview/WidgetPreview';
+
 
 export const Widgets = () => {
 
@@ -39,6 +43,7 @@ export const Widgets = () => {
         >
             <div className='widget-preview-wrapper'>
                 <WidgetPreview widgets={channel.widgets} />
+                <SettingsSpacer />
             </div>
         </motion.div>
     )

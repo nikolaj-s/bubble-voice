@@ -236,6 +236,10 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
         event.sender.send('disconnect key', {toggle: true});
       }
 
+      if (key.rawcode === keyCodes.share_screen?.keyCode) {
+        event.sender.send('screen share', {toggle: true});
+      }
+
       keyDown = false;
     })
 

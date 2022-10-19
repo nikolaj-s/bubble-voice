@@ -1,14 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { fetchAppAudio, fetchAppAudioPrefs, setAppAudio, setAppAudioPrefs } from "../../../util/LocalData";
+import { fetchSavedLocalData, saveLocalData } from "../../../util/LocalData";
 
 export const fetchSavedAppAudioSettings = createAsyncThunk(
     'soundEffectsSlice/fetchSavedAppAudioSettings',
     async (_) => {
         try {
 
-            const volume = await fetchAppAudio();
+            const volume = await fetchSavedLocalData("APPAUDIO", "LEVEL");
 
-            const audioPrefs = await fetchAppAudioPrefs();
+            const audioPrefs = await fetchSavedLocalData("APPAUDIOPREF", "AUDIOPREF");
             
             return {...volume, ...audioPrefs};
 
@@ -32,7 +32,8 @@ const soundEffectsSlice = createSlice({
         },
         setSoundEffectsVolume: (state, action) => {
             state.volume = action.payload;
-            setAppAudio(action.payload);
+
+            saveLocalData("APPAUDIO", "LEVEL", {volume: action.payload});
         },
         updateSoundEffectsState: (state, action) => {
 
@@ -46,7 +47,7 @@ const soundEffectsSlice = createSlice({
                 muteSoundEffectsWhileMutedState: state.muteSoundEffectsWhileMutedState
             }
 
-            setAppAudioPrefs(obj)
+            saveLocalData("APPAUDIOPREF", "AUDIOPREF", obj);
 
         }
 
@@ -54,7 +55,7 @@ const soundEffectsSlice = createSlice({
     extraReducers: {
         [fetchSavedAppAudioSettings.fulfilled]: (state, action) => {
 
-            state.volume = action.payload.volume;
+            state.volume = action.payload?.volume ? action.payload.volume : 1;
 
             if (action.payload.socialSoundEffect !== undefined) {
 

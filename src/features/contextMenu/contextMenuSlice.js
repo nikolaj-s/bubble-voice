@@ -23,6 +23,7 @@ const contextMenuSlice = createSlice({
         pokeUser: false,
         changeVolume: false,
         _id: "",
+        move: false,
         // copy && paste
         copy: false,
         paste: false,
@@ -30,6 +31,8 @@ const contextMenuSlice = createSlice({
         audio: false,
         // widgets
         deleteWidget: false,
+        // channel specific settings
+        channelSpecificSettings: false
     },
     reducers: {
         setContextMenuOptions: (state, action) => {
@@ -61,6 +64,8 @@ const contextMenuSlice = createSlice({
             state.pokeUser = false;
             state.changeVolume = false;
             state._id = "";
+            state.channelSpecificSettings = false;
+            state.move = false;
         },
         handleChannelCtxState: (state, action) => {
             state.joinChannel = action.payload.join;
@@ -77,6 +82,7 @@ const contextMenuSlice = createSlice({
             state.pokeUser = action.payload.poke;
             state.changeVolume = action.payload.volume;
             state._id = action.payload.member_id;
+            state.move = action.payload.move;
         },
         handleCopyPasteCtxState: (state, action) => {
             state.paste = true;
@@ -124,6 +130,10 @@ export const selectPokeUser = state => state.contextMenuSlice.pokeUser;
 export const selectChangingUsersVolumeState = state => state.contextMenuSlice.changeVolume;
 
 export const selectMemberId = state => state.contextMenuSlice._id;
+
+export const selectChannelSpecificStateSettings = state => state.contextMenuSlice.channelSpecificSettings;
+
+export const selectMoveUserState = state => state.contextMenuSlice.move;
 
 // actions
 export const { handleCopyPasteCtxState, handleUserManagementCtx, handleChannelCtxState, clearCtxState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } = contextMenuSlice.actions;

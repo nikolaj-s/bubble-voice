@@ -10,7 +10,7 @@ import { addNewChannel, addSongToQueue, assignNewServerGroup, clearServerState, 
 import { selectUsername } from '../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { getToken, url } from '../../../util/Validation';
 import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
-import { selectActivateCameraKey, selectDisconnectKey, selectMuteAudioKey, selectMuteMicKey, selectPushToTalkKey } from '../../settings/appSettings/keyBindSettings/keyBindSettingsSlice';
+import { selectActivateCameraKey, selectDisconnectKey, selectMuteAudioKey, selectMuteMicKey, selectPushToTalkKey, selectShareScreenKey } from '../../settings/appSettings/keyBindSettings/keyBindSettingsSlice';
 import { selectAudioOutput } from '../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 import { addNewWidgetOverlayToQueue, clearWidgetOverLay } from '../ChannelRoom/Room/RoomActionOverlay/RoomActionOverlaySlice';
 
@@ -27,6 +27,7 @@ import { ServerSettingsMenu } from '../serverSettings/ServerSettingsMenu';
 
 // style's
 import "./ServerBar.css"
+import { selectCurrentScreen, setCurrentScreen, toggleControlState } from '../../controlBar/ControlBarSlice';
 
 export let socket = null;
 
@@ -56,6 +57,8 @@ const Bar = () => {
 
     const audioOutput = useSelector(selectAudioOutput);
 
+    const currentScreen = useSelector(selectCurrentScreen);
+
     // keybinds
     const pushToTalkKey = useSelector(selectPushToTalkKey);
 
@@ -66,6 +69,8 @@ const Bar = () => {
     const webCamKey = useSelector(selectActivateCameraKey);
 
     const disconnectKey = useSelector(selectDisconnectKey);
+
+    const shareScreenKey = useSelector(selectShareScreenKey);
 
     const serverSettingsOpenState = useSelector(selectServerSettingsOpenState);
 
@@ -230,6 +235,21 @@ const Bar = () => {
             }
                 
         })
+
+        socket.on('move user', (data) => {
+            try {
+
+                if (window.location.hash.includes(data.new_channel)) return;
+
+                setTimeout(() => {
+                    document.getElementById(`channel-button-${data.new_channel}`).click();
+                }, 150)
+                    
+
+            } catch (error) {
+                return;
+            }
+        })
     }
 
     const joiningServer = async (tries = 0) => { 
@@ -359,7 +379,8 @@ const Bar = () => {
         }
 
         const press = (e) => {
-            
+            if (!current_channel_id) return;
+
             if (e.keyCode === muteMicKey.keyCode || e.key === muteMicKey.key || e.which === muteMicKey.keyCode) {
                 if (pressed) return;
                 document.getElementById('toggle-microphone-button').click();
@@ -381,6 +402,24 @@ const Bar = () => {
                 if (pressed) return;
                 document.getElementById('disconnect-from-channel-button').click();
             }
+
+            if (e.keyCode === shareScreenKey.keyCode || e.key === shareScreenKey.key || e.which === shareScreenKey.keyCode) {
+                if (pressed) return;
+
+                if (!current_channel_id) return;
+
+                dispatch(playSoundEffect('controlSoundEffect'))
+
+                dispatch(toggleControlState('screenShareState'));
+
+                if (currentScreen === null) {
+                    dispatch(setCurrentScreen("screen:0:0"))
+                } else {
+                    dispatch(setCurrentScreen(null));
+                }
+                
+            }
+        
         }
 
         window.addEventListener('mousedown', activate)
@@ -410,7 +449,7 @@ const Bar = () => {
         }
 
     // eslint-disable-next-line
-    }, [muteMicKey, muteAudioKey, webCamKey, disconnectKey, pushToTalkKey])
+    }, [muteMicKey, muteAudioKey, webCamKey, disconnectKey, pushToTalkKey, current_channel_id])
 
     // handle global keybinds for application
     React.useEffect(() => {
@@ -446,6 +485,23 @@ const Bar = () => {
                 document.getElementById('disconnect-from-channel-button').click();
             })
 
+            ipcRenderer.on('screen share', (event, data) => {
+                if (!current_channel_id) return;
+
+                if (document.hasFocus()) return;
+
+                dispatch(playSoundEffect('controlSoundEffect'));
+
+                dispatch(toggleControlState('screenShareState'));
+
+                if (currentScreen === null) {
+                    dispatch(setCurrentScreen("screen:0:0"))
+                } else {
+                    dispatch(setCurrentScreen(null));
+                }
+            
+            })
+
         } catch (error) {
             console.log("you are using the web version of this app")
         }
@@ -454,7 +510,7 @@ const Bar = () => {
             ipcRenderer?.removeAllListeners()
         }
     // eslint-disable-next-line
-    }, [])
+    }, [current_channel_id])
 
     React.useEffect(() => {
 

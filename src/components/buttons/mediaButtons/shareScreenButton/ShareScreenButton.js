@@ -1,11 +1,14 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { selectTextColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
+import { Loading } from '../../../LoadingComponents/Loading/Loading'
 import { ButtonAnimationWrapper } from '../../ButtonAnimationWrapper/ButtonAnimationWrapper'
 
-export const ShareScreenButton = ({action, state, active}) => {
+export const ShareScreenButton = ({action, state, active, loading}) => {
 
   const textColor = useSelector(selectTextColor);
+
+
 
   return (
     <ButtonAnimationWrapper action={action}
@@ -13,6 +16,7 @@ export const ShareScreenButton = ({action, state, active}) => {
     height={25}
     active={active}
     opacity={0.5}
+    position={'relative'}
     >
         {state ? 
         <svg
@@ -26,6 +30,7 @@ export const ShareScreenButton = ({action, state, active}) => {
         <rect x="1" y="5.82861" width="4" height="53" rx="2" transform="rotate(-45 1 5.82861)" fill={textColor}/>
         </svg>
         }
+        <Loading loading={loading} success_size={{width: 30, height: 30}} />
     </ButtonAnimationWrapper>
   )
 }

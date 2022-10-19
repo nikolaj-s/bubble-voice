@@ -24,6 +24,7 @@ export const ScreenShareMenu = () => {
     const textColor = useSelector(selectTextColor);
 
     const selectScreen = (id) => {
+        console.log(id);
         dispatch(setCurrentScreen(id));
     }
 

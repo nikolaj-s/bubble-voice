@@ -1,4 +1,4 @@
-import { setAppearanceSettings, fetchAppearanceSettings } from "../../../../util/LocalData";
+import { fetchSavedLocalData, saveLocalData } from "../../../../util/LocalData";
 
 const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
 
@@ -7,7 +7,7 @@ export const updatePersistedAppTheme = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
 
-            const data = await fetchAppearanceSettings();
+            const data = await fetchSavedLocalData("APPEARANCE", "VISUAL");
             
             return data;
 
@@ -109,7 +109,7 @@ const appearanceSettingsSlice = createSlice({
 
             state.color_themes = new_theme_object.themes;
 
-            setAppearanceSettings(new_theme_object);
+            saveLocalData("APPEARANCE", "VISUAL", new_theme_object)
 
         }
 
@@ -131,6 +131,7 @@ const appearanceSettingsSlice = createSlice({
 
                     state.textColor = state.color_themes[action.payload.current_theme.state].textColor;
 
+                    state.activationColor = state.color_themes[action.payload.current_theme.state].activationColor;
                 }
 
                 return;

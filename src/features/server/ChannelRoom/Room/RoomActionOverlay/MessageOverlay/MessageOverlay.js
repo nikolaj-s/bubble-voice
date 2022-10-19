@@ -7,24 +7,31 @@ import "./MessageOverlay.css";
 import { Message } from '../../../../../../components/Message/Message';
 import { useSelector } from 'react-redux';
 import { selectPrimaryColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectMiscSettingsDisableMessagePopUp } from '../../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 export const MessageOverlay = ({data, onEnd}) => {
 
     const primaryColor = useSelector(selectPrimaryColor);
 
+    const messageOverlayDisabled = useSelector(selectMiscSettingsDisableMessagePopUp);
+
     React.useEffect(() => {
-
-        setTimeout(() => {
-
+        if (messageOverlayDisabled) {
             onEnd();
+        } else {
+            setTimeout(() => {
 
-        }, 3500)
+                onEnd();
+    
+            }, 3500)
+        }
     }, [data])
 
     return (
         <motion.div 
         key={"message-prev-overlay"}
         style={{
+            display: messageOverlayDisabled ? 'none' : 'flex',
             backgroundColor: `rgba${primaryColor.split('rgb')[1].split(')')[0]}, 0.5)`
         }}
         initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} className='message-overlay-container'>

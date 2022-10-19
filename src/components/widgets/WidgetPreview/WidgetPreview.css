@@ -29,36 +29,55 @@
     list-style: none;
 }
 
-.editing-widgets-preview-container div {
+.editing-single-widget {
     text-decoration: none;
     width: 100%;
     cursor: grab;
     position: relative;
+    max-width: 100%;
 }
 
 .editing-widgets-preview-container .title {
     width: 100%;
     grid-column: span 2;
     cursor: grab;
+    position: relative;
 }
 
 .editing-widgets-preview-container .dynamicGallery {
     width: 100%;
     cursor: grab;
+    position: relative;
+}
+
+.editing-widgets-preview-container .music {
+    width: 100%;
+    cursor: grab;
+    position: relative;
 }
 
 .editing-widgets-preview-container .image {
     width: 100%;
     cursor: grab;
     object-fit: contain;
+    position: relative;
 }
 
 .editing-widgets-preview-container .list {
     width: 100%;
     cursor: grab;
+    position: relative;
 }
 .editing-widgets-preview-container .video {
     width: 100%;
+    cursor: grab;
+    position: relative;
+}
+
+.editing-widgets-preview-container .wheel-spin {
+    width: 100%;
+    cursor: grab;
+    position: relative;
 }
 
 .editing-widgets-preview-container .inner-music-widget-container {

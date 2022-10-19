@@ -1,0 +1,31 @@
+
+.move-user-button {
+    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px;
+}
+
+
+.move-to-channel-container {
+   display: flex;
+   max-height: 200px;
+   overflow-y: auto;
+   width: 100%;
+   flex-direction: column;
+   left: 20px;
+}
+
+.move-to-channel-container p {
+    cursor: pointer;
+    max-height: 50px;
+    flex-grow: 1;
+    height: 100%;
+    margin: 0;
+    padding: 15px 0;
+}
+
+.move-to-channel-container p:hover {
+    filter: contrast(50%);
+}

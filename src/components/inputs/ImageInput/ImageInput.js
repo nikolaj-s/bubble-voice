@@ -5,7 +5,7 @@ import { motion, useAnimation } from 'framer-motion'
 import { useSelector } from 'react-redux';
 
 // state
-import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // componenents
 import { Image } from "../../Image/Image";
@@ -22,7 +22,8 @@ export const ImageInput = ({
     center = false,
     zIndex = "0",
     getFile = () => {},
-    blur = false
+    blur = false,
+    blur_amount = 8
 }) => {
 
     // state
@@ -33,6 +34,8 @@ export const ImageInput = ({
     const iconAnimation = useAnimation();
 
     const primaryColor = useSelector(selectPrimaryColor);
+
+    const secondaryColor = useSelector(selectSecondaryColor);
 
     const accentColor = useSelector(selectAccentColor);
 
@@ -122,10 +125,11 @@ export const ImageInput = ({
                 height: '100%',
                 top: 0,
                 left: 0,
-                backdropFilter: 'blur(8px)',
+                backdropFilter: `blur(${blur_amount}px)`,
                 zIndex: 1,
                 objectFit: 'contain',
-                borderRadius: 10
+                borderRadius: 10,
+                backgroundColor: `rgba(${secondaryColor.split('(')[1]?.split(')')[0]}, 0.4)`
             }}
             ></div>
             : null}

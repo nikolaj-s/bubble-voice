@@ -1,6 +1,6 @@
 // library's
 import React from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRoutes } from 'react-router';
 
 // components
@@ -10,83 +10,80 @@ import { Loading } from '../../../../components/LoadingComponents/Loading/Loadin
 import { Error } from '../../../../components/Error/Error';
 import { ToggleButton } from '../../../../components/buttons/ToggleButton/ToggleButton';
 import { AltError } from '../../../../components/AltError/AltError';
+import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader'
 
 // state
-import { clearLocalData, fetchHardWareAcceleration, saveHardwareAcceleration } from '../../../../util/LocalData';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
+import { miscSettingsChannelSpecificStateChange, miscSettingsClearError, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, selectHardwareAcceleration, selectMiscSettingsDisableGifProfiles, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsError, selectMiscSettingsErrorMessage, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectMiscSettingsLoading, selectRestartNotice } from './MiscellaneousSettingsSlice';
 
 const Settings = () => {
 
     const dispatch = useDispatch();
 
-    const [loading, toggleLoading] = React.useState(false);
+    const loading = useSelector(selectMiscSettingsLoading);
 
-    const [hardwareAcceleration, toggleHardwareAcceleration] = React.useState(false);
+    const hardwareAcceleration = useSelector(selectHardwareAcceleration);
 
-    const [error, setError] = React.useState(false);
+    const error = useSelector(selectMiscSettingsError);
 
-    const [errorMessage, setErrorMessage] = React.useState("");
+    const errorMessage = useSelector(selectMiscSettingsErrorMessage);
 
-    const [restartNotice, setRestartNotice] = React.useState(false);
+    const restartNotice = useSelector(selectRestartNotice);
 
-    const handleSavedHardwarePref = async () => {
+    const disableGifProfiles = useSelector(selectMiscSettingsDisableGifProfiles);
 
-        const data = await fetchHardWareAcceleration();
+    const disableMessagePopUp = useSelector(selectMiscSettingsDisableMessagePopUp);
 
-        if (data.error) return;
+    const hideChannelBackground = useSelector(selectMiscSettingsHideChannelBackground);
 
-        toggleHardwareAcceleration(data.toggled);
-    
-    }
+    const hideNonVideoParticapents = useSelector(selectMiscSettingsHideNonVideoParticapents);
 
     React.useEffect(() => {
 
         dispatch(setHeaderTitle("Miscellaneous Settings"))
 
-        handleSavedHardwarePref();
-
     }, [])
 
     const handleClearLocalData = () => {
 
-        toggleLoading(true);
-
-        clearLocalData();
-
-        setTimeout(() => {
-            toggleLoading(false);
-        }, 200)
+        dispatch(miscSettingsClearLocalData());
+        
     }
 
     const handleToggleHardwareAcceleration = () => {
 
-        toggleHardwareAcceleration(!hardwareAcceleration);
-
-        setRestartNotice(true);
-
-        saveHardwareAcceleration(!hardwareAcceleration);
+        dispatch(miscSettingsToggleHardwareAcceleration());
         
     }
 
     const closeErrorMessage = () => {
         
-        setError(false);
-        
-        setErrorMessage("");
+        dispatch(miscSettingsClearError());
     
+    }
+
+    const handleChannelSpecificStateChange = (state) => {
+        dispatch(miscSettingsChannelSpecificStateChange(state));
     }
 
     return (
         <>
         <div className='settings-wrapper'>
-            <InputTitle title={"Clear Local Data"} />
-            <TextButton action={handleClearLocalData} name={"Clear Data"} />
+            <SettingsHeader title={"Channel Specific"} />
+            <InputTitle title={"Disable Message Pop Up's"} />
+            <ToggleButton action={() => {handleChannelSpecificStateChange("disableMessagePopUp")}} state={disableMessagePopUp} />
+            <InputTitle title={"Hide Channel Backgrounds"} />
+            <ToggleButton action={() => {handleChannelSpecificStateChange("hideChannelBackground")}} state={hideChannelBackground} />
+            <InputTitle title={"Hide Non Video Particapents"} />
+            <ToggleButton action={() => {handleChannelSpecificStateChange("hideNonVideoParticapents")}} state={hideNonVideoParticapents} />
+            <InputTitle title={"Disable Gif Profile Pictures / Banners"} />
+            <ToggleButton action={() => {handleChannelSpecificStateChange("disableGifProfiles")}} state={disableGifProfiles} />
+            <SettingsHeader title={"App Specific"} />
             <InputTitle title={"Disable Hardware Acceleration"} />
             <ToggleButton action={handleToggleHardwareAcceleration} state={hardwareAcceleration} />
+            <InputTitle title={"Clear Local Data"} />
+            <TextButton action={handleClearLocalData} name={"Clear Data"} />
             <AltError marginTop={'2%'} errorMessage={"Toggling Harware Acceleration Requires An App Restart"} error={restartNotice} />
-            <InputTitle title={"Disable Gif Profile Pictures / Banners"} />
-            <ToggleButton />
-            
             <Loading loading={loading} />
         </div>
         {error ? <Error action={closeErrorMessage} errorMessage={errorMessage} /> : null}

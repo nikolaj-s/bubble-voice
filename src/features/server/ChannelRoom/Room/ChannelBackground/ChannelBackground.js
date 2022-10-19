@@ -5,10 +5,10 @@ import {  selectSecondaryColor } from '../../../../settings/appSettings/appearan
 
 import "./ChannelBackground.css";
 
-export const ChannelBackground = ({channel_background}) => {
+export const ChannelBackground = ({channel_background, blur = 10}) => {
 
     const secondaryColor = useSelector(selectSecondaryColor)
-
+    
     return (
         <>
         {channel_background ?
@@ -17,7 +17,12 @@ export const ChannelBackground = ({channel_background}) => {
             border: `10px solid ${secondaryColor}`
         }}
         className='channel-background-container'>
-            <div className='channel-background-blur-layer'></div>
+            <div 
+            style={{
+                backgroundColor: `rgba(${secondaryColor.split('(')[1]?.split(')')[0]}, 0.5)`,
+                backdropFilter: `blur(${blur}px)`
+            }}
+            className='channel-background-blur-layer'></div>
             <div className='channel-background-image-wrapper'>
                 <Image objectFit='cover' image={channel_background} />
             </div>

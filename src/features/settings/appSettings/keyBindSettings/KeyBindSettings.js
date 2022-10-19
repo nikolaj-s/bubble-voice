@@ -12,7 +12,7 @@ import { SettingsHeader } from '../../../../components/titles/SettingsHeader/Set
 
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { selectActivateCameraKey, selectDisconnectKey, selectMuteAudioKey, selectMuteMicKey, selectPushToTalkKey, updateKeyCodeState } from './keyBindSettingsSlice';
+import { selectActivateCameraKey, selectDisconnectKey, selectMuteAudioKey, selectMuteMicKey, selectPushToTalkKey, selectShareScreenKey, updateKeyCodeState } from './keyBindSettingsSlice';
 
 const Settings = () => {
 
@@ -32,6 +32,8 @@ const Settings = () => {
 
     const disconnectKey = useSelector(selectDisconnectKey);
 
+    const shareScreenKey = useSelector(selectShareScreenKey);
+
     React.useEffect(() => {
         dispatch(setHeaderTitle('Key Bind Settings'))
     // eslint-disable-next-line
@@ -40,7 +42,19 @@ const Settings = () => {
     const handleKeyCodeUpdate = (keyCode, state, event) => {
         
         if (event.key.includes('F')) return;
+
+        if (event.keyCode === pushToTalkkey.keyCode) return;
         
+        if (event.keyCode === muteMicKey.keyCode) return;
+
+        if (event.keyCode === muteAudioKey.keyCode) return;
+
+        if (event.keyCode === activateCameraKey.keyCode) return;
+
+        if (event.keyCode === disconnectKey.keyCode) return;
+
+        if (event.keyCode === shareScreenKey.keyCode) return;
+
         const obj = {...local, [state]: {key: event.nativeEvent.key, keyCode: event.keyCode}}
         
         setLocal(obj)
@@ -70,6 +84,8 @@ const Settings = () => {
             <TextInput keyCode={handleKeyCodeUpdate} stateSelector='mute_audio' inputValue={local['mute_audio'] ? local['mute_audio'].key : muteAudioKey.key} />
             <InputTitle title={"Activate Camera"} />
             <TextInput keyCode={handleKeyCodeUpdate} stateSelector='activate_camera' inputValue={local['activate_camera'] ? local['activate_camera'].key : activateCameraKey.key} />
+            <InputTitle title={"Share Screen"} />
+            <TextInput keyCode={handleKeyCodeUpdate} stateSelector='share_screen' inputValue={local['share_screen'] ? local['share_screen'].key : shareScreenKey.key} />
             <SettingsHeader title={"Misc"} />
             <InputTitle title={"Disconnect"} />
             <TextInput keyCode={handleKeyCodeUpdate} stateSelector='disconnect' inputValue={local['disconnect'] ? local['disconnect'].key : disconnectKey.key} />

@@ -5,7 +5,7 @@ import { selectAccentColor, selectPrimaryColor } from '../../../../../settings/a
 
 import "./ChannelBackgroundInput.css";
 
-export const ChannelBackgroundInput = ({initialImage, getFile, }) => {
+export const ChannelBackgroundInput = ({initialImage, getFile, blur}) => {
 
     const primaryColor = useSelector(selectPrimaryColor);
 
@@ -21,7 +21,7 @@ export const ChannelBackgroundInput = ({initialImage, getFile, }) => {
                     <div style={{border: `solid 4px ${accentColor}`}}></div>
                 </div>
             </div>
-            <ImageInput blur={true} initalImage={initialImage} getFile={getFile} />
+            <ImageInput blur={true} blur_amount={blur} initalImage={initialImage} getFile={getFile} />
         </div>
     )
 }

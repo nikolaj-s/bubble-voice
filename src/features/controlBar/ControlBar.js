@@ -13,7 +13,7 @@ import { ConnectionIndicator } from '../../components/connectionIndicator/Connec
 import { ScreenShareMenu } from './ScreenShareMenu/ScreenShareMenu';
 
 // state
-import { resetControlState, selectAudioState, selectingScreensState, selectLoadingWebCam, selectMicrophoneState, selectScreenShareState, selectWebCamState, toggleControlState, toggleLoadingWebCam } from './ControlBarSlice';
+import { resetControlState, selectAudioState, selectingScreensState, selectLoadingScreenShare, selectLoadingWebCam, selectMicrophoneState, selectScreenShareState, selectWebCamState, toggleControlState, toggleLoadingWebCam } from './ControlBarSlice';
 import { selectCurrentChannelId } from '../server/ServerSlice';
 import { playSoundEffect } from '../settings/soundEffects/soundEffectsSlice';
 import { selectAccentColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
@@ -46,6 +46,8 @@ export const ControlBar = () => {
 
     const loadingWebCam = useSelector(selectLoadingWebCam);
 
+    const loadingScreenShare = useSelector(selectLoadingScreenShare);
+
     const toggleFunction = (state) => {
         
         if (window.location.hash.includes("/appsettings/voice-video")) return;
@@ -55,6 +57,8 @@ export const ControlBar = () => {
         if (state === 'webCamState' && loadingWebCam) return;
 
         if (state === 'webCamState' && webCamState === true) dispatch(toggleLoadingWebCam(true))
+
+        if (state === 'screenShareState' && loadingScreenShare === true) return;
         
         dispatch(playSoundEffect('controlSoundEffect'))
 
@@ -125,6 +129,7 @@ export const ControlBar = () => {
                     id={"mute-audio-toggle-button"}
                     />
                     <ShareScreenButton 
+                    loading={loadingScreenShare}
                     action={() => {toggleFunction('screenShareState')}} 
                     state={screenShareState} 
                     active={current_channel_id === null}

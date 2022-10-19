@@ -430,11 +430,13 @@ export class RoomClient {
                             minHeight: 540,
                             maxHeight: 720,
                             maxFrameRate: 30,
-                            minFrameRate: 24
+                            minFrameRate: 30
                         }
                     }
                 };
                 screen = true;
+
+                this.dispatch({action: 'screen-share-loading-state', value: true})
                 break
             default:
                 return
@@ -477,9 +479,6 @@ export class RoomClient {
             }
 
             const track = audio ? microphone_stream.getAudioTracks()[0] : stream.getVideoTracks()[0]
-            
-            
-           // if (screen) stream_audio = stream.getAudioTracks()[0];
 
             const params = {
                 track
@@ -489,7 +488,7 @@ export class RoomClient {
                 params.encodings = [
                     {
                     rid: 'r0',
-                    maxBitrate: 300000,
+                    maxBitrate: 100000,
                     scalabilityMode: 'L3T2',
                     maxFramerate: 30.0
                     },
@@ -501,7 +500,7 @@ export class RoomClient {
                     },
                     {
                     rid: 'r2',
-                    maxBitrate: 1500000,
+                    maxBitrate: 900000,
                     scalabilityMode: 'L3T2',
                     maxFramerate: 30.0
                     }
@@ -555,6 +554,10 @@ export class RoomClient {
             
             producer.on('trackended', () => {
                 this.closeProducer(type);
+
+                if (screen) {
+                    this.dispatch({action: 'close-stream'})
+                }
             })
 
             producer.on('transportclose', () => {
@@ -562,6 +565,11 @@ export class RoomClient {
                     el.srcObject.getTracks().forEach(track => {
                         track.stop();
                     })
+
+                }
+
+                if (screen) {
+                    this.dispatch({action: 'close-stream'})
                 }
 
                 this.producers.delete(producer.id);
@@ -572,6 +580,10 @@ export class RoomClient {
                     el.srcObject.getTracks().forEach(track => {
                         track.stop();
                     })
+                }
+
+                if (screen) {
+                    this.dispatch({action: 'close-stream'})
                 }
 
                 this.producers.delete(producer.id);
@@ -613,6 +625,8 @@ export class RoomClient {
                     this.producers.delete(producer.id);
                 })
             }
+
+            this.dispatch({action: 'screen-share-loading-state', value: false})
 
             this.dispatch({action: 'webcam-loading-state', value: false})
 

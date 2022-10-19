@@ -11,7 +11,7 @@ import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPus
 import { selectDisplayName, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { playSoundEffect, selectMuteSoundEffectsWhileMutedState } from '../../../settings/soundEffects/soundEffectsSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { selectAudioState, selectCurrentScreen, selectMicrophoneState, selectScreenShareState, selectWebCamState, setCurrentScreen, setScreens, setSelectingScreensState, toggleLoadingWebCam } from '../../../controlBar/ControlBarSlice';
+import { selectAudioState, selectCurrentScreen, selectMicrophoneState, selectScreenShareState, selectWebCamState, setCurrentScreen, setScreens, setSelectingScreensState, toggleControlState, toggleLoadingScreenShare, toggleLoadingWebCam } from '../../../controlBar/ControlBarSlice';
 
 // style
 import "./Room.css";
@@ -29,6 +29,7 @@ import { RoomUserWrapper } from './RoomUserWrapper/RoomUserWrapper';
 import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
 import { RoomActionOverlay } from './RoomActionOverlay/RoomActionOverlay';
 import { ChannelBackground } from './ChannelBackground/ChannelBackground';
+import { selectMiscSettingsHideChannelBackground } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 let client;
 
@@ -78,6 +79,7 @@ const Component = () => {
 
     const microphoneInputVolume = useSelector(selectMicInputVolume);
 
+    const hideChannelBackgrounds = useSelector(selectMiscSettingsHideChannelBackground);
     // audio pref state
     const echoCancellation = useSelector(selectEchoCancellatio);
 
@@ -134,8 +136,10 @@ const Component = () => {
         if (arg.action === 'error') return dispatch(throwServerError({errorMessage: arg.value}));
         
         if (arg.action === 'webcam-loading-state') return dispatch(toggleLoadingWebCam(false));
-       // if (arg.action === 'sdp-error') return init(1000);
-    
+        
+        if (arg.action === 'screen-share-loading-state') return dispatch(toggleLoadingScreenShare(arg.value));
+       
+        if (arg.action === 'close-stream') return dispatch(toggleControlState('screenShareState')) ;
     }
 
     const init = async (delay = 100) => {
@@ -234,12 +238,17 @@ const Component = () => {
 
     // handle state change for screen sharing
     React.useEffect(() => {
-        if (currentScreen !== null) {
-            dispatch(setScreens([]));
-            dispatch(setSelectingScreensState(false));
-            client.produce('screenType', currentScreen);
-            dispatch(updateMemberStatus({username: user.username, action: {screenshare: true}}))
-            socket.emit('user status', {username: user.username, action: {screenshare: true}})
+        try {
+            if (currentScreen !== null) {
+                dispatch(setScreens([]));
+                dispatch(setSelectingScreensState(false));
+                client.produce('screenType', currentScreen);
+                dispatch(updateMemberStatus({username: user.username, action: {screenshare: true}}))
+                socket.emit('user status', {username: user.username, action: {screenshare: true}})
+            }
+        } catch (error) {
+            console.log(error);
+            dispatch(throwServerError({errorMessage: error.message}))
         }
     // eslint-disable-next-line
     }, [currentScreen])
@@ -453,7 +462,7 @@ const Component = () => {
                 <RoomActionOverlay />
                 
             </div>
-            <ChannelBackground channel_background={channel.channel_background} />
+            <ChannelBackground channel_background={hideChannelBackgrounds ? null : channel.channel_background} blur={channel.background_blur} />
             <audio hidden={true} id={'microphone-input-source'} />
             <Music />
             <Loading loading={loading} />

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { fetchSavedVoiceVideoSettings, saveVoiceVideoSettings } from "../../../../util/LocalData";
+import { fetchSavedLocalData, saveLocalData } from "../../../../util/LocalData";
 
 export const getMediaDevices = createAsyncThunk(
     'voiceVideoSettingsSlice/getMediaDevices',
@@ -15,7 +15,7 @@ export const getMediaDevices = createAsyncThunk(
                 }
             })
             
-            const saved_data = await fetchSavedVoiceVideoSettings()
+            const saved_data = await fetchSavedLocalData("VOICE/VIDEO", "SETTINGS")
 
             return {device_list: device_list, saved_data: saved_data === null ? {} : saved_data}
         })
@@ -91,7 +91,7 @@ const voiceVideoSettingsSlice = createSlice({
                 micInputVolume: state.micInputVolume
             }
             
-            saveVoiceVideoSettings(obj)
+            saveLocalData("VOICE/VIDEO", "SETTINGS", obj);
         }
     },
     extraReducers: {

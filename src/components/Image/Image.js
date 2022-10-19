@@ -42,7 +42,8 @@ export const Image = ({image, objectFit = 'cover', position = 'relative', zIndex
             transition={{ease: 'linear', duration: 3, repeat: Infinity}}
             ></motion.div>         
             : null}
-            <motion.img onError={handleImageLoad} loading={loadingState} draggable={false} style={{width: '100%', height: '100%', objectFit: objectFit}} initial={{opacity: 0}} animate={imageAnimation} onLoad={handleImageLoad} src={image} alt="Error Loading" />
+            <motion.img 
+            onError={handleImageLoad} loading={loadingState} draggable={false} style={{width: '100%', height: '100%', objectFit: objectFit}} initial={{opacity: 0}} animate={imageAnimation} onLoad={handleImageLoad} src={image} alt="Error Loading" />
         </div>
     )
 }
