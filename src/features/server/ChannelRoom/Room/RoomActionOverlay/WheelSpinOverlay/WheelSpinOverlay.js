@@ -12,7 +12,7 @@ import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../..
 // style
 import "./WheelSpinOverlay.css";
 
-export const WheelSpinOverlay = ({data, onEnd}) => {
+export const WheelSpinOverlay = ({data, onEnd, page}) => {
 
     const textColor = useSelector(selectTextColor);
 
@@ -22,6 +22,9 @@ export const WheelSpinOverlay = ({data, onEnd}) => {
 
     return (
         <motion.div 
+        style={{
+            display: (page === "social" || page === "widgets") ? 'none' : 'flex'
+        }}
         initial={{opacity: 0}}
         animate={{opacity: 1}}
         exit={{opacity: 0}}

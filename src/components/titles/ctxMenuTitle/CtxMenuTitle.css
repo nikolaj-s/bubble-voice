@@ -5,7 +5,7 @@
 
 .ctx-menu-title p {
     margin: 0;
-    padding: 1rem;
+    padding: 0.7rem;
     font-size: 0.8rem;
     font-weight: 400;
     letter-spacing: var(--font-spacing);

@@ -55,6 +55,14 @@ export const UpdateAvailable = () => {
 
         }
 
+        if (updateAvailable) {
+            try {
+                document.getElementById('disconnect-from-server-button')?.click();
+            } catch (e) {
+                return;
+            }
+        }
+
         return () => {
 
             if (el) el.style.display = 'flex';

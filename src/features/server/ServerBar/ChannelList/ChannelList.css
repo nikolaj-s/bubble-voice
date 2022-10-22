@@ -1,6 +1,6 @@
 .channel-list-outer-container {
     width: 100%;
-    max-height: calc(100% - 380px);
+    max-height: calc(100% - 362px);
     flex-shrink: 2;
     overflow-y: auto;
     overflow-x: hidden;

@@ -14,6 +14,7 @@ export const AudioToggleButton = ({action, state, active, id}) => {
         action={action}
         active={active}
         opacity={0.5}
+        invert={true}
         id={id}
         >
             {state ?

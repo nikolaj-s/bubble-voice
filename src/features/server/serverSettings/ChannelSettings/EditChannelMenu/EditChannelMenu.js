@@ -57,22 +57,18 @@ const Wrapper = () => {
         setChannelName(channelToEdit.channel_name);
 
         setPersistChannelSocial(channelToEdit.persist_social)
-
+        
         if (channelToEdit.background_blur) {
 
             setBackgroundBlur(channelToEdit.background_blur);
         
-        } else {
-
-            setBackgroundBlur(10)
-        
         }
-
+        
         return () => {
             dispatch(setHeaderTitle(""));
         }
     // eslint-disable-next-line
-    }, [])
+    }, [channelToEdit])
 
     React.useEffect(() => {
 
@@ -129,7 +125,7 @@ const Wrapper = () => {
 
     const handleUpdateChannel = async () => {
 
-        if (channelBackground?.size > 900000) return dispatch(throwServerError({errorMessage: 'image cannot be larger than 1mb'}));
+        if (channelBackground?.size > 950000) return dispatch(throwServerError({errorMessage: 'image cannot be larger than 1mb'}));
 
         handleToggleLoading(true);
 
@@ -172,7 +168,7 @@ const Wrapper = () => {
         })
         .then(() => {
 
-            window.location.hash = window.location.hash.split('/channel/')[0];
+            window.location.hash = window.location.hash.split('/channels/')[0] + '/channels';
 
         })
         .catch(error => {
@@ -184,7 +180,7 @@ const Wrapper = () => {
     }
 
     const handleSettingChannelBackground = (data) => {
-        if (data.size > 900000) return dispatch(throwServerError({errorMessage: 'image cannot be larger than 1mb'}));
+        if (data.size > 950000) return dispatch(throwServerError({errorMessage: 'image cannot be larger than 1mb'}));
         
         setChannelBackground(data);
 
@@ -197,6 +193,7 @@ const Wrapper = () => {
         setBackgroundBlur(value);
 
         toggleEdited(true);
+    
     }
 
     return (
@@ -212,7 +209,7 @@ const Wrapper = () => {
             <InputTitle title={"Image"} />
             <ChannelBackgroundInput blur={backgroundBlur} initialImage={channelToEdit?.channel_background} getFile={handleSettingChannelBackground} />
             <InputTitle title={"Blur Amount"} />
-            <Range action={handleBlurChange} value={backgroundBlur}  min={0} max={10} step={1} />
+            <Range action={handleBlurChange} value={backgroundBlur} min={0} max={10} step={1} />
             <SettingsHeader title={"Widgets"} />
             <InputTitle title={`Widgets ${channelToEdit.widgets ? channelToEdit.widgets.length : 0} / 15`} />
             <WidgetPreview widgets={widgets} editing={true} reorder={updateWidgetOrder} />

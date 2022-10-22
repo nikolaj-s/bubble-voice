@@ -24,8 +24,14 @@ export const DropDownList = ({selectedItem, list = ["No Options"], action, state
         action(stateType, item)
     }
 
+    const mouseLeave = () => {
+        toggleOpen(false);
+    }
+
     return (
-        <div className='drop-down-container'>
+        <div 
+        onMouseLeave={mouseLeave}
+        className='drop-down-container'>
             <TextButton textAlign='start' action={toggleDropDown} name={selectedItem} />
             {open && stateType !== 'error' ?
             <div 

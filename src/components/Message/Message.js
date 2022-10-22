@@ -1,6 +1,6 @@
 // library's
 import React from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 // components
 import { Image } from '../Image/Image'
@@ -8,20 +8,32 @@ import { Video } from '../Video/Video'
 import { MessageLoadingIndicator } from './MessageLoadingIndicator/MessageLoadingIndicator';
 
 // state
-import { selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./Message.css";
 import { TextParser } from './TextParser/TextParser';
+import { setExpandedContent } from '../../features/ExpandContent/ExpandContentSlice';
 
 export const Message = ({ message, overlay = false }) => {
 
+    const dispatch = useDispatch();
+
     const textColor = useSelector(selectTextColor);
     
+    const primaryColor = useSelector(selectPrimaryColor);
+
+    const expandContent = (source) => {
+        dispatch(setExpandedContent(source))
+    }
+
     return (
         <div 
         style={{
-            borderTop: overlay ? null : `solid 2px ${textColor}`
+            border: overlay ? null : `solid 2px ${textColor}`,
+            backgroundColor: overlay ? null : primaryColor,
+            padding: overlay ? null : 10,
+            borderRadius: overlay ? null : 15
         }}
         id={message._id}
         className='message-container'>
@@ -42,6 +54,7 @@ export const Message = ({ message, overlay = false }) => {
                 height: 500,
                 backgroundColor: 'black'
             }}
+            onClick={() => {expandContent(message.image)}}
             className='message-image-container'>
                 <Image loadingState='lazy' objectFit='contain' image={message.image} />
             </div>

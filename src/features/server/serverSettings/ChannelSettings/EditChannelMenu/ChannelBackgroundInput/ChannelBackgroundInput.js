@@ -21,7 +21,7 @@ export const ChannelBackgroundInput = ({initialImage, getFile, blur}) => {
                     <div style={{border: `solid 4px ${accentColor}`}}></div>
                 </div>
             </div>
-            <ImageInput blur={true} blur_amount={blur} initalImage={initialImage} getFile={getFile} />
+            <ImageInput size={950000} blur={true} blur_amount={blur} initalImage={initialImage} getFile={getFile} />
         </div>
     )
 }

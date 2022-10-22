@@ -83,3 +83,8 @@
 .editing-widgets-preview-container .inner-music-widget-container {
     max-width: 95%;
 }
+
+.editing-widgets-preview-container .plainText {
+    width: 100%;
+    cursor: grab;
+}

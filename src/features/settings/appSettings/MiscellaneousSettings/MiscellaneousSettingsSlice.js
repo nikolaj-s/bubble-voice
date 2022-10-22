@@ -51,7 +51,8 @@ const MiscellaneousSettingsSlice = createSlice({
         disableMessagePopUp: false,
         hideChannelBackground: false,
         hideNonVideoParticapents: false,
-        disableGifProfiles: false
+        disableGifProfiles: false,
+        roomScale: 1
     },
     reducers: {
         miscSettingsClearLocalData: (state, action) => {
@@ -84,6 +85,9 @@ const MiscellaneousSettingsSlice = createSlice({
             }
 
             saveLocalData("MISC", "MISCSETTINGS", obj);
+        },
+        changeRoomScale: (state, action) => {
+            state.roomScale = action.payload;
         }
     },
     extraReducers: {
@@ -133,7 +137,9 @@ export const selectMiscSettingsHideChannelBackground = state => state.Miscellane
 
 export const selectMiscSettingsHideNonVideoParticapents = state => state.MiscellaneousSettingsSlice.hideNonVideoParticapents;
 
-export const { miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, miscSettingsClearError, miscSettingsChannelSpecificStateChange } = MiscellaneousSettingsSlice.actions;
+export const selectRoomScale = state => state.MiscellaneousSettingsSlice.roomScale;
+
+export const { changeRoomScale, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, miscSettingsClearError, miscSettingsChannelSpecificStateChange } = MiscellaneousSettingsSlice.actions;
 
 
 export default MiscellaneousSettingsSlice.reducer;

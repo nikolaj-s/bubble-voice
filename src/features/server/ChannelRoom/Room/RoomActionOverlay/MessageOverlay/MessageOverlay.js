@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { selectPrimaryColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectMiscSettingsDisableMessagePopUp } from '../../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
-export const MessageOverlay = ({data, onEnd}) => {
+export const MessageOverlay = ({data, onEnd, page}) => {
 
     const primaryColor = useSelector(selectPrimaryColor);
 
@@ -31,8 +31,8 @@ export const MessageOverlay = ({data, onEnd}) => {
         <motion.div 
         key={"message-prev-overlay"}
         style={{
-            display: messageOverlayDisabled ? 'none' : 'flex',
-            backgroundColor: `rgba${primaryColor.split('rgb')[1].split(')')[0]}, 0.5)`
+            display: messageOverlayDisabled || (page === 'social' || page === "widgets") ? 'none' : 'flex',
+            backgroundColor: `rgba${primaryColor.split('rgb')[1].split(')')[0]}, 0.5)`,
         }}
         initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} className='message-overlay-container'>
             <Message overlay={true} message={data} />

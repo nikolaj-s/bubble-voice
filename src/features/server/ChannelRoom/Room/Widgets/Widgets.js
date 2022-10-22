@@ -25,9 +25,7 @@ export const Widgets = () => {
         <motion.div 
         key={"room-content-container"}
         className='content-outer-container'
-        style={{
-            backgroundColor: secondaryColor
-        }}
+        
         initial={{
             opacity: 0,
         }}

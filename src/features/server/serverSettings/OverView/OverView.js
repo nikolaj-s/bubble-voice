@@ -11,6 +11,7 @@ import { SettingsSpacer } from "../../../../components/Spacers/SettingsSpacer/Se
 import { InputPlaceHolder } from '../../../../components/titles/InputPlaceHolder/InputPlaceHolder';
 import { Image } from '../../../../components/Image/Image';
 import { ApplyCancelButton } from '../../../../components/buttons/ApplyCancelButton/ApplyCancelButton';
+import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 
 // state
 import { selectServerBanner, selectServerName, selectUsersPermissions, setServerName, throwServerError, updateServerBanner } from '../../ServerSlice';
@@ -148,7 +149,7 @@ const Wrapper = () => {
     
     return (
         <>
-        
+        <SettingsHeader title={"Banner"} />
         {permissions?.user_can_edit_server_name ?
         <>
         <InputTitle title={"Update Server Name"} />
@@ -166,7 +167,8 @@ const Wrapper = () => {
             <InputTitle title={"Update Server Banner"} />
             <div style={{
                 position: 'relative',
-                height: 500
+                height: 500,
+                minHeight: 500
             }}>
                 <ImageInput getFile={handleBannerChange} initalImage={serverBanner} />
             </div>
@@ -177,18 +179,26 @@ const Wrapper = () => {
             <div
             style={{
                 width: '100%',
-                height: '100%',
-                maxHeight: '400px',
+                height: '500px',
+                maxHeight: '500px',
                 borderRadius: '15px',
-                overflow: 'hidden'
+                overflow: 'hidden',
+                minHeight: 500,
+                flexShrink: 0
             }}
             >
                 <Image image={serverBanner} /> 
             </div>
             </>
             }
+        {permissions?.user_can_edit_server_banner && permissions?.user_can_edit_server_name ?
+        <>
+        <SettingsHeader title={"Dashboard"} />
+        </>
+        : null}
         {permissions?.user_can_edit_server_password ?
         <>
+        <SettingsHeader title={"Security"} />
         <InputTitle title={"Update Server Password"} />
         <TextInput action={(data) => {setServerPassword(data)}} value={serverPassword} marginBottom='2%' placeholder={"Current Password"} type="password" />
         <TextInput action={(data) => {setNewServerPassword(data)}} value={newServerPassword} marginBottom='2%' placeholder={"New Password"} type="password" />

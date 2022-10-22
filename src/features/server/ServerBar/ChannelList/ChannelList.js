@@ -95,7 +95,7 @@ export const ChannelList = () => {
     React.useEffect(() => {
 
         animaiton.start({
-            maxHeight: 'calc(100% - 380px)',
+            maxHeight: 'calc(100% - 362px)',
             opacity: 1
         }).then(() => {
             animaiton.start({
@@ -116,7 +116,7 @@ export const ChannelList = () => {
             opacity: 0
         }}
         animate={animaiton}
-        transition={{duration: 0.5}}
+        transition={{duration: 0.3}}
         className='channel-list-outer-container'>
                 
                 <div className='channel-list-button-wrapper'>

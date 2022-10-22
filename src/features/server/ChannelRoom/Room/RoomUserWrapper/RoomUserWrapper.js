@@ -1,4 +1,6 @@
 import React from 'react'
+import { useSelector } from 'react-redux';
+import { selectMiscSettingsHideNonVideoParticapents } from '../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { User } from '../User/User'
 
 export const RoomUserWrapper = ({users}) => {
@@ -27,6 +29,9 @@ export const RoomUserWrapper = ({users}) => {
                 child.style.top = '0';
                 child.style.left = '0';
                 child.style.zIndex = '1';
+
+                child.style.borderTopRightRadius = '0px';
+                child.style.borderTopLeftRadius = '0px';
         
             } else {
                 const v = child.querySelector('video');
@@ -36,7 +41,8 @@ export const RoomUserWrapper = ({users}) => {
                     v.style.objectFit = 'cover'
                 
                 }
-
+                child.style.borderTopRightRadius = '15px';
+                child.style.borderTopLeftRadius = '15px';
                 child.style.maxWidth = '600px';
                 child.style.maxHeight = 'minmax(30%, 400px)';
                 child.style.position = 'relative';

@@ -116,6 +116,7 @@ const serverSlice = createSlice({
         pushToTalkActive: false,
         //social
         textInput: "",
+        selectedChannelSocial: "", 
         // music
         musicQueue: [],
         musicPlaying: false,
@@ -158,6 +159,7 @@ const serverSlice = createSlice({
             state.current_channel_id = null;
             state.editing_channel_id = null;
             state.joiningChannel = false;
+            state.selectedChannelSocial = "";
         },
         setUserImages: (state, action) => {
             const userIndex = state.members.findIndex(member => member.user_name === action.payload.username)
@@ -420,6 +422,9 @@ const serverSlice = createSlice({
         },
         updateJoiningChannelState: (state, action) => {
             state.joiningChannel = action.payload;
+        },
+        setChannelSocialId: (state, action) => {
+            state.selectedChannelSocial = action.payload;
         }
     },
     extraReducers: {
@@ -518,6 +523,16 @@ export const selectCurrentChannel = state => {
     return state.serverSlice.channels[index];
 }
 
+export const selectCurrentlyViewChannelSocial = state => {
+    const index = state.serverSlice.channels.findIndex(channel => channel._id === state.serverSlice.selectedChannelSocial);
+
+    if (index === -1) return {error: true, errorMessage: "channel not found"}
+
+    return state.serverSlice.channels[index];
+}
+
+export const selectChannelSocialId = state => state.serverSlice.selectedChannelSocial;
+
 export const selectLoadingChannel = state => state.serverSlice.loadingChannel;
 
 export const selectServerSettingsOpenState = state => state.serverSlice.serverSettingsOpen;
@@ -581,6 +596,6 @@ export const selectTopAnimationPoint = state => state.serverSlice.top_pos;
 
 // actions
 
-export const { setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, setSocialInput, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
+export const {setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, setSocialInput, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
 
 export default serverSlice.reducer;

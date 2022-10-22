@@ -16,7 +16,7 @@ import { selectSecondaryColor } from '../../../features/settings/appSettings/app
 import "./Loading.css";
 
 
-export const Loading = ({loading = false, error = false, overflow = true, success_size = {width: 75, height: 75}}) => {
+export const Loading = ({loading = false, error = false, overflow = true, success_size = {width: 75, height: 75}, show_success = true, zIndex = 6}) => {
 
     const [localLoading, toggleLoading] = React.useState(false);
 
@@ -41,7 +41,7 @@ export const Loading = ({loading = false, error = false, overflow = true, succes
 
             toggleLoading(true)
             toggleMounted(true)
-        } else if (mounted === true) {
+        } else if (mounted === true && show_success) {
 
             if (el && overflow) {
                 el.style.overflowY = 'auto'
@@ -59,6 +59,9 @@ export const Loading = ({loading = false, error = false, overflow = true, succes
                 toggleError(false)
                 toggleSuccess(false)
             }, 300)
+        } else {
+            toggleLoading(false)
+            toggleSuccess(false)
         }
 
         return () => {
@@ -84,7 +87,8 @@ export const Loading = ({loading = false, error = false, overflow = true, succes
         animate={{backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0] + ', 0.7)'}`}}
         exit={{backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0] + ', 0)'}`}}
         style={{
-            backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0] + ', 0.7)'}`
+            backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0] + ', 0.7)'}`,
+            zIndex: zIndex
         }}
         className='loading-container' >
             

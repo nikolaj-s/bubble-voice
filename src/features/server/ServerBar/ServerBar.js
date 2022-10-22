@@ -28,6 +28,8 @@ import { ServerSettingsMenu } from '../serverSettings/ServerSettingsMenu';
 // style's
 import "./ServerBar.css"
 import { selectCurrentScreen, setCurrentScreen, toggleControlState } from '../../controlBar/ControlBarSlice';
+import { handleUpdateAvailable } from '../../../app/appSlice';
+import { DisconnectButtonWrapper } from './DisconnectButtonWrapper/DisconnectButtonWrapper';
 
 export let socket = null;
 
@@ -77,12 +79,12 @@ const Bar = () => {
     const topPointAnimationLocation = useSelector(selectTopAnimationPoint);
     
     const handleConnectionLost = () => {
-
+        console.log('connection time out')
         if (window.location.hash.includes('disconnected')) return;
         
         if (window.location.hash.includes('/channel/')) {
 
-            disconnect();
+            document.getElementById('disconnect-from-channel-button').click();
 
         }
         
@@ -130,6 +132,9 @@ const Bar = () => {
             handleConnectionLost();
             console.log('server connection error')
             
+        })
+        socket.on('ping timeout', () => {
+            console.log('timed out')
         })
         socket.on('user joins channel', (data) => {
             dispatch(userJoinsChannel(data))
@@ -604,16 +609,7 @@ const Bar = () => {
             <ServerSettingsMenu />
             </>
             }
-            {current_channel_id !== null ? <DisconnectButton action={disconnect} /> : null}
-            <motion.div 
-            initial={{display: 'none'}}
-            animate={{display: 'flex'}}
-            style={{
-                width: current_channel_id ? "calc(100% - 125px)" : "90%"
-            }}
-            className='leave-server-button'>
-                <TextButton id='disconnect-from-server-button' action={() => {leaveServer(false)}} name={"Leave Server"} />
-            </motion.div>
+            <DisconnectButtonWrapper disconnect={disconnect} leave={leaveServer} channel_id={current_channel_id} /> 
         </motion.div>
     )
 }

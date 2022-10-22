@@ -26,8 +26,10 @@ export const ChannelButton = ({channel, action = () => {}, users}) => {
 
     const textColor = useSelector(selectTextColor);
 
+    const active = window.location.hash.includes(channel._id);
+
     const handleAnimation = (color) => {
-        if (channel.active) return;
+        if (active) return;
         animation.start({
             border: `solid 4px ${color}`
         })
@@ -38,8 +40,9 @@ export const ChannelButton = ({channel, action = () => {}, users}) => {
     }
 
     React.useEffect(() => {
+       
         animation.start({
-            border: `solid 4px ${channel.active ? accentColor : primaryColor}`
+            border: `solid 4px ${active ? accentColor : primaryColor}`
         })
         setUsersState(users)
     // eslint-disable-next-line
@@ -56,13 +59,13 @@ export const ChannelButton = ({channel, action = () => {}, users}) => {
             onMouseUp={() => {handleAnimation(accentColor)}}
             onClick={handleAction}
             style={{
-                border: `solid 4px ${channel.active ? accentColor : primaryColor}`,
-                backgroundColor: channel.active ? accentColor : primaryColor,
-                cursor: channel.active ? "default" : "pointer",
+                border: `solid 4px ${active ? accentColor : primaryColor}`,
+                backgroundColor: active ? accentColor : primaryColor,
+                cursor: active ? "default" : "pointer",
             }}
             className='channel-button-container'>
               <h3 style={{color: textColor}}>{channel.channel_name}</h3>  
-              <SubMenuButton />
+              <SubMenuButton target={`channel-button-${channel._id}`} width={15} height={15} borderRadius={10} />
             </motion.div>
             {usersState.map((user) => {
                 return (

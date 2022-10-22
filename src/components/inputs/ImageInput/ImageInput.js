@@ -23,7 +23,8 @@ export const ImageInput = ({
     zIndex = "0",
     getFile = () => {},
     blur = false,
-    blur_amount = 8
+    blur_amount = 8,
+    size = 4000000
 }) => {
 
     // state
@@ -50,6 +51,8 @@ export const ImageInput = ({
         onDrop: acceptedFiles => {
 
             if (acceptedFiles.length === 0) return;
+
+            if (acceptedFiles[0]?.size > size) return getFile({size: size += 1000});
 
             setFiles(acceptedFiles.map(file => Object.assign(file, {
                 preview: URL.createObjectURL(file)

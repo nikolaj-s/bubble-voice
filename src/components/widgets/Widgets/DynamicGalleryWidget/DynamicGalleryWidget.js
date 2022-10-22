@@ -1,7 +1,7 @@
 // library's
 import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { wrap } from 'popmotion'
 
 // state
@@ -13,8 +13,11 @@ import { Image } from '../../../Image/Image'
 // style
 import "./DynamicGalleryWidget.css";
 import { GalleryNavigation } from './GalleryNavigation/GalleryNavigation';
+import { setExpandedContent } from '../../../../features/ExpandContent/ExpandContentSlice';
 
 export const DynamicGalleryWidget = ({widget, editing}) => {
+
+    const dispatch = useDispatch();
 
     const [[page, direction], setPage] = React.useState([0, 0]);
 
@@ -55,6 +58,9 @@ export const DynamicGalleryWidget = ({widget, editing}) => {
         setPage([page + newDirection, newDirection]);
     };
     
+    const handleExpansion = () => {
+      dispatch(setExpandedContent(images[imageIndex]));
+    }
 
     return (
         <div 
@@ -63,7 +69,7 @@ export const DynamicGalleryWidget = ({widget, editing}) => {
                 <motion.div
                 className='image-gallery-animation-wrapper'
                 key={page}
-                
+                onClick={handleExpansion}
                 custom={direction}
                 variants={variants}
                 initial="enter"

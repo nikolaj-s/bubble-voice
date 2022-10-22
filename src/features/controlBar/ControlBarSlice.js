@@ -41,6 +41,8 @@ const controlBarSlice = createSlice({
             state.webCamState = true;
             state.audioState = true;
             state.screenShareState = true;
+            state.loadingWebCam = false;
+            state.loadingScreenShare = false;
         },
         setSelectingScreensState: (state, action) => {
             state.selectingScreens = action.payload;

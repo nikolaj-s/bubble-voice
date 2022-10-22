@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as mediasoupClient from 'mediasoup-client';
 
 // state
-import { updateMusicState, selectCurrentChannel, selectCurrentChannelId, selectMusicPlayingState, selectMusicQueue, selectPushToTalkActive, selectServerId, toggleLoadingChannel, updateMemberStatus, selectServerMembers, throwServerError, updateJoiningChannelState } from '../../ServerSlice';
+import { updateMusicState, selectCurrentChannel, selectCurrentChannelId, selectPushToTalkActive, selectServerId, toggleLoadingChannel, updateMemberStatus, selectServerMembers, throwServerError, updateJoiningChannelState, setChannelSocialId } from '../../ServerSlice';
 import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPushToTalkState, selectMirroredWebCamState, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
 import { selectDisplayName, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { playSoundEffect, selectMuteSoundEffectsWhileMutedState } from '../../../settings/soundEffects/soundEffectsSlice';
@@ -30,6 +30,7 @@ import { Loading } from '../../../../components/LoadingComponents/Loading/Loadin
 import { RoomActionOverlay } from './RoomActionOverlay/RoomActionOverlay';
 import { ChannelBackground } from './ChannelBackground/ChannelBackground';
 import { selectMiscSettingsHideChannelBackground } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { SubMenuButton } from '../../../../components/buttons/subMenuButton/SubMenuButton';
 
 let client;
 
@@ -144,8 +145,6 @@ const Component = () => {
 
     const init = async (delay = 100) => {
 
-        client = null;
-
         client = new RoomClient(socket, current_channel_id, server_id, mediasoupClient, audioDevice, videoDevice, microphoneState, webcamState, user, event, audioState, webCamMirroredState, echoCancellation, noiseSuppression, microphoneInputVolume)
 
         await client.join();
@@ -156,6 +155,11 @@ const Component = () => {
     }
 
     const cycleChannelPage = (page) =>  {
+
+        if (page === 'social') {
+            dispatch(setChannelSocialId(""));
+        }
+
         setPage(page);
     }
 
@@ -450,23 +454,44 @@ const Component = () => {
     // eslint-disable-next-line   
     }, [pushToTalk, voiceActivityDetection, loaded, current_channel_id, microphoneState, pushToTalkActive])
     
+    React.useEffect(() => {
+        const children = document.getElementById('live-chat-wrapper').children;
+        
+        if (page === 'social' || page === 'widgets') {
+            for (const c of children) {
+                if (c.className === "streaming-video-player-container" || c.className === 'active-user-container') {
+                    c.style.opacity = 0;
+                }
+            }
+        } else {
+            for (const c of children) {
+                if (c.className === "streaming-video-player-container" || c.className === 'active-user-container') {
+                    c.style.opacity = 1;
+                }
+            }
+        }
+            
+    }, [page, channel.users])
+
     return (
         <>
             <RoomNavigation action={cycleChannelPage} page={page} />
-            <div id='live-chat-wrapper'>
+            <div
+            
+            id='live-chat-wrapper'>
                 <RoomUserWrapper users={channel.users} />
                 <AnimatePresence>
-                    {page === "social" ? <Social /> : null}
+                    {page === "social" ? <Social currentChannel={channel} channelId={current_channel_id} /> : null}
                     {page === "widgets" ? <Widgets /> : null}
                 </AnimatePresence>
-                <RoomActionOverlay />
+                <RoomActionOverlay page={page} />
                 
             </div>
+            <SubMenuButton target={'live-chat-wrapper'} borderRadius={10} zIndex={1} position={"absolute"} top={5} right={10} height={15} left={null} width={15} />
             <ChannelBackground channel_background={hideChannelBackgrounds ? null : channel.channel_background} blur={channel.background_blur} />
             <audio hidden={true} id={'microphone-input-source'} />
             <Music />
             <Loading loading={loading} />
-
         </>
     )
 }

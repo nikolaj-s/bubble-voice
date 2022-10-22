@@ -10,7 +10,7 @@ import "./NowPlayingOverlay.css";
 import { useSelector } from 'react-redux';
 import { selectPrimaryColor, selectTextColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
-export const NowPlayingOverlay = ({ data, onEnd = () => {} }) => {
+export const NowPlayingOverlay = ({ data, onEnd = () => {}, page}) => {
 
     const textColor = useSelector(selectTextColor);
 
@@ -33,7 +33,8 @@ export const NowPlayingOverlay = ({ data, onEnd = () => {} }) => {
         animate={{opacity: 1}}
         exit={{opacity: 0}}
         style={{
-            backgroundColor: `rgba${primaryColor.split('rgb')[1].split(')')[0]}, 0.5)`
+            backgroundColor: `rgba${primaryColor.split('rgb')[1].split(')')[0]}, 0.5)`,
+            display: (page === "social" || page === "widgets") ? 'none' : 'flex'
         }}
         className="now-playing-overlay-container">
             <h1

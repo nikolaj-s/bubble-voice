@@ -8,7 +8,7 @@ import { CtxButton } from '../ctxButton/CtxButton';
 // style
 import "./MoveUser.css";
 
-export const MoveUser = ({move = () => {}}) => {
+export const MoveUser = ({move = () => {}, movingMenu}) => {
 
     const [expanded, toggleExpanded] = React.useState(false);
 

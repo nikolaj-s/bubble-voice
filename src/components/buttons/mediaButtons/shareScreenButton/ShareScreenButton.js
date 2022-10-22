@@ -17,6 +17,7 @@ export const ShareScreenButton = ({action, state, active, loading}) => {
     active={active}
     opacity={0.5}
     position={'relative'}
+    invert={true}
     >
         {state ? 
         <svg

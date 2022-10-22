@@ -9,9 +9,9 @@ export const ConnectionIndicator = ({active}) => {
 
     return (
         <div style={{
-            width: 35,
-            height: 35,
-            padding: "5px 0 0 5px",
+            width: 25,
+            height: 25,
+            padding: "10px",
             opacity: active ? 1 : 0.2
         }}>
             <svg style={{

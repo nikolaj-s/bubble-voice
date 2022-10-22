@@ -1,9 +1,9 @@
 
 
 .control-bar-container {
-    width: 90%;
-    height: 80px;
-    min-height: 80px;
+    width: 95%;
+    height: 60px;
+    min-height: 60px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -15,5 +15,8 @@
 }
 
 .controls-wrapper {
+    width: 100%;
+    align-items: center;
     display: flex;
+    justify-content: space-between;
 }

@@ -51,7 +51,7 @@ export class RoomClient {
 
         this.microphoneInputVolume = microphoneInputVolume;
     }
-
+    
     updateAudioPrefs(noiseSuppression, echoCancellation, microphoneInputVolume) {
 
         this.noiseSuppression = noiseSuppression;
@@ -153,6 +153,7 @@ export class RoomClient {
             }.bind(this));
 
             this.consumerTransport.on('connectionstatechange', async function(state) {
+                console.log(state)
                 switch (state) {
                     case 'connecting':
                         break
@@ -220,7 +221,7 @@ export class RoomClient {
         try {
             this.getConsumeStream(producer_id)
             .then( function (data) {
-                
+                console.log(data)
                 let consumer = data?.consumer;
 
                 if (consumer === undefined) return;
@@ -279,31 +280,34 @@ export class RoomClient {
 
                     document.getElementById(user._id).parentNode.appendChild(par)
                 } else {
-                    // handle incoming audio
-                    const user_pref_volume = USER_PREFS.get(user._id);
-
                     el = document.createElement('audio')
 
                     el.hidden = true;
 
                     el.srcObject = stream;
 
-                    el.className = `audio-source-for-user-${user._id}`;
-
                     el.id = consumer.id;
-
-                    el.playsInline = false;
 
                     el.muted = this.audioState;
 
                     el.autoplay = true;
+                    // handle incoming audio
+                    if (user.username !== 'music-bot') {
+                        const user_pref_volume = USER_PREFS.get(user._id);
 
-                    el.volume = user_pref_volume?.volume ? user_pref_volume.volume : 1;
+                        el.className = `audio-source-for-user-${user._id}`;
+
+                        el.volume = user_pref_volume?.volume ? user_pref_volume.volume : 1;
+                        
+                        document.getElementById(user._id).appendChild(el)
+                    } else {
+                        document.getElementById('live-chat-wrapper').appendChild(el);
+                    }
                     
-                    document.getElementById(user._id).appendChild(el)
 
                 }
 
+                
                 consumer.on('trackended', function () {
                     this.removeConsumer(consumer.id);
                 }.bind(this))
@@ -342,40 +346,46 @@ export class RoomClient {
     }    
 
     closeProducer(type) {
-        if (!this.producerLabel.has(type)) {
-            console.log('There is no producer for this type ' + type)
-            return
-          }
-      
-          let producer_id = this.producerLabel.get(type)
-  
-          console.log('Close producer', producer_id)
-      
-          this.socket.emit('producerClosed', {
-            producer_id
-          })
-      
-          this.producers.get(producer_id).close()
-          this.producers.delete(producer_id)
-          this.producerLabel.delete(type)
-  
-          const el = document.getElementById(producer_id);
+        try {
+            if (!this.producerLabel.has(type)) {
+                console.log('There is no producer for this type ' + type)
+                return
+            }
+        
+            let producer_id = this.producerLabel.get(type)
+    
+            console.log('Close producer', producer_id)
+        
+            this.socket.emit('producerClosed', {
+                producer_id
+            })
+        
+            this.producers.get(producer_id)?.close()
+            this.producers.delete(producer_id)
+            this.producerLabel.delete(type)
+    
+            const el = document.getElementById(producer_id);
 
-          const par = document.getElementById(producer_id + 'container');
-  
-          if (type !== mediaType.audio) {
-              el.srcObject.getTracks().forEach(track => {
-                  track.stop();
-              })
-  
-              el.remove();
-          }
+            const par = document.getElementById(producer_id + 'container');
+    
+            if (type !== mediaType.audio) {
+                el.srcObject.getTracks().forEach(track => {
+                    track.stop();
+                })
+    
+                el.remove();
+            }
 
-          if (par) {
-            par.remove();
-          }
-  
-          this.producers.delete(producer_id);
+            if (par) {
+                par.remove();
+            }
+    
+            this.producers.delete(producer_id);
+
+        } catch (error) {
+            console.log(error);
+
+        }
     }
 
     async produce(type, deviceId = null) {

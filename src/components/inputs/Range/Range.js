@@ -10,6 +10,8 @@ import "./Range.css";
 
 export const Range = ({min = 0, max = 1, action, step = 0.001, value = 0, fill = false, save = () => {}}) => {
 
+    const ref = React.createRef();
+
     const primaryColor = useSelector(selectPrimaryColor);
 
     const accentColor = useSelector(selectAccentColor);
@@ -26,7 +28,7 @@ export const Range = ({min = 0, max = 1, action, step = 0.001, value = 0, fill =
 
         const local_value = target.value;
 
-        target.style.backgroundSize = (local_value - local_min) * 100 / (local_max - local_min) + '% 100%'
+        ref.current.style.backgroundSize = (local_value - local_min) * 100 / (local_max - local_min) + '% 100%'
     
         action(target.value);
 
@@ -37,9 +39,9 @@ export const Range = ({min = 0, max = 1, action, step = 0.001, value = 0, fill =
         document.getElementById("root").style.setProperty('--range-main-background', textColor);
 
         document.getElementById("root").style.setProperty('--range-main-thumb', accentColor);
-
-        document.getElementById('range-input').style.backgroundSize = (value - min) * 100 / (max - min) + '% 100%'
-    
+        
+        ref.current.style.backgroundSize = (value - min) * 100 / (max - min) + '% 100%'
+        
         // eslint-disable-next-line
     }, [value])
 
@@ -47,7 +49,7 @@ export const Range = ({min = 0, max = 1, action, step = 0.001, value = 0, fill =
         <div 
         style={{backgroundColor: fill ? primaryColor : null}}
         className='range-container'>
-            <input onMouseUp={save} id="range-input"
+            <input ref={ref} onMouseUp={save} id="range-input"
             onChange={handleAction}  type={"range"} min={min} max={max} step={step} value={value} />
         </div>
     )

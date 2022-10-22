@@ -10,16 +10,20 @@
 }
 
 .leave-server-button {
-    width: calc(100% - 125px);
-    left: 5%;
-    bottom: 25px;
     position: absolute;
-    height: 60px;
+    bottom: 20px;
+    justify-self: baseline;
+    width: 90%;
+    display: flex;
+    height: 55px;
+    align-items: center;
 }
 
 .leave-server-button .text-button {
-    height: 60px;
+    height: 55px;
     object-fit: contain;
-    font-size: 1rem;
+    font-size: 1.2rem;
     min-height: 40px;
+    font-size: 0.9rem;
+    margin: 0 0 0 10px;
 }

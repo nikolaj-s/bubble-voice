@@ -18,6 +18,7 @@ import soundEffectsSlice from "../features/settings/soundEffects/soundEffectsSli
 import contextMenuSlice from "../features/contextMenu/contextMenuSlice";
 import RoomActionOverlaySlice from "../features/server/ChannelRoom/Room/RoomActionOverlay/RoomActionOverlaySlice";
 import MiscellaneousSettingsSlice from "../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice";
+import ExpandContentSlice from "../features/ExpandContent/ExpandContentSlice";
 
 const { configureStore } = require("@reduxjs/toolkit");
 
@@ -47,6 +48,7 @@ const store = configureStore({
         createServerSlice: createServerSlice,
         joinServerSlice: joinServerSlice,
         RoomActionOverlaySlice: RoomActionOverlaySlice,
+        ExpandContentSlice: ExpandContentSlice,
         // sound fx
         soundEffectsSlice: soundEffectsSlice,
         // ctx menu

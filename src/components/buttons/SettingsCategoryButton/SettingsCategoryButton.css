@@ -4,9 +4,11 @@
     border-radius: var(--border-radius);
     padding: 0 10px;
     margin: 8px 0;
+    height: 50px;
 }
 
 .settings-category-button h3 {
     font-weight: 400;
+    font-size: 1rem;
     letter-spacing: var(--font-spacing);
 }

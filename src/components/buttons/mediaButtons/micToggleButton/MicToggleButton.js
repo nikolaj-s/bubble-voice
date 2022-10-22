@@ -15,6 +15,7 @@ export const MicToggleButton = ({action, state, active, id}) => {
         active={active}
         opacity={0.5}
         id={id}
+        invert={true}
         >
             {state ?
             <svg 

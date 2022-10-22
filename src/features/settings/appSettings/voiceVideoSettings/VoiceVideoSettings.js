@@ -12,7 +12,7 @@ import { ListenToMicrophoneLevel } from './ListenToMicrophoneLevel/ListenToMicro
 import { ToggleButton } from '../../../../components/buttons/ToggleButton/ToggleButton';
 
 // state
-import { selectAudioInputList, selectAudioInput, updateSelectedDevice, selectAudioOutput, selectAudioOutputList, selectVideoInput, selectVideoInputList, selectPushToTalkState, selectVoiceActivityState, toggleVoiceActivity, toggleSelectedVoiceVideoState, selectMirroredWebCamState, handleSaveVoiceVideoSettings, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, updateMicInputVolume } from './voiceVideoSettingsSlice';
+import { selectAudioInputList, selectAudioInput, updateSelectedDevice, selectAudioOutput, selectAudioOutputList, selectVideoInput, selectVideoInputList, selectPushToTalkState, selectVoiceActivityState, toggleVoiceActivity, toggleSelectedVoiceVideoState, selectMirroredWebCamState, handleSaveVoiceVideoSettings, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, updateMicInputVolume, getMediaDevices } from './voiceVideoSettingsSlice';
 import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/SettingsSpacer';
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 import { Range } from '../../../../components/inputs/Range/Range';
@@ -20,6 +20,7 @@ import { selectMicrophoneState, toggleControlState } from '../../../controlBar/C
 import { PreviewWebCam } from './PreviewWebCam/PreviewWebCam';
 import { ApplyCancelButton } from '../../../../components/buttons/ApplyCancelButton/ApplyCancelButton';
 import { AltError } from '../../../../components/AltError/AltError';
+import { TextButton } from '../../../../components/buttons/textButton/TextButton';
 
 const Settings = () => {
 
@@ -69,6 +70,8 @@ const Settings = () => {
     }, [micInputVolume])
 
     React.useEffect(() => {
+
+        dispatch(getMediaDevices());
 
         if (microphoneState === true) {
 
@@ -120,6 +123,10 @@ const Settings = () => {
         togglePreviewingWebCam(bool);
     }
 
+    const refreshDeviceList = () => {
+        dispatch(getMediaDevices());
+    }
+
     return (
         <div className='settings-wrapper'>
             <SettingsHeader title={"Devices"} />
@@ -129,7 +136,8 @@ const Settings = () => {
             <DropDownList action={selectDevice} stateType={"audiooutput"} selectedItem={selectedAudioOutput.label} list={selectedAudioOutputList} />
             <InputTitle title={"Select Video Input Device"} />
             <DropDownList action={selectDevice} stateType={"videoinput"} selectedItem={selectedVideoInput.label} list={selectedVideoInputList} />
-            
+            <InputTitle title={"Refresh Device Lists"} />
+            <TextButton name={"Refresh"} action={refreshDeviceList} />
             <SettingsHeader title={"Audio Settings"} />
             <InputTitle title={"Test Mic Input"} />
             <ListenToMicrophoneLevel />

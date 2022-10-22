@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 // state
 import { selectPrimaryColor, selectSecondaryColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
-export const Image = ({image, objectFit = 'cover', position = 'relative', zIndex = 0, loadingState = ''}) => {
+export const Image = ({image, objectFit = 'cover', position = 'relative', zIndex = 0, loadingState = '', opacity = 1}) => {
 
     const [loading, toggleLoading] = React.useState(true);
 
@@ -25,7 +25,7 @@ export const Image = ({image, objectFit = 'cover', position = 'relative', zIndex
     }
 
     return (
-        <div style={{zIndex: zIndex, position: position, objectFit: objectFit, width: '100%', height: '100%'}}>
+        <div style={{zIndex: zIndex, position: position, objectFit: objectFit, width: '100%', height: '100%', opacity: opacity}}>
             {loading && image !== "" && image !== undefined ?
             <motion.div 
             style={{
@@ -35,7 +35,7 @@ export const Image = ({image, objectFit = 'cover', position = 'relative', zIndex
                 left: 0,
                 width: '100%',
                 height: '100%',
-                backgroundSize: '600% 600%'
+                backgroundSize: '600% 600%',
             }}
             initial={{backgroundPosition: '0% 50%'}}
             animate={{backgroundPosition: ['0% 50%', '300% 50%']}}

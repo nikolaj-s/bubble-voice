@@ -23,7 +23,7 @@ export const ButtonAnimationWrapper = ({action = () => {}, position = '', zIndex
         if (e) e.stopPropagation();
         if (active) return;
         animation.start({
-            backgroundColor: color
+            filter: `contrast(${color})`
         })
         
     }
@@ -34,8 +34,8 @@ export const ButtonAnimationWrapper = ({action = () => {}, position = '', zIndex
 
     React.useEffect(() => {
         animation.start({
-            backgroundColor: active && opacity === 1 ? accentColor : darkMode ? "rgba(0, 0, 0, 0)" : "rgba(255, 255, 255, 0)",
-            opacity: active ? opacity : 1
+            opacity: active ? opacity : 1,
+            filter: invert ? 'contrast(100%)' : active ? `contrast(${50}%)` : `contrast(${100}%)`
         })
     // eslint-disable-next-line
     }, [active])
@@ -46,6 +46,7 @@ export const ButtonAnimationWrapper = ({action = () => {}, position = '', zIndex
         onClick={handleAction}
         className={className}
         style={{
+            backgroundColor: invert ? secondaryColor : active ? primaryColor : secondaryColor,
             borderRadius: borderRadius,
             width: width,
             height: height,
@@ -64,10 +65,10 @@ export const ButtonAnimationWrapper = ({action = () => {}, position = '', zIndex
             right: right,
         }}
         animate={animation}
-        onMouseEnter={(e) => {handleAnimation(!invert ? primaryColor : secondaryColor, e)}}
-        onMouseLeave={(e) => {handleAnimation(darkMode ? "rgba(0, 0, 0, 0)" : "rgba(255, 255, 255, 0)", e)}}
-        onMouseDown={(e) => {handleAnimation(!invert ? accentColor : accentColor, e)}}
-        onMouseUp={(e) => {handleAnimation(!invert ? primaryColor : secondaryColor, e)}}
+        onMouseEnter={(e) => {handleAnimation('50%', e)}}
+        onMouseLeave={(e) => {handleAnimation('100%', e)}}
+        onMouseDown={(e) => {handleAnimation('80%', e)}}
+        onMouseUp={(e) => {handleAnimation('50%', e)}}
         transition={{duration: 0.1}}
         >
             {children}

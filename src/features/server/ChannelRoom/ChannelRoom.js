@@ -8,6 +8,7 @@ import { CreateChannelMenu } from './CreateChannelMenu/CreateChannelMenu'
 import { Room } from './Room/Room'
 import { Error } from '../../../components/Error/Error';
 import { AnimatePresence } from 'framer-motion'
+import { SocialRoute } from './SocialRoute/SocialRoute'
 
 export const RoomWrapper = () => {
 
@@ -26,7 +27,8 @@ export const RoomWrapper = () => {
         <CreateChannelMenu />
         <ServerSettingsRouteWrapper />
         <Room />
-        <AnimatePresence>
+        <AnimatePresence exitBeforeEnter>
+            <SocialRoute key={'social-route'} />
             {error ? <Error errorMessage={errorMessage} action={closeErrorMessage} /> : null}
         </AnimatePresence>
         </>

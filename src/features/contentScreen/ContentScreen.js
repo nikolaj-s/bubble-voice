@@ -18,6 +18,7 @@ import { selectHeaderTitle } from './contentScreenSlice';
 // style's
 import "./ContentScreen.css";
 import { Disconnected } from '../../components/disconnected/Disconnected';
+import { ExpandContent } from '../ExpandContent/ExpandContent';
 
 export const ContentScreen = () => {
     // color schema
@@ -37,6 +38,7 @@ export const ContentScreen = () => {
                 <CreateServerMenu />
                 <JoinServer />
                 <ChannelRoom />
+                <ExpandContent />
             </div>
         </motion.div>
     )

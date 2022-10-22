@@ -20,7 +20,7 @@ import "./Social.css";
 import { socket } from '../../../ServerBar/ServerBar';
 
 
-export const Social = () => {
+export const Social = ({currentChannel, channelId}) => {
 
     const dispatch = useDispatch();
 
@@ -30,15 +30,11 @@ export const Social = () => {
 
     const [image, setImage] = React.useState(null)
 
-    const channelId = useSelector(selectCurrentChannelId);
-
-    const currentChannel = useSelector(selectCurrentChannel);
-
     const username = useSelector(selectUsername);
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
-    const messages = useSelector(selectChannelSocial);
+    const messages = currentChannel.social;
 
     const permission = useSelector(selectUsersPermissions);
 
@@ -48,10 +44,12 @@ export const Social = () => {
 
         messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
 
-        if (permission.user_can_post_channel_social) document.getElementById('social-input-selector').focus()
-        
+        if (permission.user_can_post_channel_social) document.getElementById('social-input-selector').focus();
+
         return () => {
+
             dispatch(setSocialInput(""));
+            
         }
     // eslint-disable-next-line
     }, [])
@@ -70,7 +68,7 @@ export const Social = () => {
             username: username,
             channel_id: channelId,
             content: {
-                image: image ? "" : false,
+                image: image ? image.preview : false,
                 text: text,
                 video: false,
                 link: false,
@@ -90,14 +88,19 @@ export const Social = () => {
 
         await socket.request('message', data)
         .then(response => {
-            console.log(response)
+            
             if (response.success) {
                 dispatch(updateMessage(response.message));
             }
 
-            messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
-        })
-        .catch(error => {
+            try {
+
+                messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+                
+            } catch (error) {
+                return;
+            }
+        }).catch(error => {
             console.log(error)
             dispatch(throwServerError({errorMessage: error.errorMessage}));
             
@@ -124,9 +127,7 @@ export const Social = () => {
     return (
         <motion.div 
         key={"room-social-content-container"}
-        style={{
-            backgroundColor: secondaryColor
-        }}
+        
         transition={{
             duration: 0.2
         }}

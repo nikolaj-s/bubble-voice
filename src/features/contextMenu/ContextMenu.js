@@ -11,8 +11,8 @@ import { Loading } from '../../components/LoadingComponents/Loading/Loading';
 import { CtxMenuTitle } from '../../components/titles/ctxMenuTitle/CtxMenuTitle';
 
 // state
-import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteWidget, selectEditChannelCtxState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSelectedUserCtxState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
-import { assignNewServerGroup, markWidgetForDeletion, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerMembers, selectUsersPermissions, setEditingChannelId, setSocialInput, throwServerError } from '../server/ServerSlice';
+import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteWidget, selectEditChannelCtxState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSelectedUserCtxState, selectViewSocialState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
+import { assignNewServerGroup, markWidgetForDeletion, selectChannelSocialId, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerMembers, selectUsersPermissions, setChannelSocialId, setEditingChannelId, setSocialInput, throwServerError } from '../server/ServerSlice';
 
 // style
 import "./ContextMenu.css";
@@ -27,6 +27,8 @@ import { saveUserPrefs, USER_PREFS } from '../../util/LocalData';
 import { BoolButton } from '../../components/buttons/BoolButton/BoolButton';
 import { miscSettingsChannelSpecificStateChange, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents } from '../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { MoveUser } from '../../components/buttons/MoveUser/MoveUser';
+import { selectPrimaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectSocialSoundEffect, updateSoundEffectsState } from '../settings/soundEffects/soundEffectsSlice';
 
 export const ContextMenu = () => {
 
@@ -49,6 +51,8 @@ export const ContextMenu = () => {
 
     const [userVolumeLevel, setUserVolumeLevel] = React.useState(1);
 
+    const primaryColor = useSelector(selectPrimaryColor)
+
     const ctxCordinates = useSelector(selectContextMenuCordinates);
 
     const ctxActive = useSelector(selectContextMenuActive);
@@ -65,6 +69,8 @@ export const ContextMenu = () => {
 
     const channels = useSelector(selectServerChannels);
     // channel state
+    const viewSocial = useSelector(selectViewSocialState);
+
     const currentChannelId = useSelector(selectCurrentChannelId);
 
     const joinChannelState = useSelector(selectJoinChannelCtxState);
@@ -84,6 +90,9 @@ export const ContextMenu = () => {
     const hideChannelBackground = useSelector(selectMiscSettingsHideChannelBackground);
 
     const hideNonVideoParticapents = useSelector(selectMiscSettingsHideNonVideoParticapents);
+
+    const socialSoundEffect = useSelector(selectSocialSoundEffect);
+
     // user management
     const canBanUser = useSelector(selectBanUserCtxState);
 
@@ -146,13 +155,14 @@ export const ContextMenu = () => {
                 const id = p.id.split('-')[2];
 
                 dispatch(toggleContextMenu(true))
-
+                
                 dispatch(handleChannelCtxState({
                     join: currentChannelId !== id,
                     leave: currentChannelId === id,
                     edit: permissions.user_can_manage_channels,
                     channel: id,
-                    name: p.outerText
+                    name: p.outerText,
+                    social: permissions.user_can_post_channel_social
                 }))
 
             }
@@ -248,7 +258,7 @@ export const ContextMenu = () => {
             
         dispatch(setCtxCordinates({x: (e.view.innerWidth - e.pageX) < 400 ? (e.pageX - 300) : e.pageX, y: e.pageY}))
 
-        setOrigin((e.view.innerHeight - e.pageY) < 600 ? true : false)
+        setOrigin((e.view.innerHeight - e.pageY) < 300 ? true : false)
     // eslint-disable-next-line
     }, [ctxCordinates, ctxActive, permissions, currentChannelId, channels, members])
 
@@ -430,6 +440,14 @@ export const ContextMenu = () => {
         dispatch(miscSettingsChannelSpecificStateChange(state));
     }
 
+    const viewSocialFeed = () => {
+        dispatch(setChannelSocialId(selectedChannel));
+    }
+
+    const handleToggleSocialSoundEffect = () => {
+        dispatch(updateSoundEffectsState({type: "socialSoundEffect", state: !socialSoundEffect}))
+    }
+
     return (
         <>
         {ctxActive ? 
@@ -437,7 +455,8 @@ export const ContextMenu = () => {
         style={{
             top: ctxCordinates.y,
             left: ctxCordinates.x,
-            translateY: '-50%'
+            translateY: origin ? '-100%' : (ctxCordinates.y - 300) < 0 ? '0%' : '-50%',
+            backgroundColor: primaryColor
         }}
         className='ctx-menu-container'>
             {saveImage ? <CtxButton action={() => {handleSave(true)}} name={"Save Image"} /> : null}
@@ -446,6 +465,7 @@ export const ContextMenu = () => {
             {joinChannelState ? <CtxButton action={handleJoinChannel} name={"Join Channel"} /> : null}
             {leaveChannelState ? <CtxButton action={handleLeaveChannel} name={'Leave Channel'} /> : null}
             {editChannelState ? <CtxButton action={handleEditChannel} name={"Edit Channel"} /> : null}
+            {viewSocial ? <CtxButton action={viewSocialFeed} name={"Social"} /> : null}
             {isOwnerCtxState ? <CtxMenuPlaceHolder name={"Server Owner"} /> : null}
             {assignPermissions ? <AssignPermissionGroupMenu action={assignNewPermissionGroup} permission_groups={permissionGroups} current_permission_group={selectedUserToManage.split('-channel')[0]}  /> : null}
             {audio ? 
@@ -469,6 +489,7 @@ export const ContextMenu = () => {
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideChannelBackground")}} state={hideChannelBackground} name={"Hide Channel Background"} /> : null}
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideNonVideoParticapents")}} state={hideNonVideoParticapents} name={"Hide Non Video Participants"} /> : null}
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("disableMessagePopUp")}} state={disableMessagePopup} name={"Disable Message Overlay"} /> : null}
+            {channelSpecificSettingsState ? <BoolButton action={handleToggleSocialSoundEffect} state={socialSoundEffect} name="Enable Social Sound Effect" /> : null}
             <Loading loading={loading} />
         </motion.div>
         : null}

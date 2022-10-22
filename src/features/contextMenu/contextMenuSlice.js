@@ -14,6 +14,7 @@ const contextMenuSlice = createSlice({
         editChannel: false,
         selectedChannel: "",
         selectedChannelName: "",
+        viewSocial: false,
         // user management state
         banUser: false,
         assignPermissions: false,
@@ -66,6 +67,7 @@ const contextMenuSlice = createSlice({
             state._id = "";
             state.channelSpecificSettings = false;
             state.move = false;
+            state.viewSocial = false;
         },
         handleChannelCtxState: (state, action) => {
             state.joinChannel = action.payload.join;
@@ -73,6 +75,7 @@ const contextMenuSlice = createSlice({
             state.editChannel = action.payload.edit;
             state.selectedChannel = action.payload.channel;
             state.selectedChannelName = action.payload.name;
+            state.viewSocial = action.payload.social;
         },
         handleUserManagementCtx: (state, action) => {
             state.banUser = action.payload.ban;
@@ -135,6 +138,7 @@ export const selectChannelSpecificStateSettings = state => state.contextMenuSlic
 
 export const selectMoveUserState = state => state.contextMenuSlice.move;
 
+export const selectViewSocialState = state => state.contextMenuSlice.viewSocial;
 // actions
 export const { handleCopyPasteCtxState, handleUserManagementCtx, handleChannelCtxState, clearCtxState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } = contextMenuSlice.actions;
 

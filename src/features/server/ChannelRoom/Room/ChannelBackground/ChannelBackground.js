@@ -14,7 +14,7 @@ export const ChannelBackground = ({channel_background, blur = 10}) => {
         {channel_background ?
         <div 
         style={{
-            border: `10px solid ${secondaryColor}`
+            border: `3px solid ${secondaryColor}`
         }}
         className='channel-background-container'>
             <div 

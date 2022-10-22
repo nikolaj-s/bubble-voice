@@ -9,7 +9,7 @@ import { NowPlayingOverlay } from './NowPlayingOverlay/NowPlayingOverlay';
 import { removeWidgetActionFromQueue, selectOverlayQueue } from './RoomActionOverlaySlice'
 import { WheelSpinOverlay } from './WheelSpinOverlay/WheelSpinOverlay';
 
-export const RoomActionOverlay = () => {
+export const RoomActionOverlay = ({page}) => {
 
     const dispatch = useDispatch();
 
@@ -24,9 +24,9 @@ export const RoomActionOverlay = () => {
     return (
         <>
         <AnimatePresence exitBeforeEnter={true} >
-            {overlayQueue[0]?.action === 'wheel-spin' ? <WheelSpinOverlay key={"wheel-spin-overlay"} data={overlayQueue[0]} onEnd={handleOnEnd} /> : null}
-            {overlayQueue[0]?.action === 'new-message' ? <MessageOverlay key={'message-overlay'} data={overlayQueue[0]} onEnd={handleOnEnd} />  : null}
-            {overlayQueue[0]?.action === 'now-playing' ? <NowPlayingOverlay data={overlayQueue[0]} onEnd={handleOnEnd} /> : null}
+            {overlayQueue[0]?.action === 'wheel-spin' ? <WheelSpinOverlay page={page} key={"wheel-spin-overlay"} data={overlayQueue[0]} onEnd={handleOnEnd} /> : null}
+            {overlayQueue[0]?.action === 'new-message' ? <MessageOverlay page={page} key={'message-overlay'} data={overlayQueue[0]} onEnd={handleOnEnd} />  : null}
+            {overlayQueue[0]?.action === 'now-playing' ? <NowPlayingOverlay page={page} data={overlayQueue[0]} onEnd={handleOnEnd} /> : null}
         </AnimatePresence>
         </>
     )

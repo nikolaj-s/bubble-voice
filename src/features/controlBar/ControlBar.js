@@ -107,8 +107,8 @@ export const ControlBar = () => {
             <div className='control-bar-container' 
             style={{borderTop: `solid 2px ${accentColor}`}}
             >
-                <SettingsButton action={toggleAppSettings} />
                 <div className='controls-wrapper'>
+                    <SettingsButton action={toggleAppSettings} />
                     <WebCamButton 
                     action={() => {toggleFunction('webCamState')}} 
                     state={webCamState} 
@@ -134,8 +134,8 @@ export const ControlBar = () => {
                     state={screenShareState} 
                     active={current_channel_id === null}
                     />
+                    <ConnectionIndicator active={current_channel_id !== null} />
                 </div>
-                <ConnectionIndicator active={current_channel_id !== null} />
             </div>
         </>
     )
