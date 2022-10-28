@@ -16,11 +16,11 @@ export const User = ({user}) => {
     const activeColor = useSelector(selectActivationColor);
 
     const hideNonVideoParticapents = useSelector(selectMiscSettingsHideNonVideoParticapents);
-
+    
     return (
         <div 
         style={{
-            border: `solid 4px ${user.active ? activeColor : accentColor}`,
+            border: `solid 4px ${(user.active && user.microphone) ? activeColor : accentColor}`,
             display: (hideNonVideoParticapents === true && user.webcam === false) ? 'none' : 'flex'
         }}
         id={user._id} className='active-user-container'>

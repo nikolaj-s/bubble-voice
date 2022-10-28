@@ -248,7 +248,7 @@ export const ContextMenu = () => {
                 }
 
             }
-            if (e.path[0].id === 'live-chat-wrapper') {
+            if (e.path[0].id === 'live-chat-wrapper' || e.path[0].id === 'user-streams-wrapper') {
                 dispatch(toggleContextMenu(true))
 
                 dispatch(setContextMenuOptions({state: "channelSpecificSettings", value: true}));

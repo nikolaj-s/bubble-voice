@@ -50,6 +50,8 @@ export class RoomClient {
         this.echoCancellation = echoCancellation;
 
         this.microphoneInputVolume = microphoneInputVolume;
+
+        this.error_count = 0;
     }
     
     updateAudioPrefs(noiseSuppression, echoCancellation, microphoneInputVolume) {
@@ -161,6 +163,7 @@ export class RoomClient {
                         break
                     case 'failed':
                         this.consumerTransport.close();
+                        this.handleError();
                         break
                     default:
                         break
@@ -210,10 +213,8 @@ export class RoomClient {
             console.log(error);
 
             console.log('sdp error is being thrown here')
-            
-            this.dispatch({action: 'error', value: "ERROR: SDP/UDP Layer Verification of connection failed, please reconnect to server or restart app to solve issue, this is a temporary work around"});
-
-            this.exit();
+            this.dispatch({action: 'error', value: "A SDP Verification Error has been thrown, Attempting Experimental fix, if no audio or missing streams please reconnect to channel"})
+            this.handleError();
         }
     }
 
@@ -221,7 +222,7 @@ export class RoomClient {
         try {
             this.getConsumeStream(producer_id)
             .then( function (data) {
-                console.log(data)
+                console.log(user)
                 let consumer = data?.consumer;
 
                 if (consumer === undefined) return;
@@ -245,6 +246,8 @@ export class RoomClient {
                     el.className = 'stream web-cam-stream';
 
                     el.playsInline = false;
+
+                    el.style.transform = user.mirror_web_cam ? 'scaleX(-1)' : null;
 
                     el.autoplay = true;
 
@@ -397,14 +400,15 @@ export class RoomClient {
         let audio = false;
 
         let screen = false;
-
+        
         switch (type) {
             case mediaType.audio:
                 mediaConstraints = {
                     audio: {
-                        deviceId: deviceId ? {exact: deviceId} : deviceId,
+                        deviceId: deviceId,
                         echoCancellation: this.echoCancellation,
-                        noiseSuppression: this.noiseSuppression
+                        noiseSuppression: this.noiseSuppression,
+                        autoGainControl: false
                     },
                     video: false,
                 }
@@ -416,14 +420,15 @@ export class RoomClient {
                     video: {
                         width: {
                             min: 540,
-                            ideal: 1280
+                            ideal: 1280,
+                            max: 1280
                         },
                         height: {
                             min: 360,
-                            ideal: 720
+                            ideal: 720,
+                            max: 720
                         },
                         deviceId: deviceId,
-                        minFrameRate: 34,
                         maxFrameRate: 30
                     }
                 }
@@ -479,7 +484,7 @@ export class RoomClient {
                 let dst = audCtx.createMediaStreamDestination();
 
                 let gainNode = audCtx.createGain();
-
+                
                 gainNode.gain.value = this.microphoneInputVolume;
                 
                 [audCtxSrc, gainNode, dst].reduce((a, b) => a && a.connect(b));
@@ -494,13 +499,33 @@ export class RoomClient {
                 track
             }
 
+            // let stream_source_audio = screen ? await navigator.mediaDevices.getUserMedia(
+            //     {audio: {
+            //         mandatory: {
+            //             chromeMediaSource: 'desktop',
+            //             echoCancellation: true,
+            //         }
+                
+            //     },
+            //     video: {
+            //         mandatory: {
+            //             chromeMediaSource: 'desktop'
+            //         }
+            //     }
+            //     }
+            
+            //     ) : null;
+            
+
+            // stream_audio = stream_source_audio ? stream_source_audio.getAudioTracks()[0] : null;
+
             if (!audio) {
                 params.encodings = [
                     {
                     rid: 'r0',
                     maxBitrate: 100000,
                     scalabilityMode: 'L3T2',
-                    maxFramerate: 30.0
+                    maxFramerate: 30.0,
                     },
                     {
                     rid: 'r1',
@@ -642,9 +667,18 @@ export class RoomClient {
 
         } catch (error) {
             console.log(error)
+
             this.dispatch({action: 'webcam-loading-state', value: false})
 
-            this.dispatch({action: 'error', value: error.message})
+            if (error.message.includes('Queue')) {
+                
+
+
+            } else {
+                this.dispatch({action: 'error', value: error.message})
+            }
+
+            
         }
     }
 
@@ -731,5 +765,48 @@ export class RoomClient {
 
     toggleAudioState(value) {
         this.audioState = value;
+    }
+
+    async handleError() {
+
+        this.error_count++;
+
+        this.dispatch({action: 'reconnecting', value: false});
+
+        if (this.error_count > 5) {
+            this.dispatch({action: 'error', value: "Unable to resolve error please reconnect to the server"})
+        } else {
+            try {
+                this.closeProducer('audioType');
+                this.closeProducer('screenType');
+                this.closeProducer('videoType');
+                this.consumerTransport.close();
+                this.producerTransport.close();
+                this.socket.off('disconnect');
+                this.socket.off('newProducers');
+                this.socket.off('consumerClosed');
+            } catch (error) {
+                console.log(error);
+            }
+
+            setTimeout(async () => {
+
+                const data = await this.socket.request('getRouterRtpCapabilities');
+
+                let device = await this.loadDevice(data);
+                
+                this.device = device;
+
+                await this.initTransports(device);
+
+                await this.initSockets();
+
+                this.socket.emit('getProducers');
+
+                this.dispatch({action: 'reconnecting', value: true});
+                
+            }, 500 * this.error_count)
+        }
+
     }
 }

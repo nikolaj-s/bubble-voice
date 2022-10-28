@@ -134,7 +134,7 @@ const appearanceSettingsSlice = createSlice({
                 current_theme: state.current_theme
             }
 
-            state.color_themes = new_theme_object.themes;
+            state.color_themes = {...state.color_themes, custom: new_theme_object.themes.custom};
 
             saveLocalData("APPEARANCE", "VISUAL", new_theme_object)
 

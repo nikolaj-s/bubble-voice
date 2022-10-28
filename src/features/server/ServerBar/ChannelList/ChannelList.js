@@ -14,6 +14,7 @@ import { selectDisplayName, selectUserBanner, selectUserImage, selectUsername } 
 
 // style's
 import "./ChannelList.css";
+import { selectMirroredWebCamState } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 
 
 export const ChannelList = () => {
@@ -41,6 +42,8 @@ export const ChannelList = () => {
     const serverMembers = useSelector(selectServerMembers);
 
     const joiningChannel = useSelector(selectJoiningChannelState);
+
+    const mirroredWebCam = useSelector(selectMirroredWebCamState);
 
     const openCreateChannelMenu = () => {
         const location = window.location.hash.split('#')[1];
@@ -78,9 +81,10 @@ export const ChannelList = () => {
                 display_name: displayName,
                 user_image: userImage,
                 user_banner: userBanner,
-                channel: channel
+                channel: channel,
+                mirror_web_cam: mirroredWebCam
             }
-
+            
             dispatch(joinChannel(data));
         }, 200)
             

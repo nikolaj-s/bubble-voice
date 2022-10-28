@@ -40,6 +40,8 @@ export const SoundEffects = () => {
 
     const [playing, togglePlaying] = React.useState("");
 
+    const [soundEffectQueue, addToSoundEffectQueue] = React.useState([])
+
     const soundEffects = {
         'connected': connected,
         'disconnected': disconnected,

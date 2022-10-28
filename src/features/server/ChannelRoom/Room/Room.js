@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as mediasoupClient from 'mediasoup-client';
 
 // state
-import { updateMusicState, selectCurrentChannel, selectCurrentChannelId, selectPushToTalkActive, selectServerId, toggleLoadingChannel, updateMemberStatus, selectServerMembers, throwServerError, updateJoiningChannelState, setChannelSocialId } from '../../ServerSlice';
+import { updateMusicState, selectCurrentChannel, selectCurrentChannelId, selectPushToTalkActive, selectServerId, toggleLoadingChannel, updateMemberStatus, selectServerMembers, throwServerError, updateJoiningChannelState, setChannelSocialId, selectReconnectingState, toggleReconnectingState } from '../../ServerSlice';
 import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPushToTalkState, selectMirroredWebCamState, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
 import { selectDisplayName, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { playSoundEffect, selectMuteSoundEffectsWhileMutedState } from '../../../settings/soundEffects/soundEffectsSlice';
@@ -86,6 +86,8 @@ const Component = () => {
 
     const noiseSuppression = useSelector(selectNoiseSuppression);
 
+    const reconnecting = useSelector(selectReconnectingState);
+
     React.useEffect(() => {
         
         if (client) {
@@ -127,7 +129,8 @@ const Component = () => {
         username: username,
         display_name: displayName,
         user_banner: userBanner,
-        user_image: userImage
+        user_image: userImage,
+        mirror_web_cam: webCamMirroredState
     }
 
     const event = (arg) => {
@@ -140,7 +143,16 @@ const Component = () => {
         
         if (arg.action === 'screen-share-loading-state') return dispatch(toggleLoadingScreenShare(arg.value));
        
-        if (arg.action === 'close-stream') return dispatch(toggleControlState('screenShareState')) ;
+        if (arg.action === 'close-stream') return dispatch(toggleControlState('screenShareState'));
+
+        if (arg.action === 'reconnecting') {
+            setLoaded(arg.value);
+
+            if (arg.value === true) {
+                dispatch(toggleReconnectingState());
+            }
+            
+        };
     }
 
     const init = async (delay = 100) => {
@@ -246,16 +258,16 @@ const Component = () => {
             if (currentScreen !== null) {
                 dispatch(setScreens([]));
                 dispatch(setSelectingScreensState(false));
-                client.produce('screenType', currentScreen);
+                client?.produce('screenType', currentScreen);
                 dispatch(updateMemberStatus({username: user.username, action: {screenshare: true}}))
-                socket.emit('user status', {username: user.username, action: {screenshare: true}})
+                socket?.emit('user status', {username: user.username, action: {screenshare: true}})
             }
         } catch (error) {
             console.log(error);
             dispatch(throwServerError({errorMessage: error.message}))
         }
     // eslint-disable-next-line
-    }, [currentScreen])
+    }, [currentScreen, reconnecting])
 
     // handle change of user control state
     React.useEffect(() => {
@@ -327,7 +339,7 @@ const Component = () => {
 
         }
     // eslint-disable-next-line
-    }, [microphoneState, webcamState, loaded, screenShareState, audioState, soundEffectsMuted])
+    }, [microphoneState, webcamState, loaded, screenShareState, audioState, soundEffectsMuted, reconnecting])
 
     // handle voice activity
 
@@ -335,15 +347,14 @@ const Component = () => {
 
         let playing = false;
 
-
         let audioCtx,
             analyser,
             source,
-            scriptProcessor,
-            gainNode
+            scriptProcessor
 
         try {
-            if (client && loaded === true && microphoneState === true) {
+
+            if (client && loaded === true) {
                 if (voiceActivityDetection === true) {
                     navigator.mediaDevices.getUserMedia({
                         audio: {deviceId: {exact: audioDevice._id}},
@@ -351,8 +362,6 @@ const Component = () => {
                     }).then((audio) => {
 
                         audioCtx = new AudioContext();
-
-                       // gainNode = audioCtx.createGain();
                     
                         analyser = audioCtx.createAnalyser();
                         
@@ -363,10 +372,6 @@ const Component = () => {
                         analyser.smoothingTimeConstant = 0.8;
                         
                         analyser.fftSize = 1024;
-
-                      //  gainNode.gain.value = microphoneInputVolume ? microphoneInputVolume : 0;
-
-                      //  source.connect(gainNode);
 
                         source.connect(analyser);
 
@@ -383,9 +388,9 @@ const Component = () => {
                                 const arrSum = array.reduce((a, value) => a + value, 0);
 
                                 const avg = (arrSum / array.length) * 5;
-
+                                
                                 if (avg > 60) {
-
+                                    
                                     if (playing || microphoneState === false) return;
 
                                     playing = true;
@@ -413,7 +418,7 @@ const Component = () => {
                                 console.log(error)
                                 scriptProcessor.onaudioprocess = null;
                             }
-                        } 
+                        }
                     })
                 } else if (pushToTalk === true && microphoneState === true) {
                     
@@ -432,46 +437,51 @@ const Component = () => {
                         socket.emit('user status', {username: user.username, action: {active: false, channel_specific: true}})
                     }
                 }  else {
+
+                    scriptProcessor?.disconnect();
                     analyser?.disconnect();
                     source?.disconnect();
-                    scriptProcessor?.disconnect();
+                    audioCtx = null;
                 }
                     
             }
         } catch (error) {
-            console.log(error)
+            scriptProcessor?.disconnect(audioCtx?.destination)
+            scriptProcessor?.disconnect();
             analyser?.disconnect();
             source?.disconnect();
-            scriptProcessor?.disconnect();
+            
 
             dispatch(throwServerError({errorMessage: "Error processing microphone input"}))
         }
-        return () => {
+
+        if (microphoneState === false || loaded === false) {
+
+            scriptProcessor?.disconnect();
             analyser?.disconnect();
             source?.disconnect();
+            client?.closeProducer('audioType');
+            
+        }
+        return () => {
+            console.log('cleaning up')
+            analyser?.disconnect();
             scriptProcessor?.disconnect();
+            source?.disconnect();
+            
         }
     // eslint-disable-next-line   
-    }, [pushToTalk, voiceActivityDetection, loaded, current_channel_id, microphoneState, pushToTalkActive])
+    }, [pushToTalk, voiceActivityDetection, loaded, current_channel_id, microphoneState, pushToTalkActive, reconnecting])
     
     React.useEffect(() => {
-        const children = document.getElementById('live-chat-wrapper').children;
         
         if (page === 'social' || page === 'widgets') {
-            for (const c of children) {
-                if (c.className === "streaming-video-player-container" || c.className === 'active-user-container') {
-                    c.style.opacity = 0;
-                }
-            }
+            document.getElementById('user-streams-wrapper').style.opacity = 0;
         } else {
-            for (const c of children) {
-                if (c.className === "streaming-video-player-container" || c.className === 'active-user-container') {
-                    c.style.opacity = 1;
-                }
-            }
+            document.getElementById('user-streams-wrapper').style.opacity = 1;
         }
             
-    }, [page, channel.users])
+    }, [page])
 
     return (
         <>

@@ -1,16 +1,16 @@
 
 .active-user-container {
     position: relative;
-    border-radius: var(--border-radius);
-    overflow: hidden;
+    vertical-align: middle;
     display: flex;
+    align-self: center;
+    z-index: 2;
+    border-radius: 15px;
+    overflow: hidden;
     justify-content: center;
     align-items: center;
-    max-width: 600px;
-    width: calc(100% - 8px);
+    margin: 5px;
     cursor: pointer;
-    object-fit: contain;
-    height: calc(100% - 8px);
 }
 
 .active-user-container video {

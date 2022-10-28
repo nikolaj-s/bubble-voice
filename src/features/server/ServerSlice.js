@@ -115,7 +115,6 @@ const serverSlice = createSlice({
         // local push to talk state
         pushToTalkActive: false,
         //social
-        textInput: "",
         selectedChannelSocial: "", 
         // music
         musicQueue: [],
@@ -124,14 +123,15 @@ const serverSlice = createSlice({
         musicErrorMessage: "",
         musicVolume: 1,
         // joining channel status
-        joiningChannel: false
+        joiningChannel: false,
+        reconnecting: false
     },
     reducers: {
+        toggleReconnectingState: (state, action) => {
+            state.reconnecting = !state.reconnecting;
+        },
         setTopPos: (state, action) => {
             state.top_pos = action.payload;
-        },
-        setSocialInput: (state, action) => {
-            state.textInput = action.payload;
         },
         setServerName: (state, action) => {
             state.serverName = action.payload;
@@ -186,7 +186,7 @@ const serverSlice = createSlice({
             state.members[userIndex].user_banner = action.payload.user_banner;
 
             state.members[userIndex].display_name = action.payload.display_name;
-
+            console.log(action.payload)
             const channelIndex = state.channels.findIndex(channel => channel._id === action.payload.channel._id);
 
             // prevent duplicating ---> check if user exists in channel
@@ -500,6 +500,8 @@ const serverSlice = createSlice({
 })
 
 // selectors
+export const selectReconnectingState = state => state.serverSlice.reconnecting;
+
 export const selectServerUser = state => state.serverSlice.user;
 
 export const selectCurrentChannelId = state => state.serverSlice.current_channel_id;
@@ -578,8 +580,6 @@ export const selectServerErrorState = state => state.serverSlice.error;
 
 export const selectServerErrorMessage = state => state.serverSlice.errorMessage;
 
-export const selectSocialInputState = state => state.serverSlice.textInput;
-
 export const selectMusicPlayingState = state => state.serverSlice.musicPlaying;
 
 export const selectMusicQueue = state => state.serverSlice.musicQueue;
@@ -596,6 +596,6 @@ export const selectTopAnimationPoint = state => state.serverSlice.top_pos;
 
 // actions
 
-export const {setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, setSocialInput, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
+export const {toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
 
 export default serverSlice.reducer;

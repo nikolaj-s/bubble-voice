@@ -28,7 +28,7 @@ export const ChannelUserDisplay = ({user, channel_id}) => {
     return (
         <div id={`${user._id}-channel-user-display-channel-id-${channel_id}`} style={{zIndex: 1}} key={user.username} className='channel-user-placeholder'>
             <div 
-            style={{border: `solid 4px ${user.active ? activityColor : secondaryColor}`}}
+            style={{border: `solid 4px ${(user.active && user.microphone) ? activityColor : secondaryColor}`}}
             className='channel-user-placeholder-user-image'>
                 <Image objectFit='cover' image={user.user_image} />
             </div>

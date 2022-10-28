@@ -97,18 +97,18 @@ function createWindow () {
   
   const mainScreen = screen.getPrimaryDisplay();
 
-  transparent = new BrowserWindow({
-    width: mainScreen.size.width,
-    height: mainScreen.size.height,
-    transparent: true,
-    frame: false,
-    alwaysOnTop: true,
-    icon: __dirname + '/logo.png'
-  })
+  // transparent = new BrowserWindow({
+  //   width: mainScreen.size.width,
+  //   height: mainScreen.size.height,
+  //   transparent: true,
+  //   frame: false,
+  //   alwaysOnTop: true,
+  //   icon: __dirname + '/logo.png'
+  // })
 
-  transparent.setIgnoreMouseEvents(true);
+  // transparent.setIgnoreMouseEvents(true);
 
-  transparent.setFocusable(false);
+  // transparent.setFocusable(false);
 
   //load the index.html from a url
   win.loadURL(startUrl);
@@ -145,12 +145,14 @@ function createWindow () {
   ipcMain.on('close', () => {
     console.log('closing')
     win.close();
-    transparent.close();
+  //  transparent.close();
   })
   
   ipcMain.on('min', () => {
     win.minimize();
   })
+
+  
   
 }
 
@@ -315,8 +317,15 @@ app.whenReady().then(createWindow)
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
+app.on('before-quit', () => {
+
+  win.close();
+//  transparent.close();
+
+})
 
 app.on('window-all-closed', () => {
+  
   if (process.platform !== 'darwin') {
     app.quit()
   }

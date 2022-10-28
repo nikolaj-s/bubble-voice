@@ -11,6 +11,7 @@ import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../..
 
 // style
 import "./WheelSpinOverlay.css";
+import { TextButton } from '../../../../../../components/buttons/textButton/TextButton';
 
 export const WheelSpinOverlay = ({data, onEnd, page}) => {
 
@@ -42,6 +43,9 @@ export const WheelSpinOverlay = ({data, onEnd, page}) => {
                     color: textColor
                 }}
                 >{data.message}</h1>
+            </div>
+            <div className='wheel-spin-overlay-message-container'>
+                <TextButton name={"Close"} action={onEnd} />
             </div>
         </motion.div>
     )

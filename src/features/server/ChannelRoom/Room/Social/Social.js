@@ -4,9 +4,8 @@ import { motion } from 'framer-motion'
 import { useSelector, useDispatch } from 'react-redux';
 
 // state
-import { selectSecondaryColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectDisplayName, selectUsername } from '../../../../settings/appSettings/accountSettings/accountSettingsSlice';
-import { newMessage, selectChannelSocial, selectCurrentChannel, selectCurrentChannelId, selectSocialInputState, selectUsersPermissions, setSocialInput, throwServerError, updateMessage } from '../../../ServerSlice';
+import { newMessage, selectUsersPermissions, setSocialInput, throwServerError, updateMessage } from '../../../ServerSlice';
 
 // components
 import { MessageInput } from '../../../../../components/inputs/MessageInput/MessageInput';
@@ -26,13 +25,11 @@ export const Social = ({currentChannel, channelId}) => {
 
     const messagesRef = React.useRef(null);
 
-    const text = useSelector(selectSocialInputState);
+    const [text, setText] = React.useState("");
 
     const [image, setImage] = React.useState(null)
 
     const username = useSelector(selectUsername);
-
-    const secondaryColor = useSelector(selectSecondaryColor);
 
     const messages = currentChannel.social;
 
@@ -46,16 +43,11 @@ export const Social = ({currentChannel, channelId}) => {
 
         if (permission.user_can_post_channel_social) document.getElementById('social-input-selector').focus();
 
-        return () => {
-
-            dispatch(setSocialInput(""));
-            
-        }
     // eslint-disable-next-line
     }, [])
 
     const handleTextInput = (value) => {
-        dispatch(setSocialInput(value))
+        setText(value);
     }
 
     const send = async () => {
@@ -82,7 +74,7 @@ export const Social = ({currentChannel, channelId}) => {
 
         data = {...data, file: image}
 
-        dispatch(setSocialInput(""));
+        setText("");
 
         setImage(false);
 

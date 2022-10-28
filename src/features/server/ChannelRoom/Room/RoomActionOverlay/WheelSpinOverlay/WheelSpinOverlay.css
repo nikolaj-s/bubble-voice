@@ -23,6 +23,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     max-width: 500px;
     height: auto;
     border-radius: var(--border-radius);
