@@ -1,7 +1,7 @@
 .home-navigation-container {
     display: flex;
-    height: 55px;
-    min-height: 55px;
+    height: 45px;
+    min-height: 45px;
     width: 100%;
     align-items: center;
     overflow: hidden;
@@ -27,4 +27,5 @@
     font-size: 1rem;
     letter-spacing: var(--font-spacing);
     margin: 0;
+    font-size: .9rem;
 }

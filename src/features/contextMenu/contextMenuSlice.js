@@ -25,6 +25,7 @@ const contextMenuSlice = createSlice({
         changeVolume: false,
         _id: "",
         move: false,
+        flipWebCam: false,
         // copy && paste
         copy: false,
         paste: false,
@@ -68,6 +69,7 @@ const contextMenuSlice = createSlice({
             state.channelSpecificSettings = false;
             state.move = false;
             state.viewSocial = false;
+            state.flipWebCam = false;
         },
         handleChannelCtxState: (state, action) => {
             state.joinChannel = action.payload.join;
@@ -86,6 +88,7 @@ const contextMenuSlice = createSlice({
             state.changeVolume = action.payload.volume;
             state._id = action.payload.member_id;
             state.move = action.payload.move;
+            state.flipWebCam = true;
         },
         handleCopyPasteCtxState: (state, action) => {
             state.paste = true;
@@ -139,6 +142,9 @@ export const selectChannelSpecificStateSettings = state => state.contextMenuSlic
 export const selectMoveUserState = state => state.contextMenuSlice.move;
 
 export const selectViewSocialState = state => state.contextMenuSlice.viewSocial;
+
+export const selectFlipWebCamState = state => state.contextMenuSlice.flipWebCam;
+
 // actions
 export const { handleCopyPasteCtxState, handleUserManagementCtx, handleChannelCtxState, clearCtxState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } = contextMenuSlice.actions;
 

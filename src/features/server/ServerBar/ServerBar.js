@@ -246,6 +246,8 @@ const Bar = () => {
 
                 if (window.location.hash.includes(data.new_channel)) return;
 
+                dispatch(playSoundEffect('moved'))
+
                 setTimeout(() => {
                     document.getElementById(`channel-button-${data.new_channel}`).click();
                 }, 150)

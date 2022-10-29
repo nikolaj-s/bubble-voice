@@ -9,7 +9,7 @@
 }
 
 #user-streams-wrapper {
-    height: calc(100% - 45px);
+    height: calc(100%);
     width: 100%;
     max-width: 100%;
     display: flex;

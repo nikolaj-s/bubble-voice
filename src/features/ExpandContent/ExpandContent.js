@@ -11,6 +11,7 @@ import { selectExpandedContent, setExpandedContent } from './ExpandContentSlice'
 // style
 import "./ExpandContent.css";
 import { selectSecondaryColor, selectTextColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { Video } from '../../components/Video/Video';
 
 export const ExpandContent = () => {
 
@@ -66,7 +67,10 @@ export const ExpandContent = () => {
             >ESC</p>
             </div>
             <div className='content-expanded-inner-container'>
-                <Image objectFit='contain' image={expandedContent} />
+                {expandedContent.includes('mp4') || expandedContent.includes('gif') ?
+                <Video video={expandedContent} /> 
+                :        
+                <Image objectFit='contain' image={expandedContent} />}
             </div>
         </div>
         : null}

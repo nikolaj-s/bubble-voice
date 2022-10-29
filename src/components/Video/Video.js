@@ -1,8 +1,10 @@
 // library's
 
 import React from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setExpandedContent } from '../../features/ExpandContent/ExpandContentSlice';
 import { selectAccentColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { ExpandButton } from '../buttons/ExpandButton/ExpandButton';
 import { AudioToggleButton } from '../buttons/mediaButtons/audioToggleButton/AudioToggleButton';
 import { PauseButton } from '../buttons/PauseButton/PauseButton';
 import { PlayButton } from '../buttons/PlayButton/PlayButton';
@@ -18,7 +20,10 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
 
     const accentColor = useSelector(selectAccentColor);
 
-    const handlePlayState = () => {
+    const dispatch = useDispatch();
+
+    const handlePlayState = (e) => {
+        e.stopPropagation();
         if (playing) {
             document.getElementById(video + id).pause();
         } else {
@@ -27,7 +32,8 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
         togglePlaying(!playing);
     }
 
-    const handleMuteState = () => {
+    const handleMuteState = (e) => {
+        e.stopPropagation();
         if (muted) {
             document.getElementById(video + id).muted = true;
         } else {
@@ -42,11 +48,17 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
         togglePlaying(false);
     }
 
+    const expand = (e) => {
+        e.stopPropagation();
+        dispatch(setExpandedContent(video))
+    }
+
     return (
         <div 
         style={{
             height: height
         }}
+        onClick={handlePlayState}
         className='message-video-container'>
             <video 
             loading="lazy"
@@ -65,6 +77,7 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
                 <PlayButton action={handlePlayState} />
                 }
                 <AudioToggleButton action={handleMuteState} state={muted} />
+                <ExpandButton action={expand} />
             </div>}
         </div>
     )

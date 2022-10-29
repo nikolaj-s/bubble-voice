@@ -11,7 +11,7 @@ import { Loading } from '../../components/LoadingComponents/Loading/Loading';
 import { CtxMenuTitle } from '../../components/titles/ctxMenuTitle/CtxMenuTitle';
 
 // state
-import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteWidget, selectEditChannelCtxState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSelectedUserCtxState, selectViewSocialState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
+import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteWidget, selectEditChannelCtxState, selectFlipWebCamState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSelectedUserCtxState, selectViewSocialState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
 import { assignNewServerGroup, markWidgetForDeletion, selectChannelSocialId, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerMembers, selectUsersPermissions, setChannelSocialId, setEditingChannelId, setSocialInput, throwServerError } from '../server/ServerSlice';
 
 // style
@@ -50,6 +50,8 @@ export const ContextMenu = () => {
     const [selectedWidget, setSelectedWidget] = React.useState();
 
     const [userVolumeLevel, setUserVolumeLevel] = React.useState(1);
+
+    const [flippedWebCamState, setFlippedWebCamState] = React.useState(false);
 
     const primaryColor = useSelector(selectPrimaryColor)
 
@@ -111,6 +113,8 @@ export const ContextMenu = () => {
     const changeUserVolume = useSelector(selectChangingUsersVolumeState);
 
     const moveUserState = useSelector(selectMoveUserState);
+
+    const flipWebCamState = useSelector(selectFlipWebCamState);
 
     // copy paste state
     const pasteCtxState = useSelector(selectPasteCtxState);
@@ -244,6 +248,12 @@ export const ContextMenu = () => {
                         setUserVolumeLevel(USER_VOLUME?.volume);
                     } else {
                         setUserVolumeLevel(1);
+                    }
+
+                    if (USER_VOLUME?.flip_web_cam) {
+                        setFlippedWebCamState(USER_VOLUME.flip_web_cam);
+                    } else {
+                        setFlippedWebCamState(false);
                     }
                 }
 
@@ -387,12 +397,46 @@ export const ContextMenu = () => {
         }
     }
 
+    const handleFlipWebCamPref = (value) => {
+        try {
+
+            let obj = {};
+
+            const currentUserPrefs = USER_PREFS.get(memberId);
+
+            if (currentUserPrefs) {
+                obj = {...currentUserPrefs, flip_web_cam: !flippedWebCamState}
+            } else {
+                obj = {flip_web_cam: !flippedWebCamState}
+            }
+
+            
+
+            USER_PREFS.set(memberId, obj);
+
+            saveUserPrefs();
+            
+            const el = document.getElementById(memberId)
+
+            const video = el.querySelector('video');
+            
+            if (video) {
+                console.log(!flippedWebCamState)
+                video.style.transform = (!flippedWebCamState ? 'scaleX(-1)' : null)
+            }
+
+            setFlippedWebCamState(!flippedWebCamState);
+        } catch (error) {
+            dispatch(throwServerError({errorMessage: "error flipping users webcam"}))
+        }
+    }
+
     const handlePokeUser = async () => {
         
         const selected_username = selectedUserToManage.split('-')[0];
 
         const channel_id = selectedUserToManage.split('channel-id-')[1];
-        console.log(selectedUserToManage)
+        
         if (selected_username && channel_id) {
 
             await socket.request('poke', {channel_id: channel_id, username: selected_username})
@@ -480,6 +524,7 @@ export const ContextMenu = () => {
             <Range action={handleUserVolumeChange} step={0.005} value={userVolumeLevel} fill={true} /> 
             </>
             : null}
+            {flipWebCamState ? <BoolButton name={"Flip Web Cam"} state={flippedWebCamState} action={handleFlipWebCamPref} /> : null}
             {deleteWidget ? <CtxButton action={handleDeleteWidget} name={"Delete Widget"} /> : null}
             {moveUserState ? <MoveUser move={handleMoveUser} /> : null}
             {kickUser ? <CtxButton name="Kick User" action={handleKickUser} /> : null}

@@ -11,7 +11,7 @@ import { Iframe } from './Iframe/Iframe';
 export const TextParser = ({text}) => {
 
     const textColor = useSelector(selectTextColor);
-
+    
     return (
         <p style={{color: textColor}}>
         {text.split(' ').map((chunk, key) => {

@@ -25,6 +25,7 @@
 .active-user-profile-image-container {
     width: 150px;
     height: 150px;
+    flex-shrink: 0;
     position: relative;
     border-radius: 50%;
     overflow: hidden;

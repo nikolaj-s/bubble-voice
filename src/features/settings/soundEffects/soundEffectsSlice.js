@@ -24,11 +24,13 @@ const soundEffectsSlice = createSlice({
         soundEffect: "",
         volume: 1,
         socialSoundEffect: true,
-        muteSoundEffectsWhileMutedState: false
+        muteSoundEffectsWhileMutedState: false,
+        soundEffectsQueue: []
     },
     reducers: {
+        
         playSoundEffect: (state, action) => {
-            state.soundEffect = action.payload;
+            state.soundEffectsQueue.push(action.payload);
         },
         setSoundEffectsVolume: (state, action) => {
             state.volume = action.payload;
@@ -49,6 +51,9 @@ const soundEffectsSlice = createSlice({
 
             saveLocalData("APPAUDIOPREF", "AUDIOPREF", obj);
 
+        },
+        removeSoundEffectFromQueue: (state, action) => {
+            state.soundEffectsQueue.shift();
         }
 
     },
@@ -82,8 +87,10 @@ export const selectSocialSoundEffect = state => state.soundEffectsSlice.socialSo
 
 export const selectMuteSoundEffectsWhileMutedState = state => state.soundEffectsSlice.muteSoundEffectsWhileMutedState;
 
+export const selectSoundEffectQueue = state => state.soundEffectsSlice.soundEffectsQueue;
+
 // actions
 
-export const { setSoundEffectsVolume, playSoundEffect, updateSoundEffectsState, handleSaveSoundPrefs } = soundEffectsSlice.actions;
+export const { removeSoundEffectFromQueue, setSoundEffectsVolume, playSoundEffect, updateSoundEffectsState, handleSaveSoundPrefs } = soundEffectsSlice.actions;
 
 export default soundEffectsSlice.reducer;

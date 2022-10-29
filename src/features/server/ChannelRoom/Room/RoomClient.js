@@ -213,7 +213,7 @@ export class RoomClient {
             console.log(error);
 
             console.log('sdp error is being thrown here')
-            this.dispatch({action: 'error', value: "A SDP Verification Error has been thrown, Attempting Experimental fix, if no audio or missing streams please reconnect to channel"})
+         //   this.dispatch({action: 'error', value: "A SDP Verification Error has been thrown, Attempting Experimental fix, if no audio or missing streams please reconnect to channel"})
             this.handleError();
         }
     }
@@ -222,7 +222,7 @@ export class RoomClient {
         try {
             this.getConsumeStream(producer_id)
             .then( function (data) {
-                console.log(user)
+                
                 let consumer = data?.consumer;
 
                 if (consumer === undefined) return;
@@ -247,13 +247,15 @@ export class RoomClient {
 
                     el.playsInline = false;
 
-                    el.style.transform = user.mirror_web_cam ? 'scaleX(-1)' : null;
+                    const prefs = USER_PREFS.get(user._id);
+
+                    el.style.transform = (user.mirror_web_cam && !prefs?.flip_web_cam) ? 'scaleX(-1)' : null;
 
                     el.autoplay = true;
 
                     el.muted = true;
 
-                    document.getElementById(user._id).appendChild(el)
+                    document.getElementById(user._id).appendChild(el);
 
                 } else if (consumer.rtpParameters.codecs[0].mimeType === 'video/H264' || consumer.rtpParameters.codecs[0].mimeType === 'video/rtx') {
                     // display incoming screen stream

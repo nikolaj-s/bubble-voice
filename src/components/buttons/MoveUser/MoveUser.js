@@ -41,6 +41,7 @@ export const MoveUser = ({move = () => {}, movingMenu}) => {
             <div onMouseOver={() => {handleExpanded(true)}} onMouseLeave={() => {handleExpanded(false)}} className='move-to-channel-container'>
                 {channelList.map((channel) => {
                     return <p
+                    key={channel._id}
                     onClick={() => {move(channel._id)}}
                     style={{color: textColor, backgroundColor: primaryColor}}
                     >{channel.channel_name}</p>

@@ -4,7 +4,7 @@ import React from 'react'
 // state
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAudioOutput } from '../appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
-import { playSoundEffect, selectSocialSoundEffect, selectSoundEffect, selectSoundEffectVolume } from './soundEffectsSlice';
+import { playSoundEffect, removeSoundEffectFromQueue, selectSocialSoundEffect, selectSoundEffect, selectSoundEffectQueue, selectSoundEffectVolume } from './soundEffectsSlice';
 
 const connected = require('../../../assets/connected.wav');
 
@@ -32,15 +32,15 @@ export const SoundEffects = () => {
 
     const soundEffectsVolume = useSelector(selectSoundEffectVolume);
 
+    const [playing, setPlaying] = React.useState("");
+
     const audioOutput = useSelector(selectAudioOutput);
 
     const dispatch = useDispatch();
 
     const socialSoundEffect = useSelector(selectSocialSoundEffect);
 
-    const [playing, togglePlaying] = React.useState("");
-
-    const [soundEffectQueue, addToSoundEffectQueue] = React.useState([])
+    const soundEffectQueue = useSelector(selectSoundEffectQueue);
 
     const soundEffects = {
         'connected': connected,
@@ -64,16 +64,22 @@ export const SoundEffects = () => {
     }, [soundEffectsVolume])
     
     React.useEffect(() => {
-
-        if (soundEffect === 'newMessage' && socialSoundEffect === false) return; 
-
-        togglePlaying(soundEffects[soundEffect]);
+        console.log(soundEffectQueue)
+        if ((soundEffect === 'newMessage' && socialSoundEffect === false) || (soundEffects[soundEffect] === undefined)) return; 
+        
+        dispatch(playSoundEffect(soundEffects[soundEffect]));
         
     // eslint-disable-next-line
     }, [soundEffect, socialSoundEffect])
 
     const soundEffectFinished = () => {
-        dispatch(playSoundEffect(""));
+
+        setPlaying("");
+
+        setTimeout(() => {
+            dispatch(removeSoundEffectFromQueue());
+        }, 10)
+        
     }
 
     React.useEffect(() => {
@@ -86,9 +92,19 @@ export const SoundEffects = () => {
 
     }, [audioOutput])
 
+    React.useEffect(() => {
+
+        setTimeout(() => {
+
+            setPlaying(soundEffects[soundEffectQueue[0]]);
+            
+        }, 10)
+            
+    }, [soundEffectQueue])
+
     return (
         <>
-        <audio id="sound-effects-source" onEnded={soundEffectFinished} hidden={true} autoPlay={true} src={playing} loop={false} />
+        <audio id="sound-effects-source" onEnded={soundEffectFinished} src={playing} hidden={true} playsInline={true} autoPlay={true} loop={false} />
         </>
     )
 }

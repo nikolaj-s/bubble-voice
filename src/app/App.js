@@ -11,7 +11,6 @@ import { Dashboard } from '../features/dashBoard/Dashboard';
 import { SignUp } from '../features/LoggingIn/signUp/SignUp';
 import { InitializingAppScreen } from '../features/initializingAppScreen/InitializingAppScreen';
 import { Verification } from '../features/LoggingIn/verification/Verification';
-import { Disconnected } from '../components/disconnected/Disconnected';
 
 // state
 import { incrementLoadingPercentage, selectRetryState } from '../features/initializingAppScreen/initializingAppScreenSlice';
@@ -42,6 +41,8 @@ function App() {
   const signedUp = useSelector(selectSignedUp);
 
   const retryState = useSelector(selectRetryState);
+
+  let update_interval;
 
   const preventMouseDefaults = (e) => {
     if (e.button === 3 || e.button === 4) {
@@ -105,7 +106,7 @@ function App() {
 
   // handle listen for update
   React.useEffect(() => {
-    console.log('cheking for updates')
+    
     setTimeout(() => {
 
       let ipcRenderer;
@@ -129,6 +130,8 @@ function App() {
           ipcRenderer.removeAllListeners('update-downloaded');
 
           dispatch(handleUpdateAvailable(true));
+
+          clearInterval(update_interval);
         
         })
 
@@ -140,7 +143,18 @@ function App() {
           console.log(data)
         })
 
+        update_interval = setInterval(() => {
+          try {
+      
+            ipcRenderer.send('check-for-updates');
+      
+          } catch (error) {
+            clearInterval(update_interval);
+          }
+        }, 3600000)
+
       } catch (error) {
+        clearInterval(update_interval);
         console.log(error)
         console.log("using web version")
       }
@@ -152,6 +166,8 @@ function App() {
           ipcRenderer.removeAllListeners('error updating');
           ipcRenderer.removeAllListeners('get_app_ver');
         }
+
+        clearInterval(update_interval);
       }
     }, 10)
   }, [])
