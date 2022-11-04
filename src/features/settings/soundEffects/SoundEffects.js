@@ -3,6 +3,7 @@ import React from 'react'
 
 // state
 import { useDispatch, useSelector } from 'react-redux';
+import { ScreenShare } from '../../../components/Icons/ScreenShare/ScreenShare';
 import { selectScreenShareState } from '../../controlBar/ControlBarSlice';
 import { selectAudioOutput } from '../appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 import { playSoundEffect, removeSoundEffectFromQueue, selectSocialSoundEffect, selectSoundEffect, selectSoundEffectQueue, selectSoundEffectVolume } from './soundEffectsSlice';
@@ -67,8 +68,10 @@ export const SoundEffects = () => {
     }, [soundEffectsVolume])
     
     React.useEffect(() => {
+
+        if (soundEffectQueue.length > 2) return;
         
-        if ((soundEffect === 'newMessage' && socialSoundEffect === false) || (soundEffects[soundEffect] === undefined) || soundEffectQueue.length > 2) return; 
+        if ((soundEffect === 'newMessage' && socialSoundEffect === false) || (soundEffects[soundEffect] === undefined)) return; 
         
         dispatch(playSoundEffect(soundEffects[soundEffect]));
         
@@ -104,6 +107,16 @@ export const SoundEffects = () => {
         }, 10)
             
     }, [soundEffectQueue])
+    
+    React.useEffect(() => {
+
+        if (sharingScreen === false) {
+            document.getElementById('sound-effects-source').volume = 0;
+        } else {
+            document.getElementById('sound-effects-source').volume = soundEffectsVolume;
+        }
+            
+    }, [sharingScreen])
 
     return (
         <>

@@ -4,7 +4,7 @@ import { selectTextColor } from '../../../../features/settings/appSettings/appea
 import { Loading } from '../../../LoadingComponents/Loading/Loading'
 import { ButtonAnimationWrapper } from '../../ButtonAnimationWrapper/ButtonAnimationWrapper'
 
-export const ShareScreenButton = ({action, state, active, loading}) => {
+export const ShareScreenButton = ({action, state, active, loading, id}) => {
 
   const textColor = useSelector(selectTextColor);
 
@@ -18,6 +18,7 @@ export const ShareScreenButton = ({action, state, active, loading}) => {
     opacity={0.5}
     position={'relative'}
     invert={true}
+    id={id}
     >
         {state ? 
         <svg

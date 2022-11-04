@@ -11,8 +11,8 @@ import { Loading } from '../../components/LoadingComponents/Loading/Loading';
 import { CtxMenuTitle } from '../../components/titles/ctxMenuTitle/CtxMenuTitle';
 
 // state
-import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleStreamState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteWidget, selectEditChannelCtxState, selectFlipWebCamState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSelectedUserCtxState, selectStopStreamingState, selectStreamVolumeState, selectViewSocialState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
-import { assignNewServerGroup, markWidgetForDeletion, selectChannelSocialId, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerMembers, selectUsersPermissions, setChannelSocialId, setEditingChannelId, setSocialInput, throwServerError } from '../server/ServerSlice';
+import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleStreamState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteMesssageState, selectDeleteWidget, selectEditChannelCtxState, selectFlipWebCamState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSelectedMessage, selectSelectedUserCtxState, selectStopStreamingState, selectStreamVolumeState, selectViewSocialState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
+import { assignNewServerGroup, deleteMessage, markWidgetForDeletion, selectChannelSocialId, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerMembers, selectUsersPermissions, setChannelSocialId, setEditingChannelId, setSocialInput, throwServerError } from '../server/ServerSlice';
 
 // style
 import "./ContextMenu.css";
@@ -123,6 +123,11 @@ export const ContextMenu = () => {
 
     const flipWebCamState = useSelector(selectFlipWebCamState);
 
+    // message
+    const deleteMessageState = useSelector(selectDeleteMesssageState);
+
+    const selectedMessage = useSelector(selectSelectedMessage);
+
     // copy paste state
     const pasteCtxState = useSelector(selectPasteCtxState);
 
@@ -225,7 +230,14 @@ export const ContextMenu = () => {
                     isOwner: isOwner !== -1
                 }))
             }
-            if (p.className === 'text-input' && p.localName === 'input') {
+            if (p.className === 'message-container') {
+                dispatch(toggleContextMenu(true));
+                console.log(p)
+                dispatch(setContextMenuOptions({state: "deleteMessage", value: permissions.user_can_manage_channels}));
+
+                dispatch(setContextMenuOptions({state: 'selectedMessage', value: p.id}));
+            }
+            if (p.className === 'text-input' && p.localName === 'input' || p.localName === 'textarea') {
                 dispatch(toggleContextMenu(true));
 
                 setSelectedInput(p);
@@ -563,6 +575,40 @@ export const ContextMenu = () => {
         dispatch(updateSoundEffectsState({type: "socialSoundEffect", state: !socialSoundEffect}))
     }
 
+    const handleStopStreaming = () => {
+        try {
+            document.getElementById('screen-share-toggle-button').click()
+        } catch (error) {
+            console.log(error);
+        }
+        
+    }
+
+    const handleDeleteMessage = async () => {
+        try {
+            const channel_id = selectedMessage.split('/')[1];
+
+            const message_id = selectedMessage.split('/')[0];
+
+            if (!message_id && !channel_id) return dispatch(throwServerError({errorMessage: "Cannot Delete This Message"}));
+
+            await socket.request('delete message', {channel_id: channel_id, message_id: message_id})
+            .then(result => {
+                
+                dispatch(deleteMessage({message_id: result.message_id, channel_id: result.channel_id}));
+
+            })
+            .catch(error => {
+                console.log(error)
+                dispatch(throwServerError({errorMessage: error.errorMessage}));
+            })
+
+        } catch (error) {
+            console.log(error);
+            dispatch(throwServerError({errorMessage: error.message}))
+        }
+    }
+
     return (
         <>
         {ctxActive ? 
@@ -608,7 +654,8 @@ export const ContextMenu = () => {
             {channelSpecificSettingsState ? <BoolButton action={handleToggleSocialSoundEffect} state={socialSoundEffect} name="Enable Social Sound Effect" /> : null}
             {changeStreamVolumeState ? <CtxMenuTitle title={"Change Stream Volume"} /> : null}
             {changeStreamVolumeState ? <Range value={streamAudioLevel} action={handleStreamVolumeChange} fill={true} max={1} min={0} step={0.01} /> : null}
-            {stopStreamingState ? <CtxButton name={"Stop Streaming"} /> : null}
+            {stopStreamingState ? <CtxButton action={handleStopStreaming} name={"Stop Streaming"} /> : null}
+            {deleteMessageState ? <CtxButton action={handleDeleteMessage} name={"Delete Message"} /> : null}
             <Loading loading={loading} />
         </motion.div>
         : null}

@@ -56,6 +56,8 @@ export const Social = ({currentChannel, channelId}) => {
 
         if (text.length === 0 && image === null) return;
 
+        if (text.length > 511) return dispatch(throwServerError({errorMessage: "Message cannot be longer than 512 characters"}));
+
         let data = {
             username: username,
             channel_id: channelId,
@@ -115,7 +117,7 @@ export const Social = ({currentChannel, channelId}) => {
         }
         setImage(image);
     }
-
+    
     return (
         <motion.div 
         key={"room-social-content-container"}
@@ -141,7 +143,7 @@ export const Social = ({currentChannel, channelId}) => {
                 : null}
                 <div ref={messagesRef} className='social-messages-wrapper'>
                     {messages.map(message => {
-                        return <Message message={message.content} key={message.content.local_id || message._id} />
+                        return <Message channel_id={message.channel_id} id={message._id} message={message.content} key={message.content.local_id || message._id} />
                     })}
                 </div>
                 {permission?.user_can_post_channel_social ? <MessageInput persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : null}

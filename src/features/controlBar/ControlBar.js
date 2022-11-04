@@ -133,6 +133,7 @@ export const ControlBar = () => {
                     action={() => {toggleFunction('screenShareState')}} 
                     state={screenShareState} 
                     active={current_channel_id === null}
+                    id={"screen-share-toggle-button"}
                     />
                     <ConnectionIndicator active={current_channel_id !== null} />
                 </div>

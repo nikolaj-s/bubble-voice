@@ -25,6 +25,7 @@ import { Loading } from '../../../../../components/LoadingComponents/Loading/Loa
 import { playSoundEffect } from '../../../../settings/soundEffects/soundEffectsSlice';
 import { ChannelBackgroundInput } from './ChannelBackgroundInput/ChannelBackgroundInput';
 import { Range } from '../../../../../components/inputs/Range/Range';
+import { InputPlaceHolder } from '../../../../../components/titles/InputPlaceHolder/InputPlaceHolder';
 
 const Wrapper = () => {
 
@@ -45,6 +46,8 @@ const Wrapper = () => {
     const [channelBackground, setChannelBackground] = React.useState(false);
 
     const [backgroundBlur, setBackgroundBlur] = React.useState(0);
+
+    const [clearedSocial, toggleClearedSocial] = React.useState(false);
 
     const channelToEdit = useSelector(selectChannelToEdit);
 
@@ -130,7 +133,7 @@ const Wrapper = () => {
         handleToggleLoading(true);
 
         await socket.request('update channel', 
-        {...channelToEdit, widgets: widgets, persist_social: persistChannelSocial, channel_name: channelName, file: channelBackground, background_blur: backgroundBlur})
+        {...channelToEdit, widgets: widgets, persist_social: persistChannelSocial, channel_name: channelName, file: channelBackground, background_blur: backgroundBlur, clear_social: clearedSocial})
         .then(response => {
 
             dispatch(updateChannel(response.channel))
@@ -196,6 +199,12 @@ const Wrapper = () => {
     
     }
 
+    const handleClearSocial = () => {
+        toggleEdited(true);
+
+        toggleClearedSocial(true);
+    }
+
     return (
         <>
         {permission?.user_can_manage_channels ?
@@ -214,6 +223,13 @@ const Wrapper = () => {
             <InputTitle title={`Widgets ${channelToEdit.widgets ? channelToEdit.widgets.length : 0} / 15`} />
             <WidgetPreview widgets={widgets} editing={true} reorder={updateWidgetOrder} />
             <TextButton action={openWidgetMenu} name={"Add Widget"} />
+            <SettingsHeader title={"Data"} />
+            <InputTitle title={"Clear Social Data"} />
+            {clearedSocial === false ?
+            <TextButton action={handleClearSocial} name={"Clear Social Data"} />
+            :
+            <InputPlaceHolder value={"Hit Apply To Save Changes"} />
+            }
             <InputTitle title={"Delete Channel"} />
             <TextButton action={handleDeleteChannel} name={"Delete Channel"} />
             <ApplyCancelButton toggled={edited === false ? true : null} apply={handleUpdateChannel} cancel={handleCancel} />

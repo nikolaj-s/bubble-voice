@@ -375,6 +375,10 @@ export class RoomClient {
                 this.producers.get(producer_id)?.close()
 
                 this.producers.delete(producer_id)
+
+                this.socket.emit('producerClosed', {
+                    producer_id
+                })
             }
 
         } catch (error) {
@@ -414,6 +418,10 @@ export class RoomClient {
                     this.producers.get(stream_audio_producer_id).close();
 
                     this.producers.delete(stream_audio_producer_id);
+
+                    this.socket.emit('producerClosed', {
+                        producer_id: stream_audio_producer_id
+                    })
                 }
             }
 
@@ -605,7 +613,7 @@ export class RoomClient {
             if (audio) {
                 
                 params.appData = {type: 'microphone'}
-                console.log(params)
+                
             }
 
             producer = await this.producerTransport.produce(params);
@@ -660,23 +668,15 @@ export class RoomClient {
                 })
     
                 stream_audio_producer.on('transportclose', () => {
-                    if (!audio) {
-                        el.srcObject.getTracks().forEach(track => {
-                            track.stop();
-                        })
-                    }
     
                     this.producers.delete(stream_audio_producer.id);
+               
                 })
     
                 stream_audio_producer.on('close', () => {
-                    if (!audio) {
-                        el.srcObject.getTracks().forEach(track => {
-                            track.stop();
-                        })
-                    }
     
                     this.producers.delete(stream_audio_producer.id);
+                
                 })
 
                 document.getElementById(producer.id).classList.add(`stream_audio_id=${stream_audio_producer.id}`)
@@ -830,10 +830,11 @@ export class RoomClient {
         }.bind(this))
 
         this.socket.on('newProducers', async function (data) {
-            console.log(data)
+           
             for (let {producer_id, user, appData } of data) {
                 await this.consume(producer_id, user, appData);
             }
+            
         }.bind(this))
 
         this.socket.on('disconnect', function () {

@@ -11,7 +11,7 @@ export const CharacterCount = ({count = 0}) => {
 
     React.useEffect(() => {
 
-        if (count > 254) {
+        if (count > 511) {
             animation.start({
                 color: 'rgb(255, 0, 0)',
                 fontSize: '0.9rem'
@@ -30,7 +30,7 @@ export const CharacterCount = ({count = 0}) => {
             <motion.p
             animate={animation}
             style={{color: textColor}}
-            >{count} / 255</motion.p>
+            >{count} / 512</motion.p>
         </div>
     )
 }

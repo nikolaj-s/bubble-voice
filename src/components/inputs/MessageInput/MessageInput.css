@@ -8,6 +8,7 @@
     border-bottom-left-radius: var(--border-radius);
     border-bottom-right-radius: var(--border-radius);
     display: flex;
+    align-content: center;
 }
 
 .message-input-button-wrapper {
@@ -21,9 +22,9 @@
     outline: none;
 }
 
-.message-input-container input {
-    width: 100%;
-    height: 100%;
+.message-input-container textarea {
+    width: calc(100%);
+    height: calc(100% - 20px);
     object-fit: contain;
     border-bottom-left-radius: var(--border-radius);
     border-bottom-right-radius: var(--border-radius);
@@ -31,13 +32,13 @@
     font-size: 1.4rem;
     border: none;
     margin: 0 0 0 0.5rem;
-    padding: 0;
+    padding: 10px 0;
     font-weight: 400;
     letter-spacing: var(--font-spacing);
     font-family: var(--font-variable);
 }
 
-.message-input-container input:focus {
+.message-input-container textarea:focus {
     outline: none;
 }
 

@@ -127,6 +127,26 @@ const serverSlice = createSlice({
         reconnecting: false
     },
     reducers: {
+        deleteMessage: (state, action) => {
+
+            if (!action.payload.message_id && !action.payload.channel_id) return;
+
+            const index = state.channels.findIndex(c => c._id === action.payload.channel_id);
+
+            if (index === -1) return;
+
+            state.channels[index].social = state.channels[index].social.filter(m => m._id !== action.payload.message_id);
+
+        },
+        reOrderChannels: (state, action) => {
+
+            const sortOrder = action.payload;
+
+            state.channels.sort((a, b) => {
+                return sortOrder.indexOf(a._id) - sortOrder.indexOf(b._id);
+            })
+
+        },
         toggleReconnectingState: (state, action) => {
             state.reconnecting = !state.reconnecting;
         },
@@ -315,6 +335,8 @@ const serverSlice = createSlice({
 
             const message_index = state.channels[channel_index].social.findIndex(msg => msg.content.local_id === action.payload.content.local_id);
 
+            state.channels[channel_index].social[message_index]._id = action.payload._id;
+
             state.channels[channel_index].social[message_index].content = {...action.payload.content, ...{display_name: state.members[memberIndex].display_name}}
         },
         toggleServerPushToTalkState: (state, action) => {
@@ -372,10 +394,10 @@ const serverSlice = createSlice({
             })
         },
         updateChannel: (state, action) => {
-            
+            console.log(action.payload)
             state.channels = state.channels.map(channel => {
                 if (channel._id === action.payload._id) {
-                    return {...action.payload, users: channel.users, social: channel.social, widgets: action.payload.widgets}
+                    return {...action.payload, users: channel.users, social: action.payload.social, widgets: action.payload.widgets}
                 } else {
                     return channel;
                 }
@@ -596,6 +618,6 @@ export const selectTopAnimationPoint = state => state.serverSlice.top_pos;
 
 // actions
 
-export const {toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
+export const {deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
 
 export default serverSlice.reducer;

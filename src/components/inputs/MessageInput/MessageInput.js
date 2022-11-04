@@ -17,6 +17,8 @@ export const MessageInput = ({send, text, keyCode, active, image, value, persist
 
     const [files, setFiles] = React.useState([{}])
 
+    const [inputHeight, setInputHeight] = React.useState(60)
+
     const primaryColor = useSelector(selectPrimaryColor);
     
     const textColor = useSelector(selectTextColor);
@@ -46,10 +48,12 @@ export const MessageInput = ({send, text, keyCode, active, image, value, persist
     }, [files])
 
     const handleText = (e) => {
-
-        if (e.target.value.length > 255) return;
+       
+        if (e.target.value.length > 511) return;
 
         text(e.target.value)
+
+        setInputHeight(e.target.scrollHeight)
     
     }
 
@@ -57,11 +61,13 @@ export const MessageInput = ({send, text, keyCode, active, image, value, persist
         if (keyCode === false) {
             return
         }
-        
+
+        if (keyCode === 14) setInputHeight(60);
         keyCode(e.keyCode)
     }
 
     const handleSend = () => {
+        setInputHeight(60)
         send();
     }
 
@@ -71,13 +77,17 @@ export const MessageInput = ({send, text, keyCode, active, image, value, persist
             
             animate={animation}
             style={{
-                backgroundColor: primaryColor
+                backgroundColor: primaryColor,
+                height: inputHeight
             }}
             className="message-input-container" >
-                <input 
+                <textarea 
                 className='text-input'
                 style={{
-                    color: textColor
+                    color: textColor,
+                    width: '100%',
+                    resize: 'none',
+                    border: 'none'
                 }}
                 onFocus={handleText}
                 id='social-input-selector' onKeyUp={handleKeyCode} onChange={handleText} value={value}  placeholder='Message' type="text" />

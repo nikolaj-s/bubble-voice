@@ -465,7 +465,7 @@ const Component = () => {
             
         }
         return () => {
-            console.log('cleaning up')
+            
             analyser?.disconnect();
             scriptProcessor?.disconnect();
             source?.disconnect();
@@ -503,7 +503,6 @@ const Component = () => {
             <audio hidden={true} id={'microphone-input-source'} />
             <Music />
             <StreamHandler client={client} users={channel.users} /> 
-            <Loading loading={loading} />
         </>
     )
 }

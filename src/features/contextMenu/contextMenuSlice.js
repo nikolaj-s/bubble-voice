@@ -37,7 +37,10 @@ const contextMenuSlice = createSlice({
         // widgets
         deleteWidget: false,
         // channel specific settings
-        channelSpecificSettings: false
+        channelSpecificSettings: false,
+        // message state
+        deleteMessage: false,
+        selectedMessage: ""
     },
     reducers: {
         setContextMenuOptions: (state, action) => {
@@ -80,6 +83,8 @@ const contextMenuSlice = createSlice({
             state.flipWebCam = false;
             state.stream_volume = false;
             state.stop_streaming = false;
+            state.deleteMessage = false;
+            state.selectedMessage = "";
         },
         handleChannelCtxState: (state, action) => {
             state.joinChannel = action.payload.join;
@@ -107,6 +112,10 @@ const contextMenuSlice = createSlice({
 })
 
 // selectors
+export const selectDeleteMesssageState = state => state.contextMenuSlice.deleteMessage;
+
+export const selectSelectedMessage = state => state.contextMenuSlice.selectedMessage;
+
 export const selectContextMenuCordinates = state => state.contextMenuSlice.cordinates;
 
 export const selectContextMenuActive = state => state.contextMenuSlice.contextMenuActive;

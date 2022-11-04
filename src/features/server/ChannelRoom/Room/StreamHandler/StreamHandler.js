@@ -48,6 +48,24 @@ export const StreamHandler = ({users, client}) => {
             
     }, [users, client, soundEffectsQueue])
 
+    React.useEffect(() => {
+
+        const user = users.find(u => u.username === user_name);
+
+        const streams = document.getElementsByClassName('streaming-video-player')
+
+        if (streams) {
+            for (const stream of streams) {
+                if (user.active) {
+                    stream.muted = true;
+                } else {
+                    stream.muted = false;
+                }
+            }
+        }
+        
+    }, [users])
+
     return (
         <></>
     )

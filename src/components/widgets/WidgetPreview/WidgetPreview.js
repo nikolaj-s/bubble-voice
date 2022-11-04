@@ -20,6 +20,7 @@ import { InputPlaceHolder } from '../../titles/InputPlaceHolder/InputPlaceHolder
 import "./WidgetPreview.css";
 import { MusicWidget } from '../Widgets/MusicWIdget/MusicWIdget';
 import { WheelSpinWidget } from '../Widgets/WheelSpinWidget/WheelSpinWidget';
+import { MoveButton } from '../../buttons/MoveButton/MoveButton';
 
 export const WidgetPreview = ({widgets = [], editing = false, reorder}) => {
 
@@ -37,7 +38,7 @@ export const WidgetPreview = ({widgets = [], editing = false, reorder}) => {
                     dragMomentum={true}
                     dragTransition={{ bounceStiffness: 600, bounceDamping: 10 }}
                     transition={widget.delete ? {duration: 0} : {}}
-                    as="div" className={`${widget.type} editing-single-widget"`} id={widget._id} key={widget._id + key} value={widget} >
+                    as="div" className={`${widget.type} editing-single-widget"`} id={widget._id} key={widget._id} value={widget} >
                         {widget.type === 'title' && !widget.delete ? <TitleWidget editing={editing} key={widget._id} widget={widget} /> : null}
                         {widget.type === 'plainText' && !widget.delete ? <PlainTextWidget editing={editing} key={widget._id} widget={widget} /> : null}
                         {widget.type === 'list' && !widget.delete ? <ListWidget editing={editing} key={widget._id} widget={widget} /> : null}
@@ -48,6 +49,7 @@ export const WidgetPreview = ({widgets = [], editing = false, reorder}) => {
                         {widget.type === 'wheel-spin' && !widget.delete ? <WheelSpinWidget editing={true} key={widget._id} widget={widget} /> : null}
                         {widget.delete ? null : <SubMenuButton position={"absolute"} zIndex={3} top={15} left={8} />}
                         {widget.delete ? <InputPlaceHolder margin={"1% 0"} value={"Hit Apply To Save Changes"} /> : null}
+                        {widget.delete ? null : <MoveButton position={'absolute'} width={25} height={25} top={15} left={65} zIndex={3} />}
                     </Reorder.Item>
                 )
             })}

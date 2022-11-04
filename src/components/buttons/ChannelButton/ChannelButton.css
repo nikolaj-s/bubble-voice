@@ -8,12 +8,16 @@
     border-radius: var(--border-radius);
     margin-bottom: 2%;
     padding: 0 2%;
+    overflow: hidden;
 }
 
 
 .channel-button-container h3 {
     font-size: 0.9rem;
     font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
     letter-spacing: var(--font-spacing);
 }
 

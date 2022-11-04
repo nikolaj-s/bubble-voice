@@ -14,8 +14,9 @@ import { selectPrimaryColor, selectTextColor } from '../../features/settings/app
 import "./Message.css";
 import { TextParser } from './TextParser/TextParser';
 import { setExpandedContent } from '../../features/ExpandContent/ExpandContentSlice';
+import { SubMenuButton } from '../buttons/subMenuButton/SubMenuButton';
 
-export const Message = ({ message, overlay = false }) => {
+export const Message = ({ message, overlay = false, id, channel_id }) => {
 
     const dispatch = useDispatch();
 
@@ -35,7 +36,7 @@ export const Message = ({ message, overlay = false }) => {
             padding: overlay ? null : 10,
             borderRadius: overlay ? null : 15
         }}
-        id={message._id}
+        id={`${id}/${channel_id}`}
         className='message-container'>
             <div className='sender-info-container'>
                 <p
@@ -43,9 +44,16 @@ export const Message = ({ message, overlay = false }) => {
                 >{message.display_name}</p>
                 {message.loading ? 
                 <MessageLoadingIndicator />
-                : <p
-                style={{color: textColor}}
-                >{message.date.split("T")[0]}</p>}
+                : 
+                <div className='date-submenu-message-wrapper'>
+
+                <p
+                style={{color: textColor, marginRight: 10}}
+                >{message.date.split("T")[0]}</p>
+                <SubMenuButton  />
+                </div>
+                }
+                
             </div>
             {message.text ? <TextParser text={message.text} /> : null}
             {message.image ? 

@@ -24,7 +24,10 @@
     width: 100%;
     justify-content: space-between;
     align-items: center;
-    opacity: 0.5;
+}
+
+.sender-info-container p {
+    opacity: 0.6;
 }
 
 .message-loading-container {
@@ -42,4 +45,8 @@
 .message-video-container {
     width: 100%;
     max-height: 600px;
+}
+.date-submenu-message-wrapper {
+    display: flex;
+    align-items: center;
 }
