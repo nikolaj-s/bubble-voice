@@ -105,11 +105,12 @@ export class RoomClient {
             this.producerTransport.on('produce', async function ({kind, rtpParameters, appData}, callback, errback) {
 
                 try {
-
+                    
                     const producer_id = await this.socket.request('produce', {
                         producerTransportId: this.producerTransport.id,
                         kind: kind,
                         rtpParameters: rtpParameters,
+                        appData: appData
                     }).then(response => {
                         return response;
                     })
@@ -184,6 +185,9 @@ export class RoomClient {
             .catch(error => {
                 console.log(error);
             })
+
+            console.log(data)
+
             const { id, kind, rtpParameters } = data;
 
             let codecOptions = {};
@@ -218,17 +222,17 @@ export class RoomClient {
         }
     }
 
-    async consume(producer_id, user) {
+    async consume(producer_id, user, appData) {
         try {
             this.getConsumeStream(producer_id)
             .then( function (data) {
-                
+                console.log(appData)
                 let consumer = data?.consumer;
 
                 if (consumer === undefined) return;
 
                 let stream = data?.stream;
-
+                
                 this.consumers.set(consumer.id, consumer);
 
                 let el;
@@ -259,9 +263,11 @@ export class RoomClient {
 
                 } else if (consumer.rtpParameters.codecs[0].mimeType === 'video/H264' || consumer.rtpParameters.codecs[0].mimeType === 'video/rtx') {
                     // display incoming screen stream
+                    stream.getVideoTracks()[0].contentHint = 'motion'
+                    
                     par = document.createElement('div');
 
-                    par.className = 'streaming-video-player-container'
+                    par.className = `streaming-video-player-container`
 
                     el = document.createElement('video');
 
@@ -273,7 +279,7 @@ export class RoomClient {
 
                     el.autoplay = true;
 
-                    el.className = 'streaming-video-player'
+                    el.className = `streaming-video-player ${user._id}`
 
                     el.playsInline = false;
 
@@ -285,6 +291,7 @@ export class RoomClient {
 
                     document.getElementById(user._id).parentNode.appendChild(par)
                 } else {
+                    
                     el = document.createElement('audio')
 
                     el.hidden = true;
@@ -297,18 +304,27 @@ export class RoomClient {
 
                     el.autoplay = true;
                     // handle incoming audio
-                    if (user.username !== 'music-bot') {
+                    if (appData?.type === 'screen share') {
+
+                        const user_stream_volume = USER_PREFS.get(user._id);
+
+                        el.className = `${user._id}-stream-audio`;
+
+                        el.volume = user_stream_volume?.stream_volume ? user_stream_volume.stream_volume : 1;
+
+                        document.getElementById('live-chat-wrapper').appendChild(el);
+                    
+                    } else {
+
                         const user_pref_volume = USER_PREFS.get(user._id);
 
                         el.className = `audio-source-for-user-${user._id}`;
 
                         el.volume = user_pref_volume?.volume ? user_pref_volume.volume : 1;
                         
-                        document.getElementById(user._id).appendChild(el)
-                    } else {
-                        document.getElementById('live-chat-wrapper').appendChild(el);
-                    }
-                    
+                        document.getElementById(user._id).appendChild(el);
+
+                    } 
 
                 }
 
@@ -350,6 +366,22 @@ export class RoomClient {
         this.consumers.delete(consumer_id);
     }    
 
+    closeProducerById(id) {
+        try {
+
+            let producer_id = this.producers.get(id);
+
+            if (producer_id) {
+                this.producers.get(producer_id)?.close()
+
+                this.producers.delete(producer_id)
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     closeProducer(type) {
         try {
             if (!this.producerLabel.has(type)) {
@@ -372,7 +404,19 @@ export class RoomClient {
             const el = document.getElementById(producer_id);
 
             const par = document.getElementById(producer_id + 'container');
-    
+            
+            if (type === 'screenType') {
+                const stream_audio_id = el.classList[2];
+                
+                if (stream_audio_id) {
+                    const stream_audio_producer_id = stream_audio_id.split('=')[1];
+                    
+                    this.producers.get(stream_audio_producer_id).close();
+
+                    this.producers.delete(stream_audio_producer_id);
+                }
+            }
+
             if (type !== mediaType.audio) {
                 el.srcObject.getTracks().forEach(track => {
                     track.stop();
@@ -410,7 +454,6 @@ export class RoomClient {
                         deviceId: deviceId,
                         echoCancellation: this.echoCancellation,
                         noiseSuppression: this.noiseSuppression,
-                        autoGainControl: false
                     },
                     video: false,
                 }
@@ -447,7 +490,7 @@ export class RoomClient {
                             minHeight: 540,
                             maxHeight: 720,
                             maxFrameRate: 30,
-                            minFrameRate: 30
+                            minFrameRate: 30,  
                         }
                     }
                 };
@@ -476,12 +519,19 @@ export class RoomClient {
 
         try {
             stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
-            
+
+            if (screen) {
+
+                stream.getVideoTracks()[0].contentHint = 'motion'
+
+            }
             if (audio) {
 
                 let audCtx = new AudioContext();
 
                 let audCtxSrc = audCtx.createMediaStreamSource(stream);
+
+                audCtxSrc.mediaStream.getAudioTracks()[0].contentHint = 'speech';
 
                 let dst = audCtx.createMediaStreamDestination();
 
@@ -496,32 +546,34 @@ export class RoomClient {
             }
 
             const track = audio ? microphone_stream.getAudioTracks()[0] : stream.getVideoTracks()[0]
-
+            
             const params = {
                 track
             }
 
-            // let stream_source_audio = screen ? await navigator.mediaDevices.getUserMedia(
-            //     {audio: {
-            //         mandatory: {
-            //             chromeMediaSource: 'desktop',
-            //             echoCancellation: true,
-            //         }
-                
-            //     },
-            //     video: {
-            //         mandatory: {
-            //             chromeMediaSource: 'desktop'
-            //         }
-            //     }
-            //     }
-            
-            //     ) : null;
-            
+            if (screen) {
 
-            // stream_audio = stream_source_audio ? stream_source_audio.getAudioTracks()[0] : null;
+                let stream_audio_source = await navigator.mediaDevices.getUserMedia({
+                        audio: {
+                            mandatory: {
+                                chromeMediaSource: 'desktop',
+                                echoCancellation: true
+                            }
+                        },
+                        video: {
+                            mandatory: {
+                                chromeMediaSource: 'desktop',
+                            }
+                        }
+                    
+                })
+
+                stream_audio = stream_audio_source.getAudioTracks()[0];
+            
+            }  
 
             if (!audio) {
+                params.appData = {type: screen ? 'screen share' : 'web cam'}
                 params.encodings = [
                     {
                     rid: 'r0',
@@ -550,6 +602,12 @@ export class RoomClient {
                 }
             }
 
+            if (audio) {
+                
+                params.appData = {type: 'microphone'}
+                console.log(params)
+            }
+
             producer = await this.producerTransport.produce(params);
 
             this.producers.set(producer.id, producer);
@@ -575,7 +633,7 @@ export class RoomClient {
             } else if (screen) {
                 stream[type] = 'screen'
                 par = document.createElement('div');
-                par.className = 'streaming-video-player-container'
+                par.className = `streaming-video-player-container`
                 el = document.createElement('video');
                 el.srcObject = stream;
                 el.id = producer.id;
@@ -583,16 +641,54 @@ export class RoomClient {
                 el.autoplay = true;
                 el.className = 'stream';
                 el.muted = true;
-                el.className = 'streaming-video-player'
+                el.className = `streaming-video-player ${this.user.username}-streaming-player`
                 el.playsInline = true;
                 par.appendChild(el)
                 document.getElementById(this.user._id).parentNode.appendChild(par)
+            }
+
+            let stream_audio_producer;
+
+            if (stream_audio) {
+
+                stream_audio_producer = await this.producerTransport.produce({ track: stream_audio, appData: {type: 'screen share'} })
+
+                this.producers.set(stream_audio_producer.id, stream_audio_producer);
+            
+                stream_audio_producer.on('trackended', () => {
+                    this.closeProducerById(stream_audio_producer.id);
+                })
+    
+                stream_audio_producer.on('transportclose', () => {
+                    if (!audio) {
+                        el.srcObject.getTracks().forEach(track => {
+                            track.stop();
+                        })
+                    }
+    
+                    this.producers.delete(stream_audio_producer.id);
+                })
+    
+                stream_audio_producer.on('close', () => {
+                    if (!audio) {
+                        el.srcObject.getTracks().forEach(track => {
+                            track.stop();
+                        })
+                    }
+    
+                    this.producers.delete(stream_audio_producer.id);
+                })
+
+                document.getElementById(producer.id).classList.add(`stream_audio_id=${stream_audio_producer.id}`)
             }
             
             producer.on('trackended', () => {
                 this.closeProducer(type);
 
                 if (screen) {
+
+                    this.closeProducerById(stream_audio_producer.id);
+
                     this.dispatch({action: 'close-stream'})
                 }
             })
@@ -607,6 +703,8 @@ export class RoomClient {
 
                 if (screen) {
                     this.dispatch({action: 'close-stream'})
+
+                    this.producers.delete(stream_audio_producer.id);
                 }
 
                 this.producers.delete(producer.id);
@@ -621,6 +719,8 @@ export class RoomClient {
 
                 if (screen) {
                     this.dispatch({action: 'close-stream'})
+
+                    this.producers.delete(stream_audio_producer.id);
                 }
 
                 this.producers.delete(producer.id);
@@ -632,35 +732,10 @@ export class RoomClient {
                 this.pauseProducer('audioType')
             }
 
-            if (stream_audio) {
+            if (screen) {
 
-                let stream_audio_producer = await this.producerTransport.produce({ track: stream_audio })
-
-                this.producers.set(stream_audio_producer.id, stream_audio_producer);
+                this.pauseProducerById(stream_audio_producer.id);
             
-                stream_audio_producer.on('trackended', () => {
-                    this.closeProducer(type);
-                })
-    
-                stream_audio_producer.on('transportclose', () => {
-                    if (!audio) {
-                        el.srcObject.getTracks().forEach(track => {
-                            track.stop();
-                        })
-                    }
-    
-                    this.producers.delete(producer.id);
-                })
-    
-                stream_audio_producer.on('close', () => {
-                    if (!audio) {
-                        el.srcObject.getTracks().forEach(track => {
-                            track.stop();
-                        })
-                    }
-    
-                    this.producers.delete(producer.id);
-                })
             }
 
             this.dispatch({action: 'screen-share-loading-state', value: false})
@@ -682,6 +757,30 @@ export class RoomClient {
 
             
         }
+    }
+
+    pauseConsumerById(id) {
+        if (!this.consumers.has(id)) return;
+
+        this.consumers.get(id).pause();
+    }
+
+    resumeConsumerById(id) {
+        if (!this.consumers.has(id)) return;
+
+        this.consumers.get(id).resume();
+    }
+
+    pauseProducerById(id) {
+        if (!this.producers.has(id)) return;
+
+        this.producers.get(id).pause();
+    }
+
+    resumeProducerById(id) {
+        if (!this.producers.has(id)) return;
+
+        this.producers.get(id).resume();
     }
 
     pauseProducer(type) {
@@ -725,13 +824,15 @@ export class RoomClient {
 
     async initSockets() {
         this.socket.on('consumerclosed', function({ consumer_id }) {
-            console.log(consumer_id)
+            
             this.removeConsumer(consumer_id);
+        
         }.bind(this))
 
         this.socket.on('newProducers', async function (data) {
-            for (let {producer_id, user } of data) {
-                await this.consume(producer_id, user);
+            console.log(data)
+            for (let {producer_id, user, appData } of data) {
+                await this.consume(producer_id, user, appData);
             }
         }.bind(this))
 

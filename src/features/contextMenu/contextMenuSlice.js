@@ -15,6 +15,9 @@ const contextMenuSlice = createSlice({
         selectedChannel: "",
         selectedChannelName: "",
         viewSocial: false,
+        // stream management state
+        stream_volume: false,
+        stop_streaming: false,
         // user management state
         banUser: false,
         assignPermissions: false,
@@ -46,6 +49,11 @@ const contextMenuSlice = createSlice({
         toggleContextMenu: (state, action) => {
             state.contextMenuActive = action.payload;
         },
+        handleStreamState: (state, action) => {
+            state.stream_volume = action.payload.stream_volume;
+            state.stop_streaming = action.payload.stop_streaming;
+            state._id = action.payload.member_id;
+        },
         clearCtxState: (state, action) => {
             state.saveImage = false;
             state.joinChannel = false;
@@ -70,6 +78,8 @@ const contextMenuSlice = createSlice({
             state.move = false;
             state.viewSocial = false;
             state.flipWebCam = false;
+            state.stream_volume = false;
+            state.stop_streaming = false;
         },
         handleChannelCtxState: (state, action) => {
             state.joinChannel = action.payload.join;
@@ -145,7 +155,11 @@ export const selectViewSocialState = state => state.contextMenuSlice.viewSocial;
 
 export const selectFlipWebCamState = state => state.contextMenuSlice.flipWebCam;
 
+export const selectStopStreamingState = state => state.contextMenuSlice.stop_streaming;
+
+export const selectStreamVolumeState = state => state.contextMenuSlice.stream_volume;
+
 // actions
-export const { handleCopyPasteCtxState, handleUserManagementCtx, handleChannelCtxState, clearCtxState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } = contextMenuSlice.actions;
+export const { handleStreamState, handleCopyPasteCtxState, handleUserManagementCtx, handleChannelCtxState, clearCtxState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } = contextMenuSlice.actions;
 
 export default contextMenuSlice.reducer;

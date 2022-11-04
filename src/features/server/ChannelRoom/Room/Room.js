@@ -31,6 +31,7 @@ import { RoomActionOverlay } from './RoomActionOverlay/RoomActionOverlay';
 import { ChannelBackground } from './ChannelBackground/ChannelBackground';
 import { selectMiscSettingsHideChannelBackground } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { SubMenuButton } from '../../../../components/buttons/subMenuButton/SubMenuButton';
+import { StreamHandler } from './StreamHandler/StreamHandler';
 
 let client;
 
@@ -501,6 +502,7 @@ const Component = () => {
             <ChannelBackground channel_background={hideChannelBackgrounds ? null : channel.channel_background} blur={channel.background_blur} />
             <audio hidden={true} id={'microphone-input-source'} />
             <Music />
+            <StreamHandler client={client} users={channel.users} /> 
             <Loading loading={loading} />
         </>
     )

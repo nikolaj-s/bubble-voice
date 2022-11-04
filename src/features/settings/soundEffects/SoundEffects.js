@@ -3,6 +3,7 @@ import React from 'react'
 
 // state
 import { useDispatch, useSelector } from 'react-redux';
+import { selectScreenShareState } from '../../controlBar/ControlBarSlice';
 import { selectAudioOutput } from '../appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 import { playSoundEffect, removeSoundEffectFromQueue, selectSocialSoundEffect, selectSoundEffect, selectSoundEffectQueue, selectSoundEffectVolume } from './soundEffectsSlice';
 
@@ -42,6 +43,8 @@ export const SoundEffects = () => {
 
     const soundEffectQueue = useSelector(selectSoundEffectQueue);
 
+    const sharingScreen = useSelector(selectScreenShareState);
+
     const soundEffects = {
         'connected': connected,
         'disconnected': disconnected,
@@ -64,8 +67,8 @@ export const SoundEffects = () => {
     }, [soundEffectsVolume])
     
     React.useEffect(() => {
-        console.log(soundEffectQueue)
-        if ((soundEffect === 'newMessage' && socialSoundEffect === false) || (soundEffects[soundEffect] === undefined)) return; 
+        
+        if ((soundEffect === 'newMessage' && socialSoundEffect === false) || (soundEffects[soundEffect] === undefined) || soundEffectQueue.length > 2) return; 
         
         dispatch(playSoundEffect(soundEffects[soundEffect]));
         

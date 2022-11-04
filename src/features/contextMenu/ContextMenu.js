@@ -11,7 +11,7 @@ import { Loading } from '../../components/LoadingComponents/Loading/Loading';
 import { CtxMenuTitle } from '../../components/titles/ctxMenuTitle/CtxMenuTitle';
 
 // state
-import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteWidget, selectEditChannelCtxState, selectFlipWebCamState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSelectedUserCtxState, selectViewSocialState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
+import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleStreamState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteWidget, selectEditChannelCtxState, selectFlipWebCamState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSelectedUserCtxState, selectStopStreamingState, selectStreamVolumeState, selectViewSocialState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
 import { assignNewServerGroup, markWidgetForDeletion, selectChannelSocialId, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerMembers, selectUsersPermissions, setChannelSocialId, setEditingChannelId, setSocialInput, throwServerError } from '../server/ServerSlice';
 
 // style
@@ -42,6 +42,8 @@ export const ContextMenu = () => {
     const [selectedVideo, setSelectedVideo] = React.useState();
 
     const [selectedAudio, setSelectAudio] = React.useState();
+
+    const [streamAudioLevel, setStreamAudioLevel] = React.useState(1);
 
     const [selectedInput, setSelectedInput] = React.useState();
 
@@ -94,6 +96,11 @@ export const ContextMenu = () => {
     const hideNonVideoParticapents = useSelector(selectMiscSettingsHideNonVideoParticapents);
 
     const socialSoundEffect = useSelector(selectSocialSoundEffect);
+
+    // stream management
+    const changeStreamVolumeState = useSelector(selectStreamVolumeState);
+
+    const stopStreamingState = useSelector(selectStopStreamingState);
 
     // user management
     const canBanUser = useSelector(selectBanUserCtxState);
@@ -154,6 +161,40 @@ export const ContextMenu = () => {
                 setAudioLevel(p?.volume);
             
             }
+
+            if (p.className === 'streaming-video-player-container' || p.className === 'streaming-video-player') {
+                try {
+                    const id = p.children[0].classList[1];
+
+                    if (id) {
+                        if (id !== `${username}-streaming-player`) {
+                            const L_stream_vol = USER_PREFS.get(id);
+                            console.log(L_stream_vol)
+                            if (L_stream_vol) {
+
+                                setStreamAudioLevel(L_stream_vol?.stream_volume ? L_stream_vol.stream_volume : 1);
+
+                            } else {
+
+                                setStreamAudioLevel(1);
+                            
+                            }
+                        }
+
+                        dispatch(handleStreamState({
+                            stream_volume: id !== `${username}-streaming-player`,
+                            stop_streaming: id === `${username}-streaming-player`,
+                            member_id: id === `${username}-streaming-player` ? false : id
+                        }))
+                    }
+
+                    dispatch(toggleContextMenu(true));
+                } catch (error) {
+                    console.log(error);
+                }  
+
+            }
+
             if (p.id?.includes('channel-button')) {
                 
                 const id = p.id.split('-')[2];
@@ -379,7 +420,7 @@ export const ContextMenu = () => {
         let obj = {};
         
         const currentUserPrefs = USER_PREFS.get(memberId);
-
+        console.log(currentUserPrefs)
         if (currentUserPrefs) {
             obj = {...currentUserPrefs, volume: value}
         } else {
@@ -394,6 +435,36 @@ export const ContextMenu = () => {
             document.getElementsByClassName(`audio-source-for-user-${memberId}`)[0].volume = value;
         } catch (error) {
             
+        }
+    }
+
+    const handleStreamVolumeChange = (value) => {
+        try {
+            
+            setStreamAudioLevel(value);
+
+            let obj = {};
+
+            const currentUserPrefs = USER_PREFS.get(memberId);
+            console.log(memberId)
+            if (currentUserPrefs) {
+                obj = {...currentUserPrefs, stream_volume: value}
+            } else {
+                obj = {stream_volume: value}
+            }
+
+            USER_PREFS.set(memberId, obj);
+
+            saveUserPrefs();
+
+            try {
+                document.getElementsByClassName(`${memberId}-stream-audio`)[0].volume = value;
+            } catch (error) {
+                console.log(error)
+            }
+
+        } catch (error) {
+
         }
     }
 
@@ -451,7 +522,7 @@ export const ContextMenu = () => {
         const selected_username = selectedUserToManage.split('-')[0];
 
         const channel_id = selectedUserToManage.split('channel-id-')[1];
-        console.log(arg)
+        
         if (selected_username && arg) {
             await socket.request('move user', {channel_id: channel_id, username: selected_username, to_move: arg})
             .catch(error => {
@@ -515,7 +586,7 @@ export const ContextMenu = () => {
             {audio ? 
             <>
             <CtxMenuTitle title={"Change Volume"} />
-            <Range action={handleVolumeChange} fill={true} value={audioLevel} />
+            <Range action={handleVolumeChange} fill={true} value={audioLevel} max={1} min={0} step={0.01} />
             </>
              : null}
             {changeUserVolume ? 
@@ -535,6 +606,9 @@ export const ContextMenu = () => {
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideNonVideoParticapents")}} state={hideNonVideoParticapents} name={"Hide Non Video Participants"} /> : null}
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("disableMessagePopUp")}} state={disableMessagePopup} name={"Disable Message Overlay"} /> : null}
             {channelSpecificSettingsState ? <BoolButton action={handleToggleSocialSoundEffect} state={socialSoundEffect} name="Enable Social Sound Effect" /> : null}
+            {changeStreamVolumeState ? <CtxMenuTitle title={"Change Stream Volume"} /> : null}
+            {changeStreamVolumeState ? <Range value={streamAudioLevel} action={handleStreamVolumeChange} fill={true} max={1} min={0} step={0.01} /> : null}
+            {stopStreamingState ? <CtxButton name={"Stop Streaming"} /> : null}
             <Loading loading={loading} />
         </motion.div>
         : null}

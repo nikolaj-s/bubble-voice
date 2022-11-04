@@ -74,9 +74,9 @@ const appearanceSettingsSlice = createSlice({
             },
             coffee: {
                 primaryColor: "rgb(235, 225, 203)",
-                secondaryColor: "rgb(158, 118, 118)",
-                accentColor: "rgb(129, 91, 91)",
-                textColor: "rgb(89, 69, 69)",
+                secondaryColor: "rgb(111, 84, 73)",
+                accentColor: "rgb(232, 177, 115)",
+                textColor: "rgb(0, 0, 0)",
                 activationColor: "rgb(255, 248, 234)",
             },
             green: {
