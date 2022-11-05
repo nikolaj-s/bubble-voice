@@ -9,11 +9,10 @@ import { closeReleaseNotesErrorMessage, fetchReleaseNotes, selectLoadingReleaseN
 // components
 import { Loading } from '../../../components/LoadingComponents/Loading/Loading';
 import { Error } from '../../../components/Error/Error';
+import { ReleaseNote } from './ReleaseNote/ReleaseNote';
 
 // style
 import "./ReleaseNotes.css";
-import { ReleaseNote } from './ReleaseNote/ReleaseNote';
-import { SettingsSpacer } from '../../../components/Spacers/SettingsSpacer/SettingsSpacer';
 
 export const ReleaseNotes = () => {
 
@@ -37,6 +36,7 @@ export const ReleaseNotes = () => {
             dispatch(fetchReleaseNotes());
         }
 
+    // eslint-disable-next-line
     }, [loading, releaseNotes])
 
     return (

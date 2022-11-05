@@ -1,11 +1,10 @@
 
 // library's
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch} from 'react-redux';
 
 // state
 import { setHeaderTitle } from '../contentScreen/contentScreenSlice';
-import { selectPrimaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // components
 import { SoundEffects } from '../settings/soundEffects/SoundEffects';
@@ -22,8 +21,6 @@ export const Dashboard = () => {
 
     const dispatch = useDispatch();
 
-    const primaryColor = useSelector(selectPrimaryColor);
-
     React.useEffect(() => {
         // disable app title on dashboard mount
         document.getElementById('application-title').style.opacity = 0;
@@ -37,7 +34,7 @@ export const Dashboard = () => {
     }, [])
 
     return (
-        <div style={{backgroundColor: primaryColor}} className='home-container'>
+        <div className='home-container'>
             <SideBar />
             <ContentScreen />
             <SoundEffects />

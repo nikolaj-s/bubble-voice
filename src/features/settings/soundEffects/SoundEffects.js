@@ -3,14 +3,12 @@ import React from 'react'
 
 // state
 import { useDispatch, useSelector } from 'react-redux';
-import { ScreenShare } from '../../../components/Icons/ScreenShare/ScreenShare';
-import { selectScreenShareState } from '../../controlBar/ControlBarSlice';
 import { selectAudioOutput } from '../appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 import { playSoundEffect, removeSoundEffectFromQueue, selectSocialSoundEffect, selectSoundEffect, selectSoundEffectQueue, selectSoundEffectVolume } from './soundEffectsSlice';
 
 const connected = require('../../../assets/connected.wav');
 
-const disconnected = require('../../../assets/disconnected.wav');
+const disconnected = require('../../../assets/disconnect.mp3');
 
 const userJoined = require('../../../assets/user_has_joined.mp3');
 
@@ -43,8 +41,6 @@ export const SoundEffects = () => {
     const socialSoundEffect = useSelector(selectSocialSoundEffect);
 
     const soundEffectQueue = useSelector(selectSoundEffectQueue);
-
-    const sharingScreen = useSelector(selectScreenShareState);
 
     const soundEffects = {
         'connected': connected,
@@ -96,6 +92,7 @@ export const SoundEffects = () => {
             console.log(error)
         }
 
+    // eslint-disable-next-line
     }, [audioOutput])
 
     React.useEffect(() => {
@@ -105,7 +102,8 @@ export const SoundEffects = () => {
             setPlaying(soundEffects[soundEffectQueue[0]]);
             
         }, 10)
-            
+
+    // eslint-disable-next-line       
     }, [soundEffectQueue])
 
     return (

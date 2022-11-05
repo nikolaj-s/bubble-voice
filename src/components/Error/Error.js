@@ -49,7 +49,7 @@ export const Error = ({errorMessage, action, buttonLabel = "Close"}) => {
         style={{
             backgroundColor: 'rgba(' + primaryColor.split('rgb(')[1].split(')')[0] + ', 0.8)'
         }}
-        className='error-container' initial={{scale: 0}} animate={{scale: 1}} exit={{scale: 0}} key={"error-componen"}> 
+        className='error-container' initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} key={"error-componen"}> 
             <div className='inner-error-container' >
                 <div
                 style={{

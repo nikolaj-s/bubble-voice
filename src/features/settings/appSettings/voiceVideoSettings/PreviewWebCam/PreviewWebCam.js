@@ -62,6 +62,7 @@ export const PreviewWebCam = ({preview = false, deviceId, mirrored}) => {
             el?.remove();
         }
 
+    // eslint-disable-next-line
     }, [preview])
 
     React.useEffect(() => {
@@ -74,6 +75,7 @@ export const PreviewWebCam = ({preview = false, deviceId, mirrored}) => {
             }
 
         }
+    // eslint-disable-next-line
     }, [mirrored])
 
     return (

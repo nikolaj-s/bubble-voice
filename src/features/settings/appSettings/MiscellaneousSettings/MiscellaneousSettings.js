@@ -41,7 +41,8 @@ const Settings = () => {
     React.useEffect(() => {
 
         dispatch(setHeaderTitle("Miscellaneous Settings"))
-
+        
+    // eslint-disable-next-line
     }, [])
 
     const handleClearLocalData = () => {

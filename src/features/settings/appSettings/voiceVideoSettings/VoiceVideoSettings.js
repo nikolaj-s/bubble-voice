@@ -82,6 +82,7 @@ const Settings = () => {
         return () => {
             return dispatch(toggleControlState('microphoneState'))
         }
+    // eslint-disable-next-line
     }, [])
 
     const handleToggleVoiceState = () => {

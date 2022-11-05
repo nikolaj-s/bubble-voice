@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import { useSelector } from 'react-redux';
 
 // state
-import { selectSecondaryColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectCurrentChannel } from '../../../ServerSlice';
 
 // components
@@ -16,8 +15,6 @@ import "./Widgets.css";
 
 
 export const Widgets = () => {
-
-    const secondaryColor = useSelector(selectSecondaryColor);
 
     const channel = useSelector(selectCurrentChannel);
 

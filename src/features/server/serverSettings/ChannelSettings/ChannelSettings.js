@@ -8,6 +8,8 @@ import { Reorder } from 'framer-motion';
 import { TextButton } from '../../../../components/buttons/textButton/TextButton';
 import { NotAuthorizedMessage } from '../../../../components/NotAuthorizedMessage/NotAuthorizedMessage';
 import { InputTitle } from '../../../../components/titles/inputTitle/InputTitle';
+import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/SettingsSpacer';
+
 
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
@@ -126,6 +128,7 @@ const Wrapper = () => {
         </> :
         <NotAuthorizedMessage />
         }
+        <SettingsSpacer />
         </>
     )
 }

@@ -3,6 +3,7 @@ import { motion, useAnimation } from 'framer-motion';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useDropzone } from 'react-dropzone';
+import imageCompression from 'browser-image-compression';
 
 // state
 import { selectPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
@@ -12,12 +13,18 @@ import { ImageButton } from './ImageButton/ImageButton';
 import "./MessageInput.css";
 import { SendButton } from './SendButton/SendButton';
 import { CharacterCount } from './CharacterCount/CharacterCount';
+import { ProcessingImageIndicator } from './ProcessingImageIndicator/ProcessingImageIndicator';
+import { ImageDropListener } from './ImageDropListener/ImageDropListener';
 
 export const MessageInput = ({send, text, keyCode, active, image, value, persist}) => {
 
     const [files, setFiles] = React.useState([{}])
 
-    const [inputHeight, setInputHeight] = React.useState(60)
+    const [inputHeight, setInputHeight] = React.useState(60);
+
+    const [processingImage, toggleProcessingImage] = React.useState(false);
+
+    const [percent, setPercent] = React.useState(0)
 
     const primaryColor = useSelector(selectPrimaryColor);
     
@@ -25,16 +32,28 @@ export const MessageInput = ({send, text, keyCode, active, image, value, persist
 
     const animation = useAnimation();
 
+    const incrementPrecentage = (value) => {
+        setPercent(value)
+    }
+
     const {getRootProps} = useDropzone({
         accept: {
             "image/*": ['.jpeg', '.png', '.webp', '.jpg']
         },
         maxFiles: 1,
-        onDrop: acceptedFiles => {
+        onDrop: async acceptedFiles => {
 
-            setFiles(acceptedFiles.map(file => Object.assign(file, {
-                preview: URL.createObjectURL(file)
-            })))
+            if (acceptedFiles.length === 0) return;
+
+            toggleProcessingImage(true);
+
+            const options = {maxSizeMB: 0.7, onProgress: incrementPrecentage, maxIteration: 20}
+
+            const compressed_image = await imageCompression(acceptedFiles[0], options);
+            
+            setFiles([Object.assign(compressed_image, {preview: URL.createObjectURL(acceptedFiles[0])})])
+
+            toggleProcessingImage(false);
         }
 
     })
@@ -58,7 +77,7 @@ export const MessageInput = ({send, text, keyCode, active, image, value, persist
     }
 
     const handleKeyCode = (e) => {
-        if (keyCode === false) {
+        if (keyCode === false || processingImage) {
             return
         }
 
@@ -67,12 +86,20 @@ export const MessageInput = ({send, text, keyCode, active, image, value, persist
     }
 
     const handleSend = () => {
+
+        if (processingImage) return;
+
         setInputHeight(60)
         send();
     }
 
+    const handleImageButton = () => {
+        document.getElementById('image-drop-listener').click();
+    }
+
     return (
         <> 
+            <ImageDropListener root={getRootProps({className: 'dropzone'})} />
             <motion.div 
             
             animate={animation}
@@ -93,7 +120,8 @@ export const MessageInput = ({send, text, keyCode, active, image, value, persist
                 id='social-input-selector' onKeyUp={handleKeyCode} onChange={handleText} value={value}  placeholder='Message' type="text" />
                 <div className='message-input-button-wrapper'>
                     <CharacterCount count={value.length} />
-                    {persist ? <ImageButton root={getRootProps({className: 'dropzone'})} /> : null}
+                    {(persist && !processingImage) ? <ImageButton action={handleImageButton} /> : null}
+                    {processingImage ? <ProcessingImageIndicator percent={percent} /> : null}
                     <SendButton color={textColor} action={handleSend} />
                 </div>
             </motion.div>

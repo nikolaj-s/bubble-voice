@@ -58,6 +58,7 @@ export const Iframe = ({text}) => {
         >
             {link === 'error' ?
             <a 
+            rel="noreferrer"
             href={text}
             target="_blank"
             style={{
@@ -68,6 +69,7 @@ export const Iframe = ({text}) => {
             style={{
                 borderRadius: 15
             }}
+            title={link}
             sandbox='allow-scripts allow-same-origin allow-presentation allow-popups' loading='lazy' onError={handleError} src={link} allow="clipboard-write; encrypted-media;" frameBorder='0' scrolling='no' allowFullScreen={false} width='100%' height={text?.includes('steampowered') ? '200px' : '500px'}></iframe>}
         </div>
     )

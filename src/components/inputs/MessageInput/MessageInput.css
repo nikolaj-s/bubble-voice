@@ -11,6 +11,20 @@
     align-content: center;
 }
 
+#image-drop-listener {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: calc(100% - 8px);
+    height: calc(100% - 10px);
+    z-index: 10;
+    pointer-events: none;
+}
+
+.user-is-dragging  {
+    pointer-events: all !important;
+}
+
 .message-input-button-wrapper {
     height: 100%;
     display: flex;
@@ -29,7 +43,7 @@
     border-bottom-left-radius: var(--border-radius);
     border-bottom-right-radius: var(--border-radius);
     background-color: transparent;
-    font-size: 33px;
+    font-size: 14px;
     border: none;
     margin: 0 0 0 0.5rem;
     padding: 10px 0;

@@ -15,7 +15,7 @@ import { Verification } from '../features/LoggingIn/verification/Verification';
 // state
 import { incrementLoadingPercentage, selectRetryState } from '../features/initializingAppScreen/initializingAppScreenSlice';
 import { getMediaDevices } from '../features/settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
-import { selectPrimaryColor, toggleDarkMode, updatePersistedAppTheme } from '../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, selectRgbBackGround, updatePersistedAppTheme } from '../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { fetchAccount } from '../features/settings/appSettings/accountSettings/accountSettingsSlice';
 import { selectLoggedIn } from '../features/LoggingIn/signIn/signInSlice';
 import { selectSignedUp } from '../features/LoggingIn/signUp/signUpSlice';
@@ -42,7 +42,7 @@ function App() {
 
   const retryState = useSelector(selectRetryState);
 
-  let update_interval;
+  const rgbBackground = useSelector(selectRgbBackGround);
 
   const preventMouseDefaults = (e) => {
     if (e.button === 3 || e.button === 4) {
@@ -102,10 +102,14 @@ function App() {
     return () => {
       window.removeEventListener('mouseup', preventMouseDefaults);
     }
+
+  // eslint-disable-next-line
   }, [loggedIn, retryState, signedUp])
 
   // handle listen for update
   React.useEffect(() => {
+
+    let update_interval;
     
     setTimeout(() => {
 
@@ -170,10 +174,12 @@ function App() {
         clearInterval(update_interval);
       }
     }, 10)
+    
+  // eslint-disable-next-line
   }, [])
 
   return (
-    <div style={{backgroundColor: primaryColor}} className="App">
+    <div style={!rgbBackground ? {backgroundColor: primaryColor} : null} className={`App ${rgbBackground ? 'rgb-background' : null}`}>
       <TitleBar />
       <SplashScreen />
       <Routes>

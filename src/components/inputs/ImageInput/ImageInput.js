@@ -1,8 +1,9 @@
 // library's
 import React from 'react';
 import { useDropzone } from 'react-dropzone';
-import { motion, useAnimation } from 'framer-motion'
+import { AnimatePresence, motion, useAnimation } from 'framer-motion'
 import { useSelector } from 'react-redux';
+import imageCompression from 'browser-image-compression';
 
 // state
 import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
@@ -13,6 +14,7 @@ import { ImageIcon } from '../../Icons/ImageIcon/ImageIcon';
 
 // style
 import "./ImageInput.css";
+import { ImageInputProcessingIndicator } from './ImageInputProcessingIndicator/ImageInputProcessingIndicator';
 
 export const ImageInput = ({
     initalImage,
@@ -24,11 +26,15 @@ export const ImageInput = ({
     getFile = () => {},
     blur = false,
     blur_amount = 8,
-    size = 4000000
+    size = 1000000
 }) => {
 
     // state
     const [files, setFiles] = React.useState([{preview: initalImage}]);
+
+    const [processingImage, toggleProcessingImage] = React.useState(false);
+
+    const [percent, setPercent] = React.useState(0);
 
     const animation = useAnimation();
 
@@ -42,21 +48,29 @@ export const ImageInput = ({
 
     const textColor = useSelector(selectTextColor);
 
+    const handlePercent = (value) => {
+        setPercent(value);
+    }
+
     // handle file drop
     const {getRootProps, getInputProps } = useDropzone({
         accept: {
             "image/*": ['.jpeg', '.png', '.webp', '.jpg']
         },
         maxFiles: 1,
-        onDrop: acceptedFiles => {
+        onDrop: async acceptedFiles => {
 
             if (acceptedFiles.length === 0) return;
 
-            if (acceptedFiles[0]?.size > size) return getFile({size: size += 1000});
+            toggleProcessingImage(true);
 
-            setFiles(acceptedFiles.map(file => Object.assign(file, {
-                preview: URL.createObjectURL(file)
-            })))
+            const options = {maxSizeMB: 0.8, onProgress: handlePercent, maxIteration: 20}
+
+            const compressed_image = await imageCompression(acceptedFiles[0], options);
+            
+            setFiles([Object.assign(compressed_image, {preview: URL.createObjectURL(acceptedFiles[0])})]);
+
+            toggleProcessingImage(false);
         }
 
     })
@@ -90,6 +104,7 @@ export const ImageInput = ({
     }
 
     return (
+        <AnimatePresence>
         <motion.div 
         animate={animation}
         onMouseEnter={() => {
@@ -138,5 +153,7 @@ export const ImageInput = ({
             : null}
             <ImageIcon center={center} zIndex={zIndex} animation={iconAnimation} />
         </motion.div>
+        {processingImage ? <ImageInputProcessingIndicator key={"image-processing-indicator"} value={percent} /> : null}
+        </AnimatePresence>
     )
 }

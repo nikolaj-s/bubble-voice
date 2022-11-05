@@ -10,7 +10,6 @@ import { TextInput } from '../../../../../components/inputs/TextInput/TextInput'
 import { ToggleButton } from '../../../../../components/buttons/ToggleButton/ToggleButton';
 import { ApplyCancelButton } from '../../../../../components/buttons/ApplyCancelButton/ApplyCancelButton'
 import { SettingsHeader } from '../../../../../components/titles/SettingsHeader/SettingsHeader'
-import { ImageInput } from '../../../../../components/inputs/ImageInput/ImageInput';
 
 // state
 import { setHeaderTitle } from '../../../../contentScreen/contentScreenSlice';
@@ -83,6 +82,7 @@ const Wrapper = () => {
 
         setWidgets(channelToEdit.widgets);
 
+    // eslint-disable-next-line
     }, [channelToEdit])
 
     const handleCancel = () => {

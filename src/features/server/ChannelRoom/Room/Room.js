@@ -26,12 +26,11 @@ import { Social } from './Social/Social';
 import { Widgets } from './Widgets/Widgets';
 import { Music } from './Music/Music';
 import { RoomUserWrapper } from './RoomUserWrapper/RoomUserWrapper';
-import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
 import { RoomActionOverlay } from './RoomActionOverlay/RoomActionOverlay';
 import { ChannelBackground } from './ChannelBackground/ChannelBackground';
 import { selectMiscSettingsHideChannelBackground } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { SubMenuButton } from '../../../../components/buttons/subMenuButton/SubMenuButton';
-import { StreamHandler } from './StreamHandler/StreamHandler';
+import { selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 let client;
 
@@ -40,8 +39,6 @@ const Component = () => {
     const dispatch = useDispatch();
 
     const [loaded, setLoaded] = React.useState(false);
-
-    const [loading, toggleLoading] = React.useState(true);
 
     const [page, setPage] = React.useState("voice");
     // state 
@@ -89,6 +86,8 @@ const Component = () => {
 
     const reconnecting = useSelector(selectReconnectingState);
 
+    const secondaryColor = useSelector(selectSecondaryColor);
+
     React.useEffect(() => {
         
         if (client) {
@@ -113,7 +112,8 @@ const Component = () => {
             }
         
         }
-
+        
+    // eslint-disable-next-line
     }, [webCamMirroredState, webcamState])
 
     // voice activity state
@@ -203,8 +203,6 @@ const Component = () => {
     // handle initial channel join, and init of roomClient
     React.useEffect(() => {
 
-        toggleLoading(true);
-
         dispatch(updateJoiningChannelState(true));
 
         setTimeout(() => {
@@ -223,8 +221,6 @@ const Component = () => {
                 .catch(error => {
                     console.log(error)
                 })
-
-                toggleLoading(false);
 
                 setTimeout(() => {
 
@@ -481,14 +477,27 @@ const Component = () => {
         } else {
             document.getElementById('user-streams-wrapper').style.opacity = 1;
         }
-            
+    // eslint-disable-next-line      
     }, [page])
 
+    React.useEffect(() => {
+
+        document.getElementsByClassName('content-screen-inner-container')[0].style.backgroundColor = 'rgba(0, 0, 0, 0)';
+
+        return () => {
+            document.getElementsByClassName('content-screen-inner-container')[0].style.backgroundColor = secondaryColor;
+        }
+    // eslint-disable-next-line
+    }, [])
+    
     return (
         <>
             <RoomNavigation action={cycleChannelPage} page={page} />
             <div
-            
+            style={
+                (hideChannelBackgrounds || channel.channel_background === undefined) ? {backgroundColor: secondaryColor} : null
+                
+            }
             id='live-chat-wrapper'>
                 <RoomUserWrapper users={channel.users} />
                 <AnimatePresence>

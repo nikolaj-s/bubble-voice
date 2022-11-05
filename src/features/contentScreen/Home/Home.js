@@ -4,7 +4,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 // state
-import { selectTextColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice'
+import { selectSecondaryColor, selectTextColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 
 export const Home = () => {
 
@@ -16,7 +16,7 @@ export const Home = () => {
             opacity: 0
         }}
         animate={{
-            opacity: 0.5
+            opacity: 1
         }}
         exit={{
             opacity: 0

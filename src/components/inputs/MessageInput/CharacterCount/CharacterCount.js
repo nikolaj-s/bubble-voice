@@ -22,7 +22,8 @@ export const CharacterCount = ({count = 0}) => {
                 fontSize: null
             })
         }
-
+        
+    // eslint-disable-next-line
     }, [count])
 
     return (

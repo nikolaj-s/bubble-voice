@@ -23,7 +23,8 @@ export const NowPlayingOverlay = ({ data, onEnd = () => {}, page}) => {
             onEnd();
 
         }, 3000)
-
+        
+    // eslint-disable-next-line
     }, [])
 
     return (

@@ -32,7 +32,7 @@ const Settings = () => {
             dispatch(handleSaveSoundPrefs())
         
         }
-
+    // eslint-disable-next-line
     }, [])
     
     const handleSoundLevelChange = (value) => {

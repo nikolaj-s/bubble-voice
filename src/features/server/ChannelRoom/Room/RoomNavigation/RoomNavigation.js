@@ -85,9 +85,7 @@ export const RoomNavigation = ({page, action}) => {
     }, [page])
 
     return (
-        <div style={{
-            backgroundColor: primaryColor
-        }} className='room-navigation-container'>
+        <div className='room-navigation-container'>
             <div className='room-navigation-button-wrapper'>
                 <motion.div 
                 transition={{duration: 0.2}}

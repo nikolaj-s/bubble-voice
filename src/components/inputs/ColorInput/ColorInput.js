@@ -16,7 +16,7 @@ export const ColorInput = ({rgb, action, selector}) => {
 
         let h = Number(c[i]).toString(16);
 
-        hex_l += h.length == 1 ? "0" + h : h;
+        hex_l += h.length === 1 ? "0" + h : h;
 
         if (i < c.length - 1) {
             return toHex(c, i+=1, hex_l)
@@ -38,7 +38,8 @@ export const ColorInput = ({rgb, action, selector}) => {
         } catch (error) {
             return;
         }
-
+        
+    // eslint-disable-next-line
     }, [rgb])
 
     const handleChange = (e) => {

@@ -20,22 +20,17 @@ import { Loading } from '../../../components/LoadingComponents/Loading/Loading';
 import { setHeaderTitle } from '../../contentScreen/contentScreenSlice';
 import { setSideBarHeader } from '../../sideBar/sideBarSlice';
 import { ChannelList } from './ChannelList/ChannelList';
-import { TextButton } from '../../../components/buttons/textButton/TextButton';
 import { ServerSettingsButton } from '../../../components/buttons/ServerSettingsButton/ServerSettingsButton';
-import { DisconnectButton } from '../../../components/buttons/DisconnectButton/DisconnectButton';
 import { ServerSettingsMenu } from '../serverSettings/ServerSettingsMenu';
 
 // style's
 import "./ServerBar.css"
 import { selectCurrentScreen, setCurrentScreen, toggleControlState } from '../../controlBar/ControlBarSlice';
-import { handleUpdateAvailable } from '../../../app/appSlice';
 import { DisconnectButtonWrapper } from './DisconnectButtonWrapper/DisconnectButtonWrapper';
 
 export let socket = null;
 
 const Bar = () => {
-
-    const socketListeners = ['new channel', 'error', 'user joins server', 'connect_failed', 'connect_error']
 
     const navigate = useNavigate();
 
@@ -606,7 +601,8 @@ const Bar = () => {
             overflowY: 'auto',
             height: '100%'
         })
-
+        
+    // eslint-disable-next-line
     }, [])
     
     return (

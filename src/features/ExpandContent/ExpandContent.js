@@ -42,7 +42,7 @@ export const ExpandContent = () => {
         return () => {
             document.removeEventListener('keyup', excapeExpanded);
         }
-
+    // eslint-disable-next-line
     }, [])
 
     return (

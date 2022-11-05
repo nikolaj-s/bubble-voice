@@ -50,7 +50,7 @@ export const Message = ({ message, overlay = false, id, channel_id }) => {
                 <p
                 style={{color: textColor, marginRight: 10}}
                 >{message.date.split("T")[0]}</p>
-                <SubMenuButton  />
+                <SubMenuButton width={20} height={20}  />
                 </div>
                 }
                 

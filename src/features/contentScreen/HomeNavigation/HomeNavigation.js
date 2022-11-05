@@ -42,7 +42,8 @@ export const HomeNavigation = ({navigate, page}) => {
                 cursor: 'default'
             })
         }
- 
+        
+    // eslint-disable-next-line
     }, [page])
 
     const handleAnimation = (color, state, animator) => {

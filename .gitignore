@@ -4,3 +4,4 @@ electron-builder.yml
 /build/*
 /dist
 /build
+/package-lock.json

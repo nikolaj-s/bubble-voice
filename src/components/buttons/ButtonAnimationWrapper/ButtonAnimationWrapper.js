@@ -5,7 +5,7 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 
 // state
-import {selectAccentColor, selectDarkModeEnabledState, selectPrimaryColor, selectSecondaryColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
+import { selectPrimaryColor, selectSecondaryColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 
 export const ButtonAnimationWrapper = ({action = () => {}, position = '', zIndex = 0, top = 0, left = 0, className, width = 50, height = 50, borderRadius = '15px', justifyContent = 'center', invert = false, pointerOptions = null, children, active = false, opacity = 1, id = "", margin, right}) => {
 
@@ -13,11 +13,7 @@ export const ButtonAnimationWrapper = ({action = () => {}, position = '', zIndex
 
     const primaryColor = useSelector(selectPrimaryColor);
 
-    const accentColor = useSelector(selectAccentColor);
-
     const secondaryColor = useSelector(selectSecondaryColor);
-
-    const darkMode = useSelector(selectDarkModeEnabledState);
 
     const handleAnimation = (color, e) => {
         if (e) e.stopPropagation();

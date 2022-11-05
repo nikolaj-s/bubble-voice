@@ -47,7 +47,7 @@ export const RoomUserWrapper = ({users}) => {
         } else {
             handleScaling();
         }
-        
+    // eslint-disable-next-line   
     }, [expanded, hidingNonVideoMembers])
         
     React.useEffect(() => {
@@ -69,6 +69,8 @@ export const RoomUserWrapper = ({users}) => {
         } catch (error) {
             console.log(error);
         }
+
+    // eslint-disable-next-line
     }, [])
 
     React.useEffect(() => {
@@ -86,7 +88,8 @@ export const RoomUserWrapper = ({users}) => {
         } catch (error) {
             console.log(error);
         }
-
+        
+    // eslint-disable-next-line
     }, [expanded])
 
     const area = (increment, hD, wD, active_streams) => {

@@ -102,7 +102,8 @@ export const WheelSpinWidget = ({widget, editing, initDeg = 0, onEnd = () => {},
             }, 8000)
 
         }
-
+        
+    // eslint-disable-next-line
     }, [finishingDeg, overlay])
 
     return (

@@ -35,10 +35,12 @@
 }
 
 .image-social-post-preview {
-    max-width: 400px;
-    max-height: 400px;
+    max-width: 300px;
+    background-color: black;
+    z-index: 2;
+    height: 300px;
     position: absolute;
-    bottom: 100px;
+    bottom: 80px;
     right: 2%;
     border-radius: var(--border-radius);
     overflow: hidden;

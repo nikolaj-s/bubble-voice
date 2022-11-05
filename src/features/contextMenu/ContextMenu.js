@@ -12,7 +12,7 @@ import { CtxMenuTitle } from '../../components/titles/ctxMenuTitle/CtxMenuTitle'
 
 // state
 import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleStreamState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteMesssageState, selectDeleteWidget, selectEditChannelCtxState, selectFlipWebCamState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSelectedMessage, selectSelectedUserCtxState, selectStopStreamingState, selectStreamVolumeState, selectViewSocialState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
-import { assignNewServerGroup, deleteMessage, markWidgetForDeletion, selectChannelSocialId, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerMembers, selectUsersPermissions, setChannelSocialId, setEditingChannelId, setSocialInput, throwServerError } from '../server/ServerSlice';
+import { assignNewServerGroup, deleteMessage, markWidgetForDeletion, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerMembers, selectUsersPermissions, setChannelSocialId, setEditingChannelId, throwServerError } from '../server/ServerSlice';
 
 // style
 import "./ContextMenu.css";
@@ -40,8 +40,6 @@ export const ContextMenu = () => {
     const [selectedImage, setSelectedImage] = React.useState({});
 
     const [selectedVideo, setSelectedVideo] = React.useState();
-
-    const [selectedAudio, setSelectAudio] = React.useState();
 
     const [streamAudioLevel, setStreamAudioLevel] = React.useState(1);
 
@@ -232,12 +230,12 @@ export const ContextMenu = () => {
             }
             if (p.className === 'message-container') {
                 dispatch(toggleContextMenu(true));
-                console.log(p)
+                
                 dispatch(setContextMenuOptions({state: "deleteMessage", value: permissions.user_can_manage_channels}));
 
                 dispatch(setContextMenuOptions({state: 'selectedMessage', value: p.id}));
             }
-            if (p.className === 'text-input' && p.localName === 'input' || p.localName === 'textarea') {
+            if ((p.className === 'text-input' && p.localName === 'input') || p.localName === 'textarea') {
                 dispatch(toggleContextMenu(true));
 
                 setSelectedInput(p);

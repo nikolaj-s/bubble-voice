@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 // state
 import { selectDisplayName, selectUsername } from '../../../../settings/appSettings/accountSettings/accountSettingsSlice';
-import { newMessage, selectUsersPermissions, setSocialInput, throwServerError, updateMessage } from '../../../ServerSlice';
+import { newMessage, selectUsersPermissions, throwServerError, updateMessage } from '../../../ServerSlice';
 
 // components
 import { MessageInput } from '../../../../../components/inputs/MessageInput/MessageInput';
@@ -138,7 +138,7 @@ export const Social = ({currentChannel, channelId}) => {
             <div className='social-inner-container'>
                 {image?.preview ? 
                 <div className='image-social-post-preview'>
-                    <Image objectFit='contain' zIndex={1} image={image.preview} />
+                    <Image position='relative' objectFit='contain' zIndex={1} image={image.preview} />
                 </div>
                 : null}
                 <div ref={messagesRef} className='social-messages-wrapper'>

@@ -28,6 +28,7 @@ const appearanceSettingsSlice = createSlice({
         textColor: "rgb(0, 0, 0)",
         activationColor: "rgb(58, 235, 52)",
         darkModeEnabled: true,
+        rgbBackground: false,
         changeMade: false,
         color_themes: {
             light: {
@@ -131,13 +132,18 @@ const appearanceSettingsSlice = createSlice({
                         activationColor: state.current_theme.state !== 'custom' ? state.color_themes['custom'].activationColor : state.activationColor,
                     }
                 },
-                current_theme: state.current_theme
+                current_theme: state.current_theme,
+                rgbBackground: state.rgbBackground
             }
 
             state.color_themes = {...state.color_themes, custom: new_theme_object.themes.custom};
 
             saveLocalData("APPEARANCE", "VISUAL", new_theme_object)
 
+        },
+        toggleRgbBackGround: (state, action) => {
+            state.rgbBackground = !state.rgbBackground;
+            state.changeMade = true;
         }
 
     },
@@ -163,6 +169,10 @@ const appearanceSettingsSlice = createSlice({
                     document.querySelector(':root').style.setProperty('--range-background', state.color_themes[action.payload.current_theme.state].accentColor)
                 }
 
+                if (action.payload.rgbBackground) {
+                    state.rgbBackground = action.payload.rgbBackground;
+                }
+
                 return;
             } catch (error) {
                 // use system defaults if error thrown
@@ -170,18 +180,13 @@ const appearanceSettingsSlice = createSlice({
             }
         },
         [updatePersistedAppTheme.rejected]: (state, action) => {
-            try {
-                return;
-            } catch (error) {
-                // use system defaults
-                return;
-            }
+            return;
         }
     }
 })
 
 // actions
-export const { updateColorValue, changeTheme, saveTheme } = appearanceSettingsSlice.actions;
+export const { updateColorValue, changeTheme, saveTheme, toggleRgbBackGround } = appearanceSettingsSlice.actions;
 
 // color selectors
 export const selectPrimaryColor = state => state.appearanceSettingsSlice.primaryColor;
@@ -201,5 +206,8 @@ export const selectCurrentTheme = state => state.appearanceSettingsSlice.current
 export const selectThemeOptions = state => state.appearanceSettingsSlice.theme_options;
 
 export const selectAppearanceChangeMade = state => state.appearanceSettingsSlice.changeMade;
+
+export const selectRgbBackGround = state => state.appearanceSettingsSlice.rgbBackground;
+
 // export appearance settings reducer
 export default appearanceSettingsSlice.reducer;

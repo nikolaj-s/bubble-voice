@@ -107,7 +107,7 @@ export const ChannelList = () => {
             })
         })
 
-
+    // eslint-disable-next-line
     }, [])
 
     return (

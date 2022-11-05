@@ -521,7 +521,7 @@ export class RoomClient {
 
         let stream;
 
-        let stream_audio;
+      //  let stream_audio;
 
         let microphone_stream;
 

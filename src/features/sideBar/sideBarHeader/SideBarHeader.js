@@ -1,7 +1,6 @@
 // library's
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
 
 // components
 import { BubbleLogo } from '../../../components/Icons/bubbleLogo/BubbleLogo';
@@ -12,8 +11,6 @@ import { selectSideBarHeader } from '../sideBarSlice';
 import "./SideBarHeader.css";
 
 export const SideBarHeader = () => {
-
-    const navigate = useNavigate();
 
     const returnToServerSelect = () => {
         return;

@@ -4,7 +4,6 @@ import { motion, useAnimation } from 'framer-motion'
 
 // component's
 import { Image } from '../../Image/Image'
-import { HeaderTitle } from '../../titles/headerTitle/headerTitle'
 import { useSelector } from 'react-redux'
 
 // state

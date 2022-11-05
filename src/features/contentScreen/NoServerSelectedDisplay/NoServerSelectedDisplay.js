@@ -10,17 +10,23 @@ import { Home } from '../Home/Home';
 
 // style's
 import "./NoServerSelectedDisplay.css";
+import { useSelector } from 'react-redux';
+import { selectSecondaryColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 const NoServer = () => {
 
   const [page, setPage] = React.useState('home');
+
+  const secondaryColor = useSelector(selectSecondaryColor);
 
   const handlePageChange = (page) => {
     setPage(page);
   }
 
   return (
-    <div className='no-server-selected-display'>
+    <div 
+    style={{backgroundColor: secondaryColor}}
+    className='no-server-selected-display'>
         <HomeNavigation navigate={handlePageChange} page={page} />
         <AnimatePresence>
           {page === 'home' ? <Home /> : null}

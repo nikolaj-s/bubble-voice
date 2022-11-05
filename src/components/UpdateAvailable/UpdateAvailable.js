@@ -68,7 +68,8 @@ export const UpdateAvailable = () => {
             if (el) el.style.display = 'flex';
         
         }
-
+        
+    // eslint-disable-next-line
     }, [updateAvailable])
 
     return (

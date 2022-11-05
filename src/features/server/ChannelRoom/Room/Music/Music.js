@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentChannelId, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, throwMusicError, updateMusicState } from '../../../ServerSlice';
+import { selectCurrentChannelId, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, throwMusicError } from '../../../ServerSlice';
 import { addNewWidgetOverlayToQueue } from '../RoomActionOverlay/RoomActionOverlaySlice';
 
 export const Music = () => {
@@ -31,7 +31,7 @@ export const Music = () => {
             document.getElementById('room-music-player').pause()
         }
 
-
+    // eslint-disable-next-line
     }, [musicPlaying])
 
     React.useEffect(() => {
@@ -50,14 +50,14 @@ export const Music = () => {
             }
 
         }    
-        
+    // eslint-disable-next-line    
     }, [musicQueue])
 
     // handle on volume change
     React.useEffect(() => {
 
         document.getElementById('room-music-player').volume = volume;
-
+    // eslint-disable-next-line
     }, [volume])
 
     const syncInitial = (e) => {
