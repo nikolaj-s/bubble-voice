@@ -52,6 +52,8 @@ export class RoomClient {
         this.microphoneInputVolume = microphoneInputVolume;
 
         this.error_count = 0;
+
+        this.handling_error = false;
     }
     
     updateAudioPrefs(noiseSuppression, echoCancellation, microphoneInputVolume) {
@@ -186,8 +188,6 @@ export class RoomClient {
                 console.log(error);
             })
 
-            console.log(data)
-
             const { id, kind, rtpParameters } = data;
 
             let codecOptions = {};
@@ -226,7 +226,7 @@ export class RoomClient {
         try {
             this.getConsumeStream(producer_id)
             .then( function (data) {
-                console.log(appData)
+                
                 let consumer = data?.consumer;
 
                 if (consumer === undefined) return;
@@ -561,22 +561,22 @@ export class RoomClient {
 
             if (screen) {
 
-                let stream_audio_source = await navigator.mediaDevices.getUserMedia({
-                        audio: {
-                            mandatory: {
-                                chromeMediaSource: 'desktop',
-                                echoCancellation: true
-                            }
-                        },
-                        video: {
-                            mandatory: {
-                                chromeMediaSource: 'desktop',
-                            }
-                        }
+                // let stream_audio_source = await navigator.mediaDevices.getUserMedia({
+                //         audio: {
+                //             mandatory: {
+                //                 chromeMediaSource: 'desktop',
+                //                 echoCancellation: true
+                //             }
+                //         },
+                //         video: {
+                //             mandatory: {
+                //                 chromeMediaSource: 'desktop',
+                //             }
+                //         }
                     
-                })
+                // })
 
-                stream_audio = stream_audio_source.getAudioTracks()[0];
+                // stream_audio = stream_audio_source.getAudioTracks()[0];
             
             }  
 
@@ -656,40 +656,14 @@ export class RoomClient {
             }
 
             let stream_audio_producer;
-
-            if (stream_audio) {
-
-                stream_audio_producer = await this.producerTransport.produce({ track: stream_audio, appData: {type: 'screen share'} })
-
-                this.producers.set(stream_audio_producer.id, stream_audio_producer);
-            
-                stream_audio_producer.on('trackended', () => {
-                    this.closeProducerById(stream_audio_producer.id);
-                })
-    
-                stream_audio_producer.on('transportclose', () => {
-    
-                    this.producers.delete(stream_audio_producer.id);
-               
-                })
-    
-                stream_audio_producer.on('close', () => {
-    
-                    this.producers.delete(stream_audio_producer.id);
-                
-                })
-
-                document.getElementById(producer.id).classList.add(`stream_audio_id=${stream_audio_producer.id}`)
-            }
             
             producer.on('trackended', () => {
                 this.closeProducer(type);
 
                 if (screen) {
 
-                    this.closeProducerById(stream_audio_producer.id);
-
                     this.dispatch({action: 'close-stream'})
+                
                 }
             })
 
@@ -703,8 +677,6 @@ export class RoomClient {
 
                 if (screen) {
                     this.dispatch({action: 'close-stream'})
-
-                    this.producers.delete(stream_audio_producer.id);
                 }
 
                 this.producers.delete(producer.id);
@@ -730,12 +702,6 @@ export class RoomClient {
 
             if (audio) {
                 this.pauseProducer('audioType')
-            }
-
-            if (screen) {
-
-                this.pauseProducerById(stream_audio_producer.id);
-            
             }
 
             this.dispatch({action: 'screen-share-loading-state', value: false})
@@ -872,13 +838,16 @@ export class RoomClient {
     }
 
     async handleError() {
+        if (this.handling_error) return;
+
+        this.handling_error = true;
 
         this.error_count++;
 
         this.dispatch({action: 'reconnecting', value: false});
 
         if (this.error_count > 5) {
-            this.dispatch({action: 'error', value: "Unable to resolve error please reconnect to the server"})
+           return this.dispatch({action: 'error', value: "Unable to resolve error please reconnect to the server"})
         } else {
             try {
                 this.closeProducer('audioType');
@@ -909,7 +878,10 @@ export class RoomClient {
 
                 this.dispatch({action: 'reconnecting', value: true});
                 
-            }, 500 * this.error_count)
+                setTimeout(() => {
+                    this.handling_error = false;
+                }, 100)
+            }, 3000)
         }
 
     }

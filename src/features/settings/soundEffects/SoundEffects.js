@@ -107,16 +107,6 @@ export const SoundEffects = () => {
         }, 10)
             
     }, [soundEffectQueue])
-    
-    React.useEffect(() => {
-
-        if (sharingScreen === false) {
-            document.getElementById('sound-effects-source').volume = 0;
-        } else {
-            document.getElementById('sound-effects-source').volume = soundEffectsVolume;
-        }
-            
-    }, [sharingScreen])
 
     return (
         <>

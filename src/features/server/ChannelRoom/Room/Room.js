@@ -502,7 +502,6 @@ const Component = () => {
             <ChannelBackground channel_background={hideChannelBackgrounds ? null : channel.channel_background} blur={channel.background_blur} />
             <audio hidden={true} id={'microphone-input-source'} />
             <Music />
-            <StreamHandler client={client} users={channel.users} /> 
         </>
     )
 }
