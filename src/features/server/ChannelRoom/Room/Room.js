@@ -480,15 +480,6 @@ const Component = () => {
     // eslint-disable-next-line      
     }, [page])
 
-    React.useEffect(() => {
-
-        document.getElementsByClassName('content-screen-inner-container')[0].style.backgroundColor = 'rgba(0, 0, 0, 0)';
-
-        return () => {
-            document.getElementsByClassName('content-screen-inner-container')[0].style.backgroundColor = secondaryColor;
-        }
-    // eslint-disable-next-line
-    }, [])
     
     return (
         <>

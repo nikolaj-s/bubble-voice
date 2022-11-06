@@ -430,7 +430,7 @@ export const ContextMenu = () => {
         let obj = {};
         
         const currentUserPrefs = USER_PREFS.get(memberId);
-        console.log(currentUserPrefs)
+        
         if (currentUserPrefs) {
             obj = {...currentUserPrefs, volume: value}
         } else {
@@ -502,8 +502,13 @@ export const ContextMenu = () => {
             const video = el.querySelector('video');
             
             if (video) {
-                console.log(!flippedWebCamState)
-                video.style.transform = (!flippedWebCamState ? 'scaleX(-1)' : null)
+
+                if (video.style.getPropertyValue('transform') === 'scaleX(-1)') {
+                    video.style.transform = null;
+                } else {
+                    video.style.transform = 'scaleX(-1)'
+                }
+            
             }
 
             setFlippedWebCamState(!flippedWebCamState);

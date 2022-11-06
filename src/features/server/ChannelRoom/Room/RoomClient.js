@@ -878,9 +878,8 @@ export class RoomClient {
 
                 this.dispatch({action: 'reconnecting', value: true});
                 
-                setTimeout(() => {
-                    this.handling_error = false;
-                }, 100)
+                this.handling_error = false;
+                
             }, 3000)
         }
 
