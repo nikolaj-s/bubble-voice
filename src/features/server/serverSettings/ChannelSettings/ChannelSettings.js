@@ -10,7 +10,6 @@ import { NotAuthorizedMessage } from '../../../../components/NotAuthorizedMessag
 import { InputTitle } from '../../../../components/titles/inputTitle/InputTitle';
 import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/SettingsSpacer';
 
-
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 import { reOrderChannels, selectServerChannels, selectUsersPermissions, setEditingChannelId, throwServerError } from '../../ServerSlice';
@@ -38,11 +37,17 @@ const Wrapper = () => {
 
         dispatch(setHeaderTitle("Edit Channel"));
 
+        if (channels.length !== orderedChannels.length) {
+
+            setOrderedChannels(channels)
+        
+        }
+
         return () => {
             dispatch(setHeaderTitle(""));
         }
     // eslint-disable-next-line
-    }, [])
+    }, [channels])
 
     const navigateToChannel = (channelName, channelId) => {
         window.location.hash = window.location.hash + `/${channelName}`
@@ -96,12 +101,6 @@ const Wrapper = () => {
 
     }
 
-    React.useEffect(() => {
-
-        setOrderedChannels(channels);
-
-    }, [channels])
-
     return (
         <>
         {permission?.user_can_manage_channels ?
@@ -113,7 +112,7 @@ const Wrapper = () => {
                 return (
                 <Reorder.Item as='div' dragMomentum={true} value={channel} key={`${channel._id}`} 
                 style={{width: '100%', height: 'auto', display: 'flex'}}>
-                    <MoveButton />
+                    <MoveButton width={35} height={35} />
                     <TextButton action={() => {
                     navigateToChannel(channel.channel_name, channel._id) 
                     }} marginBottom="2%" textAlign='start' name={channel.channel_name} key={channel._id}  />

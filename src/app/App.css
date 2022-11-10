@@ -7,9 +7,9 @@
 }
 
 .rgb-background {
-    background: linear-gradient(124deg, #FF6B6B, #FFD93D, #6BCB77, #4D96FF, #ff8989, #FFD93D, #6BCB77, #4D96FF);
-    background-size: 1800% 1800%;
-    animation: rainbow 15s ease-in-out infinite;
+    background: linear-gradient(124deg, #FF6B6B, #FFD93D, #6BCB77, #4D96FF, #ff8989, #FFD93D, #6BCB77, #4D96FF,#FF6B6B, #FFD93D, #6BCB77, #4D96FF, #ff8989, #FFD93D, #6BCB77, #4D96FF);
+    background-size: 3800% 1800%;
+    animation: rainbow 20s ease-in-out infinite;
 }
 
 @keyframes rainbow { 

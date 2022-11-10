@@ -1,0 +1,15 @@
+
+.key-bind-input-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.key-bind-input-wrapper .text-button {
+    flex-grow: 0;
+    width: 35%;
+}
+
+.key-bind-input-wrapper .text-input-container {
+    flex-grow: 4;
+    margin-right: 2%;
+}

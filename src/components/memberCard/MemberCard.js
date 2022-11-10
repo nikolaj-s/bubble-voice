@@ -43,7 +43,7 @@ export const MemberCard = ({member}) => {
             }}
             >id: {member.username}</p>
             </div>
-            <SubMenuButton />
+            <SubMenuButton width={15} height={15} borderRadius={10} description={"User Management"} />
         </div>
     )
 }

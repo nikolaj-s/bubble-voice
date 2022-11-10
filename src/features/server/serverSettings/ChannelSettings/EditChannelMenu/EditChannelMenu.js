@@ -48,7 +48,9 @@ const Wrapper = () => {
 
     const [clearedSocial, toggleClearedSocial] = React.useState(false);
 
-    const channelToEdit = useSelector(selectChannelToEdit);
+    const [channelToEdit, setChannelToEdit] = React.useState({});
+
+    const channel = useSelector(selectChannelToEdit);
 
     const permission = useSelector(selectUsersPermissions);
 
@@ -65,6 +67,15 @@ const Wrapper = () => {
             setBackgroundBlur(channelToEdit.background_blur);
         
         }
+
+        for (const w of channel.widgets) {
+            if (w.delete) {
+                toggleEdited(true);
+                break;
+            }
+        }
+
+        setWidgets(channelToEdit.widgets);
         
         return () => {
             dispatch(setHeaderTitle(""));
@@ -74,16 +85,10 @@ const Wrapper = () => {
 
     React.useEffect(() => {
 
-        if (initMount) {
-            toggleEdited(true);
-        }
-
-        setInitMount(true);
-
-        setWidgets(channelToEdit.widgets);
+        setChannelToEdit(channel);
 
     // eslint-disable-next-line
-    }, [channelToEdit])
+    }, [channel.background_blur, channel.channel_background, channel.channel_name, channel.persist_social, channel.widgets])
 
     const handleCancel = () => {
         window.location.hash = window.location.hash.split(`/channels`)[0] + '/channels'
@@ -216,13 +221,13 @@ const Wrapper = () => {
             <ToggleButton action={handleTogglePersistSocial} state={persistChannelSocial} />
             <SettingsHeader title={"Channel Background"} />
             <InputTitle title={"Image"} />
-            <ChannelBackgroundInput blur={backgroundBlur} initialImage={channelToEdit?.channel_background} getFile={handleSettingChannelBackground} />
+            <ChannelBackgroundInput blur={backgroundBlur} initialImage={channelToEdit.channel_background} getFile={handleSettingChannelBackground} />
             <InputTitle title={"Blur Amount"} />
             <Range action={handleBlurChange} value={backgroundBlur} min={0} max={10} step={1} />
             <SettingsHeader title={"Widgets"} />
+            <TextButton action={openWidgetMenu} name={"Add Widget"} />
             <InputTitle title={`Widgets ${channelToEdit.widgets ? channelToEdit.widgets.length : 0} / 15`} />
             <WidgetPreview widgets={widgets} editing={true} reorder={updateWidgetOrder} />
-            <TextButton action={openWidgetMenu} name={"Add Widget"} />
             <SettingsHeader title={"Data"} />
             <InputTitle title={"Clear Social Data"} />
             {clearedSocial === false ?

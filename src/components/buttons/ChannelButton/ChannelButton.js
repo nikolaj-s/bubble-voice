@@ -14,7 +14,7 @@ import {  selectAccentColor, selectPrimaryColor, selectTextColor } from '../../.
 import "./ChannelButton.css";
 
 
-export const ChannelButton = ({channel, action = () => {}, users}) => {
+export const ChannelButton = ({channel, action = () => {}, users, index}) => {
 
     const [usersState, setUsersState] = React.useState([]);
 
@@ -65,7 +65,7 @@ export const ChannelButton = ({channel, action = () => {}, users}) => {
             }}
             className='channel-button-container'>
               <h3 style={{color: textColor}}>{channel.channel_name}</h3>  
-              <SubMenuButton target={`channel-button-${channel._id}`} width={15} height={15} borderRadius={10} />
+              <SubMenuButton zIndex={1} flip_description={index === 0 ? true : false} description={"More"} target={`channel-button-${channel._id}`} width={12} height={12} borderRadius={10} />
             </motion.div>
             {usersState.map((user) => {
                 return (

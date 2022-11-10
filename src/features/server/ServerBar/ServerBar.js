@@ -27,6 +27,7 @@ import { ServerSettingsMenu } from '../serverSettings/ServerSettingsMenu';
 import "./ServerBar.css"
 import { selectCurrentScreen, setCurrentScreen, toggleControlState } from '../../controlBar/ControlBarSlice';
 import { DisconnectButtonWrapper } from './DisconnectButtonWrapper/DisconnectButtonWrapper';
+import { UnpackMessage } from '../../../util/UnpackMessage';
 
 export let socket = null;
 
@@ -156,8 +157,10 @@ const Bar = () => {
             dispatch(updateMemberStatus(data))
         })
         socket.on('new message', (data) => {
+
+            const message = UnpackMessage(data);
             
-            dispatch(newMessage(data));
+            dispatch(newMessage(message));
 
             if (window.location.hash.includes(data.channel_id)) {
 

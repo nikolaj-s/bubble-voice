@@ -11,7 +11,7 @@ import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPus
 import { selectDisplayName, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { playSoundEffect, selectMuteSoundEffectsWhileMutedState } from '../../../settings/soundEffects/soundEffectsSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { selectAudioState, selectCurrentScreen, selectMicrophoneState, selectScreenShareState, selectWebCamState, setCurrentScreen, setScreens, setSelectingScreensState, toggleControlState, toggleLoadingScreenShare, toggleLoadingWebCam } from '../../../controlBar/ControlBarSlice';
+import { selectAudioState, selectCurrentScreen, selectMicrophoneState, selectScreenShareState, selectWebCamState, setCurrentScreen, setScreens, setSelectingScreensState, toggleConnectionError, toggleConnectionLoading, toggleControlState, toggleLoadingScreenShare, toggleLoadingWebCam } from '../../../controlBar/ControlBarSlice';
 
 // style
 import "./Room.css";
@@ -154,9 +154,13 @@ const Component = () => {
             }
             
         };
+
+        if (arg.action === 'connection') return dispatch(toggleConnectionLoading(arg.value));
+
+        if (arg.action === 'connectionError') return dispatch(toggleConnectionError(arg.value));
     }
 
-    const init = async (delay = 100) => {
+    const init = async () => {
 
         client = new RoomClient(socket, current_channel_id, server_id, mediasoupClient, audioDevice, videoDevice, microphoneState, webcamState, user, event, audioState, webCamMirroredState, echoCancellation, noiseSuppression, microphoneInputVolume)
 
@@ -498,7 +502,7 @@ const Component = () => {
                 <RoomActionOverlay page={page} />
                 
             </div>
-            <SubMenuButton target={'live-chat-wrapper'} borderRadius={10} zIndex={1} position={"absolute"} top={5} right={10} height={15} left={null} width={15} />
+            <SubMenuButton target={'live-chat-wrapper'} borderRadius={10} zIndex={1} position={"absolute"} top={5} right={40} height={15} left={null} width={15} />
             <ChannelBackground channel_background={hideChannelBackgrounds ? null : channel.channel_background} blur={channel.background_blur} />
             <audio hidden={true} id={'microphone-input-source'} />
             <Music />

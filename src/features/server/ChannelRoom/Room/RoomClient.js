@@ -161,12 +161,16 @@ export class RoomClient {
                 console.log(state)
                 switch (state) {
                     case 'connecting':
+                        this.dispatch({action: 'connection', value: true});
                         break
                     case 'connected':
+                        this.dispatch({action: 'connection', value: false});
+                        this.dispatch({action: 'connectionError', value: false});
                         break
                     case 'failed':
+                        this.dispatch({action: 'connection', value: true});
+                        this.dispatch({action: 'connectionError', value: true});
                         this.consumerTransport.close();
-                        this.handleError();
                         break
                     default:
                         break
@@ -241,55 +245,82 @@ export class RoomClient {
                 
                 if (consumer.rtpParameters.codecs[0].mimeType === 'video/VP8') {
                     // handle displaying web cam feed
-                    el = document.createElement('video');
 
-                    el.srcObject = stream;
+                    const exists = document.getElementsByClassName(`${user.user_name}-camera-stream`);
 
-                    el.id = consumer.id;
+                    if (exists.length > 0) {
 
-                    el.className = 'stream web-cam-stream';
+                        exists[0].srcObject = stream;
 
-                    el.playsInline = false;
+                        exists[0].id = consumer.id;
 
-                    const prefs = USER_PREFS.get(user._id);
+                    } else {
 
-                    el.style.transform = (user.mirror_web_cam && !prefs?.flip_web_cam) ? 'scaleX(-1)' : null;
+                        el = document.createElement('video');
 
-                    el.autoplay = true;
-
-                    el.muted = true;
-
-                    document.getElementById(user._id).appendChild(el);
-
+                        el.srcObject = stream;
+    
+                        el.id = consumer.id;
+    
+                        el.className = `stream web-cam-stream ${user.user_name}-camera-stream`;
+    
+                        el.playsInline = false;
+    
+                        const prefs = USER_PREFS.get(user._id);
+    
+                        el.style.transform = (user.mirror_web_cam && prefs?.flip_web_cam) ? null : (user.mirror_web_cam && !prefs?.flip_web_cam) ? 'scaleX(-1)' : null;
+    
+                        el.autoplay = true;
+    
+                        el.muted = true;
+    
+                        document.getElementById(user._id).appendChild(el);
+    
+                    }
+                    
                 } else if (consumer.rtpParameters.codecs[0].mimeType === 'video/H264' || consumer.rtpParameters.codecs[0].mimeType === 'video/rtx') {
                     // display incoming screen stream
                     stream.getVideoTracks()[0].contentHint = 'motion'
                     
-                    par = document.createElement('div');
+                    const exists = document.getElementsByClassName(`${user.user_name}-screen-share-stream`)[0]
 
-                    par.className = `streaming-video-player-container`
+                    if (exists) {
 
-                    el = document.createElement('video');
+                        exists.srcObject = stream;
 
-                    el.srcObject = stream;
-                    
-                    par.id = consumer.id + 'container';
+                        exists.id = consumer.id;
 
-                    el.id = consumer.id;
+                        exists.parentElement.id = consumer.id + 'container'
 
-                    el.autoplay = true;
+                    } else {
 
-                    el.className = `streaming-video-player ${user._id}`
+                        par = document.createElement('div');
 
-                    el.playsInline = false;
+                        par.className = `streaming-video-player-container`
 
-                    el.muted = false;
+                        el = document.createElement('video');
 
-                    el.volume = 1;
+                        el.srcObject = stream;
+                        
+                        par.id = consumer.id + 'container';
 
-                    par.appendChild(el);
+                        el.id = consumer.id;
 
-                    document.getElementById(user._id).parentNode.appendChild(par)
+                        el.autoplay = true;
+
+                        el.className = `streaming-video-player ${user._id} ${user.user_name}-screen-share-stream`
+
+                        el.playsInline = false;
+
+                        el.muted = false;
+
+                        el.volume = 1;
+
+                        par.appendChild(el);
+
+                        document.getElementById(user._id).parentNode.appendChild(par)
+
+                    }
                 } else {
                     
                     el = document.createElement('audio')
@@ -625,6 +656,13 @@ export class RoomClient {
             let par;
             
             if (!audio && !screen) {
+
+                const exists = document.getElementsByClassName(`${this.user.username}-web-cam`)[0];
+
+                if (exists) {
+                    exists.remove();
+                }
+
                 el = document.createElement('video');
                 el.srcObject = stream;
                 el.id = producer.id;
@@ -634,11 +672,17 @@ export class RoomClient {
                     el.style.transform = 'scaleX(-1)'
                 }
                 
-                el.className = 'stream web-cam-stream';
+                el.className = `stream web-cam-stream ${this.user.username}-web-cam`;
                 el.autoplay = true;
-                el.className = 'videoplayer';
                 document.getElementById(this.user._id).appendChild(el);
             } else if (screen) {
+
+                const exists = document.getElementsByClassName(`${this.user.username}-streaming-player`)[0];
+
+                if (exists) {
+                    exists.parentNode.remove();
+                }
+
                 stream[type] = 'screen'
                 par = document.createElement('div');
                 par.className = `streaming-video-player-container`
@@ -653,6 +697,7 @@ export class RoomClient {
                 el.playsInline = true;
                 par.appendChild(el)
                 document.getElementById(this.user._id).parentNode.appendChild(par)
+            
             }
 
             let stream_audio_producer;
@@ -668,6 +713,8 @@ export class RoomClient {
             })
 
             producer.on('transportclose', () => {
+                this.closeProducer(type);
+
                 if (!audio) {
                     el.srcObject.getTracks().forEach(track => {
                         track.stop();
@@ -683,6 +730,8 @@ export class RoomClient {
             })
 
             producer.on('close', () => {
+                this.closeProducer(type);
+
                 if (!audio) {
                     el.srcObject.getTracks().forEach(track => {
                         track.stop();
@@ -704,14 +753,18 @@ export class RoomClient {
                 this.pauseProducer('audioType')
             }
 
-            this.dispatch({action: 'screen-share-loading-state', value: false})
+            setTimeout(() => {
+                this.dispatch({action: 'screen-share-loading-state', value: false})
 
-            this.dispatch({action: 'webcam-loading-state', value: false})
+                this.dispatch({action: 'webcam-loading-state', value: false})
+            }, 500) 
 
         } catch (error) {
             console.log(error)
 
             this.dispatch({action: 'webcam-loading-state', value: false})
+
+            this.dispatch({action: 'screen-share-loading-state', value: false})
 
             if (error.message.includes('Queue')) {
                 
@@ -846,7 +899,7 @@ export class RoomClient {
 
         this.dispatch({action: 'reconnecting', value: false});
 
-        if (this.error_count > 5) {
+        if (this.error_count > 20) {
            return this.dispatch({action: 'error', value: "Unable to resolve error please reconnect to the server"})
         } else {
             try {

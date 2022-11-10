@@ -26,6 +26,7 @@
 .streaming-video-player-container {
     position: relative;
     vertical-align: middle;
+    overflow: hidden;
     display: flex;
     align-self: center;
     border: solid 4px black;

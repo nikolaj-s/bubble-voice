@@ -92,9 +92,9 @@ export const Loading = ({loading = false, error = false, overflow = true, succes
         }}
         className='loading-container' >
             
-                {localLoading ? <LoadingSpinner key={"loading-spinner"} /> : null}
+                {localLoading ? <LoadingSpinner width={success_size.width} height={success_size.height} key={"loading-spinner"} /> : null}
                 {success ? <LoadingSuccess width={success_size.width} height={success_size.height} key={"loading-success"} /> : null}
-                {localError ? <LoadingError key={"loading-error"} /> : null}
+                {localError ? <LoadingError width={success_size.width} height={success_size.height} key={"loading-error"} /> : null}
            
         </motion.div>
         }

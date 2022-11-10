@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetchMusicWidgetVolume, setMusicWidgetVolume } from "../../util/LocalData";
+import { UnpackMessage } from "../../util/UnpackMessage";
 
 import { socket } from "./ServerBar/ServerBar";
 
@@ -15,6 +16,12 @@ export const fetchServerDetails = createAsyncThunk(
         const server = await socket.request('joined server', {server_id: server_id})
         .then(response => {
             if (response.success) {
+
+                for (const channel of response.server.channels) {
+
+                    const s = channel.social.map(m => UnpackMessage(m))
+                    
+                }
 
                 return {...response.server, username: username, user_image: user_image, user_banner: user_banner, display_name: display_name}
             
@@ -325,7 +332,9 @@ const serverSlice = createSlice({
 
             const channelIndex = state.channels.findIndex(channel => channel._id === action.payload.channel_id)
 
-            state.channels[channelIndex].social.unshift(action.payload);
+            const message = action.payload;
+
+            state.channels[channelIndex].social.unshift(message);
             
         },
         updateMessage: (state, action) => {
@@ -335,9 +344,11 @@ const serverSlice = createSlice({
 
             const message_index = state.channels[channel_index].social.findIndex(msg => msg.content.local_id === action.payload.content.local_id);
 
-            state.channels[channel_index].social[message_index]._id = action.payload._id;
+            const message = UnpackMessage(action.payload);
 
-            state.channels[channel_index].social[message_index].content = {...action.payload.content, ...{display_name: state.members[memberIndex].display_name}}
+            state.channels[channel_index].social[message_index]._id = message._id;
+
+            state.channels[channel_index].social[message_index].content = {...message.content, ...{display_name: state.members[memberIndex].display_name}}
         },
         toggleServerPushToTalkState: (state, action) => {
             state.pushToTalkActive = action.payload;

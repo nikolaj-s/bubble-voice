@@ -9,7 +9,8 @@ export const DisconnectButton = ({action, width, height}) => {
     
     return (
     <ButtonAnimationWrapper 
-    
+    invert={true}
+    description={"Disconnect"}
     margin={"0 0 0 10px"}
     width={width} height={height} id={"disconnect-from-channel-button"} action={action}>
         <svg 

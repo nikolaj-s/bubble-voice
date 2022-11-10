@@ -17,6 +17,8 @@ export const WebCamButton = ({action, state, active, id, loading = true}) => {
     id={id}
     position={'relative'}
     invert={true}
+    description={active ? null : `Turn ${state ? 'On' : 'Off'} Webcam`}
+    zIndex={5}
     >
         {state ?
         <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">

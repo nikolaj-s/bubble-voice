@@ -6,15 +6,15 @@ import { useSelector } from 'react-redux';
 // state
 import { selectTextColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
-export const LoadingSpinner = () => {
+export const LoadingSpinner = ({width = 75, height = 75}) => {
 
     const color = useSelector(selectTextColor);
 
     return (
         <motion.div 
         style={{
-            width: 75,
-            height: 75
+            width: width,
+            height: height
         }}
         
         animate={{rotate: ["0deg", "360deg"]}}

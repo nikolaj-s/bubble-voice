@@ -1,4 +1,6 @@
-
+html {
+  scroll-behavior: smooth;
+}
 :root {
   --font-variable: "Inter", sans-serif;
   --font-spacing: 4px;

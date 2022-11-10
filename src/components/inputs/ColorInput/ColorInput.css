@@ -1,7 +1,7 @@
 
 .color-picker-input-container {
     width: calc(100% - 8px);
-    height: 60px;
+    height: 55px;
     display: flex;
     flex-shrink: 0;
     cursor: pointer;

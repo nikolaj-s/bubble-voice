@@ -75,6 +75,13 @@ export const ImageInput = ({
 
     })
 
+    React.useEffect(() => {
+
+        setFiles([{preview: initalImage}]);
+        
+    // eslint-disable-next-line
+    }, [initalImage])
+
     // clear object url to prevent memory leak
     React.useEffect(() => {
         if (files.length === 0) return;

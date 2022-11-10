@@ -78,7 +78,7 @@ const Settings = () => {
             <ColorInput rgb={textColor} selector='textColor' action={handleInput} />
             <InputTitle title={"Activation Color"} />
             <ColorInput selector="activationColor" action={handleInput} rgb={activationColor} />
-            <InputTitle title={"RGB Background"} />
+            <InputTitle title={"Ambient Background"} />
             <ToggleButton state={rgbBackground} action={handleToggleRgbBackGround}  />
             {changeMade ? <TextButton marginTop={"2%"} action={handleSaveAppearanceChanges} name="Save Changes" /> : null}
             <SettingsSpacer />

@@ -2,7 +2,7 @@
 .apply-cancel-button-container {
     
     bottom: 0;
-    min-height: 70px;
+    min-height: 55px;
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -17,5 +17,5 @@
     cursor: pointer;
     font-weight: 400;
     letter-spacing: var(--font-spacing);
-    font-size: 1.3rem;
+    font-size: 1rem;
 }

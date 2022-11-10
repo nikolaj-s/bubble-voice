@@ -353,6 +353,11 @@ ipcMain.on('write-hardware-change', (event, args) => {
 
 })
 
+// get streaming url for music
+ipcMain.on('get_music_stream', async (event, data) => {
+  
+})
+
 // handle updates
 ipcMain.on('check-for-updates', async (event, data) => {
 

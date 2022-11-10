@@ -5,6 +5,7 @@ import { useRoutes } from 'react-router'
 
 // components
 import { ApplyCancelButton } from '../../../../components/buttons/ApplyCancelButton/ApplyCancelButton';
+import { TextButton } from '../../../../components/buttons/textButton/TextButton';
 import { TextInput } from '../../../../components/inputs/TextInput/TextInput';
 import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/SettingsSpacer';
 import { InputTitle } from '../../../../components/titles/inputTitle/InputTitle';
@@ -13,6 +14,9 @@ import { SettingsHeader } from '../../../../components/titles/SettingsHeader/Set
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 import { selectActivateCameraKey, selectDisconnectKey, selectMuteAudioKey, selectMuteMicKey, selectPushToTalkKey, selectShareScreenKey, updateKeyCodeState } from './keyBindSettingsSlice';
+
+// style
+import "./KeyBindSettings.css";
 
 const Settings = () => {
 
@@ -40,21 +44,23 @@ const Settings = () => {
     }, [])
 
     const handleKeyCodeUpdate = (keyCode, state, event) => {
+
+        
         
         if (event.key.includes('F')) return;
 
-        if (event.keyCode === pushToTalkkey.keyCode) return;
+        if (event.keyCode === pushToTalkkey.keyCode && (event.keyCode !== "")) return;
         
-        if (event.keyCode === muteMicKey.keyCode) return;
+        if (event.keyCode === muteMicKey.keyCode && (event.keyCode !== "")) return;
 
-        if (event.keyCode === muteAudioKey.keyCode) return;
+        if (event.keyCode === muteAudioKey.keyCode && (event.keyCode !== "")) return;
 
-        if (event.keyCode === activateCameraKey.keyCode) return;
+        if (event.keyCode === activateCameraKey.keyCode && (event.keyCode !== "")) return;
 
-        if (event.keyCode === disconnectKey.keyCode) return;
+        if (event.keyCode === disconnectKey.keyCode && (event.keyCode !== "")) return;
 
-        if (event.keyCode === shareScreenKey.keyCode) return;
-
+        if (event.keyCode === shareScreenKey.keyCode && (event.keyCode !== "")) return;
+        console.log(event)
         const obj = {...local, [state]: {key: event.nativeEvent.key, keyCode: event.keyCode}}
         
         setLocal(obj)
@@ -77,18 +83,36 @@ const Settings = () => {
         <div className='settings-wrapper'>
             <SettingsHeader title={"Media Binds"} />
             <InputTitle title={"Push To Talk"} />
-            <TextInput keyCode={handleKeyCodeUpdate} stateSelector='push_to_talk' inputValue={local['push_to_talk'] ? local['push_to_talk'].key : pushToTalkkey.key} />
+            <div className='key-bind-input-wrapper'>
+                <TextInput keyCode={handleKeyCodeUpdate} stateSelector='push_to_talk' inputValue={local['push_to_talk'] ? local['push_to_talk'].key : pushToTalkkey.key} />
+                <TextButton action={() => {handleKeyCodeUpdate({}, "push_to_talk", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} name={"Clear Bind"} />
+            </div>
             <InputTitle title={"Mute Mic"} />
-            <TextInput keyCode={handleKeyCodeUpdate} stateSelector='mute_mic' inputValue={local['mute_mic'] ? local['mute_mic'].key : muteMicKey.key} />
+            <div className='key-bind-input-wrapper'>
+                <TextInput keyCode={handleKeyCodeUpdate} stateSelector='mute_mic' inputValue={local['mute_mic'] ? local['mute_mic'].key : muteMicKey.key} />
+                <TextButton action={() => {handleKeyCodeUpdate({}, "mute_mic", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} name={"Clear Bind"} />
+            </div>
             <InputTitle title={"Mute Audio"} />
-            <TextInput keyCode={handleKeyCodeUpdate} stateSelector='mute_audio' inputValue={local['mute_audio'] ? local['mute_audio'].key : muteAudioKey.key} />
+            <div className='key-bind-input-wrapper'>
+                <TextInput keyCode={handleKeyCodeUpdate} stateSelector='mute_audio' inputValue={local['mute_audio'] ? local['mute_audio'].key : muteAudioKey.key} />
+                <TextButton action={() => {handleKeyCodeUpdate({}, "mute_audio", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} name={"Clear Bind"} />
+            </div>
             <InputTitle title={"Activate Camera"} />
-            <TextInput keyCode={handleKeyCodeUpdate} stateSelector='activate_camera' inputValue={local['activate_camera'] ? local['activate_camera'].key : activateCameraKey.key} />
+            <div className='key-bind-input-wrapper'>    
+                <TextInput keyCode={handleKeyCodeUpdate} stateSelector='activate_camera' inputValue={local['activate_camera'] ? local['activate_camera'].key : activateCameraKey.key} />
+                <TextButton action={() => {handleKeyCodeUpdate({}, "activate_camera", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} name={"Clear Bind"} />
+            </div>
             <InputTitle title={"Share Screen"} />
-            <TextInput keyCode={handleKeyCodeUpdate} stateSelector='share_screen' inputValue={local['share_screen'] ? local['share_screen'].key : shareScreenKey.key} />
+            <div className='key-bind-input-wrapper'>
+                <TextInput keyCode={handleKeyCodeUpdate} stateSelector='share_screen' inputValue={local['share_screen'] ? local['share_screen'].key : shareScreenKey.key} />
+                <TextButton action={() => {handleKeyCodeUpdate({}, "share_screen", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} name={"Clear Bind"} />
+            </div>    
             <SettingsHeader title={"Misc"} />
             <InputTitle title={"Disconnect"} />
-            <TextInput keyCode={handleKeyCodeUpdate} stateSelector='disconnect' inputValue={local['disconnect'] ? local['disconnect'].key : disconnectKey.key} />
+            <div className='key-bind-input-wrapper'>
+                <TextInput keyCode={handleKeyCodeUpdate} stateSelector='disconnect' inputValue={local['disconnect'] ? local['disconnect'].key : disconnectKey.key} />
+                <TextButton action={() => {handleKeyCodeUpdate({}, "disconnect", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} name={"Clear Bind"} />
+            </div>
             {update ? <ApplyCancelButton cancel={handleCancel} apply={saveKeyBinds} name='Save' /> : null}
             <SettingsSpacer />
         </div>

@@ -127,7 +127,7 @@ export const ChannelList = () => {
                     <div>
                         {localChannels.map((channel, key) => {
                             return (
-                                <ChannelButton action={handleJoinChannel} channel={channel} key={key} users={channel.users} />
+                                <ChannelButton index={key} action={handleJoinChannel} channel={channel} key={key} users={channel.users} />
                             )
                         })}
                     </div>

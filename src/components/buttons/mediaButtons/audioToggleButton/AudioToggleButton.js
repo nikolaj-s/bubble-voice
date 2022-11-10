@@ -16,6 +16,8 @@ export const AudioToggleButton = ({action, state, active, id}) => {
         opacity={0.5}
         invert={true}
         id={id}
+        description={active ? null : `${state ? 'Deafen' : 'Un-Deafen'}`}
+        zIndex={5}
         >
             {state ?
             <svg 

@@ -12,9 +12,11 @@ import { selectPrimaryColor, selectTextColor } from '../../features/settings/app
 
 // style
 import "./Message.css";
-import { TextParser } from './TextParser/TextParser';
 import { setExpandedContent } from '../../features/ExpandContent/ExpandContentSlice';
 import { SubMenuButton } from '../buttons/subMenuButton/SubMenuButton';
+import { Iframe } from '../Iframe/Iframe';
+import { MessageLink } from './MessageLink/MessageLink';
+import { MessageText } from './MessageText/MessageText';
 
 export const Message = ({ message, overlay = false, id, channel_id }) => {
 
@@ -55,7 +57,9 @@ export const Message = ({ message, overlay = false, id, channel_id }) => {
                 }
                 
             </div>
-            {message.text ? <TextParser text={message.text} /> : null}
+            <MessageText color={textColor} text={message.text} />
+            <MessageLink link={message.link} />
+            <Iframe link={message.iFrame} />
             {message.image ? 
             <div 
             style={{
