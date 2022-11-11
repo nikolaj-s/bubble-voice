@@ -246,43 +246,35 @@ export class RoomClient {
                 if (consumer.rtpParameters.codecs[0].mimeType === 'video/VP8') {
                     // handle displaying web cam feed
 
-                    const exists = document.getElementsByClassName(`${user.user_name}-camera-stream`);
+                    el = document.createElement('video');
 
-                    if (exists.length > 0) {
+                    el.srcObject = stream;
 
-                        exists[0].srcObject = stream;
+                    el.id = consumer.id;
 
-                        exists[0].id = consumer.id;
+                    console.log(user)
 
-                    } else {
+                    el.className = `stream web-cam-stream ${user.username}-camera-stream`;
 
-                        el = document.createElement('video');
+                    el.playsInline = false;
 
-                        el.srcObject = stream;
+                    const prefs = USER_PREFS.get(user._id);
+
+                    el.style.transform = (user.mirror_web_cam && prefs?.flip_web_cam) ? null : (user.mirror_web_cam && !prefs?.flip_web_cam) ? 'scaleX(-1)' : null;
+
+                    el.autoplay = true;
+
+                    el.muted = true;
+
+                    document.getElementById(user._id).appendChild(el);
     
-                        el.id = consumer.id;
-    
-                        el.className = `stream web-cam-stream ${user.user_name}-camera-stream`;
-    
-                        el.playsInline = false;
-    
-                        const prefs = USER_PREFS.get(user._id);
-    
-                        el.style.transform = (user.mirror_web_cam && prefs?.flip_web_cam) ? null : (user.mirror_web_cam && !prefs?.flip_web_cam) ? 'scaleX(-1)' : null;
-    
-                        el.autoplay = true;
-    
-                        el.muted = true;
-    
-                        document.getElementById(user._id).appendChild(el);
-    
-                    }
+                    
                     
                 } else if (consumer.rtpParameters.codecs[0].mimeType === 'video/H264' || consumer.rtpParameters.codecs[0].mimeType === 'video/rtx') {
                     // display incoming screen stream
                     stream.getVideoTracks()[0].contentHint = 'motion'
                     
-                    const exists = document.getElementsByClassName(`${user.user_name}-screen-share-stream`)[0]
+                    const exists = document.getElementsByClassName(`${user.username}-screen-share-stream`)[0]
 
                     if (exists) {
 
@@ -308,7 +300,7 @@ export class RoomClient {
 
                         el.autoplay = true;
 
-                        el.className = `streaming-video-player ${user._id} ${user.user_name}-screen-share-stream`
+                        el.className = `streaming-video-player ${user._id} ${user.username}-screen-share-stream`
 
                         el.playsInline = false;
 
