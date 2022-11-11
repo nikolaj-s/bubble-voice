@@ -1,43 +1,49 @@
 import React from 'react'
+import { DropImageIcon } from '../../../Icons/DropImageIcon/DropImageIcon';
 
 export const ImageDropListener = (props) => {
 
-    const handleDragOver = () => {
+    const [dragged, toggleDragged] = React.useState(false);
 
-        document.getElementById('image-drop-listener').classList.add('user-is-dragging');
+    const handleDragOver = () => {
+        
+        toggleDragged(true);
         
     }
 
     const handleDragEnd = () => {
 
-        document.getElementById('image-drop-listener').classList.remove('user-is-dragging');
+        toggleDragged(false);
+    
     }
 
     React.useEffect(() => {
 
-        document.body.addEventListener('dragover', handleDragOver);
-
-        document.body.addEventListener('dragend', handleDragEnd);
+        document.body.addEventListener('dragenter', handleDragOver);
 
         document.body.addEventListener('drop', handleDragEnd);
 
-        document.body.addEventListener('dragleave', handleDragEnd);
+        document.body.addEventListener('dragend', handleDragEnd);
 
         return () => {
-            document.body.removeEventListener('dragover', handleDragOver);
-
-            document.body.removeEventListener('dragend', handleDragEnd);
+            document.body.removeEventListener('dragenter', handleDragOver);
 
             document.body.removeEventListener('drop', handleDragEnd);
 
-            document.body.removeEventListener('dragleave', handleDragEnd);
+            document.body.removeEventListener('dragend', handleDragEnd);
         }
 
     }, [])
-
+    
     return (
         <div 
+        style={{
+            pointerEvents: dragged ? 'all' : 'none',
+            opacity: dragged ? 1 : 0,
+            backdropFilter: dragged ? 'blur(5px)' : null
+        }}
         draggable={true} {...props.root} id='image-drop-listener'>
+            <DropImageIcon action={handleDragEnd} />
         </div>
     )
 }

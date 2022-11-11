@@ -9,6 +9,7 @@ import { Room } from './Room/Room'
 import { Error } from '../../../components/Error/Error';
 import { AnimatePresence } from 'framer-motion'
 import { SocialRoute } from './SocialRoute/SocialRoute'
+import { ServerDashBoard } from './ServerDashBoard/ServerDashBoard'
 
 export const RoomWrapper = () => {
 
@@ -27,6 +28,7 @@ export const RoomWrapper = () => {
         <CreateChannelMenu />
         <ServerSettingsRouteWrapper />
         <Room />
+        <ServerDashBoard />
         <AnimatePresence exitBeforeEnter>
             <SocialRoute key={'social-route'} />
             {error ? <Error errorMessage={errorMessage} action={closeErrorMessage} /> : null}

@@ -9,6 +9,7 @@ export const DisconnectButton = ({action, width, height}) => {
     
     return (
     <ButtonAnimationWrapper 
+    zIndex={1}
     invert={true}
     description={"Disconnect"}
     margin={"0 0 0 10px"}

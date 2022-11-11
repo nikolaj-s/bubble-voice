@@ -57,7 +57,7 @@ export const UpdateAvailable = () => {
 
         if (updateAvailable) {
             try {
-                document.getElementById('disconnect-from-server-button')?.click();
+                document.getElementById('disconnect-from-server-button').click();
             } catch (e) {
                 return;
             }

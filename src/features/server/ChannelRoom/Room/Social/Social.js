@@ -27,7 +27,9 @@ export const Social = ({currentChannel, channelId}) => {
 
     const [text, setText] = React.useState("");
 
-    const [image, setImage] = React.useState(null)
+    const [image, setImage] = React.useState(null);
+
+    const [messagesToRender, setMessagesToRender] = React.useState(10)
 
     const username = useSelector(selectUsername);
 
@@ -82,24 +84,18 @@ export const Social = ({currentChannel, channelId}) => {
 
         await socket.request('message', data)
         .then(response => {
+
+            messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
             
             if (response.success) {
                 dispatch(updateMessage(response.message));
             }
 
-            try {
-
-                messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
-                
-            } catch (error) {
-                return;
-            }
         }).catch(error => {
             console.log(error)
             dispatch(throwServerError({errorMessage: error.errorMessage}));
             
         })
-
         
     }
 
@@ -117,9 +113,17 @@ export const Social = ({currentChannel, channelId}) => {
         }
         setImage(image);
     }
+
+    const handleLoadMoreOnScroll = (e) => {
+        if (messagesRef.current.scrollTop + messagesRef.current.scrollHeight < 1500) {
+            console.log('top')
+            setMessagesToRender(messagesToRender + 5);
+        }
+    }
     
     return (
         <motion.div 
+        
         key={"room-social-content-container"}
         
         transition={{
@@ -135,15 +139,16 @@ export const Social = ({currentChannel, channelId}) => {
         exit={{
             opacity: 0,
         }}>
-            <div className='social-inner-container'>
+            <div  className='social-inner-container'>
                 {image?.preview ? 
                 <div className='image-social-post-preview'>
                     <Image position='relative' objectFit='contain' zIndex={1} image={image.preview} />
                 </div>
                 : null}
-                <div ref={messagesRef} className='social-messages-wrapper'>
-                    {messages.map(message => {
-                        return <Message channel_id={message.channel_id} id={message._id} message={message.content} key={message.content.local_id || message._id} />
+                <div onScroll={handleLoadMoreOnScroll} ref={messagesRef} className='social-messages-wrapper'>
+                    {messages.map((message, key) => {
+                        return key >= messagesToRender ?  null :
+                        <Message channel_id={message.channel_id} id={message._id} message={message.content} key={message.content.local_id || message._id} />
                     })}
                 </div>
                 {permission?.user_can_post_channel_social ? <MessageInput persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : null}

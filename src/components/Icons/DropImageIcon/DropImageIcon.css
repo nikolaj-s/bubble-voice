@@ -1,0 +1,13 @@
+.image-drop-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 40%;
+    height: 40%;
+    border-radius: 15px;
+}
+
+.image-drop-icon h1 {
+    letter-spacing: var(--font-spacing);
+}

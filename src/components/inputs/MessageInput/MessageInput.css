@@ -12,17 +12,20 @@
 }
 
 #image-drop-listener {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: calc(100% - 8px);
     height: calc(100% - 10px);
-    z-index: 10;
+    z-index: 199;
     pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.user-is-dragging  {
-    pointer-events: all !important;
+#image-drop-listener:active {
+    outline: none;
 }
 
 .message-input-button-wrapper {

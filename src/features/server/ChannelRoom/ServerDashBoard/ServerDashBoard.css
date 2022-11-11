@@ -1,0 +1,21 @@
+
+.server-dashboard-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.server-dashboard-inner-container {
+    display: flex;
+    flex-direction: column;
+    width: 95%;
+    max-width: 1000px;
+}
+
+.server-dashboard-image-wrapper {
+    width: 100%;
+    height: 600px;
+    border-radius: 15px;
+    overflow: hidden;
+}

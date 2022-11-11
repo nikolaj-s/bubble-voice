@@ -59,10 +59,14 @@ export const ControlBar = () => {
         if (state === 'webCamState' && webCamState === true) dispatch(toggleLoadingWebCam(true))
 
         if (state === 'screenShareState' && loadingScreenShare === true) return;
-        
-        dispatch(playSoundEffect('controlSoundEffect'))
 
         dispatch(toggleControlState(state))
+
+        if (eval(state) === true) {
+            dispatch(playSoundEffect('controlSoundEffect'))
+        } else {
+            dispatch(playSoundEffect('deactivate'))
+        }
 
         if (state === 'audioState' && microphoneState) {
 

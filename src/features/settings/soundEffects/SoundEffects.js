@@ -26,6 +26,8 @@ const lostConnection = require('../../../assets/lost-connection.mp3');
 
 const moved = require('../../../assets/moved.mp3')
 
+const deactivate = require('../../../assets/deactivate.mp3')
+
 export const SoundEffects = () => {
 
     const soundEffect = useSelector(selectSoundEffect);
@@ -53,7 +55,8 @@ export const SoundEffects = () => {
         'newMessage': connected,
         'userKicked': userKicked,
         'lostConnection': lostConnection,
-        'moved': moved
+        'moved': moved,
+        'deactivate': deactivate
     }
 
     React.useEffect(() => {

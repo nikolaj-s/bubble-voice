@@ -64,7 +64,7 @@ export const ImageInput = ({
 
             toggleProcessingImage(true);
 
-            const options = {maxSizeMB: 0.8, onProgress: handlePercent, maxIteration: 20}
+            const options = {maxSizeMB: 0.6, onProgress: handlePercent, maxIteration: 30}
 
             const compressed_image = await imageCompression(acceptedFiles[0], options);
             

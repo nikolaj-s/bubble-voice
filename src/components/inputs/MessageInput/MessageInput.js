@@ -47,7 +47,7 @@ export const MessageInput = ({send, text, keyCode, active, image, value, persist
 
             toggleProcessingImage(true);
 
-            const options = {maxSizeMB: 0.7, onProgress: incrementPrecentage, maxIteration: 20}
+            const options = {maxSizeMB: 0.6, onProgress: incrementPrecentage, maxIteration: 30}
 
             const compressed_image = await imageCompression(acceptedFiles[0], options);
             
@@ -99,7 +99,7 @@ export const MessageInput = ({send, text, keyCode, active, image, value, persist
 
     return (
         <> 
-            <ImageDropListener root={getRootProps({className: 'dropzone'})} />
+            {persist ? <ImageDropListener root={getRootProps({className: 'dropzone'})} /> : null}
             <motion.div 
             
             animate={animation}
