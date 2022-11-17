@@ -19,7 +19,7 @@ export const fetchServerDetails = createAsyncThunk(
 
                 for (const channel of response.server.channels) {
 
-                    const s = channel.social.map(m => UnpackMessage(m))
+                    channel.social.map(m => UnpackMessage(m))
                     
                 }
 

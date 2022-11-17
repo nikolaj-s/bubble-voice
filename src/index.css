@@ -9,6 +9,7 @@ html {
   --range-background: white;
   --range-main-active: black;
   --range-main-thumb: black;
+  --primary-color: black;
 }
 
 body {

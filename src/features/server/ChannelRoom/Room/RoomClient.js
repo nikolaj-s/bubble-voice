@@ -431,22 +431,6 @@ export class RoomClient {
             const el = document.getElementById(producer_id);
 
             const par = document.getElementById(producer_id + 'container');
-            
-            if (type === 'screenType') {
-                const stream_audio_id = el.classList[2];
-                
-                if (stream_audio_id) {
-                    const stream_audio_producer_id = stream_audio_id.split('=')[1];
-                    
-                    this.producers.get(stream_audio_producer_id).close();
-
-                    this.producers.delete(stream_audio_producer_id);
-
-                    this.socket.emit('producerClosed', {
-                        producer_id: stream_audio_producer_id
-                    })
-                }
-            }
 
             if (type !== mediaType.audio) {
                 el.srcObject.getTracks().forEach(track => {

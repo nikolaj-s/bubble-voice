@@ -15,8 +15,10 @@ import { SendButton } from './SendButton/SendButton';
 import { CharacterCount } from './CharacterCount/CharacterCount';
 import { ProcessingImageIndicator } from './ProcessingImageIndicator/ProcessingImageIndicator';
 import { ImageDropListener } from './ImageDropListener/ImageDropListener';
+import { SearchImageButton } from './SearchImageButton/SearchImageButton';
+import { ImageSearchPanel } from './ImageSearchPanel/ImageSearchPanel';
 
-export const MessageInput = ({send, text, keyCode, active, image, value, persist}) => {
+export const MessageInput = ({send, text, keyCode, image, value, persist}) => {
 
     const [files, setFiles] = React.useState([{}])
 
@@ -25,6 +27,8 @@ export const MessageInput = ({send, text, keyCode, active, image, value, persist
     const [processingImage, toggleProcessingImage] = React.useState(false);
 
     const [percent, setPercent] = React.useState(0)
+
+    const [searchingForImage, toggleSearchingForImage] = React.useState(false);
 
     const primaryColor = useSelector(selectPrimaryColor);
     
@@ -97,11 +101,23 @@ export const MessageInput = ({send, text, keyCode, active, image, value, persist
         document.getElementById('image-drop-listener').click();
     }
 
+    const handleSearchingForImageToggle = () => {
+        toggleSearchingForImage(!searchingForImage)
+    }
+
+    const selectImage = (i) => {
+        toggleSearchingForImage(false);
+
+        text(i);
+
+        image({preview: i});
+    }
+
     return (
         <> 
             {persist ? <ImageDropListener root={getRootProps({className: 'dropzone'})} /> : null}
+            <ImageSearchPanel selectImage={selectImage} searchingForImage={searchingForImage} />
             <motion.div 
-            
             animate={animation}
             style={{
                 backgroundColor: primaryColor,
@@ -120,6 +136,7 @@ export const MessageInput = ({send, text, keyCode, active, image, value, persist
                 id='social-input-selector' onKeyUp={handleKeyCode} onChange={handleText} value={value}  placeholder='Message' type="text" />
                 <div className='message-input-button-wrapper'>
                     <CharacterCount count={value.length} />
+                    <SearchImageButton margin={!persist ? '0 10px 0 0' : null} action={handleSearchingForImageToggle} />
                     {(persist && !processingImage) ? <ImageButton action={handleImageButton} /> : null}
                     {processingImage ? <ProcessingImageIndicator percent={percent} /> : null}
                     <SendButton color={textColor} action={handleSend} />

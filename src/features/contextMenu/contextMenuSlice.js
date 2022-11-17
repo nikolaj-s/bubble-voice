@@ -40,7 +40,9 @@ const contextMenuSlice = createSlice({
         channelSpecificSettings: false,
         // message state
         deleteMessage: false,
-        selectedMessage: ""
+        selectedMessage: "",
+        // copy state
+        copy: false
     },
     reducers: {
         setContextMenuOptions: (state, action) => {
@@ -85,6 +87,7 @@ const contextMenuSlice = createSlice({
             state.stop_streaming = false;
             state.deleteMessage = false;
             state.selectedMessage = "";
+            state.copy = false;
         },
         handleChannelCtxState: (state, action) => {
             state.joinChannel = action.payload.join;
@@ -167,6 +170,8 @@ export const selectFlipWebCamState = state => state.contextMenuSlice.flipWebCam;
 export const selectStopStreamingState = state => state.contextMenuSlice.stop_streaming;
 
 export const selectStreamVolumeState = state => state.contextMenuSlice.stream_volume;
+
+export const selectCopyState = state => state.contextMenuSlice.copy;
 
 // actions
 export const { handleStreamState, handleCopyPasteCtxState, handleUserManagementCtx, handleChannelCtxState, clearCtxState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } = contextMenuSlice.actions;

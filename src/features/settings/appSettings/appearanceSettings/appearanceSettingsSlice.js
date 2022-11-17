@@ -103,6 +103,10 @@ const appearanceSettingsSlice = createSlice({
             if (action.payload.type === 'accentColor') {
                 document.querySelector(':root').style.setProperty('--range-background', state.accentColor)
             }
+
+            if (action.payload.type === 'primaryColor') {
+                document.querySelector(':root').style.setProperty('--primary-color', state.primaryColor)
+            }
         },
         changeTheme: (state, action) => {
 
@@ -117,6 +121,8 @@ const appearanceSettingsSlice = createSlice({
             state.activationColor = state.color_themes[action.payload.state].activationColor;
 
             document.querySelector(':root').style.setProperty('--range-background', state.color_themes[action.payload.state].accentColor)
+        
+            document.querySelector(':root').style.setProperty('--primary-color', state.color_themes[action.payload.state].primaryColor)
         },
         saveTheme: (state, action) => {
 
@@ -167,6 +173,8 @@ const appearanceSettingsSlice = createSlice({
                     state.activationColor = state.color_themes[action.payload.current_theme.state].activationColor;
                     
                     document.querySelector(':root').style.setProperty('--range-background', state.color_themes[action.payload.current_theme.state].accentColor)
+                
+                    document.querySelector(':root').style.setProperty('--primary-color', state.color_themes[action.payload.current_theme.state].primaryColor)
                 }
 
                 if (action.payload.rgbBackground) {

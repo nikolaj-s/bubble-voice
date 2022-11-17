@@ -17,6 +17,8 @@ export const SocialRoute = () => {
 
     const dispatch = useDispatch();
 
+    const [currentSocial, setCurrentSocial] = React.useState("") 
+
     const channelId = useSelector(selectChannelSocialId);
 
     const channel = useSelector(selectCurrentlyViewChannelSocial);
@@ -27,13 +29,19 @@ export const SocialRoute = () => {
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
+    React.useEffect(() => {
+
+        if (currentSocial !== channelId) return setCurrentSocial(channelId);
+
+    }, [channelId])
+
     const closeSocialTab = () => {
         dispatch(setChannelSocialId(""));
     }
 
     return (
         <>
-            {channelId ?
+            {currentSocial ?
             <motion.div 
             key={"social-route"}
             initial={{
@@ -47,7 +55,7 @@ export const SocialRoute = () => {
             }}
             style={{
                 width: inChannel ? '500px' : '100%',
-                height: inChannel ? '650px' : '100%',
+                height: inChannel ? '850px' : '100%',
                 backgroundColor: secondaryColor,
                 borderTop: inChannel ? `4px solid ${textColor}` : null,
                 borderLeft: inChannel ? `4px solid ${textColor}` : null

@@ -131,6 +131,7 @@ export const ControlBar = () => {
                     state={audioState} 
                     active={current_channel_id === null}
                     id={"mute-audio-toggle-button"}
+                    description={current_channel_id === null ? null : `${audioState ? 'Deafen' : 'Un-Deafen'}`}
                     />
                     <ShareScreenButton 
                     loading={loadingScreenShare}

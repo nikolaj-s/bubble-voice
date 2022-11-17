@@ -11,7 +11,7 @@ import { Loading } from '../../components/LoadingComponents/Loading/Loading';
 import { CtxMenuTitle } from '../../components/titles/ctxMenuTitle/CtxMenuTitle';
 
 // state
-import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleStreamState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteMesssageState, selectDeleteWidget, selectEditChannelCtxState, selectFlipWebCamState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSelectedMessage, selectSelectedUserCtxState, selectStopStreamingState, selectStreamVolumeState, selectViewSocialState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
+import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleStreamState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCopyState, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteMesssageState, selectDeleteWidget, selectEditChannelCtxState, selectFlipWebCamState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSelectedMessage, selectSelectedUserCtxState, selectStopStreamingState, selectStreamVolumeState, selectViewSocialState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
 import { assignNewServerGroup, deleteMessage, markWidgetForDeletion, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerMembers, selectUsersPermissions, setChannelSocialId, setEditingChannelId, throwServerError } from '../server/ServerSlice';
 
 // style
@@ -128,6 +128,8 @@ export const ContextMenu = () => {
 
     // copy paste state
     const pasteCtxState = useSelector(selectPasteCtxState);
+
+    const copyCtxState = useSelector(selectCopyState);
 
     // audio
     const [audioLevel, setAudioLevel] = React.useState(0);
@@ -316,6 +318,13 @@ export const ContextMenu = () => {
             }
   
         }  
+
+        if (window.getSelection().toString().length !== 0) {
+
+            dispatch(toggleContextMenu(true));
+
+            dispatch(setContextMenuOptions({state: 'copy', value: window.getSelection().toString()}))
+        }
             
         dispatch(setCtxCordinates({x: (e.view.innerWidth - e.pageX) < 400 ? (e.pageX - 300) : e.pageX, y: e.pageY}))
 
@@ -612,6 +621,18 @@ export const ContextMenu = () => {
         }
     }
 
+    const handleCopy = () => {
+        try {
+
+            const { clipboard } = window.require('electron');
+
+            clipboard.writeText(copyCtxState);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <>
         {ctxActive ? 
@@ -626,6 +647,7 @@ export const ContextMenu = () => {
             {saveImage ? <CtxButton action={() => {handleSave(true)}} name={"Save Image"} /> : null}
             {saveVideo ? <CtxButton action={() => {handleSave(false)}} name={"Save Video"} /> : null}
             {pasteCtxState ? <CtxButton name={"Paste"} action={paste} /> : null}
+            {copyCtxState ? <CtxButton name={"Copy"} action={handleCopy} /> : null}
             {joinChannelState ? <CtxButton action={handleJoinChannel} name={"Join Channel"} /> : null}
             {leaveChannelState ? <CtxButton action={handleLeaveChannel} name={'Leave Channel'} /> : null}
             {editChannelState ? <CtxButton action={handleEditChannel} name={"Edit Channel"} /> : null}

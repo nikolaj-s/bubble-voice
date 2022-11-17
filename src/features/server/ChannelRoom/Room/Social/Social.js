@@ -76,7 +76,7 @@ export const Social = ({currentChannel, channelId}) => {
 
         dispatch(newMessage(data));
 
-        data = {...data, file: image}
+        data = {...data, file: image?.size ? image : null}
 
         setText("");
 
@@ -115,10 +115,12 @@ export const Social = ({currentChannel, channelId}) => {
     }
 
     const handleLoadMoreOnScroll = (e) => {
-        if (messagesRef.current.scrollTop + messagesRef.current.scrollHeight < 1500) {
+        
+        if ((messagesRef.current.scrollTop + messagesRef.current.scrollHeight) * .8 < e.target.clientHeight) {
             console.log('top')
             setMessagesToRender(messagesToRender + 5);
         }
+    
     }
     
     return (
@@ -139,19 +141,20 @@ export const Social = ({currentChannel, channelId}) => {
         exit={{
             opacity: 0,
         }}>
-            <div  className='social-inner-container'>
-                {image?.preview ? 
-                <div className='image-social-post-preview'>
-                    <Image position='relative' objectFit='contain' zIndex={1} image={image.preview} />
+            <div className='social-wrapper-container'>
+                <div  className='social-inner-container'>
+                    {image?.preview ? 
+                    <div className='image-social-post-preview'>
+                        <Image position='relative' objectFit='contain' zIndex={1} image={image.preview} />
+                    </div>
+                    : null}
+                    <div onScroll={handleLoadMoreOnScroll} ref={messagesRef} className='social-messages-wrapper'>
+                        {messages?.slice(0, messagesToRender).map((message, key) => {
+                            return <Message channel_id={message.channel_id} id={message._id} message={message.content} key={message.content.local_id || message._id} />
+                        })}
+                    </div>
+                    {permission?.user_can_post_channel_social ? <MessageInput persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : null}
                 </div>
-                : null}
-                <div onScroll={handleLoadMoreOnScroll} ref={messagesRef} className='social-messages-wrapper'>
-                    {messages.map((message, key) => {
-                        return key >= messagesToRender ?  null :
-                        <Message channel_id={message.channel_id} id={message._id} message={message.content} key={message.content.local_id || message._id} />
-                    })}
-                </div>
-                {permission?.user_can_post_channel_social ? <MessageInput persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : null}
             </div>
         </motion.div>
     )
