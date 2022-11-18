@@ -2,7 +2,7 @@
 .ctx-menu-container {
     position: fixed;
     z-index: 10;
-    border-radius: var(--border-radius);
+    border-radius: 10px;
     min-width: 300px;
     overflow: hidden;
     box-shadow: 4px 4px 30px rgba(0, 0, 0, 0.424);

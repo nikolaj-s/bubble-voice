@@ -1,16 +1,14 @@
 
 .channel-title-container {
-    width: calc(100% - 10%);
+    width: calc(85%);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 55px;
-    margin-right: -5%;
-    padding: 0 5%;
+    height: 45px;
 }
 
 .channel-title-container h3 {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     font-weight: 400;
     letter-spacing: var(--font-spacing);
 }

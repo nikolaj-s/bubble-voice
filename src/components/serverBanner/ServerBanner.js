@@ -27,7 +27,7 @@ export const ServerBanner = ({serverName, serverImage}) => {
             border: `solid 4px ${primaryColor}`
         }}
         animate={{
-            height: '235px',
+            height: '200px',
             borderBottomLeftRadius: '0px',
             borderBottomRightRadius: '0px',
             border: 'solid 0px transparent'

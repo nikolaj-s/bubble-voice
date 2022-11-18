@@ -54,7 +54,8 @@ export const SocialRoute = () => {
                 opacity: 0
             }}
             style={{
-                width: inChannel ? '500px' : '100%',
+                position: inChannel ? 'absolute' : 'relative',
+                width: inChannel ? '500px' : 'calc(100%)',
                 height: inChannel ? '850px' : '100%',
                 backgroundColor: secondaryColor,
                 borderTop: inChannel ? `4px solid ${textColor}` : null,

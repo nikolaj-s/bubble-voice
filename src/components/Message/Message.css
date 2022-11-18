@@ -1,10 +1,14 @@
 .message-container {
-    width: calc(100% - 2rem);
+    width: calc(100% - 1rem);
     max-width: 800px;
     display: flex;
     height: auto;
     flex-direction: column;
-    margin: 1rem;
+    margin: 0.1rem .5rem;
+}
+
+.message-container:hover {
+    background-color: var(--primary-color);
 }
 
 .message-container p {
@@ -23,12 +27,21 @@
     height: 40px;
     margin-bottom: 10px;
     width: 100%;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
 }
 
+.sender-info-container h2 {
+    margin: 0 1rem 0 0;
+    padding: 0;
+    font-size: 1.3rem;
+    letter-spacing: var(--font-spacing);
+}
+
 .sender-info-container p {
-    opacity: 0.6;
+    opacity: 0.4;
+    font-size: 0.7rem;
+    margin: 0;
 }
 
 .message-loading-container {
@@ -38,9 +51,10 @@
 
 .message-image-container {
     max-height: 600px;
-    border-radius: var(--border-radius);
     overflow: hidden;
     cursor: pointer;
+    object-fit: contain;
+    max-width: 100%;
 }
 
 .message-video-container {
@@ -50,4 +64,6 @@
 .date-submenu-message-wrapper {
     display: flex;
     align-items: center;
+    justify-self: flex-end;
+    margin-left: auto;
 }

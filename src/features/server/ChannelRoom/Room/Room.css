@@ -1,4 +1,11 @@
 
+.room-wrapper-outer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
 #live-chat-wrapper {
     height: calc(100% - 45px);
     width: 100%;

@@ -10,6 +10,7 @@ export const ProfilePictureButton = ({image, width, height}) => {
     width={width}
     height={height}
     active={true}
+    padding={0}
     invert={true}
     >
         <div

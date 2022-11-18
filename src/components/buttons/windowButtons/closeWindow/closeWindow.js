@@ -7,8 +7,8 @@ export const CloseWindow = ({ action }) => {
 
     const styles = {
         container: {
-            width: 20,
-            height: 20,
+            width: 15,
+            height: 15,
             paddingRight: 0
         },
         icon: {

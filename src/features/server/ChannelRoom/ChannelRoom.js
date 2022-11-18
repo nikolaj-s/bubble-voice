@@ -10,6 +10,7 @@ import { Error } from '../../../components/Error/Error';
 import { AnimatePresence } from 'framer-motion'
 import { SocialRoute } from './SocialRoute/SocialRoute'
 import { ServerDashBoard } from './ServerDashBoard/ServerDashBoard'
+import { UserStatusBar } from './UserStatusBar/UserStatusBar'
 
 export const RoomWrapper = () => {
 
@@ -29,8 +30,9 @@ export const RoomWrapper = () => {
         <ServerSettingsRouteWrapper />
         <Room />
         <ServerDashBoard />
-        <AnimatePresence exitBeforeEnter>
+        <AnimatePresence>
             <SocialRoute key={'social-route'} />
+            <UserStatusBar />
             {error ? <Error errorMessage={errorMessage} action={closeErrorMessage} /> : null}
         </AnimatePresence>
         </>

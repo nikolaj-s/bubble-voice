@@ -486,7 +486,7 @@ const Component = () => {
 
     
     return (
-        <>
+        <div className='room-wrapper-outer'>
             <RoomNavigation action={cycleChannelPage} page={page} />
             <div
             style={
@@ -506,7 +506,7 @@ const Component = () => {
             <ChannelBackground channel_background={hideChannelBackgrounds ? null : channel.channel_background} blur={channel.background_blur} />
             <audio hidden={true} id={'microphone-input-source'} />
             <Music />
-        </>
+        </div>
     )
 }
 

@@ -65,6 +65,19 @@ export const ImageSearchPanel = ({searchingForImage, selectImage}) => {
         selectImage(image)
     }
 
+    React.useEffect(() => {
+        try {
+            if (searchingForImage) {
+                document.getElementById('message-image-search-input').focus();
+            } else {
+                document.getElementById('social-input-selector').focus();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+        
+    }, [searchingForImage])
+
     return (
         <>
         <AnimatePresence exitBeforeEnter>
@@ -88,6 +101,7 @@ export const ImageSearchPanel = ({searchingForImage, selectImage}) => {
                     style={{backgroundColor: primaryColor}}
                     className='message-image-search-input-wrapper'>
                         <input 
+                        id="message-image-search-input"
                         style={{color: textColor}}
                         maxLength={120} onKeyUp={handleEnter} onChange={handleQuery} value={query} placeholder={"Search For Images"} />
                         <AltSearchButton action={search} margin={'0 0 0 10px'} width={20} height={20} invert={true} borderRadius={10} />

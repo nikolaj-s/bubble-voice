@@ -6,8 +6,6 @@
     justify-content: space-between;
     align-items: center;
     overflow: hidden;
-    border-top-left-radius: var(--border-radius);
-    border-top-right-radius: var(--border-radius);
     transition: 0;
     z-index: 1;
 }

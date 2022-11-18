@@ -6,13 +6,14 @@ import { io } from "socket.io-client";
 import { useNavigate, useRoutes } from 'react-router';
 
 // state
-import { addNewChannel, addSongToQueue, assignNewServerGroup, clearServerState, deleteChannel, deleteMessage, fetchPersistedMusicVolume, fetchServerDetails, handleLeavingServer, leaveChannel, newMessage, reOrderChannels, selectCurrentChannel, selectCurrentChannelId, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, selectTopAnimationPoint, setServerName, skipSong, throwServerError, toggleMusicPlaying, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateMemberStatus, updateServerBanner, updateServerGroups, userJoinsChannel, userJoinsServer, userLeavesChannel } from '../ServerSlice';
+import { addNewChannel, addSongToQueue, assignNewServerGroup, clearServerState, deleteChannel, deleteMessage, fetchPersistedMusicVolume, fetchServerDetails, handleLeavingServer, leaveChannel, newMessage, reOrderChannels, selectCurrentChannel, selectCurrentChannelId, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, selectTopAnimationPoint, setServerName, skipSong, throwServerError, toggleMusicPlaying, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateMemberStatus, updateServerBanner, updateServerGroups, userJoinsChannel, userJoinsServer, userLeavesChannel, userLeavesServer } from '../ServerSlice';
 import { selectUsername } from '../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { getToken, url } from '../../../util/Validation';
 import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
 import { selectActivateCameraKey, selectDisconnectKey, selectMuteAudioKey, selectMuteMicKey, selectPushToTalkKey, selectShareScreenKey } from '../../settings/appSettings/keyBindSettings/keyBindSettingsSlice';
 import { selectAudioOutput } from '../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 import { addNewWidgetOverlayToQueue, clearWidgetOverLay } from '../ChannelRoom/Room/RoomActionOverlay/RoomActionOverlaySlice';
+import { pushSytemNotification } from '../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 // component's
 import { ServerBanner } from '../../../components/serverBanner/ServerBanner';
@@ -168,6 +169,10 @@ const Bar = () => {
 
                 dispatch(addNewWidgetOverlayToQueue({...data.content, action: 'new-message'}));
             
+            } else {
+            
+                dispatch(pushSytemNotification(message));
+                
             }
             
         })
@@ -267,6 +272,16 @@ const Bar = () => {
         socket.on('delete message', (data) => {
             try {
                 dispatch(deleteMessage(data))
+            } catch (error) {
+                console.log(error)
+            }
+        })
+
+        socket.on('left server', (data) => {
+            try {
+                
+                dispatch(userLeavesServer(data.member_id));
+            
             } catch (error) {
                 console.log(error)
             }

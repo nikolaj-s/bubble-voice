@@ -5,8 +5,6 @@
     width: 100%;
     align-items: center;
     overflow: hidden;
-    border-top-left-radius: var(--border-radius);
-    border-top-right-radius: var(--border-radius);
 }
 
 .home-navigation-button-wrapper {

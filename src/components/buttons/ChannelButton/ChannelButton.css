@@ -1,18 +1,19 @@
 
 .channel-button-container {
     width: calc(100% - 8px - 4%);
-    height: calc(55px - 8px);
+    height: calc(45px - 8px);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-radius: var(--border-radius);
+    border-radius: 10px;
     margin-bottom: 2%;
+    position: relative;
     padding: 0 2%;
 }
 
 
 .channel-button-container h3 {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 400;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -20,3 +21,12 @@
     letter-spacing: var(--font-spacing);
 }
 
+.channel-button-extra-context-wrapper {
+    display: flex;
+    position: absolute;
+    align-items: center;
+    bottom: 0;
+    right: 20px;
+    width: 50px;
+    height: 100%;
+}

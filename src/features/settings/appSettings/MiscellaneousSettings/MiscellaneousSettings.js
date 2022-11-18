@@ -11,14 +11,19 @@ import { Error } from '../../../../components/Error/Error';
 import { ToggleButton } from '../../../../components/buttons/ToggleButton/ToggleButton';
 import { AltError } from '../../../../components/AltError/AltError';
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader'
+import { DropDownList } from '../../../../components/DropDownList/DropDownList';
+import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/SettingsSpacer'
 
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { miscSettingsChannelSpecificStateChange, miscSettingsClearError, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, selectHardwareAcceleration, selectMiscSettingsDisableGifProfiles, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsError, selectMiscSettingsErrorMessage, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectMiscSettingsLoading, selectRestartNotice } from './MiscellaneousSettingsSlice';
+import { miscSettingsChannelSpecificStateChange, miscSettingsClearError, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, selectDefaultServer, selectHardwareAcceleration, selectHideUserStatus, selectMiscSettingsDisableGifProfiles, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsError, selectMiscSettingsErrorMessage, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectMiscSettingsLoading, selectRestartNotice, selectSystemNotifcations, setDefaultServer } from './MiscellaneousSettingsSlice';
+import { selectServerList } from '../../../sideBar/sideBarSlice';
 
 const Settings = () => {
 
     const dispatch = useDispatch();
+
+    const [serversToSelectFrom, setServersToSelectFrom] = React.useState([])
 
     const loading = useSelector(selectMiscSettingsLoading);
 
@@ -38,9 +43,19 @@ const Settings = () => {
 
     const hideNonVideoParticapents = useSelector(selectMiscSettingsHideNonVideoParticapents);
 
+    const hideUserStatusBar = useSelector(selectHideUserStatus);
+
+    const defaultServer = useSelector(selectDefaultServer);
+
+    const servers = useSelector(selectServerList);
+
+    const systemNotifcations = useSelector(selectSystemNotifcations);
+
     React.useEffect(() => {
 
-        dispatch(setHeaderTitle("Miscellaneous Settings"))
+        dispatch(setHeaderTitle("Miscellaneous Settings"));
+
+        setServersToSelectFrom([{label: 'Default', id: ""}, ...servers.map(s => ({label: s.server_name, id: s.server_id}))])
         
     // eslint-disable-next-line
     }, [])
@@ -67,9 +82,19 @@ const Settings = () => {
         dispatch(miscSettingsChannelSpecificStateChange(state));
     }
 
+    const handleSetDefaultServer = (state, value) => {
+        dispatch(setDefaultServer(value));
+    }
+
     return (
         <>
         <div className='settings-wrapper'>
+            <SettingsHeader title={"Default Server"} />
+            <InputTitle title={"Select Server To Auto Join On App Launch"} />
+            <DropDownList action={handleSetDefaultServer} selectedItem={defaultServer.label} list={serversToSelectFrom} />
+            <SettingsHeader title={"System Notifcations"} />
+            <InputTitle title={"Toggle Sytem Notifications"} />
+            <ToggleButton state={systemNotifcations} action={() => {handleChannelSpecificStateChange('enabledSystemNotifications')}} />
             <SettingsHeader title={"Channel Specific"} />
             <InputTitle title={"Disable Message Pop Up's"} />
             <ToggleButton action={() => {handleChannelSpecificStateChange("disableMessagePopUp")}} state={disableMessagePopUp} />
@@ -77,6 +102,8 @@ const Settings = () => {
             <ToggleButton action={() => {handleChannelSpecificStateChange("hideChannelBackground")}} state={hideChannelBackground} />
             <InputTitle title={"Hide Non Video Particapents"} />
             <ToggleButton action={() => {handleChannelSpecificStateChange("hideNonVideoParticapents")}} state={hideNonVideoParticapents} />
+            <InputTitle title={"Hide User Status Bar When In A Channel"} />
+            <ToggleButton action={() => {handleChannelSpecificStateChange('hideUserStatus')}} state={hideUserStatusBar} />
             <InputTitle title={"Disable Gif Profile Pictures / Banners"} />
             <ToggleButton action={() => {handleChannelSpecificStateChange("disableGifProfiles")}} state={disableGifProfiles} />
             <SettingsHeader title={"App Specific"} />
@@ -84,6 +111,7 @@ const Settings = () => {
             <ToggleButton action={handleToggleHardwareAcceleration} state={hardwareAcceleration} />
             <InputTitle title={"Clear Local Data"} />
             <TextButton action={handleClearLocalData} name={"Clear Data"} />
+            <SettingsSpacer />
             <AltError marginTop={'2%'} errorMessage={"Toggling Harware Acceleration Requires An App Restart"} error={restartNotice} />
             <Loading loading={loading} />
         </div>

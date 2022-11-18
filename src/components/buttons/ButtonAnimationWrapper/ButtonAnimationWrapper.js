@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 // state
 import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 
-export const ButtonAnimationWrapper = ({action = () => {}, position = 'relative', zIndex = 0, top = 0, left = 0, className, width = 50, height = 50, borderRadius = '15px', justifyContent = 'center', invert = false, pointerOptions = null, children, active = false, opacity = 1, id = "", margin, right, description, flip_description = false}) => {
+export const ButtonAnimationWrapper = ({action = () => {}, position = 'relative', zIndex = 0, top = 0, left = 0, className, width = 50, height = 50, borderRadius = '15px', justifyContent = 'center', invert = false, pointerOptions = null, children, active = false, opacity = 1, id = "", margin, right, description, flip_description = false, padding = 10, altInvert = false}) => {
 
     const animation = useAnimation();
 
@@ -114,12 +114,12 @@ export const ButtonAnimationWrapper = ({action = () => {}, position = 'relative'
         onClick={handleAction}
         className={className}
         style={{
-            backgroundColor: invert ? secondaryColor : active ? primaryColor : secondaryColor,
+            backgroundColor: invert ? secondaryColor : (active || altInvert) ? primaryColor : secondaryColor,
             borderRadius: borderRadius,
             width: width,
             height: height,
             flexShrink: 0,
-            padding: 10,
+            padding: padding,
             cursor: active ? 'default' : 'pointer',
             display: 'flex',
             justifyContent: justifyContent,

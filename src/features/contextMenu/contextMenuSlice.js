@@ -41,8 +41,6 @@ const contextMenuSlice = createSlice({
         // message state
         deleteMessage: false,
         selectedMessage: "",
-        // copy state
-        copy: false
     },
     reducers: {
         setContextMenuOptions: (state, action) => {

@@ -114,9 +114,7 @@ export const RoomNavigation = ({page, action}) => {
                     >Social</h3>
                 </motion.div>
                 <motion.div 
-                style={{
-                    borderTopRightRadius: 15
-                }}
+                
                 transition={{duration: 0.2}}
                 onMouseOver={() => {handleAnimation(secondaryColor, widgetsButtonAnimation, 'widgets')}}
                 onMouseOut={() => {handleAnimation(primaryColor, widgetsButtonAnimation, 'widgets')}}

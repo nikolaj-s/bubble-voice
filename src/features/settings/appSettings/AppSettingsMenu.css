@@ -13,10 +13,10 @@
 }
 
 .inner-app-settings-container {
-    width: 90%;
+    width: 96%;
     flex-grow: 2;
     display: flex;
     flex-direction: column;
-    margin-top: 50px;
+    margin-top: 35px;
     justify-content: space-between;
 }

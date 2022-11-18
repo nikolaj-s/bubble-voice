@@ -1,7 +1,7 @@
 // library's
 import React from 'react';
 import { motion, useAnimation } from 'framer-motion';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 // components
 import { SubMenuButton } from '../subMenuButton/SubMenuButton';
@@ -12,11 +12,17 @@ import {  selectAccentColor, selectPrimaryColor, selectTextColor } from '../../.
 
 // style
 import "./ChannelButton.css";
+import { SocialButton } from '../SocialButton/SocialButton';
+import { setChannelSocialId } from '../../../features/server/ServerSlice';
 
 
 export const ChannelButton = ({channel, action = () => {}, users, index}) => {
 
+    const dispatch = useDispatch();
+
     const [usersState, setUsersState] = React.useState([]);
+
+    const [mouseEnter, toggleMouseEnter] = React.useState(false);
 
     const animation = useAnimation();
 
@@ -28,8 +34,15 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
 
     const active = window.location.hash.includes(channel._id);
 
-    const handleAnimation = (color) => {
+    const handleAnimation = (color, enter) => {
+        if (enter) {
+            toggleMouseEnter(true)
+        } else {
+            toggleMouseEnter(false)
+        }
+
         if (active) return;
+
         animation.start({
             border: `solid 4px ${color}`
         })
@@ -47,14 +60,20 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
         setUsersState(users)
     // eslint-disable-next-line
     }, [channel, users])
+    
+    const openSocial = (e) => {
+        e.stopPropagation();
+
+        dispatch(setChannelSocialId(channel._id))
+    }
 
     return (
         <>
             <motion.div 
             id={`channel-button-${channel._id}`}
             animate={animation} 
-            onMouseEnter={() => {handleAnimation(accentColor)}}
-            onMouseLeave={() => {handleAnimation(primaryColor)}}
+            onMouseEnter={() => {handleAnimation(accentColor, true)}}
+            onMouseLeave={() => {handleAnimation(primaryColor, false)}}
             onMouseDown={() => {handleAnimation(textColor)}}
             onMouseUp={() => {handleAnimation(accentColor)}}
             onClick={handleAction}
@@ -64,8 +83,11 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
                 cursor: active ? "default" : "pointer",
             }}
             className='channel-button-container'>
-              <h3 style={{color: textColor}}>{channel.channel_name}</h3>  
-              <SubMenuButton zIndex={1} flip_description={index === 0 ? true : false} description={"More"} target={`channel-button-${channel._id}`} width={12} height={12} borderRadius={10} />
+                <h3 style={{color: textColor}}>{channel.channel_name}</h3>
+                {mouseEnter ? <div className='channel-button-extra-context-wrapper'>
+                    <SocialButton action={openSocial} margin={'0 5px 0 0'} borderRadius={10} width={12} height={12} />
+                    <SubMenuButton zIndex={1} description={"More"} target={`channel-button-${channel._id}`} width={12} height={12} borderRadius={10} />
+                </div> : null}
             </motion.div>
             {usersState.map((user) => {
                 return (

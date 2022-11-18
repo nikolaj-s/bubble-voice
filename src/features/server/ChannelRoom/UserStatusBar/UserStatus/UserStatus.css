@@ -1,0 +1,48 @@
+.user-status-container {
+    height: 45px;
+    width: calc(100% - 10px);
+    display: flex;
+    padding: 5px;
+    align-items: center;
+}
+
+.user-status-image-container {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-name-status-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin-left: 1rem;
+    overflow: hidden;
+}
+
+.user-name-status-wrapper h3 {
+    font-size: 1rem;
+    margin: 0;
+    padding: 0;
+    cursor: default;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    font-weight: 400;
+    letter-spacing: var(--font-spacing);
+}
+
+.user-name-status-wrapper p {
+    font-size: 0.7rem;
+    margin: 0;
+    padding: 0;
+    cursor: default;
+    font-weight: 400;
+    letter-spacing: var(--font-spacing);
+    opacity: 0.6;
+}

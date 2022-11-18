@@ -52,9 +52,39 @@ const MiscellaneousSettingsSlice = createSlice({
         hideChannelBackground: false,
         hideNonVideoParticapents: false,
         disableGifProfiles: false,
-        roomScale: 1
+        hideUserStatus: false,
+        defaultServer: {label: "Default", id: ""},
+        roomScale: 1,
+        enabledSystemNotifications: true
     },
     reducers: {
+        pushSytemNotification: (state, action) => {
+            
+            if (state.enabledSystemNotifications) {
+                
+                try {
+                    console.log(action.payload)
+
+                    const notifier = window.require('node-notifier');
+
+                    const path = window.require('path')
+
+                    notifier.notify({
+                        appID: "Bubble",
+                        title: `New Message Posted By ${action.payload.content.display_name}`,
+                        message: action.payload.content.text,
+                        sound: true,
+                        icon: path.join(__dirname, 'logo.png')
+                    })
+
+
+                    
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+
+        },
         miscSettingsClearLocalData: (state, action) => {
             state.loading = true;
 
@@ -81,7 +111,26 @@ const MiscellaneousSettingsSlice = createSlice({
                 disableMessagePopUp: state.disableMessagePopUp,
                 hideChannelBackground: state.hideChannelBackground,
                 hideNonVideoParticapents: state.hideNonVideoParticapents,
-                disableGifProfiles: state.disableGifProfiles
+                disableGifProfiles: state.disableGifProfiles,
+                hideUserStatus: state.hideUserStatus,
+                defaultServer: state.defaultServer,
+                enabledSystemNotifications: state.enabledSystemNotifications
+            }
+
+            saveLocalData("MISC", "MISCSETTINGS", obj);
+        },
+        setDefaultServer: (state, action) => {
+
+            state.defaultServer = action.payload;
+
+            const obj = {
+                disableMessagePopUp: state.disableMessagePopUp,
+                hideChannelBackground: state.hideChannelBackground,
+                hideNonVideoParticapents: state.hideNonVideoParticapents,
+                disableGifProfiles: state.disableGifProfiles,
+                hideUserStatus: state.hideUserStatus,
+                defaultServer: state.defaultServer,
+                enabledSystemNotifications: state.enabledSystemNotifications
             }
 
             saveLocalData("MISC", "MISCSETTINGS", obj);
@@ -115,9 +164,20 @@ const MiscellaneousSettingsSlice = createSlice({
 
             state.hideNonVideoParticapents = saved_data.hideNonVideoParticapents;
 
+            state.hideUserStatus = saved_data.hideUserStatus;
+
+            if (saved_data.defaultServer) state.defaultServer = saved_data.defaultServer;
+            
+            if (saved_data.enabledSystemNotifications !== (undefined && null)) state.enabledSystemNotifications = saved_data.enabledSystemNotifications;
         }
     }
 })
+
+export const selectSystemNotifcations = state => state.MiscellaneousSettingsSlice.enabledSystemNotifications;
+
+export const selectDefaultServer = state => state.MiscellaneousSettingsSlice.defaultServer;
+
+export const selectHideUserStatus = state => state.MiscellaneousSettingsSlice.hideUserStatus;
 
 export const selectMiscSettingsLoading = state => state.MiscellaneousSettingsSlice.loading;
 
@@ -139,7 +199,7 @@ export const selectMiscSettingsHideNonVideoParticapents = state => state.Miscell
 
 export const selectRoomScale = state => state.MiscellaneousSettingsSlice.roomScale;
 
-export const { changeRoomScale, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, miscSettingsClearError, miscSettingsChannelSpecificStateChange } = MiscellaneousSettingsSlice.actions;
+export const {pushSytemNotification, setDefaultServer, changeRoomScale, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, miscSettingsClearError, miscSettingsChannelSpecificStateChange } = MiscellaneousSettingsSlice.actions;
 
 
 export default MiscellaneousSettingsSlice.reducer;

@@ -33,26 +33,23 @@ export const Message = ({ message, overlay = false, id, channel_id }) => {
     return (
         <div 
         style={{
-            border: overlay ? null : `solid 2px ${textColor}`,
-            backgroundColor: overlay ? null : primaryColor,
-            padding: overlay ? null : 10,
-            borderRadius: overlay ? null : 15
+            padding: overlay ? null : 5,
         }}
         id={`${id}/${channel_id}`}
         className='message-container'>
             <div className='sender-info-container'>
-                <p
+                <h2
                 style={{color: textColor}}
-                >{message.display_name}</p>
+                >{message.display_name}</h2>
+                {!message.loading ?
+                <p
+                    style={{color: textColor, marginRight: 10}}
+                >{message?.date?.split("T")[0]}</p> : null}
                 {message.loading ? 
                 <MessageLoadingIndicator />
                 : 
                 <div className='date-submenu-message-wrapper'>
-
-                <p
-                style={{color: textColor, marginRight: 10}}
-                >{message.date.split("T")[0]}</p>
-                {overlay === false ? <SubMenuButton width={20} height={20}  /> : null}
+                    {overlay === false ? <SubMenuButton width={15} height={15} borderRadius={10} /> : null}
                 </div>
                 }
                 
@@ -62,13 +59,10 @@ export const Message = ({ message, overlay = false, id, channel_id }) => {
             <Iframe link={message.iFrame} />
             {message.image ? 
             <div 
-            style={{
-                height: 500,
-                backgroundColor: 'black'
-            }}
+            
             onClick={() => {expandContent(message.image)}}
             className='message-image-container'>
-                <Image loadingState='lazy' objectFit='contain' image={message.image} />
+                <Image width='auto' loadingState='lazy' objectFit='contain' image={message.image} />
             </div>
             : null}
             {message.video ? 

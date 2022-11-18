@@ -1,0 +1,13 @@
+
+.user-status-bar {
+    min-width: 250px;
+    width: 250px;
+    height: 100%;
+    border-left: 3px var(--primary-color) solid;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    flex-shrink: 0;
+    justify-self: flex-end;
+}

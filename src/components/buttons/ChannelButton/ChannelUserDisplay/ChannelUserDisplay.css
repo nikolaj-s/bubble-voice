@@ -2,25 +2,29 @@
     width: 95%;
     margin-left: 5%;
     display: flex;
-    height: 60px;
+    height: 45px;
     align-items: center;
     margin-bottom: 2%;
-    cursor: pointer;
     position: relative;
 }
 
+.channel-user-placeholder:hover {
+    background-color: var(--primary-color);
+}
+
 .channel-user-placeholder h3 {
-    font-size: 1rem;
+    font-size: .9rem;
     font-weight: 400;
     letter-spacing: var(--font-spacing);
     overflow: hidden;
     text-overflow: ellipsis;
     width: 100%;
+    cursor: default;
 }
 
 .channel-user-placeholder-user-image {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     overflow: hidden;
     margin-right: 5%;

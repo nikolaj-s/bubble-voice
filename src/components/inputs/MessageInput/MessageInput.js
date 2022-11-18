@@ -17,6 +17,7 @@ import { ProcessingImageIndicator } from './ProcessingImageIndicator/ProcessingI
 import { ImageDropListener } from './ImageDropListener/ImageDropListener';
 import { SearchImageButton } from './SearchImageButton/SearchImageButton';
 import { ImageSearchPanel } from './ImageSearchPanel/ImageSearchPanel';
+import { selectHideUserStatus } from '../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 export const MessageInput = ({send, text, keyCode, image, value, persist}) => {
 
@@ -35,6 +36,8 @@ export const MessageInput = ({send, text, keyCode, image, value, persist}) => {
     const textColor = useSelector(selectTextColor);
 
     const animation = useAnimation();
+
+    const hideUserStatus = useSelector(selectHideUserStatus);
 
     const incrementPrecentage = (value) => {
         setPercent(value)
@@ -85,7 +88,7 @@ export const MessageInput = ({send, text, keyCode, image, value, persist}) => {
             return
         }
 
-        if (keyCode === 14) setInputHeight(60);
+        if (keyCode === 13) setInputHeight(60);
         keyCode(e.keyCode)
     }
 
@@ -121,7 +124,8 @@ export const MessageInput = ({send, text, keyCode, image, value, persist}) => {
             animate={animation}
             style={{
                 backgroundColor: primaryColor,
-                height: inputHeight
+                height: inputHeight,
+                borderBottomRightRadius: hideUserStatus ? 15 : 0
             }}
             className="message-input-container" >
                 <textarea 
@@ -130,7 +134,7 @@ export const MessageInput = ({send, text, keyCode, image, value, persist}) => {
                     color: textColor,
                     width: '100%',
                     resize: 'none',
-                    border: 'none'
+                    border: 'none',
                 }}
                 onFocus={handleText}
                 id='social-input-selector' onKeyUp={handleKeyCode} onChange={handleText} value={value}  placeholder='Message' type="text" />
