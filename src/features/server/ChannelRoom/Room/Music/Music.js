@@ -20,6 +20,8 @@ export const Music = () => {
     const volume = useSelector(selectMusicVolume);
 
     const channelId = useSelector(selectCurrentChannelId);
+
+    let player;
  
     React.useEffect(() => {
 
@@ -38,7 +40,7 @@ export const Music = () => {
 
         if (musicQueue[0]?.url !== currentlyPlaying) {
 
-            setCurrentlyPlaying(musicQueue[0]?.url);
+            setCurrentlyPlaying(musicQueue[0]?.id);
 
             if (window.location.hash.includes(channelId)) {
                 if (musicQueue[0]?.url !== undefined) {
@@ -69,16 +71,23 @@ export const Music = () => {
         }, 20)   
     }
 
-    const handleStreamError = () => {
-        if (musicQueue.length === 0) return;
-
-        dispatch(throwMusicError({error: true, errorMessage: `error streaming access to ${musicQueue[0].title} has been rejected`}));
-
-    }
-
+    console.log(currentlyPlaying)
     return (
         <>
-        <audio onError={handleStreamError} onPlay={syncInitial}  id='room-music-player' autoPlay={true} src={`https://bubble-music.herokuapp.com/audio-stream?song=${currentlyPlaying}`} />
+        {currentlyPlaying ?
+        <iframe 
+        style={{
+            position: 'fixed',
+            bottom: 0,
+            right: 0,
+            zIndex: 99,
+            outline: 'none'
+        }}
+        frameBorder="0"
+        width='400'
+        height='400'
+         allow="accelerometer; autoplay; clipboard-write; encrypted-media;" src={`https://www.youtube.com/embed/${currentlyPlaying}?autoplay=1`} /> : null}
+        <audio onPlay={syncInitial}  id='room-music-player' autoPlay={true} src={`https://bubble-music.herokuapp.com/audio-stream?song=${currentlyPlaying}`} />
         </>
     )
 }
