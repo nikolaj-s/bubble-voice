@@ -23,7 +23,8 @@ export const ChannelBackground = ({channel_background, blur = 10}) => {
             <div 
             style={{
                 backgroundColor: `rgba(${secondaryColor.split('(')[1]?.split(')')[0]}, 0.5)`,
-                backdropFilter: `blur(${blur}px)`
+                backdropFilter: `blur(${blur}px)`,
+                borderBottomRightRadius: hideUserStatus ? 15 : 0
             }}
             className='channel-background-blur-layer'></div>
             <div 

@@ -30,6 +30,9 @@ const soundEffectsSlice = createSlice({
     reducers: {
         
         playSoundEffect: (state, action) => {
+            console.log(state.soundEffectsQueue[0], action.payload)
+            if (state.soundEffectsQueue[0] === action.payload) return;
+
             state.soundEffectsQueue.push(action.payload);
         },
         setSoundEffectsVolume: (state, action) => {

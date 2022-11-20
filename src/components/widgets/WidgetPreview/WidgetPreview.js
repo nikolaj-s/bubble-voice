@@ -47,7 +47,7 @@ export const WidgetPreview = ({widgets = [], editing = false, reorder}) => {
                         {widget.type === 'dynamicGallery' && !widget.delete ? <DynamicGalleryWidget editing={editing} key={widget._id} widget={widget} /> : null}
                         {widget.type === 'music' && !widget.delete ? <MusicWidget editing={editing} /> : null}
                         {widget.type === 'wheel-spin' && !widget.delete ? <WheelSpinWidget editing={true} key={widget._id} widget={widget} /> : null}
-                        {widget.delete ? null : <SubMenuButton position={"absolute"} zIndex={3} top={15} left={8} />}
+                        {widget.delete ? null : <SubMenuButton position={"absolute"} borderRadius={10} zIndex={3} top={15} left={8} />}
                         {widget.delete ? <InputPlaceHolder margin={"1% 0"} value={"Hit Apply To Save Changes"} /> : null}
                         {widget.delete ? null : <MoveButton position={'absolute'} width={25} height={25} top={15} left={65} zIndex={3} />}
                     </Reorder.Item>

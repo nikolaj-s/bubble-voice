@@ -62,7 +62,7 @@ export const Message = ({ message, overlay = false, id, channel_id }) => {
             
             onClick={() => {expandContent(message.image)}}
             className='message-image-container'>
-                <Image width='auto' loadingState='lazy' objectFit='contain' image={message.image} />
+                <Image imgHeight='auto' cursor='pointer' width={null} altWidth={'100%'} loadingState='lazy' objectFit='contain' image={message.image} />
             </div>
             : null}
             {message.video ? 

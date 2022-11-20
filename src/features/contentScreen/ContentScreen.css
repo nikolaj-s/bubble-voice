@@ -1,7 +1,7 @@
 
 
 .content-screen-container {
-    width: 66%;
+    width: calc(66% - 30px);
     max-width: calc(100% - 20px);
     margin: 0 10px 0 3px;
     flex-grow: 2;

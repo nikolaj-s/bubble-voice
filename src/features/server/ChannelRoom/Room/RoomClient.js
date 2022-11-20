@@ -242,8 +242,10 @@ export class RoomClient {
                 let el;
 
                 let par;
-                
-                if (consumer.rtpParameters.codecs[0].mimeType === 'video/VP8') {
+
+                console.log(consumer.rtpParameters.codecs[0].mimeType)
+                console.log(appData)
+                if (consumer.rtpParameters.codecs[0].mimeType === 'video/VP8' || appData.type === 'web cam') {
                     // handle displaying web cam feed
 
                     el = document.createElement('video');
@@ -270,7 +272,7 @@ export class RoomClient {
     
                     
                     
-                } else if (consumer.rtpParameters.codecs[0].mimeType === 'video/H264' || consumer.rtpParameters.codecs[0].mimeType === 'video/rtx') {
+                } else if (consumer.rtpParameters.codecs[0].mimeType === 'video/H264' || consumer.rtpParameters.codecs[0].mimeType === 'video/rtx' || appData.type === 'screen share') {
                     // display incoming screen stream
                     stream.getVideoTracks()[0].contentHint = 'motion'
                     
@@ -364,7 +366,11 @@ export class RoomClient {
 
         } catch (error) {
             console.log(error);
+            
+            this.handleError();
+            
             console.log('sdp error is being thown on consume')
+
             this.dispatch({action: 'error', value: "ERROR: SDP/UDP Layer Verification of connection failed, please reconnect to server or restart app to solve issue, this is a temporary work around"});
         }
     }
@@ -610,7 +616,7 @@ export class RoomClient {
                     }
                 ]
 
-                params.codec = screen ? this.device.rtpCapabilities.codecs.find(codec => codec.mimeType === 'video/H264') : this.device.rtpCapabilities.codecs.find(codec => codec.mimeType === 'video/VP8')
+                params.codec = this.device.rtpCapabilities.codecs.find(codec => codec.mimeType === 'video/H264');
                 // document change video bitrate start
                 params.codecOptions = {
                     videoGoogleStartBitrate: 2000
@@ -825,7 +831,7 @@ export class RoomClient {
         }.bind(this))
 
         this.socket.on('newProducers', async function (data) {
-           
+           console.log(data)
             for (let {producer_id, user, appData } of data) {
                 await this.consume(producer_id, user, appData);
             }

@@ -24,7 +24,7 @@ import { selectSignedUp } from '../features/LoggingIn/signUp/signUpSlice';
 import './App.css';
 import { fetchKeyBinds, fetchSavedUserPrefs, initKeyBinds } from '../util/LocalData';
 import { setSavedKeyCodes } from '../features/settings/appSettings/keyBindSettings/keyBindSettingsSlice';
-import { handleUpdateAvailable, updateCurrentAppVersion } from './appSlice';
+import { handleUpdateAvailable, toggleInitApp, updateCurrentAppVersion } from './appSlice';
 import { fetchSavedAppAudioSettings } from '../features/settings/soundEffects/soundEffectsSlice';
 import { fetchMiscellaneousSettings, fetchSavedHardwareAcceleration } from '../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
@@ -86,6 +86,9 @@ function App() {
 
       dispatch(incrementLoadingPercentage({percent: 60, state: "Loading Account Details"}));
     
+      setTimeout(() => {
+        dispatch(toggleInitApp());
+      }, 100)
     }, 200)
     
   }

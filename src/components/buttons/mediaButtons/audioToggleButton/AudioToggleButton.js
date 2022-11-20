@@ -18,6 +18,7 @@ export const AudioToggleButton = ({action, state, active, id, description}) => {
         id={id}
         description={description}
         zIndex={5}
+        borderRadius={10}
         >
             {state ?
             <svg 

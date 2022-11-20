@@ -31,6 +31,8 @@ export const Social = ({currentChannel, channelId}) => {
 
     const [messagesToRender, setMessagesToRender] = React.useState(10)
 
+    const [inputHeight, setInputHeight] = React.useState(80);
+
     const username = useSelector(selectUsername);
 
     const messages = currentChannel.social;
@@ -41,12 +43,14 @@ export const Social = ({currentChannel, channelId}) => {
 
     React.useEffect(() => {
 
-        messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
-
+        setTimeout(() => {
+            messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+        }, 50)
+        
         if (permission.user_can_post_channel_social) document.getElementById('social-input-selector').focus();
 
     // eslint-disable-next-line
-    }, [])
+    }, [channelId])
 
     const handleTextInput = (value) => {
         setText(value);
@@ -144,7 +148,7 @@ export const Social = ({currentChannel, channelId}) => {
             <div className='social-wrapper-container'>
                 <div  className='social-inner-container'>
                     {image?.preview ? 
-                    <div className='image-social-post-preview'>
+                    <div style={{bottom: inputHeight}} className='image-social-post-preview'>
                         <Image position='relative' objectFit='contain' zIndex={1} image={image.preview} />
                     </div>
                     : null}
@@ -153,7 +157,7 @@ export const Social = ({currentChannel, channelId}) => {
                             return <Message channel_id={message.channel_id} id={message._id} message={message.content} key={message.content.local_id || message._id} />
                         })}
                     </div>
-                    {permission?.user_can_post_channel_social ? <MessageInput persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : null}
+                    {permission?.user_can_post_channel_social ? <MessageInput updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : null}
                 </div>
             </div>
         </motion.div>

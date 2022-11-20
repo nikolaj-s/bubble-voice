@@ -2,7 +2,7 @@
 .side-bar-container {
     min-width: 280px;
     max-width: 280px;
-    width: 34%;
+    width: 100%;
     margin-left: 10px;
     border-bottom-left-radius: 15px;
     border-top-left-radius: 15px;
@@ -13,6 +13,7 @@
     position: relative;
     align-items: center;
     overflow: hidden;
+    flex-shrink: 0;
 }
 
 .inner-side-bar-container {

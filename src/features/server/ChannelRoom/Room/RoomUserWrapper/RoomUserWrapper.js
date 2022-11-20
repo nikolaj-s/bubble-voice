@@ -9,7 +9,7 @@ export const RoomUserWrapper = ({users}) => {
 
     const hidingNonVideoMembers = useSelector(selectMiscSettingsHideNonVideoParticapents);
 
-    let margin = 30;
+    let margin = 5;
 
     const ratio = (9 / 16);
 
@@ -116,7 +116,7 @@ export const RoomUserWrapper = ({users}) => {
             
             const c_count = Array.from(children).filter(child => ((child.attributes[2] ? child.attributes[2]["value"].includes('flex') : null && child.className === 'active-user-container') || child.className === 'streaming-video-player-container'));
             
-            let wDimension = parent.offsetWidth;
+            let wDimension = parent.offsetWidth - 14;
 
             let hDimension = parent.offsetHeight;
             

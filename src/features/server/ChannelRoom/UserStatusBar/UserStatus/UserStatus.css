@@ -6,7 +6,12 @@
     align-items: center;
 }
 
+.user-status-container:hover {
+    background-color: var(--primary-color);
+}
+
 .user-status-image-container {
+    flex-shrink: 0;
     width: 35px;
     height: 35px;
     border-radius: 50%;

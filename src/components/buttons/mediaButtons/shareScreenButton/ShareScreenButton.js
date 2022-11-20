@@ -21,6 +21,7 @@ export const ShareScreenButton = ({action, state, active, loading, id}) => {
     id={id}
     description={active ? null : `${state ? 'Share-Screen' : 'Stop-Sharing'}`}
     zIndex={5}
+    borderRadius={10}
     >
         {state ? 
         <svg

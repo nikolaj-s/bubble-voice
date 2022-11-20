@@ -8,6 +8,7 @@ export const getToken = async () => {
         const token = await keytar.getPassword("TOKEN", "USER_ACCOUNT");
 
         return token;
+    
     } catch (error) {
 
         return document.cookie.split('token=')[1]

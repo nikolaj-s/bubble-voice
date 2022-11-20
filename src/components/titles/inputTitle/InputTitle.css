@@ -6,5 +6,8 @@
     font-weight: 400;
     width: calc(100% - 1rem);
     opacity: 0.8;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
 }
 

@@ -1,6 +1,5 @@
 .message-container {
     width: calc(100% - 1rem);
-    max-width: 800px;
     display: flex;
     height: auto;
     flex-direction: column;
@@ -52,9 +51,7 @@
 .message-image-container {
     max-height: 600px;
     overflow: hidden;
-    cursor: pointer;
     object-fit: contain;
-    max-width: 100%;
 }
 
 .message-video-container {

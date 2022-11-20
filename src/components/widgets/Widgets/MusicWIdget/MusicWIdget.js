@@ -122,7 +122,7 @@ export const MusicWidget = ({editing = false}) => {
                 </div>
                 <div className='music-widget-nav-container'>
                     <TextInput inputValue={query} action={handleInput} placeholder={"Add Song To Queue"} marginTop='0' />
-                    <AddButton action={handleAddSongToQueue} margin={"0 0 0 2%"} height={"50px"} width={"50px"} />
+                    <AddButton action={handleAddSongToQueue} margin={"0 0 0 2%"} height={"35px"} width={"35px"} />
                 </div> 
                 <h3 style={{color: textColor}}>Queue</h3>
                 <div className='music-queue-container'>
@@ -149,7 +149,7 @@ export const MusicWidget = ({editing = false}) => {
                             }
                             <SkipButton action={handleSkip} />
                         </div>
-                        <Range value={volume} action={handleMusicVolume} step={0.05} />
+                        <Range value={volume} action={handleMusicVolume} max={100} step={0.05} />
                     </div>
                     {queue[0]?.title && editing === false ? 
                     <Song name={queue[0].title} image={queue[0].thumbnail} />

@@ -6,28 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectAudioOutput } from '../appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 import { playSoundEffect, removeSoundEffectFromQueue, selectSocialSoundEffect, selectSoundEffect, selectSoundEffectQueue, selectSoundEffectVolume } from './soundEffectsSlice';
 
-const connected = require('../../../assets/connected.wav');
-
-const disconnected = require('../../../assets/disconnect.mp3');
-
-const userJoined = require('../../../assets/user_has_joined.mp3');
-
-const userDisconnected = require('../../../assets/user_has_disconnected.mp3');
-
-const controlSoundEffect = require('../../../assets/control-sound-effect.mp3');
-
-const channelDeleted = require('../../../assets/channel-has-been-deleted.mp3');
-
-const userPoked = require('../../../assets/hey-wake-up.mp3');
-
-const userKicked = require('../../../assets/you-have-been-kicked-from-the-server.mp3');
-
-const lostConnection = require('../../../assets/lost-connection.mp3');
-
-const moved = require('../../../assets/moved.mp3')
-
-const deactivate = require('../../../assets/deactivate.mp3')
-
 export const SoundEffects = () => {
 
     const soundEffect = useSelector(selectSoundEffect);
@@ -45,18 +23,18 @@ export const SoundEffects = () => {
     const soundEffectQueue = useSelector(selectSoundEffectQueue);
 
     const soundEffects = {
-        'connected': connected,
-        'disconnected': disconnected,
-        'userJoined': userJoined,
-        'userDisconnected': userDisconnected,
-        'controlSoundEffect': controlSoundEffect,
-        'channelDeleted': channelDeleted,
-        'youHaveBeenPoked': userPoked,
-        'newMessage': connected,
-        'userKicked': userKicked,
-        'lostConnection': lostConnection,
-        'moved': moved,
-        'deactivate': deactivate
+        'connected': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/connected_pnu1hk.wav",
+        'disconnected': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/disconnect_zpef4b.mp3",
+        'userJoined': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/user_has_joined_lzaaqf.mp3",
+        'userDisconnected': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/user_has_disconnected_zqajz0.mp3",
+        'controlSoundEffect': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/control-sound-effect_fizuj9.mp3",
+        'channelDeleted': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898472/channel-has-been-deleted_vuc7yy.mp3",
+        'youHaveBeenPoked': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/hey-wake-up_poprdv.mp3",
+        'newMessage': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/connected_pnu1hk.wav",
+        'userKicked': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/you-have-been-kicked-from-the-server_ywzaba.mp3",
+        'lostConnection': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/lost-connection_aeqih2.mp3",
+        'moved': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/moved_jszssq.mp3",
+        'deactivate': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/deactivate_naxcd8.mp3"
     }
 
     React.useEffect(() => {

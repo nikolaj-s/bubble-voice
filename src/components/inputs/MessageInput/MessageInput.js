@@ -19,7 +19,7 @@ import { SearchImageButton } from './SearchImageButton/SearchImageButton';
 import { ImageSearchPanel } from './ImageSearchPanel/ImageSearchPanel';
 import { selectHideUserStatus } from '../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
-export const MessageInput = ({send, text, keyCode, image, value, persist}) => {
+export const MessageInput = ({send, text, keyCode, image, value, persist, updateInputHeight}) => {
 
     const [files, setFiles] = React.useState([{}])
 
@@ -80,6 +80,8 @@ export const MessageInput = ({send, text, keyCode, image, value, persist}) => {
         text(e.target.value)
 
         setInputHeight(e.target.scrollHeight)
+
+        updateInputHeight(e.target.scrollHeight + 20)
     
     }
 
@@ -88,7 +90,10 @@ export const MessageInput = ({send, text, keyCode, image, value, persist}) => {
             return
         }
 
-        if (keyCode === 13) setInputHeight(60);
+        if (keyCode === 13) {
+            setInputHeight(60); 
+            updateInputHeight(80);
+        }
         keyCode(e.keyCode)
     }
 
@@ -97,6 +102,9 @@ export const MessageInput = ({send, text, keyCode, image, value, persist}) => {
         if (processingImage) return;
 
         setInputHeight(60)
+
+        updateInputHeight(80)
+
         send();
     }
 

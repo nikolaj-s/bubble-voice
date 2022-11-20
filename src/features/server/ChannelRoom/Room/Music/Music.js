@@ -1,7 +1,20 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentChannelId, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, throwMusicError } from '../../../ServerSlice';
-import { addNewWidgetOverlayToQueue } from '../RoomActionOverlay/RoomActionOverlaySlice';
+import { selectCurrentChannelId, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, throwMusicError, throwServerError } from '../../../ServerSlice';
+
+import YouTube from 'react-youtube'
+import { selectPrimaryColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+
+import "./Music.css";
+import { MusicOverlayButton } from '../../../../../components/buttons/MusicOverlayButton/MusicOverlayButton';
+import { PlayButton } from '../../../../../components/buttons/PlayButton/PlayButton';
+import { PauseButton } from '../../../../../components/buttons/PauseButton/PauseButton';
+import { SkipButton } from '../../../../../components/buttons/SkipButton/SkipButton';
+import { AudioToggleButton } from '../../../../../components/buttons/mediaButtons/audioToggleButton/AudioToggleButton';
+
+import { socket } from '../../../ServerBar/ServerBar';
+
+let player;
 
 export const Music = () => {
 
@@ -11,7 +24,11 @@ export const Music = () => {
 
     const [currentlyPlaying, setCurrentlyPlaying] = React.useState("");
 
-    const [init, setInit] = React.useState(false);
+    const [visible, toggleVisible] = React.useState(false);
+
+    const [loading, toggleLoading] = React.useState(false);
+
+    const [muted, toggleMuted] = React.useState(false);
 
     const musicQueue = useSelector(selectMusicQueue);
 
@@ -21,20 +38,34 @@ export const Music = () => {
 
     const channelId = useSelector(selectCurrentChannelId);
 
-    let player;
- 
+    const primaryColor = useSelector(selectPrimaryColor);
+
     React.useEffect(() => {
+        try {
+            console.log(player)
+            if (player) {
+                if (!musicPlaying) {
+                    player.pauseVideo();
+                } else if (musicPlaying) {
+                    player.playVideo();
+                }
 
-        const musicPlayer = document.getElementById('room-music-player');
+                player.setVolume(volume);
 
-        if (musicPlaying === true) {
-            musicPlayer.play()
-        } else if (musicPlaying === false) {
-            document.getElementById('room-music-player').pause()
+                if (muted) {
+                    player.mute();
+                } else if (!muted) {
+                    player.unMute();
+                }
+            }
+            
+        } catch (error) {
+            console.log(error)
+            return;
         }
-
+        
     // eslint-disable-next-line
-    }, [musicPlaying])
+    }, [musicPlaying, player, volume])
 
     React.useEffect(() => {
 
@@ -42,52 +73,108 @@ export const Music = () => {
 
             setCurrentlyPlaying(musicQueue[0]?.id);
 
-            if (window.location.hash.includes(channelId)) {
-                if (musicQueue[0]?.url !== undefined) {
-
-                    dispatch(addNewWidgetOverlayToQueue({action: 'now-playing', image: musicQueue[0]?.thumbnail, name: musicQueue[0]?.title}));
-                
-                }
-            
-            }
-
         }    
     // eslint-disable-next-line    
     }, [musicQueue])
 
     // handle on volume change
-    React.useEffect(() => {
+    console.log(currentlyPlaying)
 
-        document.getElementById('room-music-player').volume = volume;
-    // eslint-disable-next-line
-    }, [volume])
-
-    const syncInitial = (e) => {
-        setTimeout(() => {
-            if (musicQueue[0]?.current && init === false && e.target.src) {
-                e.target.currentTime = musicQueue[0].current;
-                setInit(true);
-            }
-        }, 20)   
+    const handleOnReady = (event) => {
+        
+        player = event.target;
+    
     }
 
-    console.log(currentlyPlaying)
+    const toggleVisibility = () => {
+        toggleVisible(!visible);
+    }
+
+    const handleTogglePlaying = async () => {
+
+        if (loading) return;
+
+        if (!currentlyPlaying && musicPlaying) return;
+
+        toggleLoading(true);
+
+        await socket.request('toggle playing music', {playing: !musicPlaying})
+        .catch(error => {
+
+            dispatch(throwServerError({errorMessage: error}));;
+
+        })
+
+        toggleLoading(false);
+
+    }
+
+    const handleSkip = async () => {
+        if (musicQueue.length === 0) return;
+
+        if (loading) return;
+
+        toggleLoading(true);
+
+        await socket.request('skip song')
+        .catch(error => {
+            
+            dispatch(throwServerError({errorMessage: error}))
+        
+        })
+
+        toggleLoading(false);
+    }
+
+    const handleMute = () => {
+        if (!muted) {
+            toggleMuted(true);
+            player.mute();
+        } else {
+            toggleMuted(false);
+            player.unMute();
+        }
+    }
+
     return (
         <>
         {currentlyPlaying ?
-        <iframe 
+        <div
         style={{
-            position: 'fixed',
-            bottom: 0,
-            right: 0,
-            zIndex: 99,
-            outline: 'none'
+            right: visible ? 10 : '-300px',
+            backgroundColor: primaryColor
         }}
-        frameBorder="0"
-        width='400'
-        height='400'
-         allow="accelerometer; autoplay; clipboard-write; encrypted-media;" src={`https://www.youtube.com/embed/${currentlyPlaying}?autoplay=1`} /> : null}
-        <audio onPlay={syncInitial}  id='room-music-player' autoPlay={true} src={`https://bubble-music.herokuapp.com/audio-stream?song=${currentlyPlaying}`} />
+        className='music-player-overlay-wrapper'>
+            <div 
+            style={{}}
+            className='music-player-overlay-controls'>
+                <MusicOverlayButton action={toggleVisibility} width={25} height={25} />
+                {!musicPlaying ? <PlayButton action={handleTogglePlaying} width={25} height={25}  /> : <PauseButton action={handleTogglePlaying} width={25} height={25} />}
+                <SkipButton action={handleSkip} width={25} height={25} />
+                <AudioToggleButton action={handleMute} state={!muted} />
+            </div>
+            <div className='youtube-player-wrapper'>
+                <YouTube 
+                onReady={handleOnReady}
+                id={'room-music-player'}
+                videoId={currentlyPlaying}  opts={{
+                    height: '100%',
+                    width: '300',
+                    playerVars: {
+                        fs: 0,
+                        autoplay: 1,
+                        enablejsapi: 1,
+                        start: musicQueue[0]?.current ? musicQueue[0].current : 0,
+                        controls: 0,
+                        modestbranding: 1
+                    }}} style={{
+                        borderBottomRightRadius: 15
+                    }} />
+                    <div className='youtube-disable-clicking'></div>
+            </div>
+        </div>
+            
+        : null}
         </>
     )
 }

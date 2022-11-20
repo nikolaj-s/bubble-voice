@@ -1,11 +1,33 @@
 
-const { app, BrowserWindow, ipcMain, desktopCapturer, screen, shell } = require('electron')
+const { app, BrowserWindow, ipcMain, desktopCapturer, screen, shell, session } = require('electron')
 
 const { autoUpdater } = require('electron-updater')
 
-const url = require('url')
+const url = require('url');
 
-const path = require('path')
+const path = require('path');
+
+const http = require('http');
+
+let startUrl = process.env.ELECTRON_START_URL || 'http://localhost:8080/index.html'
+
+let server;
+
+if (!process.env.ELECTRON_START_URL) {
+
+  server = http.createServer((req, res) => {
+
+    const filePath = path.join(__dirname, '..', req.url);
+
+    const file = fs.readFileSync(filePath);
+
+    res.end(file.toString());
+
+    if (req.url.includes('index.js')) server.close();
+
+  }).listen(8080);
+
+}
 
 let win;
 
@@ -72,12 +94,6 @@ if (!lock) {
 
 function createWindow () {
 
-  const startUrl = process.env.ELECTRON_START_URL || url.format({
-    pathname: path.join(__dirname, '../index.html'),
-    protocol: 'file',
-    slashes: true
-  })
-
   // Create the browser window.
   win = new BrowserWindow({
     minWidth: 800,
@@ -95,22 +111,6 @@ function createWindow () {
     height: data?.bounds?.height,
   })
   
-  const mainScreen = screen.getPrimaryDisplay();
-
-  // transparent = new BrowserWindow({
-  //   width: mainScreen.size.width,
-  //   height: mainScreen.size.height,
-  //   transparent: true,
-  //   frame: false,
-  //   alwaysOnTop: true,
-  //   icon: __dirname + '/logo.png'
-  // })
-
-  // transparent.setIgnoreMouseEvents(true);
-
-  // transparent.setFocusable(false);
-
-  //load the index.html from a url
   win.loadURL(startUrl);
 
   win.webContents.on('new-window', (event, url) => {
@@ -332,8 +332,11 @@ app.on('window-all-closed', () => {
 })
 
 app.on('activate', () => {
+
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
+
+
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow()
   }

@@ -11,7 +11,7 @@ export const UserStatus = ({user}) => {
     const textColor = useSelector(selectTextColor);
 
     return (
-        <div className='user-status-container'>
+        <div className={`user-status-container ${user._id}-user-status-card`}>
             <div
             style={{
                 border: `solid 3px ${(user.status && user.status !== 'offline') ? 'rgb(0, 255, 8)' : null}`

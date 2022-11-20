@@ -4,13 +4,16 @@ import { throwInitializationError } from "../../../initializingAppScreen/initial
 
 import Axios from 'axios';
 import { getToken, url } from "../../../../util/Validation";
+import { setServerId, setServerName } from "../../../server/ServerSlice";
 
 export const fetchAccount = createAsyncThunk(
     'accountSettingsSlice/fetchAccount',
-    async (_, { rejectWithValue, dispatch }) => {
+    async (_, { rejectWithValue, dispatch, getState }) => {
 
         const token = await getToken();
-        
+
+        const { defaultServer } = getState().MiscellaneousSettingsSlice;
+
         if (token) {
             const account = await Axios({
                 method: 'GET',
@@ -26,6 +29,18 @@ export const fetchAccount = createAsyncThunk(
             }).catch(error => {
                 dispatch(throwInitializationError("Connection Error"))
             })
+
+            if (defaultServer.id) {
+
+                dispatch(setServerId(defaultServer.id));
+
+                dispatch(setServerName(defaultServer.server_name));
+
+                window.location.hash = `/dashboard/server/${defaultServer.server_name}`;
+
+            } else {
+                window.location.hash = '/dashboard';
+            }
 
             return account;
         } else {
@@ -109,13 +124,16 @@ const accountSettingsSlice = createSlice({
     },
     extraReducers: {
         [fetchAccount.fulfilled]: (state, action) => {
+            
             if (action.payload?.success) {
+                
                 state.display_name = action.payload.account.display_name;
                 state.user_image = action.payload.account.user_image;
                 state.user_banner = action.payload.account.user_banner;
                 state.username = action.payload.account.username;
-                window.location.hash = "/dashboard"
+                
             } 
+
             state.change = false;
         },
         [fetchAccount.rejected]: (state, action) => {

@@ -6,7 +6,7 @@ export const Iframe = ({link}) => {
     return (
         <>
         {link ?
-            <div>
+            <div style={{maxWidth: 800}}>
                 <iframe 
                 style={{
                     borderRadius: 15
