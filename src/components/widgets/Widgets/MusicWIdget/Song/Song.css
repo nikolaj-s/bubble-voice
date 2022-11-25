@@ -1,6 +1,7 @@
 
 .song-container {
-    height: 50px;
+    height: 60px;
+    margin: 10px 0;
     width: 100%;
     display: flex;
     justify-content: space-between;

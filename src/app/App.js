@@ -27,6 +27,7 @@ import { setSavedKeyCodes } from '../features/settings/appSettings/keyBindSettin
 import { handleUpdateAvailable, toggleInitApp, updateCurrentAppVersion } from './appSlice';
 import { fetchSavedAppAudioSettings } from '../features/settings/soundEffects/soundEffectsSlice';
 import { fetchMiscellaneousSettings, fetchSavedHardwareAcceleration } from '../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { fetchSavedCustomStatus } from '../features/server/ChannelRoom/UserStatusBar/UserStatusSlice';
 
 function App() {
 
@@ -61,6 +62,8 @@ function App() {
     dispatch(fetchSavedAppAudioSettings());
 
     dispatch(fetchSavedHardwareAcceleration());
+
+    dispatch(fetchSavedCustomStatus());
     
     await fetchSavedUserPrefs();
     

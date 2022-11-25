@@ -1,19 +1,78 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import { fetchMusicWidgetVolume, setMusicWidgetVolume } from "../../util/LocalData";
 import { UnpackMessage } from "../../util/UnpackMessage";
+import { addPinnedMessage, removePinnedMessage, setPinnedMessages } from "./ChannelRoom/ServerDashBoard/ServerDashBoardSlice";
 
 import { socket } from "./ServerBar/ServerBar";
 
+export const togglePinMessage = createAsyncThunk(
+    'serverSlice/togglePinMessage',
+    async (data, {rejectWithValue, dispatch}) => {
+        try {
+
+            if (!data._id) return rejectWithValue({errorMessage: "Invalid Message"});
+
+            const pin = await socket.request('toggle pinned message', data)
+            .then(res => {
+                return res;
+            })
+            .catch(err => {
+                return rejectWithValue({errorMessage: err.errorMessage})
+            })
+
+            if (pin.message.pinned) {
+                
+                dispatch(addPinnedMessage(pin))
+            
+            } else {
+                
+                dispatch(removePinnedMessage(pin))
+            
+            }
+
+            return pin;
+
+        } catch (error) {
+            console.log(error);
+            rejectWithValue({error: true, errorMessage: error.message});
+        }
+    }
+)
+
+export const checkConnection = createAsyncThunk(
+    'serverSlice/checkConnection',
+    async (_, {rejectWithValue}) => {
+        try {
+
+            const start = Date.now();
+           
+            const ping = await socket.request('check connection')
+            .then(res => {
+                return Date.now() - start;
+            }).catch(error => {
+                return rejectWithValue({error: true})
+            })
+
+            return ping;
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+)
+
 export const fetchServerDetails = createAsyncThunk(
     'serverSlice/fetchServerDetails',
-    async (_, {rejectWithValue, getState}) => {
+    async (_, {rejectWithValue, getState, dispatch}) => {
         if (socket === null) return rejectWithValue({error: true, errorMessage: "connection error"});
 
         const { server_id } = getState().serverSlice;
 
+        const { currentStatus } = getState().UserStatusSlice;
+        
         const { username, user_image, user_banner, display_name } = getState().accountSettingsSlice;
         
-        const server = await socket.request('joined server', {server_id: server_id})
+        const server = await socket.request('joined server', {server_id: server_id, status: currentStatus})
         .then(response => {
             if (response.success) {
 
@@ -34,6 +93,8 @@ export const fetchServerDetails = createAsyncThunk(
         .catch(error => {
             return rejectWithValue({error: true, errorMessage: "unexpected error has occurred"});
         })
+
+        dispatch(setPinnedMessages(server.pinned));
 
         return server;
     }
@@ -123,15 +184,12 @@ const serverSlice = createSlice({
         pushToTalkActive: false,
         //social
         selectedChannelSocial: "", 
-        // music
-        musicQueue: [],
-        musicPlaying: false,
-        musicError: false,
-        musicErrorMessage: "",
-        musicVolume: 1,
         // joining channel status
         joiningChannel: false,
-        reconnecting: false
+        reconnecting: false,
+        // ping
+        ping: 0,
+        pinningMessage: false
     },
     reducers: {
         deleteMessage: (state, action) => {
@@ -297,6 +355,13 @@ const serverSlice = createSlice({
             }
             
         },
+        updateMemberActiveStatus: (state, action) => {
+            const index = state.members.findIndex(u => u._id === action.payload.user_id);
+
+            if (index === -1) return;
+
+            state.members[index].status = action.payload.status;
+        },
         userLeavesServer: (state, action) => {
             const userIndex = state.members.findIndex(user => user._id === action.payload);
             
@@ -432,41 +497,26 @@ const serverSlice = createSlice({
                 state.current_channel_id = null;
             }
         },
-        toggleMusicPlaying: (state, action) => {
-            state.musicPlaying = action.payload;
-        },
-        addSongToQueue: (state, action) => {
-            state.musicQueue.push(action.payload);
-
-            if (state.musicQueue.length === 0 && state.musicPlaying) {
-                state.musicPlaying = true;
-            }
-        },
-        skipSong: (state, action) => {
-            state.musicQueue.shift();
-
-            if (state.musicQueue.length === 0 && state.musicPlaying) {
-                state.musicPlaying = false;
-            }
-        },
-        updateMusicState: (state, action) => {
-            state.musicQueue = action.payload.queue;
-            state.musicPlaying = action.payload.playing;
-        },
-        throwMusicError: (state, action) => {
-            state.musicError = action.payload.error;
-            state.musicErrorMessage = action.payload.errorMessage;
-        },
-        updateMusicVolume: (state, action) => {
-            state.musicVolume = action.payload;
-
-            setMusicWidgetVolume(action.payload);
-        },
         updateJoiningChannelState: (state, action) => {
             state.joiningChannel = action.payload;
         },
         setChannelSocialId: (state, action) => {
             state.selectedChannelSocial = action.payload;
+        },
+        clearServerPing: (state, action) => {
+            state.ping = 0;
+        },
+        socketToggleMessagePin: (state, action) => {
+
+            const c_index = state.channels.findIndex(action.payload.channel_id);
+
+            if (c_index === -1) return;
+
+            const m_index = state.channels[c_index].social.findIndex(m => m._id === action.payload._id);
+
+            if (m_index === -1) return;
+
+            state.channels[c_index].social[m_index].pinned = action.payload.pinned;
         }
     },
     extraReducers: {
@@ -537,6 +587,37 @@ const serverSlice = createSlice({
 
             state.errorMessage = action.payload;
 
+        },
+        [checkConnection.fulfilled]: (state, action) => {
+            state.ping = action.payload;
+        },
+        [togglePinMessage.pending]: (state, action) => {
+            state.pinningMessage = true;
+        },
+        [togglePinMessage.rejected]: (state, action) => {
+            state.error = true;
+
+            state.errorMessage = action.payload.errorMessage;
+
+            state.pinningMessage = false;
+        },
+        [togglePinMessage.fulfilled]: (state, action) => {
+
+            state.pinningMessage = false;
+
+            state.error = false;
+
+            state.errorMessage = "";
+
+            const c_index = state.channels.findIndex(c => c._id === action.payload.message.channel_id);
+
+            if (c_index === -1) return;
+
+            const m_index = state.channels[c_index].social.findIndex(m => m._id === action.payload.message._id);
+
+            if (m_index === -1) return;
+
+            state.channels[c_index].social[m_index].pinned = action.payload.message.pinned;
         }
     }   
 })
@@ -622,22 +703,16 @@ export const selectServerErrorState = state => state.serverSlice.error;
 
 export const selectServerErrorMessage = state => state.serverSlice.errorMessage;
 
-export const selectMusicPlayingState = state => state.serverSlice.musicPlaying;
-
-export const selectMusicQueue = state => state.serverSlice.musicQueue;
-
-export const selectMusicError = state => state.serverSlice.musicError;
-
-export const selectMusicErrorMessage = state => state.serverSlice.musicErrorMessage;
-
-export const selectMusicVolume = state => state.serverSlice.musicVolume;
-
 export const selectJoiningChannelState = state => state.serverSlice.joiningChannel;
 
 export const selectTopAnimationPoint = state => state.serverSlice.top_pos;
 
+export const selectServerPing = state => state.serverSlice.ping;
+
+export const selectPinningMessage = state => state.serverSlice.pinningMessage;
+
 // actions
 
-export const {userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
+export const {socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
 
 export default serverSlice.reducer;

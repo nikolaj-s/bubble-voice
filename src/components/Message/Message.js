@@ -8,7 +8,7 @@ import { Video } from '../Video/Video'
 import { MessageLoadingIndicator } from './MessageLoadingIndicator/MessageLoadingIndicator';
 
 // state
-import { selectPrimaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import {  selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./Message.css";
@@ -17,14 +17,13 @@ import { SubMenuButton } from '../buttons/subMenuButton/SubMenuButton';
 import { Iframe } from '../Iframe/Iframe';
 import { MessageLink } from './MessageLink/MessageLink';
 import { MessageText } from './MessageText/MessageText';
+import { PinButton } from '../buttons/PinButton/PinButton';
 
-export const Message = ({ message, overlay = false, id, channel_id }) => {
+export const Message = ({ message, overlay = false, id, channel_id, perm, pinMessage, pinned}) => {
 
     const dispatch = useDispatch();
 
     const textColor = useSelector(selectTextColor);
-    
-    const primaryColor = useSelector(selectPrimaryColor);
 
     const expandContent = (source) => {
         dispatch(setExpandedContent(source))
@@ -47,11 +46,12 @@ export const Message = ({ message, overlay = false, id, channel_id }) => {
                 >{message?.date?.split("T")[0]}</p> : null}
                 {message.loading ? 
                 <MessageLoadingIndicator />
-                : 
+                : overlay === false ?
                 <div className='date-submenu-message-wrapper'>
-                    {overlay === false ? <SubMenuButton width={15} height={15} borderRadius={10} /> : null}
+                    {perm ? <PinButton description={pinned ? 'unpin' : 'pin'} action={pinMessage} width={15} height={15} pinned={pinned} /> : null}
+                    {perm ? <SubMenuButton zIndex={2} description={"More"} width={15} height={15} borderRadius={10} /> : null}
                 </div>
-                }
+                : null}
                 
             </div>
             <MessageText color={textColor} text={message.text} />

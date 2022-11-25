@@ -2,7 +2,7 @@
     min-height: calc(55px - 18px);
     max-height: calc(58px - 18px);
     width: calc(100% - 18px);
-    border-radius: 15px;
+    border-radius: var(--border-radius);
     padding: 5px;
     display: flex;
     align-items: center;

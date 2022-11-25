@@ -6,12 +6,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as mediasoupClient from 'mediasoup-client';
 
 // state
-import { updateMusicState, selectCurrentChannel, selectCurrentChannelId, selectPushToTalkActive, selectServerId, toggleLoadingChannel, updateMemberStatus, selectServerMembers, throwServerError, updateJoiningChannelState, setChannelSocialId, selectReconnectingState, toggleReconnectingState } from '../../ServerSlice';
+import { selectCurrentChannel, selectCurrentChannelId, selectPushToTalkActive, selectServerId, toggleLoadingChannel, updateMemberStatus, selectServerMembers, throwServerError, updateJoiningChannelState, setChannelSocialId, selectReconnectingState, toggleReconnectingState, checkConnection, clearServerPing } from '../../ServerSlice';
 import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPushToTalkState, selectMirroredWebCamState, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
 import { selectDisplayName, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { playSoundEffect, selectMuteSoundEffectsWhileMutedState } from '../../../settings/soundEffects/soundEffectsSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 import { selectAudioState, selectCurrentScreen, selectMicrophoneState, selectScreenShareState, selectWebCamState, setCurrentScreen, setScreens, setSelectingScreensState, toggleConnectionError, toggleConnectionLoading, toggleControlState, toggleLoadingScreenShare, toggleLoadingWebCam } from '../../../controlBar/ControlBarSlice';
+import { updateMusicState } from './Music/MusicSlice';
 
 // style
 import "./Room.css";
@@ -204,10 +205,18 @@ const Component = () => {
 
     }
 
+    const updatePing = () => {
+        console.log('checking ping')
+
+        dispatch(checkConnection());
+    }
+
     // handle initial channel join, and init of roomClient
     React.useEffect(() => {
 
         dispatch(updateJoiningChannelState(true));
+
+        let interval;
 
         setTimeout(() => {
 
@@ -216,7 +225,7 @@ const Component = () => {
 
                 await socket.request('fetch current music info')
                 .then(data => {
-
+                    console.log(data)
                     if (data.music_info) {
                         dispatch(updateMusicState({playing: data.music_info.playing, queue: data.music_info.queue}))
                     }
@@ -229,9 +238,12 @@ const Component = () => {
                 setTimeout(() => {
 
                     dispatch(updateJoiningChannelState(false));
+
+                    dispatch(checkConnection());
                 
                 }, 500)
                     
+                interval = setInterval(updatePing, 120000);
             })
         
             dispatch(setHeaderTitle(channel.channel_name));
@@ -245,10 +257,13 @@ const Component = () => {
             dispatch(setSelectingScreensState(false));
             dispatch(setCurrentScreen(null));
             setLoaded(false);
+            dispatch(clearServerPing());
+            dispatch(updateMusicState({playing: false, queue: []}))
             client?.exit();
             if (socket) {
                 console.log('channel left/ channel change')
             }
+            clearInterval(interval);
         }
     // eslint-disable-next-line
     }, [current_channel_id])

@@ -1,0 +1,23 @@
+
+.user-status-menu-container {
+    position: absolute;
+    width: 96%;
+    bottom: 55px;
+    height: 253px;
+    display: flex;
+    flex-direction: column;
+    border-top-left-radius: var(--border-radius);
+    overflow: hidden;
+    border-top-right-radius: var(--border-radius);
+}
+
+.inner-status-menu-container {
+    flex-grow: 4;
+    padding: 5px;
+}
+
+.inner-status-menu-spacer {
+    height: 20px;
+    flex-shrink: 0;
+    width: 45px;
+}

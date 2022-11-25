@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentChannelId, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, throwMusicError, throwServerError } from '../../../ServerSlice';
-
+import { selectCurrentChannelId, throwServerError } from '../../../ServerSlice';
+import {selectMusicPlayingState, selectMusicQueue, selectMusicVolume, throwMusicError,} from './MusicSlice';
 import YouTube from 'react-youtube'
 import { selectPrimaryColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
@@ -13,12 +13,13 @@ import { SkipButton } from '../../../../../components/buttons/SkipButton/SkipBut
 import { AudioToggleButton } from '../../../../../components/buttons/mediaButtons/audioToggleButton/AudioToggleButton';
 
 import { socket } from '../../../ServerBar/ServerBar';
-
-let player;
+import { current } from '@reduxjs/toolkit';
 
 export const Music = () => {
 
     // handling of music
+
+    const [player, setPlayer] = React.useState(null)
 
     const dispatch = useDispatch();
 
@@ -42,8 +43,8 @@ export const Music = () => {
 
     React.useEffect(() => {
         try {
-            console.log(player)
             if (player) {
+                
                 if (!musicPlaying) {
                     player.pauseVideo();
                 } else if (musicPlaying) {
@@ -52,7 +53,7 @@ export const Music = () => {
 
                 player.setVolume(volume);
 
-                if (muted) {
+                if (muted || volume < 1) {
                     player.mute();
                 } else if (!muted) {
                     player.unMute();
@@ -65,7 +66,7 @@ export const Music = () => {
         }
         
     // eslint-disable-next-line
-    }, [musicPlaying, player, volume])
+    }, [musicPlaying, volume, musicPlaying, musicPlaying, player])
 
     React.useEffect(() => {
 
@@ -76,15 +77,6 @@ export const Music = () => {
         }    
     // eslint-disable-next-line    
     }, [musicQueue])
-
-    // handle on volume change
-    console.log(currentlyPlaying)
-
-    const handleOnReady = (event) => {
-        
-        player = event.target;
-    
-    }
 
     const toggleVisibility = () => {
         toggleVisible(!visible);
@@ -136,6 +128,10 @@ export const Music = () => {
         }
     }
 
+    const handleOnReady = (event) => {
+        setPlayer(event.target);
+    }
+
     return (
         <>
         {currentlyPlaying ?
@@ -158,6 +154,7 @@ export const Music = () => {
                 onReady={handleOnReady}
                 id={'room-music-player'}
                 videoId={currentlyPlaying}  opts={{
+                    
                     height: '100%',
                     width: '300',
                     playerVars: {

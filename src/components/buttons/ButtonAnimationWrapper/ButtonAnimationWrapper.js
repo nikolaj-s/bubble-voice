@@ -91,7 +91,7 @@ export const ButtonAnimationWrapper = ({action = () => {}, position = 'relative'
             style={{
                 left: '50%',
                 bottom: flip_description ? '-100%' : height + 25,
-                width: 'auto',
+                minWidth: '100%',
                 position: 'absolute',
                 zIndex: 999,
                 fontWeight: '100',

@@ -26,4 +26,34 @@
     .user-name-status-wrapper {
         display: none;
     }
+
+    .preview-user-status-shrinked {
+        display: flex;
+        flex-direction: column;
+        border-radius: 10px;
+        width: 200px;
+        height: 55px;
+        justify-content: center;
+        padding: 10px;
+    }
+
+    .preview-user-status-shrinked h3,
+    .preview-user-status-shrinked p {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        cursor: default;
+        font-weight: 400;
+        letter-spacing: var(--font-spacing);
+    }
+
+    .preview-user-status-shrinked h3 {
+        font-size: 1rem;
+
+    }
+
+    .preview-user-status-shrinked p {
+        font-size: 0.7rem;
+        opacity: 0.6;
+    }
 }

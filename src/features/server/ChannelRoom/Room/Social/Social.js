@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 // state
 import { selectDisplayName, selectUsername } from '../../../../settings/appSettings/accountSettings/accountSettingsSlice';
-import { newMessage, selectUsersPermissions, throwServerError, updateMessage } from '../../../ServerSlice';
+import { newMessage, selectPinningMessage, selectUsersPermissions, throwServerError, togglePinMessage, updateMessage } from '../../../ServerSlice';
 
 // components
 import { MessageInput } from '../../../../../components/inputs/MessageInput/MessageInput';
@@ -17,9 +17,10 @@ import "./Social.css";
 
 // socket
 import { socket } from '../../../ServerBar/ServerBar';
+import { Loading } from '../../../../../components/LoadingComponents/Loading/Loading';
 
 
-export const Social = ({currentChannel, channelId}) => {
+export const Social = ({currentChannel, channelId, socialRoute = false, bulletin = false}) => {
 
     const dispatch = useDispatch();
 
@@ -29,7 +30,7 @@ export const Social = ({currentChannel, channelId}) => {
 
     const [image, setImage] = React.useState(null);
 
-    const [messagesToRender, setMessagesToRender] = React.useState(10)
+    const [messagesToRender, setMessagesToRender] = React.useState(15)
 
     const [inputHeight, setInputHeight] = React.useState(80);
 
@@ -41,7 +42,11 @@ export const Social = ({currentChannel, channelId}) => {
 
     const displayName = useSelector(selectDisplayName);
 
+    const pinning = useSelector(selectPinningMessage);
+
     React.useEffect(() => {
+
+        if (bulletin) return;
 
         setTimeout(() => {
             messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
@@ -121,10 +126,15 @@ export const Social = ({currentChannel, channelId}) => {
     const handleLoadMoreOnScroll = (e) => {
         
         if ((messagesRef.current.scrollTop + messagesRef.current.scrollHeight) * .8 < e.target.clientHeight) {
-            console.log('top')
-            setMessagesToRender(messagesToRender + 5);
+            
+            setMessagesToRender(messagesToRender + 15);
+        
         }
     
+    }
+
+    const pinMessage = (data) => {
+        dispatch(togglePinMessage(data));
     }
     
     return (
@@ -154,12 +164,13 @@ export const Social = ({currentChannel, channelId}) => {
                     : null}
                     <div onScroll={handleLoadMoreOnScroll} ref={messagesRef} className='social-messages-wrapper'>
                         {messages?.slice(0, messagesToRender).map((message, key) => {
-                            return <Message channel_id={message.channel_id} id={message._id} message={message.content} key={message.content.local_id || message._id} />
+                            return <Message pinned={message.pinned} pinMessage={() => {pinMessage(message)}} perm={permission?.user_can_post_channel_social} channel_id={message.channel_id} id={message._id} message={message.content} key={message.content.local_id || message._id} />
                         })}
                     </div>
-                    {permission?.user_can_post_channel_social ? <MessageInput updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : null}
+                    {permission?.user_can_post_channel_social ? <MessageInput socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : null}
                 </div>
             </div>
+            <Loading loading={pinning} />
         </motion.div>
     )
 }

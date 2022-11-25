@@ -6,7 +6,7 @@ import { io } from "socket.io-client";
 import { useNavigate, useRoutes } from 'react-router';
 
 // state
-import { addNewChannel, addSongToQueue, assignNewServerGroup, clearServerState, deleteChannel, deleteMessage, fetchPersistedMusicVolume, fetchServerDetails, handleLeavingServer, leaveChannel, newMessage, reOrderChannels, selectCurrentChannel, selectCurrentChannelId, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, selectTopAnimationPoint, setServerName, skipSong, throwServerError, toggleMusicPlaying, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateMemberStatus, updateServerBanner, updateServerGroups, userJoinsChannel, userJoinsServer, userLeavesChannel, userLeavesServer } from '../ServerSlice';
+import { addNewChannel, assignNewServerGroup, clearServerState, deleteChannel, deleteMessage, fetchPersistedMusicVolume, fetchServerDetails, handleLeavingServer, leaveChannel, newMessage, reOrderChannels, selectCurrentChannel, selectCurrentChannelId, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, selectTopAnimationPoint, setServerName, throwServerError, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateMemberActiveStatus, updateMemberStatus, updateServerBanner, updateServerGroups, userJoinsChannel, userJoinsServer, userLeavesChannel, userLeavesServer } from '../ServerSlice';
 import { selectUsername } from '../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { getToken, url } from '../../../util/Validation';
 import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
@@ -14,6 +14,8 @@ import { selectActivateCameraKey, selectDisconnectKey, selectMuteAudioKey, selec
 import { selectAudioOutput } from '../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 import { addNewWidgetOverlayToQueue, clearWidgetOverLay } from '../ChannelRoom/Room/RoomActionOverlay/RoomActionOverlaySlice';
 import { pushSytemNotification } from '../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { addSongToQueue, skipSong, toggleMusicPlaying } from '../ChannelRoom/Room/Music/MusicSlice';
+import { selectCurrentScreen, setCurrentScreen, toggleControlState } from '../../controlBar/ControlBarSlice';
 
 // component's
 import { ServerBanner } from '../../../components/serverBanner/ServerBanner';
@@ -23,12 +25,14 @@ import { setSideBarHeader } from '../../sideBar/sideBarSlice';
 import { ChannelList } from './ChannelList/ChannelList';
 import { ServerSettingsButton } from '../../../components/buttons/ServerSettingsButton/ServerSettingsButton';
 import { ServerSettingsMenu } from '../serverSettings/ServerSettingsMenu';
+import { DisconnectButtonWrapper } from './DisconnectButtonWrapper/DisconnectButtonWrapper';
+
+// UTIL
+import { UnpackMessage } from '../../../util/UnpackMessage';
 
 // style's
 import "./ServerBar.css"
-import { selectCurrentScreen, setCurrentScreen, toggleControlState } from '../../controlBar/ControlBarSlice';
-import { DisconnectButtonWrapper } from './DisconnectButtonWrapper/DisconnectButtonWrapper';
-import { UnpackMessage } from '../../../util/UnpackMessage';
+import { addPinnedMessage, removePinnedMessage } from '../ChannelRoom/ServerDashBoard/ServerDashBoardSlice';
 
 export let socket = null;
 
@@ -271,7 +275,12 @@ const Bar = () => {
 
         socket.on('delete message', (data) => {
             try {
-                dispatch(deleteMessage(data))
+
+                console.log(data);
+
+                dispatch(deleteMessage(data));
+
+                dispatch(removePinnedMessage({message: {_id: data.message_id}}));
             } catch (error) {
                 console.log(error)
             }
@@ -284,6 +293,18 @@ const Bar = () => {
             
             } catch (error) {
                 console.log(error)
+            }
+        })
+
+        socket.on('user status update', (data) => {
+            dispatch(updateMemberActiveStatus(data));
+        })
+
+        socket.on('toggle pinned message', (data) => {
+            if (data.message.pinned) {
+                dispatch(addPinnedMessage(data));
+            } else {
+                dispatch(removePinnedMessage(data));
             }
         })
     }

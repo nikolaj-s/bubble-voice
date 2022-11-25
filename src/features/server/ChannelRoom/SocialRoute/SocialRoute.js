@@ -76,7 +76,7 @@ export const SocialRoute = () => {
                         </svg>
                     </div>
                 </div>
-                <Social channelId={channelId} currentChannel={channel} />
+                <Social socialRoute={true} channelId={channelId} currentChannel={channel} />
             </motion.div> : null}
         </>
     )

@@ -24,11 +24,11 @@ export const ChannelBackground = ({channel_background, blur = 10}) => {
             style={{
                 backgroundColor: `rgba(${secondaryColor.split('(')[1]?.split(')')[0]}, 0.5)`,
                 backdropFilter: `blur(${blur}px)`,
-                borderBottomRightRadius: hideUserStatus ? 15 : 0
+                borderBottomRightRadius: hideUserStatus ? 10 : 0
             }}
             className='channel-background-blur-layer'></div>
             <div 
-            style={{borderBottomRightRadius: hideUserStatus ? 15 : 0}}
+            style={{borderBottomRightRadius: hideUserStatus ? 10 : 0}}
             className='channel-background-image-wrapper'>
                 <Image objectFit='cover' image={channel_background} />
             </div>

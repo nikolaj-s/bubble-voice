@@ -3,11 +3,11 @@
     min-width: 280px;
     max-width: 280px;
     width: 100%;
-    margin-left: 10px;
-    border-bottom-left-radius: 15px;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    height: calc(100% - 20px);
+    margin-left: 5px;
+    border-bottom-left-radius: var(--border-radius);
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+    height: calc(100% - 10px);
     display: flex;
     flex-direction: column;
     position: relative;

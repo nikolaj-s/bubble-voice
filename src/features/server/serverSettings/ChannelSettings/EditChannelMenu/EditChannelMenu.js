@@ -38,8 +38,6 @@ const Wrapper = () => {
 
     const [widgets, setWidgets] = React.useState([]);
 
-    const [initMount, setInitMount] = React.useState(false);
-
     const [loading, toggleLoading] = React.useState(false);
 
     const [channelBackground, setChannelBackground] = React.useState(false);
@@ -55,28 +53,32 @@ const Wrapper = () => {
     const permission = useSelector(selectUsersPermissions);
 
     React.useEffect(() => {
+        try {
+            dispatch(setHeaderTitle("Edit Channel / " + channelToEdit.channel_name));
 
-        dispatch(setHeaderTitle("Edit Channel / " + channelToEdit.channel_name));
+            setChannelName(channelToEdit.channel_name);
 
-        setChannelName(channelToEdit.channel_name);
+            setPersistChannelSocial(channelToEdit.persist_social)
+            
+            if (channelToEdit.background_blur) {
 
-        setPersistChannelSocial(channelToEdit.persist_social)
-        
-        if (channelToEdit.background_blur) {
-
-            setBackgroundBlur(channelToEdit.background_blur);
-        
-        }
-
-        for (const w of channel.widgets) {
-            if (w.delete) {
-                toggleEdited(true);
-                break;
+                setBackgroundBlur(channelToEdit.background_blur);
+            
             }
+
+            for (const w of channel.widgets) {
+                if (w.delete) {
+                    toggleEdited(true);
+                    break;
+                }
+            }
+
+            setWidgets(channelToEdit.widgets);
+        
+        } catch (error) {
+            return;
         }
 
-        setWidgets(channelToEdit.widgets);
-        
         return () => {
             dispatch(setHeaderTitle(""));
         }

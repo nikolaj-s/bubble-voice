@@ -19,6 +19,9 @@ import contextMenuSlice from "../features/contextMenu/contextMenuSlice";
 import RoomActionOverlaySlice from "../features/server/ChannelRoom/Room/RoomActionOverlay/RoomActionOverlaySlice";
 import MiscellaneousSettingsSlice from "../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice";
 import ExpandContentSlice from "../features/ExpandContent/ExpandContentSlice";
+import MusicSlice from "../features/server/ChannelRoom/Room/Music/MusicSlice";
+import UserStatusSlice from "../features/server/ChannelRoom/UserStatusBar/UserStatusSlice";
+import ServerDashBoardSlice from "../features/server/ChannelRoom/ServerDashBoard/ServerDashBoardSlice";
 
 const { configureStore } = require("@reduxjs/toolkit");
 
@@ -49,10 +52,14 @@ const store = configureStore({
         joinServerSlice: joinServerSlice,
         RoomActionOverlaySlice: RoomActionOverlaySlice,
         ExpandContentSlice: ExpandContentSlice,
+        UserStatusSlice: UserStatusSlice,
+        ServerDashBoardSlice: ServerDashBoardSlice,
         // sound fx
         soundEffectsSlice: soundEffectsSlice,
         // ctx menu
-        contextMenuSlice: contextMenuSlice
+        contextMenuSlice: contextMenuSlice,
+        // music
+        MusicSlice: MusicSlice
     }
 })
 

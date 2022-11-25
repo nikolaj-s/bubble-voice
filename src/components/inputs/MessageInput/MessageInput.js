@@ -19,7 +19,7 @@ import { SearchImageButton } from './SearchImageButton/SearchImageButton';
 import { ImageSearchPanel } from './ImageSearchPanel/ImageSearchPanel';
 import { selectHideUserStatus } from '../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
-export const MessageInput = ({send, text, keyCode, image, value, persist, updateInputHeight}) => {
+export const MessageInput = ({send, text, keyCode, image, value, persist, updateInputHeight, socialRoute}) => {
 
     const [files, setFiles] = React.useState([{}])
 
@@ -133,7 +133,7 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
             style={{
                 backgroundColor: primaryColor,
                 height: inputHeight,
-                borderBottomRightRadius: hideUserStatus ? 15 : 0
+                borderBottomRightRadius: socialRoute ? 0 : hideUserStatus ? 10 : 0
             }}
             className="message-input-container" >
                 <textarea 

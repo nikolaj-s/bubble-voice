@@ -1,7 +1,7 @@
 // library's
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import {selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import {selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // components
 import { TextInput } from '../../../inputs/TextInput/TextInput';
@@ -15,7 +15,7 @@ import { Error } from '../../../Error/Error';
 
 // state
 import { Loading } from '../../../LoadingComponents/Loading/Loading';
-import {  selectMusicError, selectMusicErrorMessage, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, throwMusicError, toggleMusicPlaying, updateMusicVolume } from '../../../../features/server/ServerSlice';
+import {  selectMusicError, selectMusicErrorMessage, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, throwMusicError, toggleMusicPlaying, updateMusicVolume } from '../../../../features/server/ChannelRoom/Room/Music/MusicSlice';
 
 // style
 import "./MusicWidget.css";
@@ -46,6 +46,8 @@ export const MusicWidget = ({editing = false}) => {
     const secondaryColor = useSelector(selectSecondaryColor);
 
     const primaryColor = useSelector(selectPrimaryColor);
+
+    const accentColor = useSelector(selectAccentColor);
 
     const handleAddSongToQueue = async () => {
         if (query.length === 0 || editing === true) return;
@@ -104,14 +106,16 @@ export const MusicWidget = ({editing = false}) => {
     }
 
     const handleMusicVolume = (value) => {
+        
         dispatch(updateMusicVolume(value))
+    
     }
 
     return (
         <div 
         style={{
             backgroundColor: secondaryColor,
-            border: `solid 4px ${primaryColor}`
+            border: `solid 4px ${accentColor}`
         }}
         className='music-widget-outer-container' >
             <div className='inner-music-widget-container'>
@@ -149,7 +153,7 @@ export const MusicWidget = ({editing = false}) => {
                             }
                             <SkipButton action={handleSkip} />
                         </div>
-                        <Range value={volume} action={handleMusicVolume} max={100} step={0.05} />
+                        <Range min={0} value={volume} action={handleMusicVolume} max={100} step={0.05} />
                     </div>
                     {queue[0]?.title && editing === false ? 
                     <Song name={queue[0].title} image={queue[0].thumbnail} />

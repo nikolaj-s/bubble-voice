@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
-import { selectMiscSettingsHideNonVideoParticapents } from '../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { selectHideUserStatus, selectMiscSettingsHideNonVideoParticapents } from '../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { User } from '../User/User'
 
 export const RoomUserWrapper = ({users}) => {
@@ -9,7 +9,9 @@ export const RoomUserWrapper = ({users}) => {
 
     const hidingNonVideoMembers = useSelector(selectMiscSettingsHideNonVideoParticapents);
 
-    let margin = 5;
+    const hidingUserStatus = useSelector(selectHideUserStatus);
+
+    let margin = 15;
 
     const ratio = (9 / 16);
 
@@ -48,7 +50,7 @@ export const RoomUserWrapper = ({users}) => {
             handleScaling();
         }
     // eslint-disable-next-line   
-    }, [expanded, hidingNonVideoMembers])
+    }, [expanded, hidingNonVideoMembers, hidingUserStatus])
         
     React.useEffect(() => {
         try {

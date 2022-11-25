@@ -1,9 +1,9 @@
 
 
 .content-screen-container {
-    width: calc(66% - 30px);
+    width: calc(66% - 10px);
     max-width: calc(100% - 20px);
-    margin: 0 10px 0 3px;
+    margin: 0 5px 0 3px;
     flex-grow: 2;
     height: 100%;
     display: flex;
@@ -12,10 +12,10 @@
 
 .content-screen-inner-container {
     margin-top: 3px;
-    height: calc(100% - 43px);
+    height: calc(100% - 38px);
     width: 100%;
-    border-bottom-right-radius: 15px;
-    border-top-right-radius: 15px;
+    border-bottom-right-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
     display: flex;
     overflow-y: auto;
     overflow-x: hidden;
