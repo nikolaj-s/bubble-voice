@@ -112,7 +112,7 @@ export const ImageSearchPanel = ({searchingForImage, selectImage}) => {
                                 <div
                                 onClick={() => {handleSelectImage(image)}}
                                 key={key} className='message-image-result-container'>
-                                    <Image image={image} />
+                                    <Image cursor='pointer' image={image} />
                                 </div>
                             )
                         })}

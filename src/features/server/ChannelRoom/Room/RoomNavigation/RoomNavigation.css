@@ -7,7 +7,7 @@
     align-items: center;
     overflow: hidden;
     transition: 0;
-    z-index: 1;
+    z-index: 3;
 }
 
 .room-navigation-button-wrapper {
@@ -17,10 +17,27 @@
 }
 
 .room-navigation-button {
-    padding: 0 2rem;
+    padding: 0 1.5rem;
     display: flex;
     align-items: center;
     height: 100%;
+}
+
+.room-navigation-button p {
+    position: fixed;
+    top: -5px;
+    padding: 5px;
+    border-radius: 5px;
+    z-index: 5;
+    text-align: center;
+    letter-spacing: var(--font-spacing);
+    font-size: 0.7rem;
+    transform: translateX(-35%);
+    min-width: 75px;
+}
+
+.stream-room-button p {
+    margin-left: 20px;
 }
 
 .room-navigation-button h3 {

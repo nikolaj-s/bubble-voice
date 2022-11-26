@@ -9,6 +9,7 @@ export const PauseButton = ({action, width = 35, height = 35}) => {
 
     return (
         <ButtonAnimationWrapper
+        description={"Pause"}
         action={action}
         width={width} height={height}
         >

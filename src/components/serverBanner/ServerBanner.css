@@ -9,6 +9,11 @@
     flex-shrink: 0;
 }
 
+.server-banner-container div:first-child {
+    overflow: hidden;
+    border-top-right-radius: 15px;
+}
+
 .server-title-overlay {
     position: absolute;
     width: 100%;

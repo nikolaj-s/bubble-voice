@@ -6,7 +6,7 @@
     height: 100%;
     bottom: 0;
     right: 0;
-    border-top-left-radius: 15px;
+    border-top-left-radius: 10px;
     z-index: 3;
     overflow-x: hidden;
     transition: 0.3s;

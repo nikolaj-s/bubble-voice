@@ -31,8 +31,8 @@ export const ServerSettingsButton = ({action}) => {
                 position: 'absolute',
                 backgroundColor: secondaryColor,
                 right: 45,
-                borderRadius: 10,
-                width: 90
+                borderRadius: 5,
+                width: 150
             }}
             >
                 <p

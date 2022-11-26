@@ -9,6 +9,7 @@
     border-top-left-radius: var(--border-radius);
     overflow: hidden;
     border-top-right-radius: var(--border-radius);
+    z-index: 1;
 }
 
 .inner-status-menu-container {

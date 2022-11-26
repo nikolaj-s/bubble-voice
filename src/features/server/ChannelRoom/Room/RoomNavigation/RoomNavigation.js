@@ -2,6 +2,9 @@
 import { useAnimation, motion } from 'framer-motion';
 import React from 'react'
 import { useSelector } from 'react-redux';
+import { SocialIcon } from '../../../../../components/Icons/SocialIcon/SocialIcon';
+import { VideoRoomIcon } from '../../../../../components/Icons/VideoRoomIcon/VideoRoomIcon';
+import { WidgetsIcon } from '../../../../../components/Icons/WidgetsIcon/WidgetsIcon';
 
 // state
 import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
@@ -27,6 +30,12 @@ export const RoomNavigation = ({page, action}) => {
     const widgetsButtonAnimation = useAnimation();
 
     const permissions = useSelector(selectUsersPermissions);
+
+    const [videoDesc, toggleVideoDesc] = React.useState(false);
+
+    const [socialDesc, toggleSocialDesc] = React.useState(false);
+
+    const [widgetDesc, toggleWidgetDesc] = React.useState(false);
 
     const handleAction = (p) => {
         action(p)
@@ -84,6 +93,16 @@ export const RoomNavigation = ({page, action}) => {
     // eslint-disable-next-line
     }, [page])
 
+    const handleDesc = (type, action) => {
+        if (type === 'video') {
+            toggleVideoDesc(action);
+        } else if (type === 'widgets') {
+            toggleWidgetDesc(action);
+        } else {
+            toggleSocialDesc(action);
+        }
+    }
+
     return (
         <div 
         style={{backgroundColor: primaryColor}}
@@ -91,39 +110,42 @@ export const RoomNavigation = ({page, action}) => {
             <div className='room-navigation-button-wrapper'>
                 <motion.div 
                 transition={{duration: 0.2}}
+                onMouseEnter={() => {handleDesc('video', true)}}
                 onMouseOver={() => {handleAnimation(secondaryColor, voiceButtonAnimation, 'voice')}}
                 onMouseOut={() => {handleAnimation(primaryColor, voiceButtonAnimation, 'voice')}}
+                onMouseLeave={() => {handleDesc('video', false)}}
                 onMouseDown={() => {handleAnimation(accentColor, voiceButtonAnimation, 'voice')}}
                 onMouseUp={() => {handleAnimation(secondaryColor, voiceButtonAnimation, 'voice')}}
-                animate={voiceButtonAnimation} onClick={() => {handleAction('voice')}} className='room-navigation-button'>
-                    <h3
-                    style={{color: textColor}}
-                    >Voice / Video</h3>
+                animate={voiceButtonAnimation} onClick={() => {handleAction('voice')}} className='room-navigation-button stream-room-button'>
+                    {videoDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Stream Room</p> : null}
+                    <VideoRoomIcon color={textColor} />
                 </motion.div>
                 {permissions?.user_can_view_channel_content ? 
                 <>
                 <motion.div 
+                id={'channel-social-tab-button'}
                 transition={{duration: 0.2}}
+                onMouseEnter={() => {handleDesc('social', true)}}
                 onMouseOver={() => {handleAnimation(secondaryColor, socialButtonAnimation, 'social')}}
                 onMouseOut={() => {handleAnimation(primaryColor, socialButtonAnimation, 'social')}}
+                onMouseLeave={() => {handleDesc('social', false)}}
                 onMouseDown={() => {handleAnimation(accentColor, socialButtonAnimation, 'social')}}
                 onMouseUp={() => {handleAnimation(secondaryColor, socialButtonAnimation, 'social')}}
                 animate={socialButtonAnimation} onClick={() => {handleAction('social')}} className='room-navigation-button'>
-                    <h3
-                    style={{color: textColor}}
-                    >Social</h3>
+                    {socialDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Social</p> : null}
+                    <SocialIcon color={textColor} />
                 </motion.div>
                 <motion.div 
-                
+                onMouseEnter={() => {handleDesc('widgets', true)}}
+                onMouseLeave={() => {handleDesc('widgets', false)}}
                 transition={{duration: 0.2}}
                 onMouseOver={() => {handleAnimation(secondaryColor, widgetsButtonAnimation, 'widgets')}}
                 onMouseOut={() => {handleAnimation(primaryColor, widgetsButtonAnimation, 'widgets')}}
                 onMouseDown={() => {handleAnimation(accentColor, widgetsButtonAnimation, 'widgets')}}
                 onMouseUp={() => {handleAnimation(secondaryColor, widgetsButtonAnimation, 'widgets')}}
                 animate={widgetsButtonAnimation} onClick={() => {handleAction('widgets')}} className='room-navigation-button'>
-                    <h3
-                    style={{color: textColor}}
-                    >Widgets</h3>
+                    {widgetDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Widgtes</p> : null}
+                    <WidgetsIcon color={textColor} />
                 </motion.div>
                 </>
                 : null}

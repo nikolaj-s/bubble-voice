@@ -5,6 +5,7 @@
     height: auto;
     border-radius: 15px;
     position: absolute;
+    z-index: 2;
     bottom: 65px;
     right: 0;
     padding: 5px;

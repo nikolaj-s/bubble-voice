@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 import { ButtonAnimationWrapper } from '../ButtonAnimationWrapper/ButtonAnimationWrapper'
 
-export const PinButton = ({pinned = false, width, height, action, description}) => {
+export const PinButton = ({pinned = false, width, height, action, description, flip_description}) => {
     
     const color = useSelector(selectTextColor);
 
@@ -12,6 +12,7 @@ export const PinButton = ({pinned = false, width, height, action, description}) 
         action={action}
         zIndex={2}
         description={description}
+        flip_description={flip_description}
         borderRadius='10px' margin={'0 10px 0 0'} width={width} height={height}>
             {!pinned ?
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

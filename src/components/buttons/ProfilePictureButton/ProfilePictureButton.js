@@ -13,7 +13,7 @@ export const ProfilePictureButton = ({image, width, height, action}) => {
     description="Status"
     action={action}
     padding={10}
-  
+    zIndex={1}
     >
         <div
         style={{

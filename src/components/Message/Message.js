@@ -19,7 +19,7 @@ import { MessageLink } from './MessageLink/MessageLink';
 import { MessageText } from './MessageText/MessageText';
 import { PinButton } from '../buttons/PinButton/PinButton';
 
-export const Message = ({ message, overlay = false, id, channel_id, perm, pinMessage, pinned}) => {
+export const Message = ({ message, overlay = false, id, channel_id, perm, pinMessage, pinned, index}) => {
 
     const dispatch = useDispatch();
 
@@ -48,8 +48,8 @@ export const Message = ({ message, overlay = false, id, channel_id, perm, pinMes
                 <MessageLoadingIndicator />
                 : overlay === false ?
                 <div className='date-submenu-message-wrapper'>
-                    {perm ? <PinButton description={pinned ? 'unpin' : 'pin'} action={pinMessage} width={15} height={15} pinned={pinned} /> : null}
-                    {perm ? <SubMenuButton zIndex={2} description={"More"} width={15} height={15} borderRadius={10} /> : null}
+                    {perm ? <PinButton flip_description={index === 0} description={pinned ? 'unpin' : 'pin'} action={pinMessage} width={15} height={15} pinned={pinned} /> : null}
+                    {perm ? <SubMenuButton flip_description={index === 0} zIndex={2} description={"More"} width={15} height={15} borderRadius={10} /> : null}
                 </div>
                 : null}
                 
@@ -62,7 +62,7 @@ export const Message = ({ message, overlay = false, id, channel_id, perm, pinMes
             
             onClick={() => {expandContent(message.image)}}
             className='message-image-container'>
-                <Image imgHeight='auto' cursor='pointer' width={null} altWidth={'100%'} loadingState='lazy' objectFit='contain' image={message.image} />
+                <Image imgHeight='auto' cursor='pointer' width={null} altWidth={'100%'} loadingState='eager' objectFit='contain' image={message.image} />
             </div>
             : null}
             {message.video ? 

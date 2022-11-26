@@ -10,14 +10,24 @@ export const UserStatus = ({user}) => {
 
     const [preview, togglePreview] = React.useState(false);
 
+    const [top, setTop] = React.useState(0);
+
     const textColor = useSelector(selectTextColor);
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
     const primaryColor = useSelector(selectPrimaryColor);
 
-    const handleMouseEnter = () => {
+    const handleMouseEnter = (e) => {
+
+        const scroll_top = e.target.parentElement.scrollTop;
+
+        const l_top = e.target.offsetTop === 0 ? 70 : e.target.offsetTop + 25;
+
+        setTop(l_top - scroll_top);
+
         togglePreview(true);
+    
     } 
 
     const handleMouseLeave = () => {
@@ -28,7 +38,7 @@ export const UserStatus = ({user}) => {
         <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={`user-status-container ${user._id}-user-status-card`}>
             {preview ?
             <div 
-            style={{backgroundColor: primaryColor}}
+            style={{backgroundColor: primaryColor, top: top}}
             className='preview-user-status-shrinked'>
                 <h3 style={{color: textColor}} >{user.display_name}</h3>
                 <p style={{color: textColor}}>{user.status ? user.status : 'offline'}</p>

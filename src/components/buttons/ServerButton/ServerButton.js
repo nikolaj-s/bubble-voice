@@ -43,9 +43,9 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
         animate={animation}
         style={{
             width: "calc(100% - 8px)",
-            height: "calc(130px - 8px)",
+            height: "calc(120px - 8px)",
             backgroundColor: primaryColor,
-            borderRadius: 15,
+            borderRadius: 10,
             display: 'flex',
             alignItems: 'center',
             margin: "2% 0 0 0",
@@ -67,7 +67,7 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
             style={{
                 width: '100%',
                 height: "100%",
-                borderRadius: '12px',
+                borderRadius: '10px',
                 overflow: 'hidden',
                 flexShrink: 0,
                 position: 'absolute'
@@ -87,8 +87,8 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
                 alignItems: 'center',
                 justifyContent: 'center',
                 backdropFilter: 'blur(2px)',
-                borderTopRightRadius: '11px',
-                borderBottomRightRadius: '11px'
+                borderTopRightRadius: '10px',
+                borderBottomRightRadius: '10px'
             }}
             >
                 <h1

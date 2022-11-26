@@ -14,6 +14,11 @@
     cursor: pointer;
 }
 
+.server-settings-button div p {
+    letter-spacing: var(--font-spacing);
+    
+}
+
 .server-settings-button svg:hover {
     opacity: 1;
 }

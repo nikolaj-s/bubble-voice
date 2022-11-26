@@ -67,7 +67,7 @@ export const ExpandContent = () => {
             >ESC</p>
             </div>
             <div className='content-expanded-inner-container'>
-                {expandedContent.includes('mp4') || expandedContent.includes('gif') ?
+                {expandedContent.includes('mp4') ?
                 <Video video={expandedContent} /> 
                 :        
                 <Image objectFit='contain' image={expandedContent} />}

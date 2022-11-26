@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { selectTextColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 import { ButtonAnimationWrapper } from '../../ButtonAnimationWrapper/ButtonAnimationWrapper'
 
-export const AudioToggleButton = ({action, state, active, id, description}) => {
+export const AudioToggleButton = ({action, state, active, id, description, o_mouseLeave, o_mouseEnter}) => {
 
     const textColor = useSelector(selectTextColor);
 
@@ -19,6 +19,8 @@ export const AudioToggleButton = ({action, state, active, id, description}) => {
         description={description}
         zIndex={5}
         borderRadius={10}
+        o_mouseEnter={o_mouseEnter}
+        o_mouseLeave={o_mouseLeave}
         >
             {state ?
             <svg 

@@ -13,6 +13,10 @@
     overflow-x: hidden;
 }
 
+.user-status-bar::-webkit-scrollbar {
+    display: none;
+}
+
 @media only screen and (max-width: 1100px) {
     .user-status-bar {
         width: 50px;

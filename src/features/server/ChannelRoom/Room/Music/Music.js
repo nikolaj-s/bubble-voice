@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentChannelId, throwServerError } from '../../../ServerSlice';
-import {selectMusicPlayingState, selectMusicQueue, selectMusicVolume, throwMusicError,} from './MusicSlice';
+import {selectMusicPlayingState, selectMusicQueue, selectMusicVolume, throwMusicError, updateMusicVolume,} from './MusicSlice';
 import YouTube from 'react-youtube'
 import { selectPrimaryColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
@@ -13,7 +13,7 @@ import { SkipButton } from '../../../../../components/buttons/SkipButton/SkipBut
 import { AudioToggleButton } from '../../../../../components/buttons/mediaButtons/audioToggleButton/AudioToggleButton';
 
 import { socket } from '../../../ServerBar/ServerBar';
-import { current } from '@reduxjs/toolkit';
+import { Range } from '../../../../../components/inputs/Range/Range';
 
 export const Music = () => {
 
@@ -30,6 +30,8 @@ export const Music = () => {
     const [loading, toggleLoading] = React.useState(false);
 
     const [muted, toggleMuted] = React.useState(false);
+
+    const [volumeControls, toggleVolumeControls] = React.useState(false);
 
     const musicQueue = useSelector(selectMusicQueue);
 
@@ -132,22 +134,35 @@ export const Music = () => {
         setPlayer(event.target);
     }
 
+    const handleToggleVolumeControls = (bool) => {
+        toggleVolumeControls(bool)
+    }
+
+    const handleVolumeChange = (value) => {
+        dispatch(updateMusicVolume(value));
+    }
+
     return (
         <>
         {currentlyPlaying ?
+        <>
+        {volumeControls ?
+        <div onMouseLeave={() => {handleToggleVolumeControls(false)}} onMouseEnter={() => {handleToggleVolumeControls(true)}} style={{right: visible ? 360 : 55, backgroundColor: primaryColor}} className='music-overlay-volume-container'>
+            <Range action={handleVolumeChange} min={0} max={100} value={volume} step={0.01} />
+        </div> : null}
         <div
         style={{
-            right: visible ? 10 : '-300px',
+            right: visible ? 5 : '-300px',
             backgroundColor: primaryColor
         }}
         className='music-player-overlay-wrapper'>
             <div 
             style={{}}
             className='music-player-overlay-controls'>
-                <MusicOverlayButton action={toggleVisibility} width={25} height={25} />
+                <MusicOverlayButton description={visible ? 'Hide' : 'Show'} action={toggleVisibility} width={25} height={25} />
                 {!musicPlaying ? <PlayButton action={handleTogglePlaying} width={25} height={25}  /> : <PauseButton action={handleTogglePlaying} width={25} height={25} />}
                 <SkipButton action={handleSkip} width={25} height={25} />
-                <AudioToggleButton action={handleMute} state={!muted} />
+                <AudioToggleButton o_mouseEnter={() => {handleToggleVolumeControls(true)}} o_mouseLeave={() => {handleToggleVolumeControls(false)}} description={muted ? 'Un Mute' : 'Mute'} action={handleMute} state={!muted} />
             </div>
             <div className='youtube-player-wrapper'>
                 <YouTube 
@@ -170,7 +185,7 @@ export const Music = () => {
                     <div className='youtube-disable-clicking'></div>
             </div>
         </div>
-            
+        </>    
         : null}
         </>
     )

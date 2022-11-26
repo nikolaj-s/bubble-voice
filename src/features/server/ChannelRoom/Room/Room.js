@@ -517,7 +517,7 @@ const Component = () => {
                 <RoomActionOverlay page={page} />
                 
             </div>
-            <SubMenuButton target={'live-chat-wrapper'} borderRadius={10} zIndex={1} position={"absolute"} top={5} right={40} height={15} left={null} width={15} />
+            <SubMenuButton description={"Room Quick Settings"} right_orientation_desc={true} target={'live-chat-wrapper'} borderRadius={10} zIndex={3} position={"absolute"} top={5} right={40} height={15} left={null} width={15} />
             <ChannelBackground channel_background={hideChannelBackgrounds ? null : channel.channel_background} blur={channel.background_blur} />
             <audio hidden={true} id={'microphone-input-source'} />
             <Music />

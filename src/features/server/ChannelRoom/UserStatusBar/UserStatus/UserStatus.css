@@ -1,9 +1,11 @@
 .user-status-container {
-    height: 55px;
+    height: 60px;
     width: calc(100%);
     display: flex;
     align-items: center;
     position: relative;
+    min-height: 60px;
+    z-index: 2;
 }
 
 .user-status-container:hover {
@@ -29,7 +31,6 @@
     align-items: flex-start;
     justify-content: center;
     margin-left: 5px;
-    overflow: hidden;
     z-index: 1;
     height: 100%;
     width: 100%;

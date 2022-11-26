@@ -41,8 +41,8 @@ const Component = () => {
                 <PinnedIcon />
             </div>
             <div className='server-dashboard-inner-container'>
-                {pins.map(p => {
-                    return <Message pinMessage={() => {handlePin(p)}} perm={permission?.user_can_post_channel_social} key={p._id} channel_id={p?.channel_id} id={p._id} message={p.content} pinned={p.pinned} />
+                {pins.map((p, key) => {
+                    return <Message index={key} pinMessage={() => {handlePin(p)}} perm={permission?.user_can_post_channel_social} key={p._id} channel_id={p?.channel_id} id={p._id} message={p.content} pinned={p.pinned} />
                 })}
             </div>
         </div>}

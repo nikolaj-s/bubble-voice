@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 
 // state
 import { selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
-import { selectChannelSocialId, selectCurrentlyViewChannelSocial, setChannelSocialId } from '../../ServerSlice'
+import { selectChannelSocialId, selectCurrentChannelId, selectCurrentlyViewChannelSocial, setChannelSocialId } from '../../ServerSlice'
 
 // component's
 import { Social } from '../Room/Social/Social'
@@ -25,11 +25,15 @@ export const SocialRoute = () => {
 
     const textColor = useSelector(selectTextColor);
 
+    const current_channel_id = useSelector(selectCurrentChannelId);
+
     const inChannel = window.location.hash.includes('/channel/');
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
     React.useEffect(() => {
+
+        if (channelId === current_channel_id) return document.getElementById('channel-social-tab-button')?.click();
 
         if (currentSocial !== channelId) return setCurrentSocial(channelId);
 
