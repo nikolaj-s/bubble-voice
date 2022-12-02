@@ -14,6 +14,7 @@
     content: '';
     transform-origin: bottom;
     animation: bounce 2.2s ease alternate;
+    transform: scaleY(0.3);
 }
 
 .music-playing-class span {

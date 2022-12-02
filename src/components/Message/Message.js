@@ -8,7 +8,7 @@ import { Video } from '../Video/Video'
 import { MessageLoadingIndicator } from './MessageLoadingIndicator/MessageLoadingIndicator';
 
 // state
-import {  selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import {  selectPrimaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./Message.css";
@@ -18,6 +18,7 @@ import { Iframe } from '../Iframe/Iframe';
 import { MessageLink } from './MessageLink/MessageLink';
 import { MessageText } from './MessageText/MessageText';
 import { PinButton } from '../buttons/PinButton/PinButton';
+import { TwitterEmbed } from '../TwitterEmbed/TwitterEmbed';
 
 export const Message = ({ message, overlay = false, id, channel_id, perm, pinMessage, pinned, index}) => {
 
@@ -25,12 +26,19 @@ export const Message = ({ message, overlay = false, id, channel_id, perm, pinMes
 
     const textColor = useSelector(selectTextColor);
 
+    const primaryColor = useSelector(selectPrimaryColor);
+
     const expandContent = (source) => {
         dispatch(setExpandedContent(source))
     }
 
+    const hoverEffect = (e, bool) => {
+        document.getElementById(`${id}/${channel_id}`).style.backgroundColor = bool ? primaryColor : null;
+    }
+
     return (
         <div 
+        onMouseEnter={(e) => {hoverEffect(e, true)}} onMouseLeave={(e) => {hoverEffect(e, false)}}
         style={{
             padding: overlay ? null : 5,
         }}
@@ -57,6 +65,7 @@ export const Message = ({ message, overlay = false, id, channel_id, perm, pinMes
             <MessageText color={textColor} text={message.text} />
             <MessageLink link={message.link} />
             <Iframe link={message.iFrame} />
+            <TwitterEmbed id={message.twitter} />
             {message.image ? 
             <div 
             

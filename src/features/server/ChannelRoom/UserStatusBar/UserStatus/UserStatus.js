@@ -18,8 +18,10 @@ export const UserStatus = ({user}) => {
 
     const primaryColor = useSelector(selectPrimaryColor);
 
-    const handleMouseEnter = (e) => {
-        
+    const handleMouseEnter = (e, bool) => {
+        console.log(bool)
+        document.getElementsByClassName(`${user._id}-user-status-card`)[0].style.backgroundColor = bool ? primaryColor : null;
+
         const target = e.target.localName !== 'div' || e.target.className === "" ? e.target.offsetParent.className === "" ? e.target.offsetParent.offsetParent : e.target.offsetParent : e.target;
         
         const scroll_top = target.parentElement.scrollTop;
@@ -33,11 +35,14 @@ export const UserStatus = ({user}) => {
     } 
 
     const handleMouseLeave = () => {
+
+        document.getElementsByClassName(`${user._id}-user-status-card`)[0].style.backgroundColor = null
+        
         togglePreview(false);
     }
 
     return (
-        <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={`user-status-container ${user._id}-user-status-card`}>
+        <div onMouseEnter={(e) => {handleMouseEnter(e, true)}} onMouseLeave={(e) => {handleMouseLeave(e, false)}} className={`user-status-container ${user._id}-user-status-card`}>
             {preview ?
             <div 
             style={{backgroundColor: primaryColor, top: top}}

@@ -1,18 +1,20 @@
 .message-image-search-container {
     display: flex;
     flex-direction: column;
-    width: 60%;
-    max-width: 600px;
+    width: 80%;
+    max-width: 1200px;
     height: auto;
     max-height: 85%;
     border-radius: 10px;
     position: absolute;
-    z-index: 2;
+    z-index: 3;
     bottom: 80px;
-    right: 20px;
+    left: 50%;
+    transform: translateX(-50%);
     padding: 5px;
     transition: 0.3s;
     overflow: hidden;
+
 }
 
 .inner-message-image-search-container {

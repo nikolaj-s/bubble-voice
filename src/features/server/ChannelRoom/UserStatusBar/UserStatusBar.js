@@ -1,6 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { InputTitle } from '../../../../components/titles/inputTitle/InputTitle';
+import { selectPrimaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectHideUserStatus } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { selectCurrentChannelId, selectServerMembers } from '../../ServerSlice'
 import { UserStatus } from './UserStatus/UserStatus';
@@ -22,6 +23,8 @@ export const UserStatusBar = () => {
 
     const offlineUsers = useSelector(selectOfflineUsers);
 
+    const primaryColor = useSelector(selectPrimaryColor);
+
     React.useEffect(() => {
 
         dispatch(setUsers(users));
@@ -31,7 +34,9 @@ export const UserStatusBar = () => {
     return (
         <>
         {(channelId && hideUserStatusBar) ? null :
-        <div className='user-status-bar'>
+        <div 
+        style={{borderLeft: `3px solid ${primaryColor}`}}
+        className='user-status-bar'>
             <InputTitle marginBottom={'13px'} marginTop={'13px'} title={"Online"} />
             {onlineUsers.map((u) => {
                 return <UserStatus user={u} key={u._id} />

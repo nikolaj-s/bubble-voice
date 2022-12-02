@@ -3,11 +3,17 @@ import React from 'react'
 
 export const Iframe = ({link}) => {
 
+    const onLoad = (e) => {
+        const frame = e.content
+        console.log(e)
+    }
+
     return (
         <>
         {link ?
             <div style={{maxWidth: 800}}>
                 <iframe 
+                onLoad={onLoad}
                 style={{
                     borderRadius: 10
                 }}

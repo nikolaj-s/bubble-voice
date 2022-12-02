@@ -1,7 +1,7 @@
 .title-widget-container {
     display: flex;
     height: 70px;
-    width: 100%;
+    width: calc(100% - 8px);
     border-radius: var(--border-radius);
     align-items: center;
     justify-content: center;

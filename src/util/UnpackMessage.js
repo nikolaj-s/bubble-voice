@@ -7,6 +7,8 @@ export const UnpackMessage = (message) => {
 
         let iFrame = false;
 
+        let twitter = false;
+
         let t = false;
 
         let text_to_analyze = message?.content?.text;
@@ -37,6 +39,10 @@ export const UnpackMessage = (message) => {
     
                     iFrame = "https://store.steampowered.com/widget/" + (text.split('app/')[1].split('/')[0]);
     
+                } else if (text.includes('twitter')) {
+                    
+                    twitter = text.split('status/')[1].split('?')[0];
+                    
                 } else if (text.includes('https')) {
     
                     link = text;
@@ -50,7 +56,7 @@ export const UnpackMessage = (message) => {
             t = text_to_analyze;
         }
 
-        message.content = {...message.content, link: link, iFrame: iFrame, text: t}
+        message.content = {...message.content, link: link, iFrame: iFrame, text: t, twitter: twitter}
 
         return message;
 

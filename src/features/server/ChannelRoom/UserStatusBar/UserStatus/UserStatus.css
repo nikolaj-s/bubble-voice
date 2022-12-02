@@ -8,10 +8,6 @@
     z-index: 2;
 }
 
-.user-status-container:hover {
-    background-color: var(--primary-color);
-}
-
 .user-status-image-container {
     flex-shrink: 0;
     width: 40px;

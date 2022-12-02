@@ -10,10 +10,15 @@ import { Image } from '../../../Image/Image';
 import { MicMuted } from '../../../Icons/MicMuted/MicMuted';
 
 // state
-import { selectSecondaryColor, selectActivationColor, selectTextColor, selectAccentColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectSecondaryColor, selectActivationColor, selectTextColor, selectAccentColor, selectPrimaryColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./ChannelUserDisplay.css";
+
+// util
+import { USER_PREFS } from '../../../../util/LocalData';
+import { DisabledWebCamIcon } from '../../../Icons/DisabledWebCamIcon/DisabledWebCamIcon';
+import { DisabledStreamIcon } from '../../../Icons/DisabledStreamIcon/DisabledStreamIcon';
 
 export const ChannelUserDisplay = ({user, channel_id}) => {
 
@@ -21,12 +26,20 @@ export const ChannelUserDisplay = ({user, channel_id}) => {
 
     const activityColor = useSelector(selectActivationColor);
 
+    const primaryColor = useSelector(selectPrimaryColor);
+
     const textColor = useSelector(selectTextColor);
 
     const accentColor = useSelector(selectAccentColor);
 
+    const PREFS = USER_PREFS.get(user._id)
+
+    const hoverEffect = (e, bool) => {
+        document.getElementById(`${user._id}-channel-user-display-channel-id-${channel_id}`).style.backgroundColor = bool ? primaryColor : null;
+    }
+
     return (
-        <div id={`${user._id}-channel-user-display-channel-id-${channel_id}`} style={{zIndex: 1}} key={user.username} className='channel-user-placeholder'>
+        <div onMouseEnter={(e) => {hoverEffect(e, true)}} onMouseLeave={(e) => {hoverEffect(e, false)}} id={`${user._id}-channel-user-display-channel-id-${channel_id}`} style={{zIndex: 1}} key={user.username} className='channel-user-placeholder'>
             <div 
             style={{border: `solid 4px ${(user.active && user.microphone) ? activityColor : secondaryColor}`}}
             className='channel-user-placeholder-user-image'>
@@ -38,8 +51,8 @@ export const ChannelUserDisplay = ({user, channel_id}) => {
             className='user-status-wrapper'>
                 {user.microphone || user.microphone === undefined ? null : <MicMuted />}
                 {user.muted ? <Muted /> : null}
-                {user.webcam ? <WebCam /> : null}
-                {user.screenshare ? <ScreenShare /> : null}
+                {user.webcam ? PREFS?.disabled_web_cam ? <DisabledWebCamIcon color={textColor} /> : <WebCam /> : null}
+                {user.screenshare ? PREFS?.disable_stream ? <DisabledStreamIcon color={textColor} /> : <ScreenShare /> : null}
             </div>
         </div>
     )

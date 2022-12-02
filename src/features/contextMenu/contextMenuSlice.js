@@ -29,6 +29,8 @@ const contextMenuSlice = createSlice({
         _id: "",
         move: false,
         flipWebCam: false,
+        disableWebCam: false,
+        disableStream: false,
         // copy && paste
         copy: false,
         paste: false,
@@ -54,8 +56,8 @@ const contextMenuSlice = createSlice({
         },
         handleStreamState: (state, action) => {
             state.stream_volume = action.payload.stream_volume;
-            state.stop_streaming = action.payload.stop_streaming;
             state._id = action.payload.member_id;
+            state.disableStream = action.payload.stop_streaming;
         },
         clearCtxState: (state, action) => {
             state.saveImage = false;
@@ -86,6 +88,9 @@ const contextMenuSlice = createSlice({
             state.deleteMessage = false;
             state.selectedMessage = "";
             state.copy = false;
+            state.disableWebCam = false;
+            state.disableStream = false;
+            console.log('clearing state')
         },
         handleChannelCtxState: (state, action) => {
             state.joinChannel = action.payload.join;
@@ -105,6 +110,8 @@ const contextMenuSlice = createSlice({
             state._id = action.payload.member_id;
             state.move = action.payload.move;
             state.flipWebCam = true;
+            state.disableWebCam = true;
+            state.disableStream = true;
         },
         handleCopyPasteCtxState: (state, action) => {
             state.paste = true;
@@ -170,6 +177,10 @@ export const selectStopStreamingState = state => state.contextMenuSlice.stop_str
 export const selectStreamVolumeState = state => state.contextMenuSlice.stream_volume;
 
 export const selectCopyState = state => state.contextMenuSlice.copy;
+
+export const selectDisableWebCam = state => state.contextMenuSlice.disableWebCam;
+
+export const selectDisableStream = state => state.contextMenuSlice.disableStream;
 
 // actions
 export const { handleStreamState, handleCopyPasteCtxState, handleUserManagementCtx, handleChannelCtxState, clearCtxState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } = contextMenuSlice.actions;

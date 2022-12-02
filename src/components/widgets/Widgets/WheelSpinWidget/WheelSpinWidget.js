@@ -3,7 +3,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentChannelId, throwServerError } from '../../../../features/server/ServerSlice';
 import { selectDisplayName } from '../../../../features/settings/appSettings/accountSettings/accountSettingsSlice';
-import { selectAccentColor, selectPrimaryColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectPrimaryColor, selectSecondaryColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { useAnimation, motion } from 'framer-motion';
 
 // socket
@@ -20,6 +20,8 @@ export const WheelSpinWidget = ({widget, editing, initDeg = 0, onEnd = () => {},
     const accentColor = useSelector(selectAccentColor);
 
     const primaryColor = useSelector(selectPrimaryColor);
+
+    const secondaryColor = useSelector(selectSecondaryColor)
 
     const display_name = useSelector(selectDisplayName);
 
@@ -110,7 +112,7 @@ export const WheelSpinWidget = ({widget, editing, initDeg = 0, onEnd = () => {},
         <div 
         style={{
             border: `solid 4px ${accentColor}`,
-            backgroundColor: primaryColor
+            backgroundColor: secondaryColor
         }}
         className='wheel-widget-wrapper' >
             <div id="wheel">

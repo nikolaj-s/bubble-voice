@@ -47,7 +47,7 @@
 .image-social-post-preview {
     max-width: 300px;
     background-color: black;
-    z-index: 2;
+    z-index: 3;
     height: 300px;
     position: absolute;
     bottom: 80px;

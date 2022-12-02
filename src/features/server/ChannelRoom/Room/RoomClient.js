@@ -243,8 +243,6 @@ export class RoomClient {
 
                 let par;
 
-                console.log(consumer.rtpParameters.codecs[0].mimeType)
-                console.log(appData)
                 if (consumer.rtpParameters.codecs[0].mimeType === 'video/VP8' || appData.type === 'web cam') {
                     // handle displaying web cam feed
 
@@ -256,7 +254,7 @@ export class RoomClient {
 
                     console.log(user)
 
-                    el.className = `stream web-cam-stream ${user.username}-camera-stream`;
+                    el.className = `stream web-cam-stream ${user._id}-camera-stream`;
 
                     el.playsInline = false;
 
@@ -268,15 +266,23 @@ export class RoomClient {
 
                     el.muted = true;
 
+                    if (prefs?.disabled_web_cam) {
+
+                        el.style.opacity = 0;
+
+                        this.pauseConsumerById(consumer.id);
+                    }
+
                     document.getElementById(user._id).appendChild(el);
-    
-                    
                     
                 } else if (consumer.rtpParameters.codecs[0].mimeType === 'video/H264' || consumer.rtpParameters.codecs[0].mimeType === 'video/rtx' || appData.type === 'screen share') {
                     // display incoming screen stream
+
+                    const prefs = USER_PREFS.get(user._id);
+
                     stream.getVideoTracks()[0].contentHint = 'motion'
                     
-                    const exists = document.getElementsByClassName(`${user.username}-screen-share-stream`)[0]
+                    const exists = document.getElementsByClassName(`${user._id}-screen-share-stream`)[0]
 
                     if (exists) {
 
@@ -302,7 +308,7 @@ export class RoomClient {
 
                         el.autoplay = true;
 
-                        el.className = `streaming-video-player ${user._id} ${user.username}-screen-share-stream`
+                        el.className = `streaming-video-player ${user._id} ${user._id}-screen-share-stream`
 
                         el.playsInline = false;
 
@@ -311,6 +317,12 @@ export class RoomClient {
                         el.volume = 1;
 
                         par.appendChild(el);
+
+                        if (prefs?.disable_stream) {
+                            par.style.display = 'none';
+
+                            this.pauseConsumerById(consumer.id);
+                        }
 
                         document.getElementById(user._id).parentNode.appendChild(par)
 
@@ -659,7 +671,7 @@ export class RoomClient {
                 document.getElementById(this.user._id).appendChild(el);
             } else if (screen) {
 
-                const exists = document.getElementsByClassName(`${this.user.username}-streaming-player`)[0];
+                const exists = document.getElementsByClassName(`${this.user._id}-streaming-player`)[0];
 
                 if (exists) {
                     exists.parentNode.remove();
@@ -763,13 +775,13 @@ export class RoomClient {
     pauseConsumerById(id) {
         if (!this.consumers.has(id)) return;
 
-        this.consumers.get(id).pause();
+        this.socket.request('pauseConsumer', {consumerId: id});
     }
 
     resumeConsumerById(id) {
         if (!this.consumers.has(id)) return;
 
-        this.consumers.get(id).resume();
+        this.socket.request('resumeConsumer', {consumerId: id});
     }
 
     pauseProducerById(id) {

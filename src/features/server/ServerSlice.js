@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
+import { m } from "framer-motion";
 import { fetchMusicWidgetVolume, setMusicWidgetVolume } from "../../util/LocalData";
 import { UnpackMessage } from "../../util/UnpackMessage";
 import { addPinnedMessage, removePinnedMessage, setPinnedMessages } from "./ChannelRoom/ServerDashBoard/ServerDashBoardSlice";
@@ -191,6 +192,10 @@ const serverSlice = createSlice({
         // ping
         ping: 0,
         pinningMessage: false,
+        // hide notice
+        hideSetDefaultServer: false,
+        // popular searches
+        popular_searches: []
 
     },
     reducers: {
@@ -520,6 +525,24 @@ const serverSlice = createSlice({
             if (m_index === -1) return;
 
             state.channels[c_index].social[m_index].pinned = action.payload.pinned;
+        },
+        toggleMembersWebCamState: (state, action) => {
+            if (state.current_channel_id) {
+
+                const c_index = state.channels.findIndex(c => c._id === state.current_channel_id);
+
+                if (c_index === -1) return;
+
+                const m_index = state.channels[c_index].users.findIndex(m_index => m._id === action.payload.id);
+
+                if (m_index === -1) return;
+
+                state.channels[c_index].users[m_index].disabled_web_cam_state = action.payload.value;
+
+            }
+        },
+        toggleHideDefaultServerNotice: (state, action) => {
+            state.hideSetDefaultServer = action.payload;
         }
     },
     extraReducers: {
@@ -527,11 +550,15 @@ const serverSlice = createSlice({
             state.loading = true;
         },
         [fetchServerDetails.fulfilled]: (state, action) => {
+
             state.loading = false;
             state.serverName = action.payload.server_name;
             state.serverBanner = action.payload.server_banner;
             state.members = action.payload.members;
             state.serverGroups = action.payload.server_groups;
+
+            state.popular_searches = action.payload.recent_searches;
+
             const memberIndex = state.members.findIndex(member => member.username === action.payload.username);
 
             if (memberIndex !== -1) {
@@ -714,8 +741,12 @@ export const selectServerPing = state => state.serverSlice.ping;
 
 export const selectPinningMessage = state => state.serverSlice.pinningMessage;
 
+export const selectHideDefaultNotce = state => state.serverSlice.hideSetDefaultServer;
+
+export const selectPopularSearches = state => state.serverSlice.popular_searches;
+
 // actions
 
-export const {socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
+export const {toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
 
 export default serverSlice.reducer;

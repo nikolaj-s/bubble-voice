@@ -8,10 +8,6 @@
     position: relative;
 }
 
-.channel-user-placeholder:hover {
-    background-color: var(--primary-color);
-}
-
 .channel-user-placeholder h3 {
     font-size: .9rem;
     font-weight: 400;

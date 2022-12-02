@@ -12,6 +12,7 @@ import { ToggleButton } from '../../buttons/ToggleButton/ToggleButton';
 import { TextArea } from '../../inputs/TextArea/TextArea';
 import { Loading } from '../../LoadingComponents/Loading/Loading';
 import { Error } from '../../Error/Error';
+import { AltError } from '../../AltError/AltError'
 
 // state
 import { selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
@@ -43,6 +44,8 @@ export const ImplementWidgetMenu = ({active = false, type, name, close}) => {
     const [error, toggleError] = React.useState(false);
 
     const [errorMessage, setErrorMessage] = React.useState("");
+
+    const [videoAudio, toggleVideoAudio] = React.useState(false);
 
     const [option1, setOption1] = React.useState("");
 
@@ -147,7 +150,8 @@ export const ImplementWidgetMenu = ({active = false, type, name, close}) => {
             file: image,
             text: textValue,
             bool: boolState,
-            channel_id: editingChannelId
+            channel_id: editingChannelId,
+            videoAudio: videoAudio
         }
         
         await socket.request('add widget to channel', widgetObject)
@@ -206,6 +210,10 @@ export const ImplementWidgetMenu = ({active = false, type, name, close}) => {
 
     }
 
+    const handleToggleVideoAudio = () => {
+        toggleVideoAudio(!videoAudio);
+    }
+
     return (
         <>
         <AnimatePresence>
@@ -238,9 +246,13 @@ export const ImplementWidgetMenu = ({active = false, type, name, close}) => {
                     {type === "dynamicGallery" ? 
                     <ToggleButton state={boolState} action={handleToggleBoolState} />
                     : null}
-                    {type === 'video' ? <TextInput inputValue={textValue} action={handleTextValue} placeholder={"Video URL"} /> : null}
+                    
+                    {type === 'video' ? <TextInput marginBottom='2%' inputValue={textValue} action={handleTextValue} placeholder={"Video URL"} /> : null}
+                    {type === 'video' ? <AltError error={true} errorMessage={"The below options only work on video links that will play within the native video player."} /> : null}
                     {type === 'video' ? <InputTitle title={"Loop"} /> : null}
                     {type === 'video' ? <ToggleButton state={boolState} action={handleToggleBoolState} /> : null}
+                    {type === 'video' ? <InputTitle title={"Audio On By Default"} /> : null}
+                    {type === 'video' ? <ToggleButton state={videoAudio} action={handleToggleVideoAudio} /> : null}
                     {type === 'music' ? <MusicWidgetButton prev={true} /> : null}
                     {type === 'wheel-spin' ? 
                     Array.apply(null, Array(6)).map((i, key) => {

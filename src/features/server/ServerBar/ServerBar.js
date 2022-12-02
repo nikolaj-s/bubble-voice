@@ -215,15 +215,35 @@ const Bar = () => {
         })
 
         socket.on('music-widget/new-song', (data) => {
+
             dispatch(addSongToQueue(data.song));
+
+            if (window.location.hash.includes(data.channel_id)) {
+                
+                dispatch(addNewWidgetOverlayToQueue({action: 'song-status', message: `${data.user.display_name} added ${data.song.title}`, user: data.user}));
+            
+            }
         })
 
         socket.on('music-widget/skipped-song', (data) => {
+            
             dispatch(skipSong());
+        
+            if (window.location.hash.includes(data.channel_id)) {
+                
+                dispatch(addNewWidgetOverlayToQueue({action: 'song-status', message: `${data.user.display_name} skipped a song`, user: data.user}));
+            
+            }
         })
 
         socket.on('music-widget/toggle-playing', (data) => {
             dispatch(toggleMusicPlaying(data.playing))
+
+            if (window.location.hash.includes(data.channel_id)) {
+                
+                dispatch(addNewWidgetOverlayToQueue({action: 'song-status', message: `${data.user.display_name} ${data.playing ? 'resumed' : "paused"} the music widget`, user: data.user}));
+            
+            }
         })
 
         socket.on('poke', (data) => {

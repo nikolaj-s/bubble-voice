@@ -1,5 +1,5 @@
 // library's
-import { motion, useAnimation } from 'framer-motion';
+import { AnimatePresence, motion, useAnimation } from 'framer-motion';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useDropzone } from 'react-dropzone';
@@ -18,6 +18,7 @@ import { ImageDropListener } from './ImageDropListener/ImageDropListener';
 import { SearchImageButton } from './SearchImageButton/SearchImageButton';
 import { ImageSearchPanel } from './ImageSearchPanel/ImageSearchPanel';
 import { selectHideUserStatus } from '../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { selectServerId } from '../../../features/server/ServerSlice';
 
 export const MessageInput = ({send, text, keyCode, image, value, persist, updateInputHeight, socialRoute}) => {
 
@@ -38,6 +39,8 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
     const animation = useAnimation();
 
     const hideUserStatus = useSelector(selectHideUserStatus);
+
+    const serverId = useSelector(selectServerId);
 
     const incrementPrecentage = (value) => {
         setPercent(value)
@@ -126,8 +129,9 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
 
     return (
         <> 
+        <AnimatePresence exitBeforeEnter>
             {persist ? <ImageDropListener root={getRootProps({className: 'dropzone'})} /> : null}
-            <ImageSearchPanel selectImage={selectImage} searchingForImage={searchingForImage} />
+            <ImageSearchPanel key={"message-input-search-container"} serverId={serverId} selectImage={selectImage} searchingForImage={searchingForImage} />
             <motion.div 
             animate={animation}
             style={{
@@ -154,6 +158,7 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
                     <SendButton color={textColor} action={handleSend} />
                 </div>
             </motion.div>
+        </AnimatePresence>
         </>
     )
 }

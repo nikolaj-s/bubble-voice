@@ -6,10 +6,6 @@
     margin: 0.1rem .5rem;
 }
 
-.message-container:hover {
-    background-color: var(--primary-color);
-}
-
 .message-container p {
     width: auto;
     max-width: 800px;

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { useRoutes } from 'react-router'
 import { ServerSettingsRouteWrapper } from '../serverSettings/ServerSettingsRouteWrapper'
-import { closeServerErrorMessage, selectServerErrorMessage, selectServerErrorState } from '../ServerSlice'
+import { closeServerErrorMessage, selectHideDefaultNotce, selectServerErrorMessage, selectServerErrorState, selectServerId, selectServerName } from '../ServerSlice'
 import { CreateChannelMenu } from './CreateChannelMenu/CreateChannelMenu'
 import { Room } from './Room/Room'
 import { Error } from '../../../components/Error/Error';
@@ -11,6 +11,8 @@ import { AnimatePresence } from 'framer-motion'
 import { SocialRoute } from './SocialRoute/SocialRoute'
 import { ServerDashBoard } from './ServerDashBoard/ServerDashBoard'
 import { UserStatusBar } from './UserStatusBar/UserStatusBar'
+import { selectDefaultServer } from '../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice'
+import { SetAsDefaultServerNotice } from './SetAsDefaultServerNotice/SetAsDefaultServerNotice'
 
 export const RoomWrapper = () => {
 
@@ -19,6 +21,14 @@ export const RoomWrapper = () => {
     const error = useSelector(selectServerErrorState);
 
     const errorMessage = useSelector(selectServerErrorMessage);
+
+    const defaultServer = useSelector(selectDefaultServer);
+
+    const serverName = useSelector(selectServerName);
+
+    const serverId = useSelector(selectServerId);
+
+    const hideDefaultNotice = useSelector(selectHideDefaultNotce);
 
     const closeErrorMessage = () => {
         dispatch(closeServerErrorMessage());
@@ -35,6 +45,7 @@ export const RoomWrapper = () => {
             <UserStatusBar />
             {error ? <Error errorMessage={errorMessage} action={closeErrorMessage} /> : null}
         </AnimatePresence>
+        <SetAsDefaultServerNotice serverId={serverId} servername={serverName} visible={hideDefaultNotice ? !hideDefaultNotice : (defaultServer?.label === 'Default' && defaultServer?.id === "")} />
         </>
     )
 }

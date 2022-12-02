@@ -1,0 +1,21 @@
+
+.set-default-server-notice-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 400px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: var(--border-radius);
+    padding: 10px;
+    z-index: 4;
+}
+
+.set-default-server-notice-container p {
+    font-weight: 400;
+    letter-spacing: var(--font-spacing);
+    font-size: .9rem;
+}
+

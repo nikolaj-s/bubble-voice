@@ -11,8 +11,8 @@ import { Loading } from '../../components/LoadingComponents/Loading/Loading';
 import { CtxMenuTitle } from '../../components/titles/ctxMenuTitle/CtxMenuTitle';
 
 // state
-import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleStreamState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCopyState, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteMesssageState, selectDeleteWidget, selectEditChannelCtxState, selectFlipWebCamState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSelectedMessage, selectSelectedUserCtxState, selectStopStreamingState, selectStreamVolumeState, selectViewSocialState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
-import { assignNewServerGroup, deleteMessage, markWidgetForDeletion, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerMembers, selectUsersPermissions, setChannelSocialId, setEditingChannelId, throwServerError } from '../server/ServerSlice';
+import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleStreamState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCopyState, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteMesssageState, selectDeleteWidget, selectDisableStream, selectDisableWebCam, selectEditChannelCtxState, selectFlipWebCamState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSelectedMessage, selectSelectedUserCtxState, selectStopStreamingState, selectStreamVolumeState, selectViewSocialState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
+import { assignNewServerGroup, deleteMessage, markWidgetForDeletion, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerMembers, selectUsersPermissions, setChannelSocialId, setEditingChannelId, throwServerError, toggleMembersWebCamState } from '../server/ServerSlice';
 
 // style
 import "./ContextMenu.css";
@@ -29,6 +29,7 @@ import { miscSettingsChannelSpecificStateChange, selectHideUserStatus, selectMis
 import { MoveUser } from '../../components/buttons/MoveUser/MoveUser';
 import { selectPrimaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectSocialSoundEffect, updateSoundEffectsState } from '../settings/soundEffects/soundEffectsSlice';
+import { selectWebCamState } from '../controlBar/ControlBarSlice';
 
 export const ContextMenu = () => {
 
@@ -52,6 +53,10 @@ export const ContextMenu = () => {
     const [userVolumeLevel, setUserVolumeLevel] = React.useState(1);
 
     const [flippedWebCamState, setFlippedWebCamState] = React.useState(false);
+
+    const [disabledWebCamLocalState, toggleDisabledWebCamLocalState] = React.useState(false);
+
+    const [disableStreamLocalState, toggleDisableStreamLocalState] = React.useState(false);
 
     const primaryColor = useSelector(selectPrimaryColor)
 
@@ -123,6 +128,10 @@ export const ContextMenu = () => {
 
     const flipWebCamState = useSelector(selectFlipWebCamState);
 
+    const disableWebCameState = useSelector(selectDisableWebCam);
+
+    const disableStreamState = useSelector(selectDisableStream);
+
     // message
     const deleteMessageState = useSelector(selectDeleteMesssageState);
 
@@ -176,12 +185,16 @@ export const ContextMenu = () => {
                     if (id) {
                         if (id !== `${username}-streaming-player`) {
                             const L_stream_vol = USER_PREFS.get(id);
-                            console.log(L_stream_vol)
+                            
                             if (L_stream_vol) {
 
                                 setStreamAudioLevel(L_stream_vol?.stream_volume ? L_stream_vol.stream_volume : 1);
 
+                                toggleDisableStreamLocalState(L_stream_vol?.disable_stream)
+                            
                             } else {
+
+                                toggleDisableStreamLocalState(false);
 
                                 setStreamAudioLevel(1);
                             
@@ -190,7 +203,8 @@ export const ContextMenu = () => {
 
                         dispatch(handleStreamState({
                             stream_volume: id !== `${username}-streaming-player`,
-                            stop_streaming: id === `${username}-streaming-player`,
+                            disable_stream: id !== `${username}-streaming-player`,
+                            stop_streaming: id !== `${username}-streaming-player`,
                             member_id: id === `${username}-streaming-player` ? false : id
                         }))
                     }
@@ -297,18 +311,30 @@ export const ContextMenu = () => {
                         move: permissions.user_can_kick_user
                     }))
 
-                    const USER_VOLUME = USER_PREFS.get(id);
+                    const L_USER = USER_PREFS.get(id);
 
-                    if (USER_VOLUME?.volume) {
-                        setUserVolumeLevel(USER_VOLUME?.volume);
+                    if (L_USER?.volume) {
+                        setUserVolumeLevel(L_USER?.volume);
                     } else {
                         setUserVolumeLevel(1);
                     }
 
-                    if (USER_VOLUME?.flip_web_cam) {
-                        setFlippedWebCamState(USER_VOLUME.flip_web_cam);
+                    if (L_USER?.flip_web_cam) {
+                        setFlippedWebCamState(L_USER.flip_web_cam);
                     } else {
                         setFlippedWebCamState(false);
+                    }
+
+                    if (L_USER?.disabled_web_cam) {
+                        toggleDisabledWebCamLocalState(L_USER.disabled_web_cam);
+                    } else {
+                        toggleDisabledWebCamLocalState(false);
+                    }
+
+                    if (L_USER?.disable_stream) {
+                        toggleDisableStreamLocalState(L_USER.disable_stream);
+                    } else {
+                        toggleDisableStreamLocalState(false);
                     }
                 }
 
@@ -530,6 +556,101 @@ export const ContextMenu = () => {
         }
     }
 
+    const handleDisableWebCam = async () => {
+        try {
+
+            let obj;
+
+            const currentUserPrefs = USER_PREFS.get(memberId);
+
+            if (currentUserPrefs) {
+                obj = {...currentUserPrefs, disabled_web_cam: !disabledWebCamLocalState}
+            } else {
+                obj = {disabled_web_cam: !disabledWebCamLocalState}
+            }
+            
+            USER_PREFS.set(memberId, obj);
+
+            saveUserPrefs();
+
+            const web_cam_el = document.getElementsByClassName(`${memberId}-camera-stream`);
+
+            if (web_cam_el.length > 0) {
+                const consumer_id = web_cam_el[0].id;
+
+                if (!disabledWebCamLocalState === true) {
+
+                    web_cam_el[0].style.opacity = 0;
+
+                    await socket.request('pauseConsumer', {consumerId: consumer_id})
+                    .catch(error => {
+                        dispatch(throwServerError({errorMessage: error.errorMessage}));
+                    }) 
+                } else {
+
+                    web_cam_el[0].style.opacity = 1;
+
+                    await socket.request('resumeConsumer', {consumerId: consumer_id})
+                    .catch(error => {
+                        dispatch(throwServerError({errorMessage: error.errorMessage}));
+                    }) 
+                }
+            }
+
+            dispatch(toggleMembersWebCamState({id: memberId, value: !disabledWebCamLocalState}));
+
+        } catch (error) {
+            dispatch(throwServerError({errorMessage: error.message}))
+        }
+    }
+
+    const handleDisableStream = async () => {
+        try {
+
+            let obj;
+
+            const currentUserPrefs = USER_PREFS.get(memberId);
+
+            if (currentUserPrefs) {
+                obj = {...currentUserPrefs, disable_stream: !disableStreamLocalState}
+            } else {
+                obj = {disable_stream: !disableStreamLocalState}
+            }
+
+            USER_PREFS.set(memberId, obj);
+
+            saveUserPrefs();
+
+            const stream = document.getElementsByClassName(`${memberId}-screen-share-stream`);
+
+            if (stream.length > 0) {
+
+                const consumerId = stream[0].id;
+
+                if (!disableStreamLocalState === true) {
+                    await socket.request('pauseConsumer', {consumerId: consumerId})
+                    .catch(error => {
+                        dispatch(throwServerError({errorMessage: error.errorMessage}));
+                    })
+
+                    document.getElementById(`${consumerId}container`).style.display = 'none'
+
+                } else {
+                    await socket.request('resumeConsumer', {consumerId: consumerId})
+                    .catch(error => {
+                        dispatch(throwServerError({errorMessage: error.errorMessage}));
+                    })
+
+                    document.getElementById(`${consumerId}container`).style.display = 'flex'
+                }
+
+            }
+
+        } catch (error) {
+            dispatch(throwServerError({errorMessage: error.message}));
+        }
+    }
+
     const handlePokeUser = async () => {
         
         const selected_username = selectedUserToManage.split('-')[0];
@@ -656,7 +777,6 @@ export const ContextMenu = () => {
             {leaveChannelState ? <CtxButton action={handleLeaveChannel} name={'Leave Channel'} /> : null}
             {editChannelState ? <CtxButton action={handleEditChannel} name={"Edit Channel"} /> : null}
             {viewSocial ? <CtxButton action={viewSocialFeed} name={"Social"} /> : null}
-            {isOwnerCtxState ? <CtxMenuPlaceHolder name={"Server Owner"} /> : null}
             {assignPermissions ? <AssignPermissionGroupMenu action={assignNewPermissionGroup} permission_groups={permissionGroups} current_permission_group={selectedUserToManage.split('-channel')[0]}  /> : null}
             {audio ? 
             <>
@@ -670,7 +790,11 @@ export const ContextMenu = () => {
             <Range action={handleUserVolumeChange} step={0.005} value={userVolumeLevel} fill={true} /> 
             </>
             : null}
+            {changeStreamVolumeState ? <CtxMenuTitle title={"Change Stream Volume"} /> : null}
+            {changeStreamVolumeState ? <Range value={streamAudioLevel} action={handleStreamVolumeChange} fill={true} max={1} min={0} step={0.01} /> : null}
             {flipWebCamState ? <BoolButton name={"Flip Web Cam"} state={flippedWebCamState} action={handleFlipWebCamPref} /> : null}
+            {disableWebCameState ? <BoolButton name={"Disable Webcam"} state={disabledWebCamLocalState} action={handleDisableWebCam} /> : null}
+            {disableStreamState ? <BoolButton name={"Disable Stream"} state={disableStreamLocalState} action={handleDisableStream} /> : null}
             {deleteWidget ? <CtxButton action={handleDeleteWidget} name={"Delete Widget"} /> : null}
             {moveUserState ? <MoveUser move={handleMoveUser} /> : null}
             {kickUser ? <CtxButton name="Kick User" action={handleKickUser} /> : null}
@@ -682,8 +806,7 @@ export const ContextMenu = () => {
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("disableMessagePopUp")}} state={disableMessagePopup} name={"Disable Message Overlay"} /> : null}
             {channelSpecificSettingsState ? <BoolButton action={handleToggleSocialSoundEffect} state={socialSoundEffect} name="Enable Social Sound Effect" /> : null}
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideUserStatus")}} state={hideUserStatus} name={"Hide User Status"} /> : null}
-            {changeStreamVolumeState ? <CtxMenuTitle title={"Change Stream Volume"} /> : null}
-            {changeStreamVolumeState ? <Range value={streamAudioLevel} action={handleStreamVolumeChange} fill={true} max={1} min={0} step={0.01} /> : null}
+            
             {stopStreamingState ? <CtxButton action={handleStopStreaming} name={"Stop Streaming"} /> : null}
             {deleteMessageState ? <CtxButton action={handleDeleteMessage} name={"Delete Message"} /> : null}
             <Loading loading={loading} />
