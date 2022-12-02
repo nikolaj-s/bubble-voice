@@ -11,6 +11,7 @@ export const SendButton = ({action, color}) => {
         invert={true}
         borderRadius={10}
         description={"Send"}
+        zIndex={2}
         >
             <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clipPath="url(#clip0_3_198)">

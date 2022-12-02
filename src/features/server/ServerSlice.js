@@ -184,14 +184,17 @@ const serverSlice = createSlice({
         pushToTalkActive: false,
         //social
         selectedChannelSocial: "", 
+        searchedImages: [],
         // joining channel status
         joiningChannel: false,
         reconnecting: false,
         // ping
         ping: 0,
-        pinningMessage: false
+        pinningMessage: false,
+
     },
     reducers: {
+        
         deleteMessage: (state, action) => {
 
             if (!action.payload.message_id && !action.payload.channel_id) return;

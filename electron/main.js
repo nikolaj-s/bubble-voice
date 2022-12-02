@@ -1,5 +1,5 @@
 
-const { app, BrowserWindow, ipcMain, desktopCapturer, screen, shell, session } = require('electron')
+const { app, BrowserWindow, ipcMain, desktopCapturer, screen, shell, session, Tray, Menu, nativeImage } = require('electron')
 
 const { autoUpdater } = require('electron-updater')
 
@@ -9,29 +9,11 @@ const path = require('path');
 
 const http = require('http');
 
-let startUrl = process.env.ELECTRON_START_URL || 'http://localhost:8080/index.html'
+let startUrl = process.env.ELECTRON_START_URL || 'http://localhost:8382/index.html'
 
 let server;
 
-if (!process.env.ELECTRON_START_URL) {
-
-  server = http.createServer((req, res) => {
-
-    const filePath = path.join(__dirname, '..', req.url);
-
-    const file = fs.readFileSync(filePath);
-
-    res.end(file.toString());
-
-    if (req.url.includes('index.js')) server.close();
-
-  }).listen(8080);
-
-}
-
 let win;
-
-let transparent;
 
 let hardwareAccelToggled;
 
@@ -84,11 +66,30 @@ if (!lock) {
   app.on('second-instance', (event, commandLine, workingDirectory) => {
 
     if (win) {
+
       if (win.isMinimized()) win.restore();
+
+      win.show();
 
       win.focus();
     }
   })
+
+}
+
+if (!process.env.ELECTRON_START_URL && lock) {
+
+  server = http.createServer((req, res) => {
+
+    const filePath = path.join(__dirname, '..', req.url);
+
+    const file = fs.readFileSync(filePath);
+
+    res.end(file.toString());
+
+    if (req.url.includes('index.js')) server.close();
+
+  }).listen(8382);
 
 }
 
@@ -152,7 +153,10 @@ function createWindow () {
     win.minimize();
   })
 
-  
+  if (process.argv.includes('--hidden')) {
+    console.log(process.argv)
+    win.hide();
+  }
   
 }
 
@@ -309,10 +313,46 @@ ipcMain.on('download', (event, data) => {
   win.webContents.downloadURL(data.url);
 })
 
+let tray;
+
+app.setLoginItemSettings({
+  openAtLogin: true,
+  args: ['--hidden']
+})
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  
+  const icon = nativeImage.createFromPath(path.join(__dirname, '..', 'logo512.ico'))
+
+  tray = new Tray(icon);
+
+  const ctxMenu = Menu.buildFromTemplate([
+    {
+      label: "Show App", click: () => {
+        win.show();
+      }
+    },
+    {
+      label: "Hide App", click: () => {
+        win.hide();
+      }
+    },
+    {
+      label: 'Quit App', click: () => {
+        app.quit();
+      }
+    }
+  ])
+
+  tray.setTitle("Bubble");
+
+  tray.setContextMenu(ctxMenu);
+
+  createWindow();
+
+})
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits

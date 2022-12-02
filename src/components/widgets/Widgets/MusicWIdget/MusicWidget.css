@@ -1,7 +1,6 @@
 
 .music-widget-outer-container {
     width: calc(100% - 8px);
-    max-height: 600px;
     border-radius: var(--border-radius);
     display: flex;
     flex-direction: column;
@@ -19,6 +18,17 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
+}
+
+.music-queue-title-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+
+.music-queue-title-container h3 {
+    width: auto;
 }
 
 .music-widget-nav-container {
@@ -43,7 +53,6 @@
 .music-widget-controls-container h3 {
     font-weight: 400;
     letter-spacing: var(--font-spacing);
-    width: 100%;
     text-align: start;
 }
 

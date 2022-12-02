@@ -41,6 +41,8 @@ export const ImageSearchPanel = ({searchingForImage, selectImage}) => {
 
     const search = async () => {
 
+        if (query.length === 0) return;
+
         toggleLoading(true);
 
         const result = await ImageSearch(query);

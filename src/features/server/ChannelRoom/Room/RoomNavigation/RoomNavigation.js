@@ -144,7 +144,7 @@ export const RoomNavigation = ({page, action}) => {
                 onMouseDown={() => {handleAnimation(accentColor, widgetsButtonAnimation, 'widgets')}}
                 onMouseUp={() => {handleAnimation(secondaryColor, widgetsButtonAnimation, 'widgets')}}
                 animate={widgetsButtonAnimation} onClick={() => {handleAction('widgets')}} className='room-navigation-button'>
-                    {widgetDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Widgtes</p> : null}
+                    {widgetDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Widgets</p> : null}
                     <WidgetsIcon color={textColor} />
                 </motion.div>
                 </>

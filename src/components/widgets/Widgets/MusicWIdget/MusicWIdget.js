@@ -52,7 +52,7 @@ export const MusicWidget = ({editing = false}) => {
     const handleAddSongToQueue = async () => {
         if (query.length === 0 || editing === true) return;
 
-        if (queue.length > 4) return dispatch(throwMusicError({error: true, errorMessage: "Song Queue Limit Has Been Reached"}));
+        if (queue.length >= 10) return dispatch(throwMusicError({error: true, errorMessage: "Song Queue Limit Has Been Reached"}));
 
         toggleLoading(true);
 
@@ -128,7 +128,10 @@ export const MusicWidget = ({editing = false}) => {
                     <TextInput inputValue={query} action={handleInput} placeholder={"Add Song To Queue"} marginTop='0' />
                     <AddButton action={handleAddSongToQueue} margin={"0 0 0 2%"} height={"35px"} width={"35px"} />
                 </div> 
-                <h3 style={{color: textColor}}>Queue</h3>
+                <div className='music-queue-title-container'>
+                    <h3 style={{color: textColor}}>Queue</h3>
+                    <h3 style={{color: textColor}}>{queue.length} / 10</h3>
+                </div>   
                 <div className='music-queue-container'>
                     {queue.length === 0 || editing ?
                     <p 

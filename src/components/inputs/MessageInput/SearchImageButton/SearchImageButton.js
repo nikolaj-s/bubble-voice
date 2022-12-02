@@ -15,6 +15,7 @@ export const SearchImageButton = ({action, margin}) => {
         height={20}
         invert={true}
         borderRadius={10}
+        zIndex={2}
         margin={margin}
         >
             <svg width="42" height="40" viewBox="0 0 42 40" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -85,9 +85,9 @@ export const Music = () => {
     }
 
     const handleTogglePlaying = async () => {
-
+        
         if (loading) return;
-
+        console.log('toggle playuig')
         if (!currentlyPlaying && musicPlaying) return;
 
         toggleLoading(true);
@@ -97,8 +97,13 @@ export const Music = () => {
 
             dispatch(throwServerError({errorMessage: error}));;
 
+            return toggleLoading(false)
+            
+        }).then(() => {
+            
+            return toggleLoading(false)
         })
-
+        
         toggleLoading(false);
 
     }
@@ -147,19 +152,19 @@ export const Music = () => {
         {currentlyPlaying ?
         <>
         {volumeControls ?
-        <div onMouseLeave={() => {handleToggleVolumeControls(false)}} onMouseEnter={() => {handleToggleVolumeControls(true)}} style={{right: visible ? 360 : 55, backgroundColor: primaryColor}} className='music-overlay-volume-container'>
+        <div onMouseLeave={() => {handleToggleVolumeControls(false)}} onMouseEnter={() => {handleToggleVolumeControls(true)}} style={{right: visible ? 355 : 55, backgroundColor: primaryColor}} className='music-overlay-volume-container'>
             <Range action={handleVolumeChange} min={0} max={100} value={volume} step={0.01} />
         </div> : null}
         <div
         style={{
-            right: visible ? 5 : '-300px',
+            right: visible ? 0 : '-300px',
             backgroundColor: primaryColor
         }}
         className='music-player-overlay-wrapper'>
             <div 
             style={{}}
             className='music-player-overlay-controls'>
-                <MusicOverlayButton description={visible ? 'Hide' : 'Show'} action={toggleVisibility} width={25} height={25} />
+                <MusicOverlayButton playing={musicPlaying} description={visible ? 'Hide' : 'Show'} action={toggleVisibility} width={25} height={25} />
                 {!musicPlaying ? <PlayButton action={handleTogglePlaying} width={25} height={25}  /> : <PauseButton action={handleTogglePlaying} width={25} height={25} />}
                 <SkipButton action={handleSkip} width={25} height={25} />
                 <AudioToggleButton o_mouseEnter={() => {handleToggleVolumeControls(true)}} o_mouseLeave={() => {handleToggleVolumeControls(false)}} description={muted ? 'Un Mute' : 'Mute'} action={handleMute} state={!muted} />

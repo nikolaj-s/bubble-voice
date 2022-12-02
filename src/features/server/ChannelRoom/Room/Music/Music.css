@@ -1,12 +1,13 @@
 
 .music-player-overlay-wrapper {
-    position: fixed;
-    bottom: 5px;
+    position: absolute;
+    bottom: 50%;
+    transform: translateY(50%);
     right: 3px;
     z-index: 4;
     border-bottom-right-radius: 10px;
     border-top-left-radius: 10px;
-  
+    border-bottom-left-radius: 10px;
     display: flex;
     width: 365px;
     transition: 0.2s;
@@ -50,9 +51,9 @@
 }
 
 .music-overlay-volume-container {
-    position: fixed;
+    position: absolute;
     z-index: 5;
-    bottom: 15px;
+    bottom: calc(50% - 110px);
     padding-right: 10px;
     border-top-left-radius: var(--border-radius);
     border-bottom-left-radius: var(--border-radius);

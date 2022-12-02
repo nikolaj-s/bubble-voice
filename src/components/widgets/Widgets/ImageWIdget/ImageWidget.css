@@ -1,7 +1,7 @@
 
 .image-widget-container {
     width: 100%;
-    max-height: calc(100vh - 130px);
+    max-height: calc(70vh - 130px);
     margin: 1% 0;
     border-radius: var(--border-radius);
     overflow: hidden;

@@ -515,12 +515,12 @@ const Component = () => {
                     {page === "widgets" ? <Widgets /> : null}
                 </AnimatePresence>
                 <RoomActionOverlay page={page} />
-                
+                <Music />
             </div>
             <SubMenuButton description={"Room Quick Settings"} right_orientation_desc={true} target={'live-chat-wrapper'} borderRadius={10} zIndex={3} position={"absolute"} top={5} right={40} height={15} left={null} width={15} />
             <ChannelBackground channel_background={hideChannelBackgrounds ? null : channel.channel_background} blur={channel.background_blur} />
             <audio hidden={true} id={'microphone-input-source'} />
-            <Music />
+            
         </div>
     )
 }

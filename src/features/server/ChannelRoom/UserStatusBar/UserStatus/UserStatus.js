@@ -19,10 +19,12 @@ export const UserStatus = ({user}) => {
     const primaryColor = useSelector(selectPrimaryColor);
 
     const handleMouseEnter = (e) => {
+        
+        const target = e.target.localName !== 'div' || e.target.className === "" ? e.target.offsetParent.className === "" ? e.target.offsetParent.offsetParent : e.target.offsetParent : e.target;
+        
+        const scroll_top = target.parentElement.scrollTop;
 
-        const scroll_top = e.target.parentElement.scrollTop;
-
-        const l_top = e.target.offsetTop === 0 ? 70 : e.target.offsetTop + 25;
+        const l_top = target.offsetTop === 0 ? 70 : target.offsetTop + 25;
 
         setTop(l_top - scroll_top);
 
