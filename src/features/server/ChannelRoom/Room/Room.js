@@ -7,7 +7,7 @@ import * as mediasoupClient from 'mediasoup-client';
 
 // state
 import { selectCurrentChannel, selectCurrentChannelId, selectPushToTalkActive, selectServerId, toggleLoadingChannel, updateMemberStatus, selectServerMembers, throwServerError, updateJoiningChannelState, setChannelSocialId, selectReconnectingState, toggleReconnectingState, checkConnection, clearServerPing } from '../../ServerSlice';
-import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPushToTalkState, selectMirroredWebCamState, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
+import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPushToTalkState, selectMirroredWebCamState, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, selectVoiceActivationSensitivity } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
 import { selectDisplayName, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { playSoundEffect, selectMuteSoundEffectsWhileMutedState } from '../../../settings/soundEffects/soundEffectsSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
@@ -85,9 +85,13 @@ const Component = () => {
 
     const noiseSuppression = useSelector(selectNoiseSuppression);
 
+    const voiceActivationSensitivity = useSelector(selectVoiceActivationSensitivity);
+
     const reconnecting = useSelector(selectReconnectingState);
 
     const secondaryColor = useSelector(selectSecondaryColor);
+
+
 
     React.useEffect(() => {
         
@@ -405,7 +409,7 @@ const Component = () => {
 
                                 const avg = (arrSum / array.length) * 5;
                                 
-                                if (avg > 60) {
+                                if (avg >= voiceActivationSensitivity) {
                                     
                                     if (playing || microphoneState === false) return;
 
@@ -417,7 +421,7 @@ const Component = () => {
                                 
                                     socket.emit('user status', {username: user.username, action: {active: true, channel_specific: true}})
                                     
-                                } else if (avg < 60) {
+                                } else if (avg < voiceActivationSensitivity) {
 
                                     if (playing === false) return;
 

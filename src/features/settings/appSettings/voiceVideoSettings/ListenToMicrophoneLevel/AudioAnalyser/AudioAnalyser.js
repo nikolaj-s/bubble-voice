@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
 import { selectActivationColor, selectPrimaryColor } from '../../../appearanceSettings/appearanceSettingsSlice';
-import { selectAudioInput, selectEchoCancellatio, selectMicInputVolume, selectNoiseSuppression } from '../../voiceVideoSettingsSlice';
+import { selectAudioInput, selectEchoCancellatio, selectMicInputVolume, selectNoiseSuppression, selectVoiceActivationSensitivity, selectVoiceActivityState } from '../../voiceVideoSettingsSlice';
 
 export const AudioAnalyser = ({audio, throwError}) => {
 
@@ -16,6 +16,10 @@ export const AudioAnalyser = ({audio, throwError}) => {
     const noiseSuppression = useSelector(selectNoiseSuppression);
 
     const micInputVolume = useSelector(selectMicInputVolume);
+
+    const voiceActivationSensitivity = useSelector(selectVoiceActivationSensitivity);
+
+    const voiceActivity = useSelector(selectVoiceActivityState);
 
     React.useEffect(() => {
 
@@ -82,9 +86,9 @@ export const AudioAnalyser = ({audio, throwError}) => {
 
                 scriptProcessor.connect(audioCtx.destination)
                 
-                el.srcObject = source.mediaStream;
+               // el.srcObject = source.mediaStream;
 
-                document.getElementsByClassName('listen-to-audio-container')[0].appendChild(el);
+               // document.getElementsByClassName('listen-to-audio-container')[0].appendChild(el);
 
                 scriptProcessor.onaudioprocess = function() {
                     
@@ -108,6 +112,22 @@ export const AudioAnalyser = ({audio, throwError}) => {
 
                     for (const pid of pidsToColor) {
                         pid.style.backgroundColor = activationColor;
+                    }
+
+                    if (voiceActivity) {
+
+                        const calc_avg = (arrSum / array.length) * 5;
+                        
+                        if (calc_avg >= voiceActivationSensitivity) {
+                            
+                            console.log('activating')
+  
+                        } else if (calc_avg < voiceActivationSensitivity) {
+
+                            console.log('deactivating')
+                        }
+                        
+
                     }
 
                 }   
@@ -141,7 +161,7 @@ export const AudioAnalyser = ({audio, throwError}) => {
             
         }
     // eslint-disable-next-line
-    }, [echoCancellation, noiseSuppression, micInputVolume])
+    }, [echoCancellation, noiseSuppression, micInputVolume, voiceActivity])
 
 
 

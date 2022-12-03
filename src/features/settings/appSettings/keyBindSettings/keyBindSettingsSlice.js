@@ -9,6 +9,10 @@ const keyBindSettingsSlice = createSlice({
             key: "",
             keyCode: ""
         },
+        push_to_mute: {
+            key: "",
+            keyCode: ""
+        },
         mute_mic: {
             key: "",
             keyCode: ""
@@ -42,7 +46,8 @@ const keyBindSettingsSlice = createSlice({
                 mute_audio: state.mute_audio,
                 activate_camera: state.activate_camera,
                 disconnect: state.disconnect,
-                share_screen: state.share_screen
+                share_screen: state.share_screen,
+                push_to_mute: state.push_to_mute
             }
 
             setKeyBinds(keysToSave).then(() => {
@@ -72,6 +77,8 @@ export const selectActivateCameraKey = state => state.keyBindSettingsSlice.activ
 export const selectDisconnectKey = state => state.keyBindSettingsSlice.disconnect;
 
 export const selectShareScreenKey = state => state.keyBindSettingsSlice.share_screen;
+
+export const selectPushToMuteKey = state => state.keyBindSettingsSlice.push_to_mute;
 
 // actions
 

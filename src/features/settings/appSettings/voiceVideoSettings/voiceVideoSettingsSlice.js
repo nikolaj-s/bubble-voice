@@ -17,7 +17,9 @@ export const getMediaDevices = createAsyncThunk(
             
             const saved_data = await fetchSavedLocalData("VOICE/VIDEO", "SETTINGS")
 
-            return {device_list: device_list, saved_data: saved_data === null ? {} : saved_data}
+            const voice_activation_level = await fetchSavedLocalData("VOICEACTIV", "SENSITIVE")
+
+            return {device_list: device_list, saved_data: saved_data === null ? {} : saved_data, voice_activation_level: voice_activation_level.error ? null : voice_activation_level}
         })
         .catch((err) => {
             return rejectWithValue("Unable To Retrieve Devices");
@@ -52,9 +54,15 @@ const voiceVideoSettingsSlice = createSlice({
         mirroredWebCam: false,
         noiseSuppression: false,
         echoCancellation: false,
-        micInputVolume: 1
+        micInputVolume: 1,
+        voiceActivationSensitivity: 60
     },
     reducers: {
+        updateVoiceActivationSensitivity: (state, action) => {
+            state.voiceActivationSensitivity = action.payload;
+
+            saveLocalData("VOICEACTIV", "SENSITIVE", {value: action.payload});
+        },
         updateMicInputVolume: (state, action) => {
 
             state.micInputVolume = action.payload;
@@ -146,6 +154,12 @@ const voiceVideoSettingsSlice = createSlice({
                 state.micInputVolume = saved_data.micInputVolume;
             }
 
+            if (action.payload.voice_activation_level) {
+                
+                state.voiceActivationSensitivity = action.payload.voice_activation_level.value;
+
+            }
+
         },
         [getMediaDevices.rejected]: (state, action) => {
             state.audioinput = {
@@ -221,7 +235,9 @@ export const selectNoiseSuppression = state => state.voiceVideoSettingsSlice.noi
 
 export const selectMicInputVolume = state => state.voiceVideoSettingsSlice.micInputVolume;
 
-export const { toggleSelectedVoiceVideoState, updateSelectedDevice, toggleVoiceActivity, handleSaveVoiceVideoSettings, updateMicInputVolume } = voiceVideoSettingsSlice.actions;
+export const selectVoiceActivationSensitivity = state => state.voiceVideoSettingsSlice.voiceActivationSensitivity;
+
+export const {updateVoiceActivationSensitivity, toggleSelectedVoiceVideoState, updateSelectedDevice, toggleVoiceActivity, handleSaveVoiceVideoSettings, updateMicInputVolume } = voiceVideoSettingsSlice.actions;
 
 export default voiceVideoSettingsSlice.reducer;
 

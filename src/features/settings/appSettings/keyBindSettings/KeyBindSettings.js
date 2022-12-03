@@ -12,7 +12,7 @@ import { SettingsHeader } from '../../../../components/titles/SettingsHeader/Set
 
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { selectActivateCameraKey, selectDisconnectKey, selectMuteAudioKey, selectMuteMicKey, selectPushToTalkKey, selectShareScreenKey, updateKeyCodeState } from './keyBindSettingsSlice';
+import { selectActivateCameraKey, selectDisconnectKey, selectMuteAudioKey, selectMuteMicKey, selectPushToMuteKey, selectPushToTalkKey, selectShareScreenKey, updateKeyCodeState } from './keyBindSettingsSlice';
 
 // style
 import "./KeyBindSettings.css";
@@ -38,6 +38,8 @@ const Settings = () => {
 
     const shareScreenKey = useSelector(selectShareScreenKey);
 
+    const pushToMuteKey = useSelector(selectPushToMuteKey);
+
     React.useEffect(() => {
         dispatch(setHeaderTitle('Key Bind Settings'))
     // eslint-disable-next-line
@@ -60,7 +62,9 @@ const Settings = () => {
         if (event.keyCode === disconnectKey.keyCode && (event.keyCode !== "")) return;
 
         if (event.keyCode === shareScreenKey.keyCode && (event.keyCode !== "")) return;
-        console.log(event)
+        
+        if (event.keyCode === pushToMuteKey.keyCode && (event.keyCode !== "")) return;
+
         const obj = {...local, [state]: {key: event.nativeEvent.key, keyCode: event.keyCode}}
         
         setLocal(obj)
@@ -86,6 +90,11 @@ const Settings = () => {
             <div className='key-bind-input-wrapper'>
                 <TextInput keyCode={handleKeyCodeUpdate} stateSelector='push_to_talk' inputValue={local['push_to_talk'] ? local['push_to_talk'].key : pushToTalkkey.key} />
                 <ClearButton action={() => {handleKeyCodeUpdate({}, "push_to_talk", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} name={"Clear Bind"} />
+            </div>
+            <InputTitle title={"Push To Mute"} />
+            <div className='key-bind-input-wrapper'>
+                <TextInput keyCode={handleKeyCodeUpdate} stateSelector='push_to_mute' inputValue={local['push_to_mute'] ? local['push_to_mute'].key : pushToMuteKey.key} />
+                <ClearButton action={() => {handleKeyCodeUpdate({}, "push_to_mute", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} name={"Clear Bind"} />
             </div>
             <InputTitle title={"Mute Mic"} />
             <div className='key-bind-input-wrapper'>

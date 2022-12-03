@@ -10,7 +10,7 @@ import { addNewChannel, assignNewServerGroup, clearServerState, deleteChannel, d
 import { selectUsername } from '../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { getToken, url } from '../../../util/Validation';
 import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
-import { selectActivateCameraKey, selectDisconnectKey, selectMuteAudioKey, selectMuteMicKey, selectPushToTalkKey, selectShareScreenKey } from '../../settings/appSettings/keyBindSettings/keyBindSettingsSlice';
+import { selectActivateCameraKey, selectDisconnectKey, selectMuteAudioKey, selectMuteMicKey, selectPushToMuteKey, selectPushToTalkKey, selectShareScreenKey } from '../../settings/appSettings/keyBindSettings/keyBindSettingsSlice';
 import { selectAudioOutput } from '../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 import { addNewWidgetOverlayToQueue, clearWidgetOverLay } from '../ChannelRoom/Room/RoomActionOverlay/RoomActionOverlaySlice';
 import { pushSytemNotification } from '../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
@@ -33,6 +33,7 @@ import { UnpackMessage } from '../../../util/UnpackMessage';
 // style's
 import "./ServerBar.css"
 import { addPinnedMessage, removePinnedMessage } from '../ChannelRoom/ServerDashBoard/ServerDashBoardSlice';
+import { handleUpdateAvailable } from '../../../app/appSlice';
 
 export let socket = null;
 
@@ -74,6 +75,8 @@ const Bar = () => {
     const disconnectKey = useSelector(selectDisconnectKey);
 
     const shareScreenKey = useSelector(selectShareScreenKey);
+
+    const pushToMuteKey = useSelector(selectPushToMuteKey);
 
     const serverSettingsOpenState = useSelector(selectServerSettingsOpenState);
 
@@ -218,32 +221,23 @@ const Bar = () => {
 
             dispatch(addSongToQueue(data.song));
 
-            if (window.location.hash.includes(data.channel_id)) {
-                
-                dispatch(addNewWidgetOverlayToQueue({action: 'song-status', message: `${data.user.display_name} added ${data.song.title}`, user: data.user}));
+            dispatch(addNewWidgetOverlayToQueue({action: 'song-status', message: `${data.user.display_name} added ${data.song.title}`, user: data.user}));
             
-            }
         })
 
         socket.on('music-widget/skipped-song', (data) => {
             
             dispatch(skipSong());
         
-            if (window.location.hash.includes(data.channel_id)) {
-                
-                dispatch(addNewWidgetOverlayToQueue({action: 'song-status', message: `${data.user.display_name} skipped a song`, user: data.user}));
+            dispatch(addNewWidgetOverlayToQueue({action: 'song-status', message: `${data.user.display_name} skipped a song`, user: data.user}));
             
-            }
         })
 
         socket.on('music-widget/toggle-playing', (data) => {
             dispatch(toggleMusicPlaying(data.playing))
 
-            if (window.location.hash.includes(data.channel_id)) {
-                
-                dispatch(addNewWidgetOverlayToQueue({action: 'song-status', message: `${data.user.display_name} ${data.playing ? 'resumed' : "paused"} the music widget`, user: data.user}));
+            dispatch(addNewWidgetOverlayToQueue({action: 'song-status', message: `${data.user.display_name} ${data.playing ? 'resumed' : "paused"} the music widget`, user: data.user}));
             
-            }
         })
 
         socket.on('poke', (data) => {
@@ -438,10 +432,17 @@ const Bar = () => {
 
         const activate = (e) => {
             if (active === true) return;
+
             if (e.keyCode === pushToTalkKey.keyCode || e.key === pushToTalkKey.key || e.which === pushToTalkKey.keyCode) {
                 dispatch(toggleServerPushToTalkState(true))
                 active = true;
             }
+
+            if (e.key === pushToMuteKey.key) {
+                active = true;
+                document.getElementById('toggle-microphone-button').click();
+            }
+            
         }
 
         const deactivate = (e) => {
@@ -452,35 +453,40 @@ const Bar = () => {
                 active = false;
             }
 
+            if (e.key === pushToMuteKey.key) {
+                active = false;
+                document.getElementById('toggle-microphone-button').click();
+            }
+            
             pressed = false;
         }
 
         const press = (e) => {
             if (!current_channel_id) return;
-
-            if (e.keyCode === muteMicKey.keyCode || e.key === muteMicKey.key || e.which === muteMicKey.keyCode) {
+          
+            if (e.key === muteMicKey.key) {
                 if (pressed) return;
                 document.getElementById('toggle-microphone-button').click();
                 pressed = true;
             }
 
-            if (e.keyCode === muteAudioKey.keyCode || e.key === muteAudioKey.key || e.which === muteAudioKey.keyCode) {
+            if (e.key === muteAudioKey.key) {
                 if (pressed) return;
                 document.getElementById('mute-audio-toggle-button').click();
                 pressed = true;
             }
 
-            if (e.keyCode === webCamKey.keyCode || e.key === webCamKey.key || e.which === webCamKey.keyCode) {
+            if (e.key === webCamKey.key) {
                 if (pressed) return;
                 document.getElementById('web-cam-toggle-button').click();
             }
 
-            if (e.keyCode === disconnectKey.keyCode || e.key === disconnectKey.key || e.which === disconnectKey.keyCode) {
+            if (e.key === disconnectKey.key) {
                 if (pressed) return;
                 document.getElementById('disconnect-from-channel-button').click();
             }
 
-            if (e.keyCode === shareScreenKey.keyCode || e.key === shareScreenKey.key || e.which === shareScreenKey.keyCode) {
+            if (e.key === shareScreenKey.key) {
                 if (pressed) return;
 
                 if (!current_channel_id) return;
@@ -526,7 +532,7 @@ const Bar = () => {
         }
 
     // eslint-disable-next-line
-    }, [muteMicKey, muteAudioKey, webCamKey, disconnectKey, pushToTalkKey, current_channel_id])
+    }, [muteMicKey, muteAudioKey, webCamKey, disconnectKey, pushToTalkKey, pushToMuteKey, current_channel_id])
 
     // handle global keybinds for application
     React.useEffect(() => {
@@ -608,8 +614,6 @@ const Bar = () => {
             joiningServer();
         
         }
-
-        
         // clean up socket
         return () => {
             dispatch(leaveChannel({username: username}));

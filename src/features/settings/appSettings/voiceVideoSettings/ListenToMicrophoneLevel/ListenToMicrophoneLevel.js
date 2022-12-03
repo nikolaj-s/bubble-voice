@@ -4,7 +4,8 @@ import { AltError } from '../../../../../components/AltError/AltError';
 
 // components
 import {ApplyCancelButton} from '../../../../../components/buttons/ApplyCancelButton/ApplyCancelButton'
-import { selectPrimaryColor } from '../../appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, selectTextColor } from '../../appearanceSettings/appearanceSettingsSlice';
+import { selectVoiceActivationSensitivity, selectVoiceActivityState } from '../voiceVideoSettingsSlice';
 
 import { AudioAnalyser } from './AudioAnalyser/AudioAnalyser';
 
@@ -19,7 +20,15 @@ export const ListenToMicrophoneLevel = () => {
 
     const [errorMessage, setErrorMessage] = React.useState("");
 
+    const [pos, setPos] = React.useState(60)
+
     const primaryColor = useSelector(selectPrimaryColor);
+
+    const voiceActivationSensitivity = useSelector(selectVoiceActivationSensitivity);
+
+    const voiceActivity = useSelector(selectVoiceActivityState);
+
+    const textColor = useSelector(selectTextColor);
 
     const testAudio = () => {
         toggleOpen(true);
@@ -63,9 +72,10 @@ export const ListenToMicrophoneLevel = () => {
 
     return (
         <div className='listen-to-audio-container'>
+            {voiceActivity ? <div style={{backgroundColor: textColor, left: `${voiceActivationSensitivity * 2.5}px`}} className='voice-activation-position'></div> : null}
             { open === false ? null : <AudioAnalyser throwError={handleThrowError} /> }
             <div className='audio-level-bars-container'>
-                {[...Array(30).keys()].map(item => {
+                {[...Array(50).keys()].map(item => {
                     return (
                         <div 
                         style={{backgroundColor: primaryColor}}

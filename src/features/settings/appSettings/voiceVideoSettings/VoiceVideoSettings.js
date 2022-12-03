@@ -12,7 +12,7 @@ import { ListenToMicrophoneLevel } from './ListenToMicrophoneLevel/ListenToMicro
 import { ToggleButton } from '../../../../components/buttons/ToggleButton/ToggleButton';
 
 // state
-import { selectAudioInputList, selectAudioInput, updateSelectedDevice, selectAudioOutput, selectAudioOutputList, selectVideoInput, selectVideoInputList, selectPushToTalkState, selectVoiceActivityState, toggleVoiceActivity, toggleSelectedVoiceVideoState, selectMirroredWebCamState, handleSaveVoiceVideoSettings, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, updateMicInputVolume, getMediaDevices } from './voiceVideoSettingsSlice';
+import { selectAudioInputList, selectAudioInput, updateSelectedDevice, selectAudioOutput, selectAudioOutputList, selectVideoInput, selectVideoInputList, selectPushToTalkState, selectVoiceActivityState, toggleVoiceActivity, toggleSelectedVoiceVideoState, selectMirroredWebCamState, handleSaveVoiceVideoSettings, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, updateMicInputVolume, getMediaDevices, selectVoiceActivationSensitivity, updateVoiceActivationSensitivity } from './voiceVideoSettingsSlice';
 import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/SettingsSpacer';
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 import { Range } from '../../../../components/inputs/Range/Range';
@@ -62,6 +62,8 @@ const Settings = () => {
     const micInputVolume = useSelector(selectMicInputVolume);
 
     const microphoneState = useSelector(selectMicrophoneState);
+
+    const voiceActivationSensitivity = useSelector(selectVoiceActivationSensitivity);
 
     React.useEffect(() => {
 
@@ -128,6 +130,10 @@ const Settings = () => {
         dispatch(getMediaDevices());
     }
 
+    const handleVoiceActivationSensitivity = (value) => {
+        dispatch(updateVoiceActivationSensitivity(value))
+    }
+
     return (
         <div className='settings-wrapper'>
             <SettingsHeader title={"Devices"} />
@@ -142,7 +148,8 @@ const Settings = () => {
             <SettingsHeader title={"Audio Settings"} />
             <InputTitle title={"Test Mic Input"} />
             <ListenToMicrophoneLevel />
-            
+            <InputTitle title={"Voice Activation Sensitivity"} />
+            <Range step={1} action={handleVoiceActivationSensitivity} min={5} max={200} value={voiceActivationSensitivity} />
             <InputTitle title={"Input Volume"} />
             <Range save={saveMicInputVolume} value={localMicInputVolume} action={handleMicInputVolume} min={1} max={8} step={0.001} /> 
             <AltError error={true} marginTop={"4%"} errorMessage="Having Noise Suppresion on and increasing microphone volume will cause microphone quality issues." />

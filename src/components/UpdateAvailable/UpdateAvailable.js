@@ -49,13 +49,10 @@ export const UpdateAvailable = () => {
 
         if (el && updateAvailable) el.style.display = 'none';
 
-        if (releaseNotes.length === 0) {
+        if (updateAvailable) {
 
             dispatch(fetchReleaseNotes());
-
-        }
-
-        if (updateAvailable) {
+            
             try {
                 document.getElementById('disconnect-from-server-button').click();
             } catch (e) {

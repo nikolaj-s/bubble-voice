@@ -5,7 +5,7 @@
     align-items: center;
     position: relative;
     min-height: 60px;
-    z-index: 2;
+    z-index: 3;
 }
 
 .user-status-image-container {
