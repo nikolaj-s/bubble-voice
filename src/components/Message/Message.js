@@ -71,7 +71,7 @@ export const Message = ({ message, overlay = false, id, channel_id, perm, pinMes
                 backgroundColor: 'black',
                 height: 500
             }}
-            className='message-video-container'>
+            className='message-outer-video-container'>
                 <Video id={message.local_id} video={message.video} />
             </div>
             : null}

@@ -12,7 +12,7 @@ import { PlayButton } from '../buttons/PlayButton/PlayButton';
 // style's
 import "./Video.css";
 
-export const Video = ({ video, id, looping = false, objectFit = 'contain', height = "100%", mutedToggled}) => {
+export const Video = ({ video, id, looping = false, objectFit = 'contain', height = "100%", mutedToggled, marginLeft}) => {
 
     const [muted, toggleMuted] = React.useState(true);
     
@@ -57,7 +57,8 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
         <div 
         style={{
             height: height,
-            objectFit: objectFit
+            objectFit: objectFit,
+            marginLeft: marginLeft
         }}
         onClick={handlePlayState}
         className='message-video-container'>
