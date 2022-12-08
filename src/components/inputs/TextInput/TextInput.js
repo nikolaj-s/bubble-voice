@@ -5,7 +5,7 @@ import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../..
 
 import "./TextInput.css";
 
-export const TextInput = ({action = () => {}, placeholder, inputValue, keyCode = false, type = 'text', stateSelector = "", marginBottom = '0', marginTop = '0'}) => {
+export const TextInput = ({action = () => {}, placeholder, inputValue, keyCode = false, type = 'text', stateSelector = "", marginBottom = '0', marginTop = '0', id}) => {
 
     const color = useSelector(selectPrimaryColor);
 
@@ -69,7 +69,7 @@ export const TextInput = ({action = () => {}, placeholder, inputValue, keyCode =
             marginTop: marginTop
         }} 
         className='text-input-container'>
-            <input onMouseUpCapture={handleMouseButton} className='text-input' style={{color: focusColor}} onKeyUp={returnKeyCode} onChange={returnInputValue} type={type} placeholder={placeholder} value={inputValue} />
+            <input id={id} onMouseUpCapture={handleMouseButton} className='text-input' style={{color: focusColor}} onKeyUp={returnKeyCode} onChange={returnInputValue} type={type} placeholder={placeholder} value={inputValue} />
         </motion.div>
     )
 }

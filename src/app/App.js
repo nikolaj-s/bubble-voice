@@ -72,6 +72,8 @@ function App() {
       
       if (!binds) return;
 
+      console.log(binds)
+
       initKeyBinds(binds)
 
       dispatch(setSavedKeyCodes(binds))

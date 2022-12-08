@@ -41,6 +41,7 @@
     align-items: center;
     margin-bottom: 8px;
     overflow-y: auto;
+    scroll-behavior: smooth;
     overflow-x: hidden;
 }
 

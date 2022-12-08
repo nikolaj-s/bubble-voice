@@ -1,7 +1,7 @@
 
 .video-widget-container {
     width: 100%;
-    max-height: calc(60vh - 130px);
+    max-height: 700px;
     height: auto;
     background-color: black;
     margin: 1% 0;

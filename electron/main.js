@@ -196,7 +196,7 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
 
     ioHook.on('keydown', (key) => {
 
-      if (key.rawcode !== keyCodes.push_to_talk?.keyCode) return;
+      if (key.rawcode !== keyCodes.push_to_talk?.keyCode && key.rawcode !== keyCodes?.push_to_mute?.keyCode) return;
 
       if (pushToTalkActive) return;
       // push to talk
@@ -207,18 +207,30 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
 
       }
 
+      if (key.rawcode === keyCodes.push_to_mute?.keyCode) {
+
+        event.sender.send('push to mute', {active: true})
+
+      }
+
       pushToTalkActive = true;
     })
 
     ioHook.on('keyup', (key) => {
-
-      if (key.rawcode !== keyCodes.push_to_talk?.keyCode) return;
+      
+      if (key.rawcode !== keyCodes.push_to_talk?.keyCode && key.rawcode !== keyCodes?.push_to_mute?.keyCode) return;
 
       if (!pushToTalkActive) return;
-
+      
       // push to talk
       if (key.rawcode === keyCodes.push_to_talk?.keyCode) {
         event.sender.send('push to talk', {active: false})
+      }
+
+      if (key.rawcode === keyCodes.push_to_mute?.keyCode) {
+
+        event.sender.send('push to mute', {active: false})
+
       }
 
       pushToTalkActive = false;
@@ -251,7 +263,7 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
 
     ioHook.on('mousedown', (key) => {
 
-      if (key.button !== keyCodes.push_to_talk?.keyCode) return;
+      if (key.button !== keyCodes.push_to_talk?.keyCode && key.button !== keyCodes?.push_to_mute?.keyCode) return;
       
       if (pushToTalkActive) return;
 
@@ -262,18 +274,30 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
 
       }
 
+      if (key.button === keyCodes.push_to_mute?.keyCode) {
+
+        event.sender.send('push to mute', {active: false})
+
+      }
+
       pushToTalkActive = true;
     })
 
     ioHook.on('mouseup', (key) => {
 
-      if (key.button !== keyCodes.push_to_talk?.keyCode) return;
+      if (key.button !== keyCodes.push_to_talk?.keyCode && key.button !== keyCodes?.push_to_mute?.keyCode) return;
 
       if (!pushToTalkActive) return;
       // push to talk
       
       if (key.button === keyCodes.push_to_talk?.keyCode) {
         event.sender.send('push to talk', {active: false})
+      }
+
+      if (key.button === keyCodes.push_to_mute?.keyCode) {
+
+        event.sender.send('push to mute', {active: false})
+
       }
 
       pushToTalkActive = false;

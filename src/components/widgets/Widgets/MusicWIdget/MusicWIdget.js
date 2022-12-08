@@ -110,7 +110,7 @@ export const MusicWidget = ({editing = false}) => {
         dispatch(updateMusicVolume(value))
     
     }
-
+    console.log(queue)
     return (
         <div 
         style={{
@@ -142,7 +142,7 @@ export const MusicWidget = ({editing = false}) => {
                     : queue.map((song, i) => {
                         return (
                             i === 0 ? null :
-                            <Song name={song.title} image={song.thumbnail} />
+                            <Song name={song.title} duration={song.duration} image={song.thumbnail} />
                         )
                     })}
                 </div>
@@ -159,7 +159,7 @@ export const MusicWidget = ({editing = false}) => {
                         <Range min={0} value={volume} action={handleMusicVolume} max={100} step={0.05} />
                     </div>
                     {queue[0]?.title && editing === false ? 
-                    <Song name={queue[0].title} image={queue[0].thumbnail} />
+                    <Song name={queue[0].title} duration={queue[0].duration} image={queue[0].thumbnail} />
                     :
                     <h3
                     style={{

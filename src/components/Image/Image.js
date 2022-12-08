@@ -24,6 +24,10 @@ export const Image = ({image, objectFit = 'cover', position = 'relative', zIndex
         })
     }
 
+    const handleError = (e) => {
+        e.target.src = "https://res.cloudinary.com/drlkgoter/image/upload/v1668805881/logo_y9odas.png"
+    }
+
     return (
         <div style={{zIndex: zIndex, position: position, objectFit: objectFit, width: width, height: '100%', opacity: opacity}}>
             {loading && image !== "" && image !== undefined ?
@@ -43,7 +47,7 @@ export const Image = ({image, objectFit = 'cover', position = 'relative', zIndex
             ></motion.div>         
             : null}
             <motion.img 
-            onError={handleImageLoad} loading={loadingState} draggable={false} style={{maxHeight: '100%',width: width, maxWidth: altWidth, height: imgHeight, objectFit: objectFit, cursor: cursor}} initial={{opacity: 0}} animate={imageAnimation} onLoad={handleImageLoad} src={image} alt="Error Loading" />
+            onError={handleError} loading={loadingState} draggable={false} style={{maxHeight: '100%',width: width, maxWidth: altWidth, height: imgHeight, objectFit: objectFit, cursor: cursor}} initial={{opacity: 0}} animate={imageAnimation} onLoad={handleImageLoad} src={image} />
         </div>
     )
 }

@@ -8,7 +8,7 @@ import { motion, useAnimation } from 'framer-motion';
 import { ChannelTitle } from './ChannelTitle/ChannelTitle'
 
 // state
-import { joinChannel, leaveChannel, selectCurrentChannelId, selectJoiningChannelState, selectServerChannels, selectServerMembers } from '../../ServerSlice';
+import { joinChannel, leaveChannel, selectCreateChannelMenuState, selectCurrentChannelId, selectJoiningChannelState, selectServerChannels, selectServerMembers, toggleCreateChannelMenu } from '../../ServerSlice';
 import { ChannelButton } from '../../../../components/buttons/ChannelButton/ChannelButton';
 import { selectDisplayName, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 
@@ -45,14 +45,11 @@ export const ChannelList = () => {
 
     const mirroredWebCam = useSelector(selectMirroredWebCamState);
 
-    const openCreateChannelMenu = () => {
-        const location = window.location.hash.split('#')[1];
+    const createChannelMenuOpen = useSelector(selectCreateChannelMenuState);
 
-        if (location.search('/create-channel-menu') === -1) {
-            navigate(location + "/create-channel-menu")
-        } else {
-            navigate(location.split('/create-channel-menu')[0])
-        }
+    const openCreateChannelMenu = () => {
+        
+        dispatch(toggleCreateChannelMenu(!createChannelMenuOpen))
 
     }
 

@@ -72,9 +72,13 @@ const UserStatusSlice = createSlice({
 
             for (const u of users) {
                 if (u.status && u.status !== 'offline') {
+
                     state.onlineUsers.push(u)
+
                 } else {
+
                     state.offlineUsers.push(u)
+                
                 }
             }
         },

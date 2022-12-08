@@ -13,7 +13,7 @@ import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
 import { selectActivateCameraKey, selectDisconnectKey, selectMuteAudioKey, selectMuteMicKey, selectPushToMuteKey, selectPushToTalkKey, selectShareScreenKey } from '../../settings/appSettings/keyBindSettings/keyBindSettingsSlice';
 import { selectAudioOutput } from '../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 import { addNewWidgetOverlayToQueue, clearWidgetOverLay } from '../ChannelRoom/Room/RoomActionOverlay/RoomActionOverlaySlice';
-import { pushSytemNotification } from '../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { pushPokeNotification, pushSytemNotification } from '../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { addSongToQueue, skipSong, toggleMusicPlaying } from '../ChannelRoom/Room/Music/MusicSlice';
 import { selectCurrentScreen, setCurrentScreen, toggleControlState } from '../../controlBar/ControlBarSlice';
 
@@ -165,8 +165,8 @@ const Bar = () => {
             dispatch(updateMemberStatus(data))
         })
         socket.on('new message', (data) => {
-
-            const message = UnpackMessage(data);
+            
+            const message = UnpackMessage(data, false);
             
             dispatch(newMessage(message));
 
@@ -242,6 +242,8 @@ const Bar = () => {
 
         socket.on('poke', (data) => {
             dispatch(playSoundEffect("youHaveBeenPoked"))
+
+            dispatch(pushPokeNotification(data.message))
         })
 
         socket.on('kick', (data) => {
@@ -438,7 +440,7 @@ const Bar = () => {
                 active = true;
             }
 
-            if (e.key === pushToMuteKey.key) {
+            if (e.key === pushToMuteKey.key || e.keyCode === pushToMuteKey.keyCode || e.which === pushToMuteKey.keyCode) {
                 active = true;
                 document.getElementById('toggle-microphone-button').click();
             }
@@ -453,7 +455,7 @@ const Bar = () => {
                 active = false;
             }
 
-            if (e.key === pushToMuteKey.key) {
+            if (e.key === pushToMuteKey.key || e.keyCode === pushToMuteKey.keyCode || e.which === pushToMuteKey.keyCode) {
                 active = false;
                 document.getElementById('toggle-microphone-button').click();
             }
@@ -544,6 +546,11 @@ const Bar = () => {
 
             ipcRenderer = window.require('electron').ipcRenderer;
             
+            ipcRenderer.on('push to mute', () => {
+                if (document.hasFocus()) return;
+                document.getElementById('toggle-microphone-button').click();
+            })
+
             ipcRenderer.on('push to talk', (event, data) => {
                dispatch(toggleServerPushToTalkState(data.active))
             })

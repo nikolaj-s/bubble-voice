@@ -46,8 +46,6 @@ const Settings = () => {
     }, [])
 
     const handleKeyCodeUpdate = (keyCode, state, event) => {
-
-        
         
         if (event.key.includes('F')) return;
 

@@ -1,7 +1,7 @@
 
 import React from 'react'
 
-export const Iframe = ({link}) => {
+export const Iframe = ({link, marginLeft}) => {
 
     const onLoad = (e) => {
         console.log(e)
@@ -10,7 +10,7 @@ export const Iframe = ({link}) => {
     return (
         <>
         {link ?
-            <div style={{maxWidth: 800}}>
+            <div style={{maxWidth: 800, marginLeft: marginLeft}}>
                 <iframe 
                 onLoad={onLoad}
                 style={{

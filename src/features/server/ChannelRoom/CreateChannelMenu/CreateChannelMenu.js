@@ -1,12 +1,12 @@
 // library's
 import React from 'react';
 import { useNavigate, useRoutes } from 'react-router';
-import { motion, useAnimation} from 'framer-motion';
+import { AnimatePresence, motion, useAnimation} from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 
 // state
-import { createChannel } from '../../ServerSlice';
-import { selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { createChannel, selectCreateChannelMenuState, toggleCreateChannelMenu } from '../../ServerSlice';
+import { selectPrimaryColor, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // components
 import { InputTitle } from '../../../../components/titles/inputTitle/InputTitle';
@@ -16,10 +16,11 @@ import { ToggleButton } from '../../../../components/buttons/ToggleButton/Toggle
 
 // style
 import "./CreateChannelMenu.css";
+import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 
 
 
-export const Menu = () => {
+export const CreateChannelMenu = () => {
 
     const [channelName, setChannelName] = React.useState("")
 
@@ -29,9 +30,11 @@ export const Menu = () => {
 
     const animation = useAnimation();
 
-    const navigate = useNavigate();
+    const primaryColor = useSelector(selectPrimaryColor);
 
     const secondaryColor = useSelector(selectSecondaryColor);
+
+    const open = useSelector(selectCreateChannelMenuState);
 
     React.useEffect(() => {
         animation.start({
@@ -51,7 +54,7 @@ export const Menu = () => {
     }
 
     const handleCancel = () => {
-        navigate(window.location.hash.split('/create-channel-menu')[0].split('#')[1])
+        dispatch(toggleCreateChannelMenu(false));
     }
 
     const create = () => {
@@ -59,25 +62,32 @@ export const Menu = () => {
     }
 
     return (
-        <motion.div 
-        style={{
-            backgroundColor: secondaryColor
-        }}
-        animate={animation} initial={{left: '100%'}} className='create-channel-menu-container'>
-            <div className='create-channel-inner-menu-container'>
-                <InputTitle title={"Channel Name"} />
-                <TextInput inputValue={channelName} action={handleChannelNameInput} placeholder={"Name"} />
-                <InputTitle title={"Persist Channel's Text Messages"} />
-                <ToggleButton state={persist} action={handleTogglePersist} />
-                <ApplyCancelButton apply={create} cancel={handleCancel} name='Create' />
-            </div>
-        </motion.div>
+        <AnimatePresence>
+            {open ? 
+            <motion.div 
+            initial={{opacity: 0}}
+            animate={{opacity: 1}}
+            exit={{opacity: 0}}
+            key="create-channel-menu"
+            style={{
+                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0.8)`
+            }}
+             className='create-channel-menu-container'>
+                <motion.div 
+                initial={{scale: 0}}
+                animate={{scale: 1}}
+                exit={{scale: 0}}
+                style={{backgroundColor: secondaryColor}} className='create-channel-inner-menu-container'>
+                    <SettingsHeader title={"Create Channel"} />
+                    <InputTitle title={"Channel Name"} />
+                    <TextInput inputValue={channelName} action={handleChannelNameInput} placeholder={"Name"} />
+                    <InputTitle title={"Persist Channel's Text Messages"} />
+                    <ToggleButton state={persist} action={handleTogglePersist} />
+                    <ApplyCancelButton apply={create} cancel={handleCancel} name='Create' />
+                </motion.div>
+            </motion.div> : null}
+        </AnimatePresence>
+        
     )
 }
-
-
-export const CreateChannelMenu = () => useRoutes([
-    { path: "/create-channel-menu", element: <Menu />},
-    { path: "/channel/:id/create-channel-menu", element: <Menu />}
-])
 

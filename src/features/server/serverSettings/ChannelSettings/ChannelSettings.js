@@ -12,7 +12,7 @@ import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/Se
 
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { reOrderChannels, selectServerChannels, selectUsersPermissions, setEditingChannelId, throwServerError } from '../../ServerSlice';
+import { reOrderChannels, selectServerChannels, selectUsersPermissions, setEditingChannelId, throwServerError, toggleCreateChannelMenu } from '../../ServerSlice';
 import { MoveButton } from '../../../../components/buttons/MoveButton/MoveButton';
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 import { ApplyCancelButton } from '../../../../components/buttons/ApplyCancelButton/ApplyCancelButton';
@@ -56,13 +56,9 @@ const Wrapper = () => {
     }
 
     const openCreateChannelMenu = () => {
-        const location = window.location.hash;
+        
+        dispatch(toggleCreateChannelMenu(true))
 
-        if (location.includes('/create-channel-menu')) {
-            window.location.hash = location.split('/server-settings')[0]
-        } else {
-            window.location.hash = location.split('/server-settings')[0] + '/create-channel-menu'
-        }
     }
 
     const reorderChannels = (value) => {

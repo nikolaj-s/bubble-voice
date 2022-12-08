@@ -14,6 +14,9 @@ import { AudioToggleButton } from '../../../../../components/buttons/mediaButton
 
 import { socket } from '../../../ServerBar/ServerBar';
 import { Range } from '../../../../../components/inputs/Range/Range';
+import { AddButton } from '../../../../../components/buttons/AddButton/AddButton';
+import { TextInput } from '../../../../../components/inputs/TextInput/TextInput';
+import { Loading } from '../../../../../components/LoadingComponents/Loading/Loading';
 
 export const Music = () => {
 
@@ -32,6 +35,10 @@ export const Music = () => {
     const [muted, toggleMuted] = React.useState(false);
 
     const [volumeControls, toggleVolumeControls] = React.useState(false);
+
+    const [searchInput, setSearchInput] = React.useState("");
+
+    const [showSearchInput, toggleShowSearchInput] = React.useState("");
 
     const musicQueue = useSelector(selectMusicQueue);
 
@@ -147,17 +154,74 @@ export const Music = () => {
         dispatch(updateMusicVolume(value));
     }
 
+    const handleShowSearch = (bool) => {
+
+        toggleShowSearchInput(bool);
+
+        setTimeout(() => {
+            if (bool) document.getElementById('music-overlay-input').focus();
+        }, 100)
+        
+    }
+
+    const handleSearchInput = (value) => {
+
+        if (value.length > 216) return;
+
+        setSearchInput(value);
+    }
+
+    const handleAddSongToQueue = async () => {
+        if (searchInput.length === 0) return;
+
+        if (musicQueue.length >= 10) return;
+
+        if (loading) return;
+
+        toggleLoading(true);
+
+        await socket.request('add song to queue', {query: searchInput})
+        .then(response => {
+
+            setSearchInput("")
+        
+        })
+        .catch(error => {
+            console.log(error);
+            dispatch(throwServerError({error: true, errorMessage: error}))
+        })
+
+
+        toggleLoading(false);
+    }
+
+    const handleEnter = (value) => {
+        if (loading) return;
+
+        if (value === 13) return handleAddSongToQueue();
+    }
+
     return (
         <>
         {currentlyPlaying ?
         <>
         {volumeControls ?
-        <div onMouseLeave={() => {handleToggleVolumeControls(false)}} onMouseEnter={() => {handleToggleVolumeControls(true)}} style={{right: visible ? 355 : 55, backgroundColor: primaryColor}} className='music-overlay-volume-container'>
-            <Range action={handleVolumeChange} min={0} max={100} value={volume} step={0.01} />
-        </div> : null}
+        <div style={{right: visible ? 238 : 35}} onMouseLeave={() => {handleToggleVolumeControls(false)}} onMouseEnter={() => {handleToggleVolumeControls(true)}} className='music-overlay-volume-container' >
+            <div style={{backgroundColor: primaryColor}} >
+                <Range action={handleVolumeChange} min={0} max={100} value={volume} step={0.01} />
+            </div> 
+        </div>
+        : null}
+        {showSearchInput ?
+        <div 
+        style={{right: visible ? 120 : 45}}
+        onMouseLeave={() => {handleShowSearch(false)}} onMouseEnter={() => {handleShowSearch(true)}} className='music-overlay-search-container'>
+            <TextInput keyCode={handleEnter} id="music-overlay-input" placeholder={"Search"} inputValue={searchInput} action={handleSearchInput} />
+        </div>
+        : null}
         <div
         style={{
-            right: visible ? 0 : '-300px',
+            right: visible ? 0 : '-395px',
             backgroundColor: primaryColor
         }}
         className='music-player-overlay-wrapper'>
@@ -167,6 +231,7 @@ export const Music = () => {
                 <MusicOverlayButton playing={musicPlaying} description={visible ? 'Hide' : 'Show'} action={toggleVisibility} width={25} height={25} />
                 {!musicPlaying ? <PlayButton action={handleTogglePlaying} width={25} height={25}  /> : <PauseButton action={handleTogglePlaying} width={25} height={25} />}
                 <SkipButton action={handleSkip} width={25} height={25} />
+                <AddButton action={handleAddSongToQueue} o_mouseEnter={() => {handleShowSearch(true)}} o_mouseLeave={() => {handleShowSearch(false)}} width={25} height={25} description="Add Song" />
                 <AudioToggleButton o_mouseEnter={() => {handleToggleVolumeControls(true)}} o_mouseLeave={() => {handleToggleVolumeControls(false)}} description={muted ? 'Un Mute' : 'Mute'} action={handleMute} state={!muted} />
             </div>
             <div className='youtube-player-wrapper'>
@@ -176,7 +241,7 @@ export const Music = () => {
                 videoId={currentlyPlaying}  opts={{
                     
                     height: '100%',
-                    width: '300',
+                    width: '400',
                     playerVars: {
                         fs: 0,
                         autoplay: 1,
@@ -189,6 +254,7 @@ export const Music = () => {
                     }} />
                     <div className='youtube-disable-clicking'></div>
             </div>
+            <Loading loading={loading} />
         </div>
         </>    
         : null}

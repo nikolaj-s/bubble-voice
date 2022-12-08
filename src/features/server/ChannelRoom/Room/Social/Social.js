@@ -18,6 +18,7 @@ import "./Social.css";
 // socket
 import { socket } from '../../../ServerBar/ServerBar';
 import { Loading } from '../../../../../components/LoadingComponents/Loading/Loading';
+import { reverseEasing } from 'popmotion';
 
 
 export const Social = ({currentChannel, channelId, socialRoute = false, bulletin = false}) => {
@@ -30,7 +31,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
     const [image, setImage] = React.useState(null);
 
-    const [messagesToRender, setMessagesToRender] = React.useState(15)
+    const [messagesToRender, setMessagesToRender] = React.useState(15);
 
     const [inputHeight, setInputHeight] = React.useState(80);
 
@@ -136,6 +137,8 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
     const pinMessage = (data) => {
         dispatch(togglePinMessage(data));
     }
+
+    console.log(messages)
     
     return (
         <motion.div 
@@ -164,7 +167,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
                     : null}
                     <div onScroll={handleLoadMoreOnScroll} ref={messagesRef} className='social-messages-wrapper'>
                         {messages?.slice(0, messagesToRender).map((message, key) => {
-                            return <Message pinned={message.pinned} pinMessage={() => {pinMessage(message)}} perm={permission?.user_can_post_channel_social} channel_id={message.channel_id} id={message._id} message={message.content} key={message.content.local_id || message._id} />
+                            return <Message current_message={message} previous_message={key === messages.length - 1 ? null : messages[key + 1]} pinned={message.pinned} pinMessage={() => {pinMessage(message)}} perm={permission?.user_can_post_channel_social} channel_id={message.channel_id} id={message._id} message={message.content} key={message.content.local_id || message._id} />
                         })}
                     </div>
                     {permission?.user_can_post_channel_social ? <MessageInput socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : null}

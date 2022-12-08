@@ -19,6 +19,7 @@ import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 import { socket } from '../../ServerBar/ServerBar';
 import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
 import { uploadImage } from '../../../../util/UploadRoute';
+import { TextButton } from '../../../../components/buttons/textButton/TextButton';
 
 
 const Wrapper = () => {
@@ -129,6 +130,26 @@ const Wrapper = () => {
         }
     }
 
+    const clearImageSearchData = async () => {
+        try {
+
+            toggleLoading(true);
+
+            await socket.request('clear image search data')
+            .then(res => {
+                toggleLoading(false);
+            })
+            .catch(err => {
+                toggleLoading(false);
+                dispatch(throwServerError({errorMessage: err.errorMessage}));
+            })
+
+        } catch (error) {   
+            toggleLoading(false);
+            dispatch(throwServerError({errorMessage: error.message}))
+        }
+    }
+
     React.useEffect(() => {
 
         dispatch(setHeaderTitle("Overview"))
@@ -193,7 +214,9 @@ const Wrapper = () => {
             }
         {permissions?.user_can_edit_server_banner && permissions?.user_can_edit_server_name ?
         <>
-        <SettingsHeader title={"Dashboard"} />
+        <SettingsHeader title={"Data"} />
+        <InputTitle title={"Clear Image Search Recommendation Data"} />
+        <TextButton name={"Clear"} action={clearImageSearchData} />
         </>
         : null}
         {permissions?.user_can_edit_server_password ?

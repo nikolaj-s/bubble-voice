@@ -79,7 +79,7 @@ export const fetchServerDetails = createAsyncThunk(
 
                 for (const channel of response.server.channels) {
 
-                    channel.social.map(m => UnpackMessage(m))
+                    channel.social.map(m => UnpackMessage(m, response.server.members))
                     
                 }
 
@@ -195,11 +195,14 @@ const serverSlice = createSlice({
         // hide notice
         hideSetDefaultServer: false,
         // popular searches
-        popular_searches: []
+        popular_searches: [],
+        create_channel_menu_open: false
 
     },
     reducers: {
-        
+        toggleCreateChannelMenu: (state, action) => {
+            state.create_channel_menu_open = action.payload;
+        },
         deleteMessage: (state, action) => {
 
             if (!action.payload.message_id && !action.payload.channel_id) return;
@@ -361,6 +364,15 @@ const serverSlice = createSlice({
                     }
                 })
             }
+
+            state.channels.forEach(c => {
+                c.social.forEach(s => {
+                    if (s.username === action.payload.username) {
+                        s.content.user_image = action.payload.user_image;
+                        s.content.display_name = action.payload.display_name;
+                    }
+                })
+            })
             
         },
         updateMemberActiveStatus: (state, action) => {
@@ -414,6 +426,13 @@ const serverSlice = createSlice({
 
             const channelIndex = state.channels.findIndex(channel => channel._id === action.payload.channel_id)
 
+            if (channelIndex === -1) return;
+
+            // verify if message with existing id exists to prevent dupe messages being posted from an issue with duplicate socket instances failing to clean up
+            const index = state.channels[channelIndex].social.findIndex(m => m._id === action.payload._id);
+
+            if (index !== -1) return;
+
             const message = action.payload;
 
             state.channels[channelIndex].social.unshift(message);
@@ -426,7 +445,7 @@ const serverSlice = createSlice({
 
             const message_index = state.channels[channel_index].social.findIndex(msg => msg.content.local_id === action.payload.content.local_id);
 
-            const message = UnpackMessage(action.payload);
+            const message = UnpackMessage(action.payload, state.members);
 
             state.channels[channel_index].social[message_index]._id = message._id;
 
@@ -556,7 +575,7 @@ const serverSlice = createSlice({
             state.serverBanner = action.payload.server_banner;
             state.members = action.payload.members;
             state.serverGroups = action.payload.server_groups;
-
+            
             state.popular_searches = action.payload.recent_searches;
 
             const memberIndex = state.members.findIndex(member => member.username === action.payload.username);
@@ -582,15 +601,14 @@ const serverSlice = createSlice({
             
             state.channelCreationLoading = false;
 
-            window.location.hash = window.location.hash.split('/create-channel-menu')[0].split('#')[1];
-          
+            state.create_channel_menu_open = false;
+            
             state.channels.push(action.payload.channel)
         },
         [createChannel.rejected]: (state, action) => {
             state.channelCreationLoading = false;
             state.errorMessage = action.payload.errorMessage;
             state.error = true;
-            window.location.hash = window.location.hash.split('/create-channel-menu')[0]
         },
         [fetchPersistedMusicVolume.fulfilled]: (state, action) => {
             state.musicVolume = action.payload.volume;
@@ -745,8 +763,10 @@ export const selectHideDefaultNotce = state => state.serverSlice.hideSetDefaultS
 
 export const selectPopularSearches = state => state.serverSlice.popular_searches;
 
+export const selectCreateChannelMenuState = state => state.serverSlice.create_channel_menu_open;
+
 // actions
 
-export const {toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
+export const {toggleCreateChannelMenu, toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
 
 export default serverSlice.reducer;

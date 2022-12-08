@@ -131,7 +131,7 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
         <> 
         <AnimatePresence exitBeforeEnter>
             {persist ? <ImageDropListener root={getRootProps({className: 'dropzone'})} /> : null}
-            <ImageSearchPanel key={"message-input-search-container"} serverId={serverId} selectImage={selectImage} searchingForImage={searchingForImage} />
+            <ImageSearchPanel key="message-image-search-container" serverId={serverId} selectImage={selectImage} searchingForImage={searchingForImage} />
             <motion.div 
             animate={animation}
             style={{

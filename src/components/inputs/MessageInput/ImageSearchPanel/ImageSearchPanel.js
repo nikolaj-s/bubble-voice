@@ -85,49 +85,49 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
     }, [searchingForImage])
 
     return (
-        <>
-        {searchingForImage ?
-        <motion.div 
-        initial={{opacity: 0}}
-        animate={{opacity: 1}}
-        exit={{opacity: 0}}
-        transition={{duration: 0.1}}
-        key={"message-input-search-container"}
-        style={{
-            backgroundColor: primaryColor
-        }}
-        className='message-image-search-container'>
-            <div 
+        <AnimatePresence exitBeforeEnter>
+            {searchingForImage ?
+            <motion.div 
+            initial={{maxHeight: '0%', opacity: 0}}
+            animate={{maxHeight: '85%', opacity: 1}}
+            exit={{maxHeight: '0%', opacity: 0}}
+            transition={{duration: 0.1}}
+            key="message-image-search-container"
             style={{
-                backgroundColor: secondaryColor
+                backgroundColor: primaryColor
             }}
-            className='inner-message-image-search-container'>
+            className='message-image-search-container'>
                 <div 
-                style={{backgroundColor: primaryColor}}
-                className='message-image-search-input-wrapper'>
-                    <input 
-                    id="message-image-search-input"
-                    style={{color: textColor}}
-                    maxLength={120} onKeyUp={handleEnter} onChange={handleQuery} value={query} placeholder={"Search For Images"} />
-                    <AltSearchButton action={search} margin={'0 0 0 10px'} width={20} height={20} invert={true} borderRadius={10} />
+                style={{
+                    backgroundColor: secondaryColor
+                }}
+                className='inner-message-image-search-container'>
+                    <div 
+                    style={{backgroundColor: primaryColor}}
+                    className='message-image-search-input-wrapper'>
+                        <input 
+                        id="message-image-search-input"
+                        style={{color: textColor}}
+                        maxLength={120} onKeyUp={handleEnter} onChange={handleQuery} value={query} placeholder={"Search For Images"} />
+                        <AltSearchButton action={search} margin={'0 0 0 10px'} width={20} height={20} invert={true} borderRadius={10} />
+                    </div>
+                    {images.length === 0 && recommendations.length > 1 ? <InputTitle title={"Results Based On Previous Searches"} /> : null}
+                    <div className='message-image-search-results-container'>
+                        
+                        {(images.length > 0 ? images : recommendations).map((image, key) => {
+                            return (
+                                <div
+                                onClick={() => {handleSelectImage(image)}}
+                                key={key} className='message-image-result-container'>
+                                    <Image cursor='pointer' image={image} />
+                                </div>
+                            )
+                        })}
+                    </div>
                 </div>
-                {images.length === 0 && recommendations.length > 1 ? <InputTitle title={"Results Based On Previous Searches"} /> : null}
-                <div className='message-image-search-results-container'>
-                    
-                    {(images.length > 0 ? images : recommendations).map((image, key) => {
-                        return (
-                            <div
-                            onClick={() => {handleSelectImage(image)}}
-                            key={key} className='message-image-result-container'>
-                                <Image cursor='pointer' image={image} />
-                            </div>
-                        )
-                    })}
-                </div>
-            </div>
-            <Loading loading={loading} />
-        </motion.div>
-        : null}
-        </>
+                <Loading loading={loading} />
+            </motion.div>
+            : null}
+        </AnimatePresence>
     )
 }

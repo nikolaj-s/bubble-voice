@@ -1,7 +1,7 @@
 // library's
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { motion } from 'framer-motion';
+import { m, motion } from 'framer-motion';
 
 // components
 import { CtxButton } from '../../components/buttons/ctxButton/CtxButton';
@@ -166,6 +166,27 @@ export const ContextMenu = () => {
                 dispatch(setContextMenuOptions({state: "saveImage", value: true}))
                 setSelectedImage(p)
             }
+
+            if (p.className?.split(' ')[0] === 'user-status-container') {
+
+                const memberId = p.className.split(' ')[1].split('-')[0];
+
+                const status = p.className.split(' ')[2].split('-')[1];
+
+                if (status === 'undefined' || status === 'offline') return;
+
+                const user = members.find(m => m._id === memberId);
+
+                if (!user || user.username === username) return;
+
+                dispatch(setContextMenuOptions({state: 'pokeUser', value: true}));
+
+                dispatch(setContextMenuOptions({state: '_id', value: memberId}));
+
+                dispatch(toggleContextMenu(true));
+
+            }
+
             if (p.localName === 'video' && p.className !== 'stream' && p.className !== 'streaming-video-player' && !p.className.includes('stream') && !p.className.includes('videoplayer')) {
 
                 dispatch(toggleContextMenu(true));
@@ -653,13 +674,9 @@ export const ContextMenu = () => {
 
     const handlePokeUser = async () => {
         
-        const selected_username = selectedUserToManage.split('-')[0];
+        if (memberId) {
 
-        const channel_id = selectedUserToManage.split('channel-id-')[1];
-        
-        if (selected_username && channel_id) {
-
-            await socket.request('poke', {channel_id: channel_id, username: selected_username})
+            await socket.request('poke', {member_id: memberId})
             .catch(error => {
                 dispatch(throwServerError({errorMessage: error}));
             })

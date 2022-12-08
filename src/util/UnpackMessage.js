@@ -1,6 +1,6 @@
 
 
-export const UnpackMessage = (message) => {
+export const UnpackMessage = (message, members) => {
     try {
 
         let link = false;
@@ -12,6 +12,10 @@ export const UnpackMessage = (message) => {
         let t = false;
 
         let text_to_analyze = message?.content?.text;
+
+        let user_image;
+
+        let display_name;
 
         if (text_to_analyze.includes('https')) {
             for (const text of text_to_analyze.split(' ')) {
@@ -56,7 +60,23 @@ export const UnpackMessage = (message) => {
             t = text_to_analyze;
         }
 
-        message.content = {...message.content, link: link, iFrame: iFrame, text: t, twitter: twitter}
+        if (members) {
+            for (const u of members) {
+                if (message.username === u.username) {
+                    user_image = u.user_image;
+                    display_name = u.display_name;
+                    break;
+                }
+            }
+        } else {
+
+            user_image = message.content.user_image;
+
+            display_name = message.content.display_name;
+        
+        }
+        
+        message.content = {...message.content, link: link, iFrame: iFrame, text: t, twitter: twitter, user_image: user_image, display_name: display_name}
 
         return message;
 

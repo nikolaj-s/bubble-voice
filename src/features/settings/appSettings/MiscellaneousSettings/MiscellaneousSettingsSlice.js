@@ -85,6 +85,23 @@ const MiscellaneousSettingsSlice = createSlice({
             }
 
         },
+        pushPokeNotification: (state, action) => {
+
+            if (state.enabledSystemNotifications) {
+                const notifier = window.require('node-notifier');
+
+                const path = window.require('path');
+
+                notifier.notify({
+                    appID: "Bubble",
+                    title: `You Have Been Poked`,
+                    message: action.payload,
+                    sound: true,
+                    icon: path.join(__dirname, 'logo.png')
+                })
+            }
+
+        },
         miscSettingsClearLocalData: (state, action) => {
             state.loading = true;
 
@@ -199,7 +216,7 @@ export const selectMiscSettingsHideNonVideoParticapents = state => state.Miscell
 
 export const selectRoomScale = state => state.MiscellaneousSettingsSlice.roomScale;
 
-export const {pushSytemNotification, setDefaultServer, changeRoomScale, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, miscSettingsClearError, miscSettingsChannelSpecificStateChange } = MiscellaneousSettingsSlice.actions;
+export const {pushPokeNotification, pushSytemNotification, setDefaultServer, changeRoomScale, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, miscSettingsClearError, miscSettingsChannelSpecificStateChange } = MiscellaneousSettingsSlice.actions;
 
 
 export default MiscellaneousSettingsSlice.reducer;

@@ -8,7 +8,7 @@ import { Video } from '../Video/Video'
 import { MessageLoadingIndicator } from './MessageLoadingIndicator/MessageLoadingIndicator';
 
 // state
-import {  selectPrimaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import {  selectAccentColor, selectPrimaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./Message.css";
@@ -19,20 +19,28 @@ import { MessageLink } from './MessageLink/MessageLink';
 import { MessageText } from './MessageText/MessageText';
 import { PinButton } from '../buttons/PinButton/PinButton';
 import { TwitterEmbed } from '../TwitterEmbed/TwitterEmbed';
+import { SenderInfo } from './SenderInfo/SenderInfo';
 
-export const Message = ({ message, overlay = false, id, channel_id, perm, pinMessage, pinned, index}) => {
+export const Message = ({ message, overlay = false, id, channel_id, perm, pinMessage, pinned, index, previous_message, current_message}) => {
 
     const dispatch = useDispatch();
+
+    const [hoverState, setHoverState] = React.useState(false);
 
     const textColor = useSelector(selectTextColor);
 
     const primaryColor = useSelector(selectPrimaryColor);
+
+    const accentColor = useSelector(selectAccentColor);
 
     const expandContent = (source) => {
         dispatch(setExpandedContent(source))
     }
 
     const hoverEffect = (e, bool) => {
+
+        setHoverState(bool);
+
         document.getElementById(`${id}/${channel_id}`).style.backgroundColor = bool ? primaryColor : null;
     }
 
@@ -40,31 +48,14 @@ export const Message = ({ message, overlay = false, id, channel_id, perm, pinMes
         <div 
         onMouseEnter={(e) => {hoverEffect(e, true)}} onMouseLeave={(e) => {hoverEffect(e, false)}}
         style={{
-            padding: overlay ? null : 5,
+            padding: overlay ? null : '2px 5px 0px 5px',
         }}
         id={`${id}/${channel_id}`}
         className='message-container'>
-            <div className='sender-info-container'>
-                <h2
-                style={{color: textColor}}
-                >{message.display_name}</h2>
-                {!message.loading ?
-                <p
-                    style={{color: textColor, marginRight: 10}}
-                >{message?.date?.split("T")[0]}</p> : null}
-                {message.loading ? 
-                <MessageLoadingIndicator />
-                : overlay === false ?
-                <div className='date-submenu-message-wrapper'>
-                    {perm ? <PinButton flip_description={index === 0} description={pinned ? 'unpin' : 'pin'} action={pinMessage} width={15} height={15} pinned={pinned} /> : null}
-                    {perm ? <SubMenuButton flip_description={index === 0} zIndex={2} description={"More"} width={15} height={15} borderRadius={10} /> : null}
-                </div>
-                : null}
-                
-            </div>
+            <SenderInfo accentColor={accentColor} hover={hoverState} textColor={textColor} perm={perm} index={index}  message={message} current_message={current_message} previous_message={previous_message} pinMessage={pinMessage} pinned={pinned} overlay={overlay} />
             <MessageText color={textColor} text={message.text} />
             <MessageLink link={message.link} />
-            <Iframe link={message.iFrame} />
+            <Iframe marginLeft={60} link={message.iFrame} />
             <TwitterEmbed id={message.twitter} />
             {message.image ? 
             <div 

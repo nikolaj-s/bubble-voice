@@ -9,9 +9,9 @@
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     display: flex;
-    width: 365px;
+    width: 455px;
     transition: 0.2s;
-    height: 245px;
+    height: 300px;
 }
 
 .music-player-overlay-controls {
@@ -35,7 +35,7 @@
 
 .youtube-player-wrapper {
     position: relative;
-    width: 300px;
+    width: 400px;
     height: 100%;
     display: flex;
     overflow: hidden;
@@ -53,8 +53,22 @@
 .music-overlay-volume-container {
     position: absolute;
     z-index: 5;
-    bottom: calc(50% - 110px);
-    padding-right: 10px;
-    border-top-left-radius: var(--border-radius);
-    border-bottom-left-radius: var(--border-radius);
+    bottom: calc(50% - 140px);
+    padding: 0 20px;
+    width: 130px;
+}
+
+.music-overlay-volume-container div {
+    width: 120px;
+    border-radius: var(--border-radius);
+}
+
+.music-overlay-search-container {
+    position: absolute;
+    z-index: 5;
+    bottom: calc(50% - 65px);
+    padding: 0 20px;
+    border-radius: var(--border-radius);
+    width: 248px;
+    height: 35px;
 }

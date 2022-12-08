@@ -36,7 +36,7 @@ export const MessageOverlay = ({data, onEnd, page}) => {
             backgroundColor: `rgba${primaryColor.split('rgb')[1].split(')')[0]}, 0.5)`,
         }}
         initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} className='message-overlay-container'>
-            <Message overlay={true} message={data} />
+            <Message overlay={true} message={data} current_message={{content: data}} />
         </motion.div>
     )
 }
