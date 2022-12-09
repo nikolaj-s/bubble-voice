@@ -54,6 +54,8 @@ export const MusicWidget = ({editing = false}) => {
 
         if (queue.length >= 10) return dispatch(throwMusicError({error: true, errorMessage: "Song Queue Limit Has Been Reached"}));
 
+        if (loading) return;
+
         toggleLoading(true);
 
         await socket.request('add song to queue', {query: query})
@@ -110,7 +112,13 @@ export const MusicWidget = ({editing = false}) => {
         dispatch(updateMusicVolume(value))
     
     }
-    console.log(queue)
+    
+    const handleEnter = (key) => {
+        if (loading || query.length === 0) return;
+
+        if (key === 13) return handleAddSongToQueue();
+    }
+
     return (
         <div 
         style={{
@@ -125,7 +133,7 @@ export const MusicWidget = ({editing = false}) => {
                     }}>Music</h2>
                 </div>
                 <div className='music-widget-nav-container'>
-                    <TextInput inputValue={query} action={handleInput} placeholder={"Add Song To Queue"} marginTop='0' />
+                    <TextInput keyCode={handleEnter} inputValue={query} action={handleInput} placeholder={"Add Song To Queue"} marginTop='0' />
                     <AddButton action={handleAddSongToQueue} margin={"0 0 0 2%"} height={"35px"} width={"35px"} />
                 </div> 
                 <div className='music-queue-title-container'>

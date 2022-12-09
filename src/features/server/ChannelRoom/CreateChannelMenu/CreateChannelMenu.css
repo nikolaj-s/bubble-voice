@@ -17,11 +17,18 @@
     flex-direction: column;
     align-items: center;
     position: relative;
-    height: 60%;
+    height: 600px;
     max-width: 600px;
     margin-left: 200px;
-    padding: 20px;
+    padding: 10px 20px;
     border-radius: var(--border-radius);
+}
+
+.create-channel-inner-menu-container .create-channel-apply-cancel-wrapper {
+    width: 100%;
+    flex-grow: 4;
+    display: flex;
+    align-items: flex-end;
 }
 
 

@@ -31,10 +31,10 @@ export const SongStatusOverlay = ({data, onEnd}) => {
 
             onEnd();
 
-        }, 2000)
+        }, 4000)
 
     }, [data])
-    console.log(data.user)
+
     return (
         <motion.div 
         initial={{opacity: 0}}
@@ -47,7 +47,7 @@ export const SongStatusOverlay = ({data, onEnd}) => {
         }}
         className='song-skipped-overlay-container'>
             <div className='song-skip-notification-image'>
-                <Image objectFit='contain' image={data.user.user_image} />
+                <Image objectFit='cover' imgHeight='100%' image={data.user.user_image} />
             </div>
             <p style={{color: textColor}}>{data.message}</p>
         </motion.div>

@@ -1,0 +1,17 @@
+.persisted-notice-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.persisted-notice-container h3 {
+    letter-spacing: var(--font-spacing);
+    text-align: center;
+}
+
+.persisted-notice-container p {
+    letter-spacing: var(--font-spacing);
+    text-align: center;
+}

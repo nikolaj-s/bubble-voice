@@ -12,7 +12,7 @@ import { ListenToMicrophoneLevel } from './ListenToMicrophoneLevel/ListenToMicro
 import { ToggleButton } from '../../../../components/buttons/ToggleButton/ToggleButton';
 
 // state
-import { selectAudioInputList, selectAudioInput, updateSelectedDevice, selectAudioOutput, selectAudioOutputList, selectVideoInput, selectVideoInputList, selectPushToTalkState, selectVoiceActivityState, toggleVoiceActivity, toggleSelectedVoiceVideoState, selectMirroredWebCamState, handleSaveVoiceVideoSettings, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, updateMicInputVolume, getMediaDevices, selectVoiceActivationSensitivity, updateVoiceActivationSensitivity } from './voiceVideoSettingsSlice';
+import { selectAudioInputList, selectAudioInput, updateSelectedDevice, selectAudioOutput, selectAudioOutputList, selectVideoInput, selectVideoInputList, selectPushToTalkState, selectVoiceActivityState, toggleVoiceActivity, toggleSelectedVoiceVideoState, selectMirroredWebCamState, handleSaveVoiceVideoSettings, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, updateMicInputVolume, getMediaDevices, selectVoiceActivationSensitivity, updateVoiceActivationSensitivity, selectAutoGainControl, toggleAutoGain } from './voiceVideoSettingsSlice';
 import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/SettingsSpacer';
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 import { Range } from '../../../../components/inputs/Range/Range';
@@ -64,6 +64,8 @@ const Settings = () => {
     const microphoneState = useSelector(selectMicrophoneState);
 
     const voiceActivationSensitivity = useSelector(selectVoiceActivationSensitivity);
+
+    const autoGainControl = useSelector(selectAutoGainControl);
 
     React.useEffect(() => {
 
@@ -134,6 +136,12 @@ const Settings = () => {
         dispatch(updateVoiceActivationSensitivity(value))
     }
 
+    const handleToggleAutoGainControl = () => {
+        dispatch(toggleAutoGain());
+
+        dispatch(handleSaveVoiceVideoSettings());
+    }
+
     return (
         <div className='settings-wrapper'>
             <SettingsHeader title={"Devices"} />
@@ -157,7 +165,8 @@ const Settings = () => {
             <ToggleButton action={() => {handleToggleSelectedVoiceVideoState("noiseSuppression")}} state={noiseSuppression} />
             <InputTitle title={"Echo Cancellation"} />
             <ToggleButton action={() => {handleToggleSelectedVoiceVideoState("echoCancellation")}} state={echoCancellation} />
-            
+            <InputTitle title={"Auto Gain Control"} />
+            <ToggleButton action={handleToggleAutoGainControl} state={autoGainControl} />
             <SettingsHeader title={"Input Mode"} />
             <InputTitle  title={"Enable Push To Talk"} />
             <ToggleButton state={pushToTalk} action={handleToggleVoiceState} />

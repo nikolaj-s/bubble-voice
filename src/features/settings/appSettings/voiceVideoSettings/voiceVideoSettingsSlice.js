@@ -55,6 +55,7 @@ const voiceVideoSettingsSlice = createSlice({
         noiseSuppression: false,
         echoCancellation: false,
         micInputVolume: 1,
+        autoGainControl: false,
         voiceActivationSensitivity: 60
     },
     reducers: {
@@ -85,6 +86,13 @@ const voiceVideoSettingsSlice = createSlice({
             state[action.payload] = !state[action.payload];
             
         },
+        toggleAutoGain: (state, action) => {
+
+            
+
+            state.autoGainControl = !state.autoGainControl;
+
+        },
         handleSaveVoiceVideoSettings: (state, action) => {
 
             const obj = {
@@ -96,7 +104,8 @@ const voiceVideoSettingsSlice = createSlice({
                 mirroredWebCam: state.mirroredWebCam,
                 noiseSuppression: state.noiseSuppression,
                 echoCancellation: state.echoCancellation,
-                micInputVolume: state.micInputVolume
+                micInputVolume: state.micInputVolume,
+                autoGainControl: state.autoGainControl
             }
             
             saveLocalData("VOICE/VIDEO", "SETTINGS", obj);
@@ -152,6 +161,10 @@ const voiceVideoSettingsSlice = createSlice({
 
             if (saved_data.micInputVolume) {
                 state.micInputVolume = saved_data.micInputVolume;
+            }
+
+            if (saved_data.autoGainControl) {
+                state.autoGainControl = saved_data.autoGainControl;
             }
 
             if (action.payload.voice_activation_level) {
@@ -237,7 +250,9 @@ export const selectMicInputVolume = state => state.voiceVideoSettingsSlice.micIn
 
 export const selectVoiceActivationSensitivity = state => state.voiceVideoSettingsSlice.voiceActivationSensitivity;
 
-export const {updateVoiceActivationSensitivity, toggleSelectedVoiceVideoState, updateSelectedDevice, toggleVoiceActivity, handleSaveVoiceVideoSettings, updateMicInputVolume } = voiceVideoSettingsSlice.actions;
+export const selectAutoGainControl = state => state.voiceVideoSettingsSlice.autoGainControl;
+
+export const {toggleAutoGain, updateVoiceActivationSensitivity, toggleSelectedVoiceVideoState, updateSelectedDevice, toggleVoiceActivity, handleSaveVoiceVideoSettings, updateMicInputVolume } = voiceVideoSettingsSlice.actions;
 
 export default voiceVideoSettingsSlice.reducer;
 

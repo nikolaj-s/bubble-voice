@@ -7,7 +7,7 @@ const mediaType = {
 }
 
 export class RoomClient {
-    constructor(socket, current_channel_id, server_id, mediasoupClient, audioInputDevice, videoInputDevice, audioInputState, videoInputState, user, dispatch, audioState, mirrorWebCam, echoCancellation = false, noiseSuppression = false, microphoneInputVolume = 1) {
+    constructor(socket, current_channel_id, server_id, mediasoupClient, audioInputDevice, videoInputDevice, audioInputState, videoInputState, user, dispatch, audioState, mirrorWebCam, echoCancellation = false, noiseSuppression = false, microphoneInputVolume = 1, autoGainControl = false) {
 
         this.socket = socket;
 
@@ -49,6 +49,8 @@ export class RoomClient {
 
         this.echoCancellation = echoCancellation;
 
+        this.autoGainControl = autoGainControl;
+
         this.microphoneInputVolume = microphoneInputVolume;
 
         this.error_count = 0;
@@ -56,13 +58,15 @@ export class RoomClient {
         this.handling_error = false;
     }
     
-    updateAudioPrefs(noiseSuppression, echoCancellation, microphoneInputVolume) {
+    updateAudioPrefs(noiseSuppression, echoCancellation, microphoneInputVolume, l_autoGainControl) {
 
         this.noiseSuppression = noiseSuppression;
 
         this.echoCancellation = echoCancellation;
 
         this.microphoneInputVolume = microphoneInputVolume;
+
+        this.autoGainControl = l_autoGainControl;
     
     }
 
@@ -487,6 +491,7 @@ export class RoomClient {
                         deviceId: deviceId,
                         echoCancellation: this.echoCancellation,
                         noiseSuppression: this.noiseSuppression,
+                        autoGainControl: this.autoGainControl
                     },
                     video: false,
                 }

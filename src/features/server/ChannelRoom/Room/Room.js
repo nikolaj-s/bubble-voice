@@ -7,7 +7,7 @@ import * as mediasoupClient from 'mediasoup-client';
 
 // state
 import { selectCurrentChannel, selectCurrentChannelId, selectPushToTalkActive, selectServerId, toggleLoadingChannel, updateMemberStatus, selectServerMembers, throwServerError, updateJoiningChannelState, setChannelSocialId, selectReconnectingState, toggleReconnectingState, checkConnection, clearServerPing } from '../../ServerSlice';
-import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPushToTalkState, selectMirroredWebCamState, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, selectVoiceActivationSensitivity } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
+import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPushToTalkState, selectMirroredWebCamState, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, selectVoiceActivationSensitivity, selectAutoGainControl } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
 import { selectDisplayName, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { playSoundEffect, selectMuteSoundEffectsWhileMutedState } from '../../../settings/soundEffects/soundEffectsSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
@@ -80,8 +80,11 @@ const Component = () => {
     const microphoneInputVolume = useSelector(selectMicInputVolume);
 
     const hideChannelBackgrounds = useSelector(selectMiscSettingsHideChannelBackground);
+    
     // audio pref state
     const echoCancellation = useSelector(selectEchoCancellatio);
+
+    const autoGainControl = useSelector(selectAutoGainControl);
 
     const noiseSuppression = useSelector(selectNoiseSuppression);
 
@@ -101,7 +104,7 @@ const Component = () => {
         
         }
 
-    }, [noiseSuppression, echoCancellation, microphoneInputVolume])
+    }, [noiseSuppression, echoCancellation, microphoneInputVolume, autoGainControl])
 
     React.useEffect(() => {
         let el = document.getElementById(user._id)
@@ -377,7 +380,12 @@ const Component = () => {
             if (client && loaded === true) {
                 if (voiceActivityDetection === true) {
                     navigator.mediaDevices.getUserMedia({
-                        audio: {deviceId: {exact: audioDevice._id}},
+                        audio: {
+                            deviceId: audioDevice._id,
+                            echoCancellation: echoCancellation,
+                            noiseSuppression: noiseSuppression,
+                            autoGainControl: autoGainControl
+                        },
                         video: false
                     }).then((audio) => {
 

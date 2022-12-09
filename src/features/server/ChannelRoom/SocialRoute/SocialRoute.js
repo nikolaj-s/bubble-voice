@@ -34,9 +34,7 @@ export const SocialRoute = () => {
     React.useEffect(() => {
 
         if (channelId === current_channel_id) return document.getElementById('channel-social-tab-button')?.click();
-        
-        if (channelId !== current_channel_id) document.getElementsByClassName('stream-room-button')[0]?.click();
-        
+    
         if (currentSocial !== channelId) setCurrentSocial(channelId);
 
     }, [channelId, current_channel_id])
@@ -62,11 +60,9 @@ export const SocialRoute = () => {
             style={{
                 position: inChannel ? 'absolute' : 'relative',
                 zIndex: inChannel ? 4 : 3,
-                width: inChannel ? '500px' : 'calc(100%)',
-                height: inChannel ? '850px' : '100%',
+                width: 'calc(100%)',
+                height: '100%',
                 backgroundColor: secondaryColor,
-                borderTop: inChannel ? `4px solid ${textColor}` : null,
-                borderLeft: inChannel ? `4px solid ${textColor}` : null
             }}
             transition={{duration: 0.2}}
             className='social-route-wrapper-container'>

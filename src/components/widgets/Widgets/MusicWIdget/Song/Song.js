@@ -23,6 +23,7 @@ export const Song = ({image, name, duration}) => {
                 <Image objectFit='cover' image={image} />
             </div>
             <p
+            className='song-name'
             style={{
                 color: textColor
             }}

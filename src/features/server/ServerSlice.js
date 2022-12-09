@@ -1,10 +1,36 @@
-import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
-import { m } from "framer-motion";
+import { createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+
 import { fetchMusicWidgetVolume, setMusicWidgetVolume } from "../../util/LocalData";
 import { UnpackMessage } from "../../util/UnpackMessage";
 import { addPinnedMessage, removePinnedMessage, setPinnedMessages } from "./ChannelRoom/ServerDashBoard/ServerDashBoardSlice";
 
 import { socket } from "./ServerBar/ServerBar";
+
+export const sendDeleteMessageRequest = createAsyncThunk(
+    'serverSlice/sendDeleteMessageRequest',
+    async ({channel_id, message_id}, {rejectWithValue, dispatch}) => {
+        try {
+            
+            const data = await socket.request('delete message', {channel_id: channel_id, message_id: message_id})
+            .then(result => {
+                
+                dispatch(removePinnedMessage({message: {_id: result.message_id}}))
+                
+                return result;
+            })
+            .catch(error => {
+                console.log(error)
+                return rejectWithValue({errorMessage: error});
+            })
+
+            return data;
+
+        } catch (error) {
+            console.log(error);
+            return rejectWithValue({error: true, errorMessage: error.message})
+        }
+    }
+)
 
 export const togglePinMessage = createAsyncThunk(
     'serverSlice/togglePinMessage',
@@ -552,7 +578,7 @@ const serverSlice = createSlice({
 
                 if (c_index === -1) return;
 
-                const m_index = state.channels[c_index].users.findIndex(m_index => m._id === action.payload.id);
+                const m_index = state.channels[c_index].users.findIndex(m => m._id === action.payload.id);
 
                 if (m_index === -1) return;
 
@@ -666,6 +692,26 @@ const serverSlice = createSlice({
             if (m_index === -1) return;
 
             state.channels[c_index].social[m_index].pinned = action.payload.message.pinned;
+        },
+        [sendDeleteMessageRequest.pending]: (state, action) => {
+            state.pinningMessage = true;
+        },
+        [sendDeleteMessageRequest.fulfilled]: (state, action) => {
+            state.pinningMessage = false;
+
+            if (!action.payload.message_id && !action.payload.channel_id) return;
+
+            const index = state.channels.findIndex(c => c._id === action.payload.channel_id);
+
+            if (index === -1) return;
+
+            state.channels[index].social = state.channels[index].social.filter(m => m._id !== action.payload.message_id);
+
+        },
+        [sendDeleteMessageRequest.rejected]: (state, action) => {
+            state.pinningMessage = false;
+            state.error = true;
+            state.errorMessage = action.payload.errorMessage;
         }
     }   
 })

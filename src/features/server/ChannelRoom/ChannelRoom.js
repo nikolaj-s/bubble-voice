@@ -41,7 +41,7 @@ export const RoomWrapper = () => {
         <Room />
         <ServerDashBoard />
         <AnimatePresence>
-            <SocialRoute key={'social-route'} />
+            <SocialRoute key='social-route' />
             <UserStatusBar />
             {error ? <Error errorMessage={errorMessage} action={closeErrorMessage} /> : null}
         </AnimatePresence>

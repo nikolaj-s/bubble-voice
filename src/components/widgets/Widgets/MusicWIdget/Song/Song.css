@@ -21,3 +21,8 @@
     font-size: .8rem;
     letter-spacing: var(--font-spacing);
 }
+
+.song-name {
+    margin-right: 5px;
+    text-align: center;
+}

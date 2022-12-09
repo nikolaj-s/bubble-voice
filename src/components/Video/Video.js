@@ -78,8 +78,8 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
                 :
                 <PlayButton action={handlePlayState} />
                 }
-                <AudioToggleButton action={handleMuteState} state={muted} />
-                <ExpandButton action={expand} />
+                <AudioToggleButton description={!muted ? 'un-mute' : 'mute'} action={handleMuteState} state={muted} />
+                <ExpandButton description={"Full Screen"} action={expand} />
             </div>}
         </div>
     )

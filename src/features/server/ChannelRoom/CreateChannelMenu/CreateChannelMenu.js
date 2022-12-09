@@ -83,7 +83,9 @@ export const CreateChannelMenu = () => {
                     <TextInput inputValue={channelName} action={handleChannelNameInput} placeholder={"Name"} />
                     <InputTitle title={"Persist Channel's Text Messages"} />
                     <ToggleButton state={persist} action={handleTogglePersist} />
-                    <ApplyCancelButton apply={create} cancel={handleCancel} name='Create' />
+                    <div className='create-channel-apply-cancel-wrapper'>
+                        <ApplyCancelButton apply={create} cancel={handleCancel} name='Create' />
+                    </div>   
                 </motion.div>
             </motion.div> : null}
         </AnimatePresence>

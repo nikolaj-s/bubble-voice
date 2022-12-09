@@ -52,7 +52,8 @@ export const Message = ({ message, overlay = false, id, channel_id, perm, pinMes
         }}
         id={`${id}/${channel_id}`}
         className='message-container'>
-            <SenderInfo accentColor={accentColor} hover={hoverState} textColor={textColor} perm={perm} index={index}  message={message} current_message={current_message} previous_message={previous_message} pinMessage={pinMessage} pinned={pinned} overlay={overlay} />
+            <div id={`${id}-ctx-message-overlay`} className={'ctx-message-overlay'} />
+            <SenderInfo id={id} accentColor={accentColor} hover={hoverState} textColor={textColor} perm={perm} index={index}  message={message} current_message={current_message} previous_message={previous_message} pinMessage={pinMessage} pinned={pinned} overlay={overlay} />
             <MessageText color={textColor} text={message.text} />
             <MessageLink link={message.link} />
             <Iframe marginLeft={60} link={message.iFrame} />
@@ -60,9 +61,9 @@ export const Message = ({ message, overlay = false, id, channel_id, perm, pinMes
             {message.image ? 
             <div 
             
-            onClick={() => {expandContent(message.image)}}
+            
             className='message-image-container'>
-                <Image imgHeight='auto' cursor='pointer' width={null} altWidth={'100%'} loadingState='eager' objectFit='contain' image={message.image} />
+                <Image expandContent={expandContent} imgHeight='auto' cursor='pointer' width={null} altWidth={'100%'} loadingState='eager' objectFit='contain' image={message.image} />
             </div>
             : null}
             {message.video ? 

@@ -8,7 +8,11 @@ const ExpandContentSlice = createSlice({
     },
     reducers: {
         setExpandedContent: (state, action) => {
-            state.selectedContent = action.payload;
+            if (state.selectedContent === action.payload) {
+                state.selectedContent = false;
+            } else {
+                state.selectedContent = action.payload;
+            }
         }
     }
 })

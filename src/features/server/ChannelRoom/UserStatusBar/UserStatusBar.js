@@ -30,7 +30,7 @@ export const UserStatusBar = () => {
     React.useEffect(() => {
 
         dispatch(setUsers(users));
-        console.log(users)
+        
     }, [users])
 
     return (

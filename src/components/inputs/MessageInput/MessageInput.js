@@ -48,11 +48,11 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
 
     const {getRootProps} = useDropzone({
         accept: {
-            "image/*": ['.jpeg', '.png', '.webp', '.jpg']
+            "image/*": ['.jpeg', '.png', '.webp', '.jpg', '.gif']
         },
         maxFiles: 1,
         onDrop: async acceptedFiles => {
-
+            console.log(acceptedFiles)
             if (acceptedFiles.length === 0) return;
 
             toggleProcessingImage(true);

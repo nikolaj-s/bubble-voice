@@ -11,8 +11,8 @@ import { Loading } from '../../components/LoadingComponents/Loading/Loading';
 import { CtxMenuTitle } from '../../components/titles/ctxMenuTitle/CtxMenuTitle';
 
 // state
-import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleStreamState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCopyState, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteMesssageState, selectDeleteWidget, selectDisableStream, selectDisableWebCam, selectEditChannelCtxState, selectFlipWebCamState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSelectedMessage, selectSelectedUserCtxState, selectStopStreamingState, selectStreamVolumeState, selectViewSocialState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
-import { assignNewServerGroup, deleteMessage, markWidgetForDeletion, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerMembers, selectUsersPermissions, setChannelSocialId, setEditingChannelId, throwServerError, toggleMembersWebCamState } from '../server/ServerSlice';
+import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleStreamState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCopyLinkState, selectCopyState, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteMesssageState, selectDeleteWidget, selectDisableStream, selectDisableWebCam, selectEditChannelCtxState, selectFlipWebCamState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSelectedMessage, selectSelectedUserCtxState, selectStopStreamingState, selectStreamVolumeState, selectViewSocialState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
+import { assignNewServerGroup, deleteMessage, markWidgetForDeletion, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerMembers, selectUsersPermissions, sendDeleteMessageRequest, setChannelSocialId, setEditingChannelId, throwServerError, toggleMembersWebCamState } from '../server/ServerSlice';
 
 // style
 import "./ContextMenu.css";
@@ -30,6 +30,7 @@ import { MoveUser } from '../../components/buttons/MoveUser/MoveUser';
 import { selectPrimaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectSocialSoundEffect, updateSoundEffectsState } from '../settings/soundEffects/soundEffectsSlice';
 import { selectWebCamState } from '../controlBar/ControlBarSlice';
+import { removePinnedMessage } from '../server/ChannelRoom/ServerDashBoard/ServerDashBoardSlice';
 
 export const ContextMenu = () => {
 
@@ -142,6 +143,8 @@ export const ContextMenu = () => {
 
     const copyCtxState = useSelector(selectCopyState);
 
+    const copyLinkState = useSelector(selectCopyLinkState);
+
     // audio
     const [audioLevel, setAudioLevel] = React.useState(0);
 
@@ -158,9 +161,14 @@ export const ContextMenu = () => {
         dispatch(clearCtxState());
         dispatch(toggleContextMenu(false));
 
-        
         for (const p of e.path) {
             
+            if (p.localName === 'a') {
+                dispatch(toggleContextMenu(true));
+
+                dispatch(setContextMenuOptions({state: 'copyLink', value: p.href}))
+            }
+
             if (p.localName === 'img') {
                 dispatch(toggleContextMenu(true))
                 dispatch(setContextMenuOptions({state: "saveImage", value: true}))
@@ -273,6 +281,30 @@ export const ContextMenu = () => {
                 dispatch(setContextMenuOptions({state: "deleteMessage", value: permissions.user_can_manage_channels}));
 
                 dispatch(setContextMenuOptions({state: 'selectedMessage', value: p.id}));
+                
+                for (const l_child of p.children) {
+                    if (l_child.className === 'message-image-container') {
+                        
+                        dispatch(setContextMenuOptions({state: "saveImage", value: true}))
+                
+                        setSelectedImage(l_child.children[0].children[0])
+                    }
+
+                    if (l_child.className === 'message-outer-video-container') {
+                        
+                        dispatch(setContextMenuOptions({state: 'saveVideo', value: true}))
+
+                        setSelectedVideo(l_child.children[0].children[0]);
+                    
+                    }
+
+                    if (l_child.localName === 'a') {
+
+                        dispatch(setContextMenuOptions({state: 'copyLink', value: l_child.href}))
+                    
+                    }
+                }
+            
             }
             if ((p.className === 'text-input' && p.localName === 'input') || p.localName === 'textarea') {
                 dispatch(toggleContextMenu(true));
@@ -746,16 +778,7 @@ export const ContextMenu = () => {
 
             if (!message_id && !channel_id) return dispatch(throwServerError({errorMessage: "Cannot Delete This Message"}));
 
-            await socket.request('delete message', {channel_id: channel_id, message_id: message_id})
-            .then(result => {
-                
-                dispatch(deleteMessage({message_id: result.message_id, channel_id: result.channel_id}));
-
-            })
-            .catch(error => {
-                console.log(error)
-                dispatch(throwServerError({errorMessage: error.errorMessage}));
-            })
+            dispatch(sendDeleteMessageRequest({channel_id, message_id}));
 
         } catch (error) {
             console.log(error);
@@ -775,6 +798,18 @@ export const ContextMenu = () => {
         }
     }
 
+    const handleCopyLink = () => {
+        try {
+
+            const { clipboard } = window.require('electron');
+
+            clipboard.writeText(copyLinkState);
+
+        } catch (error) {
+            return;
+        }
+    }
+
     return (
         <>
         {ctxActive ? 
@@ -790,6 +825,7 @@ export const ContextMenu = () => {
             {saveVideo ? <CtxButton action={() => {handleSave(false)}} name={"Save Video"} /> : null}
             {pasteCtxState ? <CtxButton name={"Paste"} action={paste} /> : null}
             {copyCtxState ? <CtxButton name={"Copy"} action={handleCopy} /> : null}
+            {copyLinkState ? <CtxButton name="Copy Link" action={handleCopyLink} /> : null}
             {joinChannelState ? <CtxButton action={handleJoinChannel} name={"Join Channel"} /> : null}
             {leaveChannelState ? <CtxButton action={handleLeaveChannel} name={'Leave Channel'} /> : null}
             {editChannelState ? <CtxButton action={handleEditChannel} name={"Edit Channel"} /> : null}

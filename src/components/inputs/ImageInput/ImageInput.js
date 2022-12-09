@@ -55,12 +55,14 @@ export const ImageInput = ({
     // handle file drop
     const {getRootProps, getInputProps } = useDropzone({
         accept: {
-            "image/*": ['.jpeg', '.png', '.webp', '.jpg']
+            "image/*": ['.jpeg', '.png', '.webp', '.jpg', '.gif']
         },
         maxFiles: 1,
         onDrop: async acceptedFiles => {
 
             if (acceptedFiles.length === 0) return;
+
+            console.log(acceptedFiles)
 
             toggleProcessingImage(true);
 

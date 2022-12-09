@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
 import { selectActivationColor, selectPrimaryColor } from '../../../appearanceSettings/appearanceSettingsSlice';
-import { selectAudioInput, selectEchoCancellatio, selectMicInputVolume, selectNoiseSuppression, selectVoiceActivationSensitivity, selectVoiceActivityState } from '../../voiceVideoSettingsSlice';
+import { selectAudioInput, selectAutoGainControl, selectEchoCancellatio, selectMicInputVolume, selectNoiseSuppression, selectVoiceActivationSensitivity, selectVoiceActivityState } from '../../voiceVideoSettingsSlice';
 
 export const AudioAnalyser = ({audio, throwError}) => {
 
@@ -21,6 +21,8 @@ export const AudioAnalyser = ({audio, throwError}) => {
 
     const voiceActivity = useSelector(selectVoiceActivityState);
 
+    const autoGainControl = useSelector(selectAutoGainControl);
+
     React.useEffect(() => {
 
         let audioCtx,
@@ -37,7 +39,8 @@ export const AudioAnalyser = ({audio, throwError}) => {
                     deviceId: {exact: audioInput._id},
                     echoCancellation: echoCancellation,
                     noiseSuppression: noiseSuppression,
-                    sampleRate: 48000
+                    sampleRate: 48000,
+                    autoGainControl: autoGainControl
                 },
                 video: false,
                 keyboard: false
@@ -161,9 +164,7 @@ export const AudioAnalyser = ({audio, throwError}) => {
             
         }
     // eslint-disable-next-line
-    }, [echoCancellation, noiseSuppression, micInputVolume, voiceActivity])
-
-
+    }, [echoCancellation, noiseSuppression, micInputVolume, voiceActivity, autoGainControl])
 
     return (
         <>

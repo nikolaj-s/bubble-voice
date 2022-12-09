@@ -6,11 +6,12 @@ import { PinnedIcon } from '../../../../components/Icons/PinnedIcon/PinnedIcon';
 import { Message } from '../../../../components/Message/Message';
 
 import { selectPrimaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
-import { selectChannelSocialId, selectUsersPermissions, togglePinMessage } from '../../ServerSlice';
+import { selectChannelSocialId, selectPinningMessage, selectUsersPermissions, togglePinMessage } from '../../ServerSlice';
 import { selectPinnedMessages } from './ServerDashBoardSlice';
 
 // style
 import "./ServerDashBoard.css";
+import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
 
 const Component = () => {
 
@@ -25,6 +26,8 @@ const Component = () => {
     const pins = useSelector(selectPinnedMessages);
 
     const permission = useSelector(selectUsersPermissions);
+
+    const pinning = useSelector(selectPinningMessage)
     
     const handlePin = (data) => {
         dispatch(togglePinMessage(data));
@@ -45,6 +48,7 @@ const Component = () => {
                     return <Message previous_message={key === 0 ? null : pins[key - 1]} current_message={p} index={key} pinMessage={() => {handlePin(p)}} perm={permission?.user_can_post_channel_social} key={p._id} channel_id={p?.channel_id} id={p._id} message={p.content} pinned={p.pinned} />
                 })}
             </div>
+            <Loading loading={pinning} />
         </div>}
         </>
     )

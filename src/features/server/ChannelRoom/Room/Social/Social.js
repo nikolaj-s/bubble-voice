@@ -19,6 +19,7 @@ import "./Social.css";
 import { socket } from '../../../ServerBar/ServerBar';
 import { Loading } from '../../../../../components/LoadingComponents/Loading/Loading';
 import { reverseEasing } from 'popmotion';
+import { PersistedDataNotice } from '../../../../../components/PersistedDataNotice/PersistedDataNotice';
 
 
 export const Social = ({currentChannel, channelId, socialRoute = false, bulletin = false}) => {
@@ -51,7 +52,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         setTimeout(() => {
             messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
-        }, 50)
+        }, 100)
         
         if (permission.user_can_post_channel_social) document.getElementById('social-input-selector').focus();
 
@@ -88,6 +89,8 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         data = {...data, file: image?.size ? image : null}
 
+        messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+        
         setText("");
 
         setImage(false);
@@ -95,8 +98,6 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
         await socket.request('message', data)
         .then(response => {
 
-            messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
-            
             if (response.success) {
                 dispatch(updateMessage(response.message));
             }
@@ -106,6 +107,12 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
             dispatch(throwServerError({errorMessage: error.errorMessage}));
             
         })
+
+        setTimeout(() => {
+
+            messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+
+        }, 200)
         
     }
 
@@ -137,9 +144,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
     const pinMessage = (data) => {
         dispatch(togglePinMessage(data));
     }
-
-    console.log(messages)
-    
+    console.log(currentChannel)
     return (
         <motion.div 
         
@@ -169,6 +174,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
                         {messages?.slice(0, messagesToRender).map((message, key) => {
                             return <Message current_message={message} previous_message={key === messages.length - 1 ? null : messages[key + 1]} pinned={message.pinned} pinMessage={() => {pinMessage(message)}} perm={permission?.user_can_post_channel_social} channel_id={message.channel_id} id={message._id} message={message.content} key={message.content.local_id || message._id} />
                         })}
+                        <PersistedDataNotice persisted={!currentChannel.persist_social} />
                     </div>
                     {permission?.user_can_post_channel_social ? <MessageInput socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : null}
                 </div>
