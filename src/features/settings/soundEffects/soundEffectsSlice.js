@@ -25,10 +25,18 @@ const soundEffectsSlice = createSlice({
         volume: 1,
         socialSoundEffect: true,
         muteSoundEffectsWhileMutedState: false,
-        soundEffectsQueue: []
+        soundEffectsQueue: [],
+        currentVoiceOver: {label: "Female", state: 'female'},
+        voiceOverOptions: [{label: "Female", state: 'female'}, {label: "Male", state: "male"}]
     },
     reducers: {
         
+        updateCurrentVoiceOver: (state, action) => {
+
+            state.currentVoiceOver = action.payload;
+
+        },
+
         playSoundEffect: (state, action) => {
             console.log(state.soundEffectsQueue[0], action.payload)
             if (state.soundEffectsQueue[0] === action.payload) return;
@@ -49,7 +57,8 @@ const soundEffectsSlice = createSlice({
 
             const obj = {
                 socialSoundEffect: state.socialSoundEffect,
-                muteSoundEffectsWhileMutedState: state.muteSoundEffectsWhileMutedState
+                muteSoundEffectsWhileMutedState: state.muteSoundEffectsWhileMutedState,
+                currentVoiceOver: state.currentVoiceOver
             }
 
             saveLocalData("APPAUDIOPREF", "AUDIOPREF", obj);
@@ -76,6 +85,10 @@ const soundEffectsSlice = createSlice({
                 state.muteSoundEffectsWhileMutedState = action.payload.muteSoundEffectsWhileMutedState;
 
             }
+
+            if (action.payload.currentVoiceOver) {
+                state.currentVoiceOver = action.payload.currentVoiceOver;
+            }
         }
     }
 })
@@ -92,8 +105,12 @@ export const selectMuteSoundEffectsWhileMutedState = state => state.soundEffects
 
 export const selectSoundEffectQueue = state => state.soundEffectsSlice.soundEffectsQueue;
 
+export const selectCurrentVoiceOver = state => state.soundEffectsSlice.currentVoiceOver;
+
+export const selectVoiceOverOptions = state => state.soundEffectsSlice.voiceOverOptions;
+
 // actions
 
-export const { removeSoundEffectFromQueue, setSoundEffectsVolume, playSoundEffect, updateSoundEffectsState, handleSaveSoundPrefs } = soundEffectsSlice.actions;
+export const {updateCurrentVoiceOver, removeSoundEffectFromQueue, setSoundEffectsVolume, playSoundEffect, updateSoundEffectsState, handleSaveSoundPrefs } = soundEffectsSlice.actions;
 
 export default soundEffectsSlice.reducer;

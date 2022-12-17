@@ -54,7 +54,7 @@ export const UserStatus = ({user}) => {
             <div
             className='user-status-image-container'>
                 {(user.status && user.status !== 'offline') ?
-                <Image image={user.user_image} />
+                <Image cursor='pointer' image={user.user_image} />
                 : 
                 <OfflineIcon image={user.user_image} />
                 }
@@ -68,7 +68,7 @@ export const UserStatus = ({user}) => {
                 <p style={{color: textColor}}>{user.status ? user.status : 'offline'}</p>
             </div>
             {(user.user_banner) ?
-            <Image position='absolute' zIndex={0} image={user.user_banner} />
+            <Image cursor='pointer' position='absolute' zIndex={0} image={user.user_banner} />
             : null}
         </div>
     )

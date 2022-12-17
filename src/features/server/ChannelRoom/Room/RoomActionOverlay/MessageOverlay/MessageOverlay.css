@@ -1,12 +1,9 @@
 
 .message-overlay-container {
     position: absolute;
-    bottom: 0px;
-    right: 00px;
-    width: 65%;
-    height: auto;
-    backdrop-filter: blur(8px);
-    border-top-left-radius: var(--border-radius);
+    right: 0px;
+    width: calc(100% - 2rem);
+    max-height: 400px;
     padding: 1rem;
     z-index: 2;
 }

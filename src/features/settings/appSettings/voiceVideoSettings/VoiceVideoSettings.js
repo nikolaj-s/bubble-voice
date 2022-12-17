@@ -12,7 +12,7 @@ import { ListenToMicrophoneLevel } from './ListenToMicrophoneLevel/ListenToMicro
 import { ToggleButton } from '../../../../components/buttons/ToggleButton/ToggleButton';
 
 // state
-import { selectAudioInputList, selectAudioInput, updateSelectedDevice, selectAudioOutput, selectAudioOutputList, selectVideoInput, selectVideoInputList, selectPushToTalkState, selectVoiceActivityState, toggleVoiceActivity, toggleSelectedVoiceVideoState, selectMirroredWebCamState, handleSaveVoiceVideoSettings, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, updateMicInputVolume, getMediaDevices, selectVoiceActivationSensitivity, updateVoiceActivationSensitivity, selectAutoGainControl, toggleAutoGain } from './voiceVideoSettingsSlice';
+import { selectAudioInputList, selectAudioInput, updateSelectedDevice, selectAudioOutput, selectAudioOutputList, selectVideoInput, selectVideoInputList, selectPushToTalkState, selectVoiceActivityState, toggleVoiceActivity, toggleSelectedVoiceVideoState, selectMirroredWebCamState, handleSaveVoiceVideoSettings, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, updateMicInputVolume, getMediaDevices, selectVoiceActivationSensitivity, updateVoiceActivationSensitivity, selectAutoGainControl, toggleAutoGain, selectVoiceDeactivationDelayState, updateVoiceDeactivationDelay } from './voiceVideoSettingsSlice';
 import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/SettingsSpacer';
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 import { Range } from '../../../../components/inputs/Range/Range';
@@ -21,6 +21,7 @@ import { PreviewWebCam } from './PreviewWebCam/PreviewWebCam';
 import { ApplyCancelButton } from '../../../../components/buttons/ApplyCancelButton/ApplyCancelButton';
 import { AltError } from '../../../../components/AltError/AltError';
 import { TextButton } from '../../../../components/buttons/textButton/TextButton';
+import { VoiceDeactivationDelay } from './VoiceDeactivationDelay/VoiceDeactivationDelay';
 
 const Settings = () => {
 
@@ -66,6 +67,8 @@ const Settings = () => {
     const voiceActivationSensitivity = useSelector(selectVoiceActivationSensitivity);
 
     const autoGainControl = useSelector(selectAutoGainControl);
+
+    const voiceDeactivationDelay = useSelector(selectVoiceDeactivationDelayState);
 
     React.useEffect(() => {
 
@@ -142,6 +145,14 @@ const Settings = () => {
         dispatch(handleSaveVoiceVideoSettings());
     }
 
+    const handleVoiceDeactivaitonDelay = (value) => {
+        dispatch(updateVoiceDeactivationDelay(value));
+    }
+
+    const saveVoiceVideoSettings = () => {
+        dispatch(handleSaveVoiceVideoSettings())
+    }
+
     return (
         <div className='settings-wrapper'>
             <SettingsHeader title={"Devices"} />
@@ -156,6 +167,8 @@ const Settings = () => {
             <SettingsHeader title={"Audio Settings"} />
             <InputTitle title={"Test Mic Input"} />
             <ListenToMicrophoneLevel />
+            <InputTitle title={"Microphone Deactivation Delay"} />
+            <VoiceDeactivationDelay value={voiceDeactivationDelay} action={handleVoiceDeactivaitonDelay} save={saveVoiceVideoSettings} />
             <InputTitle title={"Voice Activation Sensitivity"} />
             <Range step={1} action={handleVoiceActivationSensitivity} min={5} max={200} value={voiceActivationSensitivity} />
             <InputTitle title={"Input Volume"} />

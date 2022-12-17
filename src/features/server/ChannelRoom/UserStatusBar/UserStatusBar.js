@@ -42,7 +42,7 @@ export const UserStatusBar = () => {
             {serverGroups.map((server_group) => {
                 return (
                     <div style={{display: onlineUsers.findIndex(u => u.server_group === server_group._id) !== -1 ? null : 'none'}} >
-                    <InputTitle title={server_group.server_group_name} />
+                    <InputTitle fontSize='0.8rem' title={server_group.server_group_name} />
                     {onlineUsers.map(u => {
                         if (u.server_group === server_group._id) {
                             return <UserStatus user={u} key={u._id} />
@@ -51,7 +51,7 @@ export const UserStatusBar = () => {
                     </div>
                 )
             })}
-            <InputTitle marginBottom={'13px'} marginTop={'13px'} title={"Offline"} />
+            <InputTitle fontSize='0.8rem' marginBottom={'13px'} marginTop={'13px'} title={"Offline"} />
             {offlineUsers.map((u) => {
                 return <UserStatus user={u} key={u._id} />
             })}

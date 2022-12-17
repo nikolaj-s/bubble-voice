@@ -15,7 +15,25 @@ const MusicSlice = createSlice({
         toggleMusicPlaying: (state, action) => {
             state.playing = action.payload;
         },
+        like_song: (state, action) => {
+            const s_index = state.queue.findIndex(s => s._id === action.payload.song._id);
+
+            if (s_index === -1) return;
+
+            state.queue[s_index].liked = true;
+        },
+        un_like_song: (state, action) => {
+            const s_index = state.queue.findIndex(s => s._id === action.payload.song._id);
+
+            if (s_index === -1) return;
+
+            state.queue[s_index].liked = false;
+        },
         addSongToQueue: (state, action) => {
+
+            const index = state.queue.findIndex(song => song._id === action.payload._id);
+
+            if (index !== -1) return;
 
             if (state.queue.length === 0) state.playing = true;
 
@@ -55,6 +73,6 @@ export const selectMusicPlayingState = state => state.MusicSlice.playing;
 export const selectMusicVolume = state => state.MusicSlice.volume;
 
 // actions
-export const {toggleMusicPlaying, addSongToQueue, skipSong, updateMusicState, throwMusicError, updateMusicVolume} = MusicSlice.actions;
+export const {un_like_song, like_song, toggleMusicPlaying, addSongToQueue, skipSong, updateMusicState, throwMusicError, updateMusicVolume} = MusicSlice.actions;
 
 export default MusicSlice.reducer;

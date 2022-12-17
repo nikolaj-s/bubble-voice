@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { motion } from 'framer-motion';
 
 // state
-import { selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectChannelSocialId, selectCurrentChannelId, selectCurrentlyViewChannelSocial, setChannelSocialId } from '../../ServerSlice'
 
 // component's
@@ -30,6 +30,8 @@ export const SocialRoute = () => {
     const inChannel = window.location.hash.includes('/channel/');
 
     const secondaryColor = useSelector(selectSecondaryColor);
+
+    const primaryColor = useSelector(selectPrimaryColor);
 
     React.useEffect(() => {
 
@@ -66,7 +68,9 @@ export const SocialRoute = () => {
             }}
             transition={{duration: 0.2}}
             className='social-route-wrapper-container'>
-                <div className='social-route-top-nav'>
+                <div 
+                style={{borderBottom: `solid 3px ${primaryColor}`}}
+                className='social-route-top-nav'>
                     <h3
                     style={{
                         color: textColor
@@ -79,7 +83,7 @@ export const SocialRoute = () => {
                         </svg>
                     </div>
                 </div>
-                <Social socialRoute={true} channelId={channelId} currentChannel={channel} />
+                <Social channelName={channel.name} socialRoute={true} channelId={channelId} currentChannel={channel} />
             </motion.div> : null}
         </>
     )

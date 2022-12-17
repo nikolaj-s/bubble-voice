@@ -28,11 +28,6 @@
     margin: 0.2rem 0;
 }
 
-.music-player-overlay-controls svg {
-    width: 40px;
-    height: 40px;
-}
-
 .youtube-player-wrapper {
     position: relative;
     width: 400px;

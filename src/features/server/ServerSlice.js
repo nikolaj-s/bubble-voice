@@ -6,6 +6,28 @@ import { addPinnedMessage, removePinnedMessage, setPinnedMessages } from "./Chan
 
 import { socket } from "./ServerBar/ServerBar";
 
+export const unBanMember = createAsyncThunk(
+    'serverSlice/unBanMember',
+    async (id, {rejectWithValue}) => {
+        try {
+
+            const data = await socket.request('un ban', {ban_id: id})
+            .then(res => {
+                return id;
+            })
+            .catch(error => {
+                return rejectWithValue({errorMessage: error});
+            })
+
+            return data;
+
+        } catch (error) {
+            console.log(error);
+            return rejectWithValue({errorMessage: error.message});
+        }
+    }
+)
+
 export const sendDeleteMessageRequest = createAsyncThunk(
     'serverSlice/sendDeleteMessageRequest',
     async ({channel_id, message_id}, {rejectWithValue, dispatch}) => {
@@ -61,7 +83,7 @@ export const togglePinMessage = createAsyncThunk(
 
         } catch (error) {
             console.log(error);
-            rejectWithValue({error: true, errorMessage: error.message});
+            return rejectWithValue({error: true, errorMessage: error.message});
         }
     }
 )
@@ -118,7 +140,8 @@ export const fetchServerDetails = createAsyncThunk(
             }
         })
         .catch(error => {
-            return rejectWithValue({error: true, errorMessage: "unexpected error has occurred"});
+            console.log(error)
+            return rejectWithValue({error: true, errorMessage: error});
         })
 
         dispatch(setPinnedMessages(server.pinned));
@@ -202,6 +225,8 @@ const serverSlice = createSlice({
         editing_channel_id: null,
         // member
         user: {},
+        banList: [],
+        ban_loading_state: false,
         // server error
         error: false,
         errorMessage: "",
@@ -364,7 +389,7 @@ const serverSlice = createSlice({
 
             const currentChannelIndex = state.channels.findIndex(channel => channel._id === state.current_channel_id);
 
-            state.channels[currentChannelIndex].users = state.channels[currentChannelIndex].users.filter(user => user.username !== action.payload.username);
+            state.channels[currentChannelIndex].users = state.channels[currentChannelIndex].users.filter(user => user.username !== action.payload.username)
             
             state.channels[currentChannelIndex].active = false;
 
@@ -588,6 +613,38 @@ const serverSlice = createSlice({
         },
         toggleHideDefaultServerNotice: (state, action) => {
             state.hideSetDefaultServer = action.payload;
+        },
+        userBanned: (state, action) => {
+            state.members = state.members.filter(m => m.username !== action.payload.username);
+
+            state.banList.push(action.payload);
+
+        },
+        saveSongToWidget: (state, action) => {
+
+            const c_index = state.channels.findIndex(c => c._id === action.payload.channel_id);
+
+            if (c_index === -1) return;
+
+            const w_index = state.channels[c_index].widgets.findIndex(w => w.type === 'music');
+
+            if (w_index === -1) return;
+
+            state.channels[c_index].widgets[w_index].content.liked_songs.push(action.payload.song);
+
+        },
+        removeSongFromWidget: (state, action) => {
+
+            const c_index = state.channels.findIndex(c => c._id === action.payload.channel_id);
+
+            if (c_index === -1) return;
+
+            const w_index = state.channels[c_index].widgets.findIndex(w => w.type === 'music');
+
+            if (w_index === -1) return;
+
+            state.channels[c_index].widgets[w_index].content.liked_songs = state.channels[c_index].widgets[w_index].content.liked_songs.filter(s => s._id !== action.payload.song._id)
+
         }
     },
     extraReducers: {
@@ -601,6 +658,8 @@ const serverSlice = createSlice({
             state.serverBanner = action.payload.server_banner;
             state.members = action.payload.members;
             state.serverGroups = action.payload.server_groups;
+
+            state.banList = action.payload.ban_list;
             
             state.popular_searches = action.payload.recent_searches;
 
@@ -676,22 +735,27 @@ const serverSlice = createSlice({
             state.pinningMessage = false;
         },
         [togglePinMessage.fulfilled]: (state, action) => {
+            try {
+                state.pinningMessage = false;
 
-            state.pinningMessage = false;
+                state.error = false;
 
-            state.error = false;
+                state.errorMessage = "";
 
-            state.errorMessage = "";
+                const c_index = state.channels.findIndex(c => c._id === action.payload.message.channel_id);
 
-            const c_index = state.channels.findIndex(c => c._id === action.payload.message.channel_id);
+                if (c_index === -1) return;
 
-            if (c_index === -1) return;
+                const m_index = state.channels[c_index].social.findIndex(m => m._id === action.payload.message._id);
 
-            const m_index = state.channels[c_index].social.findIndex(m => m._id === action.payload.message._id);
+                if (m_index === -1) return;
 
-            if (m_index === -1) return;
-
-            state.channels[c_index].social[m_index].pinned = action.payload.message.pinned;
+                state.channels[c_index].social[m_index].pinned = action.payload.message.pinned;
+            } catch (error) {
+                state.error = true;
+                state.pinningMessage = false;
+                state.errorMessage = "Error Pinning Message"
+            }
         },
         [sendDeleteMessageRequest.pending]: (state, action) => {
             state.pinningMessage = true;
@@ -712,6 +776,21 @@ const serverSlice = createSlice({
             state.pinningMessage = false;
             state.error = true;
             state.errorMessage = action.payload.errorMessage;
+        },
+        [unBanMember.pending]: (state, action) => {
+            state.ban_loading_state = true;
+        },
+        [unBanMember.rejected]: (state, action) => {
+            state.error = true;
+            state.errorMessage = action.payload.errorMessage;
+            state.ban_loading_state = false;
+        },
+        [unBanMember.fulfilled]: (state, action) => {
+            state.error = false;
+            state.errorMessage = false;
+            state.ban_loading_state = false;
+
+            state.banList = state.banList.filter(ban => ban._id !== action.payload)
         }
     }   
 })
@@ -811,8 +890,25 @@ export const selectPopularSearches = state => state.serverSlice.popular_searches
 
 export const selectCreateChannelMenuState = state => state.serverSlice.create_channel_menu_open;
 
+export const selectBanList = state => state.serverSlice.banList;
+
+export const selectBanLoadingState = state => state.serverSlice.ban_loading_state;
+
+export const selectMusicSavedState = state => {
+    const index = state.serverSlice.channels.findIndex(c => c._id === state.serverSlice.current_channel_id);
+
+    if (index === -1) return [];
+
+    const w_index = state.serverSlice.channels[index].widgets.findIndex(w => w.type === 'music');
+
+    if (w_index === -1) return [];
+
+    return state.serverSlice.channels[index].widgets[w_index].content.liked_songs;
+    
+}
+
 // actions
 
-export const {toggleCreateChannelMenu, toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
+export const {removeSongFromWidget, saveSongToWidget, userBanned, toggleCreateChannelMenu, toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
 
 export default serverSlice.reducer;

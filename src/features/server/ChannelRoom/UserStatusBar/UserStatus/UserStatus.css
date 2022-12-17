@@ -6,6 +6,7 @@
     position: relative;
     min-height: 60px;
     z-index: 3;
+    cursor: pointer;
 }
 
 .user-status-image-container {
@@ -19,6 +20,7 @@
     align-items: center;
     z-index: 1;
     margin-left: 5px;
+    cursor: pointer;
 }
 
 .user-name-status-wrapper {
@@ -34,10 +36,9 @@
 }
 
 .user-name-status-wrapper h3 {
-    font-size: 1rem;
+    font-size: .9rem;
     margin: 0;
     padding: 0;
-    cursor: default;
     overflow: hidden;
     text-overflow: ellipsis;
     width: 100%;
@@ -46,7 +47,7 @@
 }
 
 .user-name-status-wrapper p {
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     margin: 0;
     padding: 0;
     cursor: default;

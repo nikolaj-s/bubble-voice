@@ -52,15 +52,21 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
         },
         maxFiles: 1,
         onDrop: async acceptedFiles => {
-            console.log(acceptedFiles)
+            
             if (acceptedFiles.length === 0) return;
 
             toggleProcessingImage(true);
 
             const options = {maxSizeMB: 0.6, onProgress: incrementPrecentage, maxIteration: 30}
 
-            const compressed_image = await imageCompression(acceptedFiles[0], options);
-            
+            let compressed_image;
+
+            if (acceptedFiles[0].type.includes('gif') && acceptedFiles[0].size < 950000) {
+                compressed_image = acceptedFiles[0];
+            } else {
+                compressed_image = await imageCompression(acceptedFiles[0], options);
+            }
+
             setFiles([Object.assign(compressed_image, {preview: URL.createObjectURL(acceptedFiles[0])})])
 
             toggleProcessingImage(false);

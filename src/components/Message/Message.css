@@ -54,7 +54,7 @@
     letter-spacing: var(--font-spacing);
 }
 
-.sender-info-container p {
+.sender-info-inner-container p {
     opacity: 0.4;
     font-size: 0.7rem;
     margin: 0;

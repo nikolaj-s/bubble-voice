@@ -62,13 +62,17 @@ export const ImageInput = ({
 
             if (acceptedFiles.length === 0) return;
 
-            console.log(acceptedFiles)
-
             toggleProcessingImage(true);
 
             const options = {maxSizeMB: 0.6, onProgress: handlePercent, maxIteration: 30}
 
-            const compressed_image = await imageCompression(acceptedFiles[0], options);
+            let compressed_image;
+
+            if (acceptedFiles[0].type.includes('gif') && acceptedFiles[0].size < 950000) {
+                compressed_image = acceptedFiles[0];
+            } else {
+                compressed_image = await imageCompression(acceptedFiles[0], options);
+            }
             
             setFiles([Object.assign(compressed_image, {preview: URL.createObjectURL(acceptedFiles[0])})]);
 
@@ -143,7 +147,7 @@ export const ImageInput = ({
         }}
         {...getRootProps({className: 'dropzone'})} className='image-drop-input-container'>
             <input {...getInputProps()} />
-            <Image image={files[0]?.preview} />
+            <Image cursor='pointer' image={files[0]?.preview} />
             {blur ? 
             <div
             style={{
@@ -160,7 +164,7 @@ export const ImageInput = ({
             }}
             ></div>
             : null}
-            <ImageIcon center={center} zIndex={zIndex} animation={iconAnimation} />
+            <ImageIcon cursor={'pointer'} center={center} zIndex={zIndex} animation={iconAnimation} />
         </motion.div>
         {processingImage ? <ImageInputProcessingIndicator key={"image-processing-indicator"} value={percent} /> : null}
         </AnimatePresence>

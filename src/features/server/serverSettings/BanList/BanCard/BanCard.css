@@ -1,0 +1,23 @@
+
+.ban-card-container {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    justify-content: space-between;
+    padding: 1rem 0;
+}
+
+.ban-card-container h3,
+.ban-card-container p {
+    letter-spacing: var(--font-spacing);
+}
+
+.ban-card-container h3 {
+    width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ban-card-container button {
+    width: 150px;
+}

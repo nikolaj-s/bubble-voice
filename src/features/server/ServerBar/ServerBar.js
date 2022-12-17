@@ -6,7 +6,7 @@ import { io } from "socket.io-client";
 import { useNavigate, useRoutes } from 'react-router';
 
 // state
-import { addNewChannel, assignNewServerGroup, clearServerState, deleteChannel, deleteMessage, fetchPersistedMusicVolume, fetchServerDetails, handleLeavingServer, leaveChannel, newMessage, reOrderChannels, selectCurrentChannel, selectCurrentChannelId, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, selectTopAnimationPoint, setServerName, throwServerError, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateMemberActiveStatus, updateMemberStatus, updateServerBanner, updateServerGroups, userJoinsChannel, userJoinsServer, userLeavesChannel, userLeavesServer } from '../ServerSlice';
+import { addNewChannel, assignNewServerGroup, clearServerState, deleteChannel, deleteMessage, fetchPersistedMusicVolume, fetchServerDetails, handleLeavingServer, leaveChannel, newMessage, reOrderChannels, selectCurrentChannel, selectCurrentChannelId, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, selectTopAnimationPoint, setServerName, throwServerError, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateMemberActiveStatus, updateMemberStatus, updateServerBanner, updateServerGroups, userBanned, userJoinsChannel, userJoinsServer, userLeavesChannel, userLeavesServer } from '../ServerSlice';
 import { selectUsername } from '../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { getToken, url } from '../../../util/Validation';
 import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
@@ -21,7 +21,7 @@ import { selectCurrentScreen, setCurrentScreen, toggleControlState } from '../..
 import { ServerBanner } from '../../../components/serverBanner/ServerBanner';
 import { Loading } from '../../../components/LoadingComponents/Loading/Loading';
 import { setHeaderTitle } from '../../contentScreen/contentScreenSlice';
-import { setSideBarHeader } from '../../sideBar/sideBarSlice';
+import { removeServer, setSideBarHeader } from '../../sideBar/sideBarSlice';
 import { ChannelList } from './ChannelList/ChannelList';
 import { ServerSettingsButton } from '../../../components/buttons/ServerSettingsButton/ServerSettingsButton';
 import { ServerSettingsMenu } from '../serverSettings/ServerSettingsMenu';
@@ -33,7 +33,6 @@ import { UnpackMessage } from '../../../util/UnpackMessage';
 // style's
 import "./ServerBar.css"
 import { addPinnedMessage, removePinnedMessage } from '../ChannelRoom/ServerDashBoard/ServerDashBoardSlice';
-import { handleUpdateAvailable } from '../../../app/appSlice';
 
 export let socket = null;
 
@@ -248,6 +247,16 @@ const Bar = () => {
 
         socket.on('kick', (data) => {
             leaveServer(true)
+        })
+
+        socket.on('banned', (data) => {
+            leaveServer();
+
+            dispatch(removeServer(data.server_id));
+        })
+
+        socket.on('user banned', (data) => {
+            dispatch(userBanned(data.banData));
         })
 
         socket.on('new channel widget', (data) => {

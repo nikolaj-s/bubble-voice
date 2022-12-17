@@ -35,6 +35,7 @@ export const RadioButton = ({name, state, action}) => {
         animate={animation}
         onMouseEnter={() => {handleAnimation(accentColor)}}
         onMouseLeave={() => {handleAnimation(secondaryColor)}}
+        transition={{duration: 0.1}}
         className='radio-button-container'>
             <div style={{
                 width: 40,

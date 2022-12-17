@@ -7,7 +7,7 @@ import * as mediasoupClient from 'mediasoup-client';
 
 // state
 import { selectCurrentChannel, selectCurrentChannelId, selectPushToTalkActive, selectServerId, toggleLoadingChannel, updateMemberStatus, selectServerMembers, throwServerError, updateJoiningChannelState, setChannelSocialId, selectReconnectingState, toggleReconnectingState, checkConnection, clearServerPing } from '../../ServerSlice';
-import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPushToTalkState, selectMirroredWebCamState, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, selectVoiceActivationSensitivity, selectAutoGainControl } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
+import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPushToTalkState, selectMirroredWebCamState, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, selectVoiceActivationSensitivity, selectAutoGainControl, selectVoiceDeactivationDelayState } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
 import { selectDisplayName, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { playSoundEffect, selectMuteSoundEffectsWhileMutedState } from '../../../settings/soundEffects/soundEffectsSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
@@ -94,7 +94,7 @@ const Component = () => {
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
-
+    const voiceDeactivationDelay = useSelector(selectVoiceDeactivationDelayState);
 
     React.useEffect(() => {
         
@@ -416,10 +416,14 @@ const Component = () => {
                                 const arrSum = array.reduce((a, value) => a + value, 0);
 
                                 const avg = (arrSum / array.length) * 5;
+
+                                let timeout;
                                 
                                 if (avg >= voiceActivationSensitivity) {
                                     
                                     if (playing || microphoneState === false) return;
+
+                                    clearTimeout(timeout);
 
                                     playing = true;
 
@@ -433,14 +437,15 @@ const Component = () => {
 
                                     if (playing === false) return;
 
-                                    playing = false;
+                                    timeout = setTimeout(() => {
+                                        playing = false;
 
-                                    client.pauseProducer('audioType');
+                                        client.pauseProducer('audioType');
 
-                                    dispatch(updateMemberStatus({username: user.username, action: {active: false}}))
-                                    
-                                    socket.emit('user status', {username: user.username, action: {active: false, channel_specific: true}})
-                                
+                                        dispatch(updateMemberStatus({username: user.username, action: {active: false}}))
+                                        
+                                        socket.emit('user status', {username: user.username, action: {active: false, channel_specific: true}})
+                                    }, voiceDeactivationDelay)
                                 }
                             } catch (error) {
                                 console.log(error)
@@ -450,7 +455,12 @@ const Component = () => {
                     })
                 } else if (pushToTalk === true && microphoneState === true) {
                     
+                    let timeout;
+
                     if (pushToTalkActive) {
+
+                        clearTimeout(timeout)
+
                         client.resumeProducer('audioType');
 
                         dispatch(updateMemberStatus({username: user.username, action: {active: true}}))
@@ -458,11 +468,16 @@ const Component = () => {
                         socket.emit('user status', {username: user.username, action: {active: true, channel_specific: true}})
                                 
                     } else {
-                        client.pauseProducer('audioType')
 
-                        dispatch(updateMemberStatus({username: user.username, action: {active: false}}))
+                        timeout = setTimeout(() => {
+                        
+                            client.pauseProducer('audioType')
+
+                            dispatch(updateMemberStatus({username: user.username, action: {active: false}}))
+                                
+                            socket.emit('user status', {username: user.username, action: {active: false, channel_specific: true}}) 
                             
-                        socket.emit('user status', {username: user.username, action: {active: false, channel_specific: true}})
+                        }, voiceDeactivationDelay)
                     }
                 }  else {
 

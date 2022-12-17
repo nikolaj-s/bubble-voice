@@ -11,11 +11,12 @@ export const OfflineIcon = ({image}) => {
 
     return (
         <div style={{zIndex: 3, height: '100%', width: '100%'}} className='offline-icon-container'>
-            <Image width='100%' height='100%' objectFit='cover' image={image} />
+            <Image cursor='pointer' width='100%' height='100%' objectFit='cover' image={image} />
             <svg 
             style={{
                 objectFit: 'contain',
                 position: 'absolute',
+                cursor: 'pointer',
                 width: 20,
                 height: 20,
                 left: 2,

@@ -7,8 +7,8 @@
     left: 0;
     z-index: 5;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 }
 
 .create-channel-inner-menu-container {
@@ -19,7 +19,6 @@
     position: relative;
     height: 600px;
     max-width: 600px;
-    margin-left: 200px;
     padding: 10px 20px;
     border-radius: var(--border-radius);
 }

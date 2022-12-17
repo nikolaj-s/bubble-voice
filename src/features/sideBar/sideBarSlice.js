@@ -65,6 +65,9 @@ const sideBarSlice = createSlice({
         },
         pushNewServerCard: (state, action) => {
             state.serverList.push(action.payload);
+        },
+        removeServer: (state, action) => {
+            state.serverList = state.serverList.filter(s => s.server_id !== action.payload)
         }
     },
     extraReducers: {
@@ -107,6 +110,6 @@ export const selectServerQuery = state => state.sideBarSlice.serverQuery;
 
 // actions
 
-export const { setSideBarHeader, setServerQuery, pushNewServerCard } = sideBarSlice.actions;
+export const {removeServer, setSideBarHeader, setServerQuery, pushNewServerCard } = sideBarSlice.actions;
 
 export default sideBarSlice.reducer;

@@ -18,11 +18,11 @@ import "./Social.css";
 // socket
 import { socket } from '../../../ServerBar/ServerBar';
 import { Loading } from '../../../../../components/LoadingComponents/Loading/Loading';
-import { reverseEasing } from 'popmotion';
+
 import { PersistedDataNotice } from '../../../../../components/PersistedDataNotice/PersistedDataNotice';
 
 
-export const Social = ({currentChannel, channelId, socialRoute = false, bulletin = false}) => {
+export const Social = ({currentChannel, channelId, socialRoute = false, bulletin = false, channelName}) => {
 
     const dispatch = useDispatch();
 
@@ -52,9 +52,24 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         setTimeout(() => {
             messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
-        }, 100)
+
+            setTimeout(() => {
+
+                document.getElementsByClassName('social-messages-wrapper')[0].style.scrollBehavior = 'smooth';
+
+            }, 400)
+
+        }, 300)
         
         if (permission.user_can_post_channel_social) document.getElementById('social-input-selector').focus();
+
+        return () => {
+            try {
+                document.getElementsByClassName('social-messages-wrapper')[0].style.scrollBehavior = null;
+            } catch (e) {
+                return;
+            }
+        }
 
     // eslint-disable-next-line
     }, [channelId])
@@ -174,7 +189,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
                         {messages?.slice(0, messagesToRender).map((message, key) => {
                             return <Message current_message={message} previous_message={key === messages.length - 1 ? null : messages[key + 1]} pinned={message.pinned} pinMessage={() => {pinMessage(message)}} perm={permission?.user_can_post_channel_social} channel_id={message.channel_id} id={message._id} message={message.content} key={message.content.local_id || message._id} />
                         })}
-                        <PersistedDataNotice persisted={!currentChannel.persist_social} />
+                        <PersistedDataNotice channelName={currentChannel.channel_name} persisted={!currentChannel.persist_social} />
                     </div>
                     {permission?.user_can_post_channel_social ? <MessageInput socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : null}
                 </div>

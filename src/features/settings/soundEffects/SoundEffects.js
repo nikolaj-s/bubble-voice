@@ -4,7 +4,7 @@ import React from 'react'
 // state
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAudioOutput } from '../appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
-import { playSoundEffect, removeSoundEffectFromQueue, selectSocialSoundEffect, selectSoundEffect, selectSoundEffectQueue, selectSoundEffectVolume } from './soundEffectsSlice';
+import { playSoundEffect, removeSoundEffectFromQueue, selectCurrentVoiceOver, selectSocialSoundEffect, selectSoundEffect, selectSoundEffectQueue, selectSoundEffectVolume } from './soundEffectsSlice';
 
 export const SoundEffects = () => {
 
@@ -22,16 +22,18 @@ export const SoundEffects = () => {
 
     const soundEffectQueue = useSelector(selectSoundEffectQueue);
 
+    const currentVoiceOver = useSelector(selectCurrentVoiceOver);
+
     const soundEffects = {
         'connected': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/connected_pnu1hk.wav",
         'disconnected': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/disconnect_zpef4b.mp3",
-        'userJoined': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/user_has_joined_lzaaqf.mp3",
-        'userDisconnected': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/user_has_disconnected_zqajz0.mp3",
+        'userJoined': currentVoiceOver.state === 'male' ? "https://res.cloudinary.com/drlkgoter/video/upload/v1671138913/male-joined_fgw23o.mp3" : "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/user_has_joined_lzaaqf.mp3",
+        'userDisconnected': currentVoiceOver.state === 'male' ? "https://res.cloudinary.com/drlkgoter/video/upload/v1671138913/male-disconnect_kywlbh.mp3" : "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/user_has_disconnected_zqajz0.mp3",
         'controlSoundEffect': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/control-sound-effect_fizuj9.mp3",
         'channelDeleted': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898472/channel-has-been-deleted_vuc7yy.mp3",
-        'youHaveBeenPoked': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/hey-wake-up_poprdv.mp3",
+        'youHaveBeenPoked': currentVoiceOver.state === 'male' ? "https://res.cloudinary.com/drlkgoter/video/upload/v1671138913/male-wake-up_v5dcuu.mp3" : "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/hey-wake-up_poprdv.mp3",
         'newMessage': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/connected_pnu1hk.wav",
-        'userKicked': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/you-have-been-kicked-from-the-server_ywzaba.mp3",
+        'userKicked': currentVoiceOver.state === 'male' ? "https://res.cloudinary.com/drlkgoter/video/upload/v1671138913/male-kicked_sw7eyu.mp3" : "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/you-have-been-kicked-from-the-server_ywzaba.mp3",
         'lostConnection': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/lost-connection_aeqih2.mp3",
         'moved': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/moved_jszssq.mp3",
         'deactivate': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/deactivate_naxcd8.mp3",

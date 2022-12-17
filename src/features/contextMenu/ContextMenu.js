@@ -12,7 +12,7 @@ import { CtxMenuTitle } from '../../components/titles/ctxMenuTitle/CtxMenuTitle'
 
 // state
 import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleStreamState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCopyLinkState, selectCopyState, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteMesssageState, selectDeleteWidget, selectDisableStream, selectDisableWebCam, selectEditChannelCtxState, selectFlipWebCamState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSelectedMessage, selectSelectedUserCtxState, selectStopStreamingState, selectStreamVolumeState, selectViewSocialState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
-import { assignNewServerGroup, deleteMessage, markWidgetForDeletion, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerMembers, selectUsersPermissions, sendDeleteMessageRequest, setChannelSocialId, setEditingChannelId, throwServerError, toggleMembersWebCamState } from '../server/ServerSlice';
+import { assignNewServerGroup, deleteMessage, markWidgetForDeletion, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerMembers, selectUsersPermissions, sendDeleteMessageRequest, setChannelSocialId, setEditingChannelId, throwServerError, toggleMembersWebCamState, userBanned } from '../server/ServerSlice';
 
 // style
 import "./ContextMenu.css";
@@ -29,8 +29,6 @@ import { miscSettingsChannelSpecificStateChange, selectHideUserStatus, selectMis
 import { MoveUser } from '../../components/buttons/MoveUser/MoveUser';
 import { selectPrimaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectSocialSoundEffect, updateSoundEffectsState } from '../settings/soundEffects/soundEffectsSlice';
-import { selectWebCamState } from '../controlBar/ControlBarSlice';
-import { removePinnedMessage } from '../server/ChannelRoom/ServerDashBoard/ServerDashBoardSlice';
 
 export const ContextMenu = () => {
 
@@ -181,15 +179,48 @@ export const ContextMenu = () => {
 
                 const status = p.className.split(' ')[2].split('-')[1];
 
-                if (status === 'undefined' || status === 'offline') return;
-
                 const user = members.find(m => m._id === memberId);
+
+                const isOwner = permissionGroups.findIndex(group => group._id === user.server_group && group.server_group_name === 'Owner')
 
                 if (!user || user.username === username) return;
 
-                dispatch(setContextMenuOptions({state: 'pokeUser', value: true}));
+                dispatch(handleUserManagementCtx({
+                    ban: isOwner !== -1 ? false : permissions.user_can_ban_user,
+                    perms: isOwner !== -1 ? false : permissions.user_can_manage_server_groups,
+                    user: `${user.username}-servergroup-${user.server_group}`,
+                    isOwner: isOwner !== -1,
+                    poke: (status === 'undefined' || status === 'offline') ? false : true,
+                    volume: true,
+                    member_id: user._id,
+                    move: false
+                }))
 
-                dispatch(setContextMenuOptions({state: '_id', value: memberId}));
+                const L_USER = USER_PREFS.get(user._id);
+
+                if (L_USER?.volume) {
+                    setUserVolumeLevel(L_USER?.volume);
+                } else {
+                    setUserVolumeLevel(1);
+                }
+
+                if (L_USER?.flip_web_cam) {
+                    setFlippedWebCamState(L_USER.flip_web_cam);
+                } else {
+                    setFlippedWebCamState(false);
+                }
+
+                if (L_USER?.disabled_web_cam) {
+                    toggleDisabledWebCamLocalState(L_USER.disabled_web_cam);
+                } else {
+                    toggleDisabledWebCamLocalState(false);
+                }
+
+                if (L_USER?.disable_stream) {
+                    toggleDisableStreamLocalState(L_USER.disable_stream);
+                } else {
+                    toggleDisableStreamLocalState(false);
+                }
 
                 dispatch(toggleContextMenu(true));
 
@@ -810,6 +841,29 @@ export const ContextMenu = () => {
         }
     }
 
+    const handleBanUser = async () => {
+        try {
+
+            const user_to_ban = selectedUserToManage.split('-')[0];
+
+            if (!user_to_ban) return;
+
+            await socket.request('ban', {username: user_to_ban})
+            .then(res => {
+                
+                dispatch(userBanned(res.banData))
+            })
+            .catch(error => {
+                console.log(error)
+                dispatch(throwServerError({errorMessage: error}));
+            })
+
+        } catch (error) {
+            console.log(error)
+            dispatch(throwServerError({errorMessage: error.message}));
+        }
+    }
+
     return (
         <>
         {ctxActive ? 
@@ -852,7 +906,7 @@ export const ContextMenu = () => {
             {moveUserState ? <MoveUser move={handleMoveUser} /> : null}
             {kickUser ? <CtxButton name="Kick User" action={handleKickUser} /> : null}
             {pokeUser ? <CtxButton name="Poke User" action={handlePokeUser} /> : null}
-            {canBanUser ? <CtxButton name={"Ban User"} /> : null}
+            {canBanUser ? <CtxButton action={handleBanUser} name={"Ban User"} /> : null}
             {channelSpecificSettingsState ? <CtxMenuTitle title={"Room Preferences"} /> : null}
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideChannelBackground")}} state={hideChannelBackground} name={"Hide Channel Background"} /> : null}
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideNonVideoParticapents")}} state={hideNonVideoParticapents} name={"Hide Non Video Participants"} /> : null}

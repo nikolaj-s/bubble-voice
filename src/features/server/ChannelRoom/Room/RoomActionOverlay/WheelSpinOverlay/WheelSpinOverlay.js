@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { WheelSpinWidget } from '../../../../../../components/widgets/Widgets/WheelSpinWidget/WheelSpinWidget'
 
 // state
-import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./WheelSpinOverlay.css";
@@ -21,14 +21,20 @@ export const WheelSpinOverlay = ({data, onEnd, page}) => {
 
     const accentColor = useSelector(selectAccentColor);
 
+    const secondaryColor = useSelector(selectSecondaryColor)
+
     return (
         <motion.div 
         style={{
-            display: (page === "social" || page === "widgets") ? 'none' : 'flex'
+            display: (page === "social" || page === "widgets") ? 'none' : 'flex',
+            backgroundColor: secondaryColor,
+            border: `solid 3px ${primaryColor}`,
+            borderTop: 'none'
         }}
-        initial={{opacity: 0}}
-        animate={{opacity: 1}}
-        exit={{opacity: 0}}
+        initial={{top: -750}}
+        animate={{top: 0}}
+        exit={{top: -750}}
+        transition={{duration: 0.3}}
         className="wheel-spin-overlay-container"
         key={"wheel-spin-overlay"} >
             <WheelSpinWidget overlay={true} editing={true} finishingDeg={data?.extra_info} widget={data?.widget} onEnd={onEnd}  />

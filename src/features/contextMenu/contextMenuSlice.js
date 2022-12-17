@@ -93,7 +93,6 @@ const contextMenuSlice = createSlice({
             state.disableWebCam = false;
             state.disableStream = false;
             state.copyLink = false;
-            console.log('clearing state')
         },
         handleChannelCtxState: (state, action) => {
             state.joinChannel = action.payload.join;

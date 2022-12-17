@@ -2,16 +2,18 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    align-items: center;
     flex-shrink: 0;
+    margin-left: 10px;
 }
 
 .persisted-notice-container h3 {
     letter-spacing: var(--font-spacing);
-    text-align: center;
+    text-align: start;
+    font-size: 2rem;
+    margin-bottom: 0;
 }
 
 .persisted-notice-container p {
     letter-spacing: var(--font-spacing);
-    text-align: center;
+    text-align: start;
 }

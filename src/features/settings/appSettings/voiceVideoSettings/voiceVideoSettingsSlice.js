@@ -56,7 +56,8 @@ const voiceVideoSettingsSlice = createSlice({
         echoCancellation: false,
         micInputVolume: 1,
         autoGainControl: false,
-        voiceActivationSensitivity: 60
+        voiceActivationSensitivity: 60,
+        voiceDeactivationDelay: 50
     },
     reducers: {
         updateVoiceActivationSensitivity: (state, action) => {
@@ -68,6 +69,11 @@ const voiceVideoSettingsSlice = createSlice({
 
             state.micInputVolume = action.payload;
         
+        },
+        updateVoiceDeactivationDelay: (state, action) => {
+
+            state.voiceDeactivationDelay = action.payload;
+
         },
         updateSelectedDevice: (state, action) => {
 
@@ -88,8 +94,6 @@ const voiceVideoSettingsSlice = createSlice({
         },
         toggleAutoGain: (state, action) => {
 
-            
-
             state.autoGainControl = !state.autoGainControl;
 
         },
@@ -105,7 +109,8 @@ const voiceVideoSettingsSlice = createSlice({
                 noiseSuppression: state.noiseSuppression,
                 echoCancellation: state.echoCancellation,
                 micInputVolume: state.micInputVolume,
-                autoGainControl: state.autoGainControl
+                autoGainControl: state.autoGainControl,
+                voiceDeactivationDelay: state.voiceDeactivationDelay
             }
             
             saveLocalData("VOICE/VIDEO", "SETTINGS", obj);
@@ -165,6 +170,10 @@ const voiceVideoSettingsSlice = createSlice({
 
             if (saved_data.autoGainControl) {
                 state.autoGainControl = saved_data.autoGainControl;
+            }
+
+            if (saved_data.voiceDeactivationDelay) {
+                state.voiceDeactivationDelay = saved_data.voiceDeactivationDelay;
             }
 
             if (action.payload.voice_activation_level) {
@@ -252,7 +261,9 @@ export const selectVoiceActivationSensitivity = state => state.voiceVideoSetting
 
 export const selectAutoGainControl = state => state.voiceVideoSettingsSlice.autoGainControl;
 
-export const {toggleAutoGain, updateVoiceActivationSensitivity, toggleSelectedVoiceVideoState, updateSelectedDevice, toggleVoiceActivity, handleSaveVoiceVideoSettings, updateMicInputVolume } = voiceVideoSettingsSlice.actions;
+export const selectVoiceDeactivationDelayState = state => state.voiceVideoSettingsSlice.voiceDeactivationDelay;
+
+export const {updateVoiceDeactivationDelay, toggleAutoGain, updateVoiceActivationSensitivity, toggleSelectedVoiceVideoState, updateSelectedDevice, toggleVoiceActivity, handleSaveVoiceVideoSettings, updateMicInputVolume } = voiceVideoSettingsSlice.actions;
 
 export default voiceVideoSettingsSlice.reducer;
 

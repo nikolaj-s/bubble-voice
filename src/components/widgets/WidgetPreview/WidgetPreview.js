@@ -45,7 +45,7 @@ export const WidgetPreview = ({widgets = [], editing = false, reorder}) => {
                         {widget.type === 'image' && !widget.delete ? <ImageWidget editing={editing} key={widget._id} widget={widget} /> : null}
                         {widget.type === 'video' && !widget.delete ? <VideoWidget editing={editing} key={widget._id} widget={widget} /> : null}
                         {widget.type === 'dynamicGallery' && !widget.delete ? <DynamicGalleryWidget editing={editing} key={widget._id} widget={widget} /> : null}
-                        {widget.type === 'music' && !widget.delete ? <MusicWidget editing={editing} /> : null}
+                        {widget.type === 'music' && !widget.delete ? <MusicWidget widget={widget} editing={editing} /> : null}
                         {widget.type === 'wheel-spin' && !widget.delete ? <WheelSpinWidget editing={true} key={widget._id} widget={widget} /> : null}
                         {widget.delete ? null : <SubMenuButton invert={false} altInvert={true} position={"absolute"} borderRadius={10} zIndex={3} top={15} left={8} />}
                         {widget.delete ? <InputPlaceHolder margin={"1% 0"} value={"Hit Apply To Save Changes"} /> : null}
@@ -63,7 +63,7 @@ export const WidgetPreview = ({widgets = [], editing = false, reorder}) => {
                     {widget.type === 'image' ? <ImageWidget key={widget._id + key} widget={widget} /> : null}
                     {widget.type === 'video' ? <VideoWidget key={widget._id + key} widget={widget} /> : null}
                     {widget.type === 'dynamicGallery' ? <DynamicGalleryWidget key={widget._id} widget={widget} /> : null}
-                    {widget.type === 'music' ? <MusicWidget key={widget._id + key} /> : null}
+                    {widget.type === 'music' ? <MusicWidget widget={widget} key={widget._id + key} /> : null}
                     {widget.type === 'wheel-spin' ? <WheelSpinWidget key={widget._id + key} widget={widget} /> : null}
                     </>
                 )

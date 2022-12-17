@@ -7,10 +7,11 @@
     align-items: center;
     margin: 1% 0;
     position: relative;
+    transition: 0.3s;
 }
 
 .inner-music-widget-container {
-    width: 95%;
+    width: 96%;
 }
 
 .music-top-title-container {
@@ -63,9 +64,9 @@
 }
 
 .music-widget-inner-controls-container {
-    max-width: 140px;
+    max-width: 120px;
     width: 30%;
-    margin-right: 10%;
+    margin-right: 10px;
     flex-shrink: 0;
 }
 
