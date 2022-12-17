@@ -8,7 +8,7 @@ import { CtxButton } from '../ctxButton/CtxButton';
 // style
 import "./MoveUser.css";
 
-export const MoveUser = ({move = () => {}, movingMenu}) => {
+export const MoveUser = ({move = () => {}, top, left}) => {
 
     const [expanded, toggleExpanded] = React.useState(false);
 
@@ -32,13 +32,21 @@ export const MoveUser = ({move = () => {}, movingMenu}) => {
         onMouseEnter={() => {handleExpanded(true)}}
         onMouseLeave={() => {handleExpanded(false)}}
         style={{
-            backgroundColor: primaryColor
+            backgroundColor: primaryColor,
+            borderRadius: 0
         }}
         className='move-user-button'>
-            <CtxButton name={"Move"} />
+            <CtxButton borderRadius={0} name={"Move"} />
         </div>
         {expanded ? 
-            <div onMouseOver={() => {handleExpanded(true)}} onMouseLeave={() => {handleExpanded(false)}} className='move-to-channel-container'>
+            <div 
+            style={{
+                position: 'absolute',
+                top: '50%',
+                left: '100%',
+                backgroundColor: primaryColor
+            }}
+            onMouseOver={() => {handleExpanded(true)}} onMouseLeave={() => {handleExpanded(false)}} className='move-to-channel-container'>
                 {channelList.map((channel) => {
                     return <p
                     key={channel._id}

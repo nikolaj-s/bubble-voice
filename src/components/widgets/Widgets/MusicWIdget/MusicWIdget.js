@@ -85,7 +85,7 @@ export const MusicWidget = ({editing = false, widget}) => {
 
         if (queue.length >= 11) if (queue.length >= 11) return dispatch(throwMusicError({error: true, errorMessage: "Song Queue Limit Has Been Reached"}));
         
-        if (loading) return;
+        if (loading || editing === true) return;
 
         const exists = queue.findIndex(s => s._id === song._id);
 

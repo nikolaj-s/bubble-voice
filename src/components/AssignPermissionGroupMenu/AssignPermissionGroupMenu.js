@@ -29,7 +29,7 @@ export const AssignPermissionGroupMenu = ({permission_groups, current_permission
                     group.server_group_name === 'Owner' ? null :
                     <div 
                     key={group._id + key + 'server-group-select'}
-                    style={{backgroundColor: primaryColor}}
+                    style={{backgroundColor: primaryColor, borderRadius: 0}}
                     onClick={(e) => {assignNewGroup(e, group._id)}} className='select-server-group-to-assign-button'>
                         {group._id === current_permission_group.split('servergroup-')[1] ? <div style={{backgroundColor: textColor}}></div> : <div></div>}
                         <p

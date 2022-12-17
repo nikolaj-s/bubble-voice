@@ -903,7 +903,7 @@ export const ContextMenu = () => {
             {disableWebCameState ? <BoolButton name={"Disable Webcam"} state={disabledWebCamLocalState} action={handleDisableWebCam} /> : null}
             {disableStreamState ? <BoolButton name={"Disable Stream"} state={disableStreamLocalState} action={handleDisableStream} /> : null}
             {deleteWidget ? <CtxButton action={handleDeleteWidget} name={"Delete Widget"} /> : null}
-            {moveUserState ? <MoveUser move={handleMoveUser} /> : null}
+            {moveUserState ? <MoveUser top={ctxCordinates.y} left={ctxCordinates.x} move={handleMoveUser} /> : null}
             {kickUser ? <CtxButton name="Kick User" action={handleKickUser} /> : null}
             {pokeUser ? <CtxButton name="Poke User" action={handlePokeUser} /> : null}
             {canBanUser ? <CtxButton action={handleBanUser} name={"Ban User"} /> : null}

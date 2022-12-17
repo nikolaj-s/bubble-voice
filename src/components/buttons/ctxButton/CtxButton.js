@@ -6,7 +6,7 @@ import { selectPrimaryColor, selectTextColor } from '../../../features/settings/
 // style
 import "./CtxButton.css";
 
-export const CtxButton = ({name, action}) => {
+export const CtxButton = ({name, action, borderRadius}) => {
 
     const primaryColor = useSelector(selectPrimaryColor);
 
@@ -18,6 +18,7 @@ export const CtxButton = ({name, action}) => {
         className='ctx-button-container'
         style={{
             backgroundColor: primaryColor,
+            borderRadius: borderRadius
         }}>
             <p
             style={{

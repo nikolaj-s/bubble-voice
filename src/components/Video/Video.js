@@ -4,21 +4,29 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { setExpandedContent } from '../../features/ExpandContent/ExpandContentSlice';
 import { selectAccentColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAutoPlayNativeVideos } from '../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { ExpandButton } from '../buttons/ExpandButton/ExpandButton';
 import { AudioToggleButton } from '../buttons/mediaButtons/audioToggleButton/AudioToggleButton';
 import { PauseButton } from '../buttons/PauseButton/PauseButton';
 import { PlayButton } from '../buttons/PlayButton/PlayButton';
+import { useIntersection } from '../useIntersection/useIntersection';
 
 // style's
 import "./Video.css";
 
 export const Video = ({ video, id, looping = false, objectFit = 'contain', height = "100%", mutedToggled, marginLeft}) => {
 
+    const ref = React.useRef();
+
+    const visible = useIntersection(ref, '0px');
+
     const [muted, toggleMuted] = React.useState(true);
     
     const [playing, togglePlaying] = React.useState(false);
 
     const accentColor = useSelector(selectAccentColor);
+
+    const social_autoplay = useSelector(selectAutoPlayNativeVideos);
 
     const dispatch = useDispatch();
 
@@ -53,6 +61,20 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
         dispatch(setExpandedContent(video))
     }
 
+    React.useEffect(() => {
+
+        if (visible && social_autoplay) {
+            togglePlaying(true);
+
+            document.getElementById(video + id).play();
+        } else {
+            togglePlaying(false);
+
+            document.getElementById(video + id).pause();
+        }
+
+    }, [visible])
+
     return (
         <div 
         style={{
@@ -63,10 +85,11 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
         onClick={handlePlayState}
         className='message-video-container'>
             <video 
+            ref={ref}
             loading="lazy"
             style={{objectFit: objectFit}}
-            muted={!mutedToggled ? true : false}
-            onEnded={onVideoEnd} autoPlay={looping ? true : false} id={video + id} controls={false} src={video} loop={looping} />
+            muted={mutedToggled ? true : false}
+            onEnded={onVideoEnd} autoPlay={looping ? true : false} id={video + id} controls={false} src={video} loop={true} />
             {looping ? null :
             <div 
             style={{

@@ -4,8 +4,17 @@
     z-index: 10;
     border-radius: 10px;
     min-width: 300px;
-    overflow: hidden;
     box-shadow: 4px 4px 30px rgba(0, 0, 0, 0.424);
     display: flex;
     flex-direction: column;
+}
+
+.ctx-menu-container div:first-child {
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+}
+
+.ctx-menu-container div:last-child {
+    border-bottom-left-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
 }

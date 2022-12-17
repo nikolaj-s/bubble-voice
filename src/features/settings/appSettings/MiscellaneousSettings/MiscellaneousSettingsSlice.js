@@ -53,6 +53,7 @@ const MiscellaneousSettingsSlice = createSlice({
         hideNonVideoParticapents: false,
         disableGifProfiles: false,
         hideUserStatus: false,
+        autoPlayNativeVideos: true,
         defaultServer: {label: "Default", id: ""},
         roomScale: 1,
         enabledSystemNotifications: true
@@ -131,7 +132,8 @@ const MiscellaneousSettingsSlice = createSlice({
                 disableGifProfiles: state.disableGifProfiles,
                 hideUserStatus: state.hideUserStatus,
                 defaultServer: state.defaultServer,
-                enabledSystemNotifications: state.enabledSystemNotifications
+                enabledSystemNotifications: state.enabledSystemNotifications,
+                autoPlayNativeVideos: state.autoPlayNativeVideos
             }
 
             saveLocalData("MISC", "MISCSETTINGS", obj);
@@ -183,6 +185,8 @@ const MiscellaneousSettingsSlice = createSlice({
 
             state.hideUserStatus = saved_data.hideUserStatus;
 
+            if (saved_data.autoPlayNativeVideos === false) state.autoPlayNativeVideos = false;
+
             if (saved_data.defaultServer) state.defaultServer = saved_data.defaultServer;
             
             if (saved_data.enabledSystemNotifications !== (undefined && null)) state.enabledSystemNotifications = saved_data.enabledSystemNotifications;
@@ -215,6 +219,8 @@ export const selectMiscSettingsHideChannelBackground = state => state.Miscellane
 export const selectMiscSettingsHideNonVideoParticapents = state => state.MiscellaneousSettingsSlice.hideNonVideoParticapents;
 
 export const selectRoomScale = state => state.MiscellaneousSettingsSlice.roomScale;
+
+export const selectAutoPlayNativeVideos = state => state.MiscellaneousSettingsSlice.autoPlayNativeVideos;
 
 export const {pushPokeNotification, pushSytemNotification, setDefaultServer, changeRoomScale, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, miscSettingsClearError, miscSettingsChannelSpecificStateChange } = MiscellaneousSettingsSlice.actions;
 
