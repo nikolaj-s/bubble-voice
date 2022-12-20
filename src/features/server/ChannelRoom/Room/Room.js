@@ -296,6 +296,40 @@ const Component = () => {
     React.useEffect(() => {
         if (client && loaded === true) {
 
+            if (channel.disable_streams) {
+
+                client.closeProducer('audioType');
+                dispatch(updateMemberStatus({username: user.username, action: {microphone: false}}))
+                socket.emit('user status', {username: user.username, action: {microphone: false}})
+                dispatch(updateMemberStatus({username: user.username, action: {active: false}}))    
+                socket.emit('user status', {username: user.username, action: {active: false, channel_specific: true}})
+                const audio_sources_to_mute = document.querySelectorAll('video, audio');
+
+                for (const el of audio_sources_to_mute) {
+
+                    if (soundEffectsMuted === false) {
+
+                        if (el.id !== 'sound-effects-source') {
+                            el.muted = true;
+                        } 
+
+                        continue;
+                    } else {
+                        el.muted = true;
+                    }
+
+                }
+
+                dispatch(updateMemberStatus({username: user.username, action: {muted: true}}))
+                
+                client.toggleAudioState(true)
+                
+                socket.emit('user status', {username: user.username, action: {muted: true}})
+
+                return;
+            
+            }
+
             // handle microphone state changes
             if (microphoneState) {
                 client.produce('audioType', audioDevice._id);
@@ -362,7 +396,7 @@ const Component = () => {
 
         }
     // eslint-disable-next-line
-    }, [microphoneState, webcamState, loaded, screenShareState, audioState, soundEffectsMuted, reconnecting])
+    }, [microphoneState, webcamState, loaded, screenShareState, audioState, soundEffectsMuted, reconnecting, channel.disable_streams])
 
     // handle voice activity
 
@@ -425,6 +459,8 @@ const Component = () => {
 
                                     clearTimeout(timeout);
 
+                                    timeout = null;
+
                                     playing = true;
 
                                     client.resumeProducer('audioType');
@@ -437,8 +473,13 @@ const Component = () => {
 
                                     if (playing === false) return;
 
+                                    playing = false;
+
+                                    clearTimeout(timeout);
+
+                                    timeout = null;
+
                                     timeout = setTimeout(() => {
-                                        playing = false;
 
                                         client.pauseProducer('audioType');
 
@@ -447,6 +488,8 @@ const Component = () => {
                                         socket.emit('user status', {username: user.username, action: {active: false, channel_specific: true}})
                                     }, voiceDeactivationDelay)
                                 }
+
+                                console.log(timeout)
                             } catch (error) {
                                 console.log(error)
                                 scriptProcessor.onaudioprocess = null;
@@ -455,11 +498,10 @@ const Component = () => {
                     })
                 } else if (pushToTalk === true && microphoneState === true) {
                     
+
                     let timeout;
-
+                   // console.log(timeout, pushToTalkActive)
                     if (pushToTalkActive) {
-
-                        clearTimeout(timeout)
 
                         client.resumeProducer('audioType');
 
@@ -467,18 +509,17 @@ const Component = () => {
                             
                         socket.emit('user status', {username: user.username, action: {active: true, channel_specific: true}})
                                 
-                    } else {
+                    } else { 
 
-                        timeout = setTimeout(() => {
-                        
-                            client.pauseProducer('audioType')
+                        client.pauseProducer('audioType')
 
-                            dispatch(updateMemberStatus({username: user.username, action: {active: false}}))
-                                
-                            socket.emit('user status', {username: user.username, action: {active: false, channel_specific: true}}) 
+                        dispatch(updateMemberStatus({username: user.username, action: {active: false}}))
                             
-                        }, voiceDeactivationDelay)
+                        socket.emit('user status', {username: user.username, action: {active: false, channel_specific: true}}) 
+                            
                     }
+
+                 //   console.log(timeout)
                 }  else {
 
                     scriptProcessor?.disconnect();
@@ -493,7 +534,7 @@ const Component = () => {
             scriptProcessor?.disconnect();
             analyser?.disconnect();
             source?.disconnect();
-            
+            console.log(error)
 
             dispatch(throwServerError({errorMessage: "Error processing microphone input"}))
         }

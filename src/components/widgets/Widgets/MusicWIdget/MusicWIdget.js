@@ -181,6 +181,17 @@ export const MusicWidget = ({editing = false, widget}) => {
 
         toggleLoading(false);
     }
+
+    const handleRemoveFromQueue = async (song) => {
+        toggleLoading(true);
+
+        await socket.request('remove song from queue', {song: song})
+        .catch(err => {
+            dispatch(throwServerError({errorMessage: err}));
+        })
+
+        toggleLoading(false);
+    }
     
     return (
         <div 
@@ -197,7 +208,7 @@ export const MusicWidget = ({editing = false, widget}) => {
                 </div>
                 <div className='music-widget-nav-container'>
                     <TextInput keyCode={handleEnter} inputValue={query} action={handleInput} placeholder={"Add Song To Queue"} marginTop='0' />
-                    <AddButton action={handleAddSongToQueue} margin={"0 0 0 2%"} height={"35px"} width={"35px"} />
+                    <AddButton opacity={query.length === 0 ? 0.5 : 1} invert={true} active={query.length === 0} action={handleAddSongToQueue} margin={"0 0 0 2%"} height={"35px"} width={"35px"} />
                 </div> 
                 <div className='music-queue-title-container'>
                     <h3 style={{color: textColor}}>Saved Music</h3>
@@ -225,7 +236,7 @@ export const MusicWidget = ({editing = false, widget}) => {
                     : queue.map((song, i) => {
                         return (
                             i === 0 ? null :
-                            <Song liked={song.liked} action={() => {handleSavingSong(song)}} id={song._id} key={song._id} name={song.title} duration={song.duration} image={song.thumbnail} />
+                            <Song removeFromQueue={() => {handleRemoveFromQueue(song)}} inQueue={true} liked={song.liked} action={() => {handleSavingSong(song)}} id={song._id} key={song._id} name={song.title} duration={song.duration} image={song.thumbnail} />
                         )
                     })}
                 </div>

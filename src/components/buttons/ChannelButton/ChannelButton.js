@@ -44,7 +44,8 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
         if (active) return;
 
         animation.start({
-            border: `solid 4px ${color}`
+            border: `solid 4px ${color}`,
+            backgroundColor: color
         })
     }
 
@@ -55,7 +56,8 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
     React.useEffect(() => {
        
         animation.start({
-            border: `solid 4px ${active ? accentColor : primaryColor}`
+            border: `solid 4px ${active ? primaryColor : 'transparent'}`,
+            backgroundColor: active ? primaryColor : 'transparent'
         })
         setUsersState(users)
     // eslint-disable-next-line
@@ -72,21 +74,22 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
             <motion.div 
             id={`channel-button-${channel._id}`}
             animate={animation} 
-            onMouseEnter={() => {handleAnimation(accentColor, true)}}
-            onMouseLeave={() => {handleAnimation(primaryColor, false)}}
-            onMouseDown={() => {handleAnimation(textColor)}}
-            onMouseUp={() => {handleAnimation(accentColor)}}
+            onMouseEnter={() => {handleAnimation(primaryColor, true)}}
+            onMouseLeave={() => {handleAnimation('transparent', false)}}
+            onMouseDown={() => {handleAnimation(accentColor)}}
+            onMouseUp={() => {handleAnimation(primaryColor)}}
             onClick={handleAction}
+            transition={{duration: 0.1}}
             style={{
-                border: `solid 4px ${active ? accentColor : primaryColor}`,
-                backgroundColor: active ? accentColor : primaryColor,
+                border: `solid 4px ${active ? primaryColor : 'transparent'}`,
+                backgroundColor: active ? accentColor : 'transparent',
                 cursor: active ? "default" : "pointer",
             }}
             className='channel-button-container'>
                 <h3 style={{color: textColor}}>{channel.channel_name}</h3>
                 {mouseEnter ? <div className='channel-button-extra-context-wrapper'>
-                    <SocialButton action={openSocial} margin={'0 5px 0 0'} borderRadius={10} width={12} height={12} />
-                    <SubMenuButton zIndex={1} description={"More"} target={`channel-button-${channel._id}`} width={12} height={12} borderRadius={10} />
+                    <SocialButton flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} action={openSocial} margin={'0 5px 0 0'} borderRadius={10} width={12} height={12} />
+                    <SubMenuButton flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} description={"More"} target={`channel-button-${channel._id}`} width={12} height={12} borderRadius={10} />
                 </div> : null}
             </motion.div>
             {usersState.map((user) => {

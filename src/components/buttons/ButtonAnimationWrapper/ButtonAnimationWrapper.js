@@ -25,7 +25,9 @@ export const ButtonAnimationWrapper = ({action = () => {}, position = 'relative'
 
     const handleAnimation = (color, e) => {
         if (e) e.stopPropagation();
+        
         if (active) return;
+        
         animation.start({
             filter: `contrast(${color})`
         })
@@ -37,6 +39,7 @@ export const ButtonAnimationWrapper = ({action = () => {}, position = 'relative'
     }
 
     React.useEffect(() => {
+        
         animation.start({
             opacity: active ? opacity : 1,
             filter: invert ? 'contrast(100%)' : active ? `contrast(${50}%)` : `contrast(${100}%)`

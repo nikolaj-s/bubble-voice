@@ -4,7 +4,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { setExpandedContent } from '../../features/ExpandContent/ExpandContentSlice';
 import { selectAccentColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
-import { selectAutoPlayNativeVideos } from '../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { selectAutoPlayNativeVideos, selectMuteSocialVideos } from '../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { ExpandButton } from '../buttons/ExpandButton/ExpandButton';
 import { AudioToggleButton } from '../buttons/mediaButtons/audioToggleButton/AudioToggleButton';
 import { PauseButton } from '../buttons/PauseButton/PauseButton';
@@ -18,7 +18,7 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
 
     const ref = React.useRef();
 
-    const visible = useIntersection(ref, '0px');
+    const visible = useIntersection(ref, '-400px');
 
     const [muted, toggleMuted] = React.useState(true);
     
@@ -27,6 +27,8 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
     const accentColor = useSelector(selectAccentColor);
 
     const social_autoplay = useSelector(selectAutoPlayNativeVideos);
+
+    const social_mute = useSelector(selectMuteSocialVideos);
 
     const dispatch = useDispatch();
 
@@ -74,6 +76,15 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
         }
 
     }, [visible])
+
+    React.useEffect(() => {
+
+        if (social_mute) {
+            document.getElementById(video + id).muted = true;
+            toggleMuted(false);
+        }
+
+    }, [social_mute])
 
     return (
         <div 

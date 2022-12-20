@@ -180,6 +180,8 @@ ipcMain.handle('GET_SOURCES', async () => {
   return captures;
 })
 
+let timeout;
+
 ipcMain.on("REG_KEYBINDS", (event, data) => {
 
   const keyCodes = data;
@@ -191,6 +193,22 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
     let keyDown = false;
 
     let pushToTalkActive = false;
+
+    clearTimeout(timeout);
+
+    const handle_inactivity = () => {
+
+      clearTimeout(timeout);
+
+      timeout = setTimeout(() => {
+
+        event.sender.send('inactive');
+
+        console.log('user has gone inactive');
+
+      }, 1800000)
+      
+    }
 
     ioHook.removeAllListeners();
 
@@ -214,9 +232,12 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
       }
 
       pushToTalkActive = true;
+    
     })
 
     ioHook.on('keyup', (key) => {
+
+      handle_inactivity();
       
       if (key.rawcode !== keyCodes.push_to_talk?.keyCode && key.rawcode !== keyCodes?.push_to_mute?.keyCode) return;
 
@@ -285,6 +306,8 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
 
     ioHook.on('mouseup', (key) => {
 
+      handle_inactivity();
+
       if (key.button !== keyCodes.push_to_talk?.keyCode && key.button !== keyCodes?.push_to_mute?.keyCode) return;
 
       if (!pushToTalkActive) return;
@@ -326,10 +349,15 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
 
       keyDown = false;
     })
+
+    ioHook.on('mousemove', () => {
+      handle_inactivity();
+    })
     
     ioHook.start();
   } catch (error) {
     console.log(error)
+    clearTimeout(timeout);
   }
 })
 

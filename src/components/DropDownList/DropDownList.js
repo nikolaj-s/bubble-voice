@@ -14,7 +14,7 @@ export const DropDownList = ({selectedItem, list = ["No Options"], action, state
     const [open, toggleOpen] = React.useState(false)
 
     const toggleDropDown = () => {
-        if (list.length === 1) return;
+        if (list.length === 0) return;
 
         toggleOpen(!open);
     }

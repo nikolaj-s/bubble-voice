@@ -48,6 +48,8 @@ const Wrapper = () => {
 
     const [channelToEdit, setChannelToEdit] = React.useState({});
 
+    const [disableStreams, toggleDisableStreams] = React.useState(false);
+
     const channel = useSelector(selectChannelToEdit);
 
     const permission = useSelector(selectUsersPermissions);
@@ -64,6 +66,10 @@ const Wrapper = () => {
 
                 setBackgroundBlur(channelToEdit.background_blur);
             
+            }
+
+            if (channelToEdit.disable_streams) {
+                toggleDisableStreams(true);
             }
 
             for (const w of channel.widgets) {
@@ -140,7 +146,7 @@ const Wrapper = () => {
         handleToggleLoading(true);
 
         await socket.request('update channel', 
-        {...channelToEdit, widgets: widgets, persist_social: persistChannelSocial, channel_name: channelName, file: channelBackground, background_blur: backgroundBlur, clear_social: clearedSocial})
+        {...channelToEdit, widgets: widgets, persist_social: persistChannelSocial, channel_name: channelName, file: channelBackground, background_blur: backgroundBlur, clear_social: clearedSocial, disable_streams: disableStreams})
         .then(response => {
 
             dispatch(updateChannel(response.channel))
@@ -212,6 +218,12 @@ const Wrapper = () => {
         toggleClearedSocial(true);
     }
 
+    const handleToggleDisableStreams = () => {
+        toggleEdited(true);
+
+        toggleDisableStreams(!disableStreams);
+    }
+
     return (
         <>
         {permission?.user_can_manage_channels ?
@@ -237,6 +249,9 @@ const Wrapper = () => {
             :
             <InputPlaceHolder value={"Hit Apply To Save Changes"} />
             }
+            <SettingsHeader title={"Disable Video / Audio Streams"} />
+            <InputTitle title={"Disable streams in this channel to allow for an inactive user channel"} />
+            <ToggleButton action={handleToggleDisableStreams} state={disableStreams} />
             <InputTitle title={"Delete Channel"} />
             <TextButton action={handleDeleteChannel} name={"Delete Channel"} />
             <ApplyCancelButton toggled={edited === false ? true : null} apply={handleUpdateChannel} cancel={handleCancel} />

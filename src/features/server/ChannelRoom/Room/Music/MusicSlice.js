@@ -57,6 +57,14 @@ const MusicSlice = createSlice({
             state.volume = action.payload;
 
             setMusicWidgetVolume(action.payload);
+        },
+        removeSongFromQueue: (state, action) => {
+
+            const m_index = state.queue.findIndex(s => s._id === action.payload.song._id);
+
+            if (m_index === -1) return;
+
+            state.queue.splice(m_index, 1);
         }
     }
 })
@@ -73,6 +81,6 @@ export const selectMusicPlayingState = state => state.MusicSlice.playing;
 export const selectMusicVolume = state => state.MusicSlice.volume;
 
 // actions
-export const {un_like_song, like_song, toggleMusicPlaying, addSongToQueue, skipSong, updateMusicState, throwMusicError, updateMusicVolume} = MusicSlice.actions;
+export const {removeSongFromQueue, un_like_song, like_song, toggleMusicPlaying, addSongToQueue, skipSong, updateMusicState, throwMusicError, updateMusicVolume} = MusicSlice.actions;
 
 export default MusicSlice.reducer;

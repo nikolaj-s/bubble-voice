@@ -16,7 +16,7 @@ import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/Se
 
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { miscSettingsChannelSpecificStateChange, miscSettingsClearError, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, selectAutoPlayNativeVideos, selectDefaultServer, selectHardwareAcceleration, selectHideUserStatus, selectMiscSettingsDisableGifProfiles, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsError, selectMiscSettingsErrorMessage, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectMiscSettingsLoading, selectRestartNotice, selectSystemNotifcations, setDefaultServer } from './MiscellaneousSettingsSlice';
+import { miscSettingsChannelSpecificStateChange, miscSettingsClearError, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, selectAutoPlayNativeVideos, selectDefaultServer, selectHardwareAcceleration, selectHideUserStatus, selectMiscSettingsDisableGifProfiles, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsError, selectMiscSettingsErrorMessage, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectMiscSettingsLoading, selectMuteSocialVideos, selectRestartNotice, selectSystemNotifcations, setDefaultServer } from './MiscellaneousSettingsSlice';
 import { selectServerList } from '../../../sideBar/sideBarSlice';
 
 const Settings = () => {
@@ -52,6 +52,8 @@ const Settings = () => {
     const systemNotifcations = useSelector(selectSystemNotifcations);
 
     const autoPlaySocialVideos = useSelector(selectAutoPlayNativeVideos);
+
+    const muteSocialVideos = useSelector(selectMuteSocialVideos);
 
     React.useEffect(() => {
 
@@ -111,6 +113,8 @@ const Settings = () => {
             <SettingsHeader title={"Social"} />
             <InputTitle title={"Toggle Auto Play Native Videos"} />
             <ToggleButton action={() => {handleChannelSpecificStateChange('autoPlayNativeVideos')}} state={autoPlaySocialVideos}  />
+            <InputTitle title={"Mute Videos By Default Within Social"} />
+            <ToggleButton action={() => {handleChannelSpecificStateChange("muteSocialVideos")}} state={muteSocialVideos}  /> 
             <SettingsHeader title={"App Specific"} />
             <InputTitle title={"Disable Hardware Acceleration"} />
             <ToggleButton action={handleToggleHardwareAcceleration} state={hardwareAcceleration} />

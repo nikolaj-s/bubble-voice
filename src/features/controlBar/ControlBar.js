@@ -14,7 +14,7 @@ import { ScreenShareMenu } from './ScreenShareMenu/ScreenShareMenu';
 
 // state
 import { resetControlState, selectAudioState, selectingScreensState, selectLoadingScreenShare, selectLoadingWebCam, selectMicrophoneState, selectScreenShareState, selectWebCamState, toggleControlState, toggleLoadingWebCam } from './ControlBarSlice';
-import { selectCurrentChannelId } from '../server/ServerSlice';
+import { selectCurrentChannel, selectCurrentChannelId } from '../server/ServerSlice';
 import { playSoundEffect } from '../settings/soundEffects/soundEffectsSlice';
 import { selectAccentColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
@@ -40,6 +40,8 @@ export const ControlBar = () => {
 
     const current_channel_id = useSelector(selectCurrentChannelId);
 
+    const channel = useSelector(selectCurrentChannel);
+
     const selectingScreens = useSelector(selectingScreensState);
 
     const accentColor = useSelector(selectAccentColor);
@@ -49,6 +51,8 @@ export const ControlBar = () => {
     const loadingScreenShare = useSelector(selectLoadingScreenShare);
 
     const toggleFunction = (state) => {
+
+        if (channel.disable_streams) return;
         
         if (window.location.hash.includes("/appsettings/voice-video")) return;
 
@@ -116,28 +120,28 @@ export const ControlBar = () => {
                     <WebCamButton 
                     action={() => {toggleFunction('webCamState')}} 
                     state={webCamState} 
-                    active={current_channel_id === null}
+                    active={current_channel_id === null || channel.disable_streams}
                     id={'web-cam-toggle-button'}
                     loading={loadingWebCam}
                     />
                     <MicToggleButton 
                     action={() => {toggleFunction('microphoneState')}} 
                     state={microphoneState} 
-                    active={current_channel_id === null}
+                    active={current_channel_id === null || channel.disable_streams}
                     id={"toggle-microphone-button"}
                     />
                     <AudioToggleButton 
                     action={() => {toggleFunction('audioState')}} 
                     state={audioState} 
-                    active={current_channel_id === null}
+                    active={current_channel_id === null || channel.disable_streams}
                     id={"mute-audio-toggle-button"}
-                    description={current_channel_id === null ? null : `${audioState ? 'Deafen' : 'Un-Deafen'}`}
+                    description={(current_channel_id === null  || channel.disable_streams) ? null : `${audioState ? 'Deafen' : 'Un-Deafen'}`}
                     />
                     <ShareScreenButton 
                     loading={loadingScreenShare}
                     action={() => {toggleFunction('screenShareState')}} 
                     state={screenShareState} 
-                    active={current_channel_id === null}
+                    active={current_channel_id === null || channel.disable_streams}
                     id={"screen-share-toggle-button"}
                     />
                     <ConnectionIndicator active={current_channel_id !== null} />

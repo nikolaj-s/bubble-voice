@@ -14,12 +14,13 @@ import { ApplyCancelButton } from '../../../../components/buttons/ApplyCancelBut
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 
 // state
-import { selectServerBanner, selectServerName, selectUsersPermissions, setServerName, throwServerError, updateServerBanner } from '../../ServerSlice';
+import { selectInactiveChannel, selectInactiveChannels, selectServerBanner, selectServerName, selectUsersPermissions, setServerName, throwServerError, updateInactiveChannel, updateServerBanner } from '../../ServerSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 import { socket } from '../../ServerBar/ServerBar';
 import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
 import { uploadImage } from '../../../../util/UploadRoute';
 import { TextButton } from '../../../../components/buttons/textButton/TextButton';
+import { DropDownList } from '../../../../components/DropDownList/DropDownList';
 
 
 const Wrapper = () => {
@@ -37,6 +38,8 @@ const Wrapper = () => {
 
     const [confirmNewServerPassword, setConfirmNewServerPassword] = React.useState("");
 
+    const [inactiveChannel, setInactiveChannel] = React.useState({label: "No Inactive Channel", id: ""});
+
     const [update, setUpdate] = React.useState(false);
 
     const [loading, toggleLoading] = React.useState(false);
@@ -46,6 +49,10 @@ const Wrapper = () => {
     const serverBanner = useSelector(selectServerBanner);
 
     const permissions = useSelector(selectUsersPermissions);
+
+    const inactiveChannels = useSelector(selectInactiveChannels);
+
+    const currentInactiveChannel = useSelector(selectInactiveChannel);
 
     // handle local state changes
     const handleBannerChange = (image) => {
@@ -99,7 +106,8 @@ const Wrapper = () => {
                 server_banner: image,
                 server_password: serverPassword,
                 new_server_password: newServerPassword,
-                confirm_new_server_password: confirmNewServerPassword
+                confirm_new_server_password: confirmNewServerPassword,
+                inactive_channel: inactiveChannel
             }
 
             await socket.request('update server', data)
@@ -113,6 +121,10 @@ const Wrapper = () => {
                 
                 if (data.data.server_banner) {
                     dispatch(updateServerBanner(data.data.server_banner));
+                }
+
+                if (data.data.inactive_channel) {
+                    dispatch(updateInactiveChannel(data.data.inactive_channel));
                 }
 
                 setServerPassword("");
@@ -156,6 +168,8 @@ const Wrapper = () => {
 
         setNewServerName(serverName);
 
+        setInactiveChannel(currentInactiveChannel);
+
         return () => {
             dispatch(setHeaderTitle("Select Channel"))
         }
@@ -168,6 +182,11 @@ const Wrapper = () => {
         setNewBanner(null);
     }
     
+    const changeInactiveChannel = (_, channel) => {
+        setInactiveChannel(channel);
+        setUpdate(true);
+    }
+
     return (
         <>
         <SettingsHeader title={"Banner"} />
@@ -217,6 +236,9 @@ const Wrapper = () => {
         <SettingsHeader title={"Data"} />
         <InputTitle title={"Clear Image Search Recommendation Data"} />
         <TextButton name={"Clear"} action={clearImageSearchData} />
+        <SettingsHeader title={"Set Inactive User Channel"} />
+        <InputTitle title={"Users who go inactive will automatically be moved to this channel"} />
+        <DropDownList action={changeInactiveChannel} selectedItem={inactiveChannel.label} list={inactiveChannels}  />
         </>
         : null}
         {permissions?.user_can_edit_server_password ?

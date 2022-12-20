@@ -6,7 +6,7 @@ import { io } from "socket.io-client";
 import { useNavigate, useRoutes } from 'react-router';
 
 // state
-import { addNewChannel, assignNewServerGroup, clearServerState, deleteChannel, deleteMessage, fetchPersistedMusicVolume, fetchServerDetails, handleLeavingServer, leaveChannel, newMessage, removeSongFromWidget, reOrderChannels, saveSongToWidget, selectCurrentChannel, selectCurrentChannelId, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, selectTopAnimationPoint, setServerName, throwServerError, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateMemberActiveStatus, updateMemberStatus, updateServerBanner, updateServerGroups, userBanned, userJoinsChannel, userJoinsServer, userLeavesChannel, userLeavesServer } from '../ServerSlice';
+import { addNewChannel, assignNewServerGroup, clearServerState, deleteChannel, deleteMessage, fetchPersistedMusicVolume, fetchServerDetails, handleLeavingServer, leaveChannel, newMessage, removeSongFromWidget, reOrderChannels, saveSongToWidget, selectCurrentChannel, selectCurrentChannelId, selectInactiveChannel, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, selectTopAnimationPoint, setServerName, throwServerError, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateInactiveChannel, updateMemberActiveStatus, updateMemberStatus, updateServerBanner, updateServerGroups, userBanned, userJoinsChannel, userJoinsServer, userLeavesChannel, userLeavesServer } from '../ServerSlice';
 import { selectUsername } from '../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { getToken, url } from '../../../util/Validation';
 import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
@@ -14,7 +14,7 @@ import { selectActivateCameraKey, selectDisconnectKey, selectMuteAudioKey, selec
 import { selectAudioOutput } from '../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 import { addNewWidgetOverlayToQueue, clearWidgetOverLay } from '../ChannelRoom/Room/RoomActionOverlay/RoomActionOverlaySlice';
 import { pushPokeNotification, pushSytemNotification } from '../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
-import { addSongToQueue, like_song, skipSong, toggleMusicPlaying, un_like_song } from '../ChannelRoom/Room/Music/MusicSlice';
+import { addSongToQueue, like_song, removeSongFromQueue, skipSong, toggleMusicPlaying, un_like_song } from '../ChannelRoom/Room/Music/MusicSlice';
 import { selectCurrentScreen, setCurrentScreen, toggleControlState } from '../../controlBar/ControlBarSlice';
 
 // component's
@@ -80,6 +80,8 @@ const Bar = () => {
     const serverSettingsOpenState = useSelector(selectServerSettingsOpenState);
 
     const topPointAnimationLocation = useSelector(selectTopAnimationPoint);
+
+    const inactiveChannel = useSelector(selectInactiveChannel);
     
     const handleConnectionLost = () => {
         console.log('connection time out')
@@ -190,6 +192,10 @@ const Bar = () => {
             if (data.data.server_name) {
                 dispatch(setServerName(data.data.server_name));
             }
+
+            if (data.data.inactive_channel) {
+                dispatch(updateInactiveChannel(data.data.inactive_channel));
+            }
         })
 
         socket.on("updated server groups", (data) => {
@@ -250,6 +256,13 @@ const Bar = () => {
 
             dispatch(addNewWidgetOverlayToQueue({action: 'song-status', message: `${data.user.display_name} ${data.playing ? 'resumed' : "paused"} the music widget`, user: data.user}));
             
+        })
+
+        socket.on('music-widget/song-removed', (data) => {
+            dispatch(removeSongFromQueue(data));
+
+            dispatch(addNewWidgetOverlayToQueue({action: 'song-status', message: `${data.user.display_name} removed ${data.song.title} from the queue`, user: data.user}));
+
         })
 
         socket.on('poke', (data) => {
@@ -614,6 +627,17 @@ const Bar = () => {
             
             })
 
+            ipcRenderer.on('inactive', () => {
+                if (current_channel_id && inactiveChannel.id !== "") {
+                    console.log('user has gone inactive')
+                    try {
+                        document.getElementById(`channel-button-${inactiveChannel.id}`).click();
+                    } catch (error) {
+                        return;
+                    }
+                }
+            })
+
         } catch (error) {
             console.log("you are using the web version of this app")
         }
@@ -622,7 +646,7 @@ const Bar = () => {
             ipcRenderer?.removeAllListeners()
         }
     // eslint-disable-next-line
-    }, [current_channel_id])
+    }, [current_channel_id, inactiveChannel])
 
     React.useEffect(() => {
 

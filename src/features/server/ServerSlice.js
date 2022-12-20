@@ -218,6 +218,7 @@ const serverSlice = createSlice({
         channelCreationError: false,
         channelCreationErrorMessage: "",
         newChannel: {},
+        inactiveChannel: {_id: "", label: "No Inactive Channel"},
         // current channel
         current_channel_id: null,
         loadingChannel: false,
@@ -645,6 +646,13 @@ const serverSlice = createSlice({
 
             state.channels[c_index].widgets[w_index].content.liked_songs = state.channels[c_index].widgets[w_index].content.liked_songs.filter(s => s._id !== action.payload.song._id)
 
+        },
+        updateInactiveChannel: (state, action) => {
+            const c_index = state.channels.findIndex(c => c._id === action.payload);
+
+            if (c_index === -1) return;
+
+            state.inactiveChannel = {id: action.payload, label: state.channels[c_index].channel_name};
         }
     },
     extraReducers: {
@@ -673,6 +681,10 @@ const serverSlice = createSlice({
             }
 
             state.channels = action.payload.channels;
+
+            const c_index = action.payload.channels.findIndex(c => c._id === action.payload.inactive_channel);
+          
+            state.inactiveChannel = {id: action.payload.inactive_channel, label: state.channels[c_index]?.channel_name ? state.channels[c_index]?.channel_name : "No Inactive Channel"};
         },
         [fetchServerDetails.rejected]: (state, action) => {
             state.loading = false;
@@ -862,6 +874,18 @@ export const selectChannelSocial = state => {
     }
 }
 
+export const selectInactiveChannels = state => {
+    let arr = [{id: "", label: "No Inactive Channel"}];
+
+    for (const c of state.serverSlice.channels) {
+        if (c.disable_streams) {
+            arr.push({id: c._id, label: c.channel_name});
+        }
+    }
+
+    return arr;
+}
+
 export const selectPushToTalkActive = state => state.serverSlice.pushToTalkActive;
 
 export const selectEditingChannelId = state => state.serverSlice.editing_channel_id;
@@ -907,8 +931,10 @@ export const selectMusicSavedState = state => {
     
 }
 
+export const selectInactiveChannel = state => state.serverSlice.inactiveChannel; 
+
 // actions
 
-export const {removeSongFromWidget, saveSongToWidget, userBanned, toggleCreateChannelMenu, toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
+export const {updateInactiveChannel, removeSongFromWidget, saveSongToWidget, userBanned, toggleCreateChannelMenu, toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
 
 export default serverSlice.reducer;

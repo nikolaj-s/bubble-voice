@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { selectPrimaryColor, selectTextColor } from '../../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { AddButton } from '../../../../buttons/AddButton/AddButton';
 import { LikeButton } from '../../../../buttons/LikeButton/LikeButton';
+import { RemoveButton } from '../../../../buttons/RemoveButton/RemoveButton';
 
 // components
 import { Image } from '../../../../Image/Image';
@@ -13,7 +14,7 @@ import { Image } from '../../../../Image/Image';
 // style
 import "./Song.css";
 
-export const Song = ({id, image, name, duration, action, liked, saved, addToQueue}) => {
+export const Song = ({id, image, name, duration, action, liked, saved, addToQueue, inQueue, removeFromQueue}) => {
 
     const textColor = useSelector(selectTextColor);
 
@@ -36,6 +37,7 @@ export const Song = ({id, image, name, duration, action, liked, saved, addToQueu
             >{name}</p>
             <LikeButton toggled={liked} action={action} width={20} height={20} />
             {(saved && liked) ? <AddButton action={addToQueue} margin={"0 0 0 5px"} width={20} height={20} description={"Add To Queue"} /> : null}
+            {inQueue ? <RemoveButton action={removeFromQueue} margin={"0 0 0 5px"} width={20} height={20} description={"Remove"} /> : null}
             <p style={{
                 color: textColor
             }}>{time}</p>

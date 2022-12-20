@@ -13,6 +13,8 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
 
     const animation = useAnimation();
 
+    const [width, setWidth] = React.useState('60%')
+
     const primaryColor = useSelector(selectPrimaryColor);
 
     const accentColor = useSelector(selectAccentColor);
@@ -23,7 +25,13 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
 
     const secondaryColor = useSelector(selectSecondaryColor);
     
-    const handleAnimation = (color) => {
+    const handleAnimation = (color, state) => {
+
+        if (state) {
+            setWidth('100%')
+        } else {
+            setWidth('60%')
+        }
 
         animation.start({
             border: `4px solid ${color}`
@@ -56,9 +64,9 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
             border: `solid 4px ${darkMode ? 'rgba(0, 0, 0, 0)' : 'rgba(255, 255, 255, 0)'}`,
             overflow: 'hidden'
         }}
-        onMouseEnter={() => {handleAnimation(accentColor)}}
-        onMouseLeave={() => {handleAnimation(darkMode ? 'rgba(0, 0, 0, 0)' : 'rgba(255, 255, 255, 0)')}}
-        onMouseDown={() => {handleAnimation(textColor)}}
+        onMouseEnter={() => {handleAnimation(accentColor, true)}}
+        onMouseLeave={() => {handleAnimation(darkMode ? 'rgba(0, 0, 0, 0)' : 'rgba(255, 255, 255, 0)', false)}}
+        onMouseDown={() => {handleAnimation(textColor, true)}}
         onMouseUp={() => {handleAnimation(accentColor)}}
         transition={{duration: 0.1}}
         onClick={handleAction}
@@ -72,23 +80,24 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
                 flexShrink: 0,
                 position: 'absolute'
             }}>
-                <Image image={server_banner} />
+                <Image cursor='pointer' image={server_banner} />
             </div>
             <div
             style={{
                 position: 'absolute',
                 zIndex: 1,
-                left: 122,
+                right: 0,
                 fontSize: '0.7rem',
                 background: 'rgba' + (secondaryColor.split('rgb')[1].split(')') + ' 0.7)'),
-                width: 'calc(100% - 122px)',
+                width: width,
                 height: '100%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 backdropFilter: 'blur(2px)',
                 borderTopRightRadius: '10px',
-                borderBottomRightRadius: '10px'
+                borderBottomRightRadius: '10px',
+                transition: '0.2s'
             }}
             >
                 <h1

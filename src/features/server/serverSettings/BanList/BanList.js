@@ -7,6 +7,7 @@ import { SettingsHeader } from '../../../../components/titles/SettingsHeader/Set
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 import { selectBanList, selectBanLoadingState, selectUsersPermissions, unBanMember } from '../../ServerSlice';
 import { BanCard } from './BanCard/BanCard';
+import { NoBansNotice } from './NoBansNotice/NoBansNotice';
 
 const Wrapper = () => {
 
@@ -38,7 +39,9 @@ const Wrapper = () => {
         {permission?.user_can_ban_user ?
         <>
         <SettingsHeader title={"Server Ban List"} />
-        {BanList.map(ban => {
+        {BanList.length === 0 ?
+        <NoBansNotice />
+        : BanList.map(ban => {
             return <BanCard action={() => {handleUnBanMember(ban._id)}} username={ban.username} key={ban._id} date={ban.date_banned} />
         })}
         <Loading loading={loading} />

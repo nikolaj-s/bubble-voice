@@ -56,7 +56,8 @@ const MiscellaneousSettingsSlice = createSlice({
         autoPlayNativeVideos: true,
         defaultServer: {label: "Default", id: ""},
         roomScale: 1,
-        enabledSystemNotifications: true
+        enabledSystemNotifications: true,
+        muteSocialVideos: true
     },
     reducers: {
         pushSytemNotification: (state, action) => {
@@ -64,21 +65,15 @@ const MiscellaneousSettingsSlice = createSlice({
             if (state.enabledSystemNotifications) {
                 
                 try {
-                    console.log(action.payload)
 
                     const notifier = window.require('node-notifier');
-
-                    const path = window.require('path')
 
                     notifier.notify({
                         appID: "Bubble",
                         title: `New Message Posted By ${action.payload.content.display_name}`,
                         message: action.payload.content.text,
-                        sound: true,
-                        icon: path.join(__dirname, 'logo.png')
+                        sound: true
                     })
-
-
                     
                 } catch (error) {
                     console.log(error);
@@ -133,7 +128,8 @@ const MiscellaneousSettingsSlice = createSlice({
                 hideUserStatus: state.hideUserStatus,
                 defaultServer: state.defaultServer,
                 enabledSystemNotifications: state.enabledSystemNotifications,
-                autoPlayNativeVideos: state.autoPlayNativeVideos
+                autoPlayNativeVideos: state.autoPlayNativeVideos,
+                muteSocialVideos: state.muteSocialVideos
             }
 
             saveLocalData("MISC", "MISCSETTINGS", obj);
@@ -187,6 +183,8 @@ const MiscellaneousSettingsSlice = createSlice({
 
             if (saved_data.autoPlayNativeVideos === false) state.autoPlayNativeVideos = false;
 
+            if (saved_data.muteSocialVideos === false) state.muteSocialVideos = false;
+            
             if (saved_data.defaultServer) state.defaultServer = saved_data.defaultServer;
             
             if (saved_data.enabledSystemNotifications !== (undefined && null)) state.enabledSystemNotifications = saved_data.enabledSystemNotifications;
@@ -221,6 +219,8 @@ export const selectMiscSettingsHideNonVideoParticapents = state => state.Miscell
 export const selectRoomScale = state => state.MiscellaneousSettingsSlice.roomScale;
 
 export const selectAutoPlayNativeVideos = state => state.MiscellaneousSettingsSlice.autoPlayNativeVideos;
+
+export const selectMuteSocialVideos = state => state.MiscellaneousSettingsSlice.muteSocialVideos;
 
 export const {pushPokeNotification, pushSytemNotification, setDefaultServer, changeRoomScale, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, miscSettingsClearError, miscSettingsChannelSpecificStateChange } = MiscellaneousSettingsSlice.actions;
 
