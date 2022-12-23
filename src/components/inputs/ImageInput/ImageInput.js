@@ -147,7 +147,7 @@ export const ImageInput = ({
         }}
         {...getRootProps({className: 'dropzone'})} className='image-drop-input-container'>
             <input {...getInputProps()} />
-            <Image cursor='pointer' image={files[0]?.preview} />
+            <Image disableErr={true} cursor='pointer' image={files[0]?.preview} />
             {blur ? 
             <div
             style={{

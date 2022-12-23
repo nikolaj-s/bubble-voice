@@ -93,7 +93,7 @@ const Bar = () => {
 
         }
         
-        const new_redirect = `/dashboard/server/${serverName}/disconnected`;
+        const new_redirect = `/dashboard/server/${serverName ? serverName : "placeholder"}/disconnected`;
 
         console.log(new_redirect)
 
@@ -377,6 +377,10 @@ const Bar = () => {
                 },
                 reconnectionAttempts: 15,
                 reconnectionDelay: 5000
+            })
+
+            socket.on('reconnect_failed', () => {
+                console.log('cannot reconnect')
             })
             
             socket.on('connect', (data) => {

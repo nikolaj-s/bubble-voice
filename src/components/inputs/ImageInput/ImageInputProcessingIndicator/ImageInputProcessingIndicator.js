@@ -39,13 +39,15 @@ export const ImageInputProcessingIndicator = ({value}) => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                flexDirection: 'column',
                 backgroundColor: secondaryColor,
                 borderRadius: '50%'
             }}>
                 <p style={{
                     color: color,
-                    fontSize: '2rem'
-                }}>{value}%</p>
+                    fontSize: '2rem',
+                    textAlign: 'center'
+                }}>Compressing: {value}%</p>
             </div>
         </motion.div>
     )

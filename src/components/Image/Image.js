@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 // state
 import { selectPrimaryColor, selectSecondaryColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
-export const Image = ({image, objectFit = 'cover', position = 'relative', zIndex = 0, loadingState = '', opacity = 1, width = '100%', cursor = 'default', altWidth = '100%', imgHeight = '100%', expandContent = () => {}}) => {
+export const Image = ({image, objectFit = 'cover', position = 'relative', zIndex = 0, loadingState = '', opacity = 1, width = '100%', cursor = 'default', altWidth = '100%', imgHeight = '100%', expandContent = () => {}, disableErr = false}) => {
 
     const [loading, toggleLoading] = React.useState(true);
 
@@ -25,12 +25,15 @@ export const Image = ({image, objectFit = 'cover', position = 'relative', zIndex
     }
 
     const handleError = (e) => {
+
+        if (disableErr) return toggleLoading(false);
+
         e.target.src = "https://res.cloudinary.com/drlkgoter/image/upload/v1668805881/logo_y9odas.png"
     }
 
     return (
         <div style={{zIndex: zIndex, position: position, objectFit: objectFit, width: width, height: '100%', opacity: opacity}}>
-            {loading && image !== "" && image !== undefined ?
+            {loading && image !== "" && image !== undefined && disableErr === false ?
             <motion.div 
             style={{
                 background: `linear-gradient(270deg, ${secondaryColor}, ${primaryColor}, ${secondaryColor})`,

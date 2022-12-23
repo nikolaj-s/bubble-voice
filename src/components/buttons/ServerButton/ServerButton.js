@@ -75,7 +75,7 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
             style={{
                 width: '100%',
                 height: "100%",
-                borderRadius: '10px',
+                borderRadius: '0px',
                 overflow: 'hidden',
                 flexShrink: 0,
                 position: 'absolute'
@@ -95,8 +95,8 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
                 alignItems: 'center',
                 justifyContent: 'center',
                 backdropFilter: 'blur(2px)',
-                borderTopRightRadius: '10px',
-                borderBottomRightRadius: '10px',
+                borderTopRightRadius: '5px',
+                borderBottomRightRadius: '5px',
                 transition: '0.2s'
             }}
             >

@@ -1,0 +1,63 @@
+.new-account-state-container {
+    position: fixed;
+    z-index: 5;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.inner-new-account-state-container {
+    width: 800px;
+    height: 800px;
+    padding: 0 1rem;
+    border-radius: var(--border-radius);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.inner-new-account-state-container .finish-account-set-up {
+    max-width: 600px;
+}
+
+.new-account-prev-button {
+    margin-left: 1rem;
+}
+
+.new-account-nav-container {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.new-account-nav-container h3 {
+    letter-spacing: var(--font-spacing);
+    font-size: 1rem;
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.new-next-button-container {
+    margin-left: 1rem;
+    padding: 0 1rem;
+    cursor: pointer;
+}
+
+.new-next-button-container h3 {
+    opacity: 1;
+}
+
+.new-account-nav-container h3:hover {
+    opacity: 1;
+}
+
+.new-next-button-container:hover {
+    opacity: 0.5;
+}

@@ -105,6 +105,7 @@ const accountSettingsSlice = createSlice({
         error: false,
         errorMessage: "",
         change: false,
+        new_account: false,
     },
     reducers: {
         handleSignOut: (state, action) => {
@@ -121,6 +122,9 @@ const accountSettingsSlice = createSlice({
             state.error = false;
             state.errorMessage = "";
         },
+        updateNewAccountState: (state, action) => {
+            state.new_account = false;
+        }
     },
     extraReducers: {
         [fetchAccount.fulfilled]: (state, action) => {
@@ -131,6 +135,7 @@ const accountSettingsSlice = createSlice({
                 state.user_image = action.payload.account.user_image;
                 state.user_banner = action.payload.account.user_banner;
                 state.username = action.payload.account.username;
+                state.new_account = action.payload.account.new_account_state
                 
             } 
 
@@ -155,6 +160,8 @@ const accountSettingsSlice = createSlice({
             state.newPassword = "";
 
             state.confirmNewPassword = "";
+
+            state.new_account = false;
 
             if (!action.payload.success) return;
 
@@ -201,7 +208,9 @@ export const selectUserBanner = state => state.accountSettingsSlice.user_banner;
 
 export const selectUserImage = state => state.accountSettingsSlice.user_image;
 
+export const selectNewAccountState = state => state.accountSettingsSlice.new_account;
+
 // actions
-export const { handleSignOut, updateAccountInputState, accountSettingsCloseError } = accountSettingsSlice.actions;
+export const { updateNewAccountState, handleSignOut, updateAccountInputState, accountSettingsCloseError } = accountSettingsSlice.actions;
 
 export default accountSettingsSlice.reducer;
