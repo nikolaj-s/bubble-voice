@@ -50,15 +50,7 @@ export const SocialRoute = () => {
             {currentSocial ?
             <motion.div 
             key={"social-route"}
-            initial={{
-                opacity: 0,
-            }}
-            animate={{
-                opacity: 1,
-            }}
-            exit={{
-                opacity: 0
-            }}
+            
             style={{
                 position: inChannel ? 'absolute' : 'relative',
                 zIndex: inChannel ? 4 : 3,

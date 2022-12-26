@@ -45,7 +45,7 @@ const Component = () => {
             </div>
             <div className='server-dashboard-inner-container'>
                 {pins?.map((p, key) => {
-                    return <Message previous_message={key === 0 ? null : pins[key - 1]} current_message={p} index={key} pinMessage={() => {handlePin(p)}} perm={permission?.user_can_post_channel_social} key={p._id} channel_id={p?.channel_id} id={p._id} message={p.content} pinned={p.pinned} />
+                    return <Message persist={true} previous_message={key === 0 ? null : pins[key - 1]} current_message={p} index={key} pinMessage={() => {handlePin(p)}} perm={permission?.user_can_post_channel_social} key={p._id} channel_id={p?.channel_id} id={p._id} message={p.content} pinned={p.pinned} />
                 })}
             </div>
             <Loading loading={pinning} />

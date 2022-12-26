@@ -4,7 +4,7 @@ import { SubMenuButton } from '../../buttons/subMenuButton/SubMenuButton'
 import { Image } from '../../Image/Image'
 import { MessageLoadingIndicator } from '../MessageLoadingIndicator/MessageLoadingIndicator'
 
-export const SenderInfo = ({id, current_message, previous_message, message, pinMessage, pinned, overlay, hover, textColor, index, perm, accentColor}) => {
+export const SenderInfo = ({id, current_message, previous_message, message, pinMessage, pinned, overlay, hover, textColor, index, perm, accentColor, persist}) => {
 
     return (
         <>
@@ -35,7 +35,7 @@ export const SenderInfo = ({id, current_message, previous_message, message, pinM
                 <MessageLoadingIndicator />
                 : hover ?
                 <div style={{top: index === 0 ? 5 : -30, backgroundColor: accentColor}} className='date-submenu-message-wrapper'>
-                    {perm ? <PinButton flip_description={index === 0} description={pinned ? 'unpin' : 'pin'} action={pinMessage} width={15} height={15} pinned={pinned} /> : null}
+                    {(perm && persist) ? <PinButton flip_description={index === 0} description={pinned ? 'unpin' : 'pin'} action={pinMessage} width={15} height={15} pinned={pinned} /> : null}
                     {perm ? <SubMenuButton target={`${id}-ctx-message-overlay`} flip_description={index === 0} zIndex={2} description={"More"} width={15} height={15} borderRadius={10} /> : null}
                 </div> 
                 : null}

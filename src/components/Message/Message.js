@@ -21,7 +21,7 @@ import { PinButton } from '../buttons/PinButton/PinButton';
 import { TwitterEmbed } from '../TwitterEmbed/TwitterEmbed';
 import { SenderInfo } from './SenderInfo/SenderInfo';
 
-export const Message = ({ message, overlay = false, id, channel_id, perm, pinMessage, pinned, index, previous_message, current_message}) => {
+export const Message = ({ message, overlay = false, id, channel_id, perm, pinMessage, pinned, index, previous_message, current_message, persist}) => {
 
     const dispatch = useDispatch();
 
@@ -53,15 +53,13 @@ export const Message = ({ message, overlay = false, id, channel_id, perm, pinMes
         id={`${id}/${channel_id}`}
         className='message-container'>
             <div id={`${id}-ctx-message-overlay`} className={'ctx-message-overlay'} />
-            <SenderInfo id={id} accentColor={accentColor} hover={hoverState} textColor={textColor} perm={perm} index={index}  message={message} current_message={current_message} previous_message={previous_message} pinMessage={pinMessage} pinned={pinned} overlay={overlay} />
+            <SenderInfo persist={persist} id={id} accentColor={accentColor} hover={hoverState} textColor={textColor} perm={perm} index={index}  message={message} current_message={current_message} previous_message={previous_message} pinMessage={pinMessage} pinned={pinned} overlay={overlay} />
             <MessageText color={textColor} text={message.text} />
             <MessageLink link={message.link} />
             <Iframe marginLeft={60} link={message.iFrame} />
             <TwitterEmbed id={message.twitter} />
             {message.image ? 
             <div 
-            
-            
             className='message-image-container'>
                 <Image expandContent={expandContent} imgHeight='auto' cursor='pointer' width={null} altWidth={'100%'} loadingState='eager' objectFit='contain' image={message.image} />
             </div>

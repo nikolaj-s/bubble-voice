@@ -97,12 +97,12 @@ export const ButtonAnimationWrapper = ({action = () => {}, position = 'relative'
             <motion.div 
             animate={null}
             style={{
-                top: right_orientation_desc ? 8 : null,
-                right: right_orientation_desc ? -75 : null,
+                top: right_orientation_desc ? '8px' : null,
+                right: right_orientation_desc ? '-75px' : null,
                 left: right_orientation_desc ? null : '50%',
                 bottom: right_orientation_desc ? null : flip_description ? '-100%' : height + 25,
                 minWidth: right_orientation_desc ? null : '100%',
-                position: right_orientation_desc ? 'fixed' : 'absolute',
+                position: right_orientation_desc ? 'absolute' : 'absolute',
                 width: right_orientation_desc ? 150 : null,
                 zIndex: 999,
                 fontWeight: '100',

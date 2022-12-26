@@ -1,7 +1,7 @@
 .room-navigation-container {
     display: flex;
-    height: 45px;
-    min-height: 45px;
+    height: 42px;
+    min-height: 43px;
     width: 100%;
     justify-content: space-between;
     align-items: center;

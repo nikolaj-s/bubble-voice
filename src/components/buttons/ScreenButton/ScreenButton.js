@@ -33,11 +33,11 @@ export const ScreenButton = ({thumbnail, id, name, action}) => {
         onClick={handleAction}
         animate={animation}
         style={{backgroundColor: secondaryColor}}
-        transition={{duration: 0.2}}
+        transition={{duration: 0.1}}
         onMouseOver={() => {handleAnimation(accentColor)}}
         onMouseOut={() => {handleAnimation(secondaryColor)}}
         className='screen-button-container' >
-            <Image image={thumbnail} objectFit="contain" />
+            <Image cursor='pointer' image={thumbnail} objectFit="contain" />
             <p
             style={{color: textColor}}
             >{name}</p>

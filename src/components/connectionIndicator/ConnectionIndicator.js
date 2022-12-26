@@ -30,7 +30,7 @@ export const ConnectionIndicator = ({active}) => {
         <ButtonAnimationWrapper action={active ? handleToggleShowPing : null} zIndex={3} description={active ? `${ping}ms` : null} opacity={active ? 1 : 0.2} width={25} height={25} position={'relative'} active={!active} invert={true} >
             {ping === 0 ?
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 20C13.1046 20 14 19.1046 14 18C14 16.8954 13.1046 16 12 16C10.8954 16 10 16.8954 10 18C10 19.1046 10.8954 20 12 20Z" stroke={textColor} stroke-width="2"/>
+            <path d="M12 20C13.1046 20 14 19.1046 14 18C14 16.8954 13.1046 16 12 16C10.8954 16 10 16.8954 10 18C10 19.1046 10.8954 20 12 20Z" stroke={textColor} strokeWidth="2"/>
             <path opacity="0.8" d="M7.75695 13.757C8.31412 13.1998 8.9756 12.7577 9.70362 12.4561C10.4316 12.1545 11.2119 11.9993 12 11.9993C12.788 11.9993 13.5683 12.1545 14.2963 12.4561C15.0243 12.7577 15.6858 13.1998 16.243 13.757M4.92895 10.93C8.83395 7.02502 15.166 7.02502 19.071 10.93M2.10095 8.10002C7.56795 2.63202 16.432 2.63202 21.899 8.10002" stroke={textColor} strokeOpacity="0.2" strokeWidth="2"/>
             </svg>
             : ping >= 1 && ping < 50 ?             

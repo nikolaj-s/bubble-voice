@@ -58,6 +58,9 @@ export const CreateChannelMenu = () => {
     }
 
     const create = () => {
+
+        setChannelName("");
+
         dispatch(createChannel({channel_name: channelName, persist_social: persist}));
     }
 

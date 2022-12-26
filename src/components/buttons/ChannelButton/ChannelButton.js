@@ -8,7 +8,7 @@ import { SubMenuButton } from '../subMenuButton/SubMenuButton';
 import { ChannelUserDisplay } from './ChannelUserDisplay/ChannelUserDisplay';
 
 // state
-import {  selectAccentColor, selectPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import {  selectAccentColor, selectPrimaryColor, selectTextColor, selectTransparentPrimaryColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./ChannelButton.css";
@@ -31,6 +31,8 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
     const accentColor = useSelector(selectAccentColor);
 
     const textColor = useSelector(selectTextColor);
+
+    const transparentPrimaryColor = useSelector(selectTransparentPrimaryColor);
 
     const active = window.location.hash.includes(channel._id);
 
@@ -56,8 +58,8 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
     React.useEffect(() => {
        
         animation.start({
-            border: `solid 4px ${active ? primaryColor : 'transparent'}`,
-            backgroundColor: active ? primaryColor : 'transparent'
+            border: `solid 4px ${active ? primaryColor : transparentPrimaryColor}`,
+            backgroundColor: active ? primaryColor : transparentPrimaryColor
         })
         setUsersState(users)
     // eslint-disable-next-line
@@ -75,18 +77,18 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
             id={`channel-button-${channel._id}`}
             animate={animation} 
             onMouseEnter={() => {handleAnimation(primaryColor, true)}}
-            onMouseLeave={() => {handleAnimation('transparent', false)}}
+            onMouseLeave={() => {handleAnimation(transparentPrimaryColor, false)}}
             onMouseDown={() => {handleAnimation(accentColor)}}
             onMouseUp={() => {handleAnimation(primaryColor)}}
             onClick={handleAction}
             transition={{duration: 0.1}}
             style={{
-                border: `solid 4px ${active ? primaryColor : 'transparent'}`,
-                backgroundColor: active ? accentColor : 'transparent',
+                border: `solid 4px ${active ? primaryColor : transparentPrimaryColor}`,
+                backgroundColor: active ? accentColor : transparentPrimaryColor,
                 cursor: active ? "default" : "pointer",
             }}
             className='channel-button-container'>
-                <h3 style={{color: textColor}}>{channel.channel_name}</h3>
+                <h3 style={{color: textColor, opacity: (active || mouseEnter) ? 1 : 0.7}}>{channel.channel_name}</h3>
                 {mouseEnter ? <div className='channel-button-extra-context-wrapper'>
                     <SocialButton flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} action={openSocial} margin={'0 5px 0 0'} borderRadius={10} width={12} height={12} />
                     <SubMenuButton flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} description={"More"} target={`channel-button-${channel._id}`} width={12} height={12} borderRadius={10} />

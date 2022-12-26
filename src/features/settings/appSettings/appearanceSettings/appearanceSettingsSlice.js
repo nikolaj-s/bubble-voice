@@ -197,6 +197,10 @@ const appearanceSettingsSlice = createSlice({
 export const { updateColorValue, changeTheme, saveTheme, toggleRgbBackGround } = appearanceSettingsSlice.actions;
 
 // color selectors
+export const selectTransparentPrimaryColor = state => {
+    return `rgba(${state.appearanceSettingsSlice.primaryColor.split('rgb(')[1].split(')'[0])}, 0)`
+}
+
 export const selectPrimaryColor = state => state.appearanceSettingsSlice.primaryColor;
 
 export const selectSecondaryColor = state => state.appearanceSettingsSlice.secondaryColor;

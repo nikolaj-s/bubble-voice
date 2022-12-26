@@ -157,9 +157,12 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
     }
 
     const pinMessage = (data) => {
+
+        if (currentChannel.persist_social === false) return;
+
         dispatch(togglePinMessage(data));
     }
-    console.log(currentChannel)
+    
     return (
         <motion.div 
         
@@ -187,7 +190,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
                     : null}
                     <div onScroll={handleLoadMoreOnScroll} ref={messagesRef} className='social-messages-wrapper'>
                         {messages?.slice(0, messagesToRender).map((message, key) => {
-                            return <Message current_message={message} previous_message={key === messages.length - 1 ? null : messages[key + 1]} pinned={message.pinned} pinMessage={() => {pinMessage(message)}} perm={permission?.user_can_post_channel_social} channel_id={message.channel_id} id={message._id} message={message.content} key={message.content.local_id || message._id} />
+                            return <Message persist={currentChannel.persist_social} current_message={message} previous_message={key === messages.length - 1 ? null : messages[key + 1]} pinned={message.pinned} pinMessage={() => {pinMessage(message)}} perm={permission?.user_can_post_channel_social} channel_id={message.channel_id} id={message._id} message={message.content} key={message.content.local_id || message._id} />
                         })}
                         <PersistedDataNotice channelName={currentChannel.channel_name} persisted={!currentChannel.persist_social} />
                     </div>

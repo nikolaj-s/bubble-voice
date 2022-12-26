@@ -44,6 +44,7 @@
     width: 100%;
     font-weight: 400;
     letter-spacing: var(--font-spacing);
+    cursor: pointer;
 }
 
 .user-name-status-wrapper p {
@@ -54,6 +55,7 @@
     font-weight: 400;
     letter-spacing: var(--font-spacing);
     opacity: 0.6;
+    cursor: pointer;
 }
 
 .preview-user-status-shrinked {
