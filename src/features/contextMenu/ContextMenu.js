@@ -27,8 +27,9 @@ import { saveUserPrefs, USER_PREFS } from '../../util/LocalData';
 import { BoolButton } from '../../components/buttons/BoolButton/BoolButton';
 import { miscSettingsChannelSpecificStateChange, selectHideUserStatus, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents } from '../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { MoveUser } from '../../components/buttons/MoveUser/MoveUser';
-import { selectPrimaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, selectTextColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectSocialSoundEffect, updateSoundEffectsState } from '../settings/soundEffects/soundEffectsSlice';
+import { client } from '../server/ChannelRoom/Room/Room';
 
 export const ContextMenu = () => {
 
@@ -58,6 +59,8 @@ export const ContextMenu = () => {
     const [disableStreamLocalState, toggleDisableStreamLocalState] = React.useState(false);
 
     const primaryColor = useSelector(selectPrimaryColor)
+
+    const textColor = useSelector(selectTextColor)
 
     const ctxCordinates = useSelector(selectContextMenuCordinates);
 
@@ -546,9 +549,9 @@ export const ContextMenu = () => {
     
     }
 
-    const handleUserVolumeChange = (value) => {
+    const handleUserVolumeChange = () => {
 
-        setUserVolumeLevel(value);
+        let value = userVolumeLevel;
 
         let obj = {};
         
@@ -565,9 +568,53 @@ export const ContextMenu = () => {
         saveUserPrefs();
 
         try {
-            document.getElementsByClassName(`audio-source-for-user-${memberId}`)[0].volume = value;
-        } catch (error) {
+
+            let new_el;
+
+            let el = document.getElementsByClassName(`audio-source-for-user-${memberId}`)[0];
             
+            const consumer = client.getConsumer(el.id);
+
+            if (!el || !consumer) return;
+            
+            el.remove();
+
+            const stream = new MediaStream();
+
+            stream.addTrack(consumer.track);
+
+            new_el = document.createElement('audio');
+
+            new_el.volume = value > 1 ? 1 : value;
+
+            new_el.hidden = true;
+
+            new_el.id = consumer.id;
+
+            new_el.autoplay = true;
+
+            new_el.className = `audio-source-for-user-${memberId}`;
+
+            let audCtx = new AudioContext();
+
+            let audCtxSrc = audCtx.createMediaStreamSource(stream);
+
+            audCtxSrc.mediaStream.getAudioTracks()[0].contentHint = 'speech';
+
+            let dst = audCtx.createMediaStreamDestination();
+
+            let gainNode = audCtx.createGain();
+            
+            gainNode.gain.value = value > 1 ? value : 1;
+            
+            [audCtxSrc, gainNode, dst].reduce((a, b) => a && a.connect(b));
+
+            new_el.srcObject = dst.stream;
+
+            document.getElementById(memberId).appendChild(new_el);
+
+        } catch (error) {
+            console.log(error)
         }
     }
 
@@ -893,8 +940,11 @@ export const ContextMenu = () => {
              : null}
             {changeUserVolume ? 
             <>
-            <CtxMenuTitle title={"Change User Volume"} />
-            <Range action={handleUserVolumeChange} step={0.005} value={userVolumeLevel} fill={true} /> 
+            <div style={{display: 'flex', alignItems: 'center'}}>
+                <CtxMenuTitle title={"Change User Volume"} />
+                <p style={{color: textColor, fontSize: '0.8rem', marginRight: 5}} >{Math.floor(userVolumeLevel * 100)}%</p>
+            </div>
+            <Range save={handleUserVolumeChange} action={(value) => setUserVolumeLevel(value)} step={0.01} value={userVolumeLevel} fill={true} max={5.00} min={0} /> 
             </>
             : null}
             {changeStreamVolumeState ? <CtxMenuTitle title={"Change Stream Volume"} /> : null}

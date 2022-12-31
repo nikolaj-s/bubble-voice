@@ -50,6 +50,7 @@ const controlBarSlice = createSlice({
             state.selectingScreens = action.payload;
         },
         setCurrentScreen: (state, action) => {
+            state.selectingScreens = false;
             state.currentScreen = action.payload;
         },
         toggleConnectionLoading: (state, action) => {

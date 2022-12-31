@@ -615,19 +615,36 @@ const Bar = () => {
             })
 
             ipcRenderer.on('screen share', (event, data) => {
-                if (!current_channel_id) return;
+                try {
+                    if (!current_channel_id) return;
 
-                if (document.hasFocus()) return;
+                    if (document.hasFocus()) return;
 
-                dispatch(playSoundEffect('controlSoundEffect'));
+                    if (currentScreen !== null) {
+                        dispatch(setCurrentScreen(null))
 
-                dispatch(toggleControlState('screenShareState'));
+                        dispatch(playSoundEffect('controlSoundEffect'));
 
-                if (currentScreen === null) {
-                    dispatch(setCurrentScreen("screen:0:0"))
-                } else {
-                    dispatch(setCurrentScreen(null));
+                        dispatch(toggleControlState('screenShareState'));
+                        
+                    } else {
+                        ipcRenderer.invoke("GET_SOURCES").then(res => {
+
+                            let l_windows = res.filter(w => !w.id.includes('screen'));
+
+                            dispatch(setCurrentScreen(l_windows[0].id));
+                            
+                            dispatch(playSoundEffect('controlSoundEffect'));
+
+                            dispatch(toggleControlState('screenShareState'));
+
+                        })
+                    }
+                } catch (error) {
+                    console.log(error);
+                    dispatch(throwServerError({errorMessage: "An Error Has Occured Trying to find focused window"}))
                 }
+                    
             
             })
 
@@ -650,7 +667,7 @@ const Bar = () => {
             ipcRenderer?.removeAllListeners()
         }
     // eslint-disable-next-line
-    }, [current_channel_id, inactiveChannel])
+    }, [current_channel_id, inactiveChannel, currentScreen])
 
     React.useEffect(() => {
 

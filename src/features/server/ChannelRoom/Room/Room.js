@@ -33,7 +33,7 @@ import { selectMiscSettingsHideChannelBackground } from '../../../settings/appSe
 import { SubMenuButton } from '../../../../components/buttons/subMenuButton/SubMenuButton';
 import { selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
-let client;
+export let client;
 
 const Component = () => {
     
@@ -191,6 +191,8 @@ const Component = () => {
     const handleScreenShare = async () => {
 
         try {
+            console.log(currentScreen)
+            if (currentScreen !== null) return;
 
             const ipcRenderer = window.require('electron').ipcRenderer;
 
@@ -396,7 +398,7 @@ const Component = () => {
 
         }
     // eslint-disable-next-line
-    }, [microphoneState, webcamState, loaded, screenShareState, audioState, soundEffectsMuted, reconnecting, channel.disable_streams])
+    }, [microphoneState, webcamState, loaded, screenShareState, audioState, soundEffectsMuted, reconnecting, channel.disable_streams, currentScreen])
 
     // handle voice activity
 
@@ -426,13 +428,13 @@ const Component = () => {
                         audioCtx = new AudioContext();
                     
                         analyser = audioCtx.createAnalyser();
-                        
+
                         source = audioCtx.createMediaStreamSource(audio);
 
-                        scriptProcessor = audioCtx.createScriptProcessor(2048, 1, 1)
+                        scriptProcessor = audioCtx.createScriptProcessor(1024, 1, 1)
 
-                        analyser.smoothingTimeConstant = 0.8;
-                        
+                        analyser.smoothingTimeConstant = 0.2;
+
                         analyser.fftSize = 1024;
 
                         source.connect(analyser);
@@ -440,7 +442,7 @@ const Component = () => {
                         analyser.connect(scriptProcessor);
 
                         scriptProcessor.connect(audioCtx.destination);
-                        
+
                         scriptProcessor.onaudioprocess = function() {
                             try {
                                 const array = new Uint8Array(analyser.frequencyBinCount);
@@ -495,6 +497,7 @@ const Component = () => {
                                 scriptProcessor.onaudioprocess = null;
                             }
                         }
+                        
                     })
                 } else if (pushToTalk === true && microphoneState === true) {
                     

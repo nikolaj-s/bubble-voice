@@ -36,7 +36,7 @@ export const VideoWidget = ({widget, editing}) => {
         setNonVideo(iFrame);
 
     }, [widget])
-    console.log(widget)
+    
     return (
         <div className='video-widget-container' >
             {nonVideo ?

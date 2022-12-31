@@ -233,7 +233,7 @@ export class RoomClient {
     async consume(producer_id, user, appData) {
         try {
             this.getConsumeStream(producer_id)
-            .then( function (data) {
+            .then( async function (data) {
                 
                 let consumer = data?.consumer;
 
@@ -329,7 +329,7 @@ export class RoomClient {
                         }
 
                         document.getElementById(user._id).parentNode.appendChild(par)
-
+                        
                     }
                 } else {
                     
@@ -337,11 +337,11 @@ export class RoomClient {
 
                     el.hidden = true;
 
-                    el.srcObject = stream;
-
                     el.id = consumer.id;
 
                     el.muted = this.audioState;
+
+                    el.srcObject = stream;
 
                     el.autoplay = true;
                     // handle incoming audio
@@ -361,9 +361,45 @@ export class RoomClient {
 
                         el.className = `audio-source-for-user-${user._id}`;
 
-                        el.volume = user_pref_volume?.volume ? user_pref_volume.volume : 1;
-                        
+                        el.volume = user_pref_volume?.volume ? user_pref_volume.volume > 1 ? 1 : user_pref_volume.volume : 1;
+
                         document.getElementById(user._id).appendChild(el);
+
+                        setTimeout(() => {
+
+                            let a_el = document.getElementsByClassName(`audio-source-for-user-${user._id}`)[0];
+                            
+                            let audCtx = new AudioContext();
+
+                            let audCtxSrc = audCtx.createMediaStreamSource(stream)
+                            
+                            let dst = audCtx.createMediaStreamDestination();
+
+                            let gainNode = audCtx.createGain();
+                            
+                            gainNode.gain.value = user_pref_volume?.volume ? user_pref_volume.volume > 1 ? user_pref_volume.volume : 1 : 1;
+                            
+                            [audCtxSrc, gainNode, dst].reduce((a, b) => a && a.connect(b));
+
+                            let new_a_el = document.createElement('audio');
+                            
+                            new_a_el.hidden = true;
+
+                            new_a_el.autoplay = true;
+
+                            new_a_el.id = consumer.id;
+        
+                            new_a_el.muted = this.audioState;
+
+                            new_a_el.srcObject = dst.stream;
+
+                            new_a_el.className = `audio-source-for-user-${user._id}`;
+                            
+                            a_el.remove();
+                            
+                            document.getElementById(user._id).appendChild(new_a_el);
+
+                        }, 200)
 
                     } 
 
@@ -389,6 +425,10 @@ export class RoomClient {
 
             this.dispatch({action: 'error', value: "ERROR: SDP/UDP Layer Verification of connection failed, please reconnect to server or restart app to solve issue, this is a temporary work around"});
         }
+    }
+
+    getConsumer(consumer_id) {
+        return this.consumers.get(consumer_id);
     }
 
     removeConsumer(consumer_id) {
@@ -528,7 +568,7 @@ export class RoomClient {
                             minHeight: 540,
                             maxHeight: 720,
                             maxFrameRate: 30,
-                            minFrameRate: 30,  
+                            minFrameRate: 30,
                         }
                     }
                 };
@@ -585,8 +625,8 @@ export class RoomClient {
 
             const track = audio ? microphone_stream.getAudioTracks()[0] : stream.getVideoTracks()[0]
             
-            const params = {
-                track
+            let params = {
+                track 
             }
 
             if (screen) {
@@ -649,7 +689,7 @@ export class RoomClient {
             producer = await this.producerTransport.produce(params);
 
             this.producers.set(producer.id, producer);
-
+        
             let el;
 
             let par;
@@ -681,7 +721,7 @@ export class RoomClient {
                 if (exists) {
                     exists.parentNode.remove();
                 }
-
+                
                 stream[type] = 'screen'
                 par = document.createElement('div');
                 par.className = `streaming-video-player-container`
