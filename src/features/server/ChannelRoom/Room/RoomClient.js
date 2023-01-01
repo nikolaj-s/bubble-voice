@@ -1,4 +1,5 @@
 import { USER_PREFS } from "../../../../util/LocalData";
+import { audioCtx } from "../../../AudioInit/AudioInit";
 
 const mediaType = {
     audio: 'audioType',
@@ -341,8 +342,6 @@ export class RoomClient {
 
                     el.muted = this.audioState;
 
-                    el.srcObject = stream;
-
                     el.autoplay = true;
                     // handle incoming audio
                     if (appData?.type === 'screen share') {
@@ -356,50 +355,32 @@ export class RoomClient {
                         document.getElementById('live-chat-wrapper').appendChild(el);
                     
                     } else {
-
+                        
                         const user_pref_volume = USER_PREFS.get(user._id);
 
                         el.className = `audio-source-for-user-${user._id}`;
 
                         el.volume = user_pref_volume?.volume ? user_pref_volume.volume > 1 ? 1 : user_pref_volume.volume : 1;
 
+                        // const source = audioCtx.createMediaStreamSource(stream);
+                        
+                        // const dst = audioCtx.createMediaStreamDestination();
+
+                        // const gainNode = audioCtx.createGain();
+                        
+                        // source.connect(gainNode);
+
+                        // gainNode.connect(dst)
+
+                        // source.connect(dst)
+
+                        // gainNode.gain.value = 3;
+                        
+                        audioCtx.resume();
+
+                        el.srcObject = stream;
+
                         document.getElementById(user._id).appendChild(el);
-
-                        setTimeout(() => {
-
-                            let a_el = document.getElementsByClassName(`audio-source-for-user-${user._id}`)[0];
-                            
-                            let audCtx = new AudioContext();
-
-                            let audCtxSrc = audCtx.createMediaStreamSource(stream)
-                            
-                            let dst = audCtx.createMediaStreamDestination();
-
-                            let gainNode = audCtx.createGain();
-                            
-                            gainNode.gain.value = user_pref_volume?.volume ? user_pref_volume.volume > 1 ? user_pref_volume.volume : 1 : 1;
-                            
-                            [audCtxSrc, gainNode, dst].reduce((a, b) => a && a.connect(b));
-
-                            let new_a_el = document.createElement('audio');
-                            
-                            new_a_el.hidden = true;
-
-                            new_a_el.autoplay = true;
-
-                            new_a_el.id = consumer.id;
-        
-                            new_a_el.muted = this.audioState;
-
-                            new_a_el.srcObject = dst.stream;
-
-                            new_a_el.className = `audio-source-for-user-${user._id}`;
-                            
-                            a_el.remove();
-                            
-                            document.getElementById(user._id).appendChild(new_a_el);
-
-                        }, 200)
 
                     } 
 
@@ -605,15 +586,13 @@ export class RoomClient {
             }
             if (audio) {
 
-                let audCtx = new AudioContext();
-
-                let audCtxSrc = audCtx.createMediaStreamSource(stream);
+                let audCtxSrc = audioCtx.createMediaStreamSource(stream);
 
                 audCtxSrc.mediaStream.getAudioTracks()[0].contentHint = 'speech';
 
-                let dst = audCtx.createMediaStreamDestination();
+                let dst = audioCtx.createMediaStreamDestination();
 
-                let gainNode = audCtx.createGain();
+                let gainNode = audioCtx.createGain();
                 
                 gainNode.gain.value = this.microphoneInputVolume;
                 

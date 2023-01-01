@@ -72,7 +72,9 @@ export const ListenToMicrophoneLevel = () => {
 
     return (
         <div className='listen-to-audio-container'>
-            {voiceActivity ? <div style={{backgroundColor: textColor, left: `${voiceActivationSensitivity * 2.5}px`}} className='voice-activation-position'></div> : null}
+            {
+            //voiceActivity ? <div style={{backgroundColor: textColor, left: `${voiceActivationSensitivity * 2.5}px`}} className='voice-activation-position'></div> : null
+            }
             { open === false ? null : <AudioAnalyser throwError={handleThrowError} /> }
             <div className='audio-level-bars-container'>
                 {[...Array(50).keys()].map(item => {

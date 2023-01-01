@@ -6,7 +6,7 @@ import { selectHideUserStatus } from '../../../../settings/appSettings/Miscellan
 
 import "./ChannelBackground.css";
 
-export const ChannelBackground = ({channel_background, blur = 10}) => {
+export const ChannelBackground = ({channel_background, blur = 1}) => {
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
@@ -20,15 +20,9 @@ export const ChannelBackground = ({channel_background, blur = 10}) => {
             border: `3px solid ${secondaryColor}`
         }}
         className='channel-background-container'>
+            
             <div 
-            style={{
-                backgroundColor: `rgba(${secondaryColor.split('(')[1]?.split(')')[0]}, 0.5)`,
-                backdropFilter: `blur(${blur}px)`,
-                borderBottomRightRadius: hideUserStatus ? 10 : 0
-            }}
-            className='channel-background-blur-layer'></div>
-            <div 
-            style={{borderBottomRightRadius: hideUserStatus ? 10 : 0}}
+            style={{borderBottomRightRadius: hideUserStatus ? 10 : 0, opacity: blur}}
             className='channel-background-image-wrapper'>
                 <Image objectFit='cover' image={channel_background} />
             </div>

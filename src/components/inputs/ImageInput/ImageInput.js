@@ -143,27 +143,12 @@ export const ImageInput = ({
             zIndex: zIndex,
             left: "50%" ,
             top: "50%",
-            transform: "translate(-50%, -50%)"
+            transform: "translate(-50%, -50%)",
         }}
         {...getRootProps({className: 'dropzone'})} className='image-drop-input-container'>
             <input {...getInputProps()} />
-            <Image disableErr={true} cursor='pointer' image={files[0]?.preview} />
-            {blur ? 
-            <div
-            style={{
-                position: 'absolute',
-                width: '100%',
-                height: '100%',
-                top: 0,
-                left: 0,
-                backdropFilter: `blur(${blur_amount}px)`,
-                zIndex: 1,
-                objectFit: 'contain',
-                borderRadius: 10,
-                backgroundColor: `rgba(${secondaryColor.split('(')[1]?.split(')')[0]}, 0.4)`
-            }}
-            ></div>
-            : null}
+            <Image opacity={blur_amount} disableErr={true} cursor='pointer' image={files[0]?.preview} />
+            
             <ImageIcon cursor={'pointer'} center={center} zIndex={zIndex} animation={iconAnimation} />
         </motion.div>
         {processingImage ? <ImageInputProcessingIndicator key={"image-processing-indicator"} value={percent} /> : null}

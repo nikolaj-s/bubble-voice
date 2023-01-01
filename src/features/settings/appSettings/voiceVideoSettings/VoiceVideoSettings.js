@@ -169,8 +169,10 @@ const Settings = () => {
             <ListenToMicrophoneLevel />
             <InputTitle title={"Microphone Deactivation Delay"} />
             <VoiceDeactivationDelay value={voiceDeactivationDelay} action={handleVoiceDeactivaitonDelay} save={saveVoiceVideoSettings} />
-            <InputTitle title={"Voice Activation Sensitivity"} />
-            <Range step={1} action={handleVoiceActivationSensitivity} min={5} max={200} value={voiceActivationSensitivity} />
+            {
+            //<InputTitle title={"Voice Activation Sensitivity"} />
+            //<Range step={1} action={handleVoiceActivationSensitivity} min={5} max={200} value={voiceActivationSensitivity} />
+            }
             <InputTitle title={"Input Volume"} />
             <Range save={saveMicInputVolume} value={localMicInputVolume} action={handleMicInputVolume} min={1} max={8} step={0.001} /> 
             <AltError error={true} marginTop={"4%"} errorMessage="Having Noise Suppresion on and increasing microphone volume will cause microphone quality issues." />

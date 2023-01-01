@@ -717,9 +717,9 @@ const Bar = () => {
     // handle device output
     React.useEffect(() => {
         try {
-
+            
             const mediaElements = document.querySelectorAll('audio');
-
+            
             for (const el of mediaElements) {
                 el.setSinkId(audioOutput._id);
             }

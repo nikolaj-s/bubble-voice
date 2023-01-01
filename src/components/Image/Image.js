@@ -20,7 +20,7 @@ export const Image = ({image, objectFit = 'cover', position = 'relative', zIndex
         toggleLoading(false);
 
         imageAnimation.start({
-            opacity: 1
+            opacity: opacity
         })
     }
 

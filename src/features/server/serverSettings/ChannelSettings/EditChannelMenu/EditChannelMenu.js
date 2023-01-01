@@ -236,8 +236,8 @@ const Wrapper = () => {
             <SettingsHeader title={"Channel Background"} />
             <InputTitle title={"Image"} />
             <ChannelBackgroundInput blur={backgroundBlur} initialImage={channelToEdit.channel_background} getFile={handleSettingChannelBackground} />
-            <InputTitle title={"Blur Amount"} />
-            <Range action={handleBlurChange} value={backgroundBlur} min={0} max={10} step={1} />
+            <InputTitle title={"Background Opacity"} />
+            <Range action={handleBlurChange} value={backgroundBlur} min={0} max={1} step={0.05} />
             <SettingsHeader title={"Widgets"} />
             <TextButton action={openWidgetMenu} name={"Add Widget"} />
             <InputTitle title={`Widgets ${channelToEdit.widgets ? channelToEdit.widgets.length : 0} / 15`} />

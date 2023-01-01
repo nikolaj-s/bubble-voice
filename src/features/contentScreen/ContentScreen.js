@@ -9,6 +9,10 @@ import { SettingsRoutesWrapper } from '../settings/SettingsRoutestWrapper/Settin
 import { CreateServerMenu } from '../createServer/createServerMenu/CreateServerMenu';
 import { ChannelRoom } from '../server/ChannelRoom/ChannelRoom';
 import { JoinServer } from '../joinServer/JoinServer';
+import { Disconnected } from '../../components/disconnected/Disconnected';
+import { ExpandContent } from '../ExpandContent/ExpandContent';
+import { NewAccount } from '../../components/NewAccount/NewAccount';
+import { AudioInit } from '../AudioInit/AudioInit';
 
 // state
 import { selectSecondaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
@@ -17,9 +21,6 @@ import { selectHeaderTitle } from './contentScreenSlice';
 
 // style's
 import "./ContentScreen.css";
-import { Disconnected } from '../../components/disconnected/Disconnected';
-import { ExpandContent } from '../ExpandContent/ExpandContent';
-import { NewAccount } from '../../components/NewAccount/NewAccount';
 
 export const ContentScreen = () => {
     // color schema
@@ -42,6 +43,7 @@ export const ContentScreen = () => {
                 <ExpandContent />
                 <NewAccount />
             </div>
+            <AudioInit />
         </motion.div>
     )
 }

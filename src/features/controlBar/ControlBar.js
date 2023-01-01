@@ -87,7 +87,7 @@ export const ControlBar = () => {
         }
 
     }
-    console.log(selectingScreens)
+    
     const toggleAppSettings = () => {
         const url = window.location.hash.split('#')[1]
 

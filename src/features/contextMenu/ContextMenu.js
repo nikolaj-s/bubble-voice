@@ -30,6 +30,7 @@ import { MoveUser } from '../../components/buttons/MoveUser/MoveUser';
 import { selectPrimaryColor, selectTextColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectSocialSoundEffect, updateSoundEffectsState } from '../settings/soundEffects/soundEffectsSlice';
 import { client } from '../server/ChannelRoom/Room/Room';
+import { audioCtx } from '../AudioInit/AudioInit';
 
 export const ContextMenu = () => {
 
@@ -567,51 +568,49 @@ export const ContextMenu = () => {
 
         saveUserPrefs();
 
+        console.log(audioCtx)
+
         try {
 
-            let new_el;
-
-            let el = document.getElementsByClassName(`audio-source-for-user-${memberId}`)[0];
+            document.getElementsByClassName(`audio-source-for-user-${memberId}`)[0].volume = value > 1 ? 1 : value;
             
-            const consumer = client.getConsumer(el.id);
+            // const consumer = client.getConsumer(el.id);
 
-            if (!el || !consumer) return;
+            // if (!el || !consumer) return;
+
+            // const stream = new MediaStream();
+
+            // stream.addTrack(consumer.track);
+
+            // new_el = document.createElement('audio');
+
+            // new_el.volume = value > 1 ? 1 : value;
+
+            // new_el.hidden = true;
+
+            // new_el.id = consumer.id;
+
+            // new_el.autoplay = true;
+
+            // new_el.className = `audio-source-for-user-${memberId}`;
+
+            // let audCtxSrc = audioCtx.createMediaStreamSource(stream);
+
+            // let dst = audioCtx.createMediaStreamDestination();
+
+            // let gainNode = audioCtx.createGain();
+
+            // audCtxSrc.connect(gainNode);
+
+            // gainNode.connect(dst);
             
-            el.remove();
+            // gainNode.gain.value = value > 1 ? value : 1;
 
-            const stream = new MediaStream();
+            // new_el.srcObject = dst.stream;
 
-            stream.addTrack(consumer.track);
-
-            new_el = document.createElement('audio');
-
-            new_el.volume = value > 1 ? 1 : value;
-
-            new_el.hidden = true;
-
-            new_el.id = consumer.id;
-
-            new_el.autoplay = true;
-
-            new_el.className = `audio-source-for-user-${memberId}`;
-
-            let audCtx = new AudioContext();
-
-            let audCtxSrc = audCtx.createMediaStreamSource(stream);
-
-            audCtxSrc.mediaStream.getAudioTracks()[0].contentHint = 'speech';
-
-            let dst = audCtx.createMediaStreamDestination();
-
-            let gainNode = audCtx.createGain();
+            // el.remove();
             
-            gainNode.gain.value = value > 1 ? value : 1;
-            
-            [audCtxSrc, gainNode, dst].reduce((a, b) => a && a.connect(b));
-
-            new_el.srcObject = dst.stream;
-
-            document.getElementById(memberId).appendChild(new_el);
+            // document.getElementById(memberId).appendChild(new_el);
 
         } catch (error) {
             console.log(error)
@@ -944,7 +943,7 @@ export const ContextMenu = () => {
                 <CtxMenuTitle title={"Change User Volume"} />
                 <p style={{color: textColor, fontSize: '0.8rem', marginRight: 5}} >{Math.floor(userVolumeLevel * 100)}%</p>
             </div>
-            <Range save={handleUserVolumeChange} action={(value) => setUserVolumeLevel(value)} step={0.01} value={userVolumeLevel} fill={true} max={5.00} min={0} /> 
+            <Range save={handleUserVolumeChange} action={(value) => setUserVolumeLevel(value)} step={0.01} value={userVolumeLevel} fill={true} max={1} min={0} /> 
             </>
             : null}
             {changeStreamVolumeState ? <CtxMenuTitle title={"Change Stream Volume"} /> : null}
