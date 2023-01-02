@@ -119,7 +119,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         }).catch(error => {
             console.log(error)
-            dispatch(throwServerError({errorMessage: error.errorMessage}));
+            dispatch(throwServerError({errorMessage: error.message}));
             
         })
 

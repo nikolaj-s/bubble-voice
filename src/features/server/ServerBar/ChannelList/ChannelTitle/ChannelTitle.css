@@ -11,4 +11,5 @@
     font-size: 0.7rem;
     font-weight: 400;
     letter-spacing: var(--font-spacing);
+    cursor: default;
 }

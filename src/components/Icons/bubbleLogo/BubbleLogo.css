@@ -1,12 +1,10 @@
 .logo-container {
     width: 40px;
-    height: 40px;
-    top: -10px;
+    height: 30px;
+    top: -20px;
     left: 0px;
     flex-shrink: 0;
     cursor: default;
-    -webkit-app-region: no-drag;
-    pointer-events: fill;
     border-bottom-right-radius: var(--border-radius);
     display: flex;
     align-items: center;

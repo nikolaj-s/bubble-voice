@@ -27,7 +27,7 @@ export const ConnectionIndicator = ({active}) => {
     }
     
     return (
-        <ButtonAnimationWrapper action={active ? handleToggleShowPing : null} zIndex={3} description={active ? `${ping}ms` : null} opacity={active ? 1 : 0.2} width={25} height={25} position={'relative'} active={!active} invert={true} >
+        <ButtonAnimationWrapper altInvert={true} invert={false} action={active ? handleToggleShowPing : () => {}} zIndex={1} description={active ? `${ping}ms` : null} opacity={active ? 1 : 0.2} width={25} height={25} position={'relative'} active={!active} >
             {ping === 0 ?
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 20C13.1046 20 14 19.1046 14 18C14 16.8954 13.1046 16 12 16C10.8954 16 10 16.8954 10 18C10 19.1046 10.8954 20 12 20Z" stroke={textColor} strokeWidth="2"/>

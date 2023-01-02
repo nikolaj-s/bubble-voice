@@ -27,7 +27,7 @@ export const ServerBanner = ({serverName, serverImage}) => {
             border: `solid 4px ${primaryColor}`
         }}
         animate={{
-            height: '200px',
+            height: '170px',
             borderBottomLeftRadius: '0px',
             borderBottomRightRadius: '0px',
             border: 'solid 0px transparent'
@@ -44,7 +44,7 @@ export const ServerBanner = ({serverName, serverImage}) => {
             animate={{
                 right: 0,
                 width: '100%',
-                height: '50px', 
+                height: '40px', 
             }}
             transition={{duration: 0.3}}
             style={{backgroundColor: `rgba(${primaryColor.split('(')[1].split(')')[0]}, 0.7)`}}

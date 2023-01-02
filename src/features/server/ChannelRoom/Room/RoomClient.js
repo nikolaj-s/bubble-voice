@@ -918,7 +918,7 @@ export class RoomClient {
         this.dispatch({action: 'reconnecting', value: false});
 
         if (this.error_count > 20) {
-           return this.dispatch({action: 'error', value: "Unable to resolve error please reconnect to the server"})
+           return this.dispatch({action: 'error', value: "Unable to establish a secure connection please try relaunching the application"})
         } else {
             try {
                 this.closeProducer('audioType');

@@ -1,9 +1,10 @@
 
 
 .control-bar-container {
-    width: 95%;
-    height: 60px;
-    min-height: 60px;
+    width: calc(100% - 10px);
+    height: 55px;
+    padding: 0 5px;
+    min-height: 55px;
     display: flex;
     justify-content: space-between;
     align-items: center;

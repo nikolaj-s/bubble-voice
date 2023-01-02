@@ -54,8 +54,13 @@ export const UpdateAvailable = () => {
             dispatch(fetchReleaseNotes());
             
             try {
-                document.getElementById('disconnect-from-server-button').click();
+
+                setTimeout(() => {
+                    document.getElementById('disconnect-from-server-button').click();
+                }, 500)
+                
             } catch (e) {
+                console.log(e)
                 return;
             }
         }

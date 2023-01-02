@@ -1,7 +1,7 @@
 
 .side-bar-container {
-    min-width: 280px;
-    max-width: 280px;
+    min-width: 250px;
+    max-width: 250px;
     width: 100%;
     margin-left: 5px;
     border-bottom-left-radius: var(--border-radius);

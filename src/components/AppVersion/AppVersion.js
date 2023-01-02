@@ -34,7 +34,7 @@ export const AppVersion = () => {
             <p
             style={{color: color}}
             >App Version: {appVersion}</p>
-            <p style={{color: color}}>Copyright Bubble 2022</p>
+            <p style={{color: color}}>Copyright Bubble 2023</p>
             <p onClick={openLink} style={{color: color, cursor: 'pointer'}}>Release Notes</p>
         </div>
     )

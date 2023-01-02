@@ -7,6 +7,8 @@ import { ProfilePictureButton } from '../../../../components/buttons/ProfilePict
 import { LeaveServerButton } from '../../../../components/buttons/LeaveServerButton/LeaveServerButton';
 import { selectStatusMenuState, toggleStatusMenu } from '../../ChannelRoom/UserStatusBar/UserStatusSlice';
 import { UserStatusMenu } from '../../../../components/UserStatusMenu/UserStatusMenu';
+import { ConnectionIndicator } from '../../../../components/connectionIndicator/ConnectionIndicator';
+import { selectPrimaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 export const DisconnectButtonWrapper = ({disconnect, leave, channel_id}) => {
 
@@ -15,6 +17,8 @@ export const DisconnectButtonWrapper = ({disconnect, leave, channel_id}) => {
     const profilePic = useSelector(selectUserImage);
 
     const statusMenuOpen = useSelector(selectStatusMenuState);
+
+    const primaryColor = useSelector(selectPrimaryColor);
 
     const handleToggleStatusMenu = () => {
         dispatch(toggleStatusMenu(!statusMenuOpen))
@@ -26,14 +30,19 @@ export const DisconnectButtonWrapper = ({disconnect, leave, channel_id}) => {
         <motion.div 
         style={{
             display: 'flex',
-            justifyContent: 'flex-start'
+            justifyContent: 'space-between'
         }}
         initial={{display: 'none'}}
         animate={{display: 'flex'}}
         className='leave-server-button'>
-            <ProfilePictureButton action={handleToggleStatusMenu} image={profilePic} width={25} height={25} padding={2} />
-            <LeaveServerButton description={"Leave Server"} margin={"0 12px"} width={channel_id ? 80 : 190} height={25} borderRadius={10} id='disconnect-from-server-button' action={() => {leave(false)}} name={"Leave Server"} />
-            {channel_id !== null ? <DisconnectButton action={disconnect}  width={80} height={25} /> : null}
+            <div 
+            style={{backgroundColor: primaryColor}}
+            className='profile-connection-wrapper'>
+                <ProfilePictureButton action={handleToggleStatusMenu} image={profilePic} width={25} height={25} padding={2} />
+                {channel_id !== null ? <ConnectionIndicator active={true} /> : null}
+            </div>
+            <LeaveServerButton description={"Leave Server"} margin={"0px"} width={channel_id ? 50 : 170} height={25} borderRadius={10} id='disconnect-from-server-button' action={() => {leave(false)}} name={"Leave Server"} />
+            {channel_id !== null ? <DisconnectButton action={disconnect}  width={50} height={25} /> : null}
         </motion.div>
         </>
     )

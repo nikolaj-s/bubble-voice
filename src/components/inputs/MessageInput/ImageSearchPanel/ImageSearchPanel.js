@@ -88,9 +88,9 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
         <AnimatePresence exitBeforeEnter>
             {searchingForImage ?
             <motion.div 
-            initial={{maxHeight: '0%', opacity: 0}}
-            animate={{maxHeight: '85%', opacity: 1}}
-            exit={{maxHeight: '0%', opacity: 0}}
+            initial={{opacity: 0}}
+            animate={{opacity: 1}}
+            exit={{opacity: 0}}
             transition={{duration: 0.1}}
             key="message-image-search-container"
             style={{

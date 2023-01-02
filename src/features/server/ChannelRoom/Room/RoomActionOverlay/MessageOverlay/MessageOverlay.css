@@ -3,7 +3,7 @@
     position: absolute;
     right: 0px;
     width: calc(100% - 2rem);
-    max-height: 400px;
+    max-height: 90%;
     padding: 1rem;
     z-index: 2;
 }

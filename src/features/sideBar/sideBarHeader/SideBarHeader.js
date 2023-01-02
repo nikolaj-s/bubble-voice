@@ -22,7 +22,7 @@ export const SideBarHeader = () => {
         <div className='side-bar-header-container'>
             <BubbleLogo action={returnToServerSelect} />
             <HeaderTitle title={title} />
-            <div style={{width: 50, flexShrink: 0}}></div>
+            <div style={{width: 35, flexShrink: 0}}></div>
         </div>
     )
 }

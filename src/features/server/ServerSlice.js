@@ -497,6 +497,10 @@ const serverSlice = createSlice({
 
             const message_index = state.channels[channel_index].social.findIndex(msg => msg.content.local_id === action.payload.content.local_id);
 
+            if (channel_index === -1) return;
+
+            if (message_index === -1) return;
+
             const message = UnpackMessage(action.payload, state.members);
 
             state.channels[channel_index].social[message_index]._id = message._id;

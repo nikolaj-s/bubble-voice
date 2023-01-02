@@ -9,14 +9,13 @@ import { SettingsButton } from '../../components/buttons/settingsButton/settings
 import { MicToggleButton } from '../../components/buttons/mediaButtons/micToggleButton/MicToggleButton';
 import { AudioToggleButton } from '../../components/buttons/mediaButtons/audioToggleButton/AudioToggleButton';
 import { ShareScreenButton } from '../../components/buttons/mediaButtons/shareScreenButton/ShareScreenButton';
-import { ConnectionIndicator } from '../../components/connectionIndicator/ConnectionIndicator';
 import { ScreenShareMenu } from './ScreenShareMenu/ScreenShareMenu';
 
 // state
 import { resetControlState, selectAudioState, selectingScreensState, selectLoadingScreenShare, selectLoadingWebCam, selectMicrophoneState, selectScreenShareState, selectWebCamState, toggleControlState, toggleLoadingWebCam } from './ControlBarSlice';
 import { selectCurrentChannel, selectCurrentChannelId } from '../server/ServerSlice';
 import { playSoundEffect } from '../settings/soundEffects/soundEffectsSlice';
-import { selectAccentColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style's
 import "./ControlBar.css";
@@ -44,7 +43,7 @@ export const ControlBar = () => {
 
     const selectingScreens = useSelector(selectingScreensState);
 
-    const accentColor = useSelector(selectAccentColor);
+    const accentColor = useSelector(selectPrimaryColor);
 
     const loadingWebCam = useSelector(selectLoadingWebCam);
 
@@ -113,7 +112,7 @@ export const ControlBar = () => {
         <>
             {selectingScreens ? <ScreenShareMenu /> : null}
             <div className='control-bar-container' 
-            style={{borderTop: `solid 2px ${accentColor}`}}
+            style={{borderTop: `solid 3px ${accentColor}`}}
             >
                 <div className='controls-wrapper'>
                     <SettingsButton action={toggleAppSettings} />
@@ -144,7 +143,6 @@ export const ControlBar = () => {
                     active={current_channel_id === null || channel.disable_streams}
                     id={"screen-share-toggle-button"}
                     />
-                    <ConnectionIndicator active={current_channel_id !== null} />
                 </div>
             </div>
         </>
