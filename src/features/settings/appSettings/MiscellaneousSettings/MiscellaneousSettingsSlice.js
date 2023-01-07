@@ -57,7 +57,8 @@ const MiscellaneousSettingsSlice = createSlice({
         defaultServer: {label: "Default", id: ""},
         roomScale: 1,
         enabledSystemNotifications: true,
-        muteSocialVideos: true
+        muteSocialVideos: true,
+        activity: false
     },
     reducers: {
         pushSytemNotification: (state, action) => {
@@ -129,7 +130,8 @@ const MiscellaneousSettingsSlice = createSlice({
                 defaultServer: state.defaultServer,
                 enabledSystemNotifications: state.enabledSystemNotifications,
                 autoPlayNativeVideos: state.autoPlayNativeVideos,
-                muteSocialVideos: state.muteSocialVideos
+                muteSocialVideos: state.muteSocialVideos,
+                activity: state.activity
             }
 
             saveLocalData("MISC", "MISCSETTINGS", obj);
@@ -188,6 +190,8 @@ const MiscellaneousSettingsSlice = createSlice({
             if (saved_data.defaultServer) state.defaultServer = saved_data.defaultServer;
             
             if (saved_data.enabledSystemNotifications !== (undefined && null)) state.enabledSystemNotifications = saved_data.enabledSystemNotifications;
+            
+            if (saved_data.activity) state.activity = true;
         }
     }
 })
@@ -221,6 +225,8 @@ export const selectRoomScale = state => state.MiscellaneousSettingsSlice.roomSca
 export const selectAutoPlayNativeVideos = state => state.MiscellaneousSettingsSlice.autoPlayNativeVideos;
 
 export const selectMuteSocialVideos = state => state.MiscellaneousSettingsSlice.muteSocialVideos;
+
+export const selectActivityStatus = state => state.MiscellaneousSettingsSlice.activity;
 
 export const {pushPokeNotification, pushSytemNotification, setDefaultServer, changeRoomScale, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, miscSettingsClearError, miscSettingsChannelSpecificStateChange } = MiscellaneousSettingsSlice.actions;
 

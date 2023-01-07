@@ -10,9 +10,10 @@ import { InputTitle } from '../../../../components/titles/inputTitle/InputTitle'
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 import { ListenToMicrophoneLevel } from './ListenToMicrophoneLevel/ListenToMicrophoneLevel';
 import { ToggleButton } from '../../../../components/buttons/ToggleButton/ToggleButton';
-
+import { RadioButton } from '../../../../components/buttons/RadioButton/RadioButton'
+import { TextInput } from '../../../../components/inputs/TextInput/TextInput';
 // state
-import { selectAudioInputList, selectAudioInput, updateSelectedDevice, selectAudioOutput, selectAudioOutputList, selectVideoInput, selectVideoInputList, selectPushToTalkState, selectVoiceActivityState, toggleVoiceActivity, toggleSelectedVoiceVideoState, selectMirroredWebCamState, handleSaveVoiceVideoSettings, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, updateMicInputVolume, getMediaDevices, selectVoiceActivationSensitivity, updateVoiceActivationSensitivity, selectAutoGainControl, toggleAutoGain, selectVoiceDeactivationDelayState, updateVoiceDeactivationDelay } from './voiceVideoSettingsSlice';
+import { selectAudioInputList, selectAudioInput, updateSelectedDevice, selectAudioOutput, selectAudioOutputList, selectVideoInput, selectVideoInputList, selectPushToTalkState, selectVoiceActivityState, toggleVoiceActivity, toggleSelectedVoiceVideoState, selectMirroredWebCamState, handleSaveVoiceVideoSettings, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, updateMicInputVolume, getMediaDevices, selectVoiceActivationSensitivity, updateVoiceActivationSensitivity, selectAutoGainControl, toggleAutoGain, selectVoiceDeactivationDelayState, updateVoiceDeactivationDelay, selectAdvancedVoiceActivation } from './voiceVideoSettingsSlice';
 import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/SettingsSpacer';
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 import { Range } from '../../../../components/inputs/Range/Range';
@@ -22,6 +23,7 @@ import { ApplyCancelButton } from '../../../../components/buttons/ApplyCancelBut
 import { AltError } from '../../../../components/AltError/AltError';
 import { TextButton } from '../../../../components/buttons/textButton/TextButton';
 import { VoiceDeactivationDelay } from './VoiceDeactivationDelay/VoiceDeactivationDelay';
+import { selectActivateCameraKey, selectDisconnectKey, selectMuteAudioKey, selectMuteMicKey, selectPushToMuteKey, selectPushToTalkKey, selectShareScreenKey, updateKeyCodeState } from '../keyBindSettings/keyBindSettingsSlice';
 
 const Settings = () => {
 
@@ -69,6 +71,22 @@ const Settings = () => {
     const autoGainControl = useSelector(selectAutoGainControl);
 
     const voiceDeactivationDelay = useSelector(selectVoiceDeactivationDelayState);
+
+    const pushToTalkkey = useSelector(selectPushToTalkKey);
+
+    const muteMicKey = useSelector(selectMuteMicKey);
+
+    const muteAudioKey = useSelector(selectMuteAudioKey);
+
+    const activateCameraKey = useSelector(selectActivateCameraKey);
+
+    const shareScreenKey = useSelector(selectShareScreenKey);
+
+    const disconnectKey = useSelector(selectDisconnectKey);
+
+    const pushToMuteKey = useSelector(selectPushToMuteKey);
+
+    const advancedVoiceActivationDetection = useSelector(selectAdvancedVoiceActivation);
 
     React.useEffect(() => {
 
@@ -153,6 +171,29 @@ const Settings = () => {
         dispatch(handleSaveVoiceVideoSettings())
     }
 
+    const handleKeyCodeUpdate = (keyCode, state, event) => {
+        
+        if (event.key.includes('F')) return;
+
+        if (event.keyCode === pushToTalkkey.keyCode && (event.keyCode !== "")) return;
+        
+        if (event.keyCode === muteMicKey.keyCode && (event.keyCode !== "")) return;
+
+        if (event.keyCode === muteAudioKey.keyCode && (event.keyCode !== "")) return;
+
+        if (event.keyCode === activateCameraKey.keyCode && (event.keyCode !== "")) return;
+
+        if (event.keyCode === disconnectKey.keyCode && (event.keyCode !== "")) return;
+
+        if (event.keyCode === shareScreenKey.keyCode && (event.keyCode !== "")) return;
+        
+        if (event.keyCode === pushToMuteKey.keyCode && (event.keyCode !== "")) return;
+
+        const obj = {[state]: {key: event.nativeEvent.key, keyCode: event.keyCode}}
+        
+        dispatch(updateKeyCodeState(obj));
+    }
+
     return (
         <div className='settings-wrapper'>
             <SettingsHeader title={"Devices"} />
@@ -167,26 +208,41 @@ const Settings = () => {
             <SettingsHeader title={"Audio Settings"} />
             <InputTitle title={"Test Mic Input"} />
             <ListenToMicrophoneLevel />
-            <InputTitle title={"Microphone Deactivation Delay"} />
-            <VoiceDeactivationDelay value={voiceDeactivationDelay} action={handleVoiceDeactivaitonDelay} save={saveVoiceVideoSettings} />
-            {
-            //<InputTitle title={"Voice Activation Sensitivity"} />
-            //<Range step={1} action={handleVoiceActivationSensitivity} min={5} max={200} value={voiceActivationSensitivity} />
-            }
             <InputTitle title={"Input Volume"} />
             <Range save={saveMicInputVolume} value={localMicInputVolume} action={handleMicInputVolume} min={1} max={8} step={0.001} /> 
-            <AltError error={true} marginTop={"4%"} errorMessage="Having Noise Suppresion on and increasing microphone volume will cause microphone quality issues." />
+            <InputTitle title={"Input Mode"} />
+            <RadioButton name={"Enable Push To Talk"} state={pushToTalk} action={handleToggleVoiceState} />
+            <RadioButton name={"Enable Voice Activation Detection"} state={voiceActivity} action={handleToggleVoiceState} />
+            {pushToTalk ?
+            <>
+            <InputTitle title={"Push To Talk Release Delay"} />
+            <VoiceDeactivationDelay value={voiceDeactivationDelay} action={handleVoiceDeactivaitonDelay} save={saveVoiceVideoSettings} />
+            <InputTitle title={"Push To Talk Key Bind"} />
+            <TextInput keyCode={handleKeyCodeUpdate} stateSelector='push_to_talk' inputValue={pushToTalkkey.key} />
+            </>
+            : 
+            <>
+            <InputTitle title={"Enable Advanced Voice Activation Detection"} />
+            <ToggleButton action={() => {handleToggleSelectedVoiceVideoState('advancedVoiceActivationDetection')}} state={advancedVoiceActivationDetection}  />
+            <div style={{opacity: advancedVoiceActivationDetection ? 0.3 : 1, pointerEvents: advancedVoiceActivationDetection ? 'none' : 'all'}}>
+                <InputTitle title={"Voice Activation Sensitivity"} />
+                <Range step={1} action={handleVoiceActivationSensitivity} min={1} max={200} value={voiceActivationSensitivity} />
+            </div>
+            </>
+            }
+            
+            {
+            
+            }
+            
+            <AltError error={true} marginTop={"4%"} errorMessage="Disable noise suppression and echo cancellation if experiencing microphone cut outs." />
             <InputTitle title={"Enable Noise Suppression / Bi - Quad Filter"} />
             <ToggleButton action={() => {handleToggleSelectedVoiceVideoState("noiseSuppression")}} state={noiseSuppression} />
             <InputTitle title={"Echo Cancellation"} />
             <ToggleButton action={() => {handleToggleSelectedVoiceVideoState("echoCancellation")}} state={echoCancellation} />
             <InputTitle title={"Auto Gain Control"} />
             <ToggleButton action={handleToggleAutoGainControl} state={autoGainControl} />
-            <SettingsHeader title={"Input Mode"} />
-            <InputTitle  title={"Enable Push To Talk"} />
-            <ToggleButton state={pushToTalk} action={handleToggleVoiceState} />
-            <InputTitle title={"Enable Voice Activity Detection"} />
-            <ToggleButton state={voiceActivity} action={handleToggleVoiceState} />
+            
             
             <SettingsHeader title={"Video Settings"} />
             <InputTitle title={"Mirror Web Cam"} />

@@ -1,6 +1,8 @@
 
 export let USER_PREFS = new Map();
 
+export let SOCIAL_DATA = new Map();
+
 // key bind management
 export const fetchKeyBinds = async () => {
     try {
@@ -81,6 +83,34 @@ export const setMusicWidgetVolume = async (volume) => {
     }
 }
 
+// SOCIAL DATA
+export const saveSocialData = async () => {
+    try {
+        const keytar = window.require('keytar');
+
+        await keytar.setPassword("SOCIAL", "DATA", JSON.stringify(Array.from(SOCIAL_DATA.entries())));
+        
+        return;
+    } catch (error) {
+        return;
+    }
+}
+
+export const fetchSocialData = async () => {
+    try {
+
+        const keytar = window.require('keytar');
+
+        const data = await keytar.getPassword("SOCIAL", "DATA");
+
+        SOCIAL_DATA = new Map(JSON.parse(data));
+
+        return;
+    } catch (eror) {
+        return;
+    }
+}
+
 // USER PREFS
 
 export const saveUserPrefs = async () => {
@@ -104,6 +134,7 @@ export const fetchSavedUserPrefs = async () => {
  
         USER_PREFS = new Map(JSON.parse(data));
 
+        return;
     } catch (error) {
         console.log("Using Web App");
     }

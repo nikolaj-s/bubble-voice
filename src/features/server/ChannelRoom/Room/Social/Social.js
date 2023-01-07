@@ -20,6 +20,7 @@ import { socket } from '../../../ServerBar/ServerBar';
 import { Loading } from '../../../../../components/LoadingComponents/Loading/Loading';
 
 import { PersistedDataNotice } from '../../../../../components/PersistedDataNotice/PersistedDataNotice';
+import { saveSocialData, SOCIAL_DATA } from '../../../../../util/LocalData';
 
 
 export const Social = ({currentChannel, channelId, socialRoute = false, bulletin = false, channelName}) => {
@@ -47,22 +48,40 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
     const pinning = useSelector(selectPinningMessage);
 
     React.useEffect(() => {
+        try {
+            if (messages[0]._id && currentChannel.persist_social) {
+                
+                SOCIAL_DATA.set(channelId, {message_id: messages[0]._id})
 
-        if (bulletin) return;
+                saveSocialData();
+            }
+        } catch (err) {
+            return;
+        }
 
-        setTimeout(() => {
-            messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+    }, [messages])
 
+    React.useEffect(() => {
+
+        try {
+            if (bulletin) return;
+            
             setTimeout(() => {
+                messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
 
-                document.getElementsByClassName('social-messages-wrapper')[0].style.scrollBehavior = 'smooth';
+                setTimeout(() => {
 
-            }, 400)
+                    document.getElementsByClassName('social-messages-wrapper')[0].style.scrollBehavior = 'smooth';
 
-        }, 300)
+                }, 400)
+
+            }, 300)
         
         if (permission.user_can_post_channel_social) document.getElementById('social-input-selector').focus();
-
+        
+        } catch (error) {
+            return;
+        }
         return () => {
             try {
                 document.getElementsByClassName('social-messages-wrapper')[0].style.scrollBehavior = null;

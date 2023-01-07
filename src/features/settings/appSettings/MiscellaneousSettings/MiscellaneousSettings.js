@@ -16,7 +16,7 @@ import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/Se
 
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { miscSettingsChannelSpecificStateChange, miscSettingsClearError, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, selectAutoPlayNativeVideos, selectDefaultServer, selectHardwareAcceleration, selectHideUserStatus, selectMiscSettingsDisableGifProfiles, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsError, selectMiscSettingsErrorMessage, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectMiscSettingsLoading, selectMuteSocialVideos, selectRestartNotice, selectSystemNotifcations, setDefaultServer } from './MiscellaneousSettingsSlice';
+import { miscSettingsChannelSpecificStateChange, miscSettingsClearError, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, selectActivityStatus, selectAutoPlayNativeVideos, selectDefaultServer, selectHardwareAcceleration, selectHideUserStatus, selectMiscSettingsDisableGifProfiles, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsError, selectMiscSettingsErrorMessage, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectMiscSettingsLoading, selectMuteSocialVideos, selectRestartNotice, selectSystemNotifcations, setDefaultServer } from './MiscellaneousSettingsSlice';
 import { selectServerList } from '../../../sideBar/sideBarSlice';
 
 const Settings = () => {
@@ -54,6 +54,8 @@ const Settings = () => {
     const autoPlaySocialVideos = useSelector(selectAutoPlayNativeVideos);
 
     const muteSocialVideos = useSelector(selectMuteSocialVideos);
+
+    const activityStatus = useSelector(selectActivityStatus);
 
     React.useEffect(() => {
 
@@ -99,6 +101,9 @@ const Settings = () => {
             <SettingsHeader title={"System Notifcations"} />
             <InputTitle title={"Toggle Sytem Notifications"} />
             <ToggleButton state={systemNotifcations} action={() => {handleChannelSpecificStateChange('enabledSystemNotifications')}} />
+            <SettingsHeader title={"Activity"} />
+            <InputTitle title={"Display Current Activity As Custom Status Message"} />
+            <ToggleButton state={activityStatus} action={() => {handleChannelSpecificStateChange('activity')}} />
             <SettingsHeader title={"Channel Specific"} />
             <InputTitle title={"Disable Message Pop Up's"} />
             <ToggleButton action={() => {handleChannelSpecificStateChange("disableMessagePopUp")}} state={disableMessagePopUp} />

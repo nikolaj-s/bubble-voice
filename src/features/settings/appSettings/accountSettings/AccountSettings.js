@@ -98,7 +98,7 @@ const Settings = () => {
                 <TextInput stateSelector='password' action={handleInput}  marginBottom='2%' type='password' placeholder={"Current Password"} inputValue={password} />
                 <TextInput action={handleInput} stateSelector='newPassword' marginBottom='2%' type='password' placeholder={"New Password"} inputValue={newPassword} />
                 <TextInput action={handleInput} inputValue={confirmNewPassword} stateSelector="confirmNewPassword" type='password' placeholder={"Confirm New Password"} />
-                {stateChanged ? <ApplyCancelButton apply={handleApply} cancel={handleCancel} /> : null}
+                {stateChanged ? <ApplyCancelButton bottom={10} right={5} apply={handleApply} cancel={handleCancel} /> : null}
                 <SettingsSpacer />
             </div>
             <AnimatePresence>

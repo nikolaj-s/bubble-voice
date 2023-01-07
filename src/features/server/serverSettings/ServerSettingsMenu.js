@@ -66,7 +66,7 @@ const Menu = () => {
                 {permissions.server_group_name === 'Owner' ? 
                 <SettingsCategoryButton action={navigateServerSettings} link={'delete-server'} active={window.location.hash.search('delete-server') !== -1} name={'Delete Server'} /> 
                 :
-                <SettingsCategoryButton name="Dispand From Server" />
+                <SettingsCategoryButton name="Dispand Server" />
                 }
             </div>
         </motion.div>

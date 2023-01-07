@@ -135,10 +135,11 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
 
     return (
         <> 
-        <AnimatePresence exitBeforeEnter>
-            {persist ? <ImageDropListener root={getRootProps({className: 'dropzone'})} /> : null}
+        <AnimatePresence>
+            {persist ? <ImageDropListener key={"image-drop-listener"} root={getRootProps({className: 'dropzone'})} /> : null}
             <ImageSearchPanel key="message-image-search-container" serverId={serverId} selectImage={selectImage} searchingForImage={searchingForImage} />
             <motion.div 
+            key={"message-text-input"}
             animate={animation}
             style={{
                 backgroundColor: primaryColor,

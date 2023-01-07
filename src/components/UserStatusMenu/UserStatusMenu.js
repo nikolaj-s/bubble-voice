@@ -3,9 +3,11 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentStatus, selectCustomStatus, selectLoadingStatusChange, setCustomState, updateUserStatus } from '../../features/server/ChannelRoom/UserStatusBar/UserStatusSlice';
 import { selectPrimaryColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { miscSettingsChannelSpecificStateChange, selectActivityStatus } from '../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { BoolButton } from '../buttons/BoolButton/BoolButton'
 import { TextInput } from '../inputs/TextInput/TextInput';
 import { Loading } from '../LoadingComponents/Loading/Loading';
+import { InputTitle } from '../titles/inputTitle/InputTitle';
 
 // style
 import "./UserStatusMenu.css";
@@ -22,9 +24,11 @@ export const UserStatusMenu = () => {
 
     const loadingCustomStatus = useSelector(selectLoadingStatusChange);
 
+    const activityStatus = useSelector(selectActivityStatus);
+
     const handleCustomStatus = (value) => {
 
-        if (value.length > 12) return; 
+        if (value.length > 56) return; 
 
         dispatch(setCustomState(value.toLowerCase()));
     
@@ -32,6 +36,15 @@ export const UserStatusMenu = () => {
 
     const handleChangeStatus = (value) => {
         dispatch(updateUserStatus({value: value}));
+    }
+
+    const handleDynamicActivityStatus = () => {
+
+        if (activityStatus) {
+            dispatch(updateUserStatus({value: customStatus}))
+        }
+
+        dispatch(miscSettingsChannelSpecificStateChange('activity'));
     }
 
     return (
@@ -43,6 +56,7 @@ export const UserStatusMenu = () => {
                 <BoolButton action={() => {handleChangeStatus('offline')}} state={currentStatus === 'offline'} name={"Offline"} />
                 <TextInput inputValue={customStatus} action={handleCustomStatus} marginBottom='1%' marginTop='1%' placeholder={'Custom Status'} />
                 <BoolButton action={() => {handleChangeStatus(customStatus)}} state={(currentStatus !== 'online' && currentStatus !== 'away' && currentStatus !== 'offline')} name={"Custom"} />
+                <BoolButton action={handleDynamicActivityStatus} state={activityStatus} name={"Enable Dynamic Activity Status"} />
             </div>
             <div style={{backgroundColor: primaryColor}} className='inner-status-menu-spacer'></div>
             <Loading loading={loadingCustomStatus} />

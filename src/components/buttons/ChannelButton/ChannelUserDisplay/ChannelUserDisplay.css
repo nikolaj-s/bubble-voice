@@ -7,6 +7,7 @@
     margin-bottom: 2%;
     position: relative;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .channel-user-placeholder h3 {
@@ -16,7 +17,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     width: 100%;
-    cursor: default;
+    cursor: pointer;
 }
 
 .channel-user-placeholder-user-image {
@@ -26,6 +27,7 @@
     overflow: hidden;
     margin-right: 5%;
     flex-shrink: 0;
+    cursor: pointer;
 }
 
 .user-status-wrapper {
@@ -36,7 +38,7 @@
     right: 5px;
     justify-content: flex-end;
     height: 30px;
-    border-radius: 8px;
+    border-radius: 4px;
     transition: 0.5s;
 }
 

@@ -562,7 +562,6 @@ const serverSlice = createSlice({
             })
         },
         updateChannel: (state, action) => {
-            console.log(action.payload)
             state.channels = state.channels.map(channel => {
                 if (channel._id === action.payload._id) {
                     return {...action.payload, users: channel.users, social: action.payload.social, widgets: action.payload.widgets}

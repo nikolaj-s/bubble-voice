@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import imageCompression from 'browser-image-compression';
 
 // state
-import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // componenents
 import { Image } from "../../Image/Image";
@@ -42,8 +42,6 @@ export const ImageInput = ({
 
     const primaryColor = useSelector(selectPrimaryColor);
 
-    const secondaryColor = useSelector(selectSecondaryColor);
-
     const accentColor = useSelector(selectAccentColor);
 
     const textColor = useSelector(selectTextColor);
@@ -63,8 +61,8 @@ export const ImageInput = ({
             if (acceptedFiles.length === 0) return;
 
             toggleProcessingImage(true);
-
-            const options = {maxSizeMB: 0.6, onProgress: handlePercent, maxIteration: 30}
+            
+            const options = {maxSizeMB: 0.6, onProgress: handlePercent, maxIteration: 30, type: acceptedFiles[0].type}
 
             let compressed_image;
 

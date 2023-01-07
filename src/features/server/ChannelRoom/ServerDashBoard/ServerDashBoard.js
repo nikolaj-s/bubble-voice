@@ -40,7 +40,6 @@ const Component = () => {
             <div 
             style={{borderBottom: `solid 3px ${primaryColor}`}}
             className='server-dashboard-title-container'>
-                <h1 style={{color: textColor}}>Bulletin</h1>
                 <PinnedIcon />
             </div>
             <div className='server-dashboard-inner-container'>

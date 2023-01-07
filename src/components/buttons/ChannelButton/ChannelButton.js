@@ -13,7 +13,8 @@ import {  selectAccentColor, selectPrimaryColor, selectTextColor, selectTranspar
 // style
 import "./ChannelButton.css";
 import { SocialButton } from '../SocialButton/SocialButton';
-import { setChannelSocialId } from '../../../features/server/ServerSlice';
+import { selectChannelSocialId, selectCurrentChannelId, selectCurrentlyViewChannelSocial, setChannelSocialId } from '../../../features/server/ServerSlice';
+import { SOCIAL_DATA } from '../../../util/LocalData';
 
 
 export const ChannelButton = ({channel, action = () => {}, users, index}) => {
@@ -23,6 +24,8 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
     const [usersState, setUsersState] = React.useState([]);
 
     const [mouseEnter, toggleMouseEnter] = React.useState(false);
+
+    const [unReadMessage, toggleUnReadMessage] = React.useState(false);
 
     const animation = useAnimation();
 
@@ -35,6 +38,10 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
     const transparentPrimaryColor = useSelector(selectTransparentPrimaryColor);
 
     const active = window.location.hash.includes(channel._id);
+
+    const currentChannelId = useSelector(selectCurrentChannelId);
+
+    const currentSocialId = useSelector(selectChannelSocialId);
 
     const handleAnimation = (color, enter) => {
         if (enter) {
@@ -61,9 +68,28 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
             border: `solid 4px ${active ? primaryColor : transparentPrimaryColor}`,
             backgroundColor: active ? primaryColor : transparentPrimaryColor
         })
-        setUsersState(users)
+
+        setUsersState(users);
+
+
     // eslint-disable-next-line
     }, [channel, users])
+
+    React.useEffect(() => {
+        try {
+            
+            const last_message = SOCIAL_DATA.get(channel._id);
+
+            if (channel._id === currentChannelId || channel._id === currentSocialId) return toggleUnReadMessage(false);
+
+            if ((last_message?.message_id !== channel?.social[0]._id)) {
+                toggleUnReadMessage(true);
+            }
+
+        } catch (error) {
+            return;
+        }
+    }, [channel.social, SOCIAL_DATA, currentChannelId, currentSocialId])
     
     const openSocial = (e) => {
         e.stopPropagation();
@@ -88,7 +114,10 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
                 cursor: active ? "default" : "pointer",
             }}
             className='channel-button-container'>
-                <h3 style={{color: textColor, opacity: (active || mouseEnter) ? 1 : 0.7}}>{channel.channel_name}</h3>
+                {unReadMessage ?
+                <div style={{backgroundColor: textColor}} className='unread-message-indicator'></div>
+                : null}
+                <h3 style={{color: textColor, opacity: (active || mouseEnter || unReadMessage) ? 1 : 0.7}}>{channel.channel_name}</h3>
                 {mouseEnter ? <div className='channel-button-extra-context-wrapper'>
                     <SocialButton flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} action={openSocial} margin={'0 5px 0 0'} borderRadius={10} width={12} height={12} />
                     <SubMenuButton flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} description={"More"} target={`channel-button-${channel._id}`} width={12} height={12} borderRadius={10} />

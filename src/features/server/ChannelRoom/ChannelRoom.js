@@ -13,6 +13,7 @@ import { ServerDashBoard } from './ServerDashBoard/ServerDashBoard'
 import { UserStatusBar } from './UserStatusBar/UserStatusBar'
 import { selectDefaultServer } from '../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice'
 import { SetAsDefaultServerNotice } from './SetAsDefaultServerNotice/SetAsDefaultServerNotice'
+import { MemberPanel } from './MemberPanel/MemberPanel'
 
 export const RoomWrapper = () => {
 
@@ -42,8 +43,9 @@ export const RoomWrapper = () => {
         <ServerDashBoard />
         <AnimatePresence>
             <SocialRoute key='social-route' />
-            <UserStatusBar />
-            {error ? <Error errorMessage={errorMessage} action={closeErrorMessage} /> : null}
+            <UserStatusBar key='user-status-bar' />
+            <MemberPanel key='member-panel' />
+            {error ? <Error key={'server-error'} errorMessage={errorMessage} action={closeErrorMessage} /> : null}
         </AnimatePresence>
         <SetAsDefaultServerNotice serverId={serverId} servername={serverName} visible={hideDefaultNotice ? !hideDefaultNotice : (defaultServer?.label === 'Default' && defaultServer?.id === "")} />
         </>

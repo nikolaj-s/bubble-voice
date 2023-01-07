@@ -33,6 +33,7 @@
     height: 100%;
     width: 100%;
     padding-left: 5px;
+    overflow: hidden;
 }
 
 .user-name-status-wrapper h3 {
@@ -49,6 +50,10 @@
 
 .user-name-status-wrapper p {
     font-size: 0.6rem;
+    width: 100%;
+    max-height: 22px;
+    overflow: hidden;
+    text-overflow: ellipsis;
     margin: 0;
     padding: 0;
     cursor: default;
@@ -56,6 +61,9 @@
     letter-spacing: var(--font-spacing);
     opacity: 0.6;
     cursor: pointer;
+    word-break: keep-all;
+    word-wrap: normal;
+    white-space: nowrap;
 }
 
 .preview-user-status-shrinked {

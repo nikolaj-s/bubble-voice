@@ -22,7 +22,7 @@ import { selectSignedUp } from '../features/LoggingIn/signUp/signUpSlice';
 
 // style
 import './App.css';
-import { fetchKeyBinds, fetchSavedUserPrefs, initKeyBinds } from '../util/LocalData';
+import { fetchKeyBinds, fetchSavedUserPrefs, fetchSocialData, initKeyBinds } from '../util/LocalData';
 import { setSavedKeyCodes } from '../features/settings/appSettings/keyBindSettings/keyBindSettingsSlice';
 import { handleUpdateAvailable, toggleInitApp, updateCurrentAppVersion } from './appSlice';
 import { fetchSavedAppAudioSettings } from '../features/settings/soundEffects/soundEffectsSlice';
@@ -66,6 +66,8 @@ function App() {
     dispatch(fetchSavedCustomStatus());
     
     await fetchSavedUserPrefs();
+
+    await fetchSocialData();
     
     // fetch locally stored settings
     await fetchKeyBinds().then((binds) => {

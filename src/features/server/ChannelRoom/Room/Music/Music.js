@@ -229,8 +229,8 @@ export const Music = () => {
             style={{}}
             className='music-player-overlay-controls'>
                 <MusicOverlayButton playing={musicPlaying} description={visible ? 'Hide' : 'Show'} action={toggleVisibility} width={25} height={25} />
-                {!musicPlaying ? <PlayButton action={handleTogglePlaying} width={25} height={25}  /> : <PauseButton action={handleTogglePlaying} width={25} height={25} />}
                 <SkipButton action={handleSkip} width={25} height={25} />
+                {!musicPlaying ? <PlayButton action={handleTogglePlaying} width={25} height={25}  /> : <PauseButton action={handleTogglePlaying} width={25} height={25} />}
                 <AddButton altHeight={20} altWidth={20} action={handleAddSongToQueue} o_mouseEnter={() => {handleShowSearch(true)}} o_mouseLeave={() => {handleShowSearch(false)}} width={25} height={25} description="Add Song" />
                 <AudioToggleButton o_mouseEnter={() => {handleToggleVolumeControls(true)}} o_mouseLeave={() => {handleToggleVolumeControls(false)}} description={muted ? 'Un Mute' : 'Mute'} action={handleMute} state={!muted} />
             </div>

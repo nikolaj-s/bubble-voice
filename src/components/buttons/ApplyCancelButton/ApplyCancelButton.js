@@ -6,7 +6,7 @@ import { TextButton } from '../textButton/TextButton';
 
 import "./ApplyCancelButton.css";
 
-export const ApplyCancelButton = ({apply, cancel, active, name = "Apply", toggled = null, cancelName = "Cancel", position = 'relative', bottom = 0, left = 0}) => {
+export const ApplyCancelButton = ({apply, cancel, active, name = "Apply", toggled = null, cancelName = "Cancel", position = 'relative', bottom = 0, right = 0, width = '100%'}) => {
 
     
 
@@ -15,7 +15,8 @@ export const ApplyCancelButton = ({apply, cancel, active, name = "Apply", toggle
         style={{
             position: position,
             bottom: bottom,
-            left: left
+            right: right,
+            width: width
         }}
         key={"apply-cancel-button"} initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} 
         

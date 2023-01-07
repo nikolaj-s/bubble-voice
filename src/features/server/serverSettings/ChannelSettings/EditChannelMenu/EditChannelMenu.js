@@ -42,7 +42,7 @@ const Wrapper = () => {
 
     const [channelBackground, setChannelBackground] = React.useState(false);
 
-    const [backgroundBlur, setBackgroundBlur] = React.useState(0);
+    const [backgroundBlur, setBackgroundBlur] = React.useState(1);
 
     const [clearedSocial, toggleClearedSocial] = React.useState(false);
 

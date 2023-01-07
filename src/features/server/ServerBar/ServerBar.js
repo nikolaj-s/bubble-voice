@@ -327,8 +327,6 @@ const Bar = () => {
         socket.on('delete message', (data) => {
             try {
 
-                console.log(data);
-
                 dispatch(deleteMessage(data));
 
                 dispatch(removePinnedMessage({message: {_id: data.message_id}}));

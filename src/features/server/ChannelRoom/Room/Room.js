@@ -7,7 +7,7 @@ import * as mediasoupClient from 'mediasoup-client';
 
 // state
 import { selectCurrentChannel, selectCurrentChannelId, selectPushToTalkActive, selectServerId, toggleLoadingChannel, updateMemberStatus, selectServerMembers, throwServerError, updateJoiningChannelState, setChannelSocialId, selectReconnectingState, toggleReconnectingState, checkConnection, clearServerPing } from '../../ServerSlice';
-import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPushToTalkState, selectMirroredWebCamState, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, selectVoiceActivationSensitivity, selectAutoGainControl, selectVoiceDeactivationDelayState } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
+import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPushToTalkState, selectMirroredWebCamState, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, selectVoiceActivationSensitivity, selectAutoGainControl, selectVoiceDeactivationDelayState, selectAdvancedVoiceActivation } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
 import { selectDisplayName, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { playSoundEffect, selectMuteSoundEffectsWhileMutedState } from '../../../settings/soundEffects/soundEffectsSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
@@ -96,6 +96,8 @@ const Component = () => {
     const secondaryColor = useSelector(selectSecondaryColor);
 
     const voiceDeactivationDelay = useSelector(selectVoiceDeactivationDelayState);
+
+    const advancedVoiceActivationDetection = useSelector(selectAdvancedVoiceActivation);
 
     React.useEffect(() => {
         
@@ -449,133 +451,194 @@ const Component = () => {
                         },
                         video: false
                     }).then((audio) => {
-                        
-                        analyser = audioCtx.createAnalyser();
+                        if (advancedVoiceActivationDetection) { 
+                            analyser = audioCtx.createAnalyser();
 
-                        source = audioCtx.createMediaStreamSource(audio);
+                            source = audioCtx.createMediaStreamSource(audio);
 
-                        scriptProcessor = audioCtx.createScriptProcessor(defaults.bufferLen, 1, 1)
+                            scriptProcessor = audioCtx.createScriptProcessor(defaults.bufferLen, 1, 1)
 
-                        analyser.smoothingTimeConstant = defaults.smoothingTimeConstant;
+                            analyser.smoothingTimeConstant = defaults.smoothingTimeConstant;
 
-                        analyser.fftSize = defaults.fftSize;
+                            analyser.fftSize = defaults.fftSize;
 
-                        source.connect(analyser);
+                            source.connect(analyser);
 
-                        analyser.connect(scriptProcessor);
+                            analyser.connect(scriptProcessor);
 
-                        scriptProcessor.connect(audioCtx.destination);
+                            scriptProcessor.connect(audioCtx.destination);
 
-                        let deactivationTimeout = null;
+                            let deactivationTimeout = null;
 
-                        const onVoiceStart = () => {
+                            const onVoiceStart = () => {
 
-                            client.resumeProducer('audioType');
+                                client.resumeProducer('audioType');
 
-                            dispatch(updateMemberStatus({username: user.username, action: {active: true}}))
+                                dispatch(updateMemberStatus({username: user.username, action: {active: true}}))
+                                
+                                socket.emit('user status', {username: user.username, action: {active: true, channel_specific: true}})
                             
-                            socket.emit('user status', {username: user.username, action: {active: true, channel_specific: true}})
-                        
-                        }
-
-                        const onVoiceStop = () => {
-
-                            client.pauseProducer('audioType')
-
-                            dispatch(updateMemberStatus({username: user.username, action: {active: false}}))
-                            
-                            socket.emit('user status', {username: user.username, action: {active: false, channel_specific: true}})  
-                            
-                        }
-
-                        const frequencyToIndex = (frequency, sampleRate, frequencyBinCount) => {
-
-                            let nyquist = sampleRate / 2;
-                            
-                            let index = Math.round(frequency / nyquist * frequencyBinCount);
-
-                            return Math.min(Math.max(index, 0), frequencyBinCount);
-                        
-                        }
-
-                        const analyserFrequencyAverage = (div, analyser, frequencies, minHz, maxHz) => {
-                            
-                            let sampleRate = analyser.context.sampleRate;
-
-                            let binCount = analyser.frequencyBinCount;
-
-                            let start = frequencyToIndex(minHz, sampleRate, binCount);
-
-                            let end = frequencyToIndex(maxHz, sampleRate, binCount);
-
-                            let count = end - start;
-
-                            let sum = 0;
-
-                            for (; start < end; start ++) {
-                                sum += frequencies[start] / div;
                             }
+
+                            const onVoiceStop = () => {
+
+                                client.pauseProducer('audioType')
+
+                                dispatch(updateMemberStatus({username: user.username, action: {active: false}}))
+                                
+                                socket.emit('user status', {username: user.username, action: {active: false, channel_specific: true}})  
+                                
+                            }
+
+                            const frequencyToIndex = (frequency, sampleRate, frequencyBinCount) => {
+
+                                let nyquist = sampleRate / 2;
+                                
+                                let index = Math.round(frequency / nyquist * frequencyBinCount);
+
+                                return Math.min(Math.max(index, 0), frequencyBinCount);
                             
-                            return count === 0 ? 0 : (sum / count);
-                        
-                        }
+                            }
 
-                        const init = () => {
+                            const analyserFrequencyAverage = (div, analyser, frequencies, minHz, maxHz) => {
+                                
+                                let sampleRate = analyser.context.sampleRate;
 
-                            isNoiseCapturing = false;
+                                let binCount = analyser.frequencyBinCount;
 
-                            envFreqRange = envFreqRange.filter(val => {return val}).sort();
+                                let start = frequencyToIndex(minHz, sampleRate, binCount);
 
-                            let averageEnvFreq = envFreqRange.length ? envFreqRange.reduce((p, c) => {return Math.min(p, c)}, 1) : (defaults.minNoiseLevel || 0.1);
+                                let end = frequencyToIndex(maxHz, sampleRate, binCount);
 
-                            baseLevel = averageEnvFreq * defaults.avgNoiseMultiplier;
+                                let count = end - start;
 
-                            if (defaults.minNoiseLevel && baseLevel < defaults.minNoiseLevel) baseLevel = defaults.minNoiseLevel;
+                                let sum = 0;
 
-                            if (defaults.maxNoiseLevel && baseLevel > defaults.maxNoiseLevel) baseLevel = defaults.maxNoiseLevel;
-
-                            voiceScale = 1 - baseLevel;
-
-                        }
-
-                        const monitor = () => {
-                            let frequencies = new Uint8Array(analyser.frequencyBinCount);
-
-                            analyser.getByteFrequencyData(frequencies);
-
-                            let average = analyserFrequencyAverage(255, analyser, frequencies, defaults.minCaptureFreq, defaults.maxCaptureFreq);
+                                for (; start < end; start ++) {
+                                    sum += frequencies[start] / div;
+                                }
+                                
+                                return count === 0 ? 0 : (sum / count);
                             
+                            }
+
+                            const init = () => {
+
+                                isNoiseCapturing = false;
+
+                                envFreqRange = envFreqRange.filter(val => {return val}).sort();
+
+                                let averageEnvFreq = envFreqRange.length ? envFreqRange.reduce((p, c) => {return Math.min(p, c)}, 1) : (defaults.minNoiseLevel || 0.1);
+
+                                baseLevel = averageEnvFreq * defaults.avgNoiseMultiplier;
+
+                                if (defaults.minNoiseLevel && baseLevel < defaults.minNoiseLevel) baseLevel = defaults.minNoiseLevel;
+
+                                if (defaults.maxNoiseLevel && baseLevel > defaults.maxNoiseLevel) baseLevel = defaults.maxNoiseLevel;
+
+                                voiceScale = 1 - baseLevel;
+
+                            }
+
+                            const monitor = () => {
+                                let frequencies = new Uint8Array(analyser.frequencyBinCount);
+
+                                analyser.getByteFrequencyData(frequencies);
+
+                                let average = analyserFrequencyAverage(255, analyser, frequencies, defaults.minCaptureFreq, defaults.maxCaptureFreq);
+                                
+                                if (isNoiseCapturing) {
+                                    envFreqRange.push(average);
+                                    return;
+                                }
+
+                                if (average >= baseLevel && activityCounter < activityCounterMax) {
+                                    activityCounter++;
+                                } else if (average < baseLevel && activityCounter > activityCounterMin) {
+                                    activityCounter--;
+                                }
+
+                                vadState = activityCounter > activityCounterThresh;
+
+                                if (prevVadState !== vadState) {
+                                    vadState ? onVoiceStart() : onVoiceStop();
+                                    prevVadState = vadState;
+                                }
+                            }
+
+                            scriptProcessor.onaudioprocess = monitor;
+
                             if (isNoiseCapturing) {
-                                envFreqRange.push(average);
-                                return;
+                                captureTimeout = setTimeout(init, defaults.noiseCaptureDuration);
                             }
 
-                            if (average >= baseLevel && activityCounter < activityCounterMax) {
-                                activityCounter++;
-                            } else if (average < baseLevel && activityCounter > activityCounterMin) {
-                                activityCounter--;
-                            }
+                        } else {
+                            let playing = false;
 
-                            vadState = activityCounter > activityCounterThresh;
+                            analyser = audioCtx.createAnalyser();
 
-                            if (prevVadState !== vadState) {
-                                vadState ? onVoiceStart() : onVoiceStop();
-                                prevVadState = vadState;
+                            source = audioCtx.createMediaStreamSource(audio);
+
+                            scriptProcessor = audioCtx.createScriptProcessor(1024, 1, 1)
+
+                            analyser.smoothingTimeConstant = 0.2;
+
+                            analyser.fftSize = 1024;
+
+                            source.connect(analyser);
+
+                            analyser.connect(scriptProcessor);
+
+                            scriptProcessor.connect(audioCtx.destination);
+
+                            scriptProcessor.onaudioprocess = function() {
+                                try {
+                                    const array = new Uint8Array(analyser.frequencyBinCount);
+
+                                    analyser.getByteFrequencyData(array);
+
+                                    const arrSum = array.reduce((a, value) => a + value, 0);
+
+                                    const avg = (arrSum / array.length) * 5;
+                                    
+                                    if (avg >= voiceActivationSensitivity) {
+                                        
+                                        if (playing || microphoneState === false) return;
+
+                                        playing = true;
+
+                                        client.resumeProducer('audioType');
+
+                                        dispatch(updateMemberStatus({username: user.username, action: {active: true}}))
+                                    
+                                        socket.emit('user status', {username: user.username, action: {active: true, channel_specific: true}})
+                                        
+                                    } else if (avg < voiceActivationSensitivity) {
+
+                                        if (playing === false) return;
+
+                                        playing = false;
+
+                                        client.pauseProducer('audioType');
+
+                                        dispatch(updateMemberStatus({username: user.username, action: {active: false}}))
+                                            
+                                        socket.emit('user status', {username: user.username, action: {active: false, channel_specific: true}})
+                                       
+                                    }
+
+                                } catch (error) {
+                                    console.log(error)
+                                    scriptProcessor.onaudioprocess = null;
+                                }
                             }
+                        
                         }
-
-                        scriptProcessor.onaudioprocess = monitor;
-
-                        if (isNoiseCapturing) {
-                            captureTimeout = setTimeout(init, defaults.noiseCaptureDuration);
-                        }
-
                         
                         
                     })
                 } else if (pushToTalk === true && microphoneState === true) {
                     
-                   // console.log(timeout, pushToTalkActive)
                     if (pushToTalkActive) {
 
                         client.resumeProducer('audioType');
@@ -594,7 +657,6 @@ const Component = () => {
                             
                     }
 
-                 //   console.log(timeout)
                 }  else {
                     if (scriptProcessor) {
                         scriptProcessor.onaudioprocess = null;
@@ -639,7 +701,7 @@ const Component = () => {
         }
        
     // eslint-disable-next-line   
-    }, [pushToTalk, voiceActivityDetection, loaded, current_channel_id, microphoneState, pushToTalkActive, reconnecting])
+    }, [pushToTalk, voiceActivityDetection, loaded, current_channel_id, microphoneState, pushToTalkActive, reconnecting, advancedVoiceActivationDetection])
     
     React.useEffect(() => {
         

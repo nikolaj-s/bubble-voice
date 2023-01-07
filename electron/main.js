@@ -164,7 +164,7 @@ ipcMain.handle('GET_SOURCES', async () => {
   const captures = await desktopCapturer.getSources({ types: ['window', 'screen', 'audio']})
   .then(async sources => {
       const screens = [];
-      console.log(sources)
+      
       for (const source of sources) {
         screens.push({
           id: source.id,

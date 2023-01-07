@@ -11,7 +11,6 @@ export const updateUserStatus = createAsyncThunk(
 
                 const data = await socket.request('update status', status)
                 .then(res => {
-                    console.log(res)
                     return res;
                 })
                 .catch(err => {
