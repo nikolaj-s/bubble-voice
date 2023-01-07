@@ -20,7 +20,7 @@ export const ImageInput = ({
     initalImage,
     width = "100%",
     height = "100%",
-    borderRadius = "15px",
+    borderRadius = "10px",
     center = false,
     zIndex = "0",
     getFile = () => {},

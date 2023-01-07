@@ -35,7 +35,7 @@ export const MemberPanel = () => {
 
     const serverGroups = useSelector(selectServerGroups);
 
-    const s_index = serverGroups.findIndex(s => s._id === selectedMember.server_group)
+    const s_index = serverGroups.findIndex(s => s._id === member.server_group)
 
     const transparentColor = useSelector(selectTransparentPrimaryColor);
 

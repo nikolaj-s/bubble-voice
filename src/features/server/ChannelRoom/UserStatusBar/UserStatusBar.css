@@ -48,11 +48,16 @@
         cursor: default;
         font-weight: 400;
         letter-spacing: var(--font-spacing);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-break: keep-all;
+        word-wrap: normal;
+        white-space: nowrap;
     }
 
     .preview-user-status-shrinked h3 {
         font-size: 1rem;
-
+        min-width: 100%;
     }
 
     .preview-user-status-shrinked p {
