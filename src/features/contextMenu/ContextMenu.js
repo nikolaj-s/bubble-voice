@@ -160,10 +160,14 @@ export const ContextMenu = () => {
 
     const handleCtxMenu = React.useCallback((e) => {
         e.preventDefault();
+        
         dispatch(clearCtxState());
-        dispatch(toggleContextMenu(false));
 
-        for (const p of e.path) {
+        dispatch(toggleContextMenu(false));
+        
+        const path = e.path || (e.composedPath && e.composedPath());
+        
+        for (const p of path) {
             
             if (p.localName === 'a') {
                 dispatch(toggleContextMenu(true));
@@ -428,7 +432,7 @@ export const ContextMenu = () => {
 
             }
             
-            if (e.path[0].id === 'live-chat-wrapper' || e.path[0].id === 'user-streams-wrapper') {
+            if (path[0].id === 'live-chat-wrapper' || path[0].id === 'user-streams-wrapper') {
                 dispatch(toggleContextMenu(true))
 
                 dispatch(setContextMenuOptions({state: "channelSpecificSettings", value: true}));

@@ -18,6 +18,7 @@ import { ImageSearch } from '../../../../util/ImageSearch';
 
 // style
 import "./ImageSearchPanel.css";
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 
 
 export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => {
@@ -49,15 +50,27 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
         toggleLoading(true);
 
         const result = await ImageSearch(query, serverId);
-
+        
         setQuery("");
 
-        toggleLoading(false);
+        if (result.error) {
 
-        if (result.error) return dispatch(throwServerError({errorMessage: result.errorMessage}));
+            toggleLoading(false);
 
-        setImages(result.images);
+            return dispatch(throwServerError({errorMessage: result.errorMessage}));
+        
+        }
+        
+        setImages([]);
 
+        setTimeout(() => {
+            
+            toggleLoading(false);
+
+            setImages(result.images);
+
+        }, 100)
+        
     }
 
     const handleEnter = (e) => {
@@ -93,9 +106,7 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
             exit={{opacity: 0}}
             transition={{duration: 0.1}}
             key="message-image-search-container"
-            style={{
-                backgroundColor: primaryColor
-            }}
+            style={{borderTop: `solid 3px ${primaryColor}`}}
             className='message-image-search-container'>
                 <div 
                 style={{
@@ -103,26 +114,27 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
                 }}
                 className='inner-message-image-search-container'>
                     <div 
-                    style={{backgroundColor: primaryColor}}
+                    style={{backgroundColor: primaryColor, borderBottom: `solid 5px ${secondaryColor}`}}
                     className='message-image-search-input-wrapper'>
                         <input 
                         id="message-image-search-input"
                         style={{color: textColor}}
                         maxLength={120} onKeyUp={handleEnter} onChange={handleQuery} value={query} placeholder={"Search For Images"} />
-                        <AltSearchButton action={search} margin={'0 0 0 10px'} width={20} height={20} invert={true} borderRadius={10} />
+                        <AltSearchButton active={query.length === 0} action={search} margin={'0 0 0 10px'} width={20} height={20} invert={true}  borderRadius={10} />
                     </div>
                     {images.length === 0 && recommendations.length > 1 ? <InputTitle title={"Results Based On Previous Searches"} /> : null}
                     <div className='message-image-search-results-container'>
-                        
-                        {(images.length > 0 ? images : recommendations).map((image, key) => {
-                            return (
-                                <div
-                                onClick={() => {handleSelectImage(image)}}
-                                key={key} className='message-image-result-container'>
-                                    <Image cursor='pointer' image={image} />
-                                </div>
-                            )
-                        })}
+                    <ResponsiveMasonry columnsCountBreakPoints={{800: 1, 1000: 2, 1500: 3, 1900: 4, 2500: 5}}>
+                        <Masonry gutter='5px'>   
+                            {(images.length > 0 ? images : loading ? [] : recommendations.slice(0, 15)).map((image, key) => {
+                                return (
+                                    <div onClick={() => {handleSelectImage(image)}} key={image + key} className='image-search-result-container'>
+                                        <Image hideOnError={true} cursor='pointer' image={image} />
+                                    </div> 
+                                )
+                            })}
+                        </Masonry>
+                    </ResponsiveMasonry>
                     </div>
                 </div>
                 <Loading loading={loading} />

@@ -2,19 +2,16 @@
 .content-outer-container {
     position: absolute;
     z-index: 3;
-    top: 6px;
-    bottom: 6px;
+    top: 0;
     left: 0;
-    width: calc(100% - 20px);
-    margin: 0 10px;
-    height: calc(100% - 12px);
+    width: calc(100%);
+    height: calc(100%);
     display: flex;
     justify-content: center;
     overflow-y: auto;
 }
 
 .widget-preview-wrapper {
-    margin: 1% 0 2% 0;
-    width: 95%;
+    width: 100%;
     max-width: 1000px;
 }

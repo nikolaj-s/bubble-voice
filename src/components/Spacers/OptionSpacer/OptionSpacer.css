@@ -9,6 +9,7 @@
 
 .option-spacer-container h3 {
     letter-spacing: var(--font-spacing);
+    font-size: 0.9rem;
 }
 
 .option-spacer-container .line-spacer {

@@ -1,13 +1,25 @@
 
-.message-input-container {
+.message-input-wrapper {
     position: relative;
-    bottom: 5px;
+    bottom: 0px;
     width: 100%;
+    flex-shrink: 0;
+    border-bottom-right-radius: var(--border-radius);
+    display: flex;
+    justify-content: center;
+    padding: 5px 0;
+    z-index: 5;
+}
+
+.message-input-container {
+    bottom: 5px;
+    width: calc(100% - 10px);
     height: 60px;
     flex-shrink: 0;
     border-bottom-right-radius: var(--border-radius);
     display: flex;
     align-content: center;
+    border-radius: var(--border-radius);
 }
 
 #image-drop-listener {

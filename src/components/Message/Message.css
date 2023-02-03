@@ -1,9 +1,9 @@
 .message-container {
-    width: calc(100% - 1rem);
+    width: calc(100%);
     display: flex;
     height: auto;
     flex-direction: column;
-    margin: 0rem .5rem;
+    margin: 0rem;
     position: relative;
 }
 

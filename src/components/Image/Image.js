@@ -6,9 +6,11 @@ import { useSelector } from 'react-redux';
 // state
 import { selectPrimaryColor, selectSecondaryColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
-export const Image = ({image, objectFit = 'cover', position = 'relative', zIndex = 0, loadingState = '', opacity = 1, width = '100%', cursor = 'default', altWidth = '100%', imgHeight = '100%', expandContent = () => {}, disableErr = false}) => {
+export const Image = ({image, objectFit = 'cover', position = 'relative', zIndex = 0, loadingState = '', opacity = 1, width = '100%', cursor = 'default', altWidth = '100%', imgHeight = '100%', expandContent = () => {}, disableErr = false, hideOnError = false}) => {
 
     const [loading, toggleLoading] = React.useState(true);
+
+    const [error, toggleError] = React.useState(false);
 
     const primaryColor = useSelector(selectPrimaryColor);
 
@@ -28,11 +30,14 @@ export const Image = ({image, objectFit = 'cover', position = 'relative', zIndex
 
         if (disableErr) return toggleLoading(false);
 
-        e.target.src = "https://res.cloudinary.com/drlkgoter/image/upload/v1668805881/logo_y9odas.png"
+        toggleError(true);
+
+        e.target.src = "https://res.cloudinary.com/drlkgoter/image/upload/v1674339889/no-picture_m4dmai.jpg"
+    
     }
 
     return (
-        <div style={{zIndex: zIndex, position: position, objectFit: objectFit, width: width, height: '100%', opacity: opacity}}>
+        <div style={{zIndex: zIndex, position: position, objectFit: objectFit, width: width, height: '100%', opacity: opacity, display: (error && hideOnError) ? 'none' : null}}>
             {loading && image !== "" && image !== undefined && disableErr === false ?
             <motion.div 
             style={{

@@ -6,7 +6,7 @@ import { useDropzone } from 'react-dropzone';
 import imageCompression from 'browser-image-compression';
 
 // state
-import { selectPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { ImageButton } from './ImageButton/ImageButton';
 
 // style
@@ -35,6 +35,8 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
     const primaryColor = useSelector(selectPrimaryColor);
     
     const textColor = useSelector(selectTextColor);
+
+    const secondaryColor = useSelector(selectSecondaryColor);
 
     const animation = useAnimation();
 
@@ -138,33 +140,39 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
         <AnimatePresence>
             {persist ? <ImageDropListener key={"image-drop-listener"} root={getRootProps({className: 'dropzone'})} /> : null}
             <ImageSearchPanel key="message-image-search-container" serverId={serverId} selectImage={selectImage} searchingForImage={searchingForImage} />
-            <motion.div 
-            key={"message-text-input"}
-            animate={animation}
+            <div
             style={{
-                backgroundColor: primaryColor,
-                height: inputHeight,
-                borderBottomRightRadius: socialRoute ? 0 : hideUserStatus ? 10 : 0
+                borderBottomRightRadius: socialRoute ? 0 : hideUserStatus ? 10 : 0,
+                backgroundColor: secondaryColor
             }}
-            className="message-input-container" >
-                <textarea 
-                className='text-input'
+            className='message-input-wrapper'>
+                <motion.div 
+                key={"message-text-input"}
+                animate={animation}
                 style={{
-                    color: textColor,
-                    width: '100%',
-                    resize: 'none',
-                    border: 'none',
+                    backgroundColor: primaryColor,
+                    height: inputHeight,
                 }}
-                onFocus={handleText}
-                id='social-input-selector' onKeyUp={handleKeyCode} onChange={handleText} value={value}  placeholder='Message' type="text" />
-                <div className='message-input-button-wrapper'>
-                    <CharacterCount count={value.length} />
-                    <SearchImageButton margin={!persist ? '0 10px 0 0' : null} action={handleSearchingForImageToggle} />
-                    {(persist && !processingImage) ? <ImageButton action={handleImageButton} /> : null}
-                    {processingImage ? <ProcessingImageIndicator percent={percent} /> : null}
-                    <SendButton color={textColor} action={handleSend} />
-                </div>
-            </motion.div>
+                className="message-input-container" >
+                    <textarea 
+                    className='text-input'
+                    style={{
+                        color: textColor,
+                        width: '100%',
+                        resize: 'none',
+                        border: 'none',
+                    }}
+                    onFocus={handleText}
+                    id='social-input-selector' onKeyUp={handleKeyCode} onChange={handleText} value={value}  placeholder='Message' type="text" />
+                    <div className='message-input-button-wrapper'>
+                        <CharacterCount count={value.length} />
+                        <SearchImageButton margin={!persist ? '0 10px 0 0' : null} action={handleSearchingForImageToggle} />
+                        {(persist && !processingImage) ? <ImageButton action={handleImageButton} /> : null}
+                        {processingImage ? <ProcessingImageIndicator percent={percent} /> : null}
+                        <SendButton color={textColor} action={handleSend} />
+                    </div>
+                </motion.div>
+            </div>
         </AnimatePresence>
         </>
     )

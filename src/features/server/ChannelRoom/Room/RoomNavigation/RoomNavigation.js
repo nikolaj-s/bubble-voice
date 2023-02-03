@@ -149,6 +149,7 @@ export const RoomNavigation = ({page, action}) => {
                 </motion.div>
                 </>
                 : null}
+                <div style={{backgroundColor: secondaryColor}} className='room-navigation-filler'></div>
             </div>
         </div>
     )

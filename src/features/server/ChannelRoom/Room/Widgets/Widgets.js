@@ -38,7 +38,6 @@ export const Widgets = () => {
         >
             <div className='widget-preview-wrapper'>
                 <WidgetPreview widgets={channel.widgets} />
-                <SettingsSpacer />
             </div>
         </motion.div>
     )

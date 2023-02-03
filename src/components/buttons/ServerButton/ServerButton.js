@@ -13,7 +13,9 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
 
     const animation = useAnimation();
 
-    const [width, setWidth] = React.useState('60%')
+    const [width, setWidth] = React.useState('60%');
+
+    const [opacity, setOpacity] = React.useState(0.7);
 
     const primaryColor = useSelector(selectPrimaryColor);
 
@@ -25,7 +27,7 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
 
     const secondaryColor = useSelector(selectSecondaryColor);
     
-    const handleAnimation = (color, state) => {
+    const handleAnimation = (down, state) => {
 
         if (state) {
             setWidth('100%')
@@ -33,9 +35,11 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
             setWidth('60%')
         }
 
-        animation.start({
-            border: `4px solid ${color}`
-        })
+        if (down) {
+            setOpacity(0.9);
+        } else {
+            setOpacity(0.7);
+        }
         
     }
 
@@ -50,24 +54,21 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
         id={`server-button-${server_id}`}
         animate={animation}
         style={{
-            width: "calc(100% - 8px)",
-            height: "calc(120px - 8px)",
+            width: "calc(100%)",
+            height: "calc(120px)",
             backgroundColor: primaryColor,
-            borderRadius: 10,
             display: 'flex',
             alignItems: 'center',
-            margin: "2% 0 0 0",
             justifyContent: 'space-around',
             cursor: 'pointer',
             padding: "0",
             position: 'relative',
-            border: `solid 4px ${darkMode ? 'rgba(0, 0, 0, 0)' : 'rgba(255, 255, 255, 0)'}`,
             overflow: 'hidden'
         }}
-        onMouseEnter={() => {handleAnimation(accentColor, true)}}
-        onMouseLeave={() => {handleAnimation(darkMode ? 'rgba(0, 0, 0, 0)' : 'rgba(255, 255, 255, 0)', false)}}
-        onMouseDown={() => {handleAnimation(textColor, true)}}
-        onMouseUp={() => {handleAnimation(accentColor)}}
+        onMouseEnter={() => {handleAnimation(false, true)}}
+        onMouseLeave={() => {handleAnimation(false, false)}}
+        onMouseDown={() => {handleAnimation(true, true)}}
+        onMouseUp={() => {handleAnimation(false)}}
         transition={{duration: 0.1}}
         onClick={handleAction}
         >
@@ -75,7 +76,6 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
             style={{
                 width: '100%',
                 height: "100%",
-                borderRadius: '0px',
                 overflow: 'hidden',
                 flexShrink: 0,
                 position: 'absolute'
@@ -88,15 +88,13 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
                 zIndex: 1,
                 right: 0,
                 fontSize: '0.7rem',
-                background: 'rgba' + (secondaryColor.split('rgb')[1].split(')') + ' 0.7)'),
+                background: 'rgba' + (secondaryColor.split('rgb')[1].split(')') + ` ${opacity})`),
                 width: width,
                 height: '100%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 backdropFilter: 'blur(2px)',
-                borderTopRightRadius: '5px',
-                borderBottomRightRadius: '5px',
                 transition: '0.2s'
             }}
             >

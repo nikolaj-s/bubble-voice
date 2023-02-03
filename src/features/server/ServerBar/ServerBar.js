@@ -33,6 +33,7 @@ import { UnpackMessage } from '../../../util/UnpackMessage';
 // style's
 import "./ServerBar.css"
 import { addPinnedMessage, removePinnedMessage } from '../ChannelRoom/ServerDashBoard/ServerDashBoardSlice';
+import { MobileServerBanner } from '../../../components/MobileServerBanner/MobileServerBanner';
 
 export let socket = null;
 
@@ -752,6 +753,7 @@ const Bar = () => {
             className='server-bar-container'>
             <ServerSettingsButton action={toggleServerSettings} />
             <ServerBanner serverImage={serverBanner} serverName={serverName} />
+            <MobileServerBanner serverImage={serverBanner} serverName={serverName} />
             {loading ? <Loading loading={loading} /> :
             <>
             <ChannelList />

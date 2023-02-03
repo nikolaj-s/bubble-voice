@@ -114,8 +114,10 @@ const Wrapper = () => {
             .then(data => {
                
                 toggleLoading(false);
+
                 setUpdate(false);
-                if (data.data.serverName) {
+
+                if (data.data.server_name) {
                     dispatch(setServerName(data.data.server_name))
                 }
                 
@@ -128,8 +130,11 @@ const Wrapper = () => {
                 }
 
                 setServerPassword("");
+
                 setNewServerPassword("");
+
                 setConfirmNewServerPassword("");
+                
             })
             .catch(error => {
                 toggleLoading(false);

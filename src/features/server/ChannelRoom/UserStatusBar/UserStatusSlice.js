@@ -37,11 +37,11 @@ export const fetchSavedCustomStatus = createAsyncThunk(
         try {
 
             const data = await fetchSavedLocalData("USERSTATUS", "CUSTOM");
-
+            
             if (data) {
                 return data
             } else {
-                return {custom_status: "", current_status: {state: 'online', value: 'Online'}}
+                return {custom_status: "", current_status: 'online'}
             }
 
         } catch (error) {

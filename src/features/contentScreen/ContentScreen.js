@@ -31,19 +31,21 @@ export const ContentScreen = () => {
     const headerTitleState = useSelector(selectHeaderTitle);
 
     return (
-        <motion.div className='content-screen-container' >
-            <HeaderTitle title={headerTitleState} spacing={true} />
-            <div style={{backgroundColor: secondaryColor}} className='content-screen-inner-container'>
-                <Disconnected />
-                <NoServerSelectedDisplay />
-                <SettingsRoutesWrapper />
-                <CreateServerMenu />
-                <JoinServer />
-                <ChannelRoom />
-                <ExpandContent />
-                <NewAccount />
-            </div>
-            <AudioInit />
-        </motion.div>
+        <>
+            <motion.div className='content-screen-container' >
+                <HeaderTitle title={headerTitleState} spacing={true} />
+                <div style={{backgroundColor: secondaryColor}} className='content-screen-inner-container'>
+                    <Disconnected />
+                    <NoServerSelectedDisplay />
+                    <SettingsRoutesWrapper />
+                    <CreateServerMenu />
+                    <JoinServer />
+                    <ChannelRoom />
+                    <ExpandContent />
+                    <NewAccount />
+                </div>
+                <AudioInit />
+            </motion.div>
+        </>
     )
 }

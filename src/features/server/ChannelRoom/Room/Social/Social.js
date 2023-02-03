@@ -10,7 +10,7 @@ import { newMessage, selectPinningMessage, selectUsersPermissions, throwServerEr
 // components
 import { MessageInput } from '../../../../../components/inputs/MessageInput/MessageInput';
 import { Message } from '../../../../../components/Message/Message';
-import { Image } from '../../../../../components/Image/Image';
+import { ImagePreview } from './ImagePreview/ImagePreview';
 
 // style
 import "./Social.css";
@@ -19,9 +19,9 @@ import "./Social.css";
 import { socket } from '../../../ServerBar/ServerBar';
 import { Loading } from '../../../../../components/LoadingComponents/Loading/Loading';
 
+// util
 import { PersistedDataNotice } from '../../../../../components/PersistedDataNotice/PersistedDataNotice';
 import { saveSocialData, SOCIAL_DATA } from '../../../../../util/LocalData';
-
 
 export const Social = ({currentChannel, channelId, socialRoute = false, bulletin = false, channelName}) => {
 
@@ -37,6 +37,8 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
     const [inputHeight, setInputHeight] = React.useState(80);
 
+    const [loadingMore, toggleLoadingMore] = React.useState(false);
+
     const username = useSelector(selectUsername);
 
     const messages = currentChannel.social;
@@ -49,6 +51,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
     React.useEffect(() => {
         try {
+
             if (messages[0]._id && currentChannel.persist_social) {
                 
                 SOCIAL_DATA.set(channelId, {message_id: messages[0]._id})
@@ -166,10 +169,28 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
     }
 
     const handleLoadMoreOnScroll = (e) => {
+
+        if (loadingMore) return;
+
+        let scroll_pos;
         
         if ((messagesRef.current.scrollTop + messagesRef.current.scrollHeight) * .8 < e.target.clientHeight) {
+
+            toggleLoadingMore(true);
+
+            scroll_pos = messagesRef.current.scrollTop;
+
+            setTimeout(() => {
+
+                console.log(scroll_pos, messagesRef.current.scrollTop)
+
+                setMessagesToRender(messagesToRender + 15);
+
+                toggleLoadingMore(false);
+
+            }, 250);
+
             
-            setMessagesToRender(messagesToRender + 15);
         
         }
     
@@ -180,6 +201,14 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
         if (currentChannel.persist_social === false) return;
 
         dispatch(togglePinMessage(data));
+    }
+
+    const handleCancelImageSend = () => {
+        setImage(null);
+
+        setText("");
+
+        setInputHeight(80)
     }
     
     return (
@@ -202,11 +231,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
         }}>
             <div className='social-wrapper-container'>
                 <div  className='social-inner-container'>
-                    {image?.preview ? 
-                    <div style={{bottom: inputHeight}} className='image-social-post-preview'>
-                        <Image position='relative' objectFit='contain' zIndex={1} image={image.preview} />
-                    </div>
-                    : null}
+                    <ImagePreview cancel={handleCancelImageSend} preview={image?.preview} inputHeight={inputHeight} />
                     <div onScroll={handleLoadMoreOnScroll} ref={messagesRef} className='social-messages-wrapper'>
                         {messages?.slice(0, messagesToRender).map((message, key) => {
                             return <Message persist={currentChannel.persist_social} current_message={message} previous_message={key === messages.length - 1 ? null : messages[key + 1]} pinned={message.pinned} pinMessage={() => {pinMessage(message)}} perm={permission?.user_can_post_channel_social} channel_id={message.channel_id} id={message._id} message={message.content} key={message.content.local_id || message._id} />

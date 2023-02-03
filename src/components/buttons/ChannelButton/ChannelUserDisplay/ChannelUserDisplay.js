@@ -60,7 +60,7 @@ export const ChannelUserDisplay = ({user, channel_id}) => {
             className='channel-user-placeholder-user-image'>
                 <Image cursor='pointer' objectFit='cover' image={user.user_image} />
             </div>
-            <h3 style={{color: textColor}}>{user.display_name}</h3>
+            <h3 style={{color: textColor, opacity: (user.active && user.microphone) ? 1 : 0.6}}>{user.display_name}</h3>
             <div 
             style={{backgroundColor: accentColor}}
             className='user-status-wrapper'>

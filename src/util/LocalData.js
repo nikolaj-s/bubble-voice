@@ -19,6 +19,13 @@ export const fetchKeyBinds = async () => {
         return JSON.parse(keyBinds);
     } catch (error) {
 
+        const keybinds = localStorage.getItem("KEYBINDS");
+
+        if (!keybinds) {
+            return [];
+        }
+
+        return JSON.parse(keybinds);
     }
 }
 
@@ -30,6 +37,8 @@ export const setKeyBinds = async (keys) => {
 
         return true;
     } catch (error) {
+
+        localStorage.setItem("KEYBINDS", JSON.parse(keys));
 
     }
 }
@@ -45,7 +54,7 @@ export const initKeyBinds = (keys) => {
         ipcRenderer.send('REG_KEYBINDS', binds)
 
     } catch (error) {
-        console.log(error)
+        return;
     }
 }
 
@@ -92,7 +101,9 @@ export const saveSocialData = async () => {
         
         return;
     } catch (error) {
-        return;
+
+        localStorage.setItem("SOCIALDATA", JSON.stringify(Array.from(SOCIAL_DATA.entries())));
+
     }
 }
 
@@ -107,7 +118,13 @@ export const fetchSocialData = async () => {
 
         return;
     } catch (eror) {
+        
+        const w_data = localStorage.getItem("SOCIALDATA");
+
+        SOCIAL_DATA = new Map(JSON.parse(w_data));
+
         return;
+
     }
 }
 
@@ -121,7 +138,9 @@ export const saveUserPrefs = async () => {
         await keytar.setPassword("USER", "PREFS", JSON.stringify(Array.from(USER_PREFS.entries())))
 
     } catch (error) {
-        console.log("Using Web App")
+        
+        localStorage.setItem("USERPREFS", JSON.stringify(Array.from(USER_PREFS.entries())));
+
     }
 }
 
@@ -136,7 +155,13 @@ export const fetchSavedUserPrefs = async () => {
 
         return;
     } catch (error) {
-        console.log("Using Web App");
+        
+        const data = localStorage.getItem("USERPREFS");
+
+        USER_PREFS = new Map(JSON.parse(data));
+
+        return;
+
     }
 }
 
@@ -191,8 +216,9 @@ export const saveLocalData = async (param_1, param_2, arg) => {
 
         return true;
     } catch (error) {
-        console.log(error);
-        return {error: true}
+        
+        localStorage.setItem([param_1, param_2].join(''), JSON.stringify(arg));
+
     }
 }
 
@@ -216,7 +242,12 @@ export const fetchSavedLocalData = async (param_1, param_2) => {
         }
 
     } catch (error) {
-        return {error: true}
+
+        const d = JSON.parse(localStorage.getItem([param_1, param_2].join('')));
+        
+        if (d === null) return;
+       
+        return d;
     }
 }
 
@@ -239,6 +270,6 @@ export const clearLocalData = () => {
         keytar.deletePassword("MISC", "MISCSETTINGS");
 
     } catch (error) {
-        console.log('using web app');
+        localStorage.clear();
     }
 }

@@ -1,11 +1,10 @@
 .title-widget-container {
     display: flex;
     height: 70px;
-    width: calc(100% - 8px);
-    border-radius: var(--border-radius);
+    width: calc(100%);
     align-items: center;
     justify-content: center;
-    margin: 1% 0;
+    margin: 3px 0;
 }
 
 .title-widget-container h2 {

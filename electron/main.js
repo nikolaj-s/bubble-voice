@@ -3,6 +3,8 @@ const { app, BrowserWindow, ipcMain, desktopCapturer, screen, shell, session, Tr
 
 const { autoUpdater } = require('electron-updater')
 
+const { uIOhook, UiohookKey } = require('uiohook-napi');
+
 const url = require('url');
 
 const path = require('path');
@@ -188,7 +190,6 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
 
   try {
     // clean up listeners on new init of reg keybinds to prevent duplicate calls or outadated key bind listening
-    const ioHook = require('iohook')
     
     let keyDown = false;
 
@@ -210,22 +211,22 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
       
     }
 
-    ioHook.removeAllListeners();
+    uIOhook.removeAllListeners();
 
-    ioHook.on('keydown', (key) => {
+    uIOhook.on('keydown', (key) => {
 
-      if (key.rawcode !== keyCodes.push_to_talk?.keyCode && key.rawcode !== keyCodes?.push_to_mute?.keyCode) return;
+      if (key.keycode !== UiohookKey[keyCodes.push_to_talk?.code || keyCodes.push_to_talk?.key] && key.keycode !== UiohookKey[keyCodes?.push_to_mute?.code || keyCodes?.push_to_mute?.key]) return;
 
       if (pushToTalkActive) return;
       // push to talk
       
-      if (key.rawcode === keyCodes.push_to_talk?.keyCode) {
+      if (key.keycode === UiohookKey[keyCodes.push_to_talk?.code || keyCodes.push_to_talk?.key]) {
 
         event.sender.send('push to talk', {active: true})
 
       }
 
-      if (key.rawcode === keyCodes.push_to_mute?.keyCode) {
+      if (key.keycode === UiohookKey[keyCodes?.push_to_mute?.code || keyCodes?.push_to_mute?.key]) {
 
         event.sender.send('push to mute', {active: true})
 
@@ -235,54 +236,55 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
     
     })
 
-    ioHook.on('keyup', (key) => {
+    uIOhook.on('keyup', (key) => {
 
       handle_inactivity();
       
-      if (key.rawcode !== keyCodes.push_to_talk?.keyCode && key.rawcode !== keyCodes?.push_to_mute?.keyCode) return;
+      if (key.keycode !== UiohookKey[keyCodes.push_to_talk?.code || keyCodes.push_to_talk?.key] && key.keycode !== UiohookKey[keyCodes?.push_to_mute?.code || keyCodes?.push_to_mute?.key]) return;
 
       if (!pushToTalkActive) return;
       
       // push to talk
-      if (key.rawcode === keyCodes.push_to_talk?.keyCode) {
+      if (key.keycode === UiohookKey[keyCodes.push_to_talk?.code || keyCodes.push_to_talk?.key]) {
         event.sender.send('push to talk', {active: false})
       }
 
-      if (key.rawcode === keyCodes.push_to_mute?.keyCode) {
+      if (key.keycode === UiohookKey[keyCodes?.push_to_mute?.code || keyCodes?.push_to_mute?.key]) {
 
         event.sender.send('push to mute', {active: false})
 
       }
 
       pushToTalkActive = false;
+    
     })
 
-    ioHook.on('keyup', (key) => {
+    uIOhook.on('keyup', (key) => {
 
-      if (key.rawcode === keyCodes.mute_mic?.keyCode) {
+      if (key.keycode === UiohookKey[keyCodes.mute_mic?.code || keyCodes.mute_mic?.key]) {
         event.sender.send('mute mic', {toggle: true})
       }
 
-      if (key.rawcode === keyCodes.mute_audio?.keyCode) {
+      if (key.keycode === UiohookKey[keyCodes.mute_audio?.code || keyCodes.mute_audio?.key]) {
         event.sender.send('mute audio', {toggle: true})
       }
 
-      if (key.rawcode === keyCodes.activate_camera?.keyCode) {
+      if (key.keycode === UiohookKey[keyCodes.activate_camera?.code || keyCodes.activate_camera?.key]) {
         event.sender.send('toggle camera', {toggle: true})
       }
 
-      if (key.rawcode === keyCodes.disconnect?.keyCode) {
+      if (key.keycode === UiohookKey[keyCodes.disconnect?.code || keyCodes.disconnect?.key]) {
         event.sender.send('disconnect key', {toggle: true});
       }
 
-      if (key.rawcode === keyCodes.share_screen?.keyCode) {
+      if (key.keycode === UiohookKey[keyCodes.share_screen?.code || keyCodes.share_screen?.key]) {
         event.sender.send('screen share', {toggle: true});
       }
 
       keyDown = false;
     })
 
-    ioHook.on('mousedown', (key) => {
+    uIOhook.on('mousedown', (key) => {
 
       if (key.button !== keyCodes.push_to_talk?.keyCode && key.button !== keyCodes?.push_to_mute?.keyCode) return;
       
@@ -304,7 +306,7 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
       pushToTalkActive = true;
     })
 
-    ioHook.on('mouseup', (key) => {
+    uIOhook.on('mouseup', (key) => {
 
       handle_inactivity();
 
@@ -327,10 +329,8 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
 
     })
 
-    ioHook.on('mouseup', (key) => {
+    uIOhook.on('mouseup', (key) => {
       
-      if (!keyDown) return;
-
       if (key.button === keyCodes.mute_mic?.keyCode) {
         event.sender.send('mute mic', {toggle: true})
       }
@@ -350,11 +350,11 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
       keyDown = false;
     })
 
-    ioHook.on('mousemove', () => {
+    uIOhook.on('mousemove', () => {
       handle_inactivity();
     })
     
-    ioHook.start();
+    uIOhook.start();
   } catch (error) {
     console.log(error)
     clearTimeout(timeout);

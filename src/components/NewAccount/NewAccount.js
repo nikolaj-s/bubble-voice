@@ -11,7 +11,7 @@ import { NavigatingAServer } from './NavigatingAServer/NavigatingAServer';
 
 import "./NewAccount.css";
 
-export const NewAccount = () => {
+export const NewAccount = ({mobile = false}) => {
 
     const dispatch = useDispatch();
 

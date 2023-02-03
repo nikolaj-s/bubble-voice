@@ -18,6 +18,7 @@ import "./SettingsRoutesWrapper.css";
 import { SoundSettings } from '../appSettings/soundSettings/SoundSettings'
 import { CloseSettings } from '../../../components/CloseSettings/CloseSettings'
 import { MiscellaneousSettings } from '../appSettings/MiscellaneousSettings/MiscellaneousSettings'
+import { MenuButton } from '../../../components/buttons/MenuButton/MenuButton'
 
 
 const Wrapper = () => {
@@ -25,6 +26,8 @@ const Wrapper = () => {
     const dispatch = useDispatch();
 
     const secondaryColor = useSelector(selectSecondaryColor);
+
+    const [open, toggleOpen] = React.useState(false);
 
     React.useEffect(() => {
         return () => {
@@ -36,6 +39,18 @@ const Wrapper = () => {
         }
     // eslint-disable-next-line
     }, [])
+
+    const openMobileSettingsMenu = () => {
+        const el = document.getElementsByClassName('settings-routes-wrapper')[0]
+
+        if (open) {
+            el.style.display = 'none'
+            toggleOpen(false);
+        } else {
+            el.style.display = 'flex'
+            toggleOpen(true)
+        }
+    }
 
     return (
         <div
@@ -50,6 +65,7 @@ const Wrapper = () => {
             <SoundSettings />
             <VoiceVideoSettings />
             <CloseSettings />
+            <MenuButton position={'fixed'} action={openMobileSettingsMenu} top={0} right={60} />
         </div>
     )
 }

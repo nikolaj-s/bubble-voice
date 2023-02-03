@@ -63,7 +63,7 @@ const Settings = () => {
         
         if (event.keyCode === pushToMuteKey.keyCode && (event.keyCode !== "")) return;
 
-        const obj = {...local, [state]: {key: event.nativeEvent.key, keyCode: event.keyCode}}
+        const obj = {...local, [state]: {key: event.nativeEvent.key, keyCode: event.keyCode, code: event.code}}
         
         setLocal(obj)
         

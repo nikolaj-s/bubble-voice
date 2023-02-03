@@ -20,14 +20,18 @@ import { fetchAccount } from '../features/settings/appSettings/accountSettings/a
 import { selectLoggedIn } from '../features/LoggingIn/signIn/signInSlice';
 import { selectSignedUp } from '../features/LoggingIn/signUp/signUpSlice';
 
-// style
-import './App.css';
+// util
 import { fetchKeyBinds, fetchSavedUserPrefs, fetchSocialData, initKeyBinds } from '../util/LocalData';
 import { setSavedKeyCodes } from '../features/settings/appSettings/keyBindSettings/keyBindSettingsSlice';
-import { handleUpdateAvailable, toggleInitApp, updateCurrentAppVersion } from './appSlice';
+import { handleUpdateAvailable, toggleInitApp, toggleMobileState, updateCurrentAppVersion } from './appSlice';
 import { fetchSavedAppAudioSettings } from '../features/settings/soundEffects/soundEffectsSlice';
 import { fetchMiscellaneousSettings, fetchSavedHardwareAcceleration } from '../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { fetchSavedCustomStatus } from '../features/server/ChannelRoom/UserStatusBar/UserStatusSlice';
+
+// style
+import './App.css';
+
+import "./Mobile.css";
 
 function App() {
 
@@ -184,6 +188,40 @@ function App() {
     }, 10)
     
   // eslint-disable-next-line
+  }, [])
+
+  const onResize = (e) => {
+    
+    if (e.target.innerWidth < 601 && (e.target.innerHeight / e.target.innerWidth) > 1) {
+
+      dispatch(toggleMobileState(true));
+
+    } else {
+
+      dispatch(toggleMobileState(false));
+
+    }
+  
+  }
+
+  React.useEffect(() => {
+
+    window.addEventListener('resize', onResize);
+
+    if (window.innerWidth < 601 && (window.innerHeight / window.innerWidth) > 1) {
+
+      dispatch(toggleMobileState(true));
+
+    } else {
+
+      dispatch(toggleMobileState(false));
+
+    }
+
+    return () => {
+      window.removeEventListener('resize', onResize);
+    }
+
   }, [])
 
   return (

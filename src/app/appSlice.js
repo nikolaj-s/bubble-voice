@@ -42,6 +42,7 @@ const appSlice = createSlice({
         releaseNotesError: false,
         releaseNotesErrorMessage: "",
         initilizingApp: true,
+        mobile: false
     },
     reducers: {
         handleUpdateAvailable: (state, action) => {
@@ -56,6 +57,9 @@ const appSlice = createSlice({
         },
         toggleInitApp: (state, action) => {
             state.initilizingApp = false;
+        },
+        toggleMobileState: (state, action) => {
+            state.mobile = action.payload;
         }
     },
     extraReducers: {
@@ -94,6 +98,8 @@ export const selectReleaseNotesErrorMessage = state => state.appSlice.releaseNot
 
 export const selectInitAppState = state => state.appSlice.initilizingApp;
 
-export const {toggleInitApp, closeReleaseNotesErrorMessage, updateCurrentAppVersion, handleUpdateAvailable } = appSlice.actions;
+export const selectMobileState = state => state.appSlice.mobile;
+
+export const {toggleMobileState, toggleInitApp, closeReleaseNotesErrorMessage, updateCurrentAppVersion, handleUpdateAvailable } = appSlice.actions;
 
 export default appSlice.reducer;

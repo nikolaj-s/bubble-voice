@@ -1,4 +1,6 @@
 import React from 'react'
+import { useSelector } from 'react-redux';
+import { selectSecondaryColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { Iframe } from '../../../Iframe/Iframe';
 import { Video } from '../../../Video/Video'
 
@@ -37,8 +39,10 @@ export const VideoWidget = ({widget, editing}) => {
 
     }, [widget])
     
+    const secondaryColor = useSelector(selectSecondaryColor);
+
     return (
-        <div className='video-widget-container' >
+        <div style={{backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0.8)`}} className='video-widget-container' >
             {nonVideo ?
             <Iframe link={nonVideo} />
             : 

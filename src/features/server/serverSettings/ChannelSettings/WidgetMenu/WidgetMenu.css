@@ -5,7 +5,7 @@
 }
 
 .text-widgets-large-wrapper {
-    height: 400px;
+    height: 200px;
     width: 100%;
     margin: 2% 0 0 0;
     display: flex;
@@ -14,7 +14,7 @@
 
 .widgets-button-wrapper {
     width: 100%;
-    height: 400px;
+    height: 200px;
     display: flex;
     justify-content: space-between;
 }

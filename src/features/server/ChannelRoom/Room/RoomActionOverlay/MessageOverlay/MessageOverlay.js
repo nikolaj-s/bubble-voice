@@ -25,7 +25,7 @@ export const MessageOverlay = ({data, onEnd, page}) => {
 
                 onEnd();
     
-            }, 3500)
+            }, 2500)
         }
     // eslint-disable-next-line
     }, [data])

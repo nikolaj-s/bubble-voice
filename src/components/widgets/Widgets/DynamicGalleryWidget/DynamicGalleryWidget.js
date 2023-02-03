@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { wrap } from 'popmotion'
 
 // state
-import { selectPrimaryColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, selectSecondaryColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // components
 import { Image } from '../../../Image/Image'
@@ -14,6 +14,7 @@ import { Image } from '../../../Image/Image'
 import "./DynamicGalleryWidget.css";
 import { GalleryNavigation } from './GalleryNavigation/GalleryNavigation';
 import { setExpandedContent } from '../../../../features/ExpandContent/ExpandContentSlice';
+import { GalleryTitle } from './GalleryTitle/GalleryTitle';
 
 export const DynamicGalleryWidget = ({widget, editing}) => {
 
@@ -24,6 +25,8 @@ export const DynamicGalleryWidget = ({widget, editing}) => {
     const images = widget.content.text;
 
     const color = useSelector(selectPrimaryColor);
+
+    const secondaryColor = useSelector(selectSecondaryColor);
 
     const variants = {
         enter: (direction) => {
@@ -63,7 +66,7 @@ export const DynamicGalleryWidget = ({widget, editing}) => {
     }
 
     return (
-        <div 
+        <div style={{backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0.8)`}}
         className='dynamic-gallery-widget'>
             <AnimatePresence initial={false} custom={direction}>
                 <motion.div
@@ -99,6 +102,7 @@ export const DynamicGalleryWidget = ({widget, editing}) => {
             <div style={{backgroundColor: color}} className="prev" onClick={() => paginate(1)}>
             </div>
             <GalleryNavigation images={images} currentIndex={imageIndex} />
+            <GalleryTitle title={widget?.content?.query} />
         </div>
     )
 }

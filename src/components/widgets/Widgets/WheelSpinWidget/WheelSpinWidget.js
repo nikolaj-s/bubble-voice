@@ -110,10 +110,7 @@ export const WheelSpinWidget = ({widget, editing, initDeg = 0, onEnd = () => {},
 
     return (
         <div 
-        style={{
-            border: `solid 4px ${accentColor}`,
-            backgroundColor: secondaryColor
-        }}
+        style={{backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0.8)`}}
         className='wheel-widget-wrapper' >
             <div id="wheel">
                 <motion.div transition={{duration: 0.1}} animate={animation} id="inner-wheel">

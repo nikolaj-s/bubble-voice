@@ -105,7 +105,7 @@ const Selection = () => {
                         </motion.div> : null}
                         {serverSearch ? 
                         <motion.div key={'server-list'} initial={{translateX: '100%'}} animate={{translateX: "0%"}} exit={{translateX: "100%"}} className='server-list-wrapper'>
-                            <TextInput marginBottom='2%' keyCode={search} action={handleServerSearchInput} inputValue={serverSearchQuery}  marginTop='2%' placeholder={"Server Name"} />
+                            <TextInput marginBottom='2%' keyCode={search} action={handleServerSearchInput} inputValue={serverSearchQuery}  marginTop='0%' placeholder={"Server Name"} />
                             {serverSearchQuery.length > 0 ? <TextButton action={() => {search(13)}} name={"Search"} /> : null}
                             <ServerList selectServer={selectServerToJoin} noresults='No Results' loading={loadingServerSearchResults} serverList={serverSearchResults}  />
                         </motion.div>

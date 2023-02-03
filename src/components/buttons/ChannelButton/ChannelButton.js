@@ -119,8 +119,8 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
                 : null}
                 <h3 style={{color: textColor, opacity: (active || mouseEnter || unReadMessage) ? 1 : 0.7}}>{channel.channel_name}</h3>
                 {mouseEnter ? <div className='channel-button-extra-context-wrapper'>
-                    <SocialButton flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} action={openSocial} margin={'0 5px 0 0'} borderRadius={10} width={12} height={12} />
-                    <SubMenuButton flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} description={"More"} target={`channel-button-${channel._id}`} width={12} height={12} borderRadius={10} />
+                    <SocialButton o_mouseLeave={() => {handleAnimation(transparentPrimaryColor, false)}} desc_o_mouse_leave={() => {handleAnimation(transparentPrimaryColor, false)}} flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} action={openSocial} margin={'0 5px 0 0'} borderRadius={10} width={12} height={12} />
+                    <SubMenuButton o_mouseLeave={() => {handleAnimation(transparentPrimaryColor, false)}} desc_o_mouse_leave={() => {handleAnimation(transparentPrimaryColor, false)}} flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} description={"More"} target={`channel-button-${channel._id}`} width={12} height={12} borderRadius={10} />
                 </div> : null}
             </motion.div>
             {usersState.map((user) => {

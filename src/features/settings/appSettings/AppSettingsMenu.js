@@ -56,7 +56,11 @@ const SettingsMenu = () => {
     const navigateSettings = (link) => {
         const currentUrl = window.location.hash.split('appsettings/')[0].split('#')[1];
         
-        navigate(currentUrl + `appsettings/${link}`)
+        navigate(currentUrl + `appsettings/${link}`);
+
+        const el = document.getElementsByClassName('settings-routes-wrapper')[0];
+
+        if (el) el.style.display = 'flex'
     }
 
     return (

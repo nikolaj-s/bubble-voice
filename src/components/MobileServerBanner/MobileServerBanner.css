@@ -1,0 +1,31 @@
+
+.mobile-server-banner-container {
+    display: none;
+    height: 100px;
+    width: 100%;
+    position: relative;
+    flex-direction: column;
+}
+
+.mobile-server-title-container {
+    height: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+.mobile-server-title-container h2 {
+    font-weight: 400;
+    letter-spacing: var(--font-spacing);
+}
+
+.mobile-server-navigation-container {
+    z-index: 1;
+}
+
+.mobile-server-navigation-container {
+    height: 50px;
+    width: 100%;
+}

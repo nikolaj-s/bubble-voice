@@ -12,6 +12,14 @@
     overflow-x: hidden;
 }
 
+.user-status-bar h3 {
+    word-break: keep-all;
+    word-wrap: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .user-status-bar::-webkit-scrollbar {
     display: none;
 }

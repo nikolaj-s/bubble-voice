@@ -110,7 +110,7 @@ export const ControlBar = () => {
 
     return (
         <>
-            {selectingScreens ? <ScreenShareMenu /> : null}
+            <ScreenShareMenu selectingScreens={selectingScreens} />
             <div className='control-bar-container' 
             style={{borderTop: `solid 3px ${accentColor}`}}
             >

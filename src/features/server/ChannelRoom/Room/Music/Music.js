@@ -17,6 +17,7 @@ import { Range } from '../../../../../components/inputs/Range/Range';
 import { AddButton } from '../../../../../components/buttons/AddButton/AddButton';
 import { TextInput } from '../../../../../components/inputs/TextInput/TextInput';
 import { Loading } from '../../../../../components/LoadingComponents/Loading/Loading';
+import { ExpandButton } from '../../../../../components/buttons/ExpandButton/ExpandButton';
 
 export const Music = () => {
 
@@ -29,6 +30,8 @@ export const Music = () => {
     const [currentlyPlaying, setCurrentlyPlaying] = React.useState("");
 
     const [visible, toggleVisible] = React.useState(false);
+
+    const [expanded, toggleExpanded] = React.useState(false);
 
     const [loading, toggleLoading] = React.useState(false);
 
@@ -88,13 +91,16 @@ export const Music = () => {
     }, [musicQueue])
 
     const toggleVisibility = () => {
+        if (visible) {
+            toggleExpanded(false);
+        }
         toggleVisible(!visible);
     }
 
     const handleTogglePlaying = async () => {
         
         if (loading) return;
-        console.log('toggle playuig')
+
         if (!currentlyPlaying && musicPlaying) return;
 
         toggleLoading(true);
@@ -201,6 +207,10 @@ export const Music = () => {
         if (value === 13) return handleAddSongToQueue();
     }
 
+    const handleExpansion = () => {
+        toggleExpanded(!expanded);
+    }
+
     return (
         <>
         {currentlyPlaying ?
@@ -221,12 +231,18 @@ export const Music = () => {
         : null}
         <div
         style={{
-            right: visible ? 0 : '-395px',
-            backgroundColor: primaryColor
+            width: expanded ? 'calc(100% - 20px)' : 455,
+            height: expanded ? "100%" : 300,
+            right: visible ? 0 : '-400px',
+            left: expanded ? '50%' : null,
+            transform: expanded ? 'translate(-50%, 50%)' : 'translate(0%, 50%)',
+            backgroundColor: primaryColor,
+            boxShadow: expanded ? '5px 5px 60px rgba(0, 0, 0, 0.8)' : null,
+            borderRadius: expanded ? '10px' : null
         }}
         className='music-player-overlay-wrapper'>
             <div 
-            style={{}}
+            style={{display: expanded ? 'none' : 'flex'}}
             className='music-player-overlay-controls'>
                 <MusicOverlayButton playing={musicPlaying} description={visible ? 'Hide' : 'Show'} action={toggleVisibility} width={25} height={25} />
                 <SkipButton action={handleSkip} width={25} height={25} />
@@ -234,14 +250,16 @@ export const Music = () => {
                 <AddButton altHeight={20} altWidth={20} action={handleAddSongToQueue} o_mouseEnter={() => {handleShowSearch(true)}} o_mouseLeave={() => {handleShowSearch(false)}} width={25} height={25} description="Add Song" />
                 <AudioToggleButton o_mouseEnter={() => {handleToggleVolumeControls(true)}} o_mouseLeave={() => {handleToggleVolumeControls(false)}} description={muted ? 'Un Mute' : 'Mute'} action={handleMute} state={!muted} />
             </div>
-            <div className='youtube-player-wrapper'>
+            <div style={{
+            borderRadius: expanded ? '10px' : null}} className='youtube-player-wrapper'>
                 <YouTube 
+                
                 onReady={handleOnReady}
                 id={'room-music-player'}
                 videoId={currentlyPlaying}  opts={{
                     
                     height: '100%',
-                    width: '400',
+                    width: '100%',
                     playerVars: {
                         fs: 0,
                         autoplay: 1,
@@ -250,9 +268,14 @@ export const Music = () => {
                         controls: 0,
                         modestbranding: 1
                     }}} style={{
-                        borderBottomRightRadius: 15
+                        borderBottomRightRadius: 15,
+                        width: '100%',
+                        height: '100%'
                     }} />
-                    <div className='youtube-disable-clicking'></div>
+                    <div className='youtube-disable-clicking'>
+                        <ExpandButton action={handleExpansion} description={"Expand"} />
+                    </div>
+                    
             </div>
             <Loading loading={loading} />
         </div>

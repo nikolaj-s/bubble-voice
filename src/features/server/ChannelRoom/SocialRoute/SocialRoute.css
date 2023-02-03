@@ -18,29 +18,37 @@
 
 .social-route-top-nav {
     height: 45px;
-    width: calc(100% - 1rem);
-    padding: 0 .5rem 0 .5rem;
+    width: calc(100%);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .social-route-top-nav .close-social-button {
-    width: 35px;
-    height: 35px;
+    height: 100%;
+    width: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    margin-left: 3px;
 }
 
 .social-route-top-nav .close-social-button:hover {
     opacity: 0.6;
 }
 
+.social-route-title-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
 .social-route-top-nav h3 {
     font-weight: 400;
     letter-spacing: var(--font-spacing);
     font-size: .9rem;
+    padding-left: 1rem;
 }
 

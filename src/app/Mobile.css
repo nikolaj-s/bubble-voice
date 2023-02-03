@@ -1,0 +1,133 @@
+
+@media screen and (orientation: portrait) and (max-width: 600px) {
+    /* title */
+    #application-title {
+        margin-top: 2.5rem;
+    }
+    
+    /* sign up login */
+
+    .sign-in-inner-container {
+        width: 100%;
+        min-width: 100%;
+        min-height: 100%;
+        border-radius: 0px;
+    }
+
+    /* dashboard */
+    .content-screen-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        margin: 0;
+        border-radius: 0;
+        height: 0;
+        max-height: 100vh;
+        max-width: 100%;
+        overflow: visible;
+        z-index: 10;
+    }
+
+    .content-screen-container .header-title-container {
+        display: none;
+    }
+
+    .create-server-menu-container {
+        height: 100vh;
+        z-index: 10;
+        position: fixed;
+
+    }
+
+    .side-bar-container {
+        width: 100%;
+        min-width: 100%;
+        margin: 0;
+        height: calc(100% - 3rem);
+        border-radius: 0;
+        padding-bottom: 3rem;
+    }
+
+    .mobile-spacer {
+        min-height: 90px;
+        width: 100%;
+        display: flex;
+    }
+
+    /* buttons */
+    .mobile-button {
+        display: flex;
+        width: 40px;
+        height: 40px;
+    }
+
+    .close-settings-container {
+        bottom: 10px;
+        top: 90%;
+        left: 45%;
+        opacity: 1;
+    }
+
+    .close-settings-container p {
+        display: none;
+    }
+    /* new account */
+    .new-account-state-container {
+        z-index: 10;
+        overflow-y: auto;
+    }
+    
+    .inner-new-account-state-container {
+        
+        border-radius: 0;
+    }
+
+    /* settings */
+    .settings-routes-wrapper {
+        z-index: 4;
+        position: fixed;
+        overflow-y: auto;
+        height: 100vh;
+        overflow-x: hidden;
+    }
+
+    .settings-wrapper {
+        width: 98%;
+    }
+
+    .join-server-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+    }
+
+    /* alert */
+    .set-default-server-notice-container {
+        display: none;
+    }
+
+    .server-banner-container {
+        display: none;
+    }
+
+    .mobile-server-banner-container {
+        display: flex !important;
+    }
+
+    .unread-message-indicator {
+        left: -45px;
+    }
+
+    /* social */
+    .social-route-wrapper-container {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        height: 100vh !important;
+        width: 100%;
+    }
+}

@@ -195,10 +195,7 @@ export const MusicWidget = ({editing = false, widget}) => {
     
     return (
         <div 
-        style={{
-            backgroundColor: secondaryColor,
-            border: `solid 4px ${accentColor}`
-        }}
+        style={{backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0.8)`}}
         className='music-widget-outer-container' >
             <div className='inner-music-widget-container'>
                 <div className='music-top-title-container'>

@@ -2,16 +2,16 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { ScreenButton } from '../../../components/buttons/ScreenButton/ScreenButton'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 
 // state
-import { selectAccentColor, selectSecondaryColor, selectTextColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectScreens, setCurrentScreen } from '../ControlBarSlice';
 
 // style's
 import "./ScreenShareMenu.css";
 
-export const ScreenShareMenu = () => {
+export const ScreenShareMenu = ({selectingScreens}) => {
 
     const dispatch = useDispatch();
 
@@ -19,37 +19,47 @@ export const ScreenShareMenu = () => {
 
     const accentColor = useSelector(selectAccentColor);
 
+    const primaryColor = useSelector(selectPrimaryColor);
+
     const secondaryColor = useSelector(selectSecondaryColor);
 
     const textColor = useSelector(selectTextColor);
 
     const selectScreen = (id) => {
-        console.log(id);
+        
         dispatch(setCurrentScreen(id));
     }
 
     return (
-        <motion.div
-        initial={{
-            scale: 0
-        }}
-        animate={{
-            scale: 1
-        }}
-        exit={{
-            scale: 0
-        }}
-        style={{
-            backgroundColor: secondaryColor,
-            border: `solid 4px ${accentColor}`
-        }}
-        className='screen-share-menu'>
-            <h3 style={{
-                color: textColor
-            }}>Select Screen To Share</h3>
-            {screens.map(screen => {
-                return <ScreenButton action={selectScreen} id={screen.id} name={screen.name} key={screen.id} thumbnail={screen.thumbnail} />
-            })}
-        </motion.div>
+        <>
+        <AnimatePresence>
+            {selectingScreens ?
+            <motion.div
+            initial={{
+                left: '-600px'
+            }}
+            animate={{
+                left: '0px'
+            }}
+            exit={{
+                left: '-600px'
+            }}
+            style={{
+                backgroundColor: secondaryColor,
+                border: `solid 3px ${primaryColor}`
+            }}
+            key={"share-screen-menu"}
+            className='screen-share-menu'>
+                <h3 style={{
+                    color: textColor
+                }}>Select Screen To Share</h3>
+                {screens.map(screen => {
+                    return <ScreenButton action={selectScreen} id={screen.id} name={screen.name} key={screen.id} thumbnail={screen.thumbnail} />
+                })}
+                
+            </motion.div>
+            : null}
+        </AnimatePresence> 
+        </>
     )
 }
