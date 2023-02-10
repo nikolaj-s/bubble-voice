@@ -3,7 +3,7 @@
     position: absolute;
     width: 96%;
     bottom: 60px;
-    height: 280px;
+    height: 260px;
     display: flex;
     flex-direction: column;
     border-top-left-radius: var(--border-radius);
@@ -14,12 +14,18 @@
 
 .inner-status-menu-container {
     flex-grow: 4;
-    padding: 5px;
     border-bottom-right-radius: var(--border-radius);
+    overflow: hidden;
 }
 
 .inner-status-menu-spacer {
-    height: 20px;
+    height: 10px;
     flex-shrink: 0;
     width: 45px;
+}
+
+.inner-status-menu-container .text-input-container {
+    padding: 0;
+    margin: 0 auto;
+    border-radius: 5px;
 }

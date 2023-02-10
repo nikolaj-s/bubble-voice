@@ -32,7 +32,7 @@ export const BoolButton = ({state, name, action}) => {
                 <div 
                 style={{
                     backgroundColor: accentColor,
-                    borderRadius: 10
+                    borderRadius: 5
                 }}
                 className='bool-state-true'></div>
                 : null}

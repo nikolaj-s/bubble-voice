@@ -1,0 +1,19 @@
+.video-preview-container {
+    position: relative;
+    cursor: pointer;
+    transition: 0.1s;
+}
+
+.video-preview-container:hover {
+    opacity: 0.7;
+}
+
+.video-preview-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: calc(100% - 10px);
+    font-weight: 400;
+    padding: 5px;
+    
+}

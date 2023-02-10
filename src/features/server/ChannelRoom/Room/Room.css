@@ -7,7 +7,7 @@
 }
 
 #live-chat-wrapper {
-    height: calc(100% - 45px);
+    height: calc(100% - 35px);
     width: 100%;
     max-width: 100%;
     position: relative;
@@ -28,7 +28,8 @@
     justify-content: center;
     vertical-align: middle;
     flex: 1;
-    z-index: 2;
+    z-index: 0;
+    transition: 0.1s;
 }
 
 .streaming-video-player-container {
@@ -42,6 +43,7 @@
     margin: 5px;
     cursor: pointer;
     background-color: black;
+    transition: 0.1s;
 }
 
 #live-chat-wrapper .streaming-video-player {

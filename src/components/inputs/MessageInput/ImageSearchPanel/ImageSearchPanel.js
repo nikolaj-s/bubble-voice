@@ -19,6 +19,9 @@ import { ImageSearch } from '../../../../util/ImageSearch';
 // style
 import "./ImageSearchPanel.css";
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
+import { VideoSearch } from '../../../../util/VideoSearch';
+import { Video } from '../../../Video/Video';
+import { VideoPreview } from '../../../VideoPreview/VideoPreview';
 
 
 export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => {
@@ -31,11 +34,15 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
 
     const recommendations = useSelector(selectPopularSearches);
 
+    const [mediaType, setMediaType] = React.useState('Images');
+
     const dispatch = useDispatch();
 
     const [loading, toggleLoading] = React.useState(false);
 
     const [images, setImages] = React.useState([]);
+
+    const [videos, setVideos] = React.useState([]);
 
     const [query, setQuery] = React.useState("");
 
@@ -49,7 +56,7 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
 
         toggleLoading(true);
 
-        const result = await ImageSearch(query, serverId);
+        const result = mediaType === 'Videos' ? await VideoSearch(query, serverId) : await ImageSearch(query, serverId);
         
         setQuery("");
 
@@ -66,8 +73,8 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
         setTimeout(() => {
             
             toggleLoading(false);
-
-            setImages(result.images);
+            console.log(result.media)
+            mediaType === 'Images' ? setImages(result.media) : setVideos(result.media);
 
         }, 100)
         
@@ -82,6 +89,12 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
     const handleSelectImage = (image) => {
         selectImage(image)
     }
+
+    const handleMediaType = (page) => {
+        setMediaType(page)
+
+        document.getElementById('message-image-search-input').focus();
+    } 
 
     React.useEffect(() => {
         try {
@@ -114,22 +127,30 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
                 }}
                 className='inner-message-image-search-container'>
                     <div 
-                    style={{backgroundColor: primaryColor, borderBottom: `solid 5px ${secondaryColor}`}}
                     className='message-image-search-input-wrapper'>
                         <input 
                         id="message-image-search-input"
-                        style={{color: textColor}}
-                        maxLength={120} onKeyUp={handleEnter} onChange={handleQuery} value={query} placeholder={"Search For Images"} />
-                        <AltSearchButton active={query.length === 0} action={search} margin={'0 0 0 10px'} width={20} height={20} invert={true}  borderRadius={10} />
+                        style={{color: textColor, backgroundColor: primaryColor}}
+                        maxLength={120} onKeyUp={handleEnter} onChange={handleQuery} value={query} placeholder={`Search For ${mediaType}`} />
+                        <div className='message-image-search-button'>
+                            <AltSearchButton active={query.length === 0} action={search} margin={'0 0 0 10px'} width={15} height={15} invert={true}  borderRadius={5} />
+                        </div>
                     </div>
-                    {images.length === 0 && recommendations.length > 1 ? <InputTitle title={"Results Based On Previous Searches"} /> : null}
+                    <div className='media-search-nav-container'>
+                        <h3 onClick={() => {handleMediaType("Images")}} style={{color: textColor, backgroundColor: mediaType === 'Images' ? primaryColor : null, opacity: mediaType === 'Images' ? 1 : 0.6}}>Images</h3>
+                        <h3 onClick={() => {handleMediaType("Videos")}} style={{color: textColor, backgroundColor: mediaType === 'Videos' ? primaryColor : null, opacity: mediaType === 'Videos' ? 1 : 0.6}}>Videos</h3>
+                    </div>
                     <div className='message-image-search-results-container'>
                     <ResponsiveMasonry columnsCountBreakPoints={{800: 1, 1000: 2, 1500: 3, 1900: 4, 2500: 5}}>
                         <Masonry gutter='5px'>   
-                            {(images.length > 0 ? images : loading ? [] : recommendations.slice(0, 15)).map((image, key) => {
+                            {mediaType === 'Videos' ?
+                            (videos?.length > 0 ? videos : loading ? [] : recommendations.filter(v => v.type === 'video').slice(0, 15)).map(video => {
+                                return <VideoPreview video={video} action={handleSelectImage} />
+                            })
+                            : (images?.length > 0 ? images : loading ? [] : recommendations.filter(v => v.type === 'image').slice(0, 15)).map((image, key) => {
                                 return (
-                                    <div onClick={() => {handleSelectImage(image)}} key={image + key} className='image-search-result-container'>
-                                        <Image hideOnError={true} cursor='pointer' image={image} />
+                                    <div onClick={(e) => {e.stopPropagation(); handleSelectImage(image)}} key={image + key} className='image-search-result-container'>
+                                        <Image hideOnError={true} cursor='pointer' image={image.preview} />
                                     </div> 
                                 )
                             })}

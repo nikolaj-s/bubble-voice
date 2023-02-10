@@ -13,7 +13,7 @@ export const DisconnectButton = ({action, width, height, margin}) => {
     description={"Disconnect"}
     margin={margin}
     altInvert={true}
-    borderRadius={10}
+    borderRadius={5}
     width={width} height={height} id={"disconnect-from-channel-button"} action={action}>
         <svg 
         width="30" height="30" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">

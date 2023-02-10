@@ -9,7 +9,6 @@ export const CloseWindow = ({ action }) => {
         container: {
             width: 15,
             height: 15,
-            paddingRight: 0
         },
         icon: {
             width: "100%",

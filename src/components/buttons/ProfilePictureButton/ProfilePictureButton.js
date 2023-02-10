@@ -12,7 +12,9 @@ export const ProfilePictureButton = ({image, width, height, action}) => {
     altInvert={true}
     description="Status"
     action={action}
-    padding={10}
+    padding={5}
+    borderRadius={5}
+    desc_space={15}
     zIndex={1}
     >
         <div

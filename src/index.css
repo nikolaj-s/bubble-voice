@@ -4,7 +4,7 @@ html {
 :root {
   --font-variable: "Inter", sans-serif;
   --font-spacing: 4px;
-  --border-radius: 10px;
+  --border-radius: 5px;
   --box-shadow: 0px 4px 17px rgba(0, 0, 0, 0.32);
   --range-background: white;
   --range-main-active: black;

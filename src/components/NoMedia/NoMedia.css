@@ -1,0 +1,22 @@
+
+.no-media-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    opacity: 0.5;
+}
+
+.no-media-container h2 {
+    font-weight: 400;
+    letter-spacing: var(--font-spacing);
+    font-size: 3rem;
+    text-align: center;
+    max-width: 95%;
+}
+
+.no-media-container svg {
+    flex-shrink: 0;
+}

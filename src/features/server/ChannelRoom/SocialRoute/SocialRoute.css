@@ -17,7 +17,7 @@
 }
 
 .social-route-top-nav {
-    height: 45px;
+    height: 35px;
     width: calc(100%);
     display: flex;
     justify-content: space-between;
@@ -26,7 +26,7 @@
 
 .social-route-top-nav .close-social-button {
     height: 100%;
-    width: 50px;
+    width: 40px;
     display: flex;
     justify-content: center;
     align-items: center;

@@ -4,10 +4,11 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    overflow: visible;
 }
 
 .server-dashboard-title-container {
-    height: 45px;
+    height: 35px;
     width: 100%;
     display: flex;
     align-items: center;
@@ -36,6 +37,7 @@
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
+    height: 100%;
 }
 
 .server-dashboard-inner-container .message-container {

@@ -1,9 +1,7 @@
-// library's
+/// library's
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import {  useRoutes } from 'react-router'
-import { PinnedIcon } from '../../../../components/Icons/PinnedIcon/PinnedIcon';
-import { Message } from '../../../../components/Message/Message';
 
 import { selectPrimaryColor, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectChannelSocialId, selectPinningMessage, selectPopularSearches, selectUsersPermissions, togglePinMessage } from '../../ServerSlice';
@@ -13,7 +11,6 @@ import { selectPinnedMessages } from './ServerDashBoardSlice';
 import "./ServerDashBoard.css";
 import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
 import { Pins } from './Pins/Pins';
-import { AnimatePresence } from 'framer-motion';
 import { AltPinnedButton } from '../../../../components/buttons/AltPinnedButton/AltPinnedButton';
 import { ServerMediaButton } from '../../../../components/buttons/ServerMediaButton/ServerMediaButton';
 import { ServerMedia } from './ServerMedia/ServerMedia';

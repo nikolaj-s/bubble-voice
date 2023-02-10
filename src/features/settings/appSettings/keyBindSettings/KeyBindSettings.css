@@ -2,6 +2,7 @@
 .key-bind-input-wrapper {
     display: flex;
     justify-content: space-between;
+    
 }
 
 .key-bind-input-wrapper .text-button {
@@ -11,5 +12,5 @@
 
 .key-bind-input-wrapper .text-input-container {
     flex-grow: 4;
-    margin-right: 5%;
+    margin-right: 5px;
 }

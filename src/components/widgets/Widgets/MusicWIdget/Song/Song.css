@@ -24,6 +24,8 @@
     margin-left: 5px;
     letter-spacing: var(--font-spacing);
     cursor: default;
+    min-width: 60px;
+    text-align: center;
 }
 
 .song-name {

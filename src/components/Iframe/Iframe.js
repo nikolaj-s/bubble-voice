@@ -1,17 +1,11 @@
 
 import React from 'react'
 
-import { useIntersection } from '../useIntersection/useIntersection';
-
 import { motion } from 'framer-motion';
 import { useSelector } from 'react-redux';
 import { selectPrimaryColor, selectSecondaryColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
-export const Iframe = ({link, marginLeft}) => {
-
-    const ref = React.useRef();
-
-    const visible = useIntersection(ref, '-400px');
+export const Iframe = ({link, marginLeft, maxWidth = 800}) => {
 
     const [rendered, toggleRender] = React.useState(false);
 
@@ -19,26 +13,23 @@ export const Iframe = ({link, marginLeft}) => {
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
-    React.useEffect(() => {
-
-        if (rendered) return;
-
-        if (visible) return toggleRender(true);
-
-    }, [visible])
+    const loaded = () => {
+        toggleRender(true);
+    }
 
     return (
         <>
         {link ?
-            <div ref={ref} style={{maxWidth: 800, marginLeft: marginLeft, minHeight: link?.includes('steampowered') ? '200px' : '600px', borderRadius: 10}}>
-                {rendered ?
+            <div style={{maxWidth: maxWidth, marginLeft: marginLeft, minHeight: link?.includes('steampowered') ? '200px' : '600px', borderRadius: 10, position: 'relative'}}>
+                
                 <iframe 
+                onLoad={loaded}
                 style={{
                     borderRadius: 10
                 }}
                 title={link}
                 sandbox='allow-scripts allow-same-origin allow-presentation allow-popups' loading='lazy' src={link} allow="clipboard-write; encrypted-media;" frameBorder='0' scrolling='no' allowFullScreen={false} width='100%' height={link?.includes('steampowered') ? '200px' : '600px'}></iframe>
-                : 
+                {!rendered ?
                 <motion.div 
             style={{
                 background: `linear-gradient(270deg, ${secondaryColor}, ${primaryColor}, ${secondaryColor})`,
@@ -48,12 +39,13 @@ export const Iframe = ({link, marginLeft}) => {
                 width: '100%',
                 height: '100%',
                 backgroundSize: '600% 600%',
+                zIndex: 3
             }}
             initial={{backgroundPosition: '0% 50%'}}
             animate={{backgroundPosition: ['0% 50%', '300% 50%']}}
             transition={{ease: 'linear', duration: 3, repeat: Infinity}}
             ></motion.div> 
-                }
+               : null }
             </div>
         : null}
         </>

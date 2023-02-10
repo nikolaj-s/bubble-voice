@@ -4,12 +4,12 @@ import { SubMenuButton } from '../../buttons/subMenuButton/SubMenuButton'
 import { Image } from '../../Image/Image'
 import { MessageLoadingIndicator } from '../MessageLoadingIndicator/MessageLoadingIndicator'
 
-export const SenderInfo = ({id, current_message, previous_message, message, pinMessage, pinned, overlay, hover, textColor, index, perm, accentColor, persist, action}) => {
+export const SenderInfo = ({id, current_message, previous_message, message, pinMessage, pinned, overlay, hover, textColor, index, perm, accentColor, persist, action, display_name, user_image}) => {
 
     return (
         <>
         <div 
-        onClick={action}
+        
         style={{
             height: (previous_message?.username !== current_message?.username) || (previous_message?.content?.date?.split("T")[0] !== current_message?.content?.date?.split("T")[0]) ? 15 : 0,
             padding: (previous_message?.username !== current_message?.username) || (previous_message?.content?.date?.split("T")[0] !== current_message?.content?.date?.split("T")[0]) ? '5px 0 10px 0' : 0,
@@ -21,12 +21,13 @@ export const SenderInfo = ({id, current_message, previous_message, message, pinM
                 (previous_message?.content?.date?.split("T")[0] !== current_message?.content?.date?.split("T")[0])
                 ?
                 <div className='sender-info-inner-container'>
-                    <div className='message-profile-picture'>
-                        <Image cursor='pointer' image={current_message?.content?.user_image} />
+                    <div onClick={action} className='message-profile-picture'>
+                        <Image cursor='pointer' image={user_image} />
                     </div>
                     <h2
+                    onClick={action}
                     style={{color: textColor}}
-                    >{message.display_name}</h2>
+                    >{display_name}</h2>
                     {!message.loading ?
                     <p
                         style={{color: textColor, marginRight: 10}}

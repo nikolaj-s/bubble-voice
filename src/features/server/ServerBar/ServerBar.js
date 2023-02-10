@@ -27,9 +27,6 @@ import { ServerSettingsButton } from '../../../components/buttons/ServerSettings
 import { ServerSettingsMenu } from '../serverSettings/ServerSettingsMenu';
 import { DisconnectButtonWrapper } from './DisconnectButtonWrapper/DisconnectButtonWrapper';
 
-// UTIL
-import { UnpackMessage } from '../../../util/UnpackMessage';
-
 // style's
 import "./ServerBar.css"
 import { addPinnedMessage, removePinnedMessage } from '../ChannelRoom/ServerDashBoard/ServerDashBoardSlice';
@@ -168,19 +165,17 @@ const Bar = () => {
         })
         socket.on('new message', (data) => {
             
-            const message = UnpackMessage(data, false);
-            
-            dispatch(newMessage(message));
+            dispatch(newMessage(data));
 
             if (window.location.hash.includes(data.channel_id)) {
 
                 dispatch(playSoundEffect("newMessage"))
 
-                dispatch(addNewWidgetOverlayToQueue({...data.content, action: 'new-message'}));
+                dispatch(addNewWidgetOverlayToQueue({...data, action: 'new-message'}));
             
             } else {
             
-                dispatch(pushSytemNotification(message));
+                dispatch(pushSytemNotification(data));
                 
             }
             

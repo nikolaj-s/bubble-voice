@@ -23,7 +23,7 @@ export const ChannelTitle = ({action}) => {
             <h3
             style={{color: textColor}}
             >CHANNELS</h3>
-            {permissions?.user_can_manage_channels ? <AddButton borderRadius={'10px'} description={"Add"} width={12} height={12} action={action} /> : null}
+            {permissions?.user_can_manage_channels ? <AddButton borderRadius={'5px'} description={"Add"} width={12} height={12} action={action} /> : null}
         </div>
     )
 }

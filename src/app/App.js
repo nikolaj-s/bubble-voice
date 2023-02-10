@@ -141,6 +141,12 @@ function App() {
 
         ipcRenderer.send('check-for-updates');
 
+        ipcRenderer.on("update-downloaded", () => {
+          dispatch(handleUpdateAvailable(true));
+
+          clearInterval(update_interval);
+        })
+
         ipcRenderer.on('update-available', () => {
             
           ipcRenderer.removeAllListeners('update-downloaded');
@@ -185,7 +191,7 @@ function App() {
 
         clearInterval(update_interval);
       }
-    }, 10)
+    })
     
   // eslint-disable-next-line
   }, [])

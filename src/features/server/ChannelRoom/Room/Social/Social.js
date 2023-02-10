@@ -182,8 +182,6 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
             setTimeout(() => {
 
-                console.log(scroll_pos, messagesRef.current.scrollTop)
-
                 setMessagesToRender(messagesToRender + 15);
 
                 toggleLoadingMore(false);

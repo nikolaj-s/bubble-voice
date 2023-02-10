@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 // state
 import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 
-export const ButtonAnimationWrapper = ({display = 'flex', action = () => {}, position = 'relative', zIndex = 0, top = 0, left = 0, className, width = 50, height = 50, borderRadius = '10px', justifyContent = 'center', invert = false, pointerOptions = null, children, active = false, opacity = 1, id = "", margin, right, description, flip_description = false, padding = 10, altInvert = false, right_orientation_desc = false, o_mouseEnter = () => {}, o_mouseLeave = () => {}, desc_o_mouse_leave = () => {}}) => {
+export const ButtonAnimationWrapper = ({display = 'flex', action = () => {}, position = 'relative', zIndex = 0, top = 0, left = 0, className, width = 50, height = 50, borderRadius = '5px', justifyContent = 'center', invert = false, pointerOptions = null, children, active = false, opacity = 1, id = "", margin, right, description, flip_description = false, padding = 10, altInvert = false, right_orientation_desc = false, o_mouseEnter = () => {}, o_mouseLeave = () => {}, desc_o_mouse_leave = () => {}, desc_space = 25}) => {
 
     const animation = useAnimation();
 
@@ -98,10 +98,10 @@ export const ButtonAnimationWrapper = ({display = 'flex', action = () => {}, pos
             onMouseLeave={desc_o_mouse_leave}
             animate={null}
             style={{
-                top: right_orientation_desc ? '8px' : null,
+                top: right_orientation_desc ? '5px' : null,
                 right: right_orientation_desc ? '-75px' : null,
                 left: right_orientation_desc ? null : '50%',
-                bottom: right_orientation_desc ? null : flip_description ? '-100%' : height + 25,
+                bottom: right_orientation_desc ? null : flip_description ? '-100%' : height + desc_space,
                 minWidth: right_orientation_desc ? null : '100%',
                 position: right_orientation_desc ? 'absolute' : 'absolute',
                 width: right_orientation_desc ? 150 : null,

@@ -13,9 +13,9 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
 
     const animation = useAnimation();
 
-    const [width, setWidth] = React.useState('60%');
+    const [hover, toggleHover] = React.useState(false);
 
-    const [opacity, setOpacity] = React.useState(0.7);
+    const [down, toggleDown] = React.useState(false);
 
     const primaryColor = useSelector(selectPrimaryColor);
 
@@ -29,17 +29,9 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
     
     const handleAnimation = (down, state) => {
 
-        if (state) {
-            setWidth('100%')
-        } else {
-            setWidth('60%')
-        }
+        toggleHover(state);
 
-        if (down) {
-            setOpacity(0.9);
-        } else {
-            setOpacity(0.7);
-        }
+        toggleDown(down);
         
     }
 
@@ -54,16 +46,19 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
         id={`server-button-${server_id}`}
         animate={animation}
         style={{
-            width: "calc(100%)",
-            height: "calc(120px)",
-            backgroundColor: primaryColor,
+            width: "calc(98% - 10px)",
+
+            height: "calc(100px)",
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-around',
+            justifyContent: 'space-between',
             cursor: 'pointer',
-            padding: "0",
+            padding: "0 5px",
             position: 'relative',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            borderRadius: 5,
+            transition: '0.1s',
+            backgroundColor: down ? accentColor : hover ? primaryColor : secondaryColor
         }}
         onMouseEnter={() => {handleAnimation(false, true)}}
         onMouseLeave={() => {handleAnimation(false, false)}}
@@ -74,35 +69,33 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
         >
             <div 
             style={{
-                width: '100%',
-                height: "100%",
+                width: '100px',
+                height: "90%",
                 overflow: 'hidden',
                 flexShrink: 0,
-                position: 'absolute'
+                borderRadius: '5px'
             }}>
                 <Image cursor='pointer' image={server_banner} />
             </div>
             <div
             style={{
-                position: 'absolute',
                 zIndex: 1,
                 right: 0,
                 fontSize: '0.7rem',
-                background: 'rgba' + (secondaryColor.split('rgb')[1].split(')') + ` ${opacity})`),
-                width: width,
+                width: '100%',
                 height: '100%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                backdropFilter: 'blur(2px)',
                 transition: '0.2s'
             }}
             >
                 <h1
                 style={{
                     color: textColor,
-                    fontSize: '1.1rem',
-                    marginLeft: '0.2rem'
+                    fontSize: '0.9rem',
+                    marginLeft: '0.2rem',
+                    fontWeight: 400
                 }}
                 >
                     {server_name}

@@ -52,7 +52,7 @@ const Display = () => {
 
     const handleCancel = () => {
         dispatch(cleanUpJoiningNewServerState())
-        navigate('/dashboard');
+        navigate('/dashboard/createserver');
     }
 
     const closeError = () => {

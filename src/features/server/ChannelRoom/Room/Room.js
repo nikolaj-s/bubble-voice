@@ -29,7 +29,7 @@ import { Music } from './Music/Music';
 import { RoomUserWrapper } from './RoomUserWrapper/RoomUserWrapper';
 import { RoomActionOverlay } from './RoomActionOverlay/RoomActionOverlay';
 import { ChannelBackground } from './ChannelBackground/ChannelBackground';
-import { selectMiscSettingsHideChannelBackground } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { selectMiscSettingsHideChannelBackground, selectPopOutUserStreams } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { SubMenuButton } from '../../../../components/buttons/subMenuButton/SubMenuButton';
 import { selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { audioCtx } from '../../../AudioInit/AudioInit';
@@ -81,6 +81,8 @@ const Component = () => {
     const microphoneInputVolume = useSelector(selectMicInputVolume);
 
     const hideChannelBackgrounds = useSelector(selectMiscSettingsHideChannelBackground);
+
+    const popOutUserStreams = useSelector(selectPopOutUserStreams);
     
     // audio pref state
     const echoCancellation = useSelector(selectEchoCancellatio);
@@ -706,15 +708,36 @@ const Component = () => {
     React.useEffect(() => {
         
         if (page === 'social' || page === 'widgets') {
-            document.getElementById('user-streams-wrapper').style.opacity = 0;
+            if (popOutUserStreams) {
+                document.getElementById('user-streams-wrapper').style.position = 'fixed';
+                document.getElementById('user-streams-wrapper').style.left = 0;
+                document.getElementById('user-streams-wrapper').style.width = "260px";
+                document.getElementById('user-streams-wrapper').style.top = 0;
+                document.getElementById('user-streams-wrapper').style.opacity = 1;
+                document.getElementById('user-streams-wrapper').style.pointerEvents = 'none';
+            } else {
+                document.getElementById('user-streams-wrapper').style.opacity = 0;
+                
+            }
+            
         } else {
-            document.getElementById('user-streams-wrapper').style.opacity = 1;
+            if (popOutUserStreams) {
+                document.getElementById('user-streams-wrapper').style.position = 'relative';
+                document.getElementById('user-streams-wrapper').style.width = '100%'
+                document.getElementById('user-streams-wrapper').style.opacity = 1;
+                document.getElementById('user-streams-wrapper').style.pointerEvents = null;
+            } else {
+                document.getElementById('user-streams-wrapper').style.opacity = 1;
+                document.getElementById('user-streams-wrapper').style.pointerEvents = null;
+            }
+            
         }
     // eslint-disable-next-line      
-    }, [page])
+    }, [page, popOutUserStreams])
 
     
     return (
+        <>
         <div className='room-wrapper-outer'>
             <RoomNavigation action={cycleChannelPage} page={page} />
             <div
@@ -723,7 +746,7 @@ const Component = () => {
                 
             }
             id='live-chat-wrapper'>
-                <RoomUserWrapper users={channel.users} />
+                <RoomUserWrapper page={page} users={channel.users} />
                 <AnimatePresence>
                     {page === "social" ? <Social currentChannel={channel} channelId={current_channel_id} /> : null}
                     {page === "widgets" ? <Widgets /> : null}
@@ -731,11 +754,12 @@ const Component = () => {
                 <RoomActionOverlay page={page} />
                 <Music />
             </div>
-            <SubMenuButton description={"Room Quick Settings"} right_orientation_desc={true} target={'live-chat-wrapper'} borderRadius={0} zIndex={3} position={"absolute"} top={0} right={43} height={23} left={null} width={23} />
+            <SubMenuButton description={"Room Quick Settings"} right_orientation_desc={true} target={'live-chat-wrapper'} borderRadius={0} zIndex={3} position={"absolute"} top={0} right={35} height={15} left={null} width={15} />
             <ChannelBackground channel_background={hideChannelBackgrounds ? null : channel.channel_background} blur={channel.background_blur} />
             <audio hidden={true} id={'microphone-input-source'} />
             
         </div>
+        </>
     )
 }
 

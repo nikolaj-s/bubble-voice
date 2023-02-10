@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import "./MessageOverlay.css";
 import { Message } from '../../../../../../components/Message/Message';
 import { useSelector } from 'react-redux';
-import { selectAccentColor, selectPrimaryColor, selectSecondaryColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, selectSecondaryColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectMiscSettingsDisableMessagePopUp } from '../../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 export const MessageOverlay = ({data, onEnd, page}) => {
@@ -40,7 +40,7 @@ export const MessageOverlay = ({data, onEnd, page}) => {
         }}
         transition={{duration: 0.3}}
         initial={{top: -400}} animate={{top: 0}} exit={{top: -400}} className='message-overlay-container'>
-            <Message overlay={true} message={data} current_message={{content: data}} />
+            <Message overlay={true} message={data.content} current_message={data} />
         </motion.div>
     )
 }

@@ -11,6 +11,7 @@
     align-items: center;
     margin: 5px;
     cursor: pointer;
+    transition: 0.1s;
 }
 
 .active-user-container video {

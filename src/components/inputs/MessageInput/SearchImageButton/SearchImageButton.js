@@ -9,7 +9,7 @@ export const SearchImageButton = ({action, margin}) => {
 
     return (
         <ButtonAnimationWrapper
-        description={"Search Images"}
+        description={"Search Media"}
         action={action}
         width={20}
         height={20}

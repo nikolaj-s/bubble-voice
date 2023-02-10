@@ -30,7 +30,7 @@ const ServerButton = () => {
         className='create-server-button-container'>
             <h3
             style={{color: textColor}}
-            >Create Server</h3>
+            >Add Server</h3>
         </div>
     )
 }

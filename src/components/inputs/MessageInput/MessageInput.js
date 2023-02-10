@@ -130,9 +130,9 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
     const selectImage = (i) => {
         toggleSearchingForImage(false);
 
-        text(i);
+        text(i.link || i.preview);
 
-        image({preview: i});
+        image({preview: i.preview});
     }
 
     return (

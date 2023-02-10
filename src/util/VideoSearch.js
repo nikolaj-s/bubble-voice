@@ -1,15 +1,14 @@
-
 import Axios from "axios";
 import { getToken, url } from "./Validation";
 
-export const ImageSearch = async (query, serverId) => {
+export const VideoSearch = async (query, serverId) => {
     try {
 
         const token = await getToken();
-        console.log(serverId)
-        const images = await Axios({
+        
+        const videos = await Axios({
             method: "POST",
-            url: `${url}/search-for-images`,
+            url: `${url}/search-for-videos`,
             headers: {TOKEN: token},
             data: {query: query, server_id: serverId}
         }).then(response => {
@@ -25,7 +24,7 @@ export const ImageSearch = async (query, serverId) => {
         
         })
 
-        return images;
+        return videos;
 
     } catch (error) {
         console.log(error);

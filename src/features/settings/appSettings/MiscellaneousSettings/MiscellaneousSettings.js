@@ -16,7 +16,7 @@ import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/Se
 
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { miscSettingsChannelSpecificStateChange, miscSettingsClearError, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, selectActivityStatus, selectAutoPlayNativeVideos, selectDefaultServer, selectHardwareAcceleration, selectHideUserStatus, selectMiscSettingsDisableGifProfiles, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsError, selectMiscSettingsErrorMessage, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectMiscSettingsLoading, selectMuteSocialVideos, selectRestartNotice, selectSystemNotifcations, setDefaultServer } from './MiscellaneousSettingsSlice';
+import { miscSettingsChannelSpecificStateChange, miscSettingsClearError, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, selectActivityStatus, selectAutoPlayNativeVideos, selectDefaultServer, selectHardwareAcceleration, selectHideUserStatus, selectMiscSettingsDisableGifProfiles, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsError, selectMiscSettingsErrorMessage, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectMiscSettingsLoading, selectMuteSocialVideos, selectPopOutUserStreams, selectRestartNotice, selectSystemNotifcations, setDefaultServer } from './MiscellaneousSettingsSlice';
 import { selectServerList } from '../../../sideBar/sideBarSlice';
 
 const Settings = () => {
@@ -56,6 +56,8 @@ const Settings = () => {
     const muteSocialVideos = useSelector(selectMuteSocialVideos);
 
     const activityStatus = useSelector(selectActivityStatus);
+
+    const popOutUserStreams = useSelector(selectPopOutUserStreams);
 
     React.useEffect(() => {
 
@@ -113,6 +115,8 @@ const Settings = () => {
             <ToggleButton action={() => {handleChannelSpecificStateChange("hideNonVideoParticapents")}} state={hideNonVideoParticapents} />
             <InputTitle title={"Hide User Status Bar When In A Channel"} />
             <ToggleButton action={() => {handleChannelSpecificStateChange('hideUserStatus')}} state={hideUserStatusBar} />
+            <InputTitle title={"Toggle Hide / Pop Out User Streams On Tab Change"} />
+            <ToggleButton state={popOutUserStreams} action={() => {handleChannelSpecificStateChange("popOutUserStreams")}} />
             <InputTitle title={"Disable Gif Profile Pictures / Banners"} />
             <ToggleButton action={() => {handleChannelSpecificStateChange("disableGifProfiles")}} state={disableGifProfiles} />
             <SettingsHeader title={"Social"} />

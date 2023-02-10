@@ -2,7 +2,7 @@
     width: 92%;
     margin-left: 7%;
     display: flex;
-    height: 45px;
+    height: 35px;
     align-items: center;
     margin-bottom: 2%;
     position: relative;
@@ -21,8 +21,8 @@
 }
 
 .channel-user-placeholder-user-image {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     overflow: hidden;
     margin-right: 5%;

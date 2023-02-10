@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { selectHideUserStatus, selectMiscSettingsHideNonVideoParticapents } from '../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { User } from '../User/User'
 
-export const RoomUserWrapper = ({users}) => {
+export const RoomUserWrapper = ({users, page}) => {
 
     const [expanded, setExpanded] = React.useState("");
 
@@ -51,6 +51,14 @@ export const RoomUserWrapper = ({users}) => {
         }
     // eslint-disable-next-line   
     }, [expanded, hidingNonVideoMembers, hidingUserStatus])
+
+    React.useEffect(() => {
+        console.log(page)
+        setTimeout(() => {
+            handleScaling();
+        }, 100)
+        
+    }, [page])
         
     React.useEffect(() => {
         try {

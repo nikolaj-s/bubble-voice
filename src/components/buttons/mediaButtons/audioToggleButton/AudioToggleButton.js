@@ -18,7 +18,7 @@ export const AudioToggleButton = ({action, state, active, id, description, o_mou
         id={id}
         description={description}
         zIndex={5}
-        borderRadius={10}
+        borderRadius={5}
         o_mouseEnter={o_mouseEnter}
         o_mouseLeave={o_mouseLeave}
         >

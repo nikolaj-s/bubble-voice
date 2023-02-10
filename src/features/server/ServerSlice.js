@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 
 import { fetchMusicWidgetVolume, setMusicWidgetVolume } from "../../util/LocalData";
-import { UnpackMessage } from "../../util/UnpackMessage";
+
 import { addPinnedMessage, removePinnedMessage, setPinnedMessages } from "./ChannelRoom/ServerDashBoard/ServerDashBoardSlice";
 
 import { socket } from "./ServerBar/ServerBar";
@@ -124,12 +124,6 @@ export const fetchServerDetails = createAsyncThunk(
         const server = await socket.request('joined server', {server_id: server_id, status: currentStatus})
         .then(response => {
             if (response.success) {
-
-                for (const channel of response.server.channels) {
-
-                    channel.social.map(m => UnpackMessage(m, response.server.members))
-                    
-                }
 
                 return {...response.server, username: username, user_image: user_image, user_banner: user_banner, display_name: display_name}
             
@@ -416,15 +410,6 @@ const serverSlice = createSlice({
                     }
                 })
             }
-
-            state.channels.forEach(c => {
-                c.social.forEach(s => {
-                    if (s.username === action.payload.username) {
-                        s.content.user_image = action.payload.user_image;
-                        s.content.display_name = action.payload.display_name;
-                    }
-                })
-            })
             
         },
         updateMemberActiveStatus: (state, action) => {
@@ -501,7 +486,7 @@ const serverSlice = createSlice({
 
             if (message_index === -1) return;
 
-            const message = UnpackMessage(action.payload, state.members);
+            const message = action.payload;
 
             state.channels[channel_index].social[message_index]._id = message._id;
 

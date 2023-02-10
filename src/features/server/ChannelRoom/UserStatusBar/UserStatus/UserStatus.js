@@ -23,13 +23,11 @@ export const UserStatus = ({user}) => {
 
     const handleMouseEnter = (e, bool) => {
         try {
-            document.getElementsByClassName(`${user._id}-user-name-status-wrapper`)[0].style.backgroundColor = bool ? primaryColor : null;
-
             const target = e.target.localName !== 'div' || e.target.className === "" ? e.target.offsetParent.className === "" ? e.target.offsetParent.offsetParent : e.target.offsetParent : e.target;
             
             const scroll_top = target.parentElement.scrollTop;
 
-            const l_top = target.offsetTop === 0 ? 70 : target.offsetTop - 15;
+            const l_top = target.offsetTop === 0 ? 65 : target.offsetTop - 20;
 
             setTop(l_top - scroll_top);
 
@@ -41,8 +39,6 @@ export const UserStatus = ({user}) => {
 
     const handleMouseLeave = () => {
 
-        document.getElementsByClassName(`${user._id}-user-name-status-wrapper`)[0].style.backgroundColor = user.user_banner ? `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0.8)` : null;
-        
         togglePreview(false);
     }
 
@@ -60,7 +56,9 @@ export const UserStatus = ({user}) => {
     }
     
     return (
-        <div onClick={openMemberPanel} onMouseEnter={(e) => {handleMouseEnter(e, true)}} onMouseLeave={(e) => {handleMouseLeave(e, false)}} className={`user-status-container ${user._id}-user-status-card status-${user.status}`}>
+        <div 
+        style={{backgroundColor: preview ? primaryColor : null}}
+        onClick={openMemberPanel} onMouseEnter={(e) => {handleMouseEnter(e, true)}} onMouseLeave={(e) => {handleMouseLeave(e, false)}} className={`user-status-container ${user._id}-user-status-card status-${user.status}`}>
             {preview ?
             <div 
             style={{backgroundColor: primaryColor, top: origin ? top + 40 : top}}
@@ -78,16 +76,10 @@ export const UserStatus = ({user}) => {
                 }
             </div>
             <div 
-            style={{
-                backgroundColor:( user.user_banner ) ? `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0.8)` : null
-            }}
             className={`user-name-status-wrapper ${user._id}-user-name-status-wrapper`}>
                 <h3 style={{color: textColor}} >{user.display_name}</h3>
                 <p style={{color: textColor}}>{user.status ? user.status : 'offline'}</p>
             </div>
-            {(user.user_banner) ?
-            <Image cursor='pointer' position='absolute' zIndex={0} image={user.user_banner} />
-            : null}
         </div>
     )
 }
