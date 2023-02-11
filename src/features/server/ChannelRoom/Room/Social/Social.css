@@ -48,12 +48,12 @@
 .image-social-post-preview {
     max-width: 90%;
     width: auto;
-    z-index: 3;
+    z-index: 6;
     max-height: 600px;
     background-color: black;
-    height: 100%;
+    height: auto;
     position: absolute;
-    bottom: 80px;
+    bottom: 90px;
     right: 2%;
     border-radius: var(--border-radius);
     overflow: hidden;

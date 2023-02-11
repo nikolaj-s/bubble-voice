@@ -13,7 +13,7 @@ export const ImageButton = ({action}) => {
     height={20}
     margin="0 10px 0 10px"
     action={action}
-    borderRadius={10}
+    borderRadius={5}
     description={"Upload Image"}
     zIndex={3}
     >

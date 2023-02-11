@@ -1,5 +1,5 @@
 .message-container {
-    width: calc(100%);
+    width: calc(100% - 5px);
     display: flex;
     height: auto;
     flex-direction: column;
@@ -93,8 +93,8 @@
 
 .date-submenu-message-wrapper {
     position: absolute;
-    top: -15px;
-    right: 10px;
+    top: -20px;
+    right: 20px;
     display: flex;
     align-items: center;
     justify-content: space-evenly;

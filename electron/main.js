@@ -13,11 +13,15 @@ const http = require('http');
 
 let startUrl = process.env.ELECTRON_START_URL || 'http://localhost:8382/index.html'
 
+let window_id;
+
 let server;
 
 let win;
 
 let hardwareAccelToggled;
+
+let transparent;
 
 const fs = require('fs');
 
@@ -116,14 +120,32 @@ function createWindow () {
   
   win.loadURL(startUrl);
 
-  win.webContents.on('new-window', (event, url) => {
-      event.preventDefault();
+  const mainScreen = screen.getPrimaryDisplay();
 
-      shell.openExternal(url);
-  }) 
+  transparent = new BrowserWindow({
+    width: mainScreen.size.width,
+    height: mainScreen.size.height,
+    transparent: true,
+    frame: false,
+    alwaysOnTop: true,
+    icon: __dirname + '/logo.png'
+  })
 
+  transparent.setIgnoreMouseEvents(true);
+
+  transparent.setFocusable(false);
   // Open the DevTools.
   process.env.ELECTRON_START_URL ? win.webContents.openDevTools() : null
+
+  const handleRedirect = (e, url) => {
+    e.preventDefault();
+  
+    shell.openExternal(url);
+  }
+  
+  win.webContents.on('will-navigate', handleRedirect);
+  
+  win.webContents.on('new-window', handleRedirect);
 
   win.on('close', () => {
 
@@ -133,6 +155,8 @@ function createWindow () {
     }
     
     fs.writeFileSync(initPath, JSON.stringify(window_data))
+
+    transparent.close();
   
   })
 
@@ -148,7 +172,7 @@ function createWindow () {
   ipcMain.on('close', () => {
     console.log('closing')
     win.close();
-  //  transparent.close();
+    transparent.close();
   })
   
   ipcMain.on('min', () => {
@@ -402,6 +426,14 @@ app.whenReady().then(() => {
 
   tray.setContextMenu(ctxMenu);
 
+  session.defaultSession.setDisplayMediaRequestHandler((request, callback) => {
+    desktopCapturer.getSources({types: ['window', 'screen', 'audio']}).then((sources) => {
+      const index = sources.findIndex(s => s.id === window_id);
+  
+      callback({video: sources[index], audio: 'loopbackWithMute'});
+    })
+  })
+
   createWindow();
 
   setTimeout(() => {
@@ -452,10 +484,6 @@ ipcMain.on('write-hardware-change', (event, args) => {
 
 })
 
-// get streaming url for music
-ipcMain.on('get_music_stream', async (event, data) => {
-  
-})
 
 // handle updates
 ipcMain.on('check-for-updates', async (event, data) => {
@@ -480,3 +508,16 @@ autoUpdater.on('update-not-available', () => {
 autoUpdater.on('update-downloaded', () => {
   win.webContents.send('update-available');
 })
+
+// handle open links
+ipcMain.on('open-link', (event, data) => {
+  shell.openExternal(data.url);
+})
+
+ipcMain.on('set-window-id', (event, data) => {
+
+  window_id = data.id;
+
+  console.log(window_id);
+})
+

@@ -46,9 +46,9 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
         id={`server-button-${server_id}`}
         animate={animation}
         style={{
-            width: "calc(98% - 10px)",
+            width: "calc(98% - 20px)",
 
-            height: "calc(100px)",
+            height: "calc(80px)",
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -69,11 +69,11 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
         >
             <div 
             style={{
-                width: '100px',
-                height: "90%",
+                width: '70px',
+                height: "70px",
                 overflow: 'hidden',
                 flexShrink: 0,
-                borderRadius: '5px'
+                borderRadius: '50%'
             }}>
                 <Image cursor='pointer' image={server_banner} />
             </div>
@@ -81,19 +81,20 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
             style={{
                 zIndex: 1,
                 right: 0,
-                fontSize: '0.7rem',
+                fontSize: '0.6rem',
                 width: '100%',
                 height: '100%',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                transition: '0.2s'
+                justifyContent: 'flex-start',
+                transition: '0.2s',
+                marginLeft: 5
             }}
             >
                 <h1
                 style={{
                     color: textColor,
-                    fontSize: '0.9rem',
+                    fontSize: '0.8rem',
                     marginLeft: '0.2rem',
                     fontWeight: 400
                 }}

@@ -44,6 +44,8 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
 
     const serverId = useSelector(selectServerId);
 
+    const iFrames = ['youtu', 'pornhub', 'xvideo', 'twitter', 'reddit', 'vimeo', 'redgif']
+
     const incrementPrecentage = (value) => {
         setPercent(value)
     }
@@ -130,7 +132,11 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
     const selectImage = (i) => {
         toggleSearchingForImage(false);
 
-        text(i.link || i.preview);
+        let frame;
+        
+        if (i.link) frame = iFrames.some(f => i.link.includes(f));
+
+        text((frame ? i.link : i.preview) || i.preview);
 
         image({preview: i.preview});
     }

@@ -75,13 +75,18 @@ export const ExpandContent = () => {
                 } else if (text.includes('steampowered')) {
     
                     toggleIframe("https://store.steampowered.com/widget/" + (text.split('app/')[1].split('/')[0]));
-    
+                
+                } else if (text.includes('vimeo')) {
+                    
+                        toggleIframe("https://player.vimeo.com/video/" + text.split('com/')[1]);
+        
                 } else {
                     toggleIframe(false);
                 }
 
             }
         }
+        console.log(expandedContent)
     }, [expandedContent])
 
     return (

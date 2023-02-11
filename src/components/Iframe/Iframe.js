@@ -13,22 +13,21 @@ export const Iframe = ({link, marginLeft, maxWidth = 800}) => {
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
-    const loaded = () => {
+    const loaded = (e) => {
+       
         toggleRender(true);
     }
 
     return (
         <>
         {link ?
-            <div style={{maxWidth: maxWidth, marginLeft: marginLeft, minHeight: link?.includes('steampowered') ? '200px' : '600px', borderRadius: 10, position: 'relative'}}>
+            <div style={{maxWidth: maxWidth, marginLeft: marginLeft, minHeight: link?.includes('steampowered') ? '200px' : null, maxHeight: 600, borderRadius: 5, position: 'relative', backgroundColor: 'black', display: 'flex', overflow: 'hidden'}}>
                 
                 <iframe 
                 onLoad={loaded}
-                style={{
-                    borderRadius: 10
-                }}
+                
                 title={link}
-                sandbox='allow-scripts allow-same-origin allow-presentation allow-popups' loading='lazy' src={link} allow="clipboard-write; encrypted-media;" frameBorder='0' scrolling='no' allowFullScreen={false} width='100%' height={link?.includes('steampowered') ? '200px' : '600px'}></iframe>
+                sandbox='allow-scripts allow-same-origin allow-presentation allow-popups' loading='lazy' src={link} allow="clipboard-write; encrypted-media;" frameBorder='0' scrolling='no' allowFullScreen={false} width='100%' height={link?.includes('steampowered') ? '200px' : '500px'}></iframe>
                 {!rendered ?
                 <motion.div 
             style={{

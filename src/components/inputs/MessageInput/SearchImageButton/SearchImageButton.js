@@ -14,7 +14,7 @@ export const SearchImageButton = ({action, margin}) => {
         width={20}
         height={20}
         invert={true}
-        borderRadius={10}
+        borderRadius={5}
         zIndex={3}
         margin={margin}
         >

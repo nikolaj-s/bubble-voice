@@ -9,7 +9,7 @@ export const SendButton = ({action, color}) => {
         width={20}
         height={20}
         invert={true}
-        borderRadius={10}
+        borderRadius={5}
         description={"Send"}
         zIndex={3}
         >

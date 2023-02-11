@@ -100,6 +100,14 @@ export const Menu = () => {
     }
 
     React.useEffect(() => {
+        if (page === 'join') {
+            document.getElementById('search-for-server-input').focus();
+        } else {
+            document.getElementById('new-server-name-input').focus();
+        }
+    }, [page])
+
+    React.useEffect(() => {
 
         dispatch(setHeaderTitle("Add Server"))
 
@@ -152,9 +160,9 @@ export const Menu = () => {
                 {page === 'join' ?
                 <div className='inner-create-server-menu-container'>
                     <div className='search-server-input-wrapper'>
-                        <TextInput keyCode={(key) => {if (key === 13) search()}} action={handleServerSearchInput} inputValue={serverSearchQuery} marginTop='10px' placeholder={"Server Name"} />
+                        <TextInput id={"search-for-server-input"} keyCode={(key) => {if (key === 13) search()}} action={handleServerSearchInput} inputValue={serverSearchQuery} marginTop='10px' placeholder={"Server Name"} />
                         <div className='server-search-button-container'>
-                            <AltSearchButton action={search} borderRadius={0} invert={false} height={30} width={32} />
+                            <AltSearchButton action={search} borderRadius={0} invert={false} height={28} width={32} />
                         </div>
                     </div>
                     <ServerList selectServer={selectServerToJoin} noresults='No Results' serverList={serverResults} />
@@ -162,7 +170,7 @@ export const Menu = () => {
                 :
                 <div className='inner-create-server-menu-container'>
                     <InputTitle title={"Server Name"} />
-                    <TextInput inputValue={serverName} action={handleInput} stateSelector={"serverName"} placeholder={"Name"} />
+                    <TextInput id={"new-server-name-input"} inputValue={serverName} action={handleInput} stateSelector={"serverName"} placeholder={"Name"} />
                     <InputTitle title={"Server Banner"} />
                     <div className='create-server-banner-container'>
                         <ImageInput getFile={setServerBanner} center={true} />

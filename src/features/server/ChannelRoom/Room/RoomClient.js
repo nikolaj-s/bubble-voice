@@ -317,7 +317,7 @@ export class RoomClient {
 
                         el.playsInline = false;
 
-                        el.muted = false;
+                        el.muted = true;
 
                         el.volume = 1;
 
@@ -608,26 +608,13 @@ export class RoomClient {
                 track 
             }
 
-            if (screen) {
+            // let stream_audio;
 
-                // let stream_audio_source = await navigator.mediaDevices.getUserMedia({
-                //         audio: {
-                //             mandatory: {
-                //                 chromeMediaSource: 'desktop',
-                //                 echoCancellation: true
-                //             }
-                //         },
-                //         video: {
-                //             mandatory: {
-                //                 chromeMediaSource: 'desktop',
-                //             }
-                //         }
-                    
-                // })
-
-                // stream_audio = stream_audio_source.getAudioTracks()[0];
+            // if (screen) {
+            //     console.log(stream.getAudioTracks())
+            //     stream_audio = stream.getAudioTracks()[0];
             
-            }  
+            // }  
 
             if (!audio) {
                 params.appData = {type: screen ? 'screen share' : 'web cam'}
@@ -685,7 +672,7 @@ export class RoomClient {
                 el.srcObject = stream;
                 el.id = producer.id;
                 el.playsInline = false;
-
+                el.muted = true;
                 if (this.webCamMirrorState) {
                     el.style.transform = 'scaleX(-1)'
                 }
@@ -719,6 +706,37 @@ export class RoomClient {
             }
 
             let stream_audio_producer;
+
+            // if (stream_audio) {
+
+            //     let stream_audio_producer = await this.producerTransport.produce({ track: stream_audio })
+
+            //     this.producers.set(stream_audio_producer.id, stream_audio_producer);
+            
+            //     stream_audio_producer.on('trackended', () => {
+            //         this.closeProducer(type);
+            //     })
+    
+            //     stream_audio_producer.on('transportclose', () => {
+            //         if (!audio) {
+            //             el.srcObject.getTracks().forEach(track => {
+            //                 track.stop();
+            //             })
+            //         }
+    
+            //         this.producers.delete(producer.id);
+            //     })
+    
+            //     stream_audio_producer.on('close', () => {
+            //         if (!audio) {
+            //             el.srcObject.getTracks().forEach(track => {
+            //                 track.stop();
+            //             })
+            //         }
+    
+            //         this.producers.delete(producer.id);
+            //     })
+            // }
             
             producer.on('trackended', () => {
                 this.closeProducer(type);

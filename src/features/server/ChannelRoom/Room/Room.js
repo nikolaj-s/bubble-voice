@@ -203,7 +203,7 @@ const Component = () => {
 
             ipcRenderer.invoke("GET_SOURCES").then((result) => {
 
-                dispatch(setScreens(result))
+                dispatch(setScreens(result));
 
                 dispatch(setSelectingScreensState(true));
 
@@ -288,6 +288,11 @@ const Component = () => {
             if (currentScreen !== null) {
                 dispatch(setScreens([]));
                 dispatch(setSelectingScreensState(false));
+
+                const ipcRenderer = window.require('electron').ipcRenderer;
+
+                ipcRenderer.send("set-window-id", {id: currentScreen});
+
                 client?.produce('screenType', currentScreen);
                 dispatch(updateMemberStatus({username: user.username, action: {screenshare: true}}))
                 socket?.emit('user status', {username: user.username, action: {screenshare: true}})

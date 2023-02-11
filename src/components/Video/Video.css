@@ -23,7 +23,7 @@
     justify-content: space-evenly;
     left: 0;
     padding: 2% 0%;
-    width: 200px;
+    width: 200px !important;
     border-top-right-radius: var(--border-radius);
     border-bottom-left-radius: 0px;
 }
