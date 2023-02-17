@@ -10,7 +10,7 @@
     flex-shrink: 1;
     justify-self: flex-end;
     overflow-x: hidden;
-    z-index: 1;
+    z-index: 2;
 }
 
 .user-status-bar h3 {

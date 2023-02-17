@@ -115,8 +115,10 @@ const Settings = () => {
             <ToggleButton action={() => {handleChannelSpecificStateChange("hideNonVideoParticapents")}} state={hideNonVideoParticapents} />
             <InputTitle title={"Hide User Status Bar When In A Channel"} />
             <ToggleButton action={() => {handleChannelSpecificStateChange('hideUserStatus')}} state={hideUserStatusBar} />
-            <InputTitle title={"Toggle Hide / Pop Out User Streams On Tab Change"} />
-            <ToggleButton state={popOutUserStreams} action={() => {handleChannelSpecificStateChange("popOutUserStreams")}} />
+            { //<InputTitle title={"Toggle Hide / Pop Out User Streams On Tab Change"} /> 
+            
+                //<ToggleButton state={popOutUserStreams} action={() => {handleChannelSpecificStateChange("popOutUserStreams")}} />
+            }
             <InputTitle title={"Disable Gif Profile Pictures / Banners"} />
             <ToggleButton action={() => {handleChannelSpecificStateChange("disableGifProfiles")}} state={disableGifProfiles} />
             <SettingsHeader title={"Social"} />

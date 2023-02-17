@@ -117,7 +117,7 @@ export const RoomNavigation = ({page, action}) => {
                 onMouseDown={() => {handleAnimation(accentColor, voiceButtonAnimation, 'voice')}}
                 onMouseUp={() => {handleAnimation(secondaryColor, voiceButtonAnimation, 'voice')}}
                 animate={voiceButtonAnimation} onClick={() => {handleAction('voice')}} className='room-navigation-button stream-room-button'>
-                    {videoDesc ? <p style={{color: textColor, backgroundColor: secondaryColor, marginLeft: 27}}>Stream Room</p> : null}
+                    {videoDesc ? <p style={{color: textColor, backgroundColor: secondaryColor, marginLeft: 20}}>Stream Room</p> : null}
                     <VideoRoomIcon color={textColor} />
                 </motion.div>
                 {permissions?.user_can_view_channel_content ? 

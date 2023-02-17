@@ -53,7 +53,7 @@ const MiscellaneousSettingsSlice = createSlice({
         hideNonVideoParticapents: false,
         disableGifProfiles: false,
         hideUserStatus: false,
-        popOutUserStreams: false,
+        popOutUserStreams: true,
         autoPlayNativeVideos: true,
         defaultServer: {label: "Default", id: ""},
         roomScale: 1,
@@ -195,7 +195,7 @@ const MiscellaneousSettingsSlice = createSlice({
             
             if (saved_data.activity) state.activity = true;
 
-            if (saved_data.popOutUserStreams) state.popOutUserStreams = true;
+          //  if (saved_data.popOutUserStreams) state.popOutUserStreams = true;
         }
     }
 })

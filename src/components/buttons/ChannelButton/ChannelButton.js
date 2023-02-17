@@ -104,10 +104,11 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
             animate={animation} 
             onMouseEnter={() => {handleAnimation(primaryColor, true)}}
             onMouseLeave={() => {handleAnimation(transparentPrimaryColor, false)}}
+            onMouseOver={() => {handleAnimation(primaryColor, true)}}
             onMouseDown={() => {handleAnimation(accentColor)}}
             onMouseUp={() => {handleAnimation(primaryColor)}}
             onClick={handleAction}
-            transition={{duration: 0.1}}
+            transition={{duration: 0}}
             style={{
                 border: `solid 4px ${active ? primaryColor : transparentPrimaryColor}`,
                 backgroundColor: active ? accentColor : transparentPrimaryColor,

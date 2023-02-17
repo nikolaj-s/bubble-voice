@@ -5,7 +5,7 @@
     align-items: center;
     position: relative;
     min-height: 45px;
-    z-index: 3;
+    z-index: 4;
     cursor: pointer;
     border-radius: 5px;
     margin: 3px auto;
@@ -70,7 +70,7 @@
 
 .preview-user-status-shrinked {
     position: fixed;
-    z-index: 3;
+    z-index: 5;
     right: 60px;
     display: none;
 }

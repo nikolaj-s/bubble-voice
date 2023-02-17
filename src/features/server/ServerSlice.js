@@ -6,6 +6,8 @@ import { addPinnedMessage, removePinnedMessage, setPinnedMessages } from "./Chan
 
 import { socket } from "./ServerBar/ServerBar";
 
+let pushToTalkTimeout;
+
 export const unBanMember = createAsyncThunk(
     'serverSlice/unBanMember',
     async (id, {rejectWithValue}) => {
@@ -229,6 +231,7 @@ const serverSlice = createSlice({
         serverSettingsOpen: false,
         // local push to talk state
         pushToTalkActive: false,
+        pushToTalkTimeOut: null,
         //social
         selectedChannelSocial: "", 
         searchedImages: [],
