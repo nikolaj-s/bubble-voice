@@ -1,7 +1,7 @@
 
 // library's
 import React from 'react'
-import { useDispatch, useSelector} from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 // state
 import { setHeaderTitle } from '../contentScreen/contentScreenSlice';

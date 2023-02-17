@@ -436,10 +436,6 @@ app.whenReady().then(() => {
 
   createWindow();
 
-  setTimeout(() => {
-    win.webContents.send('update-available');
-  }, 10000)
-
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
