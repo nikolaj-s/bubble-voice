@@ -1,8 +1,8 @@
 
 .toggle-button-container {
-    width: calc(85px - 8px + 10px);
+    width: calc(55px - 6px + 10px);
     display: flex;
-    height: calc(55px - 18px);
+    height: calc(40px - 18px);
     border-radius: var(--border-radius);
     align-items: center;
     padding: 5px;
@@ -11,8 +11,8 @@
 }
 
 .toggle-button-container .switch {
-    width: 40px;
-    height: 40px;
+    width: 24px;
+    height: 24px;
     border-radius: var(--border-radius);
     flex-shrink: 0;
 }

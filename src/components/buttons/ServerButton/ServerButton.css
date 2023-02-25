@@ -1,0 +1,40 @@
+
+.server-button-container {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: 0.1s;
+    margin: 4px 0;
+    position: relative;
+    z-index: 3;
+}
+
+.server-button-image-container {
+    border-radius: 50%;
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    object-fit: cover;
+    transition: 0.2s;
+}
+
+.server-button-name-container {
+    position: absolute;
+    z-index: 10;
+    left: 70px;
+    border-radius: var(--border-radius);
+    width: 120px;
+    padding: 5px;
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.395);
+}
+
+.server-button-name-container h2 {
+    font-size: 1rem;
+    font-weight: 400;
+    text-align: center;
+}

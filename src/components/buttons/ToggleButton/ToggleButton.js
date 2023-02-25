@@ -22,7 +22,7 @@ export const ToggleButton = ({state = false, action}) => {
 
     const handleAnimation = (color) => {
         animation.start({
-            border: `solid 4px ${color}`
+            border: `solid 3px ${color}`
         })
     }
 
@@ -33,7 +33,7 @@ export const ToggleButton = ({state = false, action}) => {
         style={{
             justifyContent: state ? 'flex-end' : 'flex-start',
             backgroundColor: primaryColor,
-            border: `solid 4px ${primaryColor}`,
+            border: `solid 3px ${primaryColor}`,
         }}
         onMouseOver={() => {handleAnimation(accentColor)}}
         onMouseLeave={() => {handleAnimation(primaryColor)}}

@@ -87,38 +87,38 @@ const Settings = () => {
             <InputTitle title={"Push To Talk"} />
             <div className='key-bind-input-wrapper'>
                 <TextInput keyCode={handleKeyCodeUpdate} stateSelector='push_to_talk' inputValue={local['push_to_talk'] ? local['push_to_talk'].key : pushToTalkkey.key} />
-                <ClearButton action={() => {handleKeyCodeUpdate({}, "push_to_talk", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} name={"Clear Bind"} />
+                <ClearButton width={40} height={40} action={() => {handleKeyCodeUpdate({}, "push_to_talk", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} name={"Clear Bind"} />
             </div>
             <InputTitle title={"Push To Mute"} />
             <div className='key-bind-input-wrapper'>
                 <TextInput keyCode={handleKeyCodeUpdate} stateSelector='push_to_mute' inputValue={local['push_to_mute'] ? local['push_to_mute'].key : pushToMuteKey.key} />
-                <ClearButton action={() => {handleKeyCodeUpdate({}, "push_to_mute", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} name={"Clear Bind"} />
+                <ClearButton width={40} height={40} action={() => {handleKeyCodeUpdate({}, "push_to_mute", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} name={"Clear Bind"} />
             </div>
             <InputTitle title={"Mute Mic"} />
             <div className='key-bind-input-wrapper'>
                 <TextInput keyCode={handleKeyCodeUpdate} stateSelector='mute_mic' inputValue={local['mute_mic'] ? local['mute_mic'].key : muteMicKey.key} />
-                <ClearButton action={() => {handleKeyCodeUpdate({}, "mute_mic", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} name={"Clear Bind"} />
+                <ClearButton width={40} height={40} action={() => {handleKeyCodeUpdate({}, "mute_mic", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} name={"Clear Bind"} />
             </div>
             <InputTitle title={"Mute Audio"} />
             <div className='key-bind-input-wrapper'>
                 <TextInput keyCode={handleKeyCodeUpdate} stateSelector='mute_audio' inputValue={local['mute_audio'] ? local['mute_audio'].key : muteAudioKey.key} />
-                <ClearButton action={() => {handleKeyCodeUpdate({}, "mute_audio", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} name={"Clear Bind"} />
+                <ClearButton width={40} height={40} action={() => {handleKeyCodeUpdate({}, "mute_audio", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} name={"Clear Bind"} />
             </div>
             <InputTitle title={"Activate Camera"} />
             <div className='key-bind-input-wrapper'>    
                 <TextInput keyCode={handleKeyCodeUpdate} stateSelector='activate_camera' inputValue={local['activate_camera'] ? local['activate_camera'].key : activateCameraKey.key} />
-                <ClearButton action={() => {handleKeyCodeUpdate({}, "activate_camera", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} name={"Clear Bind"} />
+                <ClearButton width={40} height={40} action={() => {handleKeyCodeUpdate({}, "activate_camera", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} name={"Clear Bind"} />
             </div>
             <InputTitle title={"Share Screen"} />
             <div className='key-bind-input-wrapper'>
                 <TextInput keyCode={handleKeyCodeUpdate} stateSelector='share_screen' inputValue={local['share_screen'] ? local['share_screen'].key : shareScreenKey.key} />
-                <ClearButton action={() => {handleKeyCodeUpdate({}, "share_screen", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} name={"Clear Bind"} />
+                <ClearButton width={40} height={40} action={() => {handleKeyCodeUpdate({}, "share_screen", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} name={"Clear Bind"} />
             </div>    
             <SettingsHeader title={"Misc"} />
             <InputTitle title={"Disconnect"} />
             <div className='key-bind-input-wrapper'>
                 <TextInput keyCode={handleKeyCodeUpdate} stateSelector='disconnect' inputValue={local['disconnect'] ? local['disconnect'].key : disconnectKey.key} />
-                <ClearButton action={() => {handleKeyCodeUpdate({}, "disconnect", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} name={"Clear Bind"} />
+                <ClearButton width={40} height={40} action={() => {handleKeyCodeUpdate({}, "disconnect", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} name={"Clear Bind"} />
             </div>
             {update ? <ApplyCancelButton cancel={handleCancel} apply={saveKeyBinds} name='Save' /> : null}
             <SettingsSpacer />

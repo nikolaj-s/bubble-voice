@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 import { ButtonAnimationWrapper } from '../ButtonAnimationWrapper/ButtonAnimationWrapper'
 
-export const DisconnectButton = ({action, width, height, margin}) => {
+export const DisconnectButton = ({action, width, height, margin, padding, desc_space}) => {
 
     const color = useSelector(selectTextColor)
     
@@ -12,7 +12,9 @@ export const DisconnectButton = ({action, width, height, margin}) => {
     zIndex={1}
     description={"Disconnect"}
     margin={margin}
+    padding={padding}
     altInvert={true}
+    desc_space={desc_space}
     borderRadius={5}
     width={width} height={height} id={"disconnect-from-channel-button"} action={action}>
         <svg 

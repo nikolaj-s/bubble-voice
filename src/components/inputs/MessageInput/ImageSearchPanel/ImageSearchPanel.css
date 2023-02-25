@@ -1,17 +1,19 @@
 .message-image-search-container {
     display: flex;
     flex-direction: column;
-    width: calc(100%);
+    width: calc(100% - 11px);
     height: auto;
     max-height: 85%;
+    max-width: 700px;
     position: absolute;
     height: auto;
     z-index: 5;
-    bottom: 65px;
-    left: 0;
+    bottom: 75px;
+    box-shadow: -5px -5px 30px rgba(0, 0, 0, 0.452);
+    right: 6px;
     transition: 0.3s;
     overflow: hidden;
-    
+    border-radius: var(--border-radius);
 }
 
 .inner-message-image-search-container {
@@ -59,7 +61,8 @@
     max-height: 600px;
     overflow-y: auto;
     min-height: 200px;
-    width: 100%;
+    width: calc(100% - 10px);
+    padding: 0 5px;
 }
 
 .image-search-result-container {

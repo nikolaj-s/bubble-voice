@@ -112,11 +112,19 @@ export const ControlBar = () => {
         <>
             <ScreenShareMenu selectingScreens={selectingScreens} />
             <div className='control-bar-container' 
-            style={{borderTop: `solid 3px ${accentColor}`}}
+            style={{borderTop: `solid 2px ${accentColor}`}}
             >
                 <div className='controls-wrapper'>
-                    <SettingsButton action={toggleAppSettings} />
+                    <SettingsButton 
+                    width={20}
+                    height={20}
+                    padding={7}
+                    desc_space={20}
+                    action={toggleAppSettings} />
                     <WebCamButton 
+                    width={20}
+                    height={20}
+                    padding={7}
                     action={() => {toggleFunction('webCamState')}} 
                     state={webCamState} 
                     active={current_channel_id === null || channel.disable_streams}
@@ -124,12 +132,20 @@ export const ControlBar = () => {
                     loading={loadingWebCam}
                     />
                     <MicToggleButton 
+                    width={20}
+                    height={20}
+                    padding={7}
+                    desc_space={20}
                     action={() => {toggleFunction('microphoneState')}} 
                     state={microphoneState} 
                     active={current_channel_id === null || channel.disable_streams}
                     id={"toggle-microphone-button"}
                     />
                     <AudioToggleButton 
+                    width={20}
+                    height={20}
+                    padding={7}
+                    desc_space={20}
                     action={() => {toggleFunction('audioState')}} 
                     state={audioState} 
                     active={current_channel_id === null || channel.disable_streams}
@@ -137,6 +153,10 @@ export const ControlBar = () => {
                     description={(current_channel_id === null  || channel.disable_streams) ? null : `${audioState ? 'Deafen' : 'Un-Deafen'}`}
                     />
                     <ShareScreenButton 
+                    width={20}
+                    height={20}
+                    padding={7}
+                    desc_space={20}
                     loading={loadingScreenShare}
                     action={() => {toggleFunction('screenShareState')}} 
                     state={screenShareState} 

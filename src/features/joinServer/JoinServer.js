@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { useDispatch, useSelector } from 'react-redux';
 
 // state
-import { cleanUpJoiningNewServerState, closeJoinServerError, joinNewServer, selectServerToJoin, selectServerToJoinErrorMessage, selectServerToJoinErrorState, selectServerToJoinLoading, selectServerToJoinPassword, setJoinServerState } from './joinServerSlice';
+import { cleanUpJoiningNewServerState, closeJoinServerError, joinNewServer, selectServerToJoin, selectServerToJoinErrorMessage, selectServerToJoinErrorState, selectServerToJoinLoading, selectServerToJoinPassword, setJoinServerState, setServerToJoin } from './joinServerSlice';
 
 // components
 import { Image } from '../../components/Image/Image';
@@ -13,14 +13,17 @@ import { Image } from '../../components/Image/Image';
 // style
 import "./JoinServer.css";
 import { setHeaderTitle } from '../contentScreen/contentScreenSlice';
-import { selectPrimaryColor, selectTextColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { InputTitle } from '../../components/titles/inputTitle/InputTitle';
 import { TextInput } from '../../components/inputs/TextInput/TextInput';
 import { ApplyCancelButton } from '../../components/buttons/ApplyCancelButton/ApplyCancelButton';
 import { LoadingErrorComponent } from '../../components/LoadingErrorComponent/LoadingErrorComponent';
+import { handleLeavingServer, selectServerId } from '../server/ServerSlice';
+import { playSoundEffect } from '../settings/soundEffects/soundEffectsSlice';
+import { clearWidgetOverLay } from '../server/ChannelRoom/Room/RoomActionOverlay/RoomActionOverlaySlice';
 
 
-const Display = () => {
+export const JoinServer = () => {
 
     const dispatch = useDispatch();
 
@@ -29,6 +32,8 @@ const Display = () => {
     const server = useSelector(selectServerToJoin);
 
     const primaryColor = useSelector(selectPrimaryColor);
+
+    const secondaryColor = useSelector(selectSecondaryColor);
 
     const textColor = useSelector(selectTextColor);
 
@@ -40,6 +45,8 @@ const Display = () => {
 
     const password = useSelector(selectServerToJoinPassword);
 
+    const currentServer = useSelector(selectServerId);
+    
     React.useEffect(() => {
 
         dispatch(setHeaderTitle("Join Server"))
@@ -49,10 +56,9 @@ const Display = () => {
         }
     // eslint-disable-next-line
     }, [])
-
+    
     const handleCancel = () => {
-        dispatch(cleanUpJoiningNewServerState())
-        navigate('/dashboard/createserver');
+        dispatch(cleanUpJoiningNewServerState());
     }
 
     const closeError = () => {
@@ -64,11 +70,38 @@ const Display = () => {
     }
 
     const join = () => {
-        dispatch(joinNewServer());
+
+        if (currentServer) {
+
+            dispatch(playSoundEffect("disconnected"));
+
+            dispatch(clearWidgetOverLay());
+
+            dispatch(handleLeavingServer());
+
+            navigate('/dashboard');
+
+            setTimeout(() => {
+
+                dispatch(joinNewServer());
+
+            }, 500)
+        } else {
+
+            dispatch(joinNewServer());
+        
+        }
+
+        dispatch(setServerToJoin({}))
+        
     }
 
     return (
-        <motion.div className='join-server-container'>
+        <>
+        {server?.server_name ?
+        <motion.div 
+        style={{backgroundColor: secondaryColor}}
+        className='join-server-container'>
             <div className='join-server-inner-container'>
                 <div className='join-server-banner-container'>
                     <Image image={server?.server_banner} />
@@ -84,10 +117,8 @@ const Display = () => {
             <LoadingErrorComponent action={closeError}  loading={loading} errorMessage={errorMessage}
             error={error}  />
         </motion.div>
+        : null}
+    </>
     )
 }
-
-export const JoinServer = () => useRoutes([
-    {path: "/join-server/:id", element: <Display /> }
-])
 

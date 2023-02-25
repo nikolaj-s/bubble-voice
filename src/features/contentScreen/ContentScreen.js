@@ -15,12 +15,13 @@ import { NewAccount } from '../../components/NewAccount/NewAccount';
 import { AudioInit } from '../AudioInit/AudioInit';
 
 // state
-import { selectSecondaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, selectSecondaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { HeaderTitle } from '../../components/titles/headerTitle/headerTitle';
 import { selectHeaderTitle } from './contentScreenSlice';
 
 // style's
 import "./ContentScreen.css";
+import { selectAddServerMenuVisible } from '../createServer/createServerSlice';
 
 export const ContentScreen = () => {
     // color schema
@@ -30,16 +31,19 @@ export const ContentScreen = () => {
 
     const headerTitleState = useSelector(selectHeaderTitle);
 
+    const primaryColor = useSelector(selectPrimaryColor);
+
+    const addServerMenuVisisble = useSelector(selectAddServerMenuVisible);
+
     return (
         <>
             <motion.div className='content-screen-container' >
                 <HeaderTitle title={headerTitleState} spacing={true} />
-                <div style={{backgroundColor: secondaryColor}} className='content-screen-inner-container'>
+                <div style={{backgroundColor: secondaryColor, borderLeft: `solid 2px ${primaryColor}`}} className='content-screen-inner-container'>
                     <Disconnected />
                     <NoServerSelectedDisplay />
                     <SettingsRoutesWrapper />
-                    <CreateServerMenu />
-                    <JoinServer />
+                    {addServerMenuVisisble ? <CreateServerMenu /> : null}
                     <ChannelRoom />
                     <ExpandContent />
                     <NewAccount />

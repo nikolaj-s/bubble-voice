@@ -70,7 +70,7 @@ export const HomeNavigation = ({navigate, page}) => {
 
     return (
         <div 
-        style={{backgroundColor: primaryColor, borderBottom: `solid 3px ${primaryColor}`}}
+        style={{backgroundColor: primaryColor, borderBottom: `solid 2px ${primaryColor}`}}
         className='home-navigation-container'>
             <motion.div
             animate={HomeBtnAnimation}

@@ -4,7 +4,8 @@ import { throwInitializationError } from "../../../initializingAppScreen/initial
 
 import Axios from 'axios';
 import { getToken, url } from "../../../../util/Validation";
-import { setServerId, setServerName } from "../../../server/ServerSlice";
+import { setServerId, setServerName, updateMemberFile } from "../../../server/ServerSlice";
+import { socket } from "../../../server/ServerBar/ServerBar";
 
 export const fetchAccount = createAsyncThunk(
     'accountSettingsSlice/fetchAccount',
@@ -51,7 +52,7 @@ export const fetchAccount = createAsyncThunk(
 
 export const updateAccount = createAsyncThunk(
     'accountSettingsSlice/updateAccount',
-    async ({userImage, userBanner}, {rejectWithValue, getState}) => {
+    async ({userImage, userBanner}, {rejectWithValue, getState, dispatch}) => {
         const token = await getToken();
 
         const {password, newPassword, confirmNewPassword, display_name} = getState().accountSettingsSlice;
@@ -85,6 +86,16 @@ export const updateAccount = createAsyncThunk(
 
             return response.data;
         })
+
+        if (update && socket) {
+            await socket.request('update member file')
+            .then(res => {
+                return dispatch(updateMemberFile(res.user));
+            })
+            .catch(error => {
+                return  rejectWithValue({error: true, errorMessage: error})
+            })
+        }
 
         return update;
         

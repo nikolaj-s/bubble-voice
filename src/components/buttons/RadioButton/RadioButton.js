@@ -38,8 +38,8 @@ export const RadioButton = ({name, state, action}) => {
         transition={{duration: 0.1}}
         className='radio-button-container'>
             <div style={{
-                width: 40,
-                height: 40,
+                width: 25,
+                height: 25,
                 borderRadius: '50%',
                 flexShrink: 0,
                 backgroundColor: state ? textColor : primaryColor

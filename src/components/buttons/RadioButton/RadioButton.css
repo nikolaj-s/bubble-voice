@@ -3,10 +3,10 @@
     display: flex;
     justify-content: flex-start;
     width: calc(100% - 1rem);
-    height: 40px;
+    height: 30px;
     align-items: center;
     cursor: pointer;
-    margin-bottom: 2%;
+    margin-bottom: 3px;
     padding: 0.5rem;
     border-radius: var(--border-radius);
 }
@@ -16,4 +16,5 @@
     letter-spacing: var(--font-spacing);
     margin-left: 1rem;
     text-transform: capitalize;
+    font-size: 1rem;
 }

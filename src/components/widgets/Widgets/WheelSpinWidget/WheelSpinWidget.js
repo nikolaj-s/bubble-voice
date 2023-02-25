@@ -3,13 +3,14 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentChannelId, throwServerError } from '../../../../features/server/ServerSlice';
 import { selectDisplayName } from '../../../../features/settings/appSettings/accountSettings/accountSettingsSlice';
-import { selectAccentColor, selectPrimaryColor, selectSecondaryColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectSecondaryColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { useAnimation, motion } from 'framer-motion';
 
 // socket
 import { socket } from '../../../../features/server/ServerBar/ServerBar';
 
 import "./WheelSpinWidget.css";
+import { selectDisableTransparancyEffects } from '../../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 export const WheelSpinWidget = ({widget, editing, initDeg = 0, onEnd = () => {}, finishingDeg, overlay = false}) => {
 
@@ -17,13 +18,11 @@ export const WheelSpinWidget = ({widget, editing, initDeg = 0, onEnd = () => {},
 
     const options = widget.content.text.split(',');
 
-    const accentColor = useSelector(selectAccentColor);
-
-    const primaryColor = useSelector(selectPrimaryColor);
-
     const secondaryColor = useSelector(selectSecondaryColor)
 
     const display_name = useSelector(selectDisplayName);
+
+    const disableTransparancyEffects = useSelector(selectDisableTransparancyEffects);
 
     const channelId = useSelector(selectCurrentChannelId);
 
@@ -110,7 +109,7 @@ export const WheelSpinWidget = ({widget, editing, initDeg = 0, onEnd = () => {},
 
     return (
         <div 
-        style={{backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0.8)`}}
+        style={{backgroundColor: disableTransparancyEffects ? secondaryColor : `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0.8)`}}
         className='wheel-widget-wrapper' >
             <div id="wheel">
                 <motion.div transition={{duration: 0.1}} animate={animation} id="inner-wheel">

@@ -45,8 +45,8 @@ const Menu = () => {
 
     return (
         <motion.div 
-        initial={{left: "-100%"}}
-        animate={{left: "0%"}}
+        initial={{left: "-100%", opacity: 0}}
+        animate={{left: "0%", opacity: 1}}
         style={{
             backgroundColor: secondaryColor
         }}

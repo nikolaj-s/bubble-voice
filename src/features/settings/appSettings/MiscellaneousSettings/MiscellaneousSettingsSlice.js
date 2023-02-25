@@ -59,7 +59,8 @@ const MiscellaneousSettingsSlice = createSlice({
         roomScale: 1,
         enabledSystemNotifications: true,
         muteSocialVideos: true,
-        activity: false
+        activity: false,
+        disableTransparancyEffects: false
     },
     reducers: {
         pushSytemNotification: (state, action) => {
@@ -133,7 +134,8 @@ const MiscellaneousSettingsSlice = createSlice({
                 autoPlayNativeVideos: state.autoPlayNativeVideos,
                 muteSocialVideos: state.muteSocialVideos,
                 activity: state.activity,
-                popOutUserStreams: state.popOutUserStreams
+                popOutUserStreams: state.popOutUserStreams,
+                disableTransparancyEffects: state.disableTransparancyEffects
             }
 
             saveLocalData("MISC", "MISCSETTINGS", obj);
@@ -195,6 +197,8 @@ const MiscellaneousSettingsSlice = createSlice({
             
             if (saved_data.activity) state.activity = true;
 
+            if (saved_data.disableTransparancyEffects) state.disableTransparancyEffects = true;
+
           //  if (saved_data.popOutUserStreams) state.popOutUserStreams = true;
         }
     }
@@ -233,6 +237,8 @@ export const selectMuteSocialVideos = state => state.MiscellaneousSettingsSlice.
 export const selectActivityStatus = state => state.MiscellaneousSettingsSlice.activity;
 
 export const selectPopOutUserStreams = state => state.MiscellaneousSettingsSlice.popOutUserStreams;
+
+export const selectDisableTransparancyEffects = state => state.MiscellaneousSettingsSlice.disableTransparancyEffects;
 
 export const {pushPokeNotification, pushSytemNotification, setDefaultServer, changeRoomScale, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, miscSettingsClearError, miscSettingsChannelSpecificStateChange } = MiscellaneousSettingsSlice.actions;
 

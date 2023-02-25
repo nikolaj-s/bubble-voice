@@ -7,7 +7,7 @@ import { Image } from '../Image/Image'
 import { Video } from '../Video/Video'
 
 // state
-import {  selectAccentColor, selectPrimaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import {  selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./Message.css";
@@ -19,6 +19,7 @@ import { TwitterEmbed } from '../TwitterEmbed/TwitterEmbed';
 import { SenderInfo } from './SenderInfo/SenderInfo';
 import { setPanelPosition, setSelectedMember } from '../../features/server/ChannelRoom/MemberPanel/MemberPanelSlice';
 import { selectServerMembers } from '../../features/server/ServerSlice';
+import { selectDisableTransparancyEffects } from '../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 export const Message = ({ message, overlay = false, id, channel_id, perm, pinMessage, pinned, index, previous_message, current_message, persist}) => {
 
@@ -32,6 +33,10 @@ export const Message = ({ message, overlay = false, id, channel_id, perm, pinMes
 
     const accentColor = useSelector(selectAccentColor);
 
+    const secondaryColor = useSelector(selectSecondaryColor);
+
+    const disableTransparancyEffects = useSelector(selectDisableTransparancyEffects);
+
     const members = useSelector(selectServerMembers);
 
     const user = members.find(member => member.username === current_message.username);
@@ -44,7 +49,7 @@ export const Message = ({ message, overlay = false, id, channel_id, perm, pinMes
 
         setHoverState(bool);
 
-        document.getElementById(`${id}/${channel_id}`).style.backgroundColor = bool ? primaryColor : null;
+        document.getElementById(`${id}/${channel_id}`).style.backgroundColor = bool ? disableTransparancyEffects ? primaryColor : `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0.7)` : null;
     }
 
     const openUserPanel = (e) => {
@@ -69,10 +74,10 @@ export const Message = ({ message, overlay = false, id, channel_id, perm, pinMes
         id={`${id}/${channel_id}`}
         className='message-container'>
             <div id={`${id}-ctx-message-overlay`} className={'ctx-message-overlay'} />
-            <SenderInfo display_name={user?.display_name} user_image={user?.user_image} action={openUserPanel} persist={persist} id={id} accentColor={accentColor} hover={hoverState} textColor={textColor} perm={perm} index={index}  message={message} current_message={current_message} previous_message={previous_message} pinMessage={pinMessage} pinned={pinned} overlay={overlay} />
+            <SenderInfo primaryColor={primaryColor} display_name={user?.display_name} user_image={user?.user_image} action={openUserPanel} persist={persist} id={id} accentColor={accentColor} hover={hoverState} textColor={textColor} perm={perm} index={index}  message={message} current_message={current_message} previous_message={previous_message} pinMessage={pinMessage} pinned={pinned} overlay={overlay} />
             <MessageText color={textColor} text={message.text} />
             <MessageLink link={message.link} />
-            <Iframe marginLeft={60} link={message.iFrame} />
+            <Iframe marginRight={5} marginLeft={60} link={message.iFrame} />
             <TwitterEmbed id={message.twitter} />
             {message.image ? 
             <div 
@@ -82,10 +87,7 @@ export const Message = ({ message, overlay = false, id, channel_id, perm, pinMes
             : null}
             {message.video ? 
             <div 
-            style={{
-                backgroundColor: 'black',
-                height: 500
-            }}
+            
             className='message-outer-video-container'>
                 <Video id={message.local_id} video={message.video} />
             </div>

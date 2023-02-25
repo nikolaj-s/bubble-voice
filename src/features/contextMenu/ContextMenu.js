@@ -289,10 +289,12 @@ export const ContextMenu = () => {
                 const id = p.id.split('-')[2];
 
                 dispatch(toggleContextMenu(true))
+
+                const channel = channels.find(c => c._id === id);
                 
                 dispatch(handleChannelCtxState({
-                    join: currentChannelId !== id,
-                    leave: currentChannelId === id,
+                    join: channel.text_only ? false : currentChannelId !== id,
+                    leave: channel.text_only ? false : currentChannelId === id,
                     edit: permissions.user_can_manage_channels,
                     channel: id,
                     name: p.outerText,

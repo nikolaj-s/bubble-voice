@@ -5,7 +5,7 @@ import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../..
 
 import "./TextButton.css";
 
-export const TextButton = ({name, action, textAlign = 'center', toggled = false, marginBottom, marginTop, id}) => {
+export const TextButton = ({name, action, textAlign = 'center', toggled = false, marginBottom, marginTop, id, invert}) => {
 
     const color = useSelector(selectPrimaryColor);
 
@@ -20,13 +20,13 @@ export const TextButton = ({name, action, textAlign = 'center', toggled = false,
             animation.start({
                 opacity: 0.5,
                 cursor: 'default',
-                border: `solid 4px ${color}`
+                border: `solid 3px ${color}`
             })
         } else {
             animation.start({
                 opacity: 1,
                 cursor: 'pointer',
-                border: `solid 4px ${color}`
+                border: `solid 3px ${color}`
             })
         }
     // eslint-disable-next-line
@@ -35,7 +35,7 @@ export const TextButton = ({name, action, textAlign = 'center', toggled = false,
     const handleAnimation = (arg) => {
         if (toggled) return
         animation.start({
-            border: `solid 4px ${arg}`
+            border: `solid 3px ${arg}`
         })
     }
 
@@ -48,8 +48,8 @@ export const TextButton = ({name, action, textAlign = 'center', toggled = false,
         onMouseUp={() => {handleAnimation(accentColor)}}
         animate={animation} onClick={action} className='text-button' 
         style={{
-            backgroundColor: color,
-            border: `4px solid ${color}`, 
+            backgroundColor: invert ? 'rgba(0,0,0,0)' : color,
+            border: `3px solid ${color}`, 
             textAlign: textAlign, 
             color: textColor, 
             marginBottom: marginBottom,

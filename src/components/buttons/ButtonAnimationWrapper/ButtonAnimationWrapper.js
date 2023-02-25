@@ -77,6 +77,7 @@ export const ButtonAnimationWrapper = ({display = 'flex', action = () => {}, pos
     return (
     <>
     <div 
+    className='b-container-wrapper'
     style={{
         
         borderRadius: borderRadius,
@@ -101,13 +102,13 @@ export const ButtonAnimationWrapper = ({display = 'flex', action = () => {}, pos
                 top: right_orientation_desc ? '5px' : null,
                 right: right_orientation_desc ? '-75px' : null,
                 left: right_orientation_desc ? null : '50%',
-                bottom: right_orientation_desc ? null : flip_description ? '-100%' : height + desc_space,
+                bottom: right_orientation_desc ? null : flip_description ? '-120%' : height + desc_space,
                 minWidth: right_orientation_desc ? null : '100%',
                 position: right_orientation_desc ? 'absolute' : 'absolute',
                 width: right_orientation_desc ? 150 : null,
                 zIndex: 999,
                 fontWeight: '100',
-                fontSize: '1rem',
+                fontSize: '0.8rem',
                 backgroundColor: accentColor,
                 padding: 5,
                 borderRadius: 5,
@@ -119,7 +120,7 @@ export const ButtonAnimationWrapper = ({display = 'flex', action = () => {}, pos
                 transform: 'translateX(-50%)',
                 filter: 'none'
                 }}>
-            <p style={{color: textColor, padding: 0, margin: 0, textAlign: 'center', fontSize: '0.8rem'}}>{description}</p>
+            <p style={{color: textColor, padding: 0, margin: 0, textAlign: 'center', fontSize: '0.7rem'}}>{description}</p>
             </motion.div>: null}
         <motion.div
         id={id}

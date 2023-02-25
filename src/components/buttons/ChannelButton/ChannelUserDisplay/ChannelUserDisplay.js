@@ -20,8 +20,11 @@ import { USER_PREFS } from '../../../../util/LocalData';
 import { DisabledWebCamIcon } from '../../../Icons/DisabledWebCamIcon/DisabledWebCamIcon';
 import { DisabledStreamIcon } from '../../../Icons/DisabledStreamIcon/DisabledStreamIcon';
 import { setPanelPosition, setSelectedMember } from '../../../../features/server/ChannelRoom/MemberPanel/MemberPanelSlice';
+import { selectServerMembers } from '../../../../features/server/ServerSlice';
 
 export const ChannelUserDisplay = ({user, channel_id}) => {
+
+    const [hover, toggleHover] = React.useState(false);
 
     const dispatch = useDispatch();
 
@@ -35,9 +38,14 @@ export const ChannelUserDisplay = ({user, channel_id}) => {
 
     const accentColor = useSelector(selectAccentColor);
 
+    const members = useSelector(selectServerMembers);
+    
     const PREFS = USER_PREFS.get(user._id)
 
     const hoverEffect = (e, bool) => {
+
+        toggleHover(bool);
+
         document.getElementById(`${user._id}-channel-user-display-channel-id-${channel_id}`).style.backgroundColor = bool ? primaryColor : null;
     }
 
@@ -56,7 +64,7 @@ export const ChannelUserDisplay = ({user, channel_id}) => {
     return (
         <div onClick={openMemberPanel} onMouseEnter={(e) => {hoverEffect(e, true)}} onMouseLeave={(e) => {hoverEffect(e, false)}} id={`${user._id}-channel-user-display-channel-id-${channel_id}`} style={{zIndex: 1}} key={user.username} className='channel-user-placeholder'>
             <div 
-            style={{border: `solid 3px ${(user.active && user.microphone) ? activityColor : secondaryColor}`}}
+            style={{border: `solid 3px ${(user.active && user.microphone) ? activityColor : hover ? primaryColor : secondaryColor}`}}
             className='channel-user-placeholder-user-image'>
                 <Image cursor='pointer' objectFit='cover' image={user.user_image} />
             </div>

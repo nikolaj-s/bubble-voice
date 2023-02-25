@@ -6,8 +6,6 @@ import { addPinnedMessage, removePinnedMessage, setPinnedMessages } from "./Chan
 
 import { socket } from "./ServerBar/ServerBar";
 
-let pushToTalkTimeout;
-
 export const unBanMember = createAsyncThunk(
     'serverSlice/unBanMember',
     async (id, {rejectWithValue}) => {
@@ -148,13 +146,20 @@ export const fetchServerDetails = createAsyncThunk(
 
 export const createChannel = createAsyncThunk(
     'serverSlice/createChannel',
-    async ({channel_name, persist_social}, {rejectWithValue, getState}) => {
+    async ({channel_name, persist_social, locked_channel, auth_users, text_only}, {rejectWithValue, getState}) => {
         const { server_id } = getState().serverSlice;
+
+        if (!channel_name || channel_name.length < 3) return rejectWithValue({error: true, errorMessage: "Invalid Channel Name"});
+
+        if (channel_name.length > 128) return rejectWithValue({error: true, errorMessage: 'Channel name cannot be longer than 128 characters'});
 
         const data = {
             channel_name: channel_name,
             persist_social: persist_social,
-            server_id: server_id
+            locked_channel: locked_channel,
+            auth_users: auth_users,
+            server_id: server_id,
+            text_only: text_only
         }
 
         const channel = await socket.request('create channel', data).then(response => {
@@ -183,13 +188,19 @@ export const handleLeavingServer = createAsyncThunk(
     'serverSlice/handleLeavingServer',
     async (_, { rejectWithValue }) => {
         try {
-            await socket.request("left server")
+
+            
+            let res = await socket.request("left server")
             .then(res => {
                 return res;
             })
             .catch(error => {
                 return rejectWithValue(error.errorMessage);
             })
+            
+            socket?.disconnect();
+
+            return res;
         } catch (error) {
             console.log(error);
             return rejectWithValue(error.errorMessage);
@@ -204,6 +215,7 @@ const serverSlice = createSlice({
         loading: true,
         serverName: "",
         serverBanner: "",
+        serverOwner: "",
         top_pos: 0,
         channels: [],
         serverGroups: [],
@@ -249,6 +261,9 @@ const serverSlice = createSlice({
 
     },
     reducers: {
+        clearSearchData: (state, action) => {
+            state.popular_searches = [];
+        },
         toggleCreateChannelMenu: (state, action) => {
             state.create_channel_menu_open = action.payload;
         },
@@ -453,7 +468,7 @@ const serverSlice = createSlice({
 
             for (let i = 0; i < state.channels.length; i++) {
                 const userIndex = state.channels[i].users.findIndex(user => user.username === action.payload.username);
-
+               
                 if (userIndex !== -1) {
                     state.channels[i].users[userIndex] = {...state.channels[i].users[userIndex], ...action.payload.action}
                     break
@@ -467,6 +482,8 @@ const serverSlice = createSlice({
             const channelIndex = state.channels.findIndex(channel => channel._id === action.payload.channel_id)
 
             if (channelIndex === -1) return;
+
+            if (state.channels[channelIndex].auth === false) return console.log('No Auth');
 
             // verify if message with existing id exists to prevent dupe messages being posted from an issue with duplicate socket instances failing to clean up
             const index = state.channels[channelIndex].social.findIndex(m => m._id === action.payload._id);
@@ -552,7 +569,10 @@ const serverSlice = createSlice({
         updateChannel: (state, action) => {
             state.channels = state.channels.map(channel => {
                 if (channel._id === action.payload._id) {
-                    return {...action.payload, users: channel.users, social: action.payload.social, widgets: action.payload.widgets}
+
+                    let auth = action.payload.auth_users.findIndex(i => i === state.user._id) !== -1;
+
+                    return {...action.payload, users: channel.users, social: action.payload.social, widgets: action.payload.widgets, auth: auth}
                 } else {
                     return channel;
                 }
@@ -644,6 +664,38 @@ const serverSlice = createSlice({
             if (c_index === -1) return;
 
             state.inactiveChannel = {id: action.payload, label: state.channels[c_index].channel_name};
+        },
+        updateMemberFile: (state, action) => {
+
+            state.members = state.members.map(m => {
+                if (m._id === action.payload._id) {
+                    return {...action.payload, status: m.status}
+                } else {
+                    return m;
+                }
+            })
+
+            const c_index = state.channels.findIndex(c => {
+                const u_index = c.users.findIndex(u => u._id === action.payload._id);
+
+                if (u_index !== -1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            
+            })
+
+            if (c_index !== -1) {
+                state.channels[c_index].users = state.channels[c_index].users.map(u => {
+                    if (u._id === action.payload._id) {
+                        return {...action.payload, active: u.active, microphone: u.microphone, muted: u.muted, webcam: u.webcam, screenshare: u.screenshare};
+                    } else {
+                        return u;
+                    }
+                })
+            }
+
         }
     },
     extraReducers: {
@@ -657,9 +709,9 @@ const serverSlice = createSlice({
             state.serverBanner = action.payload.server_banner;
             state.members = action.payload.members;
             state.serverGroups = action.payload.server_groups;
-
+            state.serverOwner = action.payload.server_owner;
             state.banList = action.payload.ban_list;
-            
+            state.user = action.payload.user;
             state.popular_searches = action.payload.recent_searches;
 
             const memberIndex = state.members.findIndex(member => member.username === action.payload.username);
@@ -702,7 +754,7 @@ const serverSlice = createSlice({
             state.musicVolume = action.payload.volume;
         },
         [handleLeavingServer.fulfilled]: (state, action) => {
-
+            console.log('left server')
             state.current_channel_id = null;
             state.server_id = null;
             state.loading = true;
@@ -718,7 +770,7 @@ const serverSlice = createSlice({
 
         },
         [handleLeavingServer.rejected]: (state, action) => {
-
+            console.log('error')
             state.error = true;
 
             state.errorMessage = action.payload;
@@ -924,8 +976,10 @@ export const selectMusicSavedState = state => {
 
 export const selectInactiveChannel = state => state.serverSlice.inactiveChannel; 
 
+export const selectServerOwner = state => state.serverSlice.serverOwner;
+
 // actions
 
-export const {updateInactiveChannel, removeSongFromWidget, saveSongToWidget, userBanned, toggleCreateChannelMenu, toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
+export const {updateMemberFile, clearSearchData, updateInactiveChannel, removeSongFromWidget, saveSongToWidget, userBanned, toggleCreateChannelMenu, toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
 
 export default serverSlice.reducer;

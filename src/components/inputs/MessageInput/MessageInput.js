@@ -149,7 +149,6 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
             <div
             style={{
                 borderBottomRightRadius: socialRoute ? 0 : hideUserStatus ? 10 : 0,
-                backgroundColor: secondaryColor
             }}
             className='message-input-wrapper'>
                 <motion.div 

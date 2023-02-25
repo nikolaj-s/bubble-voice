@@ -16,7 +16,7 @@ import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/Se
 
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { miscSettingsChannelSpecificStateChange, miscSettingsClearError, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, selectActivityStatus, selectAutoPlayNativeVideos, selectDefaultServer, selectHardwareAcceleration, selectHideUserStatus, selectMiscSettingsDisableGifProfiles, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsError, selectMiscSettingsErrorMessage, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectMiscSettingsLoading, selectMuteSocialVideos, selectPopOutUserStreams, selectRestartNotice, selectSystemNotifcations, setDefaultServer } from './MiscellaneousSettingsSlice';
+import { miscSettingsChannelSpecificStateChange, miscSettingsClearError, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, selectActivityStatus, selectAutoPlayNativeVideos, selectDefaultServer, selectDisableTransparancyEffects, selectHardwareAcceleration, selectHideUserStatus, selectMiscSettingsDisableGifProfiles, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsError, selectMiscSettingsErrorMessage, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectMiscSettingsLoading, selectMuteSocialVideos, selectPopOutUserStreams, selectRestartNotice, selectSystemNotifcations, setDefaultServer } from './MiscellaneousSettingsSlice';
 import { selectServerList } from '../../../sideBar/sideBarSlice';
 
 const Settings = () => {
@@ -58,6 +58,8 @@ const Settings = () => {
     const activityStatus = useSelector(selectActivityStatus);
 
     const popOutUserStreams = useSelector(selectPopOutUserStreams);
+
+    const disableTransparancyEffects = useSelector(selectDisableTransparancyEffects);
 
     React.useEffect(() => {
 
@@ -127,6 +129,8 @@ const Settings = () => {
             <InputTitle title={"Mute Videos By Default Within Social"} />
             <ToggleButton action={() => {handleChannelSpecificStateChange("muteSocialVideos")}} state={muteSocialVideos}  /> 
             <SettingsHeader title={"App Specific"} />
+            <InputTitle title={"Disable Transparency Effects"} />
+            <ToggleButton state={disableTransparancyEffects} action={() => {handleChannelSpecificStateChange('disableTransparancyEffects')}} />
             <InputTitle title={"Disable Hardware Acceleration"} />
             <ToggleButton action={handleToggleHardwareAcceleration} state={hardwareAcceleration} />
             <InputTitle title={"Clear Local Data"} />

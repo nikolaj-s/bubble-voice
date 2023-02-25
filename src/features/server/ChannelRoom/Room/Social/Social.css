@@ -46,19 +46,17 @@
 }
 
 .image-social-post-preview {
-    max-width: 90%;
-    width: auto;
+    max-width: 400px;
     z-index: 6;
-    max-height: 600px;
-    background-color: black;
-    height: auto;
     position: absolute;
+    object-fit: contain;
     bottom: 90px;
     right: 2%;
     border-radius: var(--border-radius);
     overflow: hidden;
-    object-fit: contain;
 }
+
+
 
 .image-prev-cancel-hover-effect {
     position: absolute;

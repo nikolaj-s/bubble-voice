@@ -3,14 +3,16 @@ import { useSelector } from 'react-redux'
 import { selectTextColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 import { ButtonAnimationWrapper } from '../../ButtonAnimationWrapper/ButtonAnimationWrapper'
 
-export const MicToggleButton = ({action, state, active, id}) => {
+export const MicToggleButton = ({action, state, active, id, width = 25, height = 25, padding, desc_space}) => {
 
     const textColor = useSelector(selectTextColor);
     
     return (
         <ButtonAnimationWrapper
-        width={25}
-        height={25}
+        width={width}
+        height={height}
+        desc_space={desc_space}
+        padding={padding}
         action={action}
         active={active}
         opacity={0.5}

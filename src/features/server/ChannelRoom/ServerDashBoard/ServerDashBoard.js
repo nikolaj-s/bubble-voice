@@ -53,7 +53,7 @@ const Component = () => {
         {socialOpen ? null :
         <div className='server-dashboard-container'>
             <div 
-            style={{borderBottom: `solid 3px ${primaryColor}`, backgroundColor: primaryColor}}
+            style={{borderBottom: `solid 2px ${primaryColor}`, backgroundColor: primaryColor}}
             className='server-dashboard-title-container'>
                 <AltPinnedButton action={() => {navigate('pins')}} active={page === 'pins'} />
                 <ServerMediaButton action={() => {navigate('media')}} active={page === 'media'} />

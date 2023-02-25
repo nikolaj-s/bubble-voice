@@ -70,6 +70,7 @@ const createServerSlice = createSlice({
         error: false,
         errorMessage: "",
         loading: false,
+        visible: false
     },
     reducers: {
         closeCreateServerError: (state, action) => {
@@ -90,6 +91,9 @@ const createServerSlice = createSlice({
         },
         setCreateServerState: (state, action) => {
             state[action.payload.state] = action.payload.value;
+        },
+        toggleAddServerMenu: (state, action) => {
+            state.visible = action.payload;
         }
     },
     extraReducers: {
@@ -116,7 +120,7 @@ const createServerSlice = createSlice({
 })
 
 // actions
-export const { closeCreateServerError, createServerSetServerBanner, clearCreateServerState, setCreateServerState } = createServerSlice.actions;
+export const {toggleAddServerMenu, closeCreateServerError, createServerSetServerBanner, clearCreateServerState, setCreateServerState } = createServerSlice.actions;
 
 // selectors
 export const selectCreateServerName = state => state.createServerSlice.serverName;
@@ -130,5 +134,7 @@ export const selectCreateServerLoadingState = state => state.createServerSlice.l
 export const selectCreateServerErrorState = state => state.createServerSlice.error;
 
 export const selectCreateServerErrorMessage = state => state.createServerSlice.errorMessage;
+
+export const selectAddServerMenuVisible = state => state.createServerSlice.visible;
 
 export default createServerSlice.reducer;

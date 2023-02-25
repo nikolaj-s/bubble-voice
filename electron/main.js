@@ -57,8 +57,6 @@ const lock = app.requestSingleInstanceLock();
 
 if (data?.toggled) {
   
-  console.log(data, 'toggling harware acceleration')
-  
   app.disableHardwareAcceleration();
 
 } 
@@ -487,6 +485,13 @@ ipcMain.on('check-for-updates', async (event, data) => {
   console.log('checking for update');
 
   autoUpdater.checkForUpdatesAndNotify();
+
+  autoUpdater.on('update-downloaded', () => {
+    
+    event.sender.send('update-available');
+
+  })
+
 })
 
 ipcMain.on('restart-to-update', (event, data) => {
@@ -503,6 +508,8 @@ autoUpdater.on('update-not-available', () => {
 
 autoUpdater.on('update-downloaded', () => {
   win.webContents.send('update-available');
+
+  ipcMain.emit('update-available');
 })
 
 // handle open links

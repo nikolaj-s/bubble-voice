@@ -92,8 +92,7 @@ const Settings = () => {
                 <TextInput stateSelector='display_name' action={handleInput} inputValue={displayName} placeholder={""} />
                 <InputTitle title={"Change Banner / Profile Picture"} />
                 <ProfileImage getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} />
-                <InputTitle title={"*Reconnect To Server To See Changes"} />
-                <SettingsHeader title={"Privacy"} />
+                <SettingsHeader title={"Security"} />
                 <InputTitle title={"Change Password"} />
                 <TextInput stateSelector='password' action={handleInput}  marginBottom='2%' type='password' placeholder={"Current Password"} inputValue={password} />
                 <TextInput action={handleInput} stateSelector='newPassword' marginBottom='2%' type='password' placeholder={"New Password"} inputValue={newPassword} />

@@ -86,10 +86,17 @@ const appearanceSettingsSlice = createSlice({
                 accentColor: "rgb(40, 46, 34)",
                 textColor: "rgb(255, 255, 255)",
                 activationColor: "rgb(58, 235, 52)",
+            },
+            dusk: {
+                primaryColor: "rgb(8, 32, 50)",
+                secondaryColor: "rgb(44, 57, 75)",
+                accentColor: "rgb(51, 71, 86)",
+                textColor: "rgb(255, 255, 255)",
+                activationColor: "rgb(255, 76, 41)"
             }
         },
         current_theme: {label: 'Light', state: 'light'},
-        theme_options: [{label: 'Light', state: 'light'}, {label: 'Dark', state: 'dark'}, {label: 'Custom', state: 'custom'}, {label: "Fall", state: 'fall'}, {label: "Forest", state: 'forest'}, {label: 'Neon', state: 'neon'}, {label: 'Coffee', state: 'coffee'}, {label: 'Green', state: 'green'}]
+        theme_options: [{label: 'Light', state: 'light'}, {label: 'Dark', state: 'dark'}, {label: 'Custom', state: 'custom'}, {label: "Fall", state: 'fall'}, {label: "Forest", state: 'forest'}, {label: 'Neon', state: 'neon'}, {label: 'Coffee', state: 'coffee'}, {label: 'Green', state: 'green'}, {label: 'Dusk', state: 'dusk'}]
     },
     reducers: {
         updateColorValue: (state, action) => {

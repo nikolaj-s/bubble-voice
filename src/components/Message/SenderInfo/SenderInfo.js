@@ -4,7 +4,7 @@ import { SubMenuButton } from '../../buttons/subMenuButton/SubMenuButton'
 import { Image } from '../../Image/Image'
 import { MessageLoadingIndicator } from '../MessageLoadingIndicator/MessageLoadingIndicator'
 
-export const SenderInfo = ({id, current_message, previous_message, message, pinMessage, pinned, overlay, hover, textColor, index, perm, accentColor, persist, action, display_name, user_image}) => {
+export const SenderInfo = ({id, current_message, primaryColor, previous_message, message, pinMessage, pinned, overlay, hover, textColor, index, perm, accentColor, persist, action, display_name, user_image}) => {
 
     return (
         <>
@@ -37,9 +37,9 @@ export const SenderInfo = ({id, current_message, previous_message, message, pinM
                 {message.loading ? 
                 <MessageLoadingIndicator />
                 : hover ?
-                <div style={{top: index === 0 ? 5 : -30, backgroundColor: accentColor}} className='date-submenu-message-wrapper'>
+                <div style={{top: index === 0 ? 5 : -30, backgroundColor: primaryColor}} className='date-submenu-message-wrapper'>
                     {(perm && persist) ? <PinButton flip_description={index === 0} description={pinned ? 'unpin' : 'pin'} action={pinMessage} width={15} height={15} pinned={pinned} /> : null}
-                    {perm ? <SubMenuButton target={`${id}-ctx-message-overlay`} flip_description={index === 0} zIndex={2} description={"More"} width={15} height={15} borderRadius={10} /> : null}
+                    {perm ? <SubMenuButton altInvert={true} invert={false} target={`${id}-ctx-message-overlay`} flip_description={index === 0} zIndex={2} description={"More"} width={15} height={15} borderRadius={5} /> : null}
                 </div> 
                 : null}
             </div>

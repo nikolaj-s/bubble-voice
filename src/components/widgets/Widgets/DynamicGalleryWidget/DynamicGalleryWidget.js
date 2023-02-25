@@ -15,6 +15,7 @@ import "./DynamicGalleryWidget.css";
 import { GalleryNavigation } from './GalleryNavigation/GalleryNavigation';
 import { setExpandedContent } from '../../../../features/ExpandContent/ExpandContentSlice';
 import { GalleryTitle } from './GalleryTitle/GalleryTitle';
+import { selectDisableTransparancyEffects } from '../../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 export const DynamicGalleryWidget = ({widget, editing}) => {
 
@@ -27,6 +28,8 @@ export const DynamicGalleryWidget = ({widget, editing}) => {
     const color = useSelector(selectPrimaryColor);
 
     const secondaryColor = useSelector(selectSecondaryColor);
+
+    const tran = useSelector(selectDisableTransparancyEffects);
 
     const variants = {
         enter: (direction) => {
@@ -66,7 +69,7 @@ export const DynamicGalleryWidget = ({widget, editing}) => {
     }
 
     return (
-        <div style={{backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0.8)`}}
+        <div style={{backgroundColor: tran ? secondaryColor : `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0.8)`}}
         className='dynamic-gallery-widget'>
             <AnimatePresence initial={false} custom={direction}>
                 <motion.div

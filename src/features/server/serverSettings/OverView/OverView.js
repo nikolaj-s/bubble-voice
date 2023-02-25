@@ -14,7 +14,7 @@ import { ApplyCancelButton } from '../../../../components/buttons/ApplyCancelBut
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 
 // state
-import { selectInactiveChannel, selectInactiveChannels, selectServerBanner, selectServerName, selectUsersPermissions, setServerName, throwServerError, updateInactiveChannel, updateServerBanner } from '../../ServerSlice';
+import { clearSearchData, selectInactiveChannel, selectInactiveChannels, selectServerBanner, selectServerName, selectUsersPermissions, setServerName, throwServerError, updateInactiveChannel, updateServerBanner } from '../../ServerSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 import { socket } from '../../ServerBar/ServerBar';
 import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
@@ -155,6 +155,8 @@ const Wrapper = () => {
             await socket.request('clear image search data')
             .then(res => {
                 toggleLoading(false);
+
+                dispatch(clearSearchData());
             })
             .catch(err => {
                 toggleLoading(false);

@@ -4,7 +4,7 @@ import { selectTextColor } from '../../../../features/settings/appSettings/appea
 import { Loading } from '../../../LoadingComponents/Loading/Loading'
 import { ButtonAnimationWrapper } from '../../ButtonAnimationWrapper/ButtonAnimationWrapper'
 
-export const ShareScreenButton = ({action, state, active, loading, id}) => {
+export const ShareScreenButton = ({action, state, active, loading, id, width = 25, height = 25, padding, desc_space}) => {
 
   const textColor = useSelector(selectTextColor);
 
@@ -12,9 +12,11 @@ export const ShareScreenButton = ({action, state, active, loading, id}) => {
 
   return (
     <ButtonAnimationWrapper action={action}
-    width={25}
-    height={25}
+    width={width}
+    height={height}
     active={active}
+    padding={padding}
+    desc_space={desc_space}
     opacity={0.5}
     position={'relative'}
     invert={true}

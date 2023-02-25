@@ -13,6 +13,7 @@ import "./ExpandContent.css";
 import { selectSecondaryColor, selectTextColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { Video } from '../../components/Video/Video';
 import { Iframe } from '../../components/Iframe/Iframe';
+import { selectDisableTransparancyEffects } from '../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 export const ExpandContent = () => {
 
@@ -25,6 +26,8 @@ export const ExpandContent = () => {
     const secondaryColor = useSelector(selectSecondaryColor);
 
     const textColor = useSelector(selectTextColor);
+
+    const disableTransparancyEffects = useSelector(selectDisableTransparancyEffects);
 
     const closeExpanded = () => {
         dispatch(setExpandedContent(false));
@@ -94,7 +97,7 @@ export const ExpandContent = () => {
         {expandedContent ? 
         <div 
         style={{
-            backgroundColor: `rgba(${secondaryColor.split('(')[1]?.split(')')[0]}, 0.9)`
+            backgroundColor: disableTransparancyEffects ? secondaryColor : `rgba(${secondaryColor.split('(')[1]?.split(')')[0]}, 0.9)`
         }}
         onClick={closeExpanded} className='expanded-content-container'>
             <div 

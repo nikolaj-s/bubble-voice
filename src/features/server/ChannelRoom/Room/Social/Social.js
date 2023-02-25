@@ -174,22 +174,20 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         let scroll_pos;
         
-        if ((messagesRef.current.scrollTop + messagesRef.current.scrollHeight) * .8 < e.target.clientHeight) {
+        if ((messagesRef.current.scrollTop + messagesRef.current.scrollHeight) * .5 < e.target.clientHeight) {
 
             toggleLoadingMore(true);
 
             scroll_pos = messagesRef.current.scrollTop;
-
+            
             setTimeout(() => {
 
                 setMessagesToRender(messagesToRender + 15);
 
                 toggleLoadingMore(false);
 
-            }, 250);
+            }, 300);
 
-            
-        
         }
     
     }

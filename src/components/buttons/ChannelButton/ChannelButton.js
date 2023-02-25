@@ -13,8 +13,12 @@ import {  selectAccentColor, selectPrimaryColor, selectTextColor, selectTranspar
 // style
 import "./ChannelButton.css";
 import { SocialButton } from '../SocialButton/SocialButton';
-import { selectChannelSocialId, selectCurrentChannelId, setChannelSocialId } from '../../../features/server/ServerSlice';
+import { selectChannelSocialId, selectCurrentChannelId, setChannelSocialId, throwServerError } from '../../../features/server/ServerSlice';
 import { SOCIAL_DATA } from '../../../util/LocalData';
+import { VoiceDisabledIcon } from '../../Icons/VoiceDisabledIcon/VoiceDisabledIcon';
+import { VoiceEnabledIcon } from '../../Icons/VoiceEnabledIcon/VoiceEnabledIcon';
+import { LockedChannelIcon } from '../../Icons/LockedChannelIcon/LockedChannelIcon';
+import { TextOnlyIcon } from '../../Icons/TextOnlyIcon/TextOnlyIcon';
 
 
 export const ChannelButton = ({channel, action = () => {}, users, index}) => {
@@ -59,6 +63,11 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
     }
 
     const handleAction = () => {
+        
+        if (channel.auth === false) return dispatch(throwServerError({errorMessage: "Whoops This Channel Has Been Made Available To Only Certain Users!"}));
+
+        if (channel.text_only) return dispatch(setChannelSocialId(channel._id));
+
         action(channel)
     }
 
@@ -94,9 +103,11 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
     const openSocial = (e) => {
         e.stopPropagation();
 
+        if (channel.auth === false) return dispatch(throwServerError({errorMessage: "Whoops This Channel Has Been Made Available To Only Certain Users!"}));
+
         dispatch(setChannelSocialId(channel._id))
     }
-
+    
     return (
         <>
             <motion.div 
@@ -115,20 +126,30 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
                 cursor: active ? "default" : "pointer",
             }}
             className='channel-button-container'>
-                {unReadMessage ?
-                <div style={{backgroundColor: textColor}} className='unread-message-indicator'></div>
-                : null}
-                <h3 style={{color: textColor, opacity: (active || mouseEnter || unReadMessage) ? 1 : 0.7}}>{channel.channel_name}</h3>
+                <div style={{backgroundColor: unReadMessage && channel.auth ? textColor : null}} className='unread-message-indicator'></div>   
+                <div style={{opacity: (active || mouseEnter || unReadMessage) && channel.auth ? 1 : 0.7}} className='channel-status-icon-container'>
+                    {channel.locked_channel ?
+                    <LockedChannelIcon /> :
+                    channel.text_only ?
+                    <TextOnlyIcon /> :
+                    channel.disable_streams ? 
+                    <VoiceDisabledIcon />
+                    :
+                    <VoiceEnabledIcon />
+                    }
+                </div>
+                <h3 style={{color: textColor, opacity: (active || mouseEnter || unReadMessage) && channel.auth ? 1 : 0.7}}>{channel.channel_name}</h3>
                 {mouseEnter ? <div className='channel-button-extra-context-wrapper'>
-                    <SocialButton o_mouseLeave={() => {handleAnimation(transparentPrimaryColor, false)}} desc_o_mouse_leave={() => {handleAnimation(transparentPrimaryColor, false)}} flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} action={openSocial} margin={'0 5px 0 0'} borderRadius={4} width={20} height={20} padding={4} desc_space={10} />
-                    <SubMenuButton invert={false} altInvert={true} o_mouseLeave={() => {handleAnimation(transparentPrimaryColor, false)}} desc_o_mouse_leave={() => {handleAnimation(transparentPrimaryColor, false)}} flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} description={"More"} target={`channel-button-${channel._id}`} padding={4} width={20} height={20} borderRadius={4} desc_space={10} />
+                    {!channel.text_only ? <SocialButton o_mouseLeave={() => {handleAnimation(transparentPrimaryColor, false)}} desc_o_mouse_leave={() => {handleAnimation(transparentPrimaryColor, false)}} flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} action={openSocial} margin={'0 5px 0 0'} borderRadius={4} width={15} height={15} padding={4} desc_space={12} /> : null}
+                    <SubMenuButton invert={false} altInvert={true} o_mouseLeave={() => {handleAnimation(transparentPrimaryColor, false)}} desc_o_mouse_leave={() => {handleAnimation(transparentPrimaryColor, false)}} flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} description={"More"} target={`channel-button-${channel._id}`} padding={4} width={15} height={15} borderRadius={4} desc_space={12} />
                 </div> : null}
             </motion.div>
-            {usersState.map((user) => {
+            {channel.auth ?
+            usersState.map((user) => {
                 return (
                     <ChannelUserDisplay key={user.username} channel_id={channel._id} user={user} />
                 )
-            })}
+            }) : null}
         </>
     )
 }

@@ -17,7 +17,7 @@ export const MemberCard = ({member}) => {
             backgroundColor: primaryColor,
             width: "calc(100% - 1rem)",
             height: 65,
-            borderRadius: "15px",
+            borderRadius: "5px",
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -43,7 +43,7 @@ export const MemberCard = ({member}) => {
             }}
             >id: {member.username}</p>
             </div>
-            <SubMenuButton width={15} height={15} borderRadius={10} description={"User Management"} />
+            <SubMenuButton width={15} height={15} borderRadius={5} description={"User Management"} />
         </div>
     )
 }

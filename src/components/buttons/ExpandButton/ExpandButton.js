@@ -3,14 +3,14 @@ import { useSelector } from 'react-redux'
 import { selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 import { ButtonAnimationWrapper } from '../ButtonAnimationWrapper/ButtonAnimationWrapper'
 
-export const ExpandButton = ({action, description}) => {
+export const ExpandButton = ({action, description, width = 25, height = 25}) => {
 
     const textColor = useSelector(selectTextColor);
 
     return (
         <ButtonAnimationWrapper
-        width={25}
-        height={25}
+        width={width}
+        height={height}
         action={action}
         description={description}
         >

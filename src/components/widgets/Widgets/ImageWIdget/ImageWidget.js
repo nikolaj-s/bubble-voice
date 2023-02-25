@@ -3,6 +3,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { setExpandedContent } from '../../../../features/ExpandContent/ExpandContentSlice';
 import { selectSecondaryColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectDisableTransparancyEffects } from '../../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 // components
 import { Image } from '../../../Image/Image';
@@ -18,10 +19,12 @@ export const ImageWidget = ({widget, editing}) => {
         dispatch(setExpandedContent(widget.content.text));
     }
 
+    const disableTransparancyEffects = useSelector(selectDisableTransparancyEffects);
+
     const secondaryColor = useSelector(selectSecondaryColor);
 
     return (
-        <div style={{backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0.8)`}} onClick={expand} className='image-widget-container' >
+        <div style={{backgroundColor: disableTransparancyEffects ? secondaryColor : `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0.8)`}} onClick={expand} className='image-widget-container' >
             <Image image={widget.content.text} objectFit='contain' />
         </div>
     )

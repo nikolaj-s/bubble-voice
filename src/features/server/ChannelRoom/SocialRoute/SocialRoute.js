@@ -12,6 +12,7 @@ import { Social } from '../Room/Social/Social'
 
 // style
 import "./SocialRoute.css";
+import { TextOnlyIcon } from '../../../../components/Icons/TextOnlyIcon/TextOnlyIcon';
 
 export const SocialRoute = () => {
 
@@ -61,16 +62,17 @@ export const SocialRoute = () => {
             transition={{duration: 0.2}}
             className='social-route-wrapper-container'>
                 <div 
-                style={{borderBottom: `solid 3px ${primaryColor}`, backgroundColor: primaryColor}}
+                style={{borderBottom: `solid 2px ${primaryColor}`, backgroundColor: primaryColor}}
                 className='social-route-top-nav'>
                     <div 
                     style={{backgroundColor: secondaryColor}}
                     className='social-route-title-container'>
+                        {channel.text_only ? <TextOnlyIcon /> : null}
                         <h3
                         style={{
                             color: textColor
                         }}
-                        >{channel.channel_name} / Social</h3>
+                        >{channel.channel_name}{channel.text_only ? null : ' / Social'}</h3>
                     </div>
                     <div 
                     style={{backgroundColor: secondaryColor}}

@@ -5,7 +5,9 @@ import { motion } from 'framer-motion';
 import { useSelector } from 'react-redux';
 import { selectPrimaryColor, selectSecondaryColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
-export const Iframe = ({link, marginLeft, maxWidth = 800}) => {
+import "./Iframe.css";
+
+export const Iframe = ({link, marginLeft, maxWidth = 800, marginRight}) => {
 
     const [rendered, toggleRender] = React.useState(false);
 
@@ -21,13 +23,15 @@ export const Iframe = ({link, marginLeft, maxWidth = 800}) => {
     return (
         <>
         {link ?
-            <div style={{maxWidth: maxWidth, marginLeft: marginLeft, minHeight: link?.includes('steampowered') ? '200px' : null, maxHeight: 600, borderRadius: 5, position: 'relative', backgroundColor: 'black', display: 'flex', overflow: 'hidden'}}>
+            <div 
+            className='iframe-outer-container'
+            style={{maxWidth: maxWidth, marginLeft: marginLeft, minHeight: link?.includes('steampowered') ? '200px' : 400, maxHeight: link?.includes('steampowered') ? '200px' : 400, borderRadius: 5, position: 'relative', display: 'flex', overflow: 'hidden', marginRight: marginRight}}>
                 
                 <iframe 
                 onLoad={loaded}
                 
                 title={link}
-                sandbox='allow-scripts allow-same-origin allow-presentation allow-popups' loading='lazy' src={link} allow="clipboard-write; encrypted-media;" frameBorder='0' scrolling='no' allowFullScreen={false} width='100%' height={link?.includes('steampowered') ? '200px' : '500px'}></iframe>
+                sandbox='allow-scripts allow-same-origin allow-presentation allow-popups' loading='lazy' src={link} allow="clipboard-write; encrypted-media;" frameBorder='0' scrolling='no' allowFullScreen={false} ></iframe>
                 {!rendered ?
                 <motion.div 
             style={{

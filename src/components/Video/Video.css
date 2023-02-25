@@ -1,5 +1,4 @@
 .message-video-container {
-    width: 100%;
     height: 100%;
     position: relative;
     overflow: hidden;
@@ -20,10 +19,10 @@
     align-items: center;
     position: absolute;
     bottom: 0;
-    justify-content: space-evenly;
+    justify-content: space-between;
     left: 0;
-    padding: 2% 0%;
-    width: 200px !important;
+    padding: 5px;
+    width: 130px !important;
     border-top-right-radius: var(--border-radius);
     border-bottom-left-radius: 0px;
 }

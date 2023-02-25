@@ -15,6 +15,7 @@ import { ContextMenu } from "../contextMenu/ContextMenu"
 // style
 import "./DashBoard.css";
 import { UpdateAvailable } from '../../components/UpdateAvailable/UpdateAvailable';
+import { ServerSelection } from '../sideBar/ServerSelection/ServerSelection';
 
 
 export const Dashboard = () => {
@@ -35,6 +36,7 @@ export const Dashboard = () => {
 
     return (
         <div className='home-container'>
+            <ServerSelection />
             <SideBar />
             <ContentScreen />
             <SoundEffects />

@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
 import { selectSecondaryColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectDisableTransparancyEffects } from '../../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { Iframe } from '../../../Iframe/Iframe';
 import { Video } from '../../../Video/Video'
 
@@ -41,8 +42,10 @@ export const VideoWidget = ({widget, editing}) => {
     
     const secondaryColor = useSelector(selectSecondaryColor);
 
+    const disableTransparancyEffects = useSelector(selectDisableTransparancyEffects);
+
     return (
-        <div style={{backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0.8)`}} className='video-widget-container' >
+        <div style={{backgroundColor: disableTransparancyEffects ? secondaryColor : `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0.8)`}} className='video-widget-container' >
             {nonVideo ?
             <Iframe link={nonVideo} />
             : 

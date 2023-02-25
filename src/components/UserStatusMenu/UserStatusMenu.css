@@ -2,26 +2,26 @@
 .user-status-menu-container {
     position: absolute;
     width: 96%;
-    bottom: 60px;
+    bottom: 48px;
     height: 260px;
     display: flex;
     flex-direction: column;
-    border-top-left-radius: var(--border-radius);
+    
     overflow: hidden;
-    border-top-right-radius: var(--border-radius);
     z-index: 1;
 }
 
 .inner-status-menu-container {
     flex-grow: 4;
-    border-bottom-right-radius: var(--border-radius);
+    border-radius: var(--border-radius);
     overflow: hidden;
 }
 
 .inner-status-menu-spacer {
     height: 10px;
     flex-shrink: 0;
-    width: 45px;
+    width: 35px;
+    margin-left: 5px;
 }
 
 .inner-status-menu-container .text-input-container {

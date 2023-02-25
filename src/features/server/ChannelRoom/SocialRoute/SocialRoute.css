@@ -31,7 +31,7 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    margin-left: 3px;
+    margin-left: 2px;
 }
 
 .social-route-top-nav .close-social-button:hover {
@@ -39,16 +39,17 @@
 }
 
 .social-route-title-container {
-    width: 100%;
+    width: calc(100% - 20px);
     display: flex;
     align-items: center;
     height: 100%;
+    padding: 0 10px;
 }
 
 .social-route-top-nav h3 {
     font-weight: 400;
     letter-spacing: var(--font-spacing);
     font-size: .9rem;
-    padding-left: 1rem;
+    padding-left: 5px;
 }
 

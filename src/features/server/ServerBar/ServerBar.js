@@ -6,7 +6,7 @@ import { io } from "socket.io-client";
 import { useNavigate, useRoutes } from 'react-router';
 
 // state
-import { addNewChannel, assignNewServerGroup, clearServerState, deleteChannel, deleteMessage, fetchPersistedMusicVolume, fetchServerDetails, handleLeavingServer, leaveChannel, newMessage, removeSongFromWidget, reOrderChannels, saveSongToWidget, selectCurrentChannel, selectCurrentChannelId, selectInactiveChannel, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, selectTopAnimationPoint, setServerName, throwServerError, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateInactiveChannel, updateMemberActiveStatus, updateMemberStatus, updateServerBanner, updateServerGroups, userBanned, userJoinsChannel, userJoinsServer, userLeavesChannel, userLeavesServer } from '../ServerSlice';
+import {clearSearchData, addNewChannel, assignNewServerGroup, clearServerState, deleteChannel, deleteMessage, fetchPersistedMusicVolume, fetchServerDetails, handleLeavingServer, leaveChannel, newMessage, removeSongFromWidget, reOrderChannels, saveSongToWidget, selectCurrentChannel, selectCurrentChannelId, selectInactiveChannel, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, selectTopAnimationPoint, setServerName, throwServerError, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateInactiveChannel, updateMemberActiveStatus, updateMemberStatus, updateServerBanner, updateServerGroups, userBanned, userJoinsChannel, userJoinsServer, userLeavesChannel, userLeavesServer, updateMemberFile } from '../ServerSlice';
 import { selectUsername } from '../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { getToken, url } from '../../../util/Validation';
 import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
@@ -352,6 +352,15 @@ const Bar = () => {
                 dispatch(removePinnedMessage(data));
             }
         })
+
+        socket.on('image data cleared', () => {
+            dispatch(clearSearchData());
+            
+        })
+
+        socket.on('member file update', (data) => {
+            dispatch(updateMemberFile(data));
+        })
     }
 
     const joiningServer = async (tries = 0) => { 
@@ -414,22 +423,6 @@ const Bar = () => {
         }
     }
 
-    const toggleServerSettings = () => {
-
-        if (window.location.hash.includes('server-settings')) {
-           
-            window.location.hash = window.location.hash.split('/server-settings')[0]
-            
-        } else {
-            if (window.location.hash.includes('appsettings')) {
-                window.location.hash = window.location.hash.split('/appsettings')[0] + "/server-settings/overview"
-            } else {
-                window.location.hash = window.location.hash + '/server-settings/overview'
-            }
-            
-        }
-    }
-
     const disconnect = () => {
         
         dispatch(leaveChannel({username: username}));
@@ -451,10 +444,6 @@ const Bar = () => {
         dispatch(handleLeavingServer())
 
         navigate('/dashboard')
-
-        socket.disconnect();
-
-        socket = null;
     
     }
 
@@ -743,10 +732,7 @@ const Bar = () => {
     React.useEffect(() => {
 
         animation.start({
-            top: 0,
-            maxWidth: '100%',
-            overflowY: 'auto',
-            height: '100%'
+            opacity: 1
         })
         
     // eslint-disable-next-line
@@ -754,15 +740,10 @@ const Bar = () => {
     
     return (
         <motion.div initial={{
-            position: 'absolute',
-            top: topPointAnimationLocation,
-            height: '130px',
-            maxWidth: '90%',
-            overflowY: 'hidden'
+            opacity: 0
             }} animate={animation}
             transition={{duration: 0.3}} 
             className='server-bar-container'>
-            <ServerSettingsButton action={toggleServerSettings} />
             <ServerBanner serverImage={serverBanner} serverName={serverName} />
             <MobileServerBanner serverImage={serverBanner} serverName={serverName} />
             {loading ? <Loading loading={loading} /> :

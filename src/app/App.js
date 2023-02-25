@@ -15,7 +15,7 @@ import { Verification } from '../features/LoggingIn/verification/Verification';
 // state
 import { incrementLoadingPercentage, selectRetryState } from '../features/initializingAppScreen/initializingAppScreenSlice';
 import { getMediaDevices } from '../features/settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
-import { selectPrimaryColor, selectRgbBackGround, updatePersistedAppTheme } from '../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, updatePersistedAppTheme } from '../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { fetchAccount } from '../features/settings/appSettings/accountSettings/accountSettingsSlice';
 import { selectLoggedIn } from '../features/LoggingIn/signIn/signInSlice';
 import { selectSignedUp } from '../features/LoggingIn/signUp/signUpSlice';
@@ -39,15 +39,13 @@ function App() {
 
   const navigate = useNavigate();
 
-  const primaryColor = useSelector(selectPrimaryColor);
+  const accentColor = useSelector(selectAccentColor);
 
   const loggedIn = useSelector(selectLoggedIn);
 
   const signedUp = useSelector(selectSignedUp);
 
   const retryState = useSelector(selectRetryState);
-
-  const rgbBackground = useSelector(selectRgbBackGround);
 
   const preventMouseDefaults = (e) => {
     if (e.button === 3 || e.button === 4) {
@@ -148,9 +146,7 @@ function App() {
         })
 
         ipcRenderer.on('update-available', () => {
-            
-          ipcRenderer.removeAllListeners('update-downloaded');
-
+            console.log('update')
           dispatch(handleUpdateAvailable(true));
 
           clearInterval(update_interval);
@@ -231,7 +227,7 @@ function App() {
   }, [])
 
   return (
-    <div style={!rgbBackground ? {backgroundColor: primaryColor} : null} className={`App ${rgbBackground ? 'rgb-background' : null}`}>
+    <div style={{backgroundColor: accentColor}} className={`App`}>
       <TitleBar />
       <SplashScreen />
       <Routes>

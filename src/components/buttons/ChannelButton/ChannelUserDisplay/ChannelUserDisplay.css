@@ -1,10 +1,11 @@
 .channel-user-placeholder {
-    width: 92%;
-    margin-left: 7%;
+    width: calc(100% - 27px);
+    margin-left: 28px;
     display: flex;
     height: 35px;
     align-items: center;
-    margin-bottom: 2%;
+    margin-bottom: 3px;
+    margin-top: 3px;
     position: relative;
     border-radius: 5px;
     cursor: pointer;
@@ -21,8 +22,8 @@
 }
 
 .channel-user-placeholder-user-image {
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     overflow: hidden;
     margin-right: 5%;
@@ -35,7 +36,7 @@
     display: flex;
     align-items: center;
     position: absolute;
-    right: 5px;
+    right: 3px;
     justify-content: flex-end;
     height: 30px;
     border-radius: 4px;

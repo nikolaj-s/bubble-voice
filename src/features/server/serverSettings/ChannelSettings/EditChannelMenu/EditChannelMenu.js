@@ -10,10 +10,11 @@ import { TextInput } from '../../../../../components/inputs/TextInput/TextInput'
 import { ToggleButton } from '../../../../../components/buttons/ToggleButton/ToggleButton';
 import { ApplyCancelButton } from '../../../../../components/buttons/ApplyCancelButton/ApplyCancelButton'
 import { SettingsHeader } from '../../../../../components/titles/SettingsHeader/SettingsHeader'
+import { BoolButton } from '../../../../../components/buttons/BoolButton/BoolButton';
 
 // state
 import { setHeaderTitle } from '../../../../contentScreen/contentScreenSlice';
-import { deleteChannel, selectChannelToEdit, selectUsersPermissions, throwServerError, updateChannel } from '../../../ServerSlice';
+import { deleteChannel, selectChannelToEdit, selectServerMembers, selectServerOwner, selectUsersPermissions, throwServerError, updateChannel } from '../../../ServerSlice';
 import { TextButton } from '../../../../../components/buttons/textButton/TextButton';
 import { NotAuthorizedMessage } from '../../../../../components/NotAuthorizedMessage/NotAuthorizedMessage';
 import { WidgetPreview } from '../../../../../components/widgets/WidgetPreview/WidgetPreview';
@@ -25,6 +26,7 @@ import { playSoundEffect } from '../../../../settings/soundEffects/soundEffectsS
 import { ChannelBackgroundInput } from './ChannelBackgroundInput/ChannelBackgroundInput';
 import { Range } from '../../../../../components/inputs/Range/Range';
 import { InputPlaceHolder } from '../../../../../components/titles/InputPlaceHolder/InputPlaceHolder';
+import { selectUsername } from '../../../../settings/appSettings/accountSettings/accountSettingsSlice';
 
 const Wrapper = () => {
 
@@ -50,9 +52,19 @@ const Wrapper = () => {
 
     const [disableStreams, toggleDisableStreams] = React.useState(false);
 
+    const [lockedChannel, toggleLockedChannel] = React.useState(false);
+
+    const [authUsers, setAuthUsers] = React.useState([]);
+
     const channel = useSelector(selectChannelToEdit);
 
+    const members = useSelector(selectServerMembers);
+
     const permission = useSelector(selectUsersPermissions);
+
+    const username = useSelector(selectUsername);
+
+    const serverOwner = useSelector(selectServerOwner);
 
     React.useEffect(() => {
         try {
@@ -67,6 +79,12 @@ const Wrapper = () => {
                 setBackgroundBlur(channelToEdit.background_blur);
             
             }
+
+            if (channelToEdit.locked_channel) {
+                toggleLockedChannel(true);
+            }
+
+            setAuthUsers(channelToEdit.auth_users);
 
             if (channelToEdit.disable_streams) {
                 toggleDisableStreams(true);
@@ -146,12 +164,14 @@ const Wrapper = () => {
         handleToggleLoading(true);
 
         await socket.request('update channel', 
-        {...channelToEdit, widgets: widgets, persist_social: persistChannelSocial, channel_name: channelName, file: channelBackground, background_blur: backgroundBlur, clear_social: clearedSocial, disable_streams: disableStreams})
+        {...channelToEdit, widgets: widgets, persist_social: persistChannelSocial, channel_name: channelName, file: channelBackground, background_blur: backgroundBlur, clear_social: clearedSocial, disable_streams: disableStreams, auth_users: authUsers, locked_channel: lockedChannel})
         .then(response => {
 
-            dispatch(updateChannel(response.channel))
+            dispatch(updateChannel(response.channel));
 
             setWidgets(response.channel.widgets);
+
+            setAuthUsers(response.channel.auth_users);
 
             toggleEdited(false);
 
@@ -224,13 +244,39 @@ const Wrapper = () => {
         toggleDisableStreams(!disableStreams);
     }
 
+    const handleLockChannel = () => {
+
+        toggleEdited(true);
+
+        toggleLockedChannel(!lockedChannel);
+    
+    }
+
+    const addAuthUser = (id) => {
+
+        toggleEdited(true);
+
+        let currentAuthUsers = [...authUsers];
+
+        if (currentAuthUsers.findIndex(i => i === id) !== -1) {
+            currentAuthUsers = currentAuthUsers.filter(u => u !== id);
+        } else {
+            currentAuthUsers.push(id);
+        }
+
+        setAuthUsers(currentAuthUsers);
+
+    }
+console.log(channelToEdit)
     return (
         <>
-        {permission?.user_can_manage_channels ?
+        {(permission?.user_can_manage_channels && (channelToEdit.locked_channel ? channelToEdit.auth : true)) ?
             <>
             <SettingsHeader title={'General'} />
             <InputTitle title={"Edit Channel Name"} />
             <TextInput action={handleUpdateChannelName} inputValue={channelName} />
+            {channelToEdit.text_only ? null :
+            <>
             <InputTitle title={"Toggle Persist Social Data *persists new data upon activation"} />
             <ToggleButton action={handleTogglePersistSocial} state={persistChannelSocial} />
             <SettingsHeader title={"Channel Background"} />
@@ -242,6 +288,7 @@ const Wrapper = () => {
             <TextButton action={openWidgetMenu} name={"Add Widget"} />
             <InputTitle title={`Widgets ${channelToEdit.widgets ? channelToEdit.widgets.length : 0} / 15`} />
             <WidgetPreview widgets={widgets} editing={true} reorder={updateWidgetOrder} />
+            </>}
             <SettingsHeader title={"Data"} />
             <InputTitle title={"Clear Social Data"} />
             {clearedSocial === false ?
@@ -249,9 +296,26 @@ const Wrapper = () => {
             :
             <InputPlaceHolder value={"Hit Apply To Save Changes"} />
             }
+            <SettingsHeader title={"Make Channel Private"} />
+            <InputTitle title={"Lock Channel To Specific Users"} />
+            <ToggleButton state={lockedChannel} action={handleLockChannel}  />
+            {lockedChannel ?
+            <>
+            <InputTitle title={"Add Authorized Users"} />
+            <div className='auth-users-container'>
+                {members.filter(m => (m.username !== username && m.username !== serverOwner)).map((member, i) => {
+                    return <BoolButton action={() => {addAuthUser(member._id)}} state={authUsers.findIndex(i => i === member._id) !== -1} name={member.display_name} />
+                })}
+            </div>
+            </>
+            : null}
+            {channelToEdit.text_only ? null :
+            <>
             <SettingsHeader title={"Disable Video / Audio Streams"} />
             <InputTitle title={"Disable streams in this channel to allow for an inactive user channel"} />
             <ToggleButton action={handleToggleDisableStreams} state={disableStreams} />
+            </>
+            }
             <InputTitle title={"Delete Channel"} />
             <TextButton action={handleDeleteChannel} name={"Delete Channel"} />
             <ApplyCancelButton toggled={edited === false ? true : null} apply={handleUpdateChannel} cancel={handleCancel} />

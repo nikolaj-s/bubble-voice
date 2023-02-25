@@ -1,20 +1,20 @@
 .server-settings-menu {
     position: absolute;
-    z-index: 2;
-    top: 0;
+    z-index: 3;
+    top: 32px;
     left: 0;
     bottom: 12px;
     width: 100%;
-    height: calc(100% - 12px);
+    height: calc(100% - 12px - 32px);
     display: flex;
     justify-content: center;
 }
 
 .inner-server-settings-container {
-    width: 96%;
+    width: 200px;
+    margin-right: 10px;
     display: flex;
     flex-direction: column;
-    margin-top: 35px;
     justify-content: space-between;
 }
 

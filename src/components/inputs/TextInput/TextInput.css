@@ -3,7 +3,7 @@
     max-height: calc(58px - 16px);
     width: calc(100% - 16px);
     border-radius: var(--border-radius);
-    padding: 5px;
+    padding: 0px 5px;
     display: flex;
     align-items: center;
 }

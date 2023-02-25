@@ -119,7 +119,6 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
             exit={{opacity: 0}}
             transition={{duration: 0.1}}
             key="message-image-search-container"
-            style={{borderTop: `solid 3px ${primaryColor}`}}
             className='message-image-search-container'>
                 <div 
                 style={{
@@ -141,7 +140,7 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
                         <h3 onClick={() => {handleMediaType("Videos")}} style={{color: textColor, backgroundColor: mediaType === 'Videos' ? primaryColor : null, opacity: mediaType === 'Videos' ? 1 : 0.6}}>Videos</h3>
                     </div>
                     <div className='message-image-search-results-container'>
-                    <ResponsiveMasonry columnsCountBreakPoints={{800: 1, 1000: 2, 1500: 3, 1900: 4, 2500: 5}}>
+                    <ResponsiveMasonry columnsCountBreakPoints={{800: 1, 1000: 2, 1500: 3}}>
                         <Masonry gutter='5px'>   
                             {mediaType === 'Videos' ?
                             (videos?.length > 0 ? videos : loading ? [] : recommendations.filter(v => v.type === 'video').slice(0, 15)).map(video => {

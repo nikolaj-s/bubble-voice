@@ -108,7 +108,7 @@ const Wrapper = () => {
                 return (
                 <Reorder.Item as='div' dragMomentum={true} value={channel} key={`${channel._id}`} 
                 style={{width: '100%', height: 'auto', display: 'flex'}}>
-                    <MoveButton width={35} height={35} />
+                    <MoveButton width={20} height={20} />
                     <TextButton action={() => {
                     navigateToChannel(channel.channel_name, channel._id) 
                     }} marginBottom="2%" textAlign='start' name={channel.channel_name} key={channel._id}  />

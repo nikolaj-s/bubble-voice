@@ -1,0 +1,17 @@
+
+.iframe-outer-container {
+    position: relative;
+    overflow: hidden;
+    width: calc(100% - 65px);
+    display: flex;
+    justify-content: flex-start;
+    height: 100%;
+}
+
+.iframe-outer-container iframe {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}

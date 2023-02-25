@@ -1,7 +1,7 @@
 // library's
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import {selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectSecondaryColor, selectTextColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // components
 import { TextInput } from '../../../inputs/TextInput/TextInput';
@@ -23,6 +23,7 @@ import "./MusicWidget.css";
 // socket
 import { socket } from '../../../../features/server/ServerBar/ServerBar'
 import { removeSongFromWidget, saveSongToWidget, selectCurrentChannelId, selectMusicSavedState, throwServerError } from '../../../../features/server/ServerSlice';
+import { selectDisableTransparancyEffects } from '../../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 export const MusicWidget = ({editing = false, widget}) => {
 
@@ -46,13 +47,11 @@ export const MusicWidget = ({editing = false, widget}) => {
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
-    const primaryColor = useSelector(selectPrimaryColor);
-
-    const accentColor = useSelector(selectAccentColor);
-
     const currentChannelId = useSelector(selectCurrentChannelId);
 
     const savedMusic = useSelector(selectMusicSavedState);
+
+    const disableTransparancyEffects = useSelector(selectDisableTransparancyEffects);
 
     const handleAddSongToQueue = async () => {
         if (query.length === 0 || editing === true) return;
@@ -195,7 +194,7 @@ export const MusicWidget = ({editing = false, widget}) => {
     
     return (
         <div 
-        style={{backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0.8)`}}
+        style={{backgroundColor: disableTransparancyEffects ? secondaryColor : `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0.8)`}}
         className='music-widget-outer-container' >
             <div className='inner-music-widget-container'>
                 <div className='music-top-title-container'>
@@ -243,7 +242,7 @@ export const MusicWidget = ({editing = false, widget}) => {
                             {playing ?
                             <PauseButton action={handlePlayPause} />
                             :
-                            <PlayButton action={handlePlayPause} />
+                            <PlayButton  action={handlePlayPause} />
                             }
                             <SkipButton action={handleSkip} />
                         </div>

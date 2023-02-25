@@ -14,13 +14,13 @@
     border-bottom-right-radius: var(--border-radius);
     position: absolute;
     z-index: 1;
-    top: 55px;
+    top: 40px;
 }
 
 .drop-down-content li {
     list-style: none;
-    padding: 1rem;
-    font-size: 1.2rem;
+    padding: .5rem;
+    font-size: 1rem;
     cursor: pointer;
     width: calc(100% - 4rem);
 }

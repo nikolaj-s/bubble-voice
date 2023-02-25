@@ -1,8 +1,21 @@
-
-.create-server-menu-container {
+.add-server-menu-outer-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5;
     width: 100%;
     height: 100%;
-    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.create-server-menu-container {
+    width: 600px;
+    max-height: 800px;
+    min-height: 500px;
+    border-radius: var(--border-radius);
+    overflow-y: auto;
+    overflow-x: hidden;
     top: 0;
     left: 0;
     display: flex;
@@ -28,19 +41,25 @@
 }
 
 .add-server-nav-container {
-    height: 46px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     width: 100%;
 }
 
+.join-server-search-results-container {
+    max-height: 500px;
+    overflow-y: auto;
+    height: 100%;
+}
+
 .add-server-nav-container h3 {
     font-weight: 400;
     letter-spacing: var(--font-spacing);
-    padding: 12px;
-    margin: 0 3px 0 0;
-    font-size: 1rem;
+    padding: 11px;
+    margin: 0 2px 0 0;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: 0.1s;
     flex-shrink: 0;
@@ -73,12 +92,13 @@
 }
 
 .close-add-server-screen {
-    width: 70px;
+    width: 40px;
     height: 100%;
+    flex-shrink: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 3px;
+    margin-left: 2px;
     cursor: pointer;
 }
 

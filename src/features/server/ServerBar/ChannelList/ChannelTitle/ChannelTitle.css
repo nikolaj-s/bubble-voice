@@ -4,7 +4,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 45px;
+    height: 25px;
+    margin-top: 5px;
+    z-index: 3;
 }
 
 .channel-title-container h3 {
@@ -12,4 +14,5 @@
     font-weight: 400;
     letter-spacing: var(--font-spacing);
     cursor: default;
+    margin-left: 5px;
 }
