@@ -55,7 +55,8 @@ export const SocialRoute = () => {
             style={{
                 position: inChannel ? 'absolute' : 'relative',
                 zIndex: inChannel ? 4 : 3,
-                width: 'calc(100%)',
+                width: 'calc(100% - 3px)',
+                left: 0,
                 height: '100%',
                 backgroundColor: secondaryColor,
             }}

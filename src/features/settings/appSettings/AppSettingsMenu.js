@@ -66,9 +66,9 @@ const SettingsMenu = () => {
     }
 
     return (
-        <motion.div initial={{left: "-100%", opacity: 0}} animate={animation} style={{backgroundColor: secondaryColor}} className='app-settings-menu'>
-            <div style={{backgroundColor: primaryColor, height: 32, width: '100%'}} ></div>
-            <div className='inner-app-settings-container'>
+        <motion.div initial={{left: "-100%", opacity: 0}} animate={animation} style={{backgroundColor: primaryColor}} className='app-settings-menu'>
+
+            <div style={{backgroundColor: secondaryColor}} className='inner-app-settings-container'>
                 <div className='setting-buttons-wrapper'>
                     {settings.map((setting, i) => {
                         return (<SettingsCategoryButton 
@@ -81,6 +81,7 @@ const SettingsMenu = () => {
                     })}
                 </div>
                 <SettingsCategoryButton action={handleLogOut} name={"Log Out"} link={"log-out"} />   
+                
             </div>
             <AppVersion />
         </motion.div>

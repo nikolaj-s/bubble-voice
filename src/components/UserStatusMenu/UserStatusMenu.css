@@ -18,10 +18,10 @@
 }
 
 .inner-status-menu-spacer {
-    height: 10px;
+    height: 9px;
     flex-shrink: 0;
     width: 35px;
-    margin-left: 5px;
+    margin-left: 1px;
 }
 
 .inner-status-menu-container .text-input-container {

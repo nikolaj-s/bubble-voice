@@ -1,6 +1,7 @@
 
 .app-version-container {
-    width: 90%;
+    width: calc(100% - 20px);
+    padding: 0 10px;
 }
 
 .app-version-container P {

@@ -34,7 +34,7 @@
     height: 100%;
     flex-grow: 2;
     display: flex;
-    width: 100%;
+    width: calc(100%);
     overflow-y: auto;
     overflow-x: hidden;
     flex-direction: column-reverse;

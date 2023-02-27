@@ -31,7 +31,6 @@ export const SideBar = () => {
 
     return (
             <motion.div style={{backgroundColor: secondaryColor}} className='side-bar-container'>
-                <div style={{backgroundColor: primaryColor, height: 32, width: '100%', position: 'absolute'}} ></div>
                 <div className='inner-side-bar-container'>
                     <ServerBar />
                     <AppSettingsMenu />

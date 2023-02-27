@@ -8,7 +8,7 @@ import { motion } from 'framer-motion'
 import { SettingsCategoryButton } from '../../../components/buttons/SettingsCategoryButton/SettingsCategoryButton';
 
 // state
-import { selectSecondaryColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, selectSecondaryColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { setSideBarHeader } from '../../sideBar/sideBarSlice';
 
 // style
@@ -26,6 +26,8 @@ const Menu = () => {
     const permissions = useSelector(selectUsersPermissions);
 
     const secondaryColor = useSelector(selectSecondaryColor);
+
+    const primaryColor = useSelector(selectPrimaryColor);
 
     React.useEffect(() => {
         dispatch(setSideBarHeader("Server Settings"))
@@ -48,10 +50,12 @@ const Menu = () => {
         initial={{left: "-100%", opacity: 0}}
         animate={{left: "0%", opacity: 1}}
         style={{
-            backgroundColor: secondaryColor
+            backgroundColor: primaryColor
         }}
         className='server-settings-menu'>
-            <div className='inner-server-settings-container'>
+            <div 
+            style={{backgroundColor: secondaryColor}}
+            className='inner-server-settings-container'>
                 <div className='server-settings-buttons-wrapper'>
                     {settings.map((setting) => {
                         return <SettingsCategoryButton

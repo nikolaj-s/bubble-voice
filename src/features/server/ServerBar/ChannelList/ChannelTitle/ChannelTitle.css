@@ -16,3 +16,11 @@
     cursor: default;
     margin-left: 5px;
 }
+
+.channel-title-buttons-container {
+    display: flex;
+    align-items: center;
+    width: 60px;
+    justify-content: space-between;
+    height: 100%;
+}

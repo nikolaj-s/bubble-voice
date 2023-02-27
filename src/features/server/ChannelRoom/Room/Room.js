@@ -727,7 +727,7 @@ const Component = () => {
         if (page === 'social' || page === 'widgets') {
             if (popOutUserStreams) {
                 document.getElementById('user-streams-wrapper').style.position = 'fixed';
-                document.getElementById('user-streams-wrapper').style.left = 0;
+                document.getElementById('user-streams-wrapper').style.left = '45px';
                 document.getElementById('user-streams-wrapper').style.width = "260px";
                 document.getElementById('user-streams-wrapper').style.top = 0;
                 document.getElementById('user-streams-wrapper').style.opacity = 1;
@@ -739,6 +739,7 @@ const Component = () => {
             
         } else {
             if (popOutUserStreams) {
+                document.getElementById('user-streams-wrapper').style.left = '0px';
                 document.getElementById('user-streams-wrapper').style.position = 'relative';
                 document.getElementById('user-streams-wrapper').style.width = '100%'
                 document.getElementById('user-streams-wrapper').style.opacity = 1;

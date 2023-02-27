@@ -204,7 +204,7 @@ export const MusicWidget = ({editing = false, widget}) => {
                 </div>
                 <div className='music-widget-nav-container'>
                     <TextInput keyCode={handleEnter} inputValue={query} action={handleInput} placeholder={"Add Song To Queue"} marginTop='0' />
-                    <AddButton opacity={query.length === 0 ? 0.5 : 1} invert={true} active={query.length === 0} action={handleAddSongToQueue} margin={"0 0 0 2%"} height={"35px"} width={"35px"} />
+                    <AddButton opacity={query.length === 0 ? 0.5 : 1} invert={true} active={query.length === 0} action={handleAddSongToQueue} margin={"0 0 0 2%"} height={"25px"} width={"25px"} />
                 </div> 
                 <div className='music-queue-title-container'>
                     <h3 style={{color: textColor}}>Saved Music</h3>

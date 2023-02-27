@@ -13,7 +13,7 @@ export const ServerMedia = ({media, expand}) => {
 
     const handleLoadMore = (e) => {
         
-        const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+        const bottom = e.target.scrollHeight - e.target.scrollTop <= (e.target.clientHeight + 200);
         
         if (bottom) {
             increaseCount(count + 15)

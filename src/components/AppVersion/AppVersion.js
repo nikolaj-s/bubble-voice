@@ -3,7 +3,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 // state
-import { selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectSecondaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectCurrentAppVersion } from '../../app/appSlice';
 
 // style
@@ -12,6 +12,8 @@ import "./AppVersion.css";
 export const AppVersion = () => {
     
     const color = useSelector(selectTextColor);
+
+    const secondaryColor = useSelector(selectSecondaryColor);
 
     const appVersion = useSelector(selectCurrentAppVersion);
 
@@ -30,7 +32,9 @@ export const AppVersion = () => {
     }
 
     return (
-        <div className='app-version-container'>
+        <div 
+        style={{backgroundColor: secondaryColor}}
+        className='app-version-container'>
             <p
             style={{color: color}}
             >App Version: {appVersion}</p>

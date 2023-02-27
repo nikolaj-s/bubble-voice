@@ -11,11 +11,12 @@
 }
 
 .inner-server-settings-container {
-    width: 200px;
-    margin-right: 10px;
+    width: calc(100% - 20px);
+    padding: 0px 10px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    border-top-left-radius: 15px;
 }
 
 .server-settings-route-wrapper {

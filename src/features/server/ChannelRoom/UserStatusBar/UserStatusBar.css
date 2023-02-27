@@ -49,6 +49,10 @@
         padding: 10px;
     }
 
+    .user-status-image-container {
+        margin-left: 0px;
+    }
+
     .preview-user-status-shrinked h3,
     .preview-user-status-shrinked p {
         margin: 0;
