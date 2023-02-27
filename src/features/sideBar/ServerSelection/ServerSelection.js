@@ -1,7 +1,7 @@
 // library's
 import React from 'react';
 import {motion, AnimatePresence} from 'framer-motion';
-import { useNavigate, useRoutes } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux/es/exports';
 
@@ -13,7 +13,7 @@ import "./ServerSelection.css";
 import { handleLeavingServer, selectServerId, setServerId, setServerName, setTopPos } from '../../server/ServerSlice';
 import { setHeaderTitle } from '../../contentScreen/contentScreenSlice';
 import { selectLoadingUsersServersState, selectServerList, setSideBarHeader } from '../sideBarSlice';
-import { selectAccentColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
 import { clearWidgetOverLay } from '../../server/ChannelRoom/Room/RoomActionOverlay/RoomActionOverlaySlice';
 import { socket } from '../../server/ServerBar/ServerBar';
@@ -24,7 +24,7 @@ export const ServerSelection = () => {
 
     const navigate = useNavigate();
 
-    const accentColor = useSelector(selectAccentColor);
+    const accentColor = useSelector(selectPrimaryColor);
 
     // handle users server list
     const serverList = useSelector(selectServerList);

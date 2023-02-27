@@ -10,7 +10,7 @@ import { selectAppSettings } from './appSettingsMenuSlice';
 import { SettingsCategoryButton } from '../../../components/buttons/SettingsCategoryButton/SettingsCategoryButton';
 
 // state
-import { selectAccentColor, selectSecondaryColor } from './appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectPrimaryColor, selectSecondaryColor } from './appearanceSettings/appearanceSettingsSlice';
 import { handleSignOut } from '../appSettings/accountSettings/accountSettingsSlice';
 import { signInHandleLogOutState } from '../../LoggingIn/signIn/signInSlice';
 
@@ -31,7 +31,7 @@ const SettingsMenu = () => {
 
     const settings = useSelector(selectAppSettings);
 
-    const accentColor = useSelector(selectAccentColor);
+    const primaryColor = useSelector(selectPrimaryColor);
 
     React.useEffect(() => {
         dispatch(setSideBarHeader("Settings"))
@@ -67,7 +67,7 @@ const SettingsMenu = () => {
 
     return (
         <motion.div initial={{left: "-100%", opacity: 0}} animate={animation} style={{backgroundColor: secondaryColor}} className='app-settings-menu'>
-            <div style={{backgroundColor: accentColor, height: 32, width: '100%'}} ></div>
+            <div style={{backgroundColor: primaryColor, height: 32, width: '100%'}} ></div>
             <div className='inner-app-settings-container'>
                 <div className='setting-buttons-wrapper'>
                     {settings.map((setting, i) => {

@@ -598,6 +598,8 @@ const Component = () => {
 
                             scriptProcessor.connect(audioCtx.destination);
 
+                            let timeout;
+
                             scriptProcessor.onaudioprocess = function() {
                                 try {
                                     const array = new Uint8Array(analyser.frequencyBinCount);
@@ -607,10 +609,12 @@ const Component = () => {
                                     const arrSum = array.reduce((a, value) => a + value, 0);
 
                                     const avg = (arrSum / array.length) * 5;
-                                    
+
                                     if (avg >= voiceActivationSensitivity) {
                                         
                                         if (playing || microphoneState === false) return;
+
+                                        clearTimeout(timeout);
 
                                         playing = true;
 
@@ -626,11 +630,19 @@ const Component = () => {
 
                                         playing = false;
 
-                                        client.pauseProducer('audioType');
+                                        clearTimeout(timeout);
 
-                                        dispatch(updateMemberStatus({username: user.username, action: {active: false}}))
-                                            
-                                        socket.emit('user status', {username: user.username, action: {active: false, channel_specific: true}})
+                                        timeout = null;
+
+                                        timeout = setTimeout(() => {
+
+                                            client.pauseProducer('audioType');
+
+                                            dispatch(updateMemberStatus({username: user.username, action: {active: false}}))
+                                                
+                                            socket.emit('user status', {username: user.username, action: {active: false, channel_specific: true}})
+                                        
+                                        }, 500)
                                        
                                     }
 

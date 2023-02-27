@@ -15,7 +15,7 @@ import { Verification } from '../features/LoggingIn/verification/Verification';
 // state
 import { incrementLoadingPercentage, selectRetryState } from '../features/initializingAppScreen/initializingAppScreenSlice';
 import { getMediaDevices } from '../features/settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
-import { selectAccentColor, updatePersistedAppTheme } from '../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, updatePersistedAppTheme } from '../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { fetchAccount } from '../features/settings/appSettings/accountSettings/accountSettingsSlice';
 import { selectLoggedIn } from '../features/LoggingIn/signIn/signInSlice';
 import { selectSignedUp } from '../features/LoggingIn/signUp/signUpSlice';
@@ -39,7 +39,7 @@ function App() {
 
   const navigate = useNavigate();
 
-  const accentColor = useSelector(selectAccentColor);
+  const primaryColor = useSelector(selectPrimaryColor);
 
   const loggedIn = useSelector(selectLoggedIn);
 
@@ -227,7 +227,7 @@ function App() {
   }, [])
 
   return (
-    <div style={{backgroundColor: accentColor}} className={`App`}>
+    <div style={{backgroundColor: primaryColor}} className={`App`}>
       <TitleBar />
       <SplashScreen />
       <Routes>

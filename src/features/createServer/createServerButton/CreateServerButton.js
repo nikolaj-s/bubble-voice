@@ -1,7 +1,7 @@
 // library's
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectPrimaryColor, selectTextColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectAddServerMenuVisible, toggleAddServerMenu } from '../createServerSlice';
 // component's
 import "./CreateServerButton.css";
@@ -16,6 +16,8 @@ export const CreateServerButton = () => {
     const textColor = useSelector(selectTextColor);
 
     const primaryColor = useSelector(selectPrimaryColor);
+
+    const accentColor = useSelector(selectAccentColor);
 
     const dispatch = useDispatch();
 
@@ -33,7 +35,7 @@ export const CreateServerButton = () => {
         <div 
         onClick={handleCreateServerMenu}
         style={{
-            backgroundColor: primaryColor
+            backgroundColor: accentColor
         }}
         onMouseEnter={() => {handleHover(true)}}
         onMouseLeave={() => {handleHover(false)}}

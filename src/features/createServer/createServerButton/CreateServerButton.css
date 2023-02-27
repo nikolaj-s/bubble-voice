@@ -1,17 +1,19 @@
 
 .create-server-button-container {
-    width: 60px;
+    width: 45px;
     border-radius: 50%;
-    height: 60px;
+    height: 45px;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     transition: 0.2s;
+    position: relative;
+    margin-top: 4px;
 }
 
 .create-server-button-container:hover {
-    border-radius: 20px;
+    border-radius: 10px;
 }
 
 .create-server-button-container h3 {

@@ -55,9 +55,9 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
         >
             <div 
             style={{
-                width: server_id === currentServer || down ? '56px' : 60,
-                borderRadius: hover || server_id === currentServer ? '20px' : '50%' ,
-                height: server_id === currentServer || down ? 56 : 60,
+                width: server_id === currentServer || down ? '41px' : 45,
+                borderRadius: hover || server_id === currentServer ? '10px' : '50%' ,
+                height: server_id === currentServer || down ? 41 : 45,
                 border: server_id === currentServer || down ? `solid 2px ${textColor}` : null,
                 cursor: server_id === currentServer ? 'default' : 'pointer'
             }}

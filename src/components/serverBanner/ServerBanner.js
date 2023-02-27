@@ -53,7 +53,7 @@ export const ServerBanner = ({serverName, serverImage}) => {
             <motion.div 
             
             transition={{duration: 0.3}}
-            style={{backgroundColor: disableTransparancyEffects ? accentColor : `rgba(${accentColor.split('(')[1].split(')')[0]}, 0.7)`}}
+            style={{backgroundColor: disableTransparancyEffects ? primaryColor : `rgba(${primaryColor.split('(')[1].split(')')[0]}, 0.7)`}}
             className='server-title-overlay'>
                 <h2
                 style={{color: color}}

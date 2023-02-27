@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 
 // state
-import { selectAccentColor, selectSecondaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectPrimaryColor, selectSecondaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 import { fetchUsersServerList } from './sideBarSlice';
 
@@ -22,7 +22,7 @@ export const SideBar = () => {
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
-    const accentColor = useSelector(selectAccentColor);
+    const primaryColor = useSelector(selectPrimaryColor);
 
     React.useEffect(() => {
         dispatch(fetchUsersServerList());
@@ -31,7 +31,7 @@ export const SideBar = () => {
 
     return (
             <motion.div style={{backgroundColor: secondaryColor}} className='side-bar-container'>
-                <div style={{backgroundColor: accentColor, height: 32, width: '100%', position: 'absolute'}} ></div>
+                <div style={{backgroundColor: primaryColor, height: 32, width: '100%', position: 'absolute'}} ></div>
                 <div className='inner-side-bar-container'>
                     <ServerBar />
                     <AppSettingsMenu />
