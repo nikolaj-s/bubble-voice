@@ -12,7 +12,7 @@ import { selectDisplayName, selectUserBanner, selectUserImage, selectUsername } 
 import { playSoundEffect, selectMuteSoundEffectsWhileMutedState } from '../../../settings/soundEffects/soundEffectsSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 import { selectAudioState, selectCurrentScreen, selectMicrophoneState, selectScreenShareState, selectWebCamState, setCurrentScreen, setScreens, setSelectingScreensState, toggleConnectionError, toggleConnectionLoading, toggleControlState, toggleLoadingScreenShare, toggleLoadingWebCam } from '../../../controlBar/ControlBarSlice';
-import { updateMusicState } from './Music/MusicSlice';
+import { selectMusicExpanded, updateMusicState } from './Music/MusicSlice';
 
 // style
 import "./Room.css";
@@ -84,6 +84,8 @@ const Component = () => {
 
     const popOutUserStreams = useSelector(selectPopOutUserStreams);
     
+    const musicExpanded = useSelector(selectMusicExpanded);
+
     // audio pref state
     const echoCancellation = useSelector(selectEchoCancellatio);
 
@@ -213,8 +215,9 @@ const Component = () => {
             
         } catch (error) {
             
-            dispatch(throwServerError({errorMessage: "Fatal error fetching screens to share"}));
-            
+            client?.produce('screenType', currentScreen);
+            dispatch(updateMemberStatus({username: user.username, action: {screenshare: true}}))
+            socket?.emit('user status', {username: user.username, action: {screenshare: true}})
         }
 
     }
@@ -724,7 +727,7 @@ const Component = () => {
     
     React.useEffect(() => {
         
-        if (page === 'social' || page === 'widgets') {
+        if (page === 'social' || page === 'widgets' || musicExpanded === true) {
             if (popOutUserStreams) {
                 document.getElementById('user-streams-wrapper').style.position = 'fixed';
                 document.getElementById('user-streams-wrapper').style.left = '45px';
@@ -751,7 +754,7 @@ const Component = () => {
             
         }
     // eslint-disable-next-line      
-    }, [page, popOutUserStreams])
+    }, [page, popOutUserStreams, musicExpanded])
 
     
     return (

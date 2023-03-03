@@ -2,12 +2,16 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getToken, url } from "../../util/Validation";
 
 import Axios from 'axios';
-import { setServerId, setServerName } from "../server/ServerSlice";
+import { handleLeavingServer, setServerId, setServerName } from "../server/ServerSlice";
 import { pushNewServerCard } from "../sideBar/sideBarSlice";
+import { playSoundEffect } from "../settings/soundEffects/soundEffectsSlice";
+import { clearWidgetOverLay } from "../server/ChannelRoom/Room/RoomActionOverlay/RoomActionOverlaySlice";
+import { toggleAddServerMenu } from "../createServer/createServerSlice";
 
 export const joinNewServer = createAsyncThunk(
     'joinServerSlice/joinNewServer',
-    async (_, {getState, rejectWithValue, dispatch}) => {
+    async ({currentServer}, {getState, rejectWithValue, dispatch}) => {
+        
         const { selectedServer, password } = getState().joinServerSlice;
 
         if (!selectedServer.server_id) return rejectWithValue({error: true, errorMessage: "Invalid Server Issue"});
@@ -30,10 +34,24 @@ export const joinNewServer = createAsyncThunk(
             if (response.data.success) {
                 // on data response success set set server slice to include the required details
                 // then redirect to the server route to load the server component
-                dispatch(setServerId(response.data.server.server_id));
-                dispatch(setServerName(response.data.server.server_name));
-                dispatch(pushNewServerCard(response.data.server));
-                window.location.hash = `/dashboard/server/${response.data.server.server_name}`;
+                if (currentServer) {
+                    dispatch(playSoundEffect("disconnected"));
+
+                    dispatch(clearWidgetOverLay());
+
+                    dispatch(handleLeavingServer());
+
+                    window.location.hash = '/dashboard'
+                }
+                
+                setTimeout(() => {
+                    dispatch(toggleAddServerMenu(false));
+                    dispatch(setServerId(response.data.server.server_id));
+                    dispatch(setServerName(response.data.server.server_name));
+                    dispatch(pushNewServerCard(response.data.server));
+                    window.location.hash = `/dashboard/server/${response.data.server.server_name}`;
+                }, 500)
+                
             }
             
         }).catch(error => {
@@ -82,6 +100,7 @@ const joinServerSlice = createSlice({
             state.loading = false;
             state.error = false;
             state.errorMessage = "";
+            state.selectedServer = {};
         },
         [joinNewServer.rejected]: (state, action) => {
             state.loading = false;

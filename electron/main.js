@@ -427,8 +427,8 @@ app.whenReady().then(() => {
   session.defaultSession.setDisplayMediaRequestHandler((request, callback) => {
     desktopCapturer.getSources({types: ['window', 'screen', 'audio']}).then((sources) => {
       const index = sources.findIndex(s => s.id === window_id);
-  
-      callback({video: sources[index], audio: 'loopbackWithMute'});
+      
+      callback({video: sources[index], audio: 'loopback'});
     })
   })
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentChannelId, throwServerError } from '../../../ServerSlice';
-import {selectMusicPlayingState, selectMusicQueue, selectMusicVolume, throwMusicError, updateMusicVolume,} from './MusicSlice';
+import {selectMusicExpanded, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, throwMusicError, toggleMusicExpanded, updateMusicVolume,} from './MusicSlice';
 import YouTube from 'react-youtube'
 import { selectPrimaryColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
@@ -31,7 +31,7 @@ export const Music = () => {
 
     const [visible, toggleVisible] = React.useState(false);
 
-    const [expanded, toggleExpanded] = React.useState(false);
+    const expanded = useSelector(selectMusicExpanded);
 
     const [loading, toggleLoading] = React.useState(false);
 
@@ -92,7 +92,7 @@ export const Music = () => {
 
     const toggleVisibility = () => {
         if (visible) {
-            toggleExpanded(false);
+            dispatch(toggleMusicExpanded(false));
         }
         toggleVisible(!visible);
     }
@@ -208,7 +208,7 @@ export const Music = () => {
     }
 
     const handleExpansion = () => {
-        toggleExpanded(!expanded);
+        dispatch(toggleMusicExpanded(!expanded));
     }
 
     return (

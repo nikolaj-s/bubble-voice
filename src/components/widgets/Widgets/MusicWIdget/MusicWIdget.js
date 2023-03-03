@@ -240,11 +240,11 @@ export const MusicWidget = ({editing = false, widget}) => {
                     <div className='music-widget-inner-controls-container'>
                         <div>
                             {playing ?
-                            <PauseButton action={handlePlayPause} />
+                            <PauseButton width={25} height={25} action={handlePlayPause} />
                             :
-                            <PlayButton  action={handlePlayPause} />
+                            <PlayButton width={25} height={25} action={handlePlayPause} />
                             }
-                            <SkipButton action={handleSkip} />
+                            <SkipButton width={25} height={25} action={handleSkip} />
                         </div>
                         <Range min={0} value={volume} action={handleMusicVolume} max={100} step={0.05} />
                     </div>

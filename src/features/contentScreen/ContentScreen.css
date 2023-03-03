@@ -11,8 +11,8 @@
 }
 
 .content-screen-inner-container {
-    height: calc(100% - 30px);
-    width: 100%;
+    height: calc(100% - 33px);
+    width: calc(100%);
     border-bottom-right-radius: var(--border-radius);
     display: flex;
     overflow-y: auto;

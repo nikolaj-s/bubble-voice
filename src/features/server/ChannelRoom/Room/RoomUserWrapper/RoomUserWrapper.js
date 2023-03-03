@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
 import { selectHideUserStatus, selectMiscSettingsHideNonVideoParticapents } from '../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { selectMusicExpanded } from '../Music/MusicSlice';
 import { User } from '../User/User'
 
 export const RoomUserWrapper = ({users, page}) => {
@@ -10,6 +11,8 @@ export const RoomUserWrapper = ({users, page}) => {
     const hidingNonVideoMembers = useSelector(selectMiscSettingsHideNonVideoParticapents);
 
     const hidingUserStatus = useSelector(selectHideUserStatus);
+
+    const musicExpanded = useSelector(selectMusicExpanded);
 
     let margin = 15;
 
@@ -58,7 +61,7 @@ export const RoomUserWrapper = ({users, page}) => {
             handleScaling();
         }, 100)
         
-    }, [page])
+    }, [page, musicExpanded])
         
     React.useEffect(() => {
         try {

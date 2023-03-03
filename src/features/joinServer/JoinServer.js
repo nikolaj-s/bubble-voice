@@ -71,28 +71,7 @@ export const JoinServer = () => {
 
     const join = () => {
 
-        if (currentServer) {
-
-            dispatch(playSoundEffect("disconnected"));
-
-            dispatch(clearWidgetOverLay());
-
-            dispatch(handleLeavingServer());
-
-            navigate('/dashboard');
-
-            setTimeout(() => {
-
-                dispatch(joinNewServer());
-
-            }, 500)
-        } else {
-
-            dispatch(joinNewServer());
-        
-        }
-
-        dispatch(setServerToJoin({}))
+        dispatch(joinNewServer({currentServer: currentServer}));
         
     }
 

@@ -317,7 +317,7 @@ export class RoomClient {
 
                         el.playsInline = false;
 
-                        el.muted = true;
+                        el.muted = false;
 
                         el.volume = 1;
 
@@ -539,18 +539,13 @@ export class RoomClient {
                 break
             case mediaType.screen:
                 mediaConstraints = {
-                    audio: false,
+                    audio: {
+                        echoCancellation: true,
+                        suppressLocalAudioPlayback: true
+                    },
                     video: {
-                        mandatory: {
-                            chromeMediaSource: 'desktop',
-                            chromeMediaSourceId: deviceId,
-                            minWidth: 960,
-                            maxWidth: 1280,
-                            minHeight: 540,
-                            maxHeight: 720,
-                            maxFrameRate: 30,
-                            minFrameRate: 30,
-                        }
+                        width: 1280,
+                        height: 720
                     }
                 };
                 screen = true;
@@ -577,7 +572,7 @@ export class RoomClient {
         let microphone_stream;
 
         try {
-            stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
+            stream = screen ? await navigator.mediaDevices.getDisplayMedia(mediaConstraints) : await navigator.mediaDevices.getUserMedia(mediaConstraints);
 
             if (screen) {
 
@@ -611,7 +606,7 @@ export class RoomClient {
             // let stream_audio;
 
             // if (screen) {
-            //     console.log(stream.getAudioTracks())
+
             //     stream_audio = stream.getAudioTracks()[0];
             
             // }  
@@ -698,6 +693,7 @@ export class RoomClient {
                 el.autoplay = true;
                 el.className = 'stream';
                 el.muted = true;
+                el.volume = 0;
                 el.className = `streaming-video-player ${this.user.username}-streaming-player`
                 el.playsInline = true;
                 par.appendChild(el)
@@ -708,7 +704,7 @@ export class RoomClient {
             let stream_audio_producer;
 
             // if (stream_audio) {
-
+            //   //  stream_audio.applyConstraints({echoCancellation: true, suppressLocalAudioPlayback: true})
             //     let stream_audio_producer = await this.producerTransport.produce({ track: stream_audio })
 
             //     this.producers.set(stream_audio_producer.id, stream_audio_producer);
