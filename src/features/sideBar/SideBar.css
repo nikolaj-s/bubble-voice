@@ -1,7 +1,7 @@
 
 .side-bar-container {
-    min-width: 240px;
-    max-width: 240px;
+    min-width: 210px;
+    max-width: 210px;
     width: 100%;
     height: calc(100%);
     display: flex;

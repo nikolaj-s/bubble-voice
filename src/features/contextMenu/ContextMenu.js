@@ -450,7 +450,7 @@ export const ContextMenu = () => {
             dispatch(setContextMenuOptions({state: 'copy', value: window.getSelection().toString()}))
         }
             
-        dispatch(setCtxCordinates({x: (e.view.innerWidth - e.pageX) < 400 ? (e.pageX - 300) : e.pageX, y: e.pageY}))
+        dispatch(setCtxCordinates({x: (e.view.innerWidth - e.pageX) < 400 ? (e.pageX - 200) : e.pageX, y: e.pageY}))
 
         setOrigin((e.view.innerHeight - e.pageY) < 300 ? true : false)
     // eslint-disable-next-line

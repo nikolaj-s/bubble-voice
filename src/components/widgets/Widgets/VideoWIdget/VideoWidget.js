@@ -32,7 +32,17 @@ export const VideoWidget = ({widget, editing}) => {
 
             iFrame = "https://www.xvideos.com/embedframe/" + (widget.content.text.split('video')[1].split('/')[0]);
             
-        } else {
+        } else if (widget.content.text.includes('vimeo')) {
+                        
+            iFrame = "https://player.vimeo.com/video/" + widget.content.text.split('com/')[1].split('/').join('?h=');
+
+        } else if (widget.content.text.includes('erothots')) { 
+
+            iFrame = "https://erothots.co/embed/video/" + widget.content.text.split('video/')[1].split('/')[0];
+
+        } 
+        
+        else {
             iFrame = null;
         }
 

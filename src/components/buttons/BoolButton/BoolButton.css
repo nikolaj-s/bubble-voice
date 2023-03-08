@@ -16,16 +16,16 @@
     margin: 0;
     padding: 0;
     font-weight: 400;
-    font-size: 0.8rem;
+    font-size: 0.6rem;
     letter-spacing: var(--font-spacing);
-    text-align: center;
+    text-align: start;
     flex: 1;
 }
 
 .bool-button-state {
     margin: 0 0.4rem;
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     flex-shrink: 0;
     border-radius: var(--border-radius);
     display: flex;
@@ -34,8 +34,8 @@
 }
 
 .bool-state-true {
-    width: 20px;
-    height: 20px;
+    width: 10px;
+    height: 10px;
     flex-shrink: 0;
-    border-radius: 5px;
+    border-radius: 2px;
 }

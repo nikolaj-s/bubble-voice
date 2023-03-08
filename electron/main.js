@@ -145,6 +145,13 @@ function createWindow () {
   
   win.webContents.on('new-window', handleRedirect);
 
+
+  win.webContents.on('did-create-window', (window, details) => {
+    window.close()
+
+    shell.openExternal(details.url);
+  })
+
   win.on('close', () => {
 
     let window_data = {

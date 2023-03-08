@@ -39,7 +39,7 @@ export const ContentScreen = () => {
         <>
             <motion.div className='content-screen-container' >
                 <HeaderTitle title={headerTitleState} spacing={true} />
-                <div style={{backgroundColor: secondaryColor, borderLeft: `solid 2px ${primaryColor}`}} className='content-screen-inner-container'>
+                <div style={{backgroundColor: secondaryColor, borderLeft: `solid 1px ${primaryColor}`}} className='content-screen-inner-container'>
                     <Disconnected />
                     <NoServerSelectedDisplay />
                     <SettingsRoutesWrapper />

@@ -28,7 +28,7 @@
     justify-content: center;
     vertical-align: middle;
     flex: 1;
-    z-index: 0;
+    z-index: 4;
     transition: 0.1s;
 }
 

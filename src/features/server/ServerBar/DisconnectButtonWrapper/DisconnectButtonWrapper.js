@@ -41,8 +41,8 @@ export const DisconnectButtonWrapper = ({disconnect, leave, channel_id}) => {
                 <ProfilePictureButton action={handleToggleStatusMenu} image={profilePic} width={25} height={25} padding={1} />
                 {channel_id !== null ? <ConnectionIndicator  active={true} /> : null}
             </div>
-            <LeaveServerButton desc_space={15} description={"Leave Server"} margin={"0px"} width={channel_id ? 65 : 180} padding={5} height={25} borderRadius={5} id='disconnect-from-server-button' action={() => {leave(false)}} name={"Leave Server"} />
-            {channel_id !== null ? <DisconnectButton desc_space={15} action={disconnect} padding={5} width={65} height={25}  /> : null}
+            <LeaveServerButton desc_space={15} description={"Leave Server"} margin={"0px"} width={channel_id ? 50 : 150} padding={5} height={25} borderRadius={5} id='disconnect-from-server-button' action={() => {leave(false)}} name={"Leave Server"} />
+            {channel_id !== null ? <DisconnectButton desc_space={15} action={disconnect} padding={5} width={50} height={25}  /> : null}
         </motion.div>
         </>
     )

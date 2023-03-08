@@ -2,7 +2,6 @@
 .image-widget-container {
     width: 100%;
     max-height: 600px;
-    margin: 3px 0;
     overflow: hidden;
     cursor: pointer;
 }

@@ -83,7 +83,7 @@ export const UserStatusBar = () => {
         <>
         {(channelId && hideUserStatusBar) ? null :
         <div 
-        style={{borderLeft: `2px solid ${primaryColor}`}}
+        style={{borderLeft: `1px solid ${primaryColor}`}}
         className='user-status-bar'>
             {serverGroups.map((server_group) => {
 

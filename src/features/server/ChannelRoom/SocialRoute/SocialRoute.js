@@ -63,7 +63,7 @@ export const SocialRoute = () => {
             transition={{duration: 0.2}}
             className='social-route-wrapper-container'>
                 <div 
-                style={{borderBottom: `solid 2px ${primaryColor}`, backgroundColor: primaryColor}}
+                style={{borderBottom: `solid 1px ${primaryColor}`, backgroundColor: primaryColor}}
                 className='social-route-top-nav'>
                     <div 
                     style={{backgroundColor: secondaryColor}}

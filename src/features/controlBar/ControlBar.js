@@ -112,7 +112,7 @@ export const ControlBar = () => {
         <>
             <ScreenShareMenu selectingScreens={selectingScreens} />
             <div className='control-bar-container' 
-            style={{borderTop: `solid 2px ${accentColor}`}}
+            style={{borderTop: `solid 1px ${accentColor}`}}
             >
                 <div className='controls-wrapper'>
                     <SettingsButton 

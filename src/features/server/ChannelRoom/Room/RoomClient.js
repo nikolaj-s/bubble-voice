@@ -539,13 +539,18 @@ export class RoomClient {
                 break
             case mediaType.screen:
                 mediaConstraints = {
-                    audio: {
-                        echoCancellation: true,
-                        suppressLocalAudioPlayback: true
-                    },
+                    audio: false,
                     video: {
-                        width: 1280,
-                        height: 720
+                        mandatory: {
+                            chromeMediaSource: 'desktop',
+                            chromeMediaSourceId: deviceId,
+                            minWidth: 960,
+                            maxWidth: 1280,
+                            minHeight: 540,
+                            maxHeight: 720,
+                            maxFrameRate: 30,
+                            minFrameRate: 30,
+                        }
                     }
                 };
                 screen = true;
@@ -572,7 +577,7 @@ export class RoomClient {
         let microphone_stream;
 
         try {
-            stream = screen ? await navigator.mediaDevices.getDisplayMedia(mediaConstraints) : await navigator.mediaDevices.getUserMedia(mediaConstraints);
+            stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
 
             if (screen) {
 
