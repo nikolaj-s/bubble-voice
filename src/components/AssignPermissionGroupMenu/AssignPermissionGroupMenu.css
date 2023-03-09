@@ -22,6 +22,10 @@
     font-size: 0.7rem;
     font-weight: 400;
     letter-spacing: var(--font-spacing);
+    width: calc(100% - 25px);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .select-server-group-to-assign-button:hover {

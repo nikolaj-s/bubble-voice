@@ -29,8 +29,8 @@
     font-weight: 400;
     font-size: 1rem;
     width: 100%;
-    text-align: center;
-    margin-left: 0px;
+    text-align: start;
+    margin-left: 3px;
     cursor: default;
     letter-spacing: var(--font-spacing);
 }

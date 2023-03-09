@@ -106,7 +106,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         if (text.length === 0 && image === null) return;
 
-        if (text.split(' ').join('').length === 0) return;
+        if (text.split(' ').join('').length === 0 && image === null) return;
         
         if (text.length > 511) return dispatch(throwServerError({errorMessage: "Message cannot be longer than 512 characters"}));
 

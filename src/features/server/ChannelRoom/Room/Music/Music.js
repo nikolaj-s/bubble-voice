@@ -87,6 +87,10 @@ export const Music = () => {
             setCurrentlyPlaying(musicQueue[0]?.id);
 
         }    
+
+        if (musicQueue.length === 0) {
+            dispatch(toggleMusicExpanded(false));
+        }
     // eslint-disable-next-line    
     }, [musicQueue])
 

@@ -31,6 +31,15 @@ import { selectPrimaryColor, selectTextColor } from '../settings/appSettings/app
 import { selectSocialSoundEffect, updateSoundEffectsState } from '../settings/soundEffects/soundEffectsSlice';
 import { client } from '../server/ChannelRoom/Room/Room';
 import { audioCtx } from '../AudioInit/AudioInit';
+import { CopyIcon } from '../../components/Icons/CopyIcon/CopyIcon';
+import { DeleteIcon } from '../../components/Icons/DeleteIcon/DeleteIcon';
+import { SaveIcon } from '../../components/Icons/SaveIcon/SaveIcon';
+import { SocialIcon } from '../../components/Icons/SocialIcon/SocialIcon';
+import { EditIcon } from '../../components/Icons/EditIcon/EditIcon';
+import { BanIcon } from '../../components/Icons/BanIcon/BanIcon';
+import { ItalyIcon } from '../../components/Icons/ItalyIcon/ItalyIcon';
+import { KickIcon } from '../../components/Icons/KickIcon/KickIcon';
+import { PokeIcon } from '../../components/Icons/PokeIcon/PokeIcon';
 
 export const ContextMenu = () => {
 
@@ -927,15 +936,15 @@ export const ContextMenu = () => {
             backgroundColor: primaryColor
         }}
         className='ctx-menu-container'>
-            {saveImage ? <CtxButton action={() => {handleSave(true)}} name={"Save Image"} /> : null}
-            {saveVideo ? <CtxButton action={() => {handleSave(false)}} name={"Save Video"} /> : null}
+            {saveImage ? <CtxButton action={() => {handleSave(true)}} name={"Save Image"} icon={<SaveIcon />} /> : null}
+            {saveVideo ? <CtxButton action={() => {handleSave(false)}} name={"Save Video"} icon={<SaveIcon />} /> : null}
             {pasteCtxState ? <CtxButton name={"Paste"} action={paste} /> : null}
-            {copyCtxState ? <CtxButton name={"Copy"} action={handleCopy} /> : null}
-            {copyLinkState ? <CtxButton name="Copy Link" action={handleCopyLink} /> : null}
+            {copyCtxState ? <CtxButton name={"Copy"} action={handleCopy} icon={<CopyIcon />} /> : null}
+            {copyLinkState ? <CtxButton name="Copy Link" action={handleCopyLink} icon={<CopyIcon />} /> : null}
             {joinChannelState ? <CtxButton action={handleJoinChannel} name={"Join Channel"} /> : null}
             {leaveChannelState ? <CtxButton action={handleLeaveChannel} name={'Leave Channel'} /> : null}
-            {editChannelState ? <CtxButton action={handleEditChannel} name={"Edit Channel"} /> : null}
-            {viewSocial ? <CtxButton action={viewSocialFeed} name={"Social"} /> : null}
+            {editChannelState ? <CtxButton action={handleEditChannel} name={"Edit Channel"} icon={<EditIcon />} /> : null}
+            {viewSocial ? <CtxButton action={viewSocialFeed} name={"Social"} icon={<SocialIcon color={textColor} />} /> : null}
             {assignPermissions ? <AssignPermissionGroupMenu action={assignNewPermissionGroup} permission_groups={permissionGroups} current_permission_group={selectedUserToManage.split('-channel')[0]}  /> : null}
             {audio ? 
             <>
@@ -957,11 +966,11 @@ export const ContextMenu = () => {
             {flipWebCamState ? <BoolButton name={"Flip Web Cam"} state={flippedWebCamState} action={handleFlipWebCamPref} /> : null}
             {disableWebCameState ? <BoolButton name={"Disable Webcam"} state={disabledWebCamLocalState} action={handleDisableWebCam} /> : null}
             {disableStreamState ? <BoolButton name={"Disable Stream"} state={disableStreamLocalState} action={handleDisableStream} /> : null}
-            {deleteWidget ? <CtxButton action={handleDeleteWidget} name={"Delete Widget"} /> : null}
+            {deleteWidget ? <CtxButton action={handleDeleteWidget} name={"Delete Widget"} icon={<DeleteIcon />} /> : null}
             {moveUserState ? <MoveUser top={ctxCordinates.y} left={ctxCordinates.x} move={handleMoveUser} /> : null}
-            {kickUser ? <CtxButton name="Kick User" action={handleKickUser} /> : null}
-            {pokeUser ? <CtxButton name="Poke User" action={handlePokeUser} /> : null}
-            {canBanUser ? <CtxButton action={handleBanUser} name={"Ban User"} /> : null}
+            {kickUser ? <CtxButton name="Kick User" action={handleKickUser} icon={<KickIcon />} /> : null}
+            {pokeUser ? <CtxButton name="Poke User" action={handlePokeUser} icon={<PokeIcon />} /> : null}
+            {canBanUser ? <CtxButton action={handleBanUser} name={"Ban User"} icon={<BanIcon />}/> : null}
             {channelSpecificSettingsState ? <CtxMenuTitle title={"Room Preferences"} /> : null}
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideChannelBackground")}} state={hideChannelBackground} name={"Hide Channel Background"} /> : null}
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideNonVideoParticapents")}} state={hideNonVideoParticapents} name={"Hide Non Video Participants"} /> : null}
@@ -970,7 +979,7 @@ export const ContextMenu = () => {
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideUserStatus")}} state={hideUserStatus} name={"Hide User Status"} /> : null}
             
             {stopStreamingState ? <CtxButton action={handleStopStreaming} name={"Stop Streaming"} /> : null}
-            {deleteMessageState ? <CtxButton action={handleDeleteMessage} name={"Delete Message"} /> : null}
+            {deleteMessageState ? <CtxButton action={handleDeleteMessage} name={"Delete Message"} icon={<DeleteIcon />} /> : null}
             <Loading loading={loading} />
         </motion.div>
         : null}
