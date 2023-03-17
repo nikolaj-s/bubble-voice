@@ -35,9 +35,9 @@ export const Song = ({id, image, name, duration, action, liked, saved, addToQueu
                 color: textColor
             }}
             >{name}</p>
-            <LikeButton toggled={liked} action={action} width={20} height={20} />
-            {(saved && liked) ? <AddButton action={addToQueue} margin={"0 0 0 5px"} width={20} height={20} description={"Add To Queue"} /> : null}
-            {inQueue ? <RemoveButton action={removeFromQueue} margin={"0 0 0 5px"} width={20} height={20} description={"Remove"} /> : null}
+            <LikeButton desc_space={10} padding={4} toggled={liked} action={action}  width={20} height={20} />
+            {(saved && liked) ? <AddButton desc_space={10} padding={4} action={addToQueue} margin={"0 0 0 5px"} width={20} height={20} description={"Add To Queue"} /> : null}
+            {inQueue ? <RemoveButton desc_space={10} padding={4} action={removeFromQueue} margin={"0 0 0 5px"} width={20} height={20} description={"Remove"} /> : null}
             <p style={{
                 color: textColor
             }}>{time}</p>

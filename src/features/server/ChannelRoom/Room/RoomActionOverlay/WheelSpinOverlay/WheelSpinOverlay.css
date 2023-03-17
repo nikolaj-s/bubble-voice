@@ -13,7 +13,7 @@
     justify-content: center;
     flex-direction: column;
     backdrop-filter: blur(8px);
-    z-index: 2;
+    z-index: 5;
 }
 
 .wheel-spin-overlay-container .wheel-widget-wrapper {

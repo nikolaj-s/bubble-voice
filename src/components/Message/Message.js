@@ -74,7 +74,7 @@ export const Message = ({ message, overlay = false, id, channel_id, perm, pinMes
         id={`${id}/${channel_id}`}
         className='message-container'>
             <div id={`${id}-ctx-message-overlay`} className={'ctx-message-overlay'} />
-            <SenderInfo primaryColor={primaryColor} display_name={user?.display_name} user_image={user?.user_image} action={openUserPanel} persist={persist} id={id} accentColor={accentColor} hover={hoverState} textColor={textColor} perm={perm} index={index}  message={message} current_message={current_message} previous_message={previous_message} pinMessage={pinMessage} pinned={pinned} overlay={overlay} />
+            <SenderInfo profile_picture_shape={user?.profile_picture_shape} primaryColor={primaryColor} display_name={user?.display_name} user_image={user?.user_image} action={openUserPanel} persist={persist} id={id} accentColor={accentColor} hover={hoverState} textColor={textColor} perm={perm} index={index}  message={message} current_message={current_message} previous_message={previous_message} pinMessage={pinMessage} pinned={pinned} overlay={overlay} />
             <MessageText color={textColor} text={message.text} />
             <MessageLink link={message.link} />
             <Iframe marginRight={5} marginLeft={60} link={message.iFrame} />

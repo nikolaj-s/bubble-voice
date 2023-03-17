@@ -209,7 +209,8 @@ export const MusicWidget = ({editing = false, widget}) => {
                 <div className='music-queue-title-container'>
                     <h3 style={{color: textColor}}>Saved Music</h3>
                 </div> 
-                {savedMusic.length === 0 ?
+                <div className='saved-music-container'>
+                    {savedMusic.length === 0 ?
                     <p 
                     style={{
                         color: textColor
@@ -218,6 +219,7 @@ export const MusicWidget = ({editing = false, widget}) => {
                     : savedMusic.map(song => {
                         return <Song addToQueue={() => {handleAddSavedSongToQueue(song)}} saved={true} liked={song.liked} action={() => {handleSavingSong(song)}} id={song._id} key={song._id} name={song.title} duration={song.duration} image={song.thumbnail} />
                     })}
+                </div>
                 <div className='music-queue-title-container'>
                     <h3 style={{color: textColor}}>Queue</h3>
                     <h3 style={{color: textColor}}>{queue.length === 0 ? 0 : queue.length - 1} / 10</h3>

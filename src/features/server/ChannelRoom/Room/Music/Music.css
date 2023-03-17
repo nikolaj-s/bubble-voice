@@ -62,7 +62,7 @@
 .music-overlay-volume-container {
     position: absolute;
     z-index: 5;
-    bottom: calc(50% - 140px);
+    bottom: calc(50% - 132px);
     padding: 0 20px;
     width: 130px;
 }
@@ -75,7 +75,7 @@
 .music-overlay-search-container {
     position: absolute;
     z-index: 5;
-    bottom: calc(50% - 65px);
+    bottom: calc(50% - 69px);
     padding: 0 20px;
     border-radius: var(--border-radius);
     width: 248px;

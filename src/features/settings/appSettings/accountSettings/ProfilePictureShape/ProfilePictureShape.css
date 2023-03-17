@@ -1,0 +1,5 @@
+.profile-shapes-container {
+    display: flex;
+    width: 140px;
+    justify-content: space-between;
+}

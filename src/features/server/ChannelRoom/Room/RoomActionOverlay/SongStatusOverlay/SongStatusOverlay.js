@@ -43,7 +43,7 @@ export const SongStatusOverlay = ({data, onEnd}) => {
         key={'song-status-overlay'}
         style={{
             backgroundColor: secondaryColor,
-            borderBottom: `solid 3px ${accentColor}`
+            borderBottom: `solid 1px ${accentColor}`
         }}
         transition={{duration: 0.3}}
         className='song-skipped-overlay-container'>

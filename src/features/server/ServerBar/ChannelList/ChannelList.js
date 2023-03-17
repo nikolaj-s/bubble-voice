@@ -96,7 +96,7 @@ export const ChannelList = () => {
     React.useEffect(() => {
 
         animaiton.start({
-            maxHeight: 'calc(100% - 190px)',
+            maxHeight: 'calc(100%)',
             opacity: 1
         }).then(() => {
             animaiton.start({

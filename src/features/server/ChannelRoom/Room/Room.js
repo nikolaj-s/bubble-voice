@@ -8,7 +8,7 @@ import * as mediasoupClient from 'mediasoup-client';
 // state
 import { selectCurrentChannel, selectCurrentChannelId, selectPushToTalkActive, selectServerId, toggleLoadingChannel, updateMemberStatus, selectServerMembers, throwServerError, updateJoiningChannelState, setChannelSocialId, selectReconnectingState, toggleReconnectingState, checkConnection, clearServerPing } from '../../ServerSlice';
 import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPushToTalkState, selectMirroredWebCamState, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, selectVoiceActivationSensitivity, selectAutoGainControl, selectVoiceDeactivationDelayState, selectAdvancedVoiceActivation } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
-import { selectDisplayName, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
+import { selectDisplayName, selectProfilePictureShape, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { playSoundEffect, selectMuteSoundEffectsWhileMutedState } from '../../../settings/soundEffects/soundEffectsSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 import { selectAudioState, selectCurrentScreen, selectMicrophoneState, selectScreenShareState, selectWebCamState, setCurrentScreen, setScreens, setSelectingScreensState, toggleConnectionError, toggleConnectionLoading, toggleControlState, toggleLoadingScreenShare, toggleLoadingWebCam } from '../../../controlBar/ControlBarSlice';
@@ -103,6 +103,8 @@ const Component = () => {
 
     const advancedVoiceActivationDetection = useSelector(selectAdvancedVoiceActivation);
 
+    const profileImageShape = useSelector(selectProfilePictureShape);
+
     React.useEffect(() => {
         
         if (client) {
@@ -146,7 +148,8 @@ const Component = () => {
         display_name: displayName,
         user_banner: userBanner,
         user_image: userImage,
-        mirror_web_cam: webCamMirroredState
+        mirror_web_cam: webCamMirroredState,
+        profile_picture_shape: profileImageShape
     }
 
     const event = (arg) => {
@@ -730,8 +733,8 @@ const Component = () => {
         if (page === 'social' || page === 'widgets' || musicExpanded === true) {
             if (popOutUserStreams) {
                 document.getElementById('user-streams-wrapper').style.position = 'fixed';
-                document.getElementById('user-streams-wrapper').style.left = '45px';
-                document.getElementById('user-streams-wrapper').style.width = "260px";
+                document.getElementById('user-streams-wrapper').style.left = '-15px';
+                document.getElementById('user-streams-wrapper').style.width = "240px";
                 document.getElementById('user-streams-wrapper').style.top = 0;
                 document.getElementById('user-streams-wrapper').style.opacity = 1;
                 document.getElementById('user-streams-wrapper').style.pointerEvents = 'none';

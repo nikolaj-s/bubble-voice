@@ -28,7 +28,7 @@ export const WheelSpinOverlay = ({data, onEnd, page}) => {
         style={{
             display: (page === "social" || page === "widgets") ? 'none' : 'flex',
             backgroundColor: secondaryColor,
-            border: `solid 3px ${primaryColor}`,
+            border: `solid 1px ${primaryColor}`,
             borderTop: 'none'
         }}
         initial={{top: -750}}

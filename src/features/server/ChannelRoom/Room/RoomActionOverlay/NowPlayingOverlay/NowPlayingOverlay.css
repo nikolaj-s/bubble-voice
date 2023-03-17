@@ -13,7 +13,7 @@
     flex-direction: column;
     bottom: 0px;
     right: 0px;
-    z-index: 2;
+    z-index: 5;
 }
 
 .now-playing-overlay-container h1 {

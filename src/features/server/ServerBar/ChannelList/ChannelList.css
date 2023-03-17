@@ -2,7 +2,7 @@
     width: 100%;
     max-height: calc(100%);
     flex-shrink: 2;
-    overflow-y: auto;
+    height: 100%;
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
@@ -10,9 +10,12 @@
 }
 
 .channel-list-button-wrapper {
-    width: 96%;
+    width: calc(100% - 4px);
     display: flex;
     flex-direction: column;
     flex-shrink: 1;
+    overflow-y: auto;
+    height: calc(100% - 45px);
+    overflow-x: hidden;
 }
 

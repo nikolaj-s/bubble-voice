@@ -1,4 +1,4 @@
-// library's
+ // library's
 import React from 'react';
 import {motion, AnimatePresence} from 'framer-motion';
 import { useNavigate } from 'react-router';
@@ -88,7 +88,7 @@ export const ServerSelection = () => {
     }, [])
 
     return (
-        <div style={{backgroundColor: accentColor}} className='side-bar-inner-container'>
+        <div id="side-server-list-wrapper" style={{backgroundColor: accentColor}} className='side-bar-inner-container'>
             <AnimatePresence >
                 <div className='server-list-outer-wrapper'>
                     <motion.div key={'server-select'} initial={{translateX: '-100%'}} animate={{translateX: '0%'}} exit={{translateX: "-100%"}} className='server-list-wrapper'>

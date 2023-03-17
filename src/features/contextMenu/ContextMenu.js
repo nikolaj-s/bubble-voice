@@ -40,6 +40,8 @@ import { BanIcon } from '../../components/Icons/BanIcon/BanIcon';
 import { ItalyIcon } from '../../components/Icons/ItalyIcon/ItalyIcon';
 import { KickIcon } from '../../components/Icons/KickIcon/KickIcon';
 import { PokeIcon } from '../../components/Icons/PokeIcon/PokeIcon';
+import { PlayOnWidgetIcon } from '../../components/Icons/PlayOnWidgetIcon/PlayOnWidgetIcon';
+import { addSongToQueue } from '../server/ChannelRoom/Room/Music/MusicSlice';
 
 export const ContextMenu = () => {
 
@@ -67,6 +69,8 @@ export const ContextMenu = () => {
     const [disabledWebCamLocalState, toggleDisabledWebCamLocalState] = React.useState(false);
 
     const [disableStreamLocalState, toggleDisableStreamLocalState] = React.useState(false);
+
+    const [addToMusicWidget, toggleAddToMusicWidget] = React.useState(false);
 
     const primaryColor = useSelector(selectPrimaryColor)
 
@@ -171,6 +175,8 @@ export const ContextMenu = () => {
         e.preventDefault();
         
         dispatch(clearCtxState());
+
+        toggleAddToMusicWidget(false);
 
         dispatch(toggleContextMenu(false));
         
@@ -350,7 +356,19 @@ export const ContextMenu = () => {
 
                     if (l_child.localName === 'a') {
 
-                        dispatch(setContextMenuOptions({state: 'copyLink', value: l_child.href}))
+                        dispatch(setContextMenuOptions({state: 'copyLink', value: l_child.href}));
+
+                        if (currentChannelId && l_child.href.includes('youtu')) {
+                            const channel = channels.find(c => c._id === currentChannelId);
+
+                            if (channel) {
+                                const has_music_widget = channel.widgets.findIndex(w => w.type === 'music');
+
+                                if (has_music_widget !== -1) {
+                                    toggleAddToMusicWidget(true);
+                                }
+                            }
+                        }
                     
                     }
                 }
@@ -925,6 +943,22 @@ export const ContextMenu = () => {
         }
     }
 
+    const handlePlayOnMusicWidget = async () => {
+        console.log(copyLinkState)
+        if (copyLinkState.length > 1) {
+            await socket.request('add song to queue', {query: copyLinkState})
+            .then(response => {
+
+                return;
+            
+            })
+            .catch(error => {
+                dispatch(throwServerError({error: true, errorMessage: error}))
+            })
+            }
+        
+    }
+
     return (
         <>
         {ctxActive ? 
@@ -977,7 +1011,7 @@ export const ContextMenu = () => {
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("disableMessagePopUp")}} state={disableMessagePopup} name={"Disable Message Overlay"} /> : null}
             {channelSpecificSettingsState ? <BoolButton action={handleToggleSocialSoundEffect} state={socialSoundEffect} name="Enable Social Sound Effect" /> : null}
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideUserStatus")}} state={hideUserStatus} name={"Hide User Status"} /> : null}
-            
+            {addToMusicWidget ? <CtxButton action={handlePlayOnMusicWidget} name="Play On Music Widget" icon={<PlayOnWidgetIcon />}/> : null}
             {stopStreamingState ? <CtxButton action={handleStopStreaming} name={"Stop Streaming"} /> : null}
             {deleteMessageState ? <CtxButton action={handleDeleteMessage} name={"Delete Message"} icon={<DeleteIcon />} /> : null}
             <Loading loading={loading} />

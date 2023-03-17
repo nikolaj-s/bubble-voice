@@ -12,6 +12,7 @@ import { TextButton } from '../../../../components/buttons/textButton/TextButton
 import { selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
 import { socket } from '../../ServerBar/ServerBar';
+import { ScoreButton } from '../../../../components/buttons/ScoreButton/ScoreButton';
 
 export const MemberPanel = () => {
 
@@ -88,7 +89,7 @@ export const MemberPanel = () => {
             className='member-panel-container'>
                 <div className='member-panel-image-container'>
                     <Image position='absolute' image={member.user_banner} />
-                    <div className='member-panel-profile-picture'>
+                    <div style={{borderRadius: member.profile_picture_shape === 'square' ? '5px' : '50%'}} className='member-panel-profile-picture'>
                         <Image image={member.user_image} />
                     </div>
                 </div>
@@ -96,6 +97,10 @@ export const MemberPanel = () => {
                     <div>
                         <h3 style={{color: textColor}}>{member.display_name}</h3>
                         <h4 style={{color: textColor, opacity: 0.8}}>#{member.username}</h4>
+                        <div className='member-score-container'>
+                            <ScoreButton description={"Server Score"} padding={3} width={15} height={15}  />
+                            <p style={{color: textColor}}>{member.server_score}</p>
+                        </div>
                     </div>
                     <div style={{height: 2, width: '100%', backgroundColor: textColor, margin: '15px 0'}}></div>
                     <h3 style={{color: textColor, marginBottom: 10, fontSize: '1.4rem'}}>Status</h3>

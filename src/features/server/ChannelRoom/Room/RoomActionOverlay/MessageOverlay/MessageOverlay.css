@@ -5,5 +5,5 @@
     width: calc(100% - 2rem);
     max-height: 90%;
     padding: 1rem;
-    z-index: 2;
+    z-index: 5;
 }

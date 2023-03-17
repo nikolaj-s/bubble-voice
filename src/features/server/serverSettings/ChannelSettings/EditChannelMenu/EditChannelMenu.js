@@ -318,7 +318,7 @@ console.log(channelToEdit)
             }
             <InputTitle title={"Delete Channel"} />
             <TextButton action={handleDeleteChannel} name={"Delete Channel"} />
-            <ApplyCancelButton toggled={edited === false ? true : null} apply={handleUpdateChannel} cancel={handleCancel} />
+            <ApplyCancelButton position={edited === false ? null : 'fixed'} right={20} toggled={edited === false ? true : null} apply={handleUpdateChannel} cancel={handleCancel} />
             <Loading loading={loading} />
             </>
         : 

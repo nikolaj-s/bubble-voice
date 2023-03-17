@@ -68,6 +68,9 @@ export const UserStatus = ({user}) => {
             </div>
             : null}
             <div
+            style={{
+                borderRadius: user.profile_picture_shape === 'circle' ? '50%' : '5px'
+            }}
             className='user-status-image-container'>
                 {(user.status && user.status !== 'offline') ?
                 <Image cursor='pointer' image={user.user_image} />

@@ -28,7 +28,7 @@ export const User = ({user}) => {
         }}
         id={user._id} className='active-user-container'>
             <Image opacity={(user.webcam && !prefs?.disabled_web_cam) ? 0 : 1} position='absolute' image={user.user_banner} />
-            <div className='active-user-profile-image-container'>
+            <div style={{borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%'}} className='active-user-profile-image-container'>
                 <Image opacity={(user.webcam && !prefs?.disabled_web_cam) ? 0 : 1} objectFit='cover' image={user.user_image} />
             </div>
             <Loading zIndex={-1} show_success={false} loading={user.webcam} />

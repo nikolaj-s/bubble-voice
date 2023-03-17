@@ -142,6 +142,7 @@ export const ImageInput = ({
             left: "50%" ,
             top: "50%",
             transform: "translate(-50%, -50%)",
+            transition: '0.1s'
         }}
         {...getRootProps({className: 'dropzone'})} className='image-drop-input-container'>
             <input {...getInputProps()} />

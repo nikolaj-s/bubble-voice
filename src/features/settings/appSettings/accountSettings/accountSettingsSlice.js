@@ -52,7 +52,7 @@ export const fetchAccount = createAsyncThunk(
 
 export const updateAccount = createAsyncThunk(
     'accountSettingsSlice/updateAccount',
-    async ({userImage, userBanner}, {rejectWithValue, getState, dispatch}) => {
+    async ({userImage, userBanner, newShape}, {rejectWithValue, getState, dispatch}) => {
         const token = await getToken();
 
         const {password, newPassword, confirmNewPassword, display_name} = getState().accountSettingsSlice;
@@ -70,6 +70,8 @@ export const updateAccount = createAsyncThunk(
         data.append("newPassword", newPassword);
 
         data.append("confirmNewPassword", confirmNewPassword);
+
+        data.append("profileImageShape", newShape);
 
         if (!token) return rejectWithValue({error: true, errorMessage: "validation error"})
 
@@ -112,6 +114,7 @@ const accountSettingsSlice = createSlice({
         password: "",
         newPassword: "",
         confirmNewPassword: "",
+        profilePictureShape: "circle",
         loading: false,
         error: false,
         errorMessage: "",
@@ -148,6 +151,11 @@ const accountSettingsSlice = createSlice({
                 state.username = action.payload.account.username;
                 state.new_account = action.payload.account.new_account_state
                 
+                if (action.payload.account.profile_picture_shape) {
+
+                    state.profilePictureShape = action.payload.account.profile_picture_shape;
+                
+                }
             } 
 
             state.change = false;
@@ -183,6 +191,8 @@ const accountSettingsSlice = createSlice({
             if (updated_info.user_banner) state.user_banner = updated_info.user_banner;
 
             if (updated_info.user_image) state.user_image = updated_info.user_image;
+
+            if (updated_info.profile_picture_shape) state.profilePictureShape = updated_info.profile_picture_shape;
 
             console.log(action.payload.serverId);
         },
@@ -220,6 +230,8 @@ export const selectUserBanner = state => state.accountSettingsSlice.user_banner;
 export const selectUserImage = state => state.accountSettingsSlice.user_image;
 
 export const selectNewAccountState = state => state.accountSettingsSlice.new_account;
+
+export const selectProfilePictureShape = state => state.accountSettingsSlice.profilePictureShape;
 
 // actions
 export const { updateNewAccountState, handleSignOut, updateAccountInputState, accountSettingsCloseError } = accountSettingsSlice.actions;

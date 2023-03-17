@@ -5,7 +5,7 @@ import { useNavigate, useRoutes } from 'react-router'
 import { AnimatePresence } from 'framer-motion';
 
 // state
-import { selectUserBanner, selectUserImage, selectDisplayName, selectAccountSettingsLoading, selectAccountSettingsErrorState, selectAccountSettingsErrorMessage, updateAccount, updateAccountInputState, selectAccountSettingsPassword, selectAccountSettingsNewPassword, selectAccountSettingsConfirmNewPassword, accountSettingsCloseError, selectAccountSettingsStateChanged } from './accountSettingsSlice';
+import { selectUserBanner, selectUserImage, selectDisplayName, selectAccountSettingsLoading, selectAccountSettingsErrorState, selectAccountSettingsErrorMessage, updateAccount, updateAccountInputState, selectAccountSettingsPassword, selectAccountSettingsNewPassword, selectAccountSettingsConfirmNewPassword, accountSettingsCloseError, selectAccountSettingsStateChanged, selectProfilePictureShape } from './accountSettingsSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 
 // components
@@ -17,6 +17,7 @@ import { Error } from '../../../../components/Error/Error';
 import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
 import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/SettingsSpacer';
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
+import { ProfilePictureShape } from './ProfilePictureShape/ProfilePictureShape';
 
 const Settings = () => {
 
@@ -29,8 +30,13 @@ const Settings = () => {
     const [newUserImage, setNewUserImage] = React.useState({});
 
     const [newUserBanner, setNewUserBanner] = React.useState({});
+
+    const [newShape, setNewShape] = React.useState("");
+
     // account slice state
     const displayName = useSelector(selectDisplayName);
+
+    const profilePictureShape = useSelector(selectProfilePictureShape);
 
     const loading = useSelector(selectAccountSettingsLoading);
 
@@ -51,7 +57,9 @@ const Settings = () => {
     const stateChanged = useSelector(selectAccountSettingsStateChanged);
 
     React.useEffect(() => {
-        dispatch(setHeaderTitle("Account Settings"))
+        dispatch(setHeaderTitle("Account Settings"));
+
+        setNewShape(profilePictureShape);
     // eslint-disable-next-line
     }, [])
 
@@ -61,7 +69,7 @@ const Settings = () => {
     }
     
     const handleApply = () => {
-        dispatch(updateAccount({userImage: newUserImage, userBanner: newUserBanner}));
+        dispatch(updateAccount({userImage: newUserImage, userBanner: newUserBanner, newShape: newShape}));
         setNewUserBanner({});
         setNewUserImage({});
     }
@@ -84,6 +92,11 @@ const Settings = () => {
         dispatch(accountSettingsCloseError());
     }
 
+    const changeProfileShape = (shape) => {
+        dispatch(updateAccountInputState({state: 'change', value: true}))
+        setNewShape(shape)
+    }
+
     return (
         <>
             <div className='settings-wrapper'>
@@ -91,13 +104,14 @@ const Settings = () => {
                 <InputTitle title={"Change Display Name"} />
                 <TextInput stateSelector='display_name' action={handleInput} inputValue={displayName} placeholder={""} />
                 <InputTitle title={"Change Banner / Profile Picture"} />
-                <ProfileImage getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} />
+                <ProfileImage shape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} />
+                <ProfilePictureShape action={changeProfileShape} shape={newShape} />
                 <SettingsHeader title={"Security"} />
                 <InputTitle title={"Change Password"} />
                 <TextInput stateSelector='password' action={handleInput}  marginBottom='2%' type='password' placeholder={"Current Password"} inputValue={password} />
                 <TextInput action={handleInput} stateSelector='newPassword' marginBottom='2%' type='password' placeholder={"New Password"} inputValue={newPassword} />
                 <TextInput action={handleInput} inputValue={confirmNewPassword} stateSelector="confirmNewPassword" type='password' placeholder={"Confirm New Password"} />
-                {stateChanged ? <ApplyCancelButton apply={handleApply} cancel={handleCancel} /> : null}
+                {stateChanged ? <ApplyCancelButton apply={handleApply} cancel={handleCancel} position={'fixed'} right={20} /> : null}
                 <SettingsSpacer />
             </div>
             <AnimatePresence>

@@ -4,7 +4,7 @@ import { SubMenuButton } from '../../buttons/subMenuButton/SubMenuButton'
 import { Image } from '../../Image/Image'
 import { MessageLoadingIndicator } from '../MessageLoadingIndicator/MessageLoadingIndicator'
 
-export const SenderInfo = ({id, current_message, primaryColor, previous_message, message, pinMessage, pinned, overlay, hover, textColor, index, perm, accentColor, persist, action, display_name, user_image}) => {
+export const SenderInfo = ({id, profile_picture_shape, current_message, primaryColor, previous_message, message, pinMessage, pinned, overlay, hover, textColor, index, perm, accentColor, persist, action, display_name, user_image}) => {
 
     return (
         <>
@@ -21,7 +21,7 @@ export const SenderInfo = ({id, current_message, primaryColor, previous_message,
                 (previous_message?.content?.date?.split("T")[0] !== current_message?.content?.date?.split("T")[0])
                 ?
                 <div className='sender-info-inner-container'>
-                    <div onClick={action} className='message-profile-picture'>
+                    <div style={{borderRadius: profile_picture_shape === 'square' ? '5px' : '50%'}} onClick={action} className='message-profile-picture'>
                         <Image cursor='pointer' image={user_image} />
                     </div>
                     <h2
