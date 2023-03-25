@@ -15,7 +15,7 @@ import { Verification } from '../features/LoggingIn/verification/Verification';
 // state
 import { incrementLoadingPercentage, selectRetryState } from '../features/initializingAppScreen/initializingAppScreenSlice';
 import { getMediaDevices } from '../features/settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
-import { selectPrimaryColor, updatePersistedAppTheme } from '../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGradient, selectPrimaryColor, updatePersistedAppTheme } from '../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { fetchAccount } from '../features/settings/appSettings/accountSettings/accountSettingsSlice';
 import { selectLoggedIn } from '../features/LoggingIn/signIn/signInSlice';
 import { selectSignedUp } from '../features/LoggingIn/signUp/signUpSlice';
@@ -26,7 +26,7 @@ import { setSavedKeyCodes } from '../features/settings/appSettings/keyBindSettin
 import { handleUpdateAvailable, toggleInitApp, toggleMobileState, updateCurrentAppVersion } from './appSlice';
 import { fetchSavedAppAudioSettings } from '../features/settings/soundEffects/soundEffectsSlice';
 import { fetchMiscellaneousSettings, fetchSavedHardwareAcceleration } from '../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
-import { fetchSavedCustomStatus } from '../features/server/ChannelRoom/UserStatusBar/UserStatusSlice';
+import { fetchSavedCustomStatus } from '../features/server/ChannelRoom/UserStatus/UserStatusSlice';
 
 // style
 import './App.css';
@@ -46,6 +46,8 @@ function App() {
   const signedUp = useSelector(selectSignedUp);
 
   const retryState = useSelector(selectRetryState);
+
+  const gradient = useSelector(selectGradient);
 
   const preventMouseDefaults = (e) => {
     if (e.button === 3 || e.button === 4) {
@@ -227,7 +229,7 @@ function App() {
   }, [])
 
   return (
-    <div style={{backgroundColor: primaryColor}} className={`App`}>
+    <div style={{transition: '0.1s',background: gradient.gradient ? gradient.gradient : `linear-gradient(to top, ${primaryColor}, ${primaryColor})`}} className={`App`}>
       <TitleBar />
       <SplashScreen />
       <Routes>

@@ -4,11 +4,17 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 // state
-import { selectSecondaryColor, selectTextColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice'
+import { selectGlassColor, selectGlassState, selectSecondaryColor, selectTextColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 
 export const Home = () => {
 
     const color = useSelector(selectTextColor);
+
+    const secondaryColor = useSelector(selectSecondaryColor);
+
+    const glass = useSelector(selectGlassState);
+
+    const glassColor = useSelector(selectGlassColor);
 
     return (
         <motion.div 
@@ -21,6 +27,7 @@ export const Home = () => {
         exit={{
             opacity: 0
         }}
+        style={{backgroundColor: glass ? glassColor : secondaryColor}}
         key={'home-content-wrapper'}
         className='home-content-wrapper'>
             <h1 style={{color: color}}>No Server Selected</h1>

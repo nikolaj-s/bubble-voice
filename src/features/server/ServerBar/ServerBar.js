@@ -23,7 +23,6 @@ import { Loading } from '../../../components/LoadingComponents/Loading/Loading';
 import { setHeaderTitle } from '../../contentScreen/contentScreenSlice';
 import { removeServer, setSideBarHeader } from '../../sideBar/sideBarSlice';
 import { ChannelList } from './ChannelList/ChannelList';
-import { ServerSettingsButton } from '../../../components/buttons/ServerSettingsButton/ServerSettingsButton';
 import { ServerSettingsMenu } from '../serverSettings/ServerSettingsMenu';
 import { DisconnectButtonWrapper } from './DisconnectButtonWrapper/DisconnectButtonWrapper';
 
@@ -78,8 +77,6 @@ const Bar = () => {
     const pushToMuteKey = useSelector(selectPushToMuteKey);
 
     const serverSettingsOpenState = useSelector(selectServerSettingsOpenState);
-
-    const topPointAnimationLocation = useSelector(selectTopAnimationPoint);
 
     const inactiveChannel = useSelector(selectInactiveChannel);
     

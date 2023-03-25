@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { InputTitle } from '../../../../components/titles/inputTitle/InputTitle';
-import { selectPrimaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassColor, selectGlassState, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectActivityStatus, selectHideUserStatus } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { selectCurrentChannelId, selectServerGroups, selectServerMembers } from '../../ServerSlice'
 import { UserStatus } from './UserStatus/UserStatus';
@@ -22,8 +22,12 @@ export const UserStatusBar = () => {
     const onlineUsers = useSelector(selectOnlineUsers);
 
     const offlineUsers = useSelector(selectOfflineUsers);
+    
+    const glass = useSelector(selectGlassState);
 
-    const primaryColor = useSelector(selectPrimaryColor);
+    const glassColor = useSelector(selectGlassColor);
+    
+    const secondaryColor = useSelector(selectSecondaryColor);
 
     const serverGroups = useSelector(selectServerGroups);
 
@@ -83,7 +87,7 @@ export const UserStatusBar = () => {
         <>
         {(channelId && hideUserStatusBar) ? null :
         <div 
-        style={{borderLeft: `1px solid ${primaryColor}`}}
+        style={{marginLeft: 1, backgroundColor: glass ? glassColor : secondaryColor}}
         className='user-status-bar'>
             {serverGroups.map((server_group) => {
 

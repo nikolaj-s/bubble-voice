@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 
 // state
-import { selectAccentColor, selectPrimaryColor, selectSecondaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectGlassColor, selectGlassState, selectPrimaryColor, selectSecondaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 import { fetchUsersServerList } from './sideBarSlice';
 
@@ -22,18 +22,23 @@ export const SideBar = () => {
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
-    const primaryColor = useSelector(selectPrimaryColor);
+    const glass = useSelector(selectGlassState);
+
+    const glassColor = useSelector(selectGlassColor);
 
     React.useEffect(() => {
         dispatch(fetchUsersServerList());
     // eslint-disable-next-line
     }, [])
 
+    console.log(window.location.hash)
+
     return (
-            <motion.div style={{backgroundColor: secondaryColor}} className='side-bar-container'>
+            <motion.div className='side-bar-container'>
                 <div className='inner-side-bar-container'>
                     <ServerBar />
                     <AppSettingsMenu />
+                    {window.location.hash === '#/dashboard' ? <div style={{backgroundColor: glass ? glassColor : secondaryColor}} className='side-bar-dashboard-placeholder'></div> : null}
                 </div>    
                 <ControlBar />
             </motion.div>

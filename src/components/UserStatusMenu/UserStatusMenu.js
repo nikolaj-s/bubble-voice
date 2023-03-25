@@ -1,7 +1,7 @@
 // library's
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentStatus, selectCustomStatus, selectLoadingStatusChange, setCustomState, updateUserStatus } from '../../features/server/ChannelRoom/UserStatusBar/UserStatusSlice';
+import { selectCurrentStatus, selectCustomStatus, selectLoadingStatusChange, setCustomState, updateUserStatus } from '../../features/server/ChannelRoom/UserStatus/UserStatusSlice';
 import { selectPrimaryColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { miscSettingsChannelSpecificStateChange, selectActivityStatus } from '../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { BoolButton } from '../buttons/BoolButton/BoolButton'

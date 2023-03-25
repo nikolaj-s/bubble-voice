@@ -304,9 +304,15 @@ const serverSlice = createSlice({
         },
         addNewChannel: (state, action) => {
             const channel = action.payload;
+
             channel["users"] = [];
+
             channel["widgets"] = [];
+
             channel["active"] = false;
+
+            channel["auth"] = channel.locked_channel ? channel.auth_users.findIndex(id => id === state.user._id) !== -1 : true;
+
             state.channels.push(channel);
         },
         clearServerState: (state, action) => {
@@ -742,8 +748,10 @@ const serverSlice = createSlice({
             state.channelCreationLoading = false;
 
             state.create_channel_menu_open = false;
+
+            const channel = {...action.payload.channel, auth: true}
             
-            state.channels.push(action.payload.channel)
+            state.channels.push(channel)
         },
         [createChannel.rejected]: (state, action) => {
             state.channelCreationLoading = false;

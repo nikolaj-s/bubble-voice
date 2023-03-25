@@ -15,6 +15,7 @@ import { selectDisplayName, selectUserBanner, selectUserImage, selectUsername } 
 // style's
 import "./ChannelList.css";
 import { selectMirroredWebCamState } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
+import { selectGlassColor, selectGlassState, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 
 export const ChannelList = () => {
@@ -26,6 +27,8 @@ export const ChannelList = () => {
     const animaiton = useAnimation();
 
     const [localChannels, setLocalChannels] = React.useState([])
+
+    const secondaryColor = useSelector(selectSecondaryColor);
 
     const channels = useSelector(selectServerChannels);
 
@@ -46,6 +49,10 @@ export const ChannelList = () => {
     const mirroredWebCam = useSelector(selectMirroredWebCamState);
 
     const createChannelMenuOpen = useSelector(selectCreateChannelMenuState);
+
+    const glass = useSelector(selectGlassState);
+
+    const glassColor = useSelector(selectGlassColor);
 
     const openCreateChannelMenu = () => {
         
@@ -118,6 +125,7 @@ export const ChannelList = () => {
         }}
         animate={animaiton}
         transition={{duration: 0.3}}
+        style={{backgroundColor: glass ? glassColor : secondaryColor, marginTop: 1}}
         className='channel-list-outer-container'>
                 
                 <div className='channel-list-button-wrapper'>

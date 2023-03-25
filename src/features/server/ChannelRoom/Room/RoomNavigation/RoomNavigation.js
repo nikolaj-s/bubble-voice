@@ -56,11 +56,11 @@ export const RoomNavigation = ({page, action}) => {
                 cursor: 'default'
             })
             socialButtonAnimation.start({
-                backgroundColor: primaryColor,
+                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
                 cursor: 'cursor'
             })
             widgetsButtonAnimation.start({
-                backgroundColor: primaryColor,
+                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
                 cursor: 'cursor'
             })
         } else if (page === 'social') {
@@ -69,11 +69,11 @@ export const RoomNavigation = ({page, action}) => {
                 cursor: 'default'
             })
             voiceButtonAnimation.start({
-                backgroundColor: primaryColor,
+                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
                 cursor: 'cursor'
             })
             widgetsButtonAnimation.start({
-                backgroundColor: primaryColor,
+                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
                 cursor: 'cursor'
             })
         } else if (page === 'widgets') {
@@ -82,11 +82,11 @@ export const RoomNavigation = ({page, action}) => {
                 cursor: 'default'
             })
             socialButtonAnimation.start({
-                backgroundColor: primaryColor,
+                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
                 cursor: 'cursor'
             })
             voiceButtonAnimation.start({
-                backgroundColor: primaryColor,
+                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
                 cursor: 'cursor'
             })
         }
@@ -105,14 +105,14 @@ export const RoomNavigation = ({page, action}) => {
 
     return (
         <div 
-        style={{backgroundColor: primaryColor, borderBottom: `solid 1px ${primaryColor}`}}
+        style={{marginBottom: 1}}
         className='room-navigation-container'>
             <div className='room-navigation-button-wrapper'>
                 <motion.div 
                 transition={{duration: 0.2}}
                 onMouseEnter={() => {handleDesc('video', true)}}
                 onMouseOver={() => {handleAnimation(secondaryColor, voiceButtonAnimation, 'voice')}}
-                onMouseOut={() => {handleAnimation(primaryColor, voiceButtonAnimation, 'voice')}}
+                onMouseOut={() => {handleAnimation(`rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`, voiceButtonAnimation, 'voice')}}
                 onMouseLeave={() => {handleDesc('video', false)}}
                 onMouseDown={() => {handleAnimation(accentColor, voiceButtonAnimation, 'voice')}}
                 onMouseUp={() => {handleAnimation(secondaryColor, voiceButtonAnimation, 'voice')}}
@@ -127,7 +127,7 @@ export const RoomNavigation = ({page, action}) => {
                 transition={{duration: 0.2}}
                 onMouseEnter={() => {handleDesc('social', true)}}
                 onMouseOver={() => {handleAnimation(secondaryColor, socialButtonAnimation, 'social')}}
-                onMouseOut={() => {handleAnimation(primaryColor, socialButtonAnimation, 'social')}}
+                onMouseOut={() => {handleAnimation(`rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`, socialButtonAnimation, 'social')}}
                 onMouseLeave={() => {handleDesc('social', false)}}
                 onMouseDown={() => {handleAnimation(accentColor, socialButtonAnimation, 'social')}}
                 onMouseUp={() => {handleAnimation(secondaryColor, socialButtonAnimation, 'social')}}
@@ -140,7 +140,7 @@ export const RoomNavigation = ({page, action}) => {
                 onMouseLeave={() => {handleDesc('widgets', false)}}
                 transition={{duration: 0.2}}
                 onMouseOver={() => {handleAnimation(secondaryColor, widgetsButtonAnimation, 'widgets')}}
-                onMouseOut={() => {handleAnimation(primaryColor, widgetsButtonAnimation, 'widgets')}}
+                onMouseOut={() => {handleAnimation(`rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`, widgetsButtonAnimation, 'widgets')}}
                 onMouseDown={() => {handleAnimation(accentColor, widgetsButtonAnimation, 'widgets')}}
                 onMouseUp={() => {handleAnimation(secondaryColor, widgetsButtonAnimation, 'widgets')}}
                 animate={widgetsButtonAnimation} onClick={() => {handleAction('widgets')}} className='room-navigation-button'>

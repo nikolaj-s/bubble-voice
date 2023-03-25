@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 // state
 import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 
-export const ButtonAnimationWrapper = ({display = 'flex', action = () => {}, position = 'relative', zIndex = 0, top = 0, left = 0, className, width = 50, height = 50, borderRadius = '5px', justifyContent = 'center', invert = false, pointerOptions = null, children, active = false, opacity = 1, id = "", margin, right, description, flip_description = false, padding = 10, altInvert = false, right_orientation_desc = false, o_mouseEnter = () => {}, o_mouseLeave = () => {}, desc_o_mouse_leave = () => {}, desc_space = 25}) => {
+export const ButtonAnimationWrapper = ({display = 'flex', action = () => {}, position = 'relative', zIndex = 0, top = 0, left = 0, className, width = 50, height = 50, borderRadius = '5px', justifyContent = 'center', invert = false, pointerOptions = null, children, active = false, opacity = 1, id = "", margin, right, description, flip_description = false, padding = 10, altInvert = false, right_orientation_desc = false, o_mouseEnter = () => {}, o_mouseLeave = () => {}, desc_o_mouse_leave = () => {}, desc_space = 25, transparent}) => {
 
     const animation = useAnimation();
 
@@ -127,7 +127,7 @@ export const ButtonAnimationWrapper = ({display = 'flex', action = () => {}, pos
         onClick={handleAction}
         className={className}
         style={{
-            backgroundColor: invert ? secondaryColor : (active || altInvert) ? primaryColor : secondaryColor,
+            backgroundColor: invert ? secondaryColor : (active || altInvert) ? transparent ? `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)` : primaryColor : secondaryColor,
             borderRadius: borderRadius,
             width: width,
             height: height,

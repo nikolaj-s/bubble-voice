@@ -13,6 +13,7 @@ import { ReleaseNote } from './ReleaseNote/ReleaseNote';
 
 // style
 import "./ReleaseNotes.css";
+import { selectGlassColor, selectGlassState, selectSecondaryColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 export const ReleaseNotes = () => {
 
@@ -25,6 +26,12 @@ export const ReleaseNotes = () => {
     const error = useSelector(selectReleaseNotesError);
 
     const errorMessage = useSelector(selectReleaseNotesErrorMessage);
+
+    const secondaryColor = useSelector(selectSecondaryColor);
+
+    const glass = useSelector(selectGlassState);
+
+    const glassColor = useSelector(selectGlassColor);
 
     const handleCloseErrorMessage = () => {
         dispatch(closeReleaseNotesErrorMessage());
@@ -52,6 +59,8 @@ export const ReleaseNotes = () => {
         }}
         key={'release-notes-wrapper'}
         className='release-notes-wrapper'
+
+        style={{backgroundColor: glass ? glassColor : secondaryColor}}
         >
             {!releaseNotes || releaseNotes.length === 0 ? null :
             releaseNotes.map((note, key) => {

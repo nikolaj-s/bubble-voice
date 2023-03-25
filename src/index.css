@@ -2,7 +2,7 @@ html {
   scroll-behavior: smooth;
 }
 :root {
-  --font-variable: "Inter", sans-serif;
+  --font-variable: "Quicksand", "Inter", sans-serif;
   --font-spacing: 2px;
   --border-radius: 5px;
   --box-shadow: 0px 4px 17px rgba(0, 0, 0, 0.32);
@@ -28,7 +28,7 @@ code {
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-track {

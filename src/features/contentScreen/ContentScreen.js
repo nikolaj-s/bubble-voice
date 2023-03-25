@@ -15,7 +15,6 @@ import { NewAccount } from '../../components/NewAccount/NewAccount';
 import { AudioInit } from '../AudioInit/AudioInit';
 
 // state
-import { selectPrimaryColor, selectSecondaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { HeaderTitle } from '../../components/titles/headerTitle/headerTitle';
 import { selectHeaderTitle } from './contentScreenSlice';
 
@@ -24,14 +23,9 @@ import "./ContentScreen.css";
 import { selectAddServerMenuVisible } from '../createServer/createServerSlice';
 
 export const ContentScreen = () => {
-    // color schema
-    const secondaryColor = useSelector(selectSecondaryColor);
-
     // content display state
 
     const headerTitleState = useSelector(selectHeaderTitle);
-
-    const primaryColor = useSelector(selectPrimaryColor);
 
     const addServerMenuVisisble = useSelector(selectAddServerMenuVisible);
 
@@ -39,7 +33,7 @@ export const ContentScreen = () => {
         <>
             <motion.div className='content-screen-container' >
                 <HeaderTitle title={headerTitleState} spacing={true} />
-                <div style={{backgroundColor: secondaryColor, borderLeft: `solid 1px ${primaryColor}`}} className='content-screen-inner-container'>
+                <div style={{marginLeft: 1}} className='content-screen-inner-container'>
                     <Disconnected />
                     <NoServerSelectedDisplay />
                     <SettingsRoutesWrapper />

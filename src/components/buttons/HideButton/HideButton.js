@@ -19,6 +19,7 @@ export const HideButton = ({action, width, height, padding, description, flip_de
         invert={invert}
         altInvert={altInvert}
         margin={margin}
+        transparent={true}
         >
             <svg 
             style={{rotate: hiddenState ? '180deg' : '0deg', transition: '0.1s'}}

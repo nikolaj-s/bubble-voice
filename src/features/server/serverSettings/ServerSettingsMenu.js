@@ -49,9 +49,6 @@ const Menu = () => {
         <motion.div 
         initial={{left: "-100%", opacity: 0}}
         animate={{left: "0%", opacity: 1}}
-        style={{
-            backgroundColor: primaryColor
-        }}
         className='server-settings-menu'>
             <div 
             style={{backgroundColor: secondaryColor}}

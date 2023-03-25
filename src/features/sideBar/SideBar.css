@@ -19,3 +19,12 @@
     justify-content: center;
     position: relative;
 }
+
+.side-bar-dashboard-placeholder {
+    position: absolute;
+    z-index: 0;
+    height: calc(100% - 32px);
+    top: 32px;
+    width: 100%;
+    border-top-left-radius: 15px;
+}

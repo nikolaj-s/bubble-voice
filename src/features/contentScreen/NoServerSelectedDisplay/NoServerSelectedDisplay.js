@@ -25,7 +25,6 @@ const NoServer = () => {
 
   return (
     <div 
-    style={{backgroundColor: secondaryColor}}
     className='no-server-selected-display'>
         <HomeNavigation navigate={handlePageChange} page={page} />
         <AnimatePresence>

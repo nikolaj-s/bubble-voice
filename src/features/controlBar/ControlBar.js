@@ -15,7 +15,7 @@ import { ScreenShareMenu } from './ScreenShareMenu/ScreenShareMenu';
 import { resetControlState, selectAudioState, selectingScreensState, selectLoadingScreenShare, selectLoadingWebCam, selectMicrophoneState, selectScreenShareState, selectWebCamState, toggleControlState, toggleLoadingWebCam } from './ControlBarSlice';
 import { selectCurrentChannel, selectCurrentChannelId } from '../server/ServerSlice';
 import { playSoundEffect } from '../settings/soundEffects/soundEffectsSlice';
-import { selectPrimaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassColor, selectGlassState, selectPrimaryColor, selectSecondaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style's
 import "./ControlBar.css";
@@ -45,9 +45,15 @@ export const ControlBar = () => {
 
     const accentColor = useSelector(selectPrimaryColor);
 
+    const secondaryColor = useSelector(selectSecondaryColor);
+
     const loadingWebCam = useSelector(selectLoadingWebCam);
 
     const loadingScreenShare = useSelector(selectLoadingScreenShare);
+
+    const glass = useSelector(selectGlassState);
+
+    const glassColor = useSelector(selectGlassColor);
 
     const toggleFunction = (state) => {
 
@@ -112,7 +118,7 @@ export const ControlBar = () => {
         <>
             <ScreenShareMenu selectingScreens={selectingScreens} />
             <div className='control-bar-container' 
-            style={{borderTop: `solid 1px ${accentColor}`}}
+            style={{backgroundColor: secondaryColor, marginTop: '1px'}}
             >
                 <div className='controls-wrapper'>
                     <SettingsButton 

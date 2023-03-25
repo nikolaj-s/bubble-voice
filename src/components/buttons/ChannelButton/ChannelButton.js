@@ -80,7 +80,6 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
 
         setUsersState(users);
 
-
     // eslint-disable-next-line
     }, [channel, users])
 

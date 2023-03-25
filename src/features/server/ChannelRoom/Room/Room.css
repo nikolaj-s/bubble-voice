@@ -12,7 +12,7 @@
     max-width: 100%;
     position: relative;
     flex: 1;
-    z-index: 2;
+    z-index: 4;
     overflow: hidden;
 }
 
@@ -28,7 +28,7 @@
     justify-content: center;
     vertical-align: middle;
     flex: 1;
-    z-index: 4;
+    z-index: 5;
     transition: 0.1s;
 }
 

@@ -1,11 +1,12 @@
 
 .channel-title-container {
-    width: calc(95%);
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 25px;
-    margin-top: 5px;
+    margin-top: 1px;
+    padding: 5px 0;
     z-index: 3;
 }
 
@@ -21,5 +22,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 60px;
     height: 100%;
+    margin-right: 3px;
 }

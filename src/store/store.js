@@ -20,7 +20,7 @@ import RoomActionOverlaySlice from "../features/server/ChannelRoom/Room/RoomActi
 import MiscellaneousSettingsSlice from "../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice";
 import ExpandContentSlice from "../features/ExpandContent/ExpandContentSlice";
 import MusicSlice from "../features/server/ChannelRoom/Room/Music/MusicSlice";
-import UserStatusSlice from "../features/server/ChannelRoom/UserStatusBar/UserStatusSlice";
+import UserStatusSlice from "../features/server/ChannelRoom/UserStatus/UserStatusSlice";
 import ServerDashBoardSlice from "../features/server/ChannelRoom/ServerDashBoard/ServerDashBoardSlice";
 import MemberPanelSlice from "../features/server/ChannelRoom/MemberPanel/MemberPanelSlice";
 

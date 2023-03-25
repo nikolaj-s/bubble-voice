@@ -10,7 +10,7 @@ import { Error } from '../../../components/Error/Error';
 import { AnimatePresence } from 'framer-motion'
 import { SocialRoute } from './SocialRoute/SocialRoute'
 import { ServerDashBoard } from './ServerDashBoard/ServerDashBoard'
-import { UserStatusBar } from './UserStatusBar/UserStatusBar'
+import { UserStatusBar } from './UserStatus/UserStatusBar'
 import { selectDefaultServer } from '../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice'
 import { SetAsDefaultServerNotice } from './SetAsDefaultServerNotice/SetAsDefaultServerNotice'
 import { MemberPanel } from './MemberPanel/MemberPanel'

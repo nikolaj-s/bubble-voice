@@ -6,14 +6,13 @@
     height: 100%;
     bottom: 0;
     right: 0;
-    z-index: 3;
+    z-index: 6;
     overflow-x: hidden;
     transition: 0.3s;
 }
 
 .social-route-wrapper-container .social-outer-container {
     position: relative;
-    height: calc(100% - 25px);
 }
 
 .social-route-top-nav {

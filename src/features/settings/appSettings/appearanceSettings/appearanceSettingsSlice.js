@@ -27,9 +27,25 @@ const appearanceSettingsSlice = createSlice({
         accentColor: "rgb(217, 217, 217)",
         textColor: "rgb(0, 0, 0)",
         activationColor: "rgb(58, 235, 52)",
+        glassColor: "",
         darkModeEnabled: true,
         rgbBackground: false,
         changeMade: false,
+        gradient: {type: 'none', gradient: false},
+        gradients: [
+            {type: 'none', gradient: false},
+            {type: "Witching Hour", gradient: 'linear-gradient(to top, #c31432, #240b36)'},
+            {type: "Sublime Vivid", gradient: 'linear-gradient(135deg, #fc466b, #3f5efb)'},
+            {type: "Blue Lagoon", gradient: 'linear-gradient(to top, #43c6ac, #191654)'},
+            {type: "Miaka", gradient: 'linear-gradient(to top, #fc354c, #0abfbc)'},
+            {type: "Deep Space", gradient: 'linear-gradient(to bottom, #000000, #434343)'},
+            {type: "Neon Life", gradient: 'linear-gradient(to bottom, #b3ffab, #12fff7)'},
+            {type: 'Diablo', gradient: 'linear-gradient(to bottom, #870000, #190a05)'},
+            {type: 'Starfall', gradient: 'linear-gradient(to bottom, #f0c27b, #4b1248)'},
+            {type: 'Topaz', gradient: 'linear-gradient(135deg, hsla(265, 53%, 29%, 1) 0%, hsla(152, 74%, 44%, 1) 49%, hsla(24, 93%, 73%, 1) 100%)'},
+            {type: 'Green', gradient: 'linear-gradient(to top, #607e5f, #2e3d2f'}
+
+        ],
         color_themes: {
             light: {
                 primaryColor: "rgb(255, 255, 255)",
@@ -95,6 +111,7 @@ const appearanceSettingsSlice = createSlice({
                 activationColor: "rgb(255, 76, 41)"
             }
         },
+        glass: false,
         current_theme: {label: 'Light', state: 'light'},
         theme_options: [{label: 'Light', state: 'light'}, {label: 'Dark', state: 'dark'}, {label: 'Custom', state: 'custom'}, {label: "Fall", state: 'fall'}, {label: "Forest", state: 'forest'}, {label: 'Neon', state: 'neon'}, {label: 'Coffee', state: 'coffee'}, {label: 'Green', state: 'green'}, {label: 'Dusk', state: 'dusk'}]
     },
@@ -114,10 +131,12 @@ const appearanceSettingsSlice = createSlice({
             if (action.payload.type === 'primaryColor') {
                 document.querySelector(':root').style.setProperty('--primary-color', state.primaryColor)
             }
+
+            if (action.payload.type === 'primaryColor') {
+                state.glassColor = `rgba(${state.secondaryColor.split('rgb(')[1].split(')')[0]}, 0.9)`
+            }
         },
         changeTheme: (state, action) => {
-
-            state.changeMade = true;
 
             state.current_theme = action.payload;
 
@@ -127,10 +146,19 @@ const appearanceSettingsSlice = createSlice({
             state.textColor = state.color_themes[action.payload.state].textColor;
             state.activationColor = state.color_themes[action.payload.state].activationColor;
 
+            state.glassColor = `rgba(${state.secondaryColor.split('rgb(')[1].split(')')[0]}, 0.9)`
+
             document.querySelector(':root').style.setProperty('--range-background', state.color_themes[action.payload.state].accentColor)
         
             document.querySelector(':root').style.setProperty('--primary-color', state.color_themes[action.payload.state].primaryColor)
         },
+        updateGradient: (state, action) => {
+            state.gradient = action.payload;
+        },
+        updateGlassState: (state, action) => {
+            state.glass = !state.glass;
+        },
+
         saveTheme: (state, action) => {
 
             state.changeMade = false;
@@ -146,7 +174,9 @@ const appearanceSettingsSlice = createSlice({
                     }
                 },
                 current_theme: state.current_theme,
-                rgbBackground: state.rgbBackground
+                rgbBackground: state.rgbBackground,
+                gradient: state.gradient,
+                glass: state.glass
             }
 
             state.color_themes = {...state.color_themes, custom: new_theme_object.themes.custom};
@@ -184,9 +214,17 @@ const appearanceSettingsSlice = createSlice({
                     document.querySelector(':root').style.setProperty('--primary-color', state.color_themes[action.payload.current_theme.state].primaryColor)
                 }
 
+                if (action.payload.gradient) {
+                    state.gradient = action.payload.gradient;
+                }
+
                 if (action.payload.rgbBackground) {
                     state.rgbBackground = action.payload.rgbBackground;
                 }
+
+                if (action.payload.glass) state.glass = true;
+
+                state.glassColor = `rgba(${state.secondaryColor.split('rgb(')[1].split(')')[0]}, 0.75)`
 
                 return;
             } catch (error) {
@@ -201,7 +239,7 @@ const appearanceSettingsSlice = createSlice({
 })
 
 // actions
-export const { updateColorValue, changeTheme, saveTheme, toggleRgbBackGround } = appearanceSettingsSlice.actions;
+export const {updateGlassState, updateGradient, updateColorValue, changeTheme, saveTheme, toggleRgbBackGround } = appearanceSettingsSlice.actions;
 
 // color selectors
 export const selectTransparentPrimaryColor = state => {
@@ -227,6 +265,14 @@ export const selectThemeOptions = state => state.appearanceSettingsSlice.theme_o
 export const selectAppearanceChangeMade = state => state.appearanceSettingsSlice.changeMade;
 
 export const selectRgbBackGround = state => state.appearanceSettingsSlice.rgbBackground;
+
+export const selectGradients = state => state.appearanceSettingsSlice.gradients
+
+export const selectGradient = state => state.appearanceSettingsSlice.gradient;
+
+export const selectGlassState = state => state.appearanceSettingsSlice.glass;
+
+export const selectGlassColor = state => state.appearanceSettingsSlice.glassColor;
 
 // export appearance settings reducer
 export default appearanceSettingsSlice.reducer;

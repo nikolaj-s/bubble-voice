@@ -66,7 +66,7 @@ const SettingsMenu = () => {
     }
 
     return (
-        <motion.div initial={{left: "-100%", opacity: 0}} animate={animation} style={{backgroundColor: primaryColor}} className='app-settings-menu'>
+        <motion.div initial={{left: "-100%", opacity: 0}} animate={animation} className='app-settings-menu'>
 
             <div style={{backgroundColor: secondaryColor}} className='inner-app-settings-container'>
                 <div className='setting-buttons-wrapper'>

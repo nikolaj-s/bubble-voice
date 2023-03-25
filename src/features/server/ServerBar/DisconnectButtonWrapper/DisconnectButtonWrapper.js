@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectUserImage } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { ProfilePictureButton } from '../../../../components/buttons/ProfilePictureButton/ProfilePictureButton';
 import { LeaveServerButton } from '../../../../components/buttons/LeaveServerButton/LeaveServerButton';
-import { selectStatusMenuState, toggleStatusMenu } from '../../ChannelRoom/UserStatusBar/UserStatusSlice';
+import { selectStatusMenuState, toggleStatusMenu } from '../../ChannelRoom/UserStatus/UserStatusSlice';
 import { UserStatusMenu } from '../../../../components/UserStatusMenu/UserStatusMenu';
 import { ConnectionIndicator } from '../../../../components/connectionIndicator/ConnectionIndicator';
 import { selectPrimaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';

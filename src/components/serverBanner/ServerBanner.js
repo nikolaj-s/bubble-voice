@@ -53,14 +53,12 @@ export const ServerBanner = ({serverName, serverImage}) => {
         animate={{
             opacity: 1
         }}
-        style={{backgroundColor: primaryColor}}
         transition={{duration: 0.3}}
         className='server-banner-container' >
             <Image id={"server-banner-image"} position='absolute' objectFit='cover' image={serverImage} />
             <motion.div 
             
             transition={{duration: 0.3}}
-            style={{backgroundColor: primaryColor}}
             className='server-title-overlay'>
                 <HideButton hiddenState={hideServerBar} action={handleHideServerBar} flip_description={true} invert={false} altInvert={true} width={15} height={15} padding={4} margin={"0 0 0 3px"} />
                 <h2

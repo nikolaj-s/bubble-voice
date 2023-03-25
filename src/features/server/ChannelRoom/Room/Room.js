@@ -31,7 +31,7 @@ import { RoomActionOverlay } from './RoomActionOverlay/RoomActionOverlay';
 import { ChannelBackground } from './ChannelBackground/ChannelBackground';
 import { selectMiscSettingsHideChannelBackground, selectPopOutUserStreams } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { SubMenuButton } from '../../../../components/buttons/subMenuButton/SubMenuButton';
-import { selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassColor, selectGlassState, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { audioCtx } from '../../../AudioInit/AudioInit';
 
 export let client;
@@ -45,6 +45,10 @@ const Component = () => {
     const [page, setPage] = React.useState("voice");
     // state 
     const channel = useSelector(selectCurrentChannel);
+
+    const glass = useSelector(selectGlassState);
+
+    const glassColor = useSelector(selectGlassColor);
 
     const current_channel_id = useSelector(selectCurrentChannelId);
 
@@ -766,7 +770,7 @@ const Component = () => {
             <RoomNavigation action={cycleChannelPage} page={page} />
             <div
             style={
-                (hideChannelBackgrounds || channel.channel_background === undefined) ? {backgroundColor: secondaryColor} : null
+                (hideChannelBackgrounds || channel.channel_background === undefined) ? {backgroundColor: glass ? glassColor : secondaryColor} : null
                 
             }
             id='live-chat-wrapper'>

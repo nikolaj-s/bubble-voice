@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { motion } from 'framer-motion';
 
 // state
-import { selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassColor, selectGlassState, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectChannelSocialId, selectCurrentChannelId, selectCurrentlyViewChannelSocial, setChannelSocialId } from '../../ServerSlice'
 
 // component's
@@ -34,6 +34,10 @@ export const SocialRoute = () => {
 
     const primaryColor = useSelector(selectPrimaryColor);
 
+    const glass = useSelector(selectGlassState);
+
+    const glassColor = useSelector(selectGlassColor);
+
     React.useEffect(() => {
 
         if (channelId === current_channel_id) return document.getElementById('channel-social-tab-button')?.click();
@@ -54,19 +58,18 @@ export const SocialRoute = () => {
             
             style={{
                 position: inChannel ? 'absolute' : 'relative',
-                zIndex: inChannel ? 4 : 3,
+                zIndex: inChannel ? 5 : 3,
                 width: 'calc(100% - 3px)',
                 left: 0,
                 height: '100%',
-                backgroundColor: secondaryColor,
             }}
             transition={{duration: 0.2}}
             className='social-route-wrapper-container'>
                 <div 
-                style={{borderBottom: `solid 1px ${primaryColor}`, backgroundColor: primaryColor}}
+                style={{marginBottom: 1, backgroundColor: secondaryColor}}
                 className='social-route-top-nav'>
                     <div 
-                    style={{backgroundColor: secondaryColor}}
+                    style={{}}
                     className='social-route-title-container'>
                         {channel.text_only ? <TextOnlyIcon /> : null}
                         <h3
@@ -84,7 +87,16 @@ export const SocialRoute = () => {
 
                     </div>
                 </div>
-                <Social channelName={channel.name} socialRoute={true} channelId={channelId} currentChannel={channel} />
+                <div
+                style={{
+                    minHeight: 'calc(100% - 36px)',
+                    width: '100%',
+                    backgroundColor: glass ? glassColor : secondaryColor
+                }}
+                >
+                    <Social channelName={channel.name} socialRoute={true} channelId={channelId} currentChannel={channel} />
+                </div>
+                    
             </motion.div> : null}
         </>
     )

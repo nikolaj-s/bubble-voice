@@ -1,6 +1,7 @@
 
 .no-server-selected-display {
-    height: calc(100% - 55px);
+    max-height: calc(100%);
+    overflow: hidden;
     width: 100%;
 }
 
