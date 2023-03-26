@@ -4,7 +4,7 @@
     bottom: 50%;
     transform: translateY(50%);
     right: 3px;
-    z-index: 4;
+    z-index: 5;
     border-bottom-right-radius: 10px;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
