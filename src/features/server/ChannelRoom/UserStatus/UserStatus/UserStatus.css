@@ -1,6 +1,7 @@
 .user-status-container {
     height: 45px;
-    width: calc(100% - 10px);
+    width: 137px;
+    max-width: 137px;
     display: flex;
     align-items: center;
     position: relative;
@@ -8,7 +9,7 @@
     z-index: 4;
     cursor: pointer;
     border-radius: 5px;
-    margin: 3px;
+    padding-left: 3px;
 }
 
 .user-status-image-container {
@@ -21,7 +22,6 @@
     justify-content: center;
     align-items: center;
     z-index: 1;
-    margin-left: 5px;
     cursor: pointer;
 }
 
@@ -30,11 +30,10 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    margin-left: 5px;
+    margin-left: 3px;
     z-index: 1;
     height: 100%;
     width: calc(100% - 10px);
-    padding-left: 5px;
     overflow: hidden;
 }
 

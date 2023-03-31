@@ -435,7 +435,7 @@ app.whenReady().then(() => {
     desktopCapturer.getSources({types: ['window', 'screen', 'audio']}).then((sources) => {
       const index = sources.findIndex(s => s.id === window_id);
       
-      callback({video: sources[index], audio: 'loopback'});
+      callback({video: sources[index], audio: 'loopbackWithMute', enableLocalEcho: false});
     })
   })
 

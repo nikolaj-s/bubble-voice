@@ -12,7 +12,7 @@ import { CtxMenuTitle } from '../../components/titles/ctxMenuTitle/CtxMenuTitle'
 
 // state
 import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleStreamState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCopyLinkState, selectCopyState, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteMesssageState, selectDeleteWidget, selectDisableStream, selectDisableWebCam, selectEditChannelCtxState, selectFlipWebCamState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSelectedMessage, selectSelectedUserCtxState, selectStopStreamingState, selectStreamVolumeState, selectViewSocialState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
-import { assignNewServerGroup, deleteMessage, markWidgetForDeletion, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerMembers, selectUsersPermissions, sendDeleteMessageRequest, setChannelSocialId, setEditingChannelId, throwServerError, toggleMembersWebCamState, userBanned } from '../server/ServerSlice';
+import { assignNewServerGroup, deleteMessage, markWidgetForDeletion, moveUser, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerMembers, selectUsersPermissions, sendDeleteMessageRequest, setChannelSocialId, setEditingChannelId, throwServerError, toggleMembersWebCamState, userBanned } from '../server/ServerSlice';
 
 // style
 import "./ContextMenu.css";
@@ -188,6 +188,18 @@ export const ContextMenu = () => {
                 dispatch(toggleContextMenu(true));
 
                 dispatch(setContextMenuOptions({state: 'copyLink', value: p.href}))
+
+                if (currentChannelId && p.href.includes('youtu')) {
+                    const channel = channels.find(c => c._id === currentChannelId);
+
+                    if (channel) {
+                        const has_music_widget = channel.widgets.findIndex(w => w.type === 'music');
+
+                        if (has_music_widget !== -1) {
+                            toggleAddToMusicWidget(true);
+                        }
+                    }
+                }
             }
 
             if (p.localName === 'img') {
@@ -828,14 +840,11 @@ export const ContextMenu = () => {
 
     const handleMoveUser = async (arg) => {
         const selected_username = selectedUserToManage.split('-')[0];
-
+        console.log(selected_username)
         const channel_id = selectedUserToManage.split('channel-id-')[1];
         
         if (selected_username && arg) {
-            await socket.request('move user', {channel_id: channel_id, username: selected_username, to_move: arg})
-            .catch(error => {
-                dispatch(throwServerError({errorMessage: error}));
-            })
+            dispatch(moveUser({username: selected_username, channel_id: channel_id, arg: arg}))
         }
     }
 

@@ -5,9 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 // components
 import { Loading } from '../../../LoadingComponents/Loading/Loading';
-import { Image } from '../../../Image/Image';
 import { AltSearchButton } from '../../../buttons/AltSearchButton/AltSearchButton';
-import { InputTitle } from '../../../titles/inputTitle/InputTitle';
 
 // state
 import { selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
@@ -20,8 +18,9 @@ import { ImageSearch } from '../../../../util/ImageSearch';
 import "./ImageSearchPanel.css";
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { VideoSearch } from '../../../../util/VideoSearch';
-import { Video } from '../../../Video/Video';
+
 import { VideoPreview } from '../../../VideoPreview/VideoPreview';
+import { ImagePreview } from '../../../ImagePreview/ImagePreview';
 
 
 export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => {
@@ -47,7 +46,9 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
     const [query, setQuery] = React.useState("");
 
     const handleQuery = (e) => {
+
         setQuery(e.target.value);
+
     }
 
     const search = async () => {
@@ -87,6 +88,7 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
     }
 
     const handleSelectImage = (image) => {
+       
         selectImage(image)
     }
 
@@ -109,6 +111,17 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
         }
         
     }, [searchingForImage])
+
+    const handleTag = (tag) => {
+
+        if (loading) return;
+
+        setQuery(tag);
+        
+        setTimeout(() => {
+            document.getElementsByClassName('message-image-search-button')[0].click();
+        }, 50)
+    }
 
     return (
         <AnimatePresence exitBeforeEnter>
@@ -148,9 +161,7 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
                             })
                             : (images?.length > 0 ? images : loading ? [] : recommendations.filter(v => v.type === 'image').slice(0, 15)).map((image, key) => {
                                 return (
-                                    <div onClick={(e) => {e.stopPropagation(); handleSelectImage(image)}} key={image + key} className='image-search-result-container'>
-                                        <Image hideOnError={true} cursor='pointer' image={image.preview} />
-                                    </div> 
+                                    <ImagePreview tag_action={handleTag} tags={image.tags} image={image.preview} action={(e) => {handleSelectImage(image)}} />
                                 )
                             })}
                         </Masonry>

@@ -99,8 +99,8 @@ export const ButtonAnimationWrapper = ({display = 'flex', action = () => {}, pos
             onMouseLeave={desc_o_mouse_leave}
             animate={null}
             style={{
-                top: right_orientation_desc ? '5px' : null,
-                right: right_orientation_desc ? '-75px' : null,
+                top: right_orientation_desc ? '3px' : null,
+                right: right_orientation_desc ? '-35px' : null,
                 left: right_orientation_desc ? null : '50%',
                 bottom: right_orientation_desc ? null : flip_description ? '-120%' : height + desc_space,
                 minWidth: right_orientation_desc ? null : '100%',

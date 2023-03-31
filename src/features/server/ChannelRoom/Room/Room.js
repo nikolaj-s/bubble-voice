@@ -22,7 +22,6 @@ import { socket } from '../../ServerBar/ServerBar';
 
 // client
 import { RoomClient } from './RoomClient';
-import { RoomNavigation } from './RoomNavigation/RoomNavigation';
 import { Social } from './Social/Social';
 import { Widgets } from './Widgets/Widgets';
 import { Music } from './Music/Music';
@@ -30,9 +29,9 @@ import { RoomUserWrapper } from './RoomUserWrapper/RoomUserWrapper';
 import { RoomActionOverlay } from './RoomActionOverlay/RoomActionOverlay';
 import { ChannelBackground } from './ChannelBackground/ChannelBackground';
 import { selectMiscSettingsHideChannelBackground, selectPopOutUserStreams } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
-import { SubMenuButton } from '../../../../components/buttons/subMenuButton/SubMenuButton';
 import { selectGlassColor, selectGlassState, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { audioCtx } from '../../../AudioInit/AudioInit';
+import { selectCurrentServerPageState } from '../ServerNavigation/ServerNavigationSlice';
 
 export let client;
 
@@ -42,7 +41,7 @@ const Component = () => {
 
     const [loaded, setLoaded] = React.useState(false);
 
-    const [page, setPage] = React.useState("voice");
+    const page = useSelector(selectCurrentServerPageState);
     // state 
     const channel = useSelector(selectCurrentChannel);
 
@@ -193,19 +192,10 @@ const Component = () => {
             
     }
 
-    const cycleChannelPage = (page) =>  {
-
-        if (page === 'social') {
-            dispatch(setChannelSocialId(""));
-        }
-
-        setPage(page);
-    }
-
     const handleScreenShare = async () => {
 
         try {
-            console.log(currentScreen)
+
             if (currentScreen !== null) return;
 
             const ipcRenderer = window.require('electron').ipcRenderer;
@@ -485,8 +475,6 @@ const Component = () => {
 
                             scriptProcessor.connect(audioCtx.destination);
 
-                            let deactivationTimeout = null;
-
                             const onVoiceStart = () => {
 
                                 client.resumeProducer('audioType');
@@ -734,7 +722,7 @@ const Component = () => {
     
     React.useEffect(() => {
         
-        if (page === 'social' || page === 'widgets' || musicExpanded === true) {
+        if (page === 'social' || page === 'widgets' || musicExpanded === true || page === 'pins' || page === 'media') {
             if (popOutUserStreams) {
                 document.getElementById('user-streams-wrapper').style.position = 'fixed';
                 document.getElementById('user-streams-wrapper').style.left = '-15px';
@@ -767,7 +755,6 @@ const Component = () => {
     return (
         <>
         <div className='room-wrapper-outer'>
-            <RoomNavigation action={cycleChannelPage} page={page} />
             <div
             style={
                 (hideChannelBackgrounds || channel.channel_background === undefined) ? {backgroundColor: glass ? glassColor : secondaryColor} : null
@@ -780,9 +767,8 @@ const Component = () => {
                     {page === "widgets" ? <Widgets /> : null}
                 </AnimatePresence>
                 <RoomActionOverlay page={page} />
-                <Music />
             </div>
-            <SubMenuButton description={"Room Quick Settings"} right_orientation_desc={true} target={'live-chat-wrapper'} borderRadius={0} zIndex={3} position={"absolute"} top={0} right={35} height={15} left={null} width={15} />
+            
             <ChannelBackground channel_background={hideChannelBackgrounds ? null : channel.channel_background} blur={channel.background_blur} />
             <audio hidden={true} id={'microphone-input-source'} />
             

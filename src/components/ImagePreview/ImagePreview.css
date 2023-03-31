@@ -1,0 +1,31 @@
+
+.image-preview-result-container {
+    position: relative;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    object-fit: cover;
+}
+
+.image-preview-result-container:hover {
+    filter: brightness(110%);
+}
+
+.image-tags-container {
+    position: absolute;
+    bottom: 4px;
+    height: auto;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.image-tags-container p {
+    margin: 3px;
+    padding: 3px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.image-tags-container p:hover {
+    opacity: 0.7;
+}

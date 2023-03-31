@@ -57,9 +57,9 @@ export const SocialRoute = () => {
             key={"social-route"}
             
             style={{
-                position: inChannel ? 'absolute' : 'relative',
-                zIndex: inChannel ? 5 : 3,
-                width: 'calc(100% - 3px)',
+                position: 'absolute',
+                zIndex: 4,
+                width: 'calc(100%)',
                 left: 0,
                 height: '100%',
             }}
@@ -91,7 +91,7 @@ export const SocialRoute = () => {
                 style={{
                     minHeight: 'calc(100% - 36px)',
                     width: '100%',
-                    backgroundColor: glass ? glassColor : secondaryColor
+                    backgroundColor: glass && !inChannel ? glassColor : secondaryColor
                 }}
                 >
                     <Social channelName={channel.name} socialRoute={true} channelId={channelId} currentChannel={channel} />

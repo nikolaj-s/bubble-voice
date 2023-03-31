@@ -14,6 +14,10 @@ import { UserStatusBar } from './UserStatus/UserStatusBar'
 import { selectDefaultServer } from '../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice'
 import { SetAsDefaultServerNotice } from './SetAsDefaultServerNotice/SetAsDefaultServerNotice'
 import { MemberPanel } from './MemberPanel/MemberPanel'
+import { ServerNavigation } from './ServerNavigation/ServerNavigation'
+
+import "./ChannelRoom.css";
+import { Music } from './Room/Music/Music'
 
 export const RoomWrapper = () => {
 
@@ -39,10 +43,14 @@ export const RoomWrapper = () => {
         <>
         <CreateChannelMenu />
         <ServerSettingsRouteWrapper />
-        <Room />
-        <ServerDashBoard />
-        <AnimatePresence>
+        <div className='server-page-wrapper'>
+            <ServerNavigation />
+            <Room />
+            <ServerDashBoard />
             <SocialRoute key='social-route' />
+            <Music />
+        </div>
+        <AnimatePresence>
             <UserStatusBar key='user-status-bar' />
             <MemberPanel key='member-panel' />
             {error ? <Error key={'server-error'} errorMessage={errorMessage} action={closeErrorMessage} /> : null}

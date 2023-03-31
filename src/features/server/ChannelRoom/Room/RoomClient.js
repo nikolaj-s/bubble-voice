@@ -611,7 +611,7 @@ export class RoomClient {
             // let stream_audio;
 
             // if (screen) {
-
+            //     console.log(stream.getAudioTracks())
             //     stream_audio = stream.getAudioTracks()[0];
             
             // }  

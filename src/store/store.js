@@ -23,6 +23,7 @@ import MusicSlice from "../features/server/ChannelRoom/Room/Music/MusicSlice";
 import UserStatusSlice from "../features/server/ChannelRoom/UserStatus/UserStatusSlice";
 import ServerDashBoardSlice from "../features/server/ChannelRoom/ServerDashBoard/ServerDashBoardSlice";
 import MemberPanelSlice from "../features/server/ChannelRoom/MemberPanel/MemberPanelSlice";
+import ServerNavigationSlice from "../features/server/ChannelRoom/ServerNavigation/ServerNavigationSlice";
 
 const { configureStore } = require("@reduxjs/toolkit");
 
@@ -56,6 +57,7 @@ const store = configureStore({
         UserStatusSlice: UserStatusSlice,
         ServerDashBoardSlice: ServerDashBoardSlice,
         MemberPanelSlice: MemberPanelSlice,
+        ServerNavigationSlice: ServerNavigationSlice,
         // sound fx
         soundEffectsSlice: soundEffectsSlice,
         // ctx menu

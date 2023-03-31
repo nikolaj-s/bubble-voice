@@ -4,7 +4,7 @@
     bottom: 50%;
     transform: translateY(50%);
     right: 3px;
-    z-index: 5;
+    z-index: 4;
     border-bottom-right-radius: 10px;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
@@ -36,6 +36,7 @@
     height: 100%;
     display: flex;
     overflow: hidden;
+    vertical-align: center;
 }
 
 
@@ -61,7 +62,7 @@
 
 .music-overlay-volume-container {
     position: absolute;
-    z-index: 5;
+    z-index: 7;
     bottom: calc(50% - 132px);
     padding: 0 20px;
     width: 130px;
@@ -74,7 +75,7 @@
 
 .music-overlay-search-container {
     position: absolute;
-    z-index: 5;
+    z-index: 7;
     bottom: calc(50% - 69px);
     padding: 0 20px;
     border-radius: var(--border-radius);

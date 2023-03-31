@@ -47,8 +47,8 @@ export const ChannelTitle = ({action}) => {
             style={{color: textColor}}
             >CHANNELS</h3>
             <div className='channel-title-buttons-container'>
-                {permissions?.user_can_manage_channels ? <AddButton desc_space={15} padding={'6px'} borderRadius={'5px'} description={"Add"} width={15}  height={15} action={action} /> : null}
-                <SettingsButton id="server-settings-button" action={toggleServerSettings} description='Edit' desc_space={12} width={19} height={19} padding={4}  />
+                {permissions?.user_can_manage_channels ? <AddButton desc_space={15} padding={'6px'} transparent={true} borderRadius={'5px'} description={"Add"} width={15}  height={15} action={action} /> : null}
+                <SettingsButton transparent={true} id="server-settings-button" action={toggleServerSettings} description='Edit' desc_space={12} width={19} height={19} padding={4}  />
             </div>
         </div>
     )

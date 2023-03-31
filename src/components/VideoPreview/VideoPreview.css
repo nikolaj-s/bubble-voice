@@ -2,18 +2,20 @@
     position: relative;
     cursor: pointer;
     transition: 0.1s;
+    border-radius: var(--border-radius);
+    overflow: hidden;
 }
 
 .video-preview-container:hover {
-    opacity: 0.7;
+    filter: brightness(120%);
 }
 
 .video-preview-title {
     position: absolute;
-    bottom: 0;
+    bottom: 10px;
     left: 0;
     width: calc(100% - 10px);
     font-weight: 400;
     padding: 5px;
-    
+    margin: 0;
 }

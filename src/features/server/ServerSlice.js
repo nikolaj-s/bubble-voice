@@ -173,6 +173,18 @@ export const createChannel = createAsyncThunk(
     }
 )
 
+export const moveUser = createAsyncThunk(
+    'serverSlice',
+    async ({username, channel_id, arg}, {rejectWithValue}) => {
+
+        await socket.request('move user', {channel_id: channel_id, username: username, to_move: arg})
+        .catch(error => {
+            rejectWithValue({error: true})
+        })
+
+    }
+)
+
 export const fetchPersistedMusicVolume = createAsyncThunk(
     'serverSlice/fetchPersistedMusicVolume',
     async (_) => {
@@ -705,6 +717,10 @@ const serverSlice = createSlice({
         }
     },
     extraReducers: {
+        [moveUser.rejected]: (state, action) => {
+            state.error = true;
+            state.errorMessage = "Error Moving User";
+        },
         [fetchServerDetails.pending]: (state, action) => {
             state.loading = true;
         },

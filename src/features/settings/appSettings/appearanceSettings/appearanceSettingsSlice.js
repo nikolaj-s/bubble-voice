@@ -43,8 +43,10 @@ const appearanceSettingsSlice = createSlice({
             {type: 'Diablo', gradient: 'linear-gradient(to bottom, #870000, #190a05)'},
             {type: 'Starfall', gradient: 'linear-gradient(to bottom, #f0c27b, #4b1248)'},
             {type: 'Topaz', gradient: 'linear-gradient(135deg, hsla(265, 53%, 29%, 1) 0%, hsla(152, 74%, 44%, 1) 49%, hsla(24, 93%, 73%, 1) 100%)'},
-            {type: 'Green', gradient: 'linear-gradient(to top, #607e5f, #2e3d2f'}
-
+            {type: 'Green', gradient: 'linear-gradient(to top, #607e5f, #2e3d2f'},
+            {type: "Interstellar", gradient: 'radial-gradient(ellipse at 11% 15%,#16213E, #0F3460, #533483, #E94560)'},
+            {type: "Sunset", gradient: 'radial-gradient(ellipse at 11% 15%,#F76E11, #FF9F45, #FFBC80, #FC4F4F)'},
+            {type: 'Black Hole', gradient: 'radial-gradient(circle at 50% 50%,#000000, #000000, rgba(179, 76, 51, 1), rgba(0,0,0,1), rgba(0,0,0,1))'}
         ],
         color_themes: {
             light: {

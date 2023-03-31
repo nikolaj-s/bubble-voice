@@ -2,9 +2,8 @@
 .channel-background-container {
     position: absolute;
     z-index: 0;
-    height: calc(100% - 35px);
+    height: calc(100%);
     width: calc(100%);
-    top: 35px;
     overflow: hidden;
 }
 

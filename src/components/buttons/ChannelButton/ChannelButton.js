@@ -13,12 +13,14 @@ import {  selectAccentColor, selectPrimaryColor, selectTextColor, selectTranspar
 // style
 import "./ChannelButton.css";
 import { SocialButton } from '../SocialButton/SocialButton';
-import { selectChannelSocialId, selectCurrentChannelId, setChannelSocialId, throwServerError } from '../../../features/server/ServerSlice';
+import { moveUser, selectChannelSocialId, selectCurrentChannelId, setChannelSocialId, throwServerError } from '../../../features/server/ServerSlice';
 import { SOCIAL_DATA } from '../../../util/LocalData';
 import { VoiceDisabledIcon } from '../../Icons/VoiceDisabledIcon/VoiceDisabledIcon';
 import { VoiceEnabledIcon } from '../../Icons/VoiceEnabledIcon/VoiceEnabledIcon';
 import { LockedChannelIcon } from '../../Icons/LockedChannelIcon/LockedChannelIcon';
 import { TextOnlyIcon } from '../../Icons/TextOnlyIcon/TextOnlyIcon';
+import { handleChangePage } from '../../../features/server/ChannelRoom/ServerNavigation/ServerNavigationSlice';
+import { selectUsername } from '../../../features/settings/appSettings/accountSettings/accountSettingsSlice';
 
 
 export const ChannelButton = ({channel, action = () => {}, users, index}) => {
@@ -40,12 +42,14 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
     const textColor = useSelector(selectTextColor);
 
     const transparentPrimaryColor = useSelector(selectTransparentPrimaryColor);
-
-    const active = window.location.hash.includes(channel._id);
-
+    
     const currentChannelId = useSelector(selectCurrentChannelId);
 
     const currentSocialId = useSelector(selectChannelSocialId);
+
+    const username = useSelector(selectUsername);
+
+    const active = window.location.hash.includes(channel._id);
 
     const handleAnimation = (color, enter) => {
         if (enter) {
@@ -104,12 +108,50 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
 
         if (channel.auth === false) return dispatch(throwServerError({errorMessage: "Whoops This Channel Has Been Made Available To Only Certain Users!"}));
 
-        dispatch(setChannelSocialId(channel._id))
+        if (channel._id === currentChannelId) {
+
+            dispatch(handleChangePage('social'));
+
+            dispatch(setChannelSocialId(null));
+        } else {
+            dispatch(setChannelSocialId(channel._id));
+        }
+
+        
+    }
+
+    const onDragOver = (event) => {
+        event.preventDefault();
+    }
+
+    const onDrop = (event) => {
+
+        if (channel.text_only) return;
+
+        const id = event.dataTransfer.getData('text');
+        
+        if (!id) return;
+
+        const selected_username = id.split(' ')[1];
+
+        const channel_id = id.split(' ')[0];
+        
+        if (channel_id === channel._id) return;
+
+        if (selected_username === username) {
+            document.getElementById(`channel-button-${channel._id}`).click();
+        } else if (selected_username && channel_id) {
+            
+            dispatch(moveUser({username: selected_username, channel_id: channel_id, arg: channel._id}))
+        }
     }
     
     return (
         <>
             <motion.div 
+            onDragOver={(event) => {onDragOver(event); handleAnimation(primaryColor, true)}}
+            onDragLeave={() => {handleAnimation(transparentPrimaryColor, false)}}
+            onDrop={onDrop}
             id={`channel-button-${channel._id}`}
             animate={animation} 
             onMouseEnter={() => {handleAnimation(primaryColor, true)}}

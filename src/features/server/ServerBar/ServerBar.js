@@ -365,6 +365,8 @@ const Bar = () => {
         try {
             console.log("retrying joining server function")
 
+            socket?.off();
+
             socket?.disconnect();
             
             socket = null;
@@ -670,6 +672,8 @@ const Bar = () => {
         console.log('rejoining')
         
         if (socket !== null) {
+
+            socket.off();
 
             socket = null;
         

@@ -68,10 +68,12 @@
 .image-search-result-container {
     cursor: pointer;
     transition: 0.1s;
+    border-radius: var(--border-radius);
+    overflow: hidden;
 }
 
 .image-search-result-container:hover {
-    opacity: 0.5;
+    filter: brightness(120%);
 }
 
 .media-search-nav-container {

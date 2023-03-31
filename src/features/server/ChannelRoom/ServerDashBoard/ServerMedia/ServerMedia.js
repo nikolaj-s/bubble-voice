@@ -6,10 +6,11 @@ import { Image } from '../../../../../components/Image/Image';
 
 import { NoMedia } from '../../../../../components/NoMedia/NoMedia';
 import { VideoPreview } from '../../../../../components/VideoPreview/VideoPreview';
+import { ImagePreview } from '../../../../../components/ImagePreview/ImagePreview';
 
 export const ServerMedia = ({media, expand}) => {
     
-    const [count, increaseCount] = React.useState(15)
+    const [count, increaseCount] = React.useState(30)
 
     const handleLoadMore = (e) => {
         
@@ -19,7 +20,7 @@ export const ServerMedia = ({media, expand}) => {
             increaseCount(count + 15)
         }
     }
-
+    
     return (
         <div onScroll={handleLoadMore} className='server-media-container'>
             {media?.length === 0 ?
@@ -29,12 +30,12 @@ export const ServerMedia = ({media, expand}) => {
                 <Masonry gutter='5px'> 
                     {media.slice(0, count).map((img, key) => {
                         return (
-                            <div className='server-media-image-container'>
-                                {img.type === 'image' ?
-                                <Image hideOnError={true} loadingState='lazy' expandContent={expand} cursor='pointer' key={img.preview + key} image={img.preview} />
-                                :
-                                <VideoPreview action={() => {expand(img.link)}} video={img} />}
-                            </div>
+                           <>
+                            {img.type === 'image' ?
+                            <ImagePreview image={img.preview} action={() => {expand(img.preview)}} tags={img.tags} />
+                            :
+                            <VideoPreview action={() => {expand(img.link)}} video={img} />}
+                            </>
                         )
                     })}
                 </Masonry>

@@ -127,7 +127,7 @@ export const RoomUserWrapper = ({users, page}) => {
 
             const children = parent.children;
             
-            const c_count = Array.from(children).filter(child => ((child.attributes[2] ? child.attributes[2]["value"].includes('flex') : null && child.className === 'active-user-container') || child.className === 'streaming-video-player-container'));
+            const c_count = Array.from(children).filter(child => ((child.attributes[2] ? child.attributes[2]["value"].includes('flex') : null && child.className === 'active-user-container') || child.className === 'streaming-video-player-container' || child.className.includes('youtube-player-wrapper')));
             
             let wDimension = parent.offsetWidth - 14;
 
@@ -160,7 +160,9 @@ export const RoomUserWrapper = ({users, page}) => {
 
     const handleStreamExpansion = (e) => {
 
-        for (const el of e.path) {
+        const path = e.path || (e.composedPath && e.composedPath())
+
+        for (const el of path) {
             
             if ((el.id !== 'user-streams-wrapper' && el.id) && (el.className === 'active-user-container' || el.className === 'streaming-video-player-container')) {
                 if (el.id === expanded) {

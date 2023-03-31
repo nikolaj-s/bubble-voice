@@ -6,13 +6,13 @@ import { selectTextColor } from '../../../features/settings/appSettings/appearan
 import { ButtonAnimationWrapper } from '../ButtonAnimationWrapper/ButtonAnimationWrapper'
 
 
-export const SettingsButton = ({flip_desc, id, action, margin, width = 25, height = 25, desc_space, padding, description = 'Settings'}) => {
+export const SettingsButton = ({flip_desc, id, action, margin, width = 25, height = 25, desc_space, padding, description = 'Settings', transparent}) => {
 
     const color = useSelector(selectTextColor);
 
     return (
         <ButtonAnimationWrapper
-        
+        transparent={transparent}
         id={id}
         flip_description={flip_desc}
         action={action}

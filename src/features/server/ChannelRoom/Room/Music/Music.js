@@ -212,7 +212,7 @@ export const Music = () => {
     }
 
     const handleExpansion = () => {
-        dispatch(toggleMusicExpanded(!expanded));
+       dispatch(toggleMusicExpanded(!expanded));
     }
 
     return (
@@ -237,16 +237,16 @@ export const Music = () => {
         style={{
             width: expanded ? 'calc(100% - 20px)' : 455,
             height: expanded ? "100%" : 300,
-            right: visible ? 0 : '-400px',
+            right: visible ? 0 : '-398px',
             left: expanded ? '50%' : null,
             transform: expanded ? 'translate(-50%, 50%)' : 'translate(0%, 50%)',
-            backgroundColor: primaryColor,
             boxShadow: expanded ? '5px 5px 60px rgba(0, 0, 0, 0.8)' : null,
             borderRadius: expanded ? '10px' : null
         }}
         className='music-player-overlay-wrapper'>
             <div 
-            style={{display: expanded ? 'none' : 'flex'}}
+            style={{display: expanded ? 'none' : 'flex',
+            backgroundColor: primaryColor, borderTopLeftRadius: 10, borderBottomLeftRadius: 10}}
             className='music-player-overlay-controls'>
                 <MusicOverlayButton playing={musicPlaying} description={visible ? 'Hide' : 'Show'} action={toggleVisibility} width={25} height={25} />
                 <SkipButton action={handleSkip} width={25} height={25} />
@@ -255,7 +255,7 @@ export const Music = () => {
                 <AudioToggleButton o_mouseEnter={() => {handleToggleVolumeControls(true)}} o_mouseLeave={() => {handleToggleVolumeControls(false)}} description={muted ? 'Un Mute' : 'Mute'} action={handleMute} state={!muted} />
             </div>
             <div style={{
-            borderRadius: expanded ? '10px' : null}} className='youtube-player-wrapper'>
+            borderRadius: expanded ? '10px' : null, opacity: visible ? 1 : 0}} className='youtube-player-wrapper' id="youtube-media-container">
                 <YouTube 
                 
                 onReady={handleOnReady}
