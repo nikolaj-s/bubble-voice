@@ -121,13 +121,31 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
     }
 
     const onDragOver = (event) => {
+
+        if (channel.text_only) return;
+
         event.preventDefault();
+
+        handleAnimation(primaryColor, true);
+
+        document.getElementById(`channel-wrapper-button-${channel._id}`).style.backgroundColor = primaryColor;
+    }
+
+    const onDragLeave = () => {
+
+        if (channel.text_only) return;
+
+        document.getElementById(`channel-wrapper-button-${channel._id}`).style.backgroundColor = 'rgba(0, 0, 0, 0)';
+    
+        handleAnimation(transparentPrimaryColor, false)
     }
 
     const onDrop = (event) => {
 
-        if (channel.text_only) return;
+        document.getElementById(`channel-wrapper-button-${channel._id}`).style.backgroundColor = 'rgba(0, 0, 0, 0)';
 
+        if (channel.text_only) return;
+        console.log(event)
         const id = event.dataTransfer.getData('text');
         
         if (!id) return;
@@ -147,11 +165,14 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
     }
     
     return (
-        <>
-            <motion.div 
-            onDragOver={(event) => {onDragOver(event); handleAnimation(primaryColor, true)}}
-            onDragLeave={() => {handleAnimation(transparentPrimaryColor, false)}}
+        <div
+        id={`channel-wrapper-button-${channel._id}`}
+        onDragOver={(event) => {onDragOver(event)}}
+            onDragLeave={() => {onDragLeave()}}
             onDrop={onDrop}
+        >
+            <motion.div 
+            
             id={`channel-button-${channel._id}`}
             animate={animation} 
             onMouseEnter={() => {handleAnimation(primaryColor, true)}}
@@ -191,6 +212,6 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
                     <ChannelUserDisplay key={user.username} channel_id={channel._id} user={user} />
                 )
             }) : null}
-        </>
+        </div>
     )
 }

@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 // state
 import { selectDisplayName, selectUsername } from '../../../../settings/appSettings/accountSettings/accountSettingsSlice';
-import { newMessage, selectPinningMessage, selectUsersPermissions, throwServerError, togglePinMessage, updateMessage } from '../../../ServerSlice';
+import { newMessage, removeInvalidMessage, selectPinningMessage, selectUsersPermissions, throwServerError, togglePinMessage, updateMessage } from '../../../ServerSlice';
 
 // components
 import { MessageInput } from '../../../../../components/inputs/MessageInput/MessageInput';
@@ -143,7 +143,9 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         }).catch(error => {
             console.log(error)
-            dispatch(throwServerError({errorMessage: error.message}));
+            dispatch(removeInvalidMessage(data));
+
+            dispatch(throwServerError({errorMessage: error}));
             
         })
 

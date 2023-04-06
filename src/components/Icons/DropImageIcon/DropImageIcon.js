@@ -24,7 +24,7 @@ export const DropImageIcon = ({action}) => {
             <path d="M38.5417 18.75V6.25" stroke={color} strokeWidth="4.16667" strokeLinecap="round" strokeLinejoin="round"/>
             <path d="M33.3335 11.4583L38.5418 6.25L43.7502 11.4583" stroke={color} strokeWidth="4.16667" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            <h1 style={{color: color}}>Drop File</h1>
+            <h1 style={{color: color}}>Drop Media</h1>
             <TextButton name={"Cancel"} action={cancel} />
         </div>
     )

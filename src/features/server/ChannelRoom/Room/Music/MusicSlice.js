@@ -1,16 +1,43 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { setMusicWidgetVolume } from "../../../../../util/LocalData";
+import { throwServerError } from "../../../ServerSlice";
+import { socket } from "../../../ServerBar/ServerBar";
 
+export const handleAddingMedia = createAsyncThunk(
+    'MusicSlice/handleAddingMedia',
+    async (query, {rejectWithValue, dispatch}) => {
+        try {
+
+            await socket.request('add song to queue', {query: query})
+            .then(response => {
+                return true;
+            })
+            .catch(error => {
+                console.log(error);
+                
+                dispatch(throwServerError({error: true, errorMessage: error}))
+            
+                return true;
+            })
+
+            return;
+        } catch (error) {
+            dispatch(throwServerError({error: true, errorMessage: error}))
+            return rejectWithValue(true);
+        }
+    }
+)
 
 const MusicSlice = createSlice({
-    name: 'MuscSlice',
+    name: 'MusicSlice',
     initialState: {
         playing: false,
         queue: [],
         error: false,
         errorMessage: "",
         volume: 25,
-        expanded: false
+        expanded: false,
+        loading: false
     },
     reducers: {
         toggleMusicPlaying: (state, action) => {
@@ -69,6 +96,20 @@ const MusicSlice = createSlice({
         },
         toggleMusicExpanded: (state, action) => {
             state.expanded = action.payload;
+        },
+        toggleLoadingMusic: (state, action) => {
+            state.loading = action.payload;
+        }
+    },
+    extraReducers: {
+        [handleAddingMedia.pending]: (state, action) => {
+            state.loading = true;
+        },
+        [handleAddingMedia.fulfilled]: (state, action) => {
+            state.loading = false;
+        },
+        [handleAddingMedia.rejected]: (state, action) => {
+            state.loading = false;
         }
     }
 })
@@ -86,7 +127,9 @@ export const selectMusicVolume = state => state.MusicSlice.volume;
 
 export const selectMusicExpanded = state => state.MusicSlice.expanded;
 
+export const selectLoadingMusicState = state => state.MusicSlice.loading;
+
 // actions
-export const {toggleMusicExpanded, removeSongFromQueue, un_like_song, like_song, toggleMusicPlaying, addSongToQueue, skipSong, updateMusicState, throwMusicError, updateMusicVolume} = MusicSlice.actions;
+export const {toggleLoadingMusic,toggleMusicExpanded, removeSongFromQueue, un_like_song, like_song, toggleMusicPlaying, addSongToQueue, skipSong, updateMusicState, throwMusicError, updateMusicVolume} = MusicSlice.actions;
 
 export default MusicSlice.reducer;

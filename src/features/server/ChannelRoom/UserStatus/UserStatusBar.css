@@ -8,7 +8,7 @@
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    flex-shrink: 1;
+    flex-shrink: 0;
     justify-self: flex-end;
     overflow-x: hidden;
     z-index: 4;
@@ -17,7 +17,7 @@
 
 .user-status-bar h4 {
     width: 100%;
-    margin: 10px 0px 10px 3px;
+    margin: 10px 0px 10px 8px;
     font-weight: 400;
     font-size: 0.8rem;
 }

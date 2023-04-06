@@ -15,6 +15,7 @@ export const MusicOverlayButton = ({width, height, action, description, playing 
                 <span style={{backgroundColor: color}} />
                 <span style={{backgroundColor: color}} />
                 <span style={{backgroundColor: color}} />
+                <span style={{backgroundColor: color}} />
             </div>
         </ButtonAnimationWrapper>
     )

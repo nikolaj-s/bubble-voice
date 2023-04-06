@@ -53,7 +53,7 @@ export const MusicWidgetButton = ({action, prev = false}) => {
             </svg>
 
             </div>
-            <h2 style={{color: textColor}}>Music</h2>
+            <h2 style={{color: textColor}}>Media</h2>
         </motion.div>
     )
 }

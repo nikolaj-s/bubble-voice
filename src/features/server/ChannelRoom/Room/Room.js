@@ -766,7 +766,6 @@ const Component = () => {
                     {page === "social" ? <Social currentChannel={channel} channelId={current_channel_id} /> : null}
                     {page === "widgets" ? <Widgets /> : null}
                 </AnimatePresence>
-                <RoomActionOverlay page={page} />
             </div>
             
             <ChannelBackground channel_background={hideChannelBackgrounds ? null : channel.channel_background} blur={channel.background_blur} />

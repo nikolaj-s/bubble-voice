@@ -2,13 +2,13 @@
 .music-overlay-button-wrapper {
     position: relative;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     width: 20px;
     height: 20px;
 }
 
 .music-overlay-button-wrapper span {
-    width: 3px;
+    width: 2px;
     height: 100%;
     border-radius: 3px;
     content: '';
@@ -30,6 +30,9 @@
     animation-delay: -3.7s; /* Start mid-way of return of animation */
 }
 
+.music-playing-class span:nth-of-type(4) {
+    animation-delay: -4.8s; /* Start mid-way of return of animation */
+}
 
 @keyframes bounce {
     10% {

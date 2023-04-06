@@ -15,7 +15,7 @@ import { Error } from '../../../Error/Error';
 
 // state
 import { Loading } from '../../../LoadingComponents/Loading/Loading';
-import {  like_song, selectMusicError, selectMusicErrorMessage, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, throwMusicError, toggleMusicPlaying, un_like_song, updateMusicVolume } from '../../../../features/server/ChannelRoom/Room/Music/MusicSlice';
+import {  handleAddingMedia, like_song, selectLoadingMusicState, selectMusicError, selectMusicErrorMessage, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, throwMusicError, toggleLoadingMusic, toggleMusicPlaying, un_like_song, updateMusicVolume } from '../../../../features/server/ChannelRoom/Room/Music/MusicSlice';
 
 // style
 import "./MusicWidget.css";
@@ -31,7 +31,7 @@ export const MusicWidget = ({editing = false, widget}) => {
 
     const [query, setQuery] = React.useState("");
 
-    const [loading, toggleLoading] = React.useState(false);
+    const loading = useSelector(selectLoadingMusicState);
 
     const volume = useSelector(selectMusicVolume);
 
@@ -60,24 +60,7 @@ export const MusicWidget = ({editing = false, widget}) => {
 
         if (loading) return;
 
-        toggleLoading(true);
-
-        await socket.request('add song to queue', {query: query})
-        .then(response => {
-
-            if (queue.length === 0) {
-                dispatch(toggleMusicPlaying(true));
-            }
-
-            setQuery("")
-        })
-        .catch(error => {
-            console.log(error);
-            dispatch(throwMusicError({error: true, errorMessage: error}))
-        })
-
-
-        toggleLoading(false);
+        dispatch(handleAddingMedia(query));
     }
 
     const handleAddSavedSongToQueue = async (song) => {
@@ -90,7 +73,7 @@ export const MusicWidget = ({editing = false, widget}) => {
 
         if (exists !== -1) return dispatch(throwMusicError({error: true, errorMessage: "Song is already in the queue"}));
 
-        toggleLoading(true);
+        dispatch(toggleLoadingMusic(true));
 
         await socket.request('add song to queue', {song: song})
         .then(res => {
@@ -103,7 +86,7 @@ export const MusicWidget = ({editing = false, widget}) => {
             dispatch(throwMusicError({error: true, errorMessage: error}))
         })
 
-        toggleLoading(false);
+        dispatch(toggleLoadingMusic(false));
     }   
 
     const handlePlayPause = async () => {
@@ -151,7 +134,7 @@ export const MusicWidget = ({editing = false, widget}) => {
 
     const handleSavingSong = async (song) => {
         
-        toggleLoading(true);
+        dispatch(toggleLoadingMusic(true));
 
         if (song.liked) {
             await socket.request('un like song', {channel_id: currentChannelId, song: song})
@@ -178,18 +161,21 @@ export const MusicWidget = ({editing = false, widget}) => {
             })
         }
 
-        toggleLoading(false);
+        dispatch(toggleLoadingMusic(false));
     }
 
     const handleRemoveFromQueue = async (song) => {
-        toggleLoading(true);
+
+        if (loading) return;
+
+        dispatch(toggleLoadingMusic(true));
 
         await socket.request('remove song from queue', {song: song})
         .catch(err => {
             dispatch(throwServerError({errorMessage: err}));
         })
 
-        toggleLoading(false);
+        dispatch(toggleLoadingMusic(false));
     }
     
     return (
@@ -200,14 +186,14 @@ export const MusicWidget = ({editing = false, widget}) => {
                 <div className='music-top-title-container'>
                     <h2 style={{
                         color: textColor
-                    }}>Music</h2>
+                    }}>Media</h2>
                 </div>
                 <div className='music-widget-nav-container'>
                     <TextInput keyCode={handleEnter} inputValue={query} action={handleInput} placeholder={"Add Song To Queue"} marginTop='0' />
                     <AddButton opacity={query.length === 0 ? 0.5 : 1} invert={true} active={query.length === 0} action={handleAddSongToQueue} margin={"0 0 0 2%"} height={"25px"} width={"25px"} />
                 </div> 
                 <div className='music-queue-title-container'>
-                    <h3 style={{color: textColor}}>Saved Music</h3>
+                    <h3 style={{color: textColor}}>Saved Media</h3>
                 </div> 
                 <div className='saved-music-container'>
                     {savedMusic.length === 0 ?

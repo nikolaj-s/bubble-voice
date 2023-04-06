@@ -44,30 +44,9 @@ export const UpdateAvailable = () => {
     }
 
     React.useEffect(() => {
-
-        const el = document.getElementsByClassName('side-bar-header-container')[0]
-
-        if (el && updateAvailable) el.style.display = 'none';
-
         if (updateAvailable) {
 
             dispatch(fetchReleaseNotes());
-            
-            try {
-
-                setTimeout(() => {
-                    document.getElementById('disconnect-from-server-button').click();
-                }, 500)
-                
-            } catch (e) {
-                console.log(e)
-                return;
-            }
-        }
-
-        return () => {
-
-            if (el) el.style.display = 'flex';
         
         }
         
