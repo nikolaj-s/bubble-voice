@@ -45,7 +45,7 @@ export const MusicWidgetButton = ({action, prev = false}) => {
             backgroundColor: primaryColor,
             border: `solid 4px ${primaryColor}`,
             cursor: prev ? 'default' : 'pointer',
-            width: prev ? '100%' : '48%'
+            
         }}>
             <div>
             <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">

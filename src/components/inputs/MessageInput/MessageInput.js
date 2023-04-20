@@ -136,9 +136,11 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
         
         if (i.link) frame = iFrames.some(f => i.link.includes(f));
 
-        text((frame ? i.link : i.preview) || i.preview);
+        text((frame ? i.link : i.image) || i.preview);
 
-        image({preview: i.preview});
+        image({preview: i.image});
+
+        
     }
 
     return (

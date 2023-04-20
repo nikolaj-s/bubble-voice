@@ -1,0 +1,23 @@
+
+.saved-media-container {
+    width: 41px;
+    border-radius: 50%;
+    height: 41px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.2s;
+    position: relative;
+    margin-top: 4px;
+}
+
+.saved-media-container:hover {
+    border-radius: 10px;
+}
+
+.saved-media-container h3 {
+    font-size: 1.2rem;
+    letter-spacing: var(--font-spacing);
+    font-weight: 400;
+}

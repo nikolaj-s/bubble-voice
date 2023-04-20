@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Image } from '../../components/Image/Image';
 
 // state
-import { selectExpandedContent, setExpandedContent } from './ExpandContentSlice'
+import { selectExpandedContent, selectIframeExpanded, selectRedditExpanded, setExpandedContent } from './ExpandContentSlice'
 
 // style
 import "./ExpandContent.css";
@@ -14,12 +14,15 @@ import { selectSecondaryColor, selectTextColor } from '../settings/appSettings/a
 import { Video } from '../../components/Video/Video';
 import { Iframe } from '../../components/Iframe/Iframe';
 import { selectDisableTransparancyEffects } from '../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { RedditPost } from '../../components/RedditPost/RedditPost';
 
 export const ExpandContent = () => {
 
     const dispatch = useDispatch();
 
-    const [iframe, toggleIframe] = React.useState(false);
+    const iframe = useSelector(selectIframeExpanded);
+
+    const reddit = useSelector(selectRedditExpanded);
 
     const expandedContent = useSelector(selectExpandedContent);
 
@@ -51,47 +54,6 @@ export const ExpandContent = () => {
     // eslint-disable-next-line
     }, [])
 
-    React.useEffect(() => {
-        if (!expandedContent) return;
-        if (expandedContent?.includes('https')) {
-            for (const text of expandedContent.split(' ')) {
-                if (text.includes('redgif')) {
-                
-                    toggleIframe("https://redgifs.com/ifr/" + (text.split('redgifs.com/')[1]?.includes('watch') ? text.split('redgifs.com/')[1]?.split('watch/')[1].toLowerCase() : text.split('redgifs.com/')[1]?.split('-')[0].toLowerCase()));
-                
-                } else if (text.includes('youtu')) {
-    
-                    toggleIframe("https://www.youtube.com/embed/" + (text.split('/')[3].includes('watch?') ? text.split('/')[3].split('watch?v=')[1].split('&')[0] : text.split('/')[3]));
-    
-                } else if (text.includes('pornhub')) {
-    
-                    toggleIframe("https://www.pornhub.com/embed/" + (text.split('viewkey=')[1]))
-    
-                } else  if (text.includes('xvideos')) {
-    
-                    toggleIframe("https://www.xvideos.com/embedframe/" + (text.split('video')[1].split('/')[0]));
-    
-                } else if (text.includes('reddit')) {
-    
-                    toggleIframe("https://www.redditmedia.com/r/" + (text.split('r/')[1].split('?utm_')[0] + "?ref_source=embed&amp;ref=share&amp;embed=true&amp;theme=dark"))
-    
-                } else if (text.includes('steampowered')) {
-    
-                    toggleIframe("https://store.steampowered.com/widget/" + (text.split('app/')[1].split('/')[0]));
-                
-                } else if (text.includes('vimeo')) {
-                    
-                        toggleIframe("https://player.vimeo.com/video/" + text.split('com/')[1]);
-        
-                } else {
-                    toggleIframe(false);
-                }
-
-            }
-        }
-        console.log(expandedContent)
-    }, [expandedContent])
-
     return (
         <>
         {expandedContent ? 
@@ -114,10 +76,12 @@ export const ExpandContent = () => {
             >ESC</p>
             </div>
             <div className='content-expanded-inner-container'>
-                {iframe ?
+                {reddit ?
+                <RedditPost data={expandedContent} /> :
+                iframe ?
                 <Iframe maxWidth={"90%"} link={iframe} />
                 :
-                expandedContent.includes('mp4') ?
+                expandedContent?.includes('mp4') ?
                 <Video video={expandedContent} /> 
                 :        
                 <Image objectFit='contain' image={expandedContent} />}

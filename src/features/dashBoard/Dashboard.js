@@ -16,6 +16,7 @@ import { ContextMenu } from "../contextMenu/ContextMenu"
 import "./DashBoard.css";
 import { UpdateAvailable } from '../../components/UpdateAvailable/UpdateAvailable';
 import { ServerSelection } from '../sideBar/ServerSelection/ServerSelection';
+import { SavedMedia } from '../SavedMedia/SavedMedia';
 
 
 export const Dashboard = () => {
@@ -42,6 +43,7 @@ export const Dashboard = () => {
             <SoundEffects />
             <ContextMenu />
             <UpdateAvailable />
+            <SavedMedia />
         </div>
     )
 }

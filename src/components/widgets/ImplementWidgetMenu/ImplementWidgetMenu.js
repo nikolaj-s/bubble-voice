@@ -228,10 +228,8 @@ export const ImplementWidgetMenu = ({active = false, type, name, close}) => {
                     backgroundColor: secondaryColor
                 }}
                 className='inner-implement-widget-menu-container'>
-                    <h2
-                    style={{color: textColor}}
-                    >{name}</h2>
-                    {type === 'music' || type === 'wheel-spin' ? null : 
+                 
+                    {type === 'music' || type === 'wheel-spin' || type === 'subreddit' ? null : 
                     <InputTitle title={inputTitle} />}
                     {type === 'title' || type === 'dynamicGallery' ? <TextInput inputValue={textValue} action={handleTextValue} placeholder={type === 'dynamicGallery' ? "Image Query" : "Text"} /> : null}
                     {type === 'plainText' || type === 'list' ? <TextArea inputValue={textValue} action={handleTextValue} placeHolder={"Text"} /> : null}

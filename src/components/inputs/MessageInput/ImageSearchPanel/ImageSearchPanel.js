@@ -21,6 +21,7 @@ import { VideoSearch } from '../../../../util/VideoSearch';
 
 import { VideoPreview } from '../../../VideoPreview/VideoPreview';
 import { ImagePreview } from '../../../ImagePreview/ImagePreview';
+import { selectSavedMedia } from '../../../../features/SavedMedia/SavedMediaSlice';
 
 
 export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => {
@@ -32,6 +33,8 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
     const textColor = useSelector(selectTextColor);
 
     const recommendations = useSelector(selectPopularSearches);
+
+    const savedMedia = useSelector(selectSavedMedia);
 
     const [mediaType, setMediaType] = React.useState('Images');
 
@@ -74,7 +77,7 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
         setTimeout(() => {
             
             toggleLoading(false);
-            console.log(result.media)
+            
             mediaType === 'Images' ? setImages(result.media) : setVideos(result.media);
 
         }, 100)
@@ -88,7 +91,7 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
     }
 
     const handleSelectImage = (image) => {
-       
+       console.log(image)
         selectImage(image)
     }
 
@@ -138,6 +141,7 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
                     backgroundColor: secondaryColor
                 }}
                 className='inner-message-image-search-container'>
+                    {mediaType === 'Saves' ? null :
                     <div 
                     className='message-image-search-input-wrapper'>
                         <input 
@@ -147,10 +151,11 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
                         <div className='message-image-search-button'>
                             <AltSearchButton active={query.length === 0} action={search} margin={'0 0 0 10px'} width={15} height={15} invert={true}  borderRadius={5} />
                         </div>
-                    </div>
+                    </div>}
                     <div className='media-search-nav-container'>
                         <h3 onClick={() => {handleMediaType("Images")}} style={{color: textColor, backgroundColor: mediaType === 'Images' ? primaryColor : null, opacity: mediaType === 'Images' ? 1 : 0.6}}>Images</h3>
                         <h3 onClick={() => {handleMediaType("Videos")}} style={{color: textColor, backgroundColor: mediaType === 'Videos' ? primaryColor : null, opacity: mediaType === 'Videos' ? 1 : 0.6}}>Videos</h3>
+                        <h3 onClick={() => {handleMediaType("Saves")}} style={{color: textColor, backgroundColor: mediaType === 'Saves' ? primaryColor : null, opacity: mediaType === 'Saves' ? 1 : 0.6}}>Saves</h3>
                     </div>
                     <div className='message-image-search-results-container'>
                     <ResponsiveMasonry columnsCountBreakPoints={{800: 1, 1000: 2, 1500: 3}}>
@@ -159,9 +164,18 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
                             (videos?.length > 0 ? videos : loading ? [] : recommendations.filter(v => v.type === 'video').slice(0, 15)).map(video => {
                                 return <VideoPreview video={video} action={handleSelectImage} />
                             })
+                            : mediaType === 'Saves' ?
+                            savedMedia.map(media => {
+                                return (
+                                    media.type === 'image' ?
+                                    <ImagePreview action={() => {handleSelectImage({preview: media.media, type: 'image', image: media.media})}} image={media.media} />
+                                    :
+                                    <VideoPreview action={() => {handleSelectImage({preview: media.media, type: 'video', image: media.media})}} video={{preview: media.media}} />
+                                )
+                            })
                             : (images?.length > 0 ? images : loading ? [] : recommendations.filter(v => v.type === 'image').slice(0, 15)).map((image, key) => {
                                 return (
-                                    <ImagePreview tag_action={handleTag} tags={image.tags} image={image.preview} action={(e) => {handleSelectImage(image)}} />
+                                    <ImagePreview tag_action={handleTag} tags={image.tags} image={image.preview} action={(e) => {handleSelectImage({...image, image: image.preview})}} />
                                 )
                             })}
                         </Masonry>

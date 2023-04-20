@@ -9,6 +9,7 @@ import { BubbleLogo } from '../../../../components/Icons/bubbleLogo/BubbleLogo'
 // style's
 import "./ServerList.css";
 import { CreateServerButton } from '../../../createServer/createServerButton/CreateServerButton';
+import { SavedMediaButton } from '../../../../components/buttons/SavedMediaButton/SavedMediaButton';
 
 export const ServerList = ({selectServer, serverList = [], loading = false, animation, noresults = "No Joined Servers"}) => {
 
@@ -18,6 +19,7 @@ export const ServerList = ({selectServer, serverList = [], loading = false, anim
             {serverList.map(servers => {
                 return <ServerButton action={selectServer} key={servers._id} {...servers} />
             })}
+            <SavedMediaButton />
             <CreateServerButton />
             <Loading loading={loading} error={serverList.length === 0} />
         </motion.div>

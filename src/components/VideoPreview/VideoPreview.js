@@ -13,12 +13,12 @@ export const VideoPreview = ({video, action}) => {
     return (
         <a href={video.link} onClick={(e) => {e.preventDefault(); action(video)}} className='video-preview-container'>
             <video loading="lazy" loop={true} style={{width: '100%', height: '100%'}} src={video.preview} controls={false} autoPlay />
-            <p 
+            {video.title ? <p 
             style={{
                 backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0.7)`,
                 color: textColor
             }}
-            className='video-preview-title'>{video.title}</p>
+            className='video-preview-title'>{video.title}</p> : null}
         </a>
     )
 }

@@ -26,7 +26,8 @@
     height: 28px;
     border-radius: 50%;
     overflow: hidden;
-    margin-right: 5%;
+    margin-right: 5px;
+    margin-left: 5px;
     flex-shrink: 0;
     cursor: pointer;
 }

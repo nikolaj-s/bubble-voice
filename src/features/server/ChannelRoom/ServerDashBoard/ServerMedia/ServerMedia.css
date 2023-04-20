@@ -2,7 +2,7 @@
     width: 100%;
     height: 100%;
     overflow-y: auto;
-    padding-top: 3px;
+    position: relative;
 }
 
 .server-media-image-container {
@@ -16,10 +16,27 @@
     filter: brightness(120%);
 }
 
-.server-media-container h3 {
-    max-width: 98%;
-    margin-left: 1%;
-    text-align: center;
+
+.server-media-navigation-container {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    padding-left: 5px;
+}
+
+.server-media-navigation-container h3 {
+    padding: 2px 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: 0.1s;
     font-weight: 400;
-    letter-spacing: var(--font-spacing);
+    text-align: center;
+    border-radius: 3px;
+}
+
+.server-media-navigation-container h3:hover {
+    opacity: 1 !important;
 }

@@ -44,6 +44,8 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
 
     const handlePlayState = (e) => {
         e.stopPropagation();
+        e.preventDefault();
+        
         if (playing) {
             document.getElementById(video + id).pause();
         } else {

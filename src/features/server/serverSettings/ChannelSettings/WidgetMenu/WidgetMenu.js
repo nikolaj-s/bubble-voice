@@ -73,23 +73,16 @@ const Wrapper = () => {
     return (
         <>
             <div className='widget-menu-container'>
-                <InputTitle title={"Text Widgets"} />
+                <InputTitle title={"Widgets"} />
                 <TitleWidgetButton action={() => {openAddWidgetMenu("title", "Add A Title Widget")}} />
                 <div className='text-widgets-large-wrapper'>
                     <PlainTextWidgetButton action={() => {openAddWidgetMenu("plainText", "Plain Text Widget")}} />
                     <ListWidgetButton action={() => {openAddWidgetMenu('list', "Add List Widget")}} />
                 </div>
-                <InputTitle title={"Image Widgets"} />
                 <div className='widgets-button-wrapper'>
                     <ImageWidgetButton action={() => {openAddWidgetMenu('image', "Add Image Widget")}} />
                     <DynamicGalleryWidgetButton action={() => {openAddWidgetMenu("dynamicGallery", "Add Dynamic Image Gallery")}} />
-                </div>
-                <InputTitle title={"Video Widgets"} />
-                <div className='widgets-button-wrapper'>
                     <VideoWidgetButton action={() => {openAddWidgetMenu('video', "Add Video Widget")}} />
-                </div>
-                <InputTitle title={"Media Widgets"} />
-                <div className='widgets-button-wrapper'>
                     <MusicWidgetButton action={() => {openAddWidgetMenu('music', "Add Music Widget")}} />
                     <WheelSpinButton action={() => {openAddWidgetMenu('wheel-spin', 'Add Wheel Spin Widget')}} />
                 </div>

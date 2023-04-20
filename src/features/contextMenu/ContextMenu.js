@@ -29,7 +29,7 @@ import { miscSettingsChannelSpecificStateChange, selectHideUserStatus, selectMis
 import { MoveUser } from '../../components/buttons/MoveUser/MoveUser';
 import { selectPrimaryColor, selectTextColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectSocialSoundEffect, updateSoundEffectsState } from '../settings/soundEffects/soundEffectsSlice';
-import { client } from '../server/ChannelRoom/Room/Room';
+
 import { audioCtx } from '../AudioInit/AudioInit';
 import { CopyIcon } from '../../components/Icons/CopyIcon/CopyIcon';
 import { DeleteIcon } from '../../components/Icons/DeleteIcon/DeleteIcon';
@@ -37,11 +37,11 @@ import { SaveIcon } from '../../components/Icons/SaveIcon/SaveIcon';
 import { SocialIcon } from '../../components/Icons/SocialIcon/SocialIcon';
 import { EditIcon } from '../../components/Icons/EditIcon/EditIcon';
 import { BanIcon } from '../../components/Icons/BanIcon/BanIcon';
-import { ItalyIcon } from '../../components/Icons/ItalyIcon/ItalyIcon';
+import { SavesIcon } from '../../components/Icons/SavesIcon/SavesIcon';
 import { KickIcon } from '../../components/Icons/KickIcon/KickIcon';
 import { PokeIcon } from '../../components/Icons/PokeIcon/PokeIcon';
 import { PlayOnWidgetIcon } from '../../components/Icons/PlayOnWidgetIcon/PlayOnWidgetIcon';
-import { addSongToQueue } from '../server/ChannelRoom/Room/Music/MusicSlice';
+import { deleteMedia, saveMedia, selectSavedMedia } from '../SavedMedia/SavedMediaSlice';
 
 export const ContextMenu = () => {
 
@@ -71,6 +71,8 @@ export const ContextMenu = () => {
     const [disableStreamLocalState, toggleDisableStreamLocalState] = React.useState(false);
 
     const [addToMusicWidget, toggleAddToMusicWidget] = React.useState(false);
+
+    const [unSave, toggleUnSave] = React.useState(false);
 
     const primaryColor = useSelector(selectPrimaryColor)
 
@@ -103,6 +105,8 @@ export const ContextMenu = () => {
     const editChannelState = useSelector(selectEditChannelCtxState);
 
     const selectedChannel = useSelector(selectCtxSelectedChannel);
+
+    const savedMedia = useSelector(selectSavedMedia);
 
     const selectedChannelName = useSelector(selectCtxSelectedChannelName);
 
@@ -171,6 +175,14 @@ export const ContextMenu = () => {
     // user
     const username = useSelector(selectUsername);
 
+    React.useEffect(() => {
+
+        const index = savedMedia.findIndex(media => media.media === (selectedImage?.src || selectedVideo?.src));
+
+        if (index !== -1) toggleUnSave(true);
+
+    }, [savedMedia, selectedImage, selectedVideo])
+
     const handleCtxMenu = React.useCallback((e) => {
         e.preventDefault();
         
@@ -179,6 +191,8 @@ export const ContextMenu = () => {
         toggleAddToMusicWidget(false);
 
         dispatch(toggleContextMenu(false));
+
+        toggleUnSave(false);
         
         const path = e.path || (e.composedPath && e.composedPath());
         
@@ -203,8 +217,11 @@ export const ContextMenu = () => {
             }
 
             if (p.localName === 'img') {
-                dispatch(toggleContextMenu(true))
-                dispatch(setContextMenuOptions({state: "saveImage", value: true}))
+
+                dispatch(toggleContextMenu(true));
+
+                dispatch(setContextMenuOptions({state: "saveImage", value: true}));
+
                 setSelectedImage(p)
             }
 
@@ -968,6 +985,30 @@ export const ContextMenu = () => {
         
     }
 
+    const addToSaves = () => {
+
+        let obj;
+
+        if (saveImage) {
+
+            obj = {media: selectedImage.src, type: 'image'}
+
+        } else {
+
+            obj = {media: selectedVideo.src, type: 'video'}
+
+        }
+
+        console.log(obj)
+
+        if (unSave) {
+            dispatch(deleteMedia(obj));
+        } else {
+            dispatch(saveMedia(obj));
+        }
+        
+    }
+
     return (
         <>
         {ctxActive ? 
@@ -979,8 +1020,9 @@ export const ContextMenu = () => {
             backgroundColor: primaryColor
         }}
         className='ctx-menu-container'>
-            {saveImage ? <CtxButton action={() => {handleSave(true)}} name={"Save Image"} icon={<SaveIcon />} /> : null}
-            {saveVideo ? <CtxButton action={() => {handleSave(false)}} name={"Save Video"} icon={<SaveIcon />} /> : null}
+            {saveImage ? <CtxButton action={() => {handleSave(true)}} name={"Download Image"} icon={<SaveIcon />} /> : null}
+            {saveVideo ? <CtxButton action={() => {handleSave(false)}} name={"Download Video"} icon={<SaveIcon />} /> : null}
+            {saveImage || saveVideo ? <CtxButton action={() => {addToSaves()}} name={unSave ? "Unsave" : "Save"} icon={<SavesIcon />} /> : null}
             {pasteCtxState ? <CtxButton name={"Paste"} action={paste} /> : null}
             {copyCtxState ? <CtxButton name={"Copy"} action={handleCopy} icon={<CopyIcon />} /> : null}
             {copyLinkState ? <CtxButton name="Copy Link" action={handleCopyLink} icon={<CopyIcon />} /> : null}

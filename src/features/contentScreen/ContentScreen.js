@@ -21,6 +21,7 @@ import { selectHeaderTitle } from './contentScreenSlice';
 // style's
 import "./ContentScreen.css";
 import { selectAddServerMenuVisible } from '../createServer/createServerSlice';
+import { selectSavedMediaOpenState } from '../SavedMedia/SavedMediaSlice';
 
 export const ContentScreen = () => {
     // content display state
@@ -29,9 +30,11 @@ export const ContentScreen = () => {
 
     const addServerMenuVisisble = useSelector(selectAddServerMenuVisible);
 
+    const savedMediaOpen = useSelector(selectSavedMediaOpenState);
+
     return (
         <>
-            <motion.div className='content-screen-container' >
+            <motion.div style={{opacity: savedMediaOpen ? 0 : 1}} className='content-screen-container' >
                 <HeaderTitle title={headerTitleState} spacing={true} />
                 <div style={{marginLeft: 1}} className='content-screen-inner-container'>
                     <Disconnected />
@@ -39,11 +42,12 @@ export const ContentScreen = () => {
                     <SettingsRoutesWrapper />
                     {addServerMenuVisisble ? <CreateServerMenu /> : null}
                     <ChannelRoom />
-                    <ExpandContent />
+                    
                     <NewAccount />
                 </div>
                 <AudioInit />
             </motion.div>
+            <ExpandContent />
         </>
     )
 }

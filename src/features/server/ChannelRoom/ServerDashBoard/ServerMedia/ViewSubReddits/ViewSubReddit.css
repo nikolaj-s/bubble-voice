@@ -1,0 +1,21 @@
+
+.implement-sub-reddit-container {
+    width: 100%;
+    position: relative;
+    max-width: 100%;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sub-reddits-button-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-between;
+}
+.sub-reddit-finder-container {
+    max-width: 1000px;
+    width: 98%;
+}

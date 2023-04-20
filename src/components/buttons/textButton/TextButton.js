@@ -5,7 +5,7 @@ import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../..
 
 import "./TextButton.css";
 
-export const TextButton = ({name, action, textAlign = 'center', toggled = false, marginBottom, marginTop, id, invert}) => {
+export const TextButton = ({name, action, textAlign = 'center', toggled = false, marginBottom, marginTop, id, invert, altInvert}) => {
 
     const color = useSelector(selectPrimaryColor);
 
@@ -18,13 +18,13 @@ export const TextButton = ({name, action, textAlign = 'center', toggled = false,
     React.useEffect(() => {
         if (toggled) {
             animation.start({
-                opacity: 0.5,
+                opacity: altInvert ? 1 : 0.5,
                 cursor: 'default',
                 border: `solid 3px ${color}`
             })
         } else {
             animation.start({
-                opacity: 1,
+                opacity: altInvert ? 0.5 : 1,
                 cursor: 'pointer',
                 border: `solid 3px ${color}`
             })
@@ -35,7 +35,7 @@ export const TextButton = ({name, action, textAlign = 'center', toggled = false,
     const handleAnimation = (arg) => {
         if (toggled) return
         animation.start({
-            border: `solid 3px ${arg}`
+            border: `solid 3px ${arg}`,
         })
     }
 
