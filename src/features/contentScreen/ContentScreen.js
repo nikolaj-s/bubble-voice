@@ -30,11 +30,9 @@ export const ContentScreen = () => {
 
     const addServerMenuVisisble = useSelector(selectAddServerMenuVisible);
 
-    const savedMediaOpen = useSelector(selectSavedMediaOpenState);
-
     return (
         <>
-            <motion.div style={{opacity: savedMediaOpen ? 0 : 1}} className='content-screen-container' >
+            <motion.div className='content-screen-container' >
                 <HeaderTitle title={headerTitleState} spacing={true} />
                 <div style={{marginLeft: 1}} className='content-screen-inner-container'>
                     <Disconnected />

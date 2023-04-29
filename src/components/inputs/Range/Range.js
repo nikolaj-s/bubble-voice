@@ -20,6 +20,10 @@ export const Range = ({min = 0, max = 1, action, step = 0.001, value = 0, fill =
 
     const handleAction = (e) => {
 
+        e.preventDefault();
+
+        e.stopPropagation()
+
         let target = e.target;
 
         const local_min = target.min;
@@ -45,11 +49,15 @@ export const Range = ({min = 0, max = 1, action, step = 0.001, value = 0, fill =
         // eslint-disable-next-line
     }, [value])
 
+    const onMouseMove = (e) => {
+        e.stopPropagation();
+    }
+
     return (
         <div 
         style={{backgroundColor: fill ? primaryColor : null}}
         className='range-container'>
-            <input ref={ref} onMouseUp={save} id="range-input"
+            <input onMouseMove={onMouseMove} ref={ref} onMouseUp={save} id="range-input"
             onChange={handleAction}  type={"range"} min={min} max={max} step={step} value={value} />
         </div>
     )

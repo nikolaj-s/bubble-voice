@@ -88,7 +88,7 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
 
     const handleText = (e) => {
        
-        if (e.target.value.length > 511) return;
+        if (e.target.value.length > 1024) return;
 
         text(e.target.value)
 

@@ -22,8 +22,9 @@ import { Loading } from '../../../../../components/LoadingComponents/Loading/Loa
 // util
 import { PersistedDataNotice } from '../../../../../components/PersistedDataNotice/PersistedDataNotice';
 import { saveSocialData, SOCIAL_DATA } from '../../../../../util/LocalData';
+import { sendDirectMessage, updateDirectmessage } from '../../../../Messages/MessagesSlice';
 
-export const Social = ({currentChannel, channelId, socialRoute = false, bulletin = false, channelName}) => {
+export const Social = ({currentChannel, channelId, socialRoute = false, bulletin = false, channelName, direct_message, direct_message_user, status}) => {
 
     const dispatch = useDispatch();
 
@@ -108,9 +109,10 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         if (text.split(' ').join('').length === 0 && image === null) return;
         
-        if (text.length > 511) return dispatch(throwServerError({errorMessage: "Message cannot be longer than 512 characters"}));
+        if (text.length > 1024) return dispatch(throwServerError({errorMessage: "Message cannot be longer than 512 characters"}));
 
         let data = {
+            send_to: direct_message_user,
             username: username,
             channel_id: channelId,
             content: {
@@ -124,7 +126,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
             }
         }
 
-        dispatch(newMessage(data));
+        direct_message ? dispatch(sendDirectMessage({username: direct_message_user, message: data})) : dispatch(newMessage(data));
 
         data = {...data, file: image?.size ? image : null}
 
@@ -134,20 +136,33 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         setImage(false);
 
-        await socket.request('message', data)
-        .then(response => {
+        if (direct_message) {
 
-            if (response.success) {
-                dispatch(updateMessage(response.message));
-            }
+            await socket.request('send direct message', data)
+            .then(res => {
+                console.log(res)
+                dispatch(updateDirectmessage({...res.message, send_to: direct_message_user}))
+            })
+            .catch(err => {
+                console.log(err)
+            })
 
-        }).catch(error => {
-            console.log(error)
-            dispatch(removeInvalidMessage(data));
-
-            dispatch(throwServerError({errorMessage: error}));
-            
-        })
+        } else {
+            await socket.request('message', data)
+            .then(response => {
+    
+                if (response.success) {
+                    dispatch(updateMessage(response.message));
+                }
+    
+            }).catch(error => {
+                console.log(error)
+                dispatch(removeInvalidMessage(data));
+    
+                dispatch(throwServerError({errorMessage: error}));
+                
+            })
+        }
 
         setTimeout(() => {
 
@@ -234,11 +249,14 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
                     <ImagePreview cancel={handleCancelImageSend} preview={image?.preview} inputHeight={inputHeight} />
                     <div onScroll={handleLoadMoreOnScroll} ref={messagesRef} className='social-messages-wrapper'>
                         {messages?.slice(0, messagesToRender).map((message, key) => {
-                            return <Message persist={currentChannel.persist_social} current_message={message} previous_message={key === messages.length - 1 ? null : messages[key + 1]} pinned={message.pinned} pinMessage={() => {pinMessage(message)}} perm={permission?.user_can_post_channel_social} channel_id={message.channel_id} id={message._id} message={message.content} key={message.content.local_id || message._id} />
+                            return <Message persist={currentChannel.persist_social} current_message={message} previous_message={key === messages.length - 1 ? null : messages[key + 1]} pinned={message?.pinned} pinMessage={() => {pinMessage(message)}} perm={permission?.user_can_post_channel_social} channel_id={message?.channel_id} id={message._id} message={message.content} key={message.content.local_id || message._id} />
                         })}
-                        <PersistedDataNotice channelName={currentChannel.channel_name} persisted={!currentChannel.persist_social} />
+                        {direct_message ? null : <PersistedDataNotice channelName={currentChannel.channel_name} persisted={!currentChannel.persist_social} />}
                     </div>
-                    {permission?.user_can_post_channel_social ? <MessageInput socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : null}
+                    {(direct_message && status) ? <MessageInput socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : 
+                    permission?.user_can_post_channel_social && !direct_message ?
+                    <MessageInput socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} />
+                     : null}
                 </div>
             </div>
             <Loading loading={pinning} />

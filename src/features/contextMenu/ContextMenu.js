@@ -42,6 +42,7 @@ import { KickIcon } from '../../components/Icons/KickIcon/KickIcon';
 import { PokeIcon } from '../../components/Icons/PokeIcon/PokeIcon';
 import { PlayOnWidgetIcon } from '../../components/Icons/PlayOnWidgetIcon/PlayOnWidgetIcon';
 import { deleteMedia, saveMedia, selectSavedMedia } from '../SavedMedia/SavedMediaSlice';
+import { SavedIcon } from '../../components/Icons/SavedIcon/SavedIcon';
 
 export const ContextMenu = () => {
 
@@ -222,7 +223,11 @@ export const ContextMenu = () => {
 
                 dispatch(setContextMenuOptions({state: "saveImage", value: true}));
 
-                setSelectedImage(p)
+                setSelectedImage(p);
+
+                if (!p.src.includes('cloudinary')) {
+                    dispatch(setContextMenuOptions({state: 'copyLink', value: p.src}));
+                }
             }
 
             if (p.className?.split(' ')[0] === 'user-status-container') {
@@ -287,6 +292,8 @@ export const ContextMenu = () => {
                 setSelectedVideo(p)
 
                 setAudioLevel(p?.volume);
+
+                dispatch(setContextMenuOptions({state: 'copyLink', value: p.src}));
             
             }
 
@@ -1022,7 +1029,7 @@ export const ContextMenu = () => {
         className='ctx-menu-container'>
             {saveImage ? <CtxButton action={() => {handleSave(true)}} name={"Download Image"} icon={<SaveIcon />} /> : null}
             {saveVideo ? <CtxButton action={() => {handleSave(false)}} name={"Download Video"} icon={<SaveIcon />} /> : null}
-            {saveImage || saveVideo ? <CtxButton action={() => {addToSaves()}} name={unSave ? "Unsave" : "Save"} icon={<SavesIcon />} /> : null}
+            {saveImage || saveVideo ? <CtxButton action={() => {addToSaves()}} name={unSave ? "Unsave" : "Save"} icon={unSave ? <SavedIcon /> : <SavesIcon />} /> : null}
             {pasteCtxState ? <CtxButton name={"Paste"} action={paste} /> : null}
             {copyCtxState ? <CtxButton name={"Copy"} action={handleCopy} icon={<CopyIcon />} /> : null}
             {copyLinkState ? <CtxButton name="Copy Link" action={handleCopyLink} icon={<CopyIcon />} /> : null}

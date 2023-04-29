@@ -8,9 +8,9 @@ export const fetchSavedMedia = createAsyncThunk(
         try {
 
             const data = await fetchSavedLocalData("SAVED", "MEDIA");
-
-            if (data.error) return [];
-
+            
+            if (data?.error || !data || data === undefined) return [];
+            console.log(data)
             return data;
 
         } catch (err) {
@@ -24,7 +24,7 @@ const SavedMediaSlice = createSlice({
     name: "SavedMediaSlice",
     initialState: {
         saves: [],
-        open: false
+        open: false,
     },
     reducers: {
         saveMedia: (state, action) => {
@@ -35,6 +35,10 @@ const SavedMediaSlice = createSlice({
                 state.saves.unshift(action.payload);
             } else {
                 state.saves = state.saves.filter(save => save.media !== action.payload.media);
+            }
+
+            if (state.saves.length > 100) {
+                state.saves.pop();
             }
 
             saveLocalData("SAVED", "MEDIA", state.saves);

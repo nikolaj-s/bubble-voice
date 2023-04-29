@@ -13,6 +13,7 @@ import { selectUsername } from '../../../settings/appSettings/accountSettings/ac
 import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
 import { socket } from '../../ServerBar/ServerBar';
 import { ScoreButton } from '../../../../components/buttons/ScoreButton/ScoreButton';
+import { openDirectMessage } from '../../../Messages/MessagesSlice';
 
 export const MemberPanel = () => {
 
@@ -68,6 +69,13 @@ export const MemberPanel = () => {
         toggleLoading(false);
     }
 
+    const handleOpenDirectMessage = () => {
+        
+        dispatch(openDirectMessage(member));
+
+        dispatch(setSelectedMember(""));
+    }
+
     React.useEffect(() => {
 
         if (selectedMember) {
@@ -85,7 +93,7 @@ export const MemberPanel = () => {
         {selectedMember ?
         <div onClick={closePanel} className='outer-member-panel-container'>
             <div 
-            style={{backgroundColor: primaryColor, top: origin ? positionY + 70 : positionY, transform: `translateY(${origin ? '-100%' :  '0%'})`, left: leftPost}}
+            style={{backgroundColor: primaryColor, left: leftPost}}
             className='member-panel-container'>
                 <div className='member-panel-image-container'>
                     <Image position='absolute' image={member.user_banner} />
@@ -113,6 +121,7 @@ export const MemberPanel = () => {
                         s_index !== -1 ? serverGroups[s_index]?.server_group_name : null
                     }</p>
                     {member.username !== username && member.status !== 'offline' ? <TextButton action={poke} marginTop={15} name={"Poke"} /> : null}
+                    {member.username !== username && member.status !== 'offline' ? <TextButton action={handleOpenDirectMessage} marginTop={15} name={"Send Message"} /> : null}
                 </div>
                 <Loading loading={loading} />
             </div>

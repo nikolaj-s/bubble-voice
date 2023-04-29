@@ -10,7 +10,7 @@
     transition: 0.1s;
     margin: 4px 0;
     position: relative;
-    z-index: 3;
+    z-index: 10;
 }
 
 .server-button-image-container {
@@ -25,7 +25,7 @@
 
 .server-button-name-container {
     position: absolute;
-    z-index: 10;
+    z-index: 20;
     left: 50px;
     border-radius: var(--border-radius);
     width: 120px;

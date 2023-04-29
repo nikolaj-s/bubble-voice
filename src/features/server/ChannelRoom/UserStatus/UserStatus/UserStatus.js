@@ -51,7 +51,7 @@ export const UserStatus = ({user}) => {
         onClick={openMemberPanel} onMouseEnter={(e) => {handleMouseEnter(e, true)}} onMouseLeave={(e) => {handleMouseLeave(e, false)}} className={`user-status-container ${user._id}-user-status-card status-${user.status}`}>
             <div
             style={{
-                borderRadius: user.profile_picture_shape === 'circle' ? '50%' : '5px'
+                borderRadius: (user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%'
             }}
             className='user-status-image-container'>
                 <Image cursor='pointer' image={user.user_image} />

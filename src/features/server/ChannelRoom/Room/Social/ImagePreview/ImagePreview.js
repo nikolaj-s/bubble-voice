@@ -22,7 +22,7 @@ export const ImagePreview = ({preview, cancel, inputHeight}) => {
             </svg>
             <h2 style={{color: textColor}}>Cancel</h2>
             </div>
-            {preview.endsWith('.mp4') ?
+            {preview.includes('.mp4') ?
             <video loop={true} style={{width: '100%', height: '100%'}} src={preview} controls={false} autoPlay /> :
             <Image position='relative' objectFit='contain' zIndex={1} image={preview} />
             }

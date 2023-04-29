@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 // state
 import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 
-export const ButtonAnimationWrapper = ({display = 'flex', action = () => {}, position = 'relative', zIndex = 0, top = 0, left = 0, className, width = 50, height = 50, borderRadius = '5px', justifyContent = 'center', invert = false, pointerOptions = null, children, active = false, opacity = 1, id = "", margin, right, description, flip_description = false, padding = 10, altInvert = false, right_orientation_desc = false, o_mouseEnter = () => {}, o_mouseLeave = () => {}, desc_o_mouse_leave = () => {}, desc_space = 25, transparent}) => {
+export const ButtonAnimationWrapper = ({onMouseDown = () => {},display = 'flex', action = () => {}, position = 'relative', zIndex = 0, top = 0, left = 0, className, width = 50, height = 50, borderRadius = '5px', justifyContent = 'center', invert = false, pointerOptions = null, children, active = false, opacity = 1, id = "", margin, right, description, flip_description = false, padding = 10, altInvert = false, right_orientation_desc = false, o_mouseEnter = () => {}, o_mouseLeave = () => {}, desc_o_mouse_leave = () => {}, desc_space = 25, transparent, desc_font_size = '0.7rem'}) => {
 
     const animation = useAnimation();
 
@@ -120,14 +120,14 @@ export const ButtonAnimationWrapper = ({display = 'flex', action = () => {}, pos
                 transform: 'translateX(-50%)',
                 filter: 'none'
                 }}>
-            <p style={{color: textColor, padding: 0, margin: 0, textAlign: 'center', fontSize: '0.7rem'}}>{description}</p>
+            <p style={{color: textColor, padding: '0px', margin: 0, textAlign: 'center', fontSize: desc_font_size}}>{description}</p>
             </motion.div>: null}
         <motion.div
         id={id}
         onClick={handleAction}
         className={className}
         style={{
-            backgroundColor: invert ? secondaryColor : (active || altInvert) ? transparent ? `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)` : primaryColor : secondaryColor,
+            backgroundColor: transparent ? null : invert ? secondaryColor : (active || altInvert) ? primaryColor : secondaryColor,
             borderRadius: borderRadius,
             width: width,
             height: height,
@@ -144,7 +144,7 @@ export const ButtonAnimationWrapper = ({display = 'flex', action = () => {}, pos
         animate={animation}
         onMouseEnter={(e) => {handleAnimation('50%', e); handleOnMouseEnter(e)}}
         onMouseLeave={(e) => {handleAnimation('100%', e); handleOnMouseLeave(e)}}
-        onMouseDown={(e) => {handleAnimation('80%', e)}}
+        onMouseDown={(e) => {handleAnimation('80%', e); onMouseDown()}}
         onMouseUp={(e) => {handleAnimation('50%', e)}}
         transition={{duration: 0.1}}
         >

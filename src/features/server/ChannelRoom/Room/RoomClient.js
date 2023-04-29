@@ -678,7 +678,9 @@ export class RoomClient {
                 }
                 
                 el.className = `stream web-cam-stream ${this.user.username}-web-cam`;
+                
                 el.autoplay = true;
+                
                 document.getElementById(this.user._id).appendChild(el);
             } else if (screen) {
 

@@ -26,6 +26,9 @@ import MemberPanelSlice from "../features/server/ChannelRoom/MemberPanel/MemberP
 import ServerNavigationSlice from "../features/server/ChannelRoom/ServerNavigation/ServerNavigationSlice";
 import ServerMediaSlice from "../features/server/ChannelRoom/ServerDashBoard/ServerMedia/ServerMediaSlice";
 import SavedMediaSlice from "../features/SavedMedia/SavedMediaSlice";
+import ProfileSlice from "../features/Profile/ProfileSlice";
+import ExploreSlice from "../features/Explore/ExploreSlice";
+import MessagesSlice from "../features/Messages/MessagesSlice";
 
 const { configureStore } = require("@reduxjs/toolkit");
 
@@ -68,7 +71,11 @@ const store = configureStore({
         // music
         MusicSlice: MusicSlice,
         // saves
-        SavedMediaSlice: SavedMediaSlice
+        SavedMediaSlice: SavedMediaSlice,
+        ExploreSlice: ExploreSlice,
+        // profile
+        ProfileSlice: ProfileSlice,
+        MessagesSlice: MessagesSlice
     }
 })
 

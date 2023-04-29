@@ -11,7 +11,7 @@ export const VideoPreview = ({video, action}) => {
     const textColor = useSelector(selectTextColor);
 
     return (
-        <a href={video.link} onClick={(e) => {e.preventDefault(); action(video)}} className='video-preview-container'>
+        <div onClick={(e) => {e.preventDefault(); action(video)}} className='video-preview-container'>
             <video loading="lazy" loop={true} style={{width: '100%', height: '100%'}} src={video.preview} controls={false} autoPlay />
             {video.title ? <p 
             style={{
@@ -19,6 +19,6 @@ export const VideoPreview = ({video, action}) => {
                 color: textColor
             }}
             className='video-preview-title'>{video.title}</p> : null}
-        </a>
+        </div>
     )
 }

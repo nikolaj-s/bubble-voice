@@ -17,6 +17,9 @@ import "./DashBoard.css";
 import { UpdateAvailable } from '../../components/UpdateAvailable/UpdateAvailable';
 import { ServerSelection } from '../sideBar/ServerSelection/ServerSelection';
 import { SavedMedia } from '../SavedMedia/SavedMedia';
+import { Profile } from '../Profile/Profile';
+import { Explore } from '../Explore/Explore';
+import { Messages } from '../Messages/Messages';
 
 
 export const Dashboard = () => {
@@ -44,6 +47,9 @@ export const Dashboard = () => {
             <ContextMenu />
             <UpdateAvailable />
             <SavedMedia />
+            <Profile />
+            <Explore />
+            <Messages />
         </div>
     )
 }

@@ -30,6 +30,7 @@ import { DisconnectButtonWrapper } from './DisconnectButtonWrapper/DisconnectBut
 import "./ServerBar.css"
 import { addPinnedMessage, removePinnedMessage } from '../ChannelRoom/ServerDashBoard/ServerDashBoardSlice';
 import { MobileServerBanner } from '../../../components/MobileServerBanner/MobileServerBanner';
+import { clearDirectMessages, sendDirectMessage } from '../../Messages/MessagesSlice';
 
 export let socket = null;
 
@@ -358,6 +359,12 @@ const Bar = () => {
         socket.on('member file update', (data) => {
             dispatch(updateMemberFile(data));
         })
+
+        socket.on('direct message', (data) => {
+            dispatch(playSoundEffect('newMessage'));
+            
+            dispatch(sendDirectMessage({message: data, username: data.username}))
+        })
     }
 
     const joiningServer = async (tries = 0) => { 
@@ -441,6 +448,8 @@ const Bar = () => {
         dispatch(clearWidgetOverLay());
 
         dispatch(handleLeavingServer())
+
+        dispatch(clearDirectMessages());
 
         navigate('/dashboard')
     

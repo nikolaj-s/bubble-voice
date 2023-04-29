@@ -3,7 +3,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { setExpandedContent } from '../../features/ExpandContent/ExpandContentSlice';
-import { selectAccentColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectAutoPlayNativeVideos, selectMuteSocialVideos } from '../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { ExpandButton } from '../buttons/ExpandButton/ExpandButton';
 import { AudioToggleButton } from '../buttons/mediaButtons/audioToggleButton/AudioToggleButton';
@@ -28,7 +28,13 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
 
     const [interacted, toggleInteracted] = React.useState(false);
 
+    const [progress, setProgress] = React.useState(0);
+
+    const [mouseDown, toggleMouseDown] = React.useState(false);
+
     const accentColor = useSelector(selectAccentColor);
+
+    const primaryColor = useSelector(selectPrimaryColor);
 
     const color = useSelector(selectTextColor);
 
@@ -99,6 +105,21 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
         
     }
 
+    const handleProgress = (e) => {
+        setProgress((e.target.currentTime / e.target.duration) * 100)
+    }
+
+    const scrub = (e) => {
+        e.stopPropagation();
+
+        const v = document.getElementById(video + id);
+        
+        const time = (e.nativeEvent.offsetX / e.target.offsetWidth) * v.duration;
+
+        v.currentTime = time;
+
+    }
+
     React.useEffect(() => {
 
         if (visible && social_autoplay) {
@@ -142,8 +163,8 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
         onClick={handlePlayState}
         className='message-video-container'>
             <video 
+            onTimeUpdate={handleProgress}
             onMouseMove={() => {showControls(false)}}
-            
             ref={ref}
             loading="lazy"
             style={{objectFit: objectFit}}
@@ -153,20 +174,26 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
             {(looping || !interacted) ? null :
             <motion.div 
             animate={controlAnimation}
-            transition={{duration: 0.1}}
+            transition={{duration: 0.01}}
             onMouseMove={() => {showControls(true)}}
-            style={{
-                backgroundColor: accentColor
-            }}
             className='message-video-controls-container'>
                 {playing ?
-                <PauseButton width={20} height={20} action={handlePlayState} />
+                <PauseButton  width={15} height={15} action={handlePlayState} />
                 :
-                <PlayButton width={20} height={20} action={handlePlayState} />
+                <PlayButton width={15} height={15} action={handlePlayState} />
                 }
-                <AudioToggleButton width={20} height={20} description={!muted ? 'un-mute' : 'mute'} action={handleMuteState} state={muted} />
-                <ExpandButton width={20} height={20} description={"max"} action={expand} />
+                <AudioToggleButton width={15} height={15} description={!muted ? 'un-mute' : 'mute'} action={handleMuteState} state={muted} />
+                <ExpandButton width={15} height={15} description={"max"} action={expand} />
             </motion.div>}
+            {interacted ? 
+            <div onMouseDown={() => {toggleMouseDown(true)}}
+            onMouseUp={() => {toggleMouseDown(false)}}
+            
+            onClick={scrub}
+             className='video-progress-bar-container'>
+                <div style={{height: '100%', width: `${progress}%`, backgroundColor: accentColor, transition: '0.1s'}} ></div>
+            </div>
+            : null}
         </div>
     )
 }

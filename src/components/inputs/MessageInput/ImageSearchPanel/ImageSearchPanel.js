@@ -73,7 +73,7 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
         }
         
         setImages([]);
-
+        console.log(result)
         setTimeout(() => {
             
             toggleLoading(false);
@@ -91,7 +91,7 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
     }
 
     const handleSelectImage = (image) => {
-       console.log(image)
+      
         selectImage(image)
     }
 
@@ -175,7 +175,7 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
                             })
                             : (images?.length > 0 ? images : loading ? [] : recommendations.filter(v => v.type === 'image').slice(0, 15)).map((image, key) => {
                                 return (
-                                    <ImagePreview tag_action={handleTag} tags={image.tags} image={image.preview} action={(e) => {handleSelectImage({...image, image: image.preview})}} />
+                                    <ImagePreview tag_action={handleTag} tags={image.tags} image={image.preview} action={(e) => {handleSelectImage({...image, preview: image.image})}} />
                                 )
                             })}
                         </Masonry>

@@ -10,8 +10,15 @@ import { BubbleLogo } from '../../../../components/Icons/bubbleLogo/BubbleLogo'
 import "./ServerList.css";
 import { CreateServerButton } from '../../../createServer/createServerButton/CreateServerButton';
 import { SavedMediaButton } from '../../../../components/buttons/SavedMediaButton/SavedMediaButton';
+import { useSelector } from 'react-redux';
+import { selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { ProfileButton } from '../../../../components/buttons/ProfileButton/ProfileButton';
+import { ExploreButton } from '../../../../components/buttons/ExploreButton/ExploreButton';
+import { MessagesNavigation } from '../../../Messages/MessagesNavigation';
 
 export const ServerList = ({selectServer, serverList = [], loading = false, animation, noresults = "No Joined Servers"}) => {
+
+    const color = useSelector(selectTextColor);
 
     return (
         <motion.div animate={animation} className='server-list-container'>
@@ -19,6 +26,10 @@ export const ServerList = ({selectServer, serverList = [], loading = false, anim
             {serverList.map(servers => {
                 return <ServerButton action={selectServer} key={servers._id} {...servers} />
             })}
+            <MessagesNavigation />
+            <div style={{backgroundColor: color}} className="application-navigation-spacer"></div>
+            <ProfileButton />
+            <ExploreButton />
             <SavedMediaButton />
             <CreateServerButton />
             <Loading loading={loading} error={serverList.length === 0} />

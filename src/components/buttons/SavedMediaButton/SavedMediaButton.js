@@ -7,6 +7,10 @@ import { CloseIcon } from '../../Icons/CloseIcon/CloseIcon';
 
 import "./SavedMediaButton.css";
 import { selectSavedMediaOpenState, toggleMediaPanel } from '../../../features/SavedMedia/SavedMediaSlice';
+import { toggleAddServerMenu } from '../../../features/createServer/createServerSlice';
+import { toggleProfileTab } from '../../../features/Profile/ProfileSlice';
+import { toggleExploreTab } from '../../../features/Explore/ExploreSlice';
+import { closeDirectMessage } from '../../../features/Messages/MessagesSlice';
 
 export const SavedMediaButton = () => {
 
@@ -27,6 +31,15 @@ export const SavedMediaButton = () => {
     }
 
     const action = () => {
+
+        dispatch(toggleAddServerMenu(false));
+        
+        dispatch(toggleProfileTab(false));
+
+        dispatch(toggleExploreTab(false));
+
+        dispatch(closeDirectMessage());
+
         dispatch(toggleMediaPanel(!visible))
     }
 

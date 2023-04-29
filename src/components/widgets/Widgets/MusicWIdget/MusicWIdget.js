@@ -61,6 +61,8 @@ export const MusicWidget = ({editing = false, widget}) => {
         if (loading) return;
 
         dispatch(handleAddingMedia(query));
+
+        setQuery("");
     }
 
     const handleAddSavedSongToQueue = async (song) => {

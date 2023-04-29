@@ -27,8 +27,6 @@ export const SideBar = () => {
 
     const glassColor = useSelector(selectGlassColor);
 
-    const savedMediaOpen = useSelector(selectSavedMediaOpenState);
-
     React.useEffect(() => {
         dispatch(fetchUsersServerList());
     // eslint-disable-next-line
@@ -37,7 +35,7 @@ export const SideBar = () => {
     console.log(window.location.hash)
 
     return (
-            <motion.div style={{opacity: savedMediaOpen ? 0 : 1}} className='side-bar-container'>
+            <motion.div className='side-bar-container'>
                 <div className='inner-side-bar-container'>
                     <ServerBar />
                     <AppSettingsMenu />

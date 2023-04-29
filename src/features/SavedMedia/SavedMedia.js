@@ -8,7 +8,7 @@ import { selectGlassColor, selectGlassState, selectSecondaryColor } from '../set
 import { NoMedia } from '../../components/NoMedia/NoMedia';
 
 import { Video } from '../../components/Video/Video'
-import {ImagePreview} from '../../components/ImagePreview/ImagePreview';
+
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { setExpandedContent } from '../ExpandContent/ExpandContentSlice';
 import { Image } from '../../components/Image/Image';
@@ -41,21 +41,21 @@ export const SavedMedia = () => {
         <AnimatePresence>
             {visibleState ?
             <motion.div 
-            initial={{opacity: 0}}
-            animate={{opacity: 1}}
-            exit={{opacity: 0}}
+            initial={{opacity: 0, left: '-600px'}}
+            animate={{opacity: 1, left: 55}}
+            exit={{opacity: 0, left: '-600px'}}
             style={{backgroundColor: glassState ? glassColor : secondaryColor}}
             className='saved-media-outer-container'>
                 <div className='saved-media-inner-container'>
                     {savedMedia.length === 0 ?
-                    <NoMedia alt={true} message={"No Saved Media"} />
+                    <NoMedia alt={true} message={"You Have No Saved Media, Save Media By Right Clicking On Media And Hitting Save Within The Context Menu"} />
                     : 
-                    <ResponsiveMasonry columnsCountBreakPoints={{800: 1, 1000: 2, 1500: 3, 1900: 4, 2500: 5}}>
+                    <ResponsiveMasonry columnsCountBreakPoints={{1000: 2}}>
                         <Masonry gutter='5px'> 
                             {savedMedia.map(media => {
                                return <div style={{borderRadius: 5, overflow: 'hidden'}}>
                                     {media.type === 'image' ?
-                                    <Image image={media.media} expandContent={() => {expand(media.media)}} />
+                                    <Image cursor='pointer' image={media.media} expandContent={() => {expand(media.media)}} />
                                     :
                                     <Video  video={media.media} />}
                                 </div>

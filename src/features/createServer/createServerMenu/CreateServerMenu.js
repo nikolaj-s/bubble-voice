@@ -21,7 +21,7 @@ import { clearCreateServerState, closeCreateServerError, createServerFunction, s
 // style's
 import "./CreateServerMenu.css";
 import { searchForServers, selectLoadingServerResultsState, selectServerQuery, selectServerSearchResults, setServerQuery } from '../../sideBar/sideBarSlice';
-import { ServerList } from '../../sideBar/ServerSelection/serverList/ServerList';
+
 import { setServerToJoin } from '../../joinServer/joinServerSlice';
 import { ServerToAddButton } from '../ServerToAddButton/ServerToAddButton';
 import { JoinServer } from '../../joinServer/JoinServer';
@@ -166,7 +166,11 @@ export const CreateServerMenu = () => {
 
     return (
         <>
-        <div style={{backgroundColor: `rgba(${accentColor.split('rgb(')[1].split(')')[0]}, 0.7)`}} className='add-server-menu-outer-container'>
+        <motion.div
+        initial={{opacity: 0, left: '-600px'}}
+        animate={{opacity: 1, left: 55}}
+        exit={{opacity: 0, left: '-600px'}}
+        style={{backgroundColor: `rgba(${accentColor.split('rgb(')[1].split(')')[0]}, 0.7)`}} className='add-server-menu-outer-container'>
             
             <motion.div
             style={{
@@ -223,7 +227,7 @@ export const CreateServerMenu = () => {
                 <Loading loading={loading || loadingResults} error={error} />
                 </AnimatePresence>
             </motion.div> 
-        </div>
+        </motion.div>
         </>
     )
 }

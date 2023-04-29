@@ -601,7 +601,7 @@ const serverSlice = createSlice({
 
                     let auth = action.payload.auth_users.findIndex(i => i === state.user._id) !== -1;
 
-                    return {...action.payload, users: channel.users, social: action.payload.social, widgets: action.payload.widgets, auth: auth}
+                    return {...action.payload, users: channel.users, social: action.payload.social, widgets: action.payload.widgets, auth: action.payload.locked_channel ? auth : true}
                 } else {
                     return channel;
                 }

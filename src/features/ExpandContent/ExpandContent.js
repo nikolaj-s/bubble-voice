@@ -10,15 +10,23 @@ import { selectExpandedContent, selectIframeExpanded, selectRedditExpanded, setE
 
 // style
 import "./ExpandContent.css";
-import { selectSecondaryColor, selectTextColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { Video } from '../../components/Video/Video';
 import { Iframe } from '../../components/Iframe/Iframe';
 import { selectDisableTransparancyEffects } from '../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { RedditPost } from '../../components/RedditPost/RedditPost';
+import { CopyButton } from '../../components/buttons/CopyButton/CopyButton';
+import { DownloadButton } from '../../components/buttons/DownloadButton/DownloadButton';
+import { SaveButton } from '../../components/buttons/SaveButton/SaveButton';
+import { saveMedia, selectSavedMedia } from '../SavedMedia/SavedMediaSlice';
 
 export const ExpandContent = () => {
 
     const dispatch = useDispatch();
+
+    const [saved, toggleSaved] = React.useState(false);
+
+    const savedMedia = useSelector(selectSavedMedia);
 
     const iframe = useSelector(selectIframeExpanded);
 
@@ -27,6 +35,8 @@ export const ExpandContent = () => {
     const expandedContent = useSelector(selectExpandedContent);
 
     const secondaryColor = useSelector(selectSecondaryColor);
+
+    const primaryColor = useSelector(selectPrimaryColor);
 
     const textColor = useSelector(selectTextColor);
 
@@ -43,6 +53,41 @@ export const ExpandContent = () => {
 
         }
     }
+
+    const handleCopy = () => {
+        try {
+
+            const { clipboard } = window.require('electron');
+
+            clipboard.writeText(expandedContent);
+
+        } catch (e) {
+            return;
+        }
+    }
+
+    const handleDownload = () => {
+        try {
+            const ipcRenderer = window.require('electron').ipcRenderer;
+
+            ipcRenderer.send("download", {url: expandedContent});
+        } catch (error) {
+            window.open(expandedContent)
+        }
+    }
+
+    const handleSave = () => {
+        
+        dispatch(saveMedia({media: expandedContent, type: expandedContent.includes('.mp4') ? 'video' : 'image'}))
+    }
+
+    React.useEffect(() => {
+
+        const s = savedMedia.findIndex(m => m.media === expandedContent);
+
+        toggleSaved(s !== -1);
+
+    }, [expandedContent, savedMedia])
 
     React.useEffect(() => {
 
@@ -85,6 +130,11 @@ export const ExpandContent = () => {
                 <Video video={expandedContent} /> 
                 :        
                 <Image objectFit='contain' image={expandedContent} />}
+            </div>
+            <div onClick={(e) => {e.stopPropagation()}} style={{backgroundColor: primaryColor}} className='expanded-content-navigation-container'>                
+                <CopyButton action={handleCopy} description={'Copy Link'} width={20} height={20} />
+                <DownloadButton action={handleDownload} margin={"5px 0"} width={20} height={20} />
+                <SaveButton width={20} height={20} action={handleSave} description={saved ? "Unsave" : "Save"} />
             </div>
         </div>
         : null}

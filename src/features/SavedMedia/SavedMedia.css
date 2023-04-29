@@ -1,18 +1,25 @@
 
 .saved-media-outer-container {
     position: absolute;
-    top: 30px;
+    top: 32px;
     left: 55px;
-    width: calc(100% - 55px);
-    height: calc(100% - 30px);
-    z-index: 3;
+    width: 600px;
+    height: calc(100% - 32px - 15px);
+    padding: 5px 5px 10px 5px;
+    z-index: 6;
     border-top-left-radius: 15px;
-    overflow-y: auto;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    overflow: hidden;
+    box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.561);
 }
 
 .saved-media-inner-container {
     width: 100%;
     min-height: 100%;
+    height: 100%;
+    overflow-y: auto;
+    border-radius: 15px;
 }
 
 .saved-media-inner-container .no-media-container {

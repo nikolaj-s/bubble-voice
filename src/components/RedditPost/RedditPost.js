@@ -13,9 +13,9 @@ export const RedditPost = ({data, action}) => {
     const textColor = useSelector(selectTextColor);
 
     const primaryColor = useSelector(selectPrimaryColor)
-
+    
     return (
-        <a href={data.url.includes('.gifv') || data.url.includes('.mp4') || data.url.includes('redgifs') ? data.preview?.reddit_video_preview?.fallback_url : data.url} onClick={(e) => {e.preventDefault()}} className='reddit-post-container'>
+        <div onClick={(e) => {e.preventDefault()}} className='reddit-post-container'>
 
                 <div className='reddit-media-container'>
                 {data.selftext?.length > 1 ?
@@ -34,6 +34,6 @@ export const RedditPost = ({data, action}) => {
                     <p style={{color: textColor}}>{data.subreddit_name_prefixed}</p>
                 </div>
 
-        </a>
+        </div>
     )
 }

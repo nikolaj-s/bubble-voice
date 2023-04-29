@@ -14,7 +14,7 @@ import { RedditPost } from '../../../../../../components/RedditPost/RedditPost'
 import { useDispatch, useSelector } from 'react-redux'
 import { GetPostsFromSubReddit, SubRedditSearch, selectCurrentSubReddit, selectLoadingSubReddit, selectSubRedditPosts, selectSubRedditQuery, selectSubRedditSortState, selectSubReddits, setSubReddit, setSubRedditQuery, toggleSortSubPosts } from '../ServerMediaSlice'
 
-export const ViewSubReddit = ({expand}) => {
+export const ViewSubReddit = ({expand, explore}) => {
 
     const dispatch = useDispatch();
 
@@ -95,7 +95,7 @@ export const ViewSubReddit = ({expand}) => {
                 : null}
             </div>
             {posts.length > 0 ? 
-            <ResponsiveMasonry style={{width: '100%', marginTop: 10}} columnsCountBreakPoints={{800: 1, 1200: 2, 1400: 3}}>
+            <ResponsiveMasonry style={{width: '100%', marginTop: 10}} columnsCountBreakPoints={explore ? {400: 1} : {800: 1, 1200: 2, 1400: 3}}>
                 <Masonry gutter='5px'>
                     {posts.map(post => {
                         return <RedditPost action={expand} data={post} />
