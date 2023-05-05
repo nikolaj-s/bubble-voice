@@ -112,7 +112,7 @@ export const checkConnection = createAsyncThunk(
 
 export const fetchServerDetails = createAsyncThunk(
     'serverSlice/fetchServerDetails',
-    async (_, {rejectWithValue, getState, dispatch}) => {
+    async ({channel_id}, {rejectWithValue, getState, dispatch}) => {
         if (socket === null) return rejectWithValue({error: true, errorMessage: "connection error"});
 
         const { server_id } = getState().serverSlice;
@@ -125,7 +125,7 @@ export const fetchServerDetails = createAsyncThunk(
         .then(response => {
             if (response.success) {
 
-                return {...response.server, username: username, user_image: user_image, user_banner: user_banner, display_name: display_name}
+                return {...response.server, username: username, user_image: user_image, user_banner: user_banner, display_name: display_name, channel_id: channel_id}
             
             } else if (response.error) {
                 return rejectWithValue({error: true, errorMessage: response.errorMessage})
@@ -233,6 +233,7 @@ const serverSlice = createSlice({
         serverGroups: [],
         server: {},
         members: [],
+        serverBannerAmbiance: '',
         // creating channel state
         channelCreationLoading: false,
         channelCreationError: false,
@@ -269,10 +270,17 @@ const serverSlice = createSlice({
         hideSetDefaultServer: false,
         // popular searches
         popular_searches: [],
-        create_channel_menu_open: false
+        create_channel_menu_open: false,
+        connection_lost: false
 
     },
     reducers: {
+        toggleConnectionLostState: (state, action) => {
+            state.connection_lost = action.payload;
+        },
+        setServerbannerAmbiance: (state, action) => {
+            state.serverBannerAmbiance = action.payload;
+        },
         clearSearchData: (state, action) => {
             state.popular_searches = [];
         },
@@ -761,6 +769,13 @@ const serverSlice = createSlice({
             const c_index = action.payload.channels.findIndex(c => c._id === action.payload.inactive_channel);
           
             state.inactiveChannel = {id: action.payload.inactive_channel, label: state.channels[c_index]?.channel_name ? state.channels[c_index]?.channel_name : "No Inactive Channel"};
+
+            if (action.payload.channel_id) {
+                setTimeout(() => {
+                    document.getElementById('channel-button-' + action.payload.channel_id)?.click();
+                }, 100)
+               
+            }
         },
         [fetchServerDetails.rejected]: (state, action) => {
             state.loading = false;
@@ -1013,8 +1028,12 @@ export const selectInactiveChannel = state => state.serverSlice.inactiveChannel;
 
 export const selectServerOwner = state => state.serverSlice.serverOwner;
 
+export const selectServerBannerAmbiance = state => state.serverSlice.serverBannerAmbiance;
+
+export const selectConnectionLost = state => state.serverSlice.connection_lost;
+
 // actions
 
-export const {removeInvalidMessage, updateMemberFile, clearSearchData, updateInactiveChannel, removeSongFromWidget, saveSongToWidget, userBanned, toggleCreateChannelMenu, toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
+export const {toggleConnectionLostState, setServerbannerAmbiance, removeInvalidMessage, updateMemberFile, clearSearchData, updateInactiveChannel, removeSongFromWidget, saveSongToWidget, userBanned, toggleCreateChannelMenu, toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
 
 export default serverSlice.reducer;

@@ -4,6 +4,7 @@ import { selectPrimaryColor, selectTextColor } from '../../features/settings/app
 import { TextButton } from '../buttons/textButton/TextButton';
 
 import "./DropDownList.css";
+import { DownIcon } from '../Icons/DownIcon/DownIcon';
 
 export const DropDownList = ({selectedItem, list = ["No Options"], action, stateType}) => {
 
@@ -28,6 +29,9 @@ export const DropDownList = ({selectedItem, list = ["No Options"], action, state
         <div 
         className='drop-down-container'>
             <TextButton textAlign='start' action={toggleDropDown} name={selectedItem} />
+            <div style={{rotate: open ? '-180deg' : null}} className='drop-down-icon-wrapper'>
+                <DownIcon />
+            </div>
             {open && stateType !== 'error' ?
             <div 
             style={{

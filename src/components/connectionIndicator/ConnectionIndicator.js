@@ -7,7 +7,7 @@ import { selectTextColor } from '../../features/settings/appSettings/appearanceS
 import { ButtonAnimationWrapper } from '../buttons/ButtonAnimationWrapper/ButtonAnimationWrapper';
 import { Loading } from '../LoadingComponents/Loading/Loading';
 
-export const ConnectionIndicator = ({active}) => {
+export const ConnectionIndicator = ({active, width}) => {
 
     const dispatch = useDispatch();
 
@@ -27,7 +27,7 @@ export const ConnectionIndicator = ({active}) => {
     }
     
     return (
-        <ButtonAnimationWrapper altInvert={true} borderRadius={5} invert={false} action={active ? handleToggleShowPing : () => {}} zIndex={1} description={active ? `${ping}ms` : null} opacity={active ? 1 : 0.2} width={25} desc_space={15} height={25} padding={5} position={'relative'} active={!active} >
+        <ButtonAnimationWrapper altInvert={true} borderRadius={5} invert={false} action={active ? handleToggleShowPing : () => {}} zIndex={1} description={active ? `${ping}ms` : null} opacity={active ? 1 : 0.2} width={width} desc_space={15} height={25} padding={5} position={'relative'} active={!active} >
             {ping === 0 ?
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 20C13.1046 20 14 19.1046 14 18C14 16.8954 13.1046 16 12 16C10.8954 16 10 16.8954 10 18C10 19.1046 10.8954 20 12 20Z" stroke={textColor} strokeWidth="2"/>

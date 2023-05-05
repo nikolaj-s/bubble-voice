@@ -10,7 +10,7 @@ import { DropDownList } from '../../../../components/DropDownList/DropDownList'
 import { ToggleButton } from '../../../../components/buttons/ToggleButton/ToggleButton';
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { changeTheme, saveTheme, selectAccentColor, selectActivationColor, selectAppearanceChangeMade, selectCurrentTheme, selectGlassState, selectGradient, selectGradients, selectPrimaryColor, selectRgbBackGround, selectSecondaryColor, selectTextColor, selectThemeOptions, toggleRgbBackGround, updateColorValue, updateGlassState, updateGradient } from './appearanceSettingsSlice';
+import { changeTheme, saveTheme, selectAccentColor, selectActivationColor, selectAppearanceChangeMade, selectCurrentTheme, selectGlassState, selectGradient, selectGradients, selectPrimaryColor, selectRgbBackGround, selectSecondaryColor, selectServerAmbiance, selectTextColor, selectThemeOptions, toggleDisableServerAmbiance, toggleRgbBackGround, updateColorValue, updateGlassState, updateGradient } from './appearanceSettingsSlice';
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 import { ColorInput } from '../../../../components/inputs/ColorInput/ColorInput';
 import { TextButton } from '../../../../components/buttons/textButton/TextButton';
@@ -45,6 +45,8 @@ const Settings = () => {
 
     const rgbBackground = useSelector(selectRgbBackGround);
 
+    const disableServerAmbiance = useSelector(selectServerAmbiance);
+
     const gradients = useSelector(selectGradients);
 
     const gradient = useSelector(selectGradient);
@@ -78,6 +80,12 @@ const Settings = () => {
 
         dispatch(saveTheme());
     }
+
+    const handleServerAmbiance = () => {
+        dispatch(toggleDisableServerAmbiance());
+
+        dispatch(saveTheme())
+    }
     
     return (
         <div className='settings-wrapper'>
@@ -100,6 +108,8 @@ const Settings = () => {
             <ColorInput selector="activationColor" action={handleInput} rgb={activationColor} />
             <InputTitle title={"Glass UI"} />
             <ToggleButton action={handleGlassUi} state={glass} />
+            <InputTitle title={"Disable Server Ambiance"} />
+            <ToggleButton action={handleServerAmbiance} state={disableServerAmbiance} />
             {changeMade ? <TextButton marginTop={"2%"} action={handleSaveAppearanceChanges} name="Save Changes" /> : null}
             <SettingsSpacer />
         </div>

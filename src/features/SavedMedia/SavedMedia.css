@@ -25,3 +25,19 @@
 .saved-media-inner-container .no-media-container {
     height: calc(100vh - 30px);
 }
+
+.saved-media-header-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: calc(100% - 10px);
+    padding: 5px;
+    height: 30px;
+}
+
+.saved-media-header-wrapper h3,
+.saved-media-header-wrapper h2 {
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
+}

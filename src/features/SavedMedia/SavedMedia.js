@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchSavedMedia, selectSavedMedia, selectSavedMediaOpenState } from './SavedMediaSlice'
 
 import "./SavedMedia.css";
-import { selectGlassColor, selectGlassState, selectSecondaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassColor, selectGlassState, selectSecondaryColor, selectTextColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { NoMedia } from '../../components/NoMedia/NoMedia';
 
 import { Video } from '../../components/Video/Video'
@@ -27,6 +27,8 @@ export const SavedMedia = () => {
 
     const glassColor = useSelector(selectGlassColor);
 
+    const textColor = useSelector(selectTextColor);
+
     React.useEffect(() => {
 
         dispatch(fetchSavedMedia());
@@ -47,6 +49,10 @@ export const SavedMedia = () => {
             style={{backgroundColor: glassState ? glassColor : secondaryColor}}
             className='saved-media-outer-container'>
                 <div className='saved-media-inner-container'>
+                    <div className='saved-media-header-wrapper'>
+                        <h2 style={{color: textColor}}>Saved Media</h2>
+                        <h3 style={{color: textColor}}>{savedMedia.length} / 50</h3>
+                    </div>
                     {savedMedia.length === 0 ?
                     <NoMedia alt={true} message={"You Have No Saved Media, Save Media By Right Clicking On Media And Hitting Save Within The Context Menu"} />
                     : 

@@ -47,7 +47,7 @@ export const ServerSelection = () => {
 
             navigate('/dashboard');
 
-            socket?.disconnect();
+         //   socket?.disconnect();
             
             setTimeout(() => {
                 dispatch(setServerId(_id));

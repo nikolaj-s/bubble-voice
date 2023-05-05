@@ -22,7 +22,7 @@ export const RedditPost = ({data, action}) => {
                 <p style={{color: textColor}} >{data.selftext}</p>
                 :
                 data.url.includes('.gifv') || data.url.includes('.mp4') || data.url.includes('redgifs') || data.url.includes('gfycat') || data.media?.reddit_video ? 
-                <Video video={data.preview?.reddit_video_preview?.fallback_url || data.media?.reddit_video?.fallback_url} />
+                <Video video={data.url.includes('.gifv') ? data.url.split('.gifv')[0] + '.mp4' : data.preview?.reddit_video_preview?.fallback_url || data.media?.reddit_video?.fallback_url} />
                 : data.gallery_data ?
                 <SimpleImageCarousel expand={action} images={data.gallery_data.items.map(id => `https://i.redd.it/${id.media_id}.jpg`)} />
                 : 

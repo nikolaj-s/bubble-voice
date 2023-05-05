@@ -37,17 +37,21 @@ const SavedMediaSlice = createSlice({
                 state.saves = state.saves.filter(save => save.media !== action.payload.media);
             }
 
-            if (state.saves.length > 100) {
+            if (state.saves.length > 50) {
                 state.saves.pop();
             }
 
-            saveLocalData("SAVED", "MEDIA", state.saves);
+            let saves = state.saves;
+
+            saveLocalData("SAVED", "MEDIA", saves);
         },
         deleteMedia: (state, action) => {
 
             state.saves = state.saves.filter(save => save.media !== action.payload.media);
 
+            let saves = state.saves;
 
+            saveLocalData("SAVED", "MEDIA", saves);
 
         },
         toggleMediaPanel: (state, action) => {

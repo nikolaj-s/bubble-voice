@@ -28,3 +28,16 @@
 .drop-down-content li:hover {
     opacity: 0.5;
 }
+
+.drop-down-icon-wrapper {
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    transition: 0.1s;
+}

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 
 // state
-import { selectAccentColor, selectGlassColor, selectGlassState, selectPrimaryColor, selectSecondaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassColor, selectGlassState, selectSecondaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 import { fetchUsersServerList } from './sideBarSlice';
 
@@ -15,8 +15,6 @@ import { AppSettingsMenu } from '../settings/appSettings/AppSettingsMenu';
 
 // style
 import "./SideBar.css";
-import { selectSavedMediaOpenState } from '../SavedMedia/SavedMediaSlice';
-
 export const SideBar = () => {
 
     const dispatch = useDispatch();

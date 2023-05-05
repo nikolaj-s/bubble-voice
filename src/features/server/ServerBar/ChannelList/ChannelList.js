@@ -100,30 +100,14 @@ export const ChannelList = () => {
 
     // handle mount animation
 
-    React.useEffect(() => {
-
-        animaiton.start({
-            maxHeight: 'calc(100%)',
-            opacity: 1
-        }).then(() => {
-            animaiton.start({
-                overflowY: 'auto'
-            })
-        })
-
-    // eslint-disable-next-line
-    }, [])
-
     return (
         <>
         <ChannelTitle action={openCreateChannelMenu} />
         <motion.div 
         initial={{
-            maxHeight: 0,
-            overflowY: 'hidden',
             opacity: 0
         }}
-        animate={animaiton}
+        animate={{opacity: 1}}
         transition={{duration: 0.3}}
         style={{backgroundColor: glass ? glassColor : secondaryColor, marginTop: 1}}
         className='channel-list-outer-container'>

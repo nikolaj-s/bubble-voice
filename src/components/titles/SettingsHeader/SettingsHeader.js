@@ -9,12 +9,12 @@ import { selectTextColor } from '../../../features/settings/appSettings/appearan
 // style
 import "./SettingsHeader.css";
 
-export const SettingsHeader = ({title}) => {
+export const SettingsHeader = ({title, zIndex = null}) => {
 
     const textColor = useSelector(selectTextColor);
 
     return (
-        <div className='settings-header-container'>
+        <div style={{zIndex: zIndex}} className='settings-header-container'>
             <h2
             className='settings-header'
             style={{

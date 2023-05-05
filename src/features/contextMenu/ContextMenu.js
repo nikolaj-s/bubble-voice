@@ -25,7 +25,7 @@ import { selectUsername } from '../settings/appSettings/accountSettings/accountS
 // USER PREFS
 import { saveUserPrefs, USER_PREFS } from '../../util/LocalData';
 import { BoolButton } from '../../components/buttons/BoolButton/BoolButton';
-import { miscSettingsChannelSpecificStateChange, selectHideUserStatus, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents } from '../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { miscSettingsChannelSpecificStateChange, selectDisableMediaWidget, selectHideUserStatus, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents } from '../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { MoveUser } from '../../components/buttons/MoveUser/MoveUser';
 import { selectPrimaryColor, selectTextColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectSocialSoundEffect, updateSoundEffectsState } from '../settings/soundEffects/soundEffectsSlice';
@@ -74,6 +74,10 @@ export const ContextMenu = () => {
     const [addToMusicWidget, toggleAddToMusicWidget] = React.useState(false);
 
     const [unSave, toggleUnSave] = React.useState(false);
+
+    const [mediaWidgetState, setMediaWidgetState] = React.useState(false);
+
+    const disableMediaWidget = useSelector(selectDisableMediaWidget);
 
     const primaryColor = useSelector(selectPrimaryColor)
 
@@ -194,6 +198,8 @@ export const ContextMenu = () => {
         dispatch(toggleContextMenu(false));
 
         toggleUnSave(false);
+
+        setMediaWidgetState(false);
         
         const path = e.path || (e.composedPath && e.composedPath());
         
@@ -215,6 +221,12 @@ export const ContextMenu = () => {
                         }
                     }
                 }
+            }
+
+            if (p.className === 'music-widget-outer-container' || p.className === 'music-player-overlay-wrapper') {
+                dispatch(toggleContextMenu(true));
+
+                setMediaWidgetState(true);
             }
 
             if (p.localName === 'img') {
@@ -591,7 +603,7 @@ export const ContextMenu = () => {
         
         navigator.clipboard.readText()
         .then(data => {
-            selectedInput.value = data;
+            selectedInput.value = selectedInput.value + " " + data;
 
             selectedInput.dispatchEvent(new Event('input', {bubbles: true}));
 
@@ -1069,6 +1081,7 @@ export const ContextMenu = () => {
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("disableMessagePopUp")}} state={disableMessagePopup} name={"Disable Message Overlay"} /> : null}
             {channelSpecificSettingsState ? <BoolButton action={handleToggleSocialSoundEffect} state={socialSoundEffect} name="Enable Social Sound Effect" /> : null}
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideUserStatus")}} state={hideUserStatus} name={"Hide User Status"} /> : null}
+            {channelSpecificSettingsState || mediaWidgetState ? <BoolButton action={() => {handleChannelSpecificStateChange('disableMediaWidget')}} state={disableMediaWidget} name={"Disable Media Widget"} /> : null}
             {addToMusicWidget ? <CtxButton action={handlePlayOnMusicWidget} name="Play On Music Widget" icon={<PlayOnWidgetIcon />}/> : null}
             {stopStreamingState ? <CtxButton action={handleStopStreaming} name={"Stop Streaming"} /> : null}
             {deleteMessageState ? <CtxButton action={handleDeleteMessage} name={"Delete Message"} icon={<DeleteIcon />} /> : null}

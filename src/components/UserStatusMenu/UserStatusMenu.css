@@ -1,12 +1,14 @@
 
 .user-status-menu-container {
     position: absolute;
-    width: 96%;
-    bottom: 48px;
-    height: 260px;
+    width: calc(100%);
     display: flex;
+    top: 0;
+    left: 0;
     flex-direction: column;
-    
+    align-items: center;
+    height: 100%;
+    justify-content: center;
     overflow: hidden;
     z-index: 1;
 }
@@ -15,6 +17,8 @@
     flex-grow: 4;
     border-radius: var(--border-radius);
     overflow: hidden;
+    width: 400px;
+    max-height: 370px;
 }
 
 .inner-status-menu-spacer {

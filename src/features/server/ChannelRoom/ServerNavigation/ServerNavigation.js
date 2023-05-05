@@ -202,8 +202,10 @@ export const ServerNavigation = () => {
     }, [inChannel])
 
     return (
-        <motion.div className='server-navigation-container'>
-            <div className='server-navigation-button-wrapper'>
+        <motion.div
+        
+        className='server-navigation-container'>
+            <div style={{backgroundColor: primaryColor}} className='server-navigation-button-wrapper'>
                 {inChannel ?
                 <>
                 <motion.div 
@@ -273,9 +275,10 @@ export const ServerNavigation = () => {
                     {mediaDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Media</p> : null}
                     <MediaIcon color={textColor} />
                 </motion.div>
-                <motion.div transition={{duration: 0.2}} style={{backgroundColor: secondaryColor}} className='server-navigation-filler'></motion.div>
-                {inChannel ? <SubMenuButton margin={"0 0 0 1px"} description={"Room Quick Settings"} right_orientation_desc={true}  target={'live-chat-wrapper'} borderRadius={0} zIndex={3} top={0} height={10} left={null} width={15} /> : null}
+               
             </div>
+            <motion.div transition={{duration: 0.2}} style={{backgroundColor: secondaryColor}} className='server-navigation-filler'></motion.div>
+                {inChannel ? <SubMenuButton margin={"0 0 0 1px"} description={"Room Quick Settings"} right_orientation_desc={true}  target={'live-chat-wrapper'} borderRadius={0} zIndex={3} top={0} height={10} left={null} width={15} /> : null}
         </motion.div>
     )
 }

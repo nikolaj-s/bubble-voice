@@ -58,7 +58,7 @@ export const Range = ({min = 0, max = 1, action, step = 0.001, value = 0, fill =
         style={{backgroundColor: fill ? primaryColor : null}}
         className='range-container'>
             <input onMouseMove={onMouseMove} ref={ref} onMouseUp={save} id="range-input"
-            onChange={handleAction}  type={"range"} min={min} max={max} step={step} value={value} />
+            onChange={handleAction} onClick={(e) => {e.stopPropagation()}}  type={"range"} min={min} max={max} step={step} value={value} />
         </div>
     )
 }

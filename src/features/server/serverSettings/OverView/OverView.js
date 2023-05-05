@@ -14,13 +14,14 @@ import { ApplyCancelButton } from '../../../../components/buttons/ApplyCancelBut
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 
 // state
-import { clearSearchData, selectInactiveChannel, selectInactiveChannels, selectServerBanner, selectServerName, selectUsersPermissions, setServerName, throwServerError, updateInactiveChannel, updateServerBanner } from '../../ServerSlice';
+import { clearSearchData, selectInactiveChannel, selectInactiveChannels, selectServerBanner, selectServerId, selectServerName, selectUsersPermissions, setServerName, throwServerError, updateInactiveChannel, updateServerBanner } from '../../ServerSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 import { socket } from '../../ServerBar/ServerBar';
 import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
 import { uploadImage } from '../../../../util/UploadRoute';
 import { TextButton } from '../../../../components/buttons/textButton/TextButton';
 import { DropDownList } from '../../../../components/DropDownList/DropDownList';
+import { updateServer } from '../../../sideBar/sideBarSlice';
 
 
 const Wrapper = () => {
@@ -53,6 +54,8 @@ const Wrapper = () => {
     const inactiveChannels = useSelector(selectInactiveChannels);
 
     const currentInactiveChannel = useSelector(selectInactiveChannel);
+
+    const serverId = useSelector(selectServerId);
 
     // handle local state changes
     const handleBannerChange = (image) => {
@@ -128,6 +131,7 @@ const Wrapper = () => {
                 if (data.data.inactive_channel) {
                     dispatch(updateInactiveChannel(data.data.inactive_channel));
                 }
+                dispatch(updateServer({server_id: serverId, server_banner: data.data.server_banner, server_name: data.data.server_name}))
 
                 setServerPassword("");
 
@@ -211,13 +215,13 @@ const Wrapper = () => {
         
             {permissions?.user_can_edit_server_banner ?
             <>
-            <InputTitle title={"Update Server Banner"} />
+            <InputTitle zIndex={2} title={"Update Server Banner"} />
             <div style={{
                 position: 'relative',
                 height: 500,
                 minHeight: 500
             }}>
-                <ImageInput getFile={handleBannerChange} initalImage={serverBanner} />
+                <ImageInput showShadow={true} getFile={handleBannerChange} initalImage={serverBanner} />
             </div>
             </>
             : 
@@ -240,7 +244,7 @@ const Wrapper = () => {
             }
         {permissions?.user_can_edit_server_banner && permissions?.user_can_edit_server_name ?
         <>
-        <SettingsHeader title={"Data"} />
+        <SettingsHeader zIndex={2} title={"Data"} />
         <InputTitle title={"Clear Image Search Recommendation Data"} />
         <TextButton name={"Clear"} action={clearImageSearchData} />
         <SettingsHeader title={"Set Inactive User Channel"} />

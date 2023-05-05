@@ -8,6 +8,7 @@ import "./Explore.css";
 import { ViewSubReddit } from '../server/ChannelRoom/ServerDashBoard/ServerMedia/ViewSubReddits/ViewSubReddit'
 import { setExpandedContent } from '../ExpandContent/ExpandContentSlice'
 import { GetPostsFromSubReddit, selectCurrentSubReddit, selectLoadingSubReddit, selectNextPostPage, selectSubRedditSortState } from '../server/ChannelRoom/ServerDashBoard/ServerMedia/ServerMediaSlice'
+import { TextButton } from '../../components/buttons/textButton/TextButton'
 
 export const Explore = () => {
 
@@ -73,6 +74,13 @@ export const Explore = () => {
 
     }, [visible])
 
+    const backToTop = () => {
+        dispatch(setExploreScrollPos(0))
+
+        document.getElementsByClassName('explore-tab-inner-container')[0].scrollTop = 0;
+        
+    }
+
     return (
         <AnimatePresence>
             {visible ? 
@@ -86,6 +94,10 @@ export const Explore = () => {
                 <div onScroll={handleLoadMore} className='explore-tab-inner-container'>
                     <ViewSubReddit explore={true} expand={expand} />
                 </div>
+                {scrollPos > window.innerHeight ?
+                <div className='back-to-top-container'>
+                    <TextButton action={backToTop} name={"Back To Top"} />
+                </div>: null}
             </motion.div>
             : null}
         </AnimatePresence>

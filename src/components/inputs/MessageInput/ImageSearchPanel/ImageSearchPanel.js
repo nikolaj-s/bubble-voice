@@ -22,6 +22,7 @@ import { VideoSearch } from '../../../../util/VideoSearch';
 import { VideoPreview } from '../../../VideoPreview/VideoPreview';
 import { ImagePreview } from '../../../ImagePreview/ImagePreview';
 import { selectSavedMedia } from '../../../../features/SavedMedia/SavedMediaSlice';
+import { selectShowFullResPreviews } from '../../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 
 export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => {
@@ -35,6 +36,8 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
     const recommendations = useSelector(selectPopularSearches);
 
     const savedMedia = useSelector(selectSavedMedia);
+
+    const showFullResPreviews = useSelector(selectShowFullResPreviews);
 
     const [mediaType, setMediaType] = React.useState('Images');
 
@@ -158,7 +161,7 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
                         <h3 onClick={() => {handleMediaType("Saves")}} style={{color: textColor, backgroundColor: mediaType === 'Saves' ? primaryColor : null, opacity: mediaType === 'Saves' ? 1 : 0.6}}>Saves</h3>
                     </div>
                     <div className='message-image-search-results-container'>
-                    <ResponsiveMasonry columnsCountBreakPoints={{800: 1, 1000: 2, 1500: 3}}>
+                    <ResponsiveMasonry columnsCountBreakPoints={{1000: 2, 1500: 3}}>
                         <Masonry gutter='5px'>   
                             {mediaType === 'Videos' ?
                             (videos?.length > 0 ? videos : loading ? [] : recommendations.filter(v => v.type === 'video').slice(0, 15)).map(video => {
@@ -175,7 +178,7 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
                             })
                             : (images?.length > 0 ? images : loading ? [] : recommendations.filter(v => v.type === 'image').slice(0, 15)).map((image, key) => {
                                 return (
-                                    <ImagePreview tag_action={handleTag} tags={image.tags} image={image.preview} action={(e) => {handleSelectImage({...image, preview: image.image})}} />
+                                    <ImagePreview tag_action={handleTag} tags={image.tags} image={showFullResPreviews ? image.image : image.preview} action={(e) => {handleSelectImage({...image, preview: image.image})}} />
                                 )
                             })}
                         </Masonry>

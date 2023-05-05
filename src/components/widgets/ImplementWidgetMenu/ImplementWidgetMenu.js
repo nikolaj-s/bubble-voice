@@ -13,7 +13,7 @@ import { TextArea } from '../../inputs/TextArea/TextArea';
 import { Loading } from '../../LoadingComponents/Loading/Loading';
 import { Error } from '../../Error/Error';
 import { AltError } from '../../AltError/AltError'
-
+import { Video } from '../../Video/Video'
 // state
 import { selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
@@ -235,7 +235,7 @@ export const ImplementWidgetMenu = ({active = false, type, name, close}) => {
                     {type === 'plainText' || type === 'list' ? <TextArea inputValue={textValue} action={handleTextValue} placeHolder={"Text"} /> : null}
                     {type === 'image' ? 
                     <div className='adding-widget-image'>
-                        <ImageInput getFile={handleSetImage} borderRadius='15px' /> 
+                        <ImageInput getFile={handleSetImage} borderRadius='5px' /> 
                     </div>
                     : null}
                     {type === "dynamicGallery" ? 
@@ -249,6 +249,15 @@ export const ImplementWidgetMenu = ({active = false, type, name, close}) => {
                     {type === 'video' ? <AltError error={true} errorMessage={"The below options only work on video links that will play within the native video player."} /> : null}
                     {type === 'video' ? <InputTitle title={"Loop"} /> : null}
                     {type === 'video' ? <ToggleButton state={boolState} action={handleToggleBoolState} /> : null}
+                    {type === 'video' ? 
+                    <>
+                    <InputTitle title={"Preview"} />
+                    <div className='video-widget-preview-container'>
+                        
+                        <Video  objectFit='contain' video={textValue} />
+                    </div>
+                    </>
+                    : null}
                     {type === 'video' ? <InputTitle title={"Audio On By Default"} /> : null}
                     {type === 'video' ? <ToggleButton state={videoAudio} action={handleToggleVideoAudio} /> : null}
                     {type === 'music' ? <MusicWidgetButton prev={true} /> : null}

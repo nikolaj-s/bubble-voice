@@ -55,13 +55,15 @@ export const updateAccount = createAsyncThunk(
     async ({userImage, userBanner, newShape}, {rejectWithValue, getState, dispatch}) => {
         const token = await getToken();
 
-        const {password, newPassword, confirmNewPassword, display_name} = getState().accountSettingsSlice;
+        const {password, newPassword, confirmNewPassword, display_name, bio} = getState().accountSettingsSlice;
 
         const data = new FormData();
 
         data.append("displayName", display_name);
 
         data.append("userImage", userImage);
+
+        data.append("bio", bio);
 
         data.append("userBanner", userBanner);
 
@@ -120,6 +122,7 @@ const accountSettingsSlice = createSlice({
         errorMessage: "",
         change: false,
         new_account: false,
+        bio: ""
     },
     reducers: {
         handleSignOut: (state, action) => {
@@ -138,6 +141,10 @@ const accountSettingsSlice = createSlice({
         },
         updateNewAccountState: (state, action) => {
             state.new_account = false;
+        },
+        handleUpdateBio: (state, action) => {
+            state.bio = action.payload;
+            state.change = true;
         }
     },
     extraReducers: {
@@ -150,7 +157,7 @@ const accountSettingsSlice = createSlice({
                 state.user_banner = action.payload.account.user_banner;
                 state.username = action.payload.account.username;
                 state.new_account = action.payload.account.new_account_state
-                
+                state.bio = action.payload.account.bio;
                 if (action.payload.account.profile_picture_shape) {
 
                     state.profilePictureShape = action.payload.account.profile_picture_shape;
@@ -185,6 +192,8 @@ const accountSettingsSlice = createSlice({
             if (!action.payload.success) return;
 
             const updated_info = action.payload.user;
+
+            state.bio = updated_info.bio;
 
             if (updated_info.display_name) state.display_name = updated_info.display_name;
 
@@ -233,7 +242,9 @@ export const selectNewAccountState = state => state.accountSettingsSlice.new_acc
 
 export const selectProfilePictureShape = state => state.accountSettingsSlice.profilePictureShape;
 
+export const selectProfileBio = state => state.accountSettingsSlice.bio;
+
 // actions
-export const { updateNewAccountState, handleSignOut, updateAccountInputState, accountSettingsCloseError } = accountSettingsSlice.actions;
+export const {handleUpdateBio, updateNewAccountState, handleSignOut, updateAccountInputState, accountSettingsCloseError } = accountSettingsSlice.actions;
 
 export default accountSettingsSlice.reducer;

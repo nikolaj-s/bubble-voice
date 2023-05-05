@@ -31,6 +31,7 @@ const appearanceSettingsSlice = createSlice({
         darkModeEnabled: true,
         rgbBackground: false,
         changeMade: false,
+        disableServerAmbiance: false,
         gradient: {type: 'none', gradient: false},
         gradients: [
             {type: 'none', gradient: false},
@@ -178,7 +179,8 @@ const appearanceSettingsSlice = createSlice({
                 current_theme: state.current_theme,
                 rgbBackground: state.rgbBackground,
                 gradient: state.gradient,
-                glass: state.glass
+                glass: state.glass,
+                disableServerAmbiance: state.disableServerAmbiance
             }
 
             state.color_themes = {...state.color_themes, custom: new_theme_object.themes.custom};
@@ -189,6 +191,9 @@ const appearanceSettingsSlice = createSlice({
         toggleRgbBackGround: (state, action) => {
             state.rgbBackground = !state.rgbBackground;
             state.changeMade = true;
+        },
+        toggleDisableServerAmbiance: (state, action) => {
+            state.disableServerAmbiance = !state.disableServerAmbiance;
         }
 
     },
@@ -226,6 +231,8 @@ const appearanceSettingsSlice = createSlice({
 
                 if (action.payload.glass) state.glass = true;
 
+                if (action.payload.disableServerAmbiance) state.disableServerAmbiance = true;
+
                 state.glassColor = `rgba(${state.secondaryColor.split('rgb(')[1].split(')')[0]}, 0.75)`
 
                 return;
@@ -241,7 +248,7 @@ const appearanceSettingsSlice = createSlice({
 })
 
 // actions
-export const {updateGlassState, updateGradient, updateColorValue, changeTheme, saveTheme, toggleRgbBackGround } = appearanceSettingsSlice.actions;
+export const {toggleDisableServerAmbiance, updateGlassState, updateGradient, updateColorValue, changeTheme, saveTheme, toggleRgbBackGround } = appearanceSettingsSlice.actions;
 
 // color selectors
 export const selectTransparentPrimaryColor = state => {
@@ -275,6 +282,8 @@ export const selectGradient = state => state.appearanceSettingsSlice.gradient;
 export const selectGlassState = state => state.appearanceSettingsSlice.glass;
 
 export const selectGlassColor = state => state.appearanceSettingsSlice.glassColor;
+
+export const selectServerAmbiance = state => state.appearanceSettingsSlice.disableServerAmbiance;
 
 // export appearance settings reducer
 export default appearanceSettingsSlice.reducer;

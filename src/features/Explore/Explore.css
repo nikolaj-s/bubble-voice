@@ -21,3 +21,10 @@
     overflow-y: auto;
     border-radius: 15px;
 }
+
+.back-to-top-container {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.755);
+}

@@ -68,6 +68,15 @@ const sideBarSlice = createSlice({
         },
         removeServer: (state, action) => {
             state.serverList = state.serverList.filter(s => s.server_id !== action.payload)
+        },
+        updateServer: (state, action) => {
+            const i = state.serverList.findIndex(s => s.server_id === action.payload.server_id);
+
+            if (i === -1) return;
+
+            state.serverList[i].server_banner = action.payload.server_banner;
+
+            state.serverList[i].server_name = action.payload.server_name;
         }
     },
     extraReducers: {
@@ -75,6 +84,7 @@ const sideBarSlice = createSlice({
             state.loadingUsersServers = true;
         },
         [fetchUsersServerList.fulfilled]: (state, action) => {
+            console.log(action.payload)
             state.serverList = action.payload;
             state.loadingUsersServers = false;
             
@@ -110,6 +120,6 @@ export const selectServerQuery = state => state.sideBarSlice.serverQuery;
 
 // actions
 
-export const {removeServer, setSideBarHeader, setServerQuery, pushNewServerCard } = sideBarSlice.actions;
+export const {updateServer, removeServer, setSideBarHeader, setServerQuery, pushNewServerCard } = sideBarSlice.actions;
 
 export default sideBarSlice.reducer;

@@ -1,10 +1,10 @@
 // library's
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 
 // state
-import {  selectPrimaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectSecondaryColor, selectServerAmbiance, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // components
 import { Image } from '../Image/Image';
@@ -12,14 +12,20 @@ import { Image } from '../Image/Image';
 // styles
 import "./ServerBanner.css";
 import { HideButton } from '../buttons/HideButton/HideButton';
+import { setServerbannerAmbiance } from '../../features/server/ServerSlice';
+import { GetImageColorData } from '../../util/GetImageColorData';
 
 export const ServerBanner = ({serverName, serverImage}) => {
 
-    const [hideServerBar, toggleHideServerBar] = React.useState(false)
+    const [hideServerBar, toggleHideServerBar] = React.useState(false);
 
     const color = useSelector(selectTextColor);
 
-    const primaryColor = useSelector(selectPrimaryColor)
+    const dispatch = useDispatch();
+
+    const secondaryColor = useSelector(selectSecondaryColor);
+
+    const disableServerAmbiance = useSelector(selectServerAmbiance);
 
     const handleHideServerBar = () => {
         if (hideServerBar) {
@@ -34,6 +40,7 @@ export const ServerBanner = ({serverName, serverImage}) => {
     }
 
     React.useEffect(() => {
+
         
         return () => {
             try {
@@ -45,6 +52,20 @@ export const ServerBanner = ({serverName, serverImage}) => {
         }
     }, [])
 
+    const bannerLoaded = (e) => {
+        try {
+
+            if (disableServerAmbiance) return;
+
+           const color = GetImageColorData(e);
+        
+            dispatch(setServerbannerAmbiance(color));
+            
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     return (
         <motion.div 
         initial={{
@@ -55,7 +76,7 @@ export const ServerBanner = ({serverName, serverImage}) => {
         }}
         transition={{duration: 0.3}}
         className='server-banner-container' >
-            <Image id={"server-banner-image"} position='absolute' objectFit='cover' image={serverImage} />
+            <Image backgroundColor={secondaryColor} disableErr={true} onLoad={bannerLoaded} id={"server-banner-image"} position='absolute' objectFit='cover' image={serverImage} />
             <motion.div 
             
             transition={{duration: 0.3}}

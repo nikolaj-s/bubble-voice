@@ -5,10 +5,10 @@
     justify-content: center;
     align-items: center;
     background-color: transparent;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
-    z-index: 7;
+    z-index: 15;
     backdrop-filter: blur(8px);
 }
 

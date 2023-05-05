@@ -4,14 +4,20 @@ import { useDispatch, useSelector } from 'react-redux'
 import { selectCreatePostMenuOpen, selectProfileTabOpen, toggleCreatePostMenu } from './ProfileSlice'
 
 import "./Profile.css";
-import { selectGlassColor, selectGlassState, selectSecondaryColor, selectTextColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassColor, selectGlassState, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { Image } from '../../components/Image/Image';
-import { selectUserBanner, selectUserImage } from '../settings/appSettings/accountSettings/accountSettingsSlice';
+import { selectProfileBio, selectUserBanner, selectUserImage } from '../settings/appSettings/accountSettings/accountSettingsSlice';
 import { AddButton } from '../../components/buttons/AddButton/AddButton';
+import { StatusButton } from '../../components/buttons/StatusButton/StatusButton';
+import { UserStatusMenu } from '../../components/UserStatusMenu/UserStatusMenu';
+import { UserBio } from '../../components/UserBio/UserBio';
+
 
 export const Profile = () => {
 
     const dispatch = useDispatch();
+
+    const [changeStatusMenu, toggleChangeStatusMenu] = React.useState(false);
 
     const createPostMenuOpen = useSelector(selectCreatePostMenuOpen);
 
@@ -21,6 +27,8 @@ export const Profile = () => {
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
+    const primaryColor = useSelector(selectPrimaryColor);
+
     const glassState = useSelector(selectGlassState);
 
     const glassColor = useSelector(selectGlassColor);
@@ -29,9 +37,15 @@ export const Profile = () => {
 
     const userImage = useSelector(selectUserImage);
 
+    const bio = useSelector(selectProfileBio);
+
     const handleToggleCreatePostMenu = () => {
         dispatch(toggleCreatePostMenu(!createPostMenuOpen));
     } 
+
+    const handleToggleChangeStatusMenu = () => {
+        toggleChangeStatusMenu(!changeStatusMenu);
+    }
 
     return (
         <AnimatePresence>
@@ -49,10 +63,14 @@ export const Profile = () => {
                     </div>
                     
                 </div>
-                <h3 style={{color: textColor, textAlign: 'center'}}>This is a placeholder for future features </h3>
-                <div className='add-post-button-container'>
-                    <AddButton action={handleToggleCreatePostMenu} desc_font_size={'1.5rem'} invert={true} description={'Create'} />
+                <div style={{backgroundColor: primaryColor}} className='profile-nav-bar'>
+                    <StatusButton action={handleToggleChangeStatusMenu} width={20} height={20} description={"Change Status"} />
+                    <AddButton  width={20} height={20} description={'Add Post'} margin={'0px 5px'} />
                 </div>
+                <UserBio bio={bio} />
+                <>
+                {changeStatusMenu ? <UserStatusMenu close={() => {toggleChangeStatusMenu(false)}} /> : null}
+                </>
             </motion.div>
             : null}
         </AnimatePresence>

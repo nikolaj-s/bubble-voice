@@ -3,8 +3,8 @@
     height: 600px;
     position: relative;
     min-height: 600px;
-    overflow: hidden;
     border-radius: var(--border-radius);
+    z-index: 0;
 }
 
 .user-stream-image-input-icon-overlay {

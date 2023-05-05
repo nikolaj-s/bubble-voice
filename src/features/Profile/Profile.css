@@ -32,9 +32,12 @@
     overflow: hidden;
 }
 
-.add-post-button-container {
-    position: absolute;
-    left: 50%;
-    bottom: 25px;
-    transform: translateX(-50%);
+.profile-nav-bar {
+    height: 45px;
+    border-radius: var(--border-radius);
+    width: calc(100% - 10px);
+    padding: 5px;
+    margin: 5px 0px;
+    align-items: center;
+    display: flex;
 }

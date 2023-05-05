@@ -280,7 +280,7 @@ console.log(channelToEdit)
             <InputTitle title={"Toggle Persist Social Data *persists new data upon activation"} />
             <ToggleButton action={handleTogglePersistSocial} state={persistChannelSocial} />
             <SettingsHeader title={"Channel Background"} />
-            <InputTitle title={"Image"} />
+            <InputTitle zIndex={2} title={"Image"} />
             <ChannelBackgroundInput blur={backgroundBlur} initialImage={channelToEdit.channel_background} getFile={handleSettingChannelBackground} />
             <InputTitle title={"Background Opacity"} />
             <Range action={handleBlurChange} value={backgroundBlur} min={0} max={1} step={0.05} />

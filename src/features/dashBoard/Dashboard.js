@@ -20,6 +20,7 @@ import { SavedMedia } from '../SavedMedia/SavedMedia';
 import { Profile } from '../Profile/Profile';
 import { Explore } from '../Explore/Explore';
 import { Messages } from '../Messages/Messages';
+import { ServerBannerAmbiance } from '../../components/ServerBannerAmbiance/ServerBannerAmbiance';
 
 
 export const Dashboard = () => {
@@ -50,6 +51,7 @@ export const Dashboard = () => {
             <Profile />
             <Explore />
             <Messages />
+            <ServerBannerAmbiance />
         </div>
     )
 }

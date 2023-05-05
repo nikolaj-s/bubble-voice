@@ -21,7 +21,7 @@ import { selectCurrentScreen, setCurrentScreen, toggleControlState } from '../..
 import { ServerBanner } from '../../../components/serverBanner/ServerBanner';
 import { Loading } from '../../../components/LoadingComponents/Loading/Loading';
 import { setHeaderTitle } from '../../contentScreen/contentScreenSlice';
-import { removeServer, setSideBarHeader } from '../../sideBar/sideBarSlice';
+import { removeServer, setSideBarHeader, updateServer } from '../../sideBar/sideBarSlice';
 import { ChannelList } from './ChannelList/ChannelList';
 import { ServerSettingsMenu } from '../serverSettings/ServerSettingsMenu';
 import { DisconnectButtonWrapper } from './DisconnectButtonWrapper/DisconnectButtonWrapper';
@@ -31,6 +31,7 @@ import "./ServerBar.css"
 import { addPinnedMessage, removePinnedMessage } from '../ChannelRoom/ServerDashBoard/ServerDashBoardSlice';
 import { MobileServerBanner } from '../../../components/MobileServerBanner/MobileServerBanner';
 import { clearDirectMessages, sendDirectMessage } from '../../Messages/MessagesSlice';
+import { selectGlassState, selectSecondaryColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 export let socket = null;
 
@@ -82,16 +83,18 @@ const Bar = () => {
     const inactiveChannel = useSelector(selectInactiveChannel);
     
     const handleConnectionLost = () => {
-        console.log('connection time out')
+        
         if (window.location.hash.includes('disconnected')) return;
         
+        const new_redirect = `/dashboard/server/${serverName ? serverName : "placeholder"}/disconnected`;
+
+        const channel = window.location.hash.split('/channel/')[1];
+
         if (window.location.hash.includes('/channel/')) {
 
             document.getElementById('disconnect-from-channel-button').click();
 
-        }
-        
-        const new_redirect = `/dashboard/server/${serverName ? serverName : "placeholder"}/disconnected`;
+        } 
 
         window.location.hash =  new_redirect;
         
@@ -106,7 +109,7 @@ const Bar = () => {
         // reset socket to avoid mismatch socket id errors
         socket = null;
         
-        joiningServer();
+        joiningServer(channel);
 
     }
 
@@ -122,13 +125,14 @@ const Bar = () => {
             dispatch(userJoinsServer(data));
         })
         socket.on('connect_failed', (data) => {
+            console.log('server connection error')
             socket.off('connect_failed');
 
             handleConnectionLost();
-            console.log('internet connection error')
             socket.disconnect()
         })
         socket.on('connect_error', () => {
+            console.log('server connection error')
             socket.off('connect_error');
             handleConnectionLost();
             console.log('server connection error')
@@ -144,6 +148,7 @@ const Bar = () => {
             }
         })
         socket.on('user leaves channel', (data) => {
+            console.log(data)
             dispatch(userLeavesChannel(data));
             if (window.location.hash.includes(data.id)) {
                 dispatch(playSoundEffect("userDisconnected"))
@@ -151,6 +156,7 @@ const Bar = () => {
         })
 
         socket.on('user dropped connection', (data) => {
+            console.log('dropped')
             dispatch(userLeavesChannel(data));
 
             if (window.location.hash.includes(data.id)) {
@@ -190,6 +196,8 @@ const Bar = () => {
             if (data.data.inactive_channel) {
                 dispatch(updateInactiveChannel(data.data.inactive_channel));
             }
+
+            dispatch(updateServer({server_id: server_id, server_banner: data.data.server_banner, server_name: data.data.server_name}));
         })
 
         socket.on("updated server groups", (data) => {
@@ -367,7 +375,7 @@ const Bar = () => {
         })
     }
 
-    const joiningServer = async (tries = 0) => { 
+    const joiningServer = async (channel) => { 
 
         try {
             console.log("retrying joining server function")
@@ -384,7 +392,7 @@ const Bar = () => {
                 query: {
                     "TOKEN": token
                 },
-                reconnectionAttempts: 15,
+                reconnectionAttempts: 50,
                 reconnectionDelay: 5000
             })
 
@@ -392,6 +400,11 @@ const Bar = () => {
                 console.log('cannot reconnect')
             })
             
+            socket.on('disconnect', (data) => {
+                console.log('server change')
+                handleConnectionLost();
+            })
+
             socket.on('connect', (data) => {
 
                 socket.request = function request(type, data = {}) {
@@ -412,7 +425,7 @@ const Bar = () => {
 
                 }
 
-                dispatch(fetchServerDetails());
+                dispatch(fetchServerDetails({channel_id: channel}));
 
                 dispatch(fetchPersistedMusicVolume());
 
@@ -747,7 +760,7 @@ const Bar = () => {
         
     // eslint-disable-next-line
     }, [])
-    
+
     return (
         <motion.div initial={{
             opacity: 0
@@ -756,12 +769,9 @@ const Bar = () => {
             className='server-bar-container'>
             <ServerBanner serverImage={serverBanner} serverName={serverName} />
             <MobileServerBanner serverImage={serverBanner} serverName={serverName} />
-            {loading ? <Loading loading={loading} /> :
-            <>
+            <Loading loading={loading} /> 
             <ChannelList />
             <ServerSettingsMenu />
-            </>
-            }
             <DisconnectButtonWrapper disconnect={disconnect} leave={leaveServer} channel_id={current_channel_id} /> 
         </motion.div>
     )

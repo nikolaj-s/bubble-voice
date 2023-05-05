@@ -1,0 +1,26 @@
+
+.user-bio-preview-container {
+    width: calc(100% - 10px);
+    height: auto;
+    padding: 5px;
+    border-radius: var(--border-radius);
+}
+
+.user-bio-preview-container p {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 99%;
+    overflow-wrap: break-word;
+    overflow: hidden;
+    text-overflow: clip;
+}
+
+.mini-bio-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+    overflow: hidden;
+    cursor: pointer;
+}

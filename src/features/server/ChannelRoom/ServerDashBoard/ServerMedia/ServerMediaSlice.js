@@ -14,7 +14,7 @@ export const GetPostsFromSubReddit = createAsyncThunk(
             .catch(err => {
                 return rejectWithValue({error: true, errorMessage: err.message})
             });
-            
+            console.log(data)
             return data;
 
         } catch (error) {

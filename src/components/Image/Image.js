@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 // state
 import { selectPrimaryColor, selectSecondaryColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
-export const Image = ({image, objectFit = 'cover', position = 'relative', zIndex = 0, loadingState = '', opacity = 1, width = '100%', cursor = 'default', altWidth = '100%', imgHeight = '100%', expandContent = () => {}, disableErr = false, hideOnError = false, id, imageError = "https://res.cloudinary.com/drlkgoter/image/upload/v1674339889/no-picture_m4dmai.jpg"}) => {
+export const Image = ({image, objectFit = 'cover', position = 'relative', zIndex = 0, loadingState = '', opacity = 1, width = '100%', cursor = 'default', altWidth = '100%', imgHeight = '100%', expandContent = () => {}, disableErr = false, hideOnError = false, id, imageError = "https://res.cloudinary.com/drlkgoter/image/upload/v1674339889/no-picture_m4dmai.jpg", onLoad = () => {}, backgroundColor = null}) => {
 
     const [loading, toggleLoading] = React.useState(true);
 
@@ -18,12 +18,14 @@ export const Image = ({image, objectFit = 'cover', position = 'relative', zIndex
 
     const imageAnimation = useAnimation();
 
-    const handleImageLoad = () => {
+    const handleImageLoad = (e) => {
         toggleLoading(false);
-
+        
         imageAnimation.start({
             opacity: opacity
         })
+
+        onLoad(e);
     }
 
     const handleError = (e) => {
@@ -37,7 +39,7 @@ export const Image = ({image, objectFit = 'cover', position = 'relative', zIndex
     }
 
     return (
-        <div id={id} style={{zIndex: zIndex, position: position, objectFit: objectFit, width: width, height: '100%', opacity: opacity, display: (error && hideOnError) ? 'none' : null}}>
+        <div id={id} style={{zIndex: zIndex, position: position, objectFit: objectFit, width: width, height: '100%', opacity: opacity, display: (error && hideOnError) ? 'none' : null, backgroundColor: backgroundColor}}>
             {loading && image !== "" && image !== undefined && disableErr === false ?
             <motion.div 
             style={{

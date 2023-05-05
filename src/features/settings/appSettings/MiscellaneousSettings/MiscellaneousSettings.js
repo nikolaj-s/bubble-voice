@@ -16,7 +16,7 @@ import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/Se
 
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { miscSettingsChannelSpecificStateChange, miscSettingsClearError, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, selectActivityStatus, selectAutoPlayNativeVideos, selectDefaultServer, selectDisableTransparancyEffects, selectHardwareAcceleration, selectHideUserStatus, selectMiscSettingsDisableGifProfiles, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsError, selectMiscSettingsErrorMessage, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectMiscSettingsLoading, selectMuteSocialVideos, selectPopOutUserStreams, selectRestartNotice, selectSystemNotifcations, setDefaultServer } from './MiscellaneousSettingsSlice';
+import { miscSettingsChannelSpecificStateChange, miscSettingsClearError, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, selectActivityStatus, selectAutoPlayNativeVideos, selectDefaultServer, selectDisableMediaWidget, selectDisableTransparancyEffects, selectHardwareAcceleration, selectHideUserStatus, selectMiscSettingsDisableGifProfiles, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsError, selectMiscSettingsErrorMessage, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectMiscSettingsLoading, selectMuteSocialVideos, selectPopOutUserStreams, selectRestartNotice, selectShowFullResPreviews, selectSystemNotifcations, setDefaultServer } from './MiscellaneousSettingsSlice';
 import { selectServerList } from '../../../sideBar/sideBarSlice';
 
 const Settings = () => {
@@ -57,9 +57,11 @@ const Settings = () => {
 
     const activityStatus = useSelector(selectActivityStatus);
 
-    const popOutUserStreams = useSelector(selectPopOutUserStreams);
+    const disableMediaWidget = useSelector(selectDisableMediaWidget);
 
     const disableTransparancyEffects = useSelector(selectDisableTransparancyEffects);
+
+    const showFullResPreviews = useSelector(selectShowFullResPreviews);
 
     React.useEffect(() => {
 
@@ -133,6 +135,11 @@ const Settings = () => {
             <ToggleButton state={disableTransparancyEffects} action={() => {handleChannelSpecificStateChange('disableTransparancyEffects')}} />
             <InputTitle title={"Disable Hardware Acceleration"} />
             <ToggleButton action={handleToggleHardwareAcceleration} state={hardwareAcceleration} />
+            <SettingsHeader title={"Bandwith"} />
+            <InputTitle title={"Disable Media Widget"} />
+            <ToggleButton state={disableMediaWidget} action={() => {handleChannelSpecificStateChange('disableMediaWidget')}} />
+            <InputTitle title={"Show Full Resolution Previews of Images"} />
+            <ToggleButton state={showFullResPreviews} action={() => {handleChannelSpecificStateChange('showFullResPreviews')}} />
             <InputTitle title={"Clear Local Data"} />
             <TextButton action={handleClearLocalData} name={"Clear Data"} />
             <SettingsSpacer />

@@ -8,7 +8,7 @@ import { NoServerSelectedDisplay } from './NoServerSelectedDisplay/NoServerSelec
 import { SettingsRoutesWrapper } from '../settings/SettingsRoutestWrapper/SettingsRoutesWrapper';
 import { CreateServerMenu } from '../createServer/createServerMenu/CreateServerMenu';
 import { ChannelRoom } from '../server/ChannelRoom/ChannelRoom';
-import { JoinServer } from '../joinServer/JoinServer';
+
 import { Disconnected } from '../../components/disconnected/Disconnected';
 import { ExpandContent } from '../ExpandContent/ExpandContent';
 import { NewAccount } from '../../components/NewAccount/NewAccount';
@@ -21,7 +21,6 @@ import { selectHeaderTitle } from './contentScreenSlice';
 // style's
 import "./ContentScreen.css";
 import { selectAddServerMenuVisible } from '../createServer/createServerSlice';
-import { selectSavedMediaOpenState } from '../SavedMedia/SavedMediaSlice';
 
 export const ContentScreen = () => {
     // content display state

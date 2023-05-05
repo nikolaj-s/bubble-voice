@@ -3,8 +3,13 @@ import { NoMedia } from '../../../../../../components/NoMedia/NoMedia'
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 import { ImagePreview } from '../../../../../../components/ImagePreview/ImagePreview'
 import { VideoPreview } from '../../../../../../components/VideoPreview/VideoPreview'
+import { useSelector } from 'react-redux'
+import { selectShowFullResPreviews } from '../../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice'
 
 export const Reccomendations = ({media, count, expand}) => {
+
+    const showFullResPreviews = useSelector(selectShowFullResPreviews);
+
     return (
         <>
         {media?.length === 0 ?
@@ -16,7 +21,7 @@ export const Reccomendations = ({media, count, expand}) => {
                         return (
                            <>
                             {img.type === 'image' ?
-                            <ImagePreview image={img.preview} action={() => {expand(img.image ? img.image : img.preview)}} tags={img.tags} />
+                            <ImagePreview image={showFullResPreviews ? img.image : img.preview} action={() => {expand(img.image ? img.image : img.preview)}} tags={img.tags} />
                             :
                             <VideoPreview action={() => {expand(img.link)}} video={img} />}
                             </>

@@ -1,9 +1,9 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentChannelId, throwServerError } from '../../../ServerSlice';
-import {handleAddingMedia, selectLoadingMusicState, selectMusicExpanded, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, throwMusicError, toggleLoadingMusic, toggleMusicExpanded, updateMusicVolume,} from './MusicSlice';
+import { throwServerError } from '../../../ServerSlice';
+import { selectLoadingMusicState, selectMusicExpanded, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, throwMusicError, toggleLoadingMusic, toggleMusicExpanded, updateMusicVolume,} from './MusicSlice';
 import YouTube from 'react-youtube'
-import { selectAccentColor, selectPrimaryColor, selectSecondaryColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import {  selectPrimaryColor, selectSecondaryColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 import "./Music.css";
 import { MusicOverlayButton } from '../../../../../components/buttons/MusicOverlayButton/MusicOverlayButton';
@@ -16,6 +16,7 @@ import { socket } from '../../../ServerBar/ServerBar';
 import { Range } from '../../../../../components/inputs/Range/Range';
 import { Loading } from '../../../../../components/LoadingComponents/Loading/Loading';
 import { ExpandButton } from '../../../../../components/buttons/ExpandButton/ExpandButton';
+import { selectDisableMediaWidget } from '../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 export const Music = () => {
 
@@ -45,9 +46,7 @@ export const Music = () => {
 
     const [volumeControls, toggleVolumeControls] = React.useState(false);
 
-    const [searchInput, setSearchInput] = React.useState("");
-
-    const [showSearchInput, toggleShowSearchInput] = React.useState("");
+    const disableMediaWidget = useSelector(selectDisableMediaWidget);
 
     const musicQueue = useSelector(selectMusicQueue);
 
@@ -233,7 +232,7 @@ export const Music = () => {
 
     return (
         <>
-        {currentlyPlaying ?
+        {(currentlyPlaying && disableMediaWidget === false) ?
         
         
         <div 
@@ -291,7 +290,8 @@ export const Music = () => {
                         enablejsapi: 1,
                         start: musicQueue[0]?.current ? musicQueue[0].current : 0,
                         controls: 0,
-                        modestbranding: 1
+                        modestbranding: 1,
+                        disablekb: 1
                     }}} style={{
                         borderBottomRightRadius: 15,
                         width: '100%',

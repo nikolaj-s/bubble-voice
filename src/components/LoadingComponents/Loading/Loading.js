@@ -83,11 +83,8 @@ export const Loading = ({loading = false, error = false, overflow = true, succes
         null :
         <motion.div 
         key={"loading-background-color"}
-        initial={{backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0] + ', 0)'}`}}
-        animate={{backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0] + ', 0.7)'}`}}
-        exit={{backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0] + ', 0)'}`}}
+        
         style={{
-            backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0] + ', 0.7)'}`,
             zIndex: zIndex
         }}
         className='loading-container' >

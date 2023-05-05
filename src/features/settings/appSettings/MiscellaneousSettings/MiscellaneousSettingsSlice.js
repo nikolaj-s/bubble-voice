@@ -60,7 +60,11 @@ const MiscellaneousSettingsSlice = createSlice({
         enabledSystemNotifications: true,
         muteSocialVideos: true,
         activity: false,
-        disableTransparancyEffects: false
+        disableTransparancyEffects: false,
+        disableMediaWidget: false,
+        disableBeingPoked: false,
+        videoVolume: 1,
+        showFullResPreviews: false
     },
     reducers: {
         pushSytemNotification: (state, action) => {
@@ -135,10 +139,16 @@ const MiscellaneousSettingsSlice = createSlice({
                 muteSocialVideos: state.muteSocialVideos,
                 activity: state.activity,
                 popOutUserStreams: state.popOutUserStreams,
-                disableTransparancyEffects: state.disableTransparancyEffects
+                disableTransparancyEffects: state.disableTransparancyEffects,
+                disableMediaWidget: state.disableMediaWidget,
+                showFullResPreviews: state.showFullResPreviews
+
             }
 
             saveLocalData("MISC", "MISCSETTINGS", obj);
+        },
+        setVideoVolume: (state, action) => {
+            state.videoVolume = action.payload;
         },
         setDefaultServer: (state, action) => {
 
@@ -151,7 +161,8 @@ const MiscellaneousSettingsSlice = createSlice({
                 disableGifProfiles: state.disableGifProfiles,
                 hideUserStatus: state.hideUserStatus,
                 defaultServer: state.defaultServer,
-                enabledSystemNotifications: state.enabledSystemNotifications
+                enabledSystemNotifications: state.enabledSystemNotifications,
+                disableMediaWidget: state.disableMediaWidget
             }
 
             saveLocalData("MISC", "MISCSETTINGS", obj);
@@ -190,6 +201,8 @@ const MiscellaneousSettingsSlice = createSlice({
             if (saved_data.autoPlayNativeVideos === false) state.autoPlayNativeVideos = false;
 
             if (saved_data.muteSocialVideos === false) state.muteSocialVideos = false;
+
+            if (saved_data.disableMediaWidget) state.disableMediaWidget = true;
             
             if (saved_data.defaultServer) state.defaultServer = saved_data.defaultServer;
             
@@ -198,6 +211,8 @@ const MiscellaneousSettingsSlice = createSlice({
             if (saved_data.activity) state.activity = true;
 
             if (saved_data.disableTransparancyEffects) state.disableTransparancyEffects = true;
+
+            if (saved_data.showFullResPreviews) state.showFullResPreviews = true;
 
           //  if (saved_data.popOutUserStreams) state.popOutUserStreams = true;
         }
@@ -240,7 +255,13 @@ export const selectPopOutUserStreams = state => state.MiscellaneousSettingsSlice
 
 export const selectDisableTransparancyEffects = state => state.MiscellaneousSettingsSlice.disableTransparancyEffects;
 
-export const {pushPokeNotification, pushSytemNotification, setDefaultServer, changeRoomScale, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, miscSettingsClearError, miscSettingsChannelSpecificStateChange } = MiscellaneousSettingsSlice.actions;
+export const selectDisableMediaWidget = state => state.MiscellaneousSettingsSlice.disableMediaWidget;
+
+export const selectVideoVolume = state => state.MiscellaneousSettingsSlice.videoVolume;
+
+export const selectShowFullResPreviews = state => state.MiscellaneousSettingsSlice.showFullResPreviews;
+
+export const {setVideoVolume, pushPokeNotification, pushSytemNotification, setDefaultServer, changeRoomScale, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, miscSettingsClearError, miscSettingsChannelSpecificStateChange } = MiscellaneousSettingsSlice.actions;
 
 
 export default MiscellaneousSettingsSlice.reducer;

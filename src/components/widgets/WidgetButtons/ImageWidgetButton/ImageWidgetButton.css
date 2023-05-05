@@ -1,6 +1,6 @@
 
 .image-widget-button-container {
-    width: 30%;
+    width: 31.3%;
     height: 200px;
     border-radius: var(--border-radius);
     display: flex;
@@ -8,7 +8,7 @@
     align-items: center;
     flex-direction: column;
     cursor: pointer;
-    margin: 10px 0 0 0;
+    margin: 8px 0 0 0;
 }
 
 .image-widget-button-container div {

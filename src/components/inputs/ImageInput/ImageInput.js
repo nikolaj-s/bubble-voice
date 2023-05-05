@@ -11,6 +11,7 @@ import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../..
 // componenents
 import { Image } from "../../Image/Image";
 import { ImageIcon } from '../../Icons/ImageIcon/ImageIcon';
+import {GetImageColorData} from '../../../util/GetImageColorData'
 
 // style
 import "./ImageInput.css";
@@ -20,13 +21,14 @@ export const ImageInput = ({
     initalImage,
     width = "100%",
     height = "100%",
-    borderRadius = "10px",
+    borderRadius = "5px",
     center = false,
     zIndex = "0",
     getFile = () => {},
     blur = false,
     blur_amount = 8,
-    size = 1000000
+    size = 1000000,
+    showShadow = false
 }) => {
 
     // state
@@ -35,6 +37,8 @@ export const ImageInput = ({
     const [processingImage, toggleProcessingImage] = React.useState(false);
 
     const [percent, setPercent] = React.useState(0);
+
+    const [shadow, setShadow] = React.useState('rgba(0,0,0,0)');
 
     const animation = useAnimation();
 
@@ -114,6 +118,15 @@ export const ImageInput = ({
         }
     }
 
+    const onLoad = (e) => {
+
+        if (showShadow === false) return;
+
+        const color = GetImageColorData(e);
+
+        setShadow(color);
+    }
+
     return (
         <AnimatePresence>
         <motion.div 
@@ -137,16 +150,18 @@ export const ImageInput = ({
             overflow: 'hidden',
             cursor: 'pointer',
             borderRadius: borderRadius,
-            border: `4px solid ${primaryColor}`,
+            border: `2px solid ${primaryColor}`,
             zIndex: zIndex,
             left: "50%" ,
             top: "50%",
             transform: "translate(-50%, -50%)",
-            transition: '0.1s'
+            transition: '0.1s',
+            boxShadow: shadow ? `0 0 25px 25px ${shadow}` : null
+            
         }}
         {...getRootProps({className: 'dropzone'})} className='image-drop-input-container'>
             <input {...getInputProps()} />
-            <Image opacity={blur_amount} disableErr={true} cursor='pointer' image={files[0]?.preview} />
+            <Image onLoad={onLoad} opacity={blur_amount} disableErr={true} cursor='pointer' image={files[0]?.preview} />
             
             <ImageIcon cursor={'pointer'} center={center} zIndex={zIndex} animation={iconAnimation} />
         </motion.div>

@@ -9,7 +9,7 @@ import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../..
 // style
 import "./TextArea.css";
 
-export const TextArea = ({action = () => {}, placeHolder, inputValue, margin}) => {
+export const TextArea = ({action = () => {}, placeHolder, inputValue = "", margin, height, maxLength = 1024}) => {
 
     const animation = useAnimation();
 
@@ -21,7 +21,7 @@ export const TextArea = ({action = () => {}, placeHolder, inputValue, margin}) =
 
     const handleAnimation = (color) => {
         animation.start({
-            border: `4px solid ${color}`
+            border: `2px solid ${color}`
         })
     }
 
@@ -33,7 +33,7 @@ export const TextArea = ({action = () => {}, placeHolder, inputValue, margin}) =
         <motion.div
         animate={animation}
         className='text-area-container'
-        style={{border: `4px solid ${color}`}}
+        style={{border: `2px solid ${color}`, height: height}}
         onBlur={() => {handleAnimation(color)}}
         onFocus={() => {handleAnimation(textColor)}}
         onMouseOver={(e) => {
@@ -49,6 +49,7 @@ export const TextArea = ({action = () => {}, placeHolder, inputValue, margin}) =
         >
             <textarea 
             onChange={returnInputValue} style={{color: textColor, backgroundColor: color}} placeholder={placeHolder} value={inputValue} />
+            <p className='text-area-character-counter' style={{color: textColor}}>{inputValue?.length} / {maxLength} </p>
         </motion.div>
     )
 }

@@ -5,7 +5,7 @@ import { useNavigate, useRoutes } from 'react-router'
 import { AnimatePresence } from 'framer-motion';
 
 // state
-import { selectUserBanner, selectUserImage, selectDisplayName, selectAccountSettingsLoading, selectAccountSettingsErrorState, selectAccountSettingsErrorMessage, updateAccount, updateAccountInputState, selectAccountSettingsPassword, selectAccountSettingsNewPassword, selectAccountSettingsConfirmNewPassword, accountSettingsCloseError, selectAccountSettingsStateChanged, selectProfilePictureShape } from './accountSettingsSlice';
+import { selectUserBanner, selectUserImage, selectDisplayName, selectAccountSettingsLoading, selectAccountSettingsErrorState, selectAccountSettingsErrorMessage, updateAccount, updateAccountInputState, selectAccountSettingsPassword, selectAccountSettingsNewPassword, selectAccountSettingsConfirmNewPassword, accountSettingsCloseError, selectAccountSettingsStateChanged, selectProfilePictureShape, selectProfileBio, handleUpdateBio } from './accountSettingsSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 
 // components
@@ -18,6 +18,9 @@ import { Loading } from '../../../../components/LoadingComponents/Loading/Loadin
 import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/SettingsSpacer';
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 import { ProfilePictureShape } from './ProfilePictureShape/ProfilePictureShape';
+import { TextArea } from '../../../../components/inputs/TextArea/TextArea';
+import { TogglePreviewButton } from '../../../../components/buttons/TogglePreviewButton/TogglePreviewButton';
+import { UserBio } from '../../../../components/UserBio/UserBio';
 
 const Settings = () => {
 
@@ -33,10 +36,14 @@ const Settings = () => {
 
     const [newShape, setNewShape] = React.useState("");
 
+    const [previewBio, togglePreviewBio] = React.useState(false);
+
     // account slice state
     const displayName = useSelector(selectDisplayName);
 
     const profilePictureShape = useSelector(selectProfilePictureShape);
+
+    const profileBio = useSelector(selectProfileBio);
 
     const loading = useSelector(selectAccountSettingsLoading);
 
@@ -97,6 +104,12 @@ const Settings = () => {
         setNewShape(shape)
     }
 
+    const changeProfileBio = (value) => {
+        if (value.length > 1024) return;
+
+        dispatch(handleUpdateBio(value));
+    }
+
     return (
         <>
             <div className='settings-wrapper'>
@@ -106,6 +119,16 @@ const Settings = () => {
                 <InputTitle title={"Change Banner / Profile Picture"} />
                 <ProfileImage shape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} />
                 <ProfilePictureShape action={changeProfileShape} shape={newShape} />
+                <div style={{display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-between'}}>
+                    <InputTitle width={'60px'} title={'Bio'} />
+                    <TogglePreviewButton active={previewBio} action={() => {togglePreviewBio(!previewBio)}} padding={5} width={20} height={20} description={'Toggle Preview'} desc_height={15} />
+                </div>
+                {previewBio ?
+                <UserBio bio={profileBio} />
+                :
+                <TextArea inputValue={profileBio} action={changeProfileBio} height={300} />
+                }
+               
                 <SettingsHeader title={"Security"} />
                 <InputTitle title={"Change Password"} />
                 <TextInput stateSelector='password' action={handleInput}  marginBottom='2%' type='password' placeholder={"Current Password"} inputValue={password} />
