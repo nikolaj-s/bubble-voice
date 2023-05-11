@@ -61,7 +61,7 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
 
             toggleProcessingImage(true);
 
-            const options = {maxSizeMB: 0.6, onProgress: incrementPrecentage, maxIteration: 30}
+            const options = {maxSizeMB: 0.6, onProgress: incrementPrecentage, maxIteration: 30, maxWidthOrHeight: 1600}
 
             let compressed_image;
 

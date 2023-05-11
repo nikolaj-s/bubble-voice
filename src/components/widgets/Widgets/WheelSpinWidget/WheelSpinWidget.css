@@ -5,6 +5,7 @@
     height: 400px;
     align-items: center;
     justify-content: center;
+	border-radius: var(--border-radius);
 }
 
 /*WHEEL*/

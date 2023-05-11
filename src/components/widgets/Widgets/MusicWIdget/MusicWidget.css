@@ -6,6 +6,7 @@
     align-items: center;
     position: relative;
     transition: 0.3s;
+    border-radius: var(--border-radius);
 }
 
 .inner-music-widget-container {

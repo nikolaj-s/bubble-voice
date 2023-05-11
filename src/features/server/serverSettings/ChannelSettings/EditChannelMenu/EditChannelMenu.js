@@ -27,6 +27,7 @@ import { ChannelBackgroundInput } from './ChannelBackgroundInput/ChannelBackgrou
 import { Range } from '../../../../../components/inputs/Range/Range';
 import { InputPlaceHolder } from '../../../../../components/titles/InputPlaceHolder/InputPlaceHolder';
 import { selectUsername } from '../../../../settings/appSettings/accountSettings/accountSettingsSlice';
+import { ChannelIcon } from './ChannelIcon/ChannelIcon';
 
 const Wrapper = () => {
 
@@ -56,6 +57,8 @@ const Wrapper = () => {
 
     const [authUsers, setAuthUsers] = React.useState([]);
 
+    const [icon, setChannelIcon] = React.useState(false)
+
     const channel = useSelector(selectChannelToEdit);
 
     const members = useSelector(selectServerMembers);
@@ -73,7 +76,7 @@ const Wrapper = () => {
             setChannelName(channelToEdit.channel_name);
 
             setPersistChannelSocial(channelToEdit.persist_social)
-            
+
             if (channelToEdit.background_blur) {
 
                 setBackgroundBlur(channelToEdit.background_blur);
@@ -114,7 +117,7 @@ const Wrapper = () => {
         setChannelToEdit(channel);
 
     // eslint-disable-next-line
-    }, [channel.background_blur, channel.channel_background, channel.channel_name, channel.persist_social, channel.widgets])
+    }, [channel.background_blur, channel.channel_background, channel.channel_name, channel.persist_social, channel.widgets, channel.icon])
 
     const handleCancel = () => {
         window.location.hash = window.location.hash.split(`/channels`)[0] + '/channels'
@@ -164,7 +167,7 @@ const Wrapper = () => {
         handleToggleLoading(true);
 
         await socket.request('update channel', 
-        {...channelToEdit, widgets: widgets, persist_social: persistChannelSocial, channel_name: channelName, file: channelBackground, background_blur: backgroundBlur, clear_social: clearedSocial, disable_streams: disableStreams, auth_users: authUsers, locked_channel: lockedChannel})
+        {...channelToEdit, widgets: widgets, persist_social: persistChannelSocial, channel_name: channelName, file: channelBackground, background_blur: backgroundBlur, clear_social: clearedSocial, disable_streams: disableStreams, auth_users: authUsers, locked_channel: lockedChannel, icon_file: icon})
         .then(response => {
 
             dispatch(updateChannel(response.channel));
@@ -176,6 +179,8 @@ const Wrapper = () => {
             toggleEdited(false);
 
             setChannelBackground(false);
+
+            setChannelIcon(false);
         })
         .catch(error => {
             console.log(error);
@@ -267,14 +272,23 @@ const Wrapper = () => {
         setAuthUsers(currentAuthUsers);
 
     }
-console.log(channelToEdit)
+
+    const updateChannelIcon = (file) => {
+        setChannelIcon(file);
+
+        toggleEdited(true);
+    }
+
     return (
         <>
         {(permission?.user_can_manage_channels && (channelToEdit.locked_channel ? channelToEdit.auth : true)) ?
             <>
             <SettingsHeader title={'General'} />
-            <InputTitle title={"Edit Channel Name"} />
+            <InputTitle title={"Edit Channel Name / Icon"} />
+            <div style={{display: 'flex', alignItems: 'center'}} >
+            <ChannelIcon initial={channelToEdit?.icon} locked={lockedChannel} textOnly={channelToEdit?.text_only} getFile={updateChannelIcon}  />
             <TextInput action={handleUpdateChannelName} inputValue={channelName} />
+            </div>
             {channelToEdit.text_only ? null :
             <>
             <InputTitle title={"Toggle Persist Social Data *persists new data upon activation"} />

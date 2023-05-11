@@ -10,7 +10,7 @@ import { selectAppSettings } from './appSettingsMenuSlice';
 import { SettingsCategoryButton } from '../../../components/buttons/SettingsCategoryButton/SettingsCategoryButton';
 
 // state
-import { selectAccentColor, selectPrimaryColor, selectSecondaryColor } from './appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, selectSecondaryColor } from './appearanceSettings/appearanceSettingsSlice';
 import { handleSignOut } from '../appSettings/accountSettings/accountSettingsSlice';
 import { signInHandleLogOutState } from '../../LoggingIn/signIn/signInSlice';
 

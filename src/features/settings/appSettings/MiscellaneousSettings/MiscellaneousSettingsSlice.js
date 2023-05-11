@@ -64,7 +64,8 @@ const MiscellaneousSettingsSlice = createSlice({
         disableMediaWidget: false,
         disableBeingPoked: false,
         videoVolume: 1,
-        showFullResPreviews: false
+        showFullResPreviews: false,
+        disableChannelIcons: false
     },
     reducers: {
         pushSytemNotification: (state, action) => {
@@ -141,8 +142,8 @@ const MiscellaneousSettingsSlice = createSlice({
                 popOutUserStreams: state.popOutUserStreams,
                 disableTransparancyEffects: state.disableTransparancyEffects,
                 disableMediaWidget: state.disableMediaWidget,
-                showFullResPreviews: state.showFullResPreviews
-
+                showFullResPreviews: state.showFullResPreviews,
+                disableChannelIcons: state.disableChannelIcons
             }
 
             saveLocalData("MISC", "MISCSETTINGS", obj);
@@ -162,7 +163,9 @@ const MiscellaneousSettingsSlice = createSlice({
                 hideUserStatus: state.hideUserStatus,
                 defaultServer: state.defaultServer,
                 enabledSystemNotifications: state.enabledSystemNotifications,
-                disableMediaWidget: state.disableMediaWidget
+                disableMediaWidget: state.disableMediaWidget,
+                showFullResPreviews: state.showFullResPreviews,
+                disableChannelIcons: state.disableChannelIcons
             }
 
             saveLocalData("MISC", "MISCSETTINGS", obj);
@@ -214,6 +217,8 @@ const MiscellaneousSettingsSlice = createSlice({
 
             if (saved_data.showFullResPreviews) state.showFullResPreviews = true;
 
+            if (saved_data.disableChannelIcons) state.disableChannelIcons = true;
+
           //  if (saved_data.popOutUserStreams) state.popOutUserStreams = true;
         }
     }
@@ -260,6 +265,8 @@ export const selectDisableMediaWidget = state => state.MiscellaneousSettingsSlic
 export const selectVideoVolume = state => state.MiscellaneousSettingsSlice.videoVolume;
 
 export const selectShowFullResPreviews = state => state.MiscellaneousSettingsSlice.showFullResPreviews;
+
+export const selectDisableChannelIcons = state => state.MiscellaneousSettingsSlice.disableChannelIcons;
 
 export const {setVideoVolume, pushPokeNotification, pushSytemNotification, setDefaultServer, changeRoomScale, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, miscSettingsClearError, miscSettingsChannelSpecificStateChange } = MiscellaneousSettingsSlice.actions;
 

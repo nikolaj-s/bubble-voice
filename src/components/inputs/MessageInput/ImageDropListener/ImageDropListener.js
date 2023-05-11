@@ -5,8 +5,10 @@ export const ImageDropListener = (props) => {
 
     const [dragged, toggleDragged] = React.useState(false);
 
-    const handleDragOver = () => {
+    const handleDragOver = (e) => {
         
+        e.stopPropagation();
+
         toggleDragged(true);
         
     }

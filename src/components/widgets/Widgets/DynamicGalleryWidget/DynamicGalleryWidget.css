@@ -4,6 +4,7 @@
     height: 600px;
     overflow: hidden;
     position: relative;
+    border-radius: var(--border-radius);
 }
 
 .dynamic-gallery-widget .image-gallery-animation-wrapper {
@@ -18,8 +19,8 @@
     left: 0;
     top: 0;
     height: 100%;
-    width: 15%;
-    opacity: 0;
+    width: 30px;
+    opacity: 0.3;
     z-index: 1;
     cursor: pointer;
     max-width: 80px;
@@ -30,8 +31,8 @@
     right: 0;
     top: 0;
     height: 100%;
-    width: 15%;
-    opacity: 0;
+    width: 30px;
+    opacity: 0.3;
     z-index: 1;
     cursor: pointer;
     max-width: 80px;
@@ -39,5 +40,5 @@
 
 .dynamic-gallery-widget .prev:hover,
 .dynamic-gallery-widget .next:hover {
-    opacity: 0.8;
+    opacity: 0.6;
 }

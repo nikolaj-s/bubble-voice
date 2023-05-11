@@ -29,12 +29,12 @@ export const GalleryNavigation = ({images, action, currentIndex}) => {
                     <div
                     key={key + "gallery-nav-prev"}
                     style={{
-                        width: 15,
-                        height: 15,
-                        borderRadius: '50%',
+                        width: 12,
+                        height: 5,
+                        borderRadius: '10px',
                         backgroundColor: index === key ? textColor : primaryColor,
                         flexShrink: 0,
-                        margin: '0 0.5rem'
+                        margin: '0 0.1rem'
                     }}
                     ></div>
                 )

@@ -8,7 +8,7 @@ import * as mediasoupClient from 'mediasoup-client';
 // state
 import { selectCurrentChannel, selectCurrentChannelId, selectPushToTalkActive, selectServerId, toggleLoadingChannel, updateMemberStatus, selectServerMembers, throwServerError, updateJoiningChannelState, setChannelSocialId, selectReconnectingState, toggleReconnectingState, checkConnection, clearServerPing } from '../../ServerSlice';
 import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPushToTalkState, selectMirroredWebCamState, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, selectVoiceActivationSensitivity, selectAutoGainControl, selectVoiceDeactivationDelayState, selectAdvancedVoiceActivation } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
-import { selectDisplayName, selectProfilePictureShape, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
+import { selectDisplayName, selectProfileColor, selectProfilePictureShape, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { playSoundEffect, selectMuteSoundEffectsWhileMutedState } from '../../../settings/soundEffects/soundEffectsSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 import { selectAudioState, selectCurrentScreen, selectMicrophoneState, selectScreenShareState, selectWebCamState, setCurrentScreen, setScreens, setSelectingScreensState, toggleConnectionError, toggleConnectionLoading, toggleControlState, toggleLoadingScreenShare, toggleLoadingWebCam } from '../../../controlBar/ControlBarSlice';
@@ -106,6 +106,8 @@ const Component = () => {
 
     const profileImageShape = useSelector(selectProfilePictureShape);
 
+    const profileColor = useSelector(selectProfileColor);
+
     React.useEffect(() => {
         
         if (client) {
@@ -150,7 +152,8 @@ const Component = () => {
         user_banner: userBanner,
         user_image: userImage,
         mirror_web_cam: webCamMirroredState,
-        profile_picture_shape: profileImageShape
+        profile_picture_shape: profileImageShape,
+        color: profileColor
     }
 
     const event = (arg) => {
@@ -703,7 +706,7 @@ const Component = () => {
             client?.closeProducer('audioType');
             
         }
-        console.log(microphoneState)
+        
         return () => {
             captureTimeout && clearTimeout(captureTimeout)
             if (scriptProcessor) {
@@ -723,7 +726,7 @@ const Component = () => {
         if (page === 'social' || page === 'widgets' || musicExpanded === true || page === 'pins' || page === 'media') {
             if (popOutUserStreams) {
                 document.getElementById('user-streams-wrapper').style.position = 'fixed';
-                document.getElementById('user-streams-wrapper').style.left = '-15px';
+                document.getElementById('user-streams-wrapper').style.left = '40px';
                 document.getElementById('user-streams-wrapper').style.width = "240px";
                 document.getElementById('user-streams-wrapper').style.top = 0;
                 document.getElementById('user-streams-wrapper').style.opacity = 1;
@@ -749,13 +752,12 @@ const Component = () => {
     // eslint-disable-next-line      
     }, [page, popOutUserStreams, musicExpanded])
 
-    
     return (
         <>
         <div className='room-wrapper-outer'>
             <div
             style={
-                (hideChannelBackgrounds || channel.channel_background === undefined) ? {backgroundColor: glass ? glassColor : secondaryColor} : null
+                (hideChannelBackgrounds || channel.channel_background === undefined) && page !== 'voice' || page === 'social' || page === 'media' || page === 'pins' ? {backgroundColor: glass ? glassColor : secondaryColor} : null
                 
             }
             id='live-chat-wrapper'>

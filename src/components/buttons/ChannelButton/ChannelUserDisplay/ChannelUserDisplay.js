@@ -10,7 +10,7 @@ import { Image } from '../../../Image/Image';
 import { MicMuted } from '../../../Icons/MicMuted/MicMuted';
 
 // state
-import { selectSecondaryColor, selectActivationColor, selectTextColor, selectAccentColor, selectPrimaryColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectActivationColor, selectTextColor, selectAccentColor, selectPrimaryColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./ChannelUserDisplay.css";
@@ -20,15 +20,13 @@ import { USER_PREFS } from '../../../../util/LocalData';
 import { DisabledWebCamIcon } from '../../../Icons/DisabledWebCamIcon/DisabledWebCamIcon';
 import { DisabledStreamIcon } from '../../../Icons/DisabledStreamIcon/DisabledStreamIcon';
 import { setPanelPosition, setSelectedMember } from '../../../../features/server/ChannelRoom/MemberPanel/MemberPanelSlice';
-import { selectServerMembers } from '../../../../features/server/ServerSlice';
+import { selectCurrentChannelId } from '../../../../features/server/ServerSlice';
 
 export const ChannelUserDisplay = ({user, channel_id}) => {
 
     const [hover, toggleHover] = React.useState(false);
 
     const dispatch = useDispatch();
-
-    const secondaryColor = useSelector(selectSecondaryColor);
 
     const activityColor = useSelector(selectActivationColor);
 
@@ -38,15 +36,14 @@ export const ChannelUserDisplay = ({user, channel_id}) => {
 
     const accentColor = useSelector(selectAccentColor);
 
-    const members = useSelector(selectServerMembers);
-    
     const PREFS = USER_PREFS.get(user._id)
+
+    const currentChannelId = useSelector(selectCurrentChannelId);
 
     const hoverEffect = (e, bool) => {
 
         toggleHover(bool);
 
-        document.getElementById(`${user._id}-channel-user-display-channel-id-${channel_id}`).style.backgroundColor = bool ? primaryColor : null;
     }
 
     const openMemberPanel = (e) => {
@@ -72,9 +69,9 @@ export const ChannelUserDisplay = ({user, channel_id}) => {
     }
 
     return (
-        <div onDragStart={onDragStart} onDragEnd={onDragEnd} draggable={true} onClick={openMemberPanel} onMouseEnter={(e) => {hoverEffect(e, true)}} onMouseLeave={(e) => {hoverEffect(e, false)}} id={`${user._id}-channel-user-display-channel-id-${channel_id}`} style={{zIndex: 1}} key={user.username} className='channel-user-placeholder'>
+        <div onDragStart={onDragStart} onDragEnd={onDragEnd} draggable={true} onClick={openMemberPanel} onMouseEnter={(e) => {hoverEffect(e, true)}} onMouseLeave={(e) => {hoverEffect(e, false)}} id={`${user._id}-channel-user-display-channel-id-${channel_id}`} style={{zIndex: 1, backgroundColor: hover ? primaryColor : null}} key={user.username} className='channel-user-placeholder'>
             <div 
-            style={{border: (user.active && user.microphone) ? `solid 2px ${activityColor}` : null, borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%', width: (user.active && user.microphone) ? 26 : 30, height: (user.active && user.microphone) ? 26 : 30}}
+            style={{border: (user.active && user.microphone && currentChannelId === channel_id) ? `solid 2px ${activityColor}` : null, borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%', width: (user.active && user.microphone) ? 26 : 30, height: (user.active && user.microphone) ? 26 : 30}}
             className='channel-user-placeholder-user-image'>
                 <Image cursor='pointer' objectFit='cover' image={user.user_image} />
             </div>

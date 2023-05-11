@@ -27,7 +27,13 @@ const soundEffectsSlice = createSlice({
         muteSoundEffectsWhileMutedState: false,
         soundEffectsQueue: [],
         currentVoiceOver: {label: "Female", state: 'female'},
-        voiceOverOptions: [{label: "Female", state: 'female'}, {label: "Male", state: "male"}]
+        voiceOverOptions: [{label: "Female", state: 'female'}, {label: "Male", state: "male"}],
+        dynamicVoiceAlerts: false,
+        selectedDynamicVoice: 0,
+        voices: [],
+        rate: 1,
+        pitch: 1
+
     },
     reducers: {
         
@@ -40,6 +46,8 @@ const soundEffectsSlice = createSlice({
         playSoundEffect: (state, action) => {
            
             if (state.soundEffectsQueue[0] === action.payload) return;
+
+            if (action.payload?.default && (action.payload?.default ===state.soundEffectsQueue[0]?.default)) return;
 
             state.soundEffectsQueue.push(action.payload);
         },
@@ -58,7 +66,11 @@ const soundEffectsSlice = createSlice({
             const obj = {
                 socialSoundEffect: state.socialSoundEffect,
                 muteSoundEffectsWhileMutedState: state.muteSoundEffectsWhileMutedState,
-                currentVoiceOver: state.currentVoiceOver
+                currentVoiceOver: state.currentVoiceOver,
+                dynamicVoiceAlerts: state.dynamicVoiceAlerts,
+                selectedDynamicVoice: state.selectedDynamicVoice,
+                rate: state.rate,
+                pitch: state.pitch
             }
 
             saveLocalData("APPAUDIOPREF", "AUDIOPREF", obj);
@@ -89,6 +101,16 @@ const soundEffectsSlice = createSlice({
             if (action.payload.currentVoiceOver) {
                 state.currentVoiceOver = action.payload.currentVoiceOver;
             }
+
+            if (action.payload.dynamicVoiceAlerts) state.dynamicVoiceAlerts = true;
+
+            if (action.payload.selectedDynamicVoice) state.selectedDynamicVoice = action.payload.selectedDynamicVoice;
+
+            if (action.payload.rate) state.rate = action.payload.rate;
+
+            if (action.payload.pitch) state.pitch = action.payload.pitch;
+        
+            state.voices = speechSynthesis.getVoices();
         }
     }
 })
@@ -108,6 +130,17 @@ export const selectSoundEffectQueue = state => state.soundEffectsSlice.soundEffe
 export const selectCurrentVoiceOver = state => state.soundEffectsSlice.currentVoiceOver;
 
 export const selectVoiceOverOptions = state => state.soundEffectsSlice.voiceOverOptions;
+
+export const selectDynamicVoiceAlerts = state => state.soundEffectsSlice.dynamicVoiceAlerts;
+
+export const selectVoices = state => state.soundEffectsSlice.voices;
+
+export const selectCurrentDynamicVoice = state => state.soundEffectsSlice.selectedDynamicVoice;
+
+export const selectVoiceRate = state => state.soundEffectsSlice.rate;
+
+export const selectVoicePitch = state => state.soundEffectsSlice.pitch;
+
 
 // actions
 

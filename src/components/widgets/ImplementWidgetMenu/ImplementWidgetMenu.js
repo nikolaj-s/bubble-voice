@@ -235,14 +235,8 @@ export const ImplementWidgetMenu = ({active = false, type, name, close}) => {
                     {type === 'plainText' || type === 'list' ? <TextArea inputValue={textValue} action={handleTextValue} placeHolder={"Text"} /> : null}
                     {type === 'image' ? 
                     <div className='adding-widget-image'>
-                        <ImageInput getFile={handleSetImage} borderRadius='5px' /> 
+                        <ImageInput maxDimensions={1280} getFile={handleSetImage} borderRadius='5px' /> 
                     </div>
-                    : null}
-                    {type === "dynamicGallery" ? 
-                    <InputTitle title={"Content Filter"} />
-                    : null}
-                    {type === "dynamicGallery" ? 
-                    <ToggleButton state={boolState} action={handleToggleBoolState} />
                     : null}
                     
                     {type === 'video' ? <TextInput marginBottom='2%' inputValue={textValue} action={handleTextValue} placeholder={"Video URL"} /> : null}

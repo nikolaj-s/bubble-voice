@@ -36,7 +36,7 @@ export const SimpleImageCarousel = ({images = [], expand}) => {
             <div style={{backgroundColor: accentColor}} onClick={incr} className='incr-control'></div>
             <div className='position-indicator-wrapper'>
                 {images.map((item, key) => {
-                    return <div onClick={() => {setIndex(key)}} style={{width: 14, heigh: 14, flexShrink: 0, borderRadius: '50%', backgroundColor: key === index ? accentColor : primaryColor, margin: '5px'}} ></div>
+                    return <div onClick={() => {setIndex(key)}} style={{width: 12, height: 5, flexShrink: 0, borderRadius: 5, backgroundColor: key === index ? accentColor : primaryColor, margin: '2px'}} ></div>
                 })}
             </div>
         </div>

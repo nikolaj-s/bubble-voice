@@ -22,16 +22,23 @@ export const UserBio = ({bio = "", margin}) => {
         <>
         {bio.length > 0 ?
         <div style={{backgroundColor: primaryColor, margin: margin}} className='user-bio-preview-container'>
-            <p style={{color: textColor}}>
-            {bio.split(' ').map(i => {
-                return (i.includes('.jpg') || i.includes('.png') || i.includes('.jpeg') || i.includes('.gif') ?
-                <div onClick={() => {expand(i)}} className='mini-bio-image'>
-                    <Image cursor='pointer' image={i} />
-                </div>
-                : 
-                i + " ")
-            })}
-            </p>
+            <h2 style={{color: textColor, fontWeight: '400', margin: '5px 0px'}}>Bio</h2>
+            <div className='inner-bio-wrapper'>
+                <p style={{color: textColor}}>
+                {bio.split(' ').map(i => {
+                    return (i.includes('.jpg') || i.includes('.png') || i.includes('.jpeg') || i.includes('.gif') ?
+                    <div onClick={() => {expand(i)}} className='mini-bio-image'>
+                        <Image cursor='pointer' image={i} />
+                    </div>
+                    : 
+                    i.startsWith('https') ?
+                    <a href={i}>{i}</a>
+                    :
+                    i + " ")
+                })}
+                </p>
+            </div>
+            
         </div>
         : null}
         </>

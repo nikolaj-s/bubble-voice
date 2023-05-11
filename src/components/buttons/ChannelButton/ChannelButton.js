@@ -21,6 +21,8 @@ import { LockedChannelIcon } from '../../Icons/LockedChannelIcon/LockedChannelIc
 import { TextOnlyIcon } from '../../Icons/TextOnlyIcon/TextOnlyIcon';
 import { handleChangePage } from '../../../features/server/ChannelRoom/ServerNavigation/ServerNavigationSlice';
 import { selectUsername } from '../../../features/settings/appSettings/accountSettings/accountSettingsSlice';
+import { ChannelImageIcon } from '../../ChannelImageIcon/ChannelImageIcon';
+import { selectDisableChannelIcons } from '../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 
 export const ChannelButton = ({channel, action = () => {}, users, index}) => {
@@ -50,6 +52,8 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
     const username = useSelector(selectUsername);
 
     const active = window.location.hash.includes(channel._id);
+
+    const disableChannelIcons = useSelector(selectDisableChannelIcons);
 
     const handleAnimation = (color, enter) => {
         if (enter) {
@@ -190,6 +194,8 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
             className='channel-button-container'>
                 <div style={{backgroundColor: unReadMessage && channel.auth ? textColor : null}} className='unread-message-indicator'></div>   
                 <div style={{opacity: (active || mouseEnter || unReadMessage) && channel.auth ? 1 : 0.7}} className='channel-status-icon-container'>
+                    {(channel.icon && disableChannelIcons === false) ?
+                    <ChannelImageIcon image={channel.icon} /> : null}
                     {channel.locked_channel ?
                     <LockedChannelIcon /> :
                     channel.text_only ?

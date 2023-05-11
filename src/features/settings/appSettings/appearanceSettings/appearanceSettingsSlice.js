@@ -233,7 +233,7 @@ const appearanceSettingsSlice = createSlice({
 
                 if (action.payload.disableServerAmbiance) state.disableServerAmbiance = true;
 
-                state.glassColor = `rgba(${state.secondaryColor.split('rgb(')[1].split(')')[0]}, 0.75)`
+                state.glassColor = `rgba(${state.secondaryColor.split('rgb(')[1].split(')')[0]}, 0.6)`
 
                 return;
             } catch (error) {

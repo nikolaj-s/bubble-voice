@@ -31,6 +31,7 @@
     flex: 1;
     z-index: 5;
     transition: 0.1s;
+    
 }
 
 .streaming-video-player-container {
@@ -44,6 +45,8 @@
     margin: 5px;
     cursor: pointer;
     background-color: black;
+    max-width: 960px;
+    max-height: 540px;
 }
 
 #live-chat-wrapper .streaming-video-player {

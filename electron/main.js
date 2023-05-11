@@ -499,6 +499,11 @@ ipcMain.on('check-for-updates', async (event, data) => {
 
   })
 
+  autoUpdater.on('update-not-available', () => {
+    console.log('no update')
+    event.sender.send('no-update');
+  })
+
 })
 
 ipcMain.on('restart-to-update', (event, data) => {

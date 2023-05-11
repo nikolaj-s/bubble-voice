@@ -9,6 +9,8 @@ import { selectCurrentAppVersion } from '../../app/appSlice';
 // style
 import "./AppVersion.css";
 
+import { Loading } from '../LoadingComponents/Loading/Loading';
+
 export const AppVersion = () => {
     
     const color = useSelector(selectTextColor);
@@ -16,6 +18,8 @@ export const AppVersion = () => {
     const secondaryColor = useSelector(selectSecondaryColor);
 
     const appVersion = useSelector(selectCurrentAppVersion);
+
+    const [loading, toggleLoading] = React.useState(false);
 
     const openLink = () => {
         
@@ -31,6 +35,28 @@ export const AppVersion = () => {
     
     }
 
+    const checkForUpdate = async () => {
+
+        let ipcRenderer;
+
+        if (loading) return;
+
+        try {
+            toggleLoading(true);
+
+            ipcRenderer = window.require('electron').ipcRenderer;
+
+            ipcRenderer.send('check-for-updates');
+
+            setTimeout(() => {
+                toggleLoading(false);
+            }, 6000)
+        } catch (err) {
+            toggleLoading(false)
+        }
+        
+    }
+
     return (
         <div 
         style={{backgroundColor: secondaryColor}}
@@ -39,7 +65,9 @@ export const AppVersion = () => {
             style={{color: color}}
             >App Version: {appVersion}</p>
             <p style={{color: color}}>Copyright Bubble 2023</p>
-            <p onClick={openLink} style={{color: color, cursor: 'pointer'}}>Release Notes</p>
+            <p className='app-version-buttons' onClick={openLink} style={{color: color, cursor: 'pointer'}}>Release Notes</p>
+            <p onClick={checkForUpdate} className='app-version-buttons' style={{color: color, cursor: 'pointer'}}>Check For Updates</p>
+            <Loading loading={loading} />
         </div>
     )
 }

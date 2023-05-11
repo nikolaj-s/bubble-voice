@@ -59,7 +59,8 @@ export const UserStatusMenu = ({close = () => {}}) => {
     }
 
     const save = () => {
-        dispatch(updateUserStatus({value: value === 'custom' ? customStatus : value}))
+        
+        dispatch(updateUserStatus({value: value !== 'online' || value !== 'offline' || value !== 'away' ? customStatus : value}))
         
         close();
     }

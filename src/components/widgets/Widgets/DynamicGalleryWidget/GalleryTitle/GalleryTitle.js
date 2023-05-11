@@ -13,7 +13,7 @@ export const GalleryTitle = ({title}) => {
         {title ?
         <div className='gallery-title-container'>
             <h3
-            style={{color: textColor}}
+            style={{color: textColor, textTransform: 'capitalize'}}
             >{title}</h3>
         </div>
         : null}

@@ -28,7 +28,13 @@ export const ImageInput = ({
     blur = false,
     blur_amount = 8,
     size = 1000000,
-    showShadow = false
+    maxSize = 0.6,
+    showShadow = false,
+    borderWidth = 2,
+    maxDimensions = 1920,
+    disableIcon = false,
+    imageProcessingFontSize,
+    getColor = () => {}
 }) => {
 
     // state
@@ -66,7 +72,7 @@ export const ImageInput = ({
 
             toggleProcessingImage(true);
             
-            const options = {maxSizeMB: 0.6, onProgress: handlePercent, maxIteration: 30, type: acceptedFiles[0].type}
+            const options = {maxSizeMB: maxSize, onProgress: handlePercent, maxIteration: 30, type: acceptedFiles[0].type, maxWidthOrHeight: maxDimensions}
 
             let compressed_image;
 
@@ -104,7 +110,7 @@ export const ImageInput = ({
     // handle animation's
     const animateEntry = (arg, leaving) => {
         animation.start({
-            border: `solid 4px ${arg}`
+            border: `solid ${borderWidth}px ${arg}`
         })
 
         if (leaving === false) {
@@ -125,11 +131,14 @@ export const ImageInput = ({
         const color = GetImageColorData(e);
 
         setShadow(color);
+
+        getColor(color);
     }
 
     return (
         <AnimatePresence>
         <motion.div 
+        transition={{duration: 0.1}}
         animate={animation}
         onMouseEnter={() => {
             animateEntry(accentColor, false);
@@ -150,7 +159,7 @@ export const ImageInput = ({
             overflow: 'hidden',
             cursor: 'pointer',
             borderRadius: borderRadius,
-            border: `2px solid ${primaryColor}`,
+            border: `${borderWidth}px solid ${primaryColor}`,
             zIndex: zIndex,
             left: "50%" ,
             top: "50%",
@@ -163,9 +172,9 @@ export const ImageInput = ({
             <input {...getInputProps()} />
             <Image onLoad={onLoad} opacity={blur_amount} disableErr={true} cursor='pointer' image={files[0]?.preview} />
             
-            <ImageIcon cursor={'pointer'} center={center} zIndex={zIndex} animation={iconAnimation} />
+            {disableIcon ? null : <ImageIcon cursor={'pointer'} center={center} zIndex={zIndex} animation={iconAnimation} />}
         </motion.div>
-        {processingImage ? <ImageInputProcessingIndicator key={"image-processing-indicator"} value={percent} /> : null}
+        {processingImage ? <ImageInputProcessingIndicator fontSize={imageProcessingFontSize} key={"image-processing-indicator"} value={percent} /> : null}
         </AnimatePresence>
     )
 }

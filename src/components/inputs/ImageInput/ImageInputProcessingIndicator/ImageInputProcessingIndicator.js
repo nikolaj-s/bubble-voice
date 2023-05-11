@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { selectSecondaryColor, selectTextColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { motion } from 'framer-motion';
 
-export const ImageInputProcessingIndicator = ({value}) => {
+export const ImageInputProcessingIndicator = ({value, fontSize = '2rem'}) => {
 
     const color = useSelector(selectTextColor);
 
@@ -45,7 +45,7 @@ export const ImageInputProcessingIndicator = ({value}) => {
             }}>
                 <p style={{
                     color: color,
-                    fontSize: '2rem',
+                    fontSize: fontSize,
                     textAlign: 'center'
                 }}>Compressing: {value}%</p>
             </div>

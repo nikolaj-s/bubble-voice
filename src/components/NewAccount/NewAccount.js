@@ -21,6 +21,8 @@ export const NewAccount = ({mobile = false}) => {
 
     const [newUserBanner, setNewUserBanner] = React.useState({});
 
+    const [color, setColor] = React.useState("");
+
     const newAccount = useSelector(selectNewAccountState);
 
     const primaryColor = useSelector(selectPrimaryColor);
@@ -32,18 +34,7 @@ export const NewAccount = ({mobile = false}) => {
     const loading = useSelector(selectAccountSettingsLoading);
     
     const handleAdvance = (skip = false) => {
-        if (page === 'setup' && skip === false) return setPage("how-to-join");
-
-        if (page === 'how-to-join' && skip === false) return setPage("navigate-a-server");
-
-        if (skip || page === 'navigate-a-server') return dispatch(updateAccount({userImage: newUserImage, userBanner: newUserBanner}))
-        
-    }
-
-    const handlePrev = () => {
-        if (page === 'how-to-join') return setPage('setup');
-
-        if (page === 'navigate-a-server') return setPage('how-to-join')
+        dispatch(updateAccount({userImage: newUserImage, userBanner: newUserBanner, newShape: 'circle', color: color}))
     }
 
     return (
@@ -59,15 +50,12 @@ export const NewAccount = ({mobile = false}) => {
                 className='inner-new-account-state-container'>
                     <SettingsHeader title={"Welcome To Bubble"} />
                     <AnimatePresence exitBeforeEnter>
-                        {page === 'setup' ? <FinishSettingUp key={"account"} setNewUserBanner={setNewUserBanner} setNewUserImage={setNewUserImage} /> : null}
-                        {page === 'how-to-join' ? <HowToJoinAServer key={"how-to-join"} /> : null}
-                        {page === 'navigate-a-server' ? <NavigatingAServer key={"how-to-navigate"} /> : null}
+                        <FinishSettingUp getColor={(c) => {setColor(c)}} key={"account"} setNewUserBanner={setNewUserBanner} setNewUserImage={setNewUserImage} />
                     </AnimatePresence>
                     <div className='new-account-nav-container'>
-                        <h3 onClick={() => {handleAdvance(true)}} style={{color: textColor}}>Skip</h3>
-                        {page !== 'setup' ? <h3 onClick={handlePrev} className="new-account-prev-button" style={{color: textColor}}>Prev</h3> : null}
+                       
                         <div onClick={() => {handleAdvance(false)}} style={{backgroundColor: primaryColor}} className='new-next-button-container'>
-                            <h3 style={{color: textColor}}>{page === 'navigate-a-server' ? "Finish" : "Next"}</h3>
+                            <h3 style={{color: textColor}}>Finish</h3>
                         </div>
                     </div>
                     <Loading loading={loading} />

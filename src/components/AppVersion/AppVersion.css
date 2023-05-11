@@ -2,6 +2,7 @@
 .app-version-container {
     width: calc(100% - 20px);
     padding: 0 10px;
+    position: relative;
 }
 
 .app-version-container P {
@@ -11,4 +12,8 @@
     font-weight: 400;
     letter-spacing: var(--font-spacing);
     opacity: 0.6;
+}
+
+.app-version-buttons:hover {
+    text-decoration: underline;
 }

@@ -11,13 +11,10 @@ import { Image } from '../Image/Image';
 
 // styles
 import "./ServerBanner.css";
-import { HideButton } from '../buttons/HideButton/HideButton';
 import { setServerbannerAmbiance } from '../../features/server/ServerSlice';
 import { GetImageColorData } from '../../util/GetImageColorData';
 
 export const ServerBanner = ({serverName, serverImage}) => {
-
-    const [hideServerBar, toggleHideServerBar] = React.useState(false);
 
     const color = useSelector(selectTextColor);
 
@@ -26,18 +23,6 @@ export const ServerBanner = ({serverName, serverImage}) => {
     const secondaryColor = useSelector(selectSecondaryColor);
 
     const disableServerAmbiance = useSelector(selectServerAmbiance);
-
-    const handleHideServerBar = () => {
-        if (hideServerBar) {
-            document.getElementById('side-server-list-wrapper').style.display = 'flex';
-            document.getElementById('side-server-list-wrapper').style.width = '55px';
-        } else {
-            document.getElementById('side-server-list-wrapper').style.display = 'none';
-            document.getElementById('side-server-list-wrapper').style.width = '0px';
-        }
-
-        toggleHideServerBar(!hideServerBar)
-    }
 
     React.useEffect(() => {
 
@@ -81,7 +66,6 @@ export const ServerBanner = ({serverName, serverImage}) => {
             
             transition={{duration: 0.3}}
             className='server-title-overlay'>
-                <HideButton hiddenState={hideServerBar} action={handleHideServerBar} flip_description={true} invert={false} altInvert={true} width={15} height={15} padding={4} margin={"0 0 0 3px"} />
                 <h2
                 style={{color: color}}
                 >{serverName}</h2>

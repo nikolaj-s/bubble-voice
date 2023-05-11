@@ -4,17 +4,18 @@
     flex-direction: column;
     align-items: center;
     position: relative;
+    z-index: 2;
 }
 
 .drop-down-content {
     max-height: 300px;
     overflow-y: auto;
-    width: 95%;
+    width: 100%;
     border-bottom-left-radius: var(--border-radius);
     border-bottom-right-radius: var(--border-radius);
     position: absolute;
-    z-index: 1;
-    top: 40px;
+    z-index: 0;
+    top: 38px;
 }
 
 .drop-down-content li {

@@ -48,6 +48,7 @@ export const TextArea = ({action = () => {}, placeHolder, inputValue = "", margi
         }}
         >
             <textarea 
+            onBlur={returnInputValue}
             onChange={returnInputValue} style={{color: textColor, backgroundColor: color}} placeholder={placeHolder} value={inputValue} />
             <p className='text-area-character-counter' style={{color: textColor}}>{inputValue?.length} / {maxLength} </p>
         </motion.div>

@@ -7,7 +7,6 @@ import { useSelector } from 'react-redux';
 import { selectCurrentChannel } from '../../../ServerSlice';
 
 // components
-import { SettingsSpacer } from '../../../../../components/Spacers/SettingsSpacer/SettingsSpacer'
 import { WidgetPreview } from '../../../../../components/widgets/WidgetPreview/WidgetPreview';
 
 // style

@@ -1,7 +1,7 @@
 
 // library's
 import React from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 // state
 import { setHeaderTitle } from '../contentScreen/contentScreenSlice';
@@ -21,11 +21,15 @@ import { Profile } from '../Profile/Profile';
 import { Explore } from '../Explore/Explore';
 import { Messages } from '../Messages/Messages';
 import { ServerBannerAmbiance } from '../../components/ServerBannerAmbiance/ServerBannerAmbiance';
+import { selectingScreensState } from '../controlBar/ControlBarSlice';
+import { ScreenShareMenu } from '../controlBar/ScreenShareMenu/ScreenShareMenu';
 
 
 export const Dashboard = () => {
 
     const dispatch = useDispatch();
+
+    const selectingScreens = useSelector(selectingScreensState);
 
     React.useEffect(() => {
         // disable app title on dashboard mount
@@ -52,6 +56,7 @@ export const Dashboard = () => {
             <Explore />
             <Messages />
             <ServerBannerAmbiance />
+            <ScreenShareMenu selectingScreens={selectingScreens} />
         </div>
     )
 }

@@ -9,13 +9,12 @@ import { SettingsButton } from '../../components/buttons/settingsButton/settings
 import { MicToggleButton } from '../../components/buttons/mediaButtons/micToggleButton/MicToggleButton';
 import { AudioToggleButton } from '../../components/buttons/mediaButtons/audioToggleButton/AudioToggleButton';
 import { ShareScreenButton } from '../../components/buttons/mediaButtons/shareScreenButton/ShareScreenButton';
-import { ScreenShareMenu } from './ScreenShareMenu/ScreenShareMenu';
 
 // state
-import { resetControlState, selectAudioState, selectingScreensState, selectLoadingScreenShare, selectLoadingWebCam, selectMicrophoneState, selectScreenShareState, selectWebCamState, toggleControlState, toggleLoadingWebCam } from './ControlBarSlice';
+import { resetControlState, selectAudioState, selectLoadingScreenShare, selectLoadingWebCam, selectMicrophoneState, selectScreenShareState, selectWebCamState, toggleControlState, toggleLoadingWebCam } from './ControlBarSlice';
 import { selectCurrentChannel, selectCurrentChannelId } from '../server/ServerSlice';
 import { playSoundEffect } from '../settings/soundEffects/soundEffectsSlice';
-import { selectGlassColor, selectGlassState, selectPrimaryColor, selectSecondaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectSecondaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style's
 import "./ControlBar.css";
@@ -41,19 +40,11 @@ export const ControlBar = () => {
 
     const channel = useSelector(selectCurrentChannel);
 
-    const selectingScreens = useSelector(selectingScreensState);
-
-    const accentColor = useSelector(selectPrimaryColor);
-
     const secondaryColor = useSelector(selectSecondaryColor);
 
     const loadingWebCam = useSelector(selectLoadingWebCam);
 
     const loadingScreenShare = useSelector(selectLoadingScreenShare);
-
-    const glass = useSelector(selectGlassState);
-
-    const glassColor = useSelector(selectGlassColor);
 
     const toggleFunction = (state) => {
 
@@ -116,7 +107,6 @@ export const ControlBar = () => {
 
     return (
         <>
-            <ScreenShareMenu selectingScreens={selectingScreens} />
             <div className='control-bar-container' 
             style={{backgroundColor: secondaryColor, marginTop: '1px'}}
             >

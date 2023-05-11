@@ -1,6 +1,6 @@
 {
   "name": "bubble",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "private": false,
   "dependencies": {
     "@popmotion/popcorn": "^0.4.4",

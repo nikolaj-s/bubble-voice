@@ -19,9 +19,8 @@
     border-radius: var(--border-radius);
     overflow: hidden;
     right: 160px;
-    padding-bottom: .5rem;
     top: 50px;
-    height: calc(100% - 80px);
+    height: calc(100% - 70px);
     box-shadow: -4px -4px 30px rgba(0, 0, 0, 0.424);
 }
 
@@ -34,6 +33,14 @@
     align-items: center;
 }
 
+.username-wrapper-container {
+    margin-bottom: 5px;
+    border-radius: var(--border-radius);
+    width: calc(100% - 10px);
+    padding: 5px;
+    min-height: 45px;
+}
+
 .member-panel-profile-picture {
     width: 150px;
     height: 150px;
@@ -42,9 +49,9 @@
 }
 
 .member-panel-info-container {
-    height: calc(100% - 250px);
+    height: calc(100% - 240px);
     bottom: 0;
-    width: calc(100% - 2rem);
+    width: calc(100% - 10px);
     display: flex;
     flex-direction: column;
     padding: 0.5rem;
@@ -88,10 +95,29 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 5px 0px;
     width: 100%;
+    margin-bottom: 5px;
 }
 
 .member-panel-button-wrapper .text-button {
-    width: 45%;
+    width: 50%;
+}
+
+#member-panel-poke-button {
+    margin-right: 5px;
+}
+
+.server-user-details-wrapper-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: calc(100% - 10px);
+    padding: 5px;
+    border-radius: var(--border-radius);
+}
+
+.server-user-details-wrapper-container h3,
+.server-user-details-wrapper-container p {
+    width: 100%;
+    text-align: start;
 }

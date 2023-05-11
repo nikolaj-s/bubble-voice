@@ -21,6 +21,7 @@ import "./WidgetPreview.css";
 import { MusicWidget } from '../Widgets/MusicWIdget/MusicWIdget';
 import { WheelSpinWidget } from '../Widgets/WheelSpinWidget/WheelSpinWidget';
 import { MoveButton } from '../../buttons/MoveButton/MoveButton';
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 
 export const WidgetPreview = ({widgets = [], editing = false, reorder}) => {
 
@@ -54,20 +55,26 @@ export const WidgetPreview = ({widgets = [], editing = false, reorder}) => {
                 )
             })}
             </Reorder.Group>
-            : widgets.map((widget, key) => {
-                return (
-                    <>
-                    {widget.type === 'title' ? <TitleWidget key={widget._id + key} widget={widget} /> : null}
-                    {widget.type === 'plainText' ? <PlainTextWidget key={widget._id + key} widget={widget} /> : null}
-                    {widget.type === 'list' ? <ListWidget key={widget._id + key} widget={widget} /> : null}
-                    {widget.type === 'image' ? <ImageWidget key={widget._id + key} widget={widget} /> : null}
-                    {widget.type === 'video' ? <VideoWidget key={widget._id + key} widget={widget} /> : null}
-                    {widget.type === 'dynamicGallery' ? <DynamicGalleryWidget key={widget._id} widget={widget} /> : null}
-                    {widget.type === 'music' ? <MusicWidget widget={widget} key={widget._id + key} /> : null}
-                    {widget.type === 'wheel-spin' ? <WheelSpinWidget key={widget._id + key} widget={widget} /> : null}
-                    </>
-                )
-            })}
+            : 
+            <ResponsiveMasonry style={{width: '100%'}} columnsCountBreakPoints={{1299: 1, 1300: 2, 2000: 3}}>
+                <Masonry gutter='2px'>
+                {widgets.map((widget, key) => {
+                    return (
+                        <>
+                        {widget.type === 'title' ? <TitleWidget key={widget._id + key} widget={widget} /> : null}
+                        {widget.type === 'plainText' ? <PlainTextWidget key={widget._id + key} widget={widget} /> : null}
+                        {widget.type === 'list' ? <ListWidget key={widget._id + key} widget={widget} /> : null}
+                        {widget.type === 'image' ? <ImageWidget key={widget._id + key} widget={widget} /> : null}
+                        {widget.type === 'video' ? <VideoWidget key={widget._id + key} widget={widget} /> : null}
+                        {widget.type === 'dynamicGallery' ? <DynamicGalleryWidget key={widget._id} widget={widget} /> : null}
+                        {widget.type === 'music' ? <MusicWidget widget={widget} key={widget._id + key} /> : null}
+                        {widget.type === 'wheel-spin' ? <WheelSpinWidget key={widget._id + key} widget={widget} /> : null}
+                        </>
+                    )
+                })}
+                </Masonry>
+            </ResponsiveMasonry >
+            }
         </div>
     )
 }

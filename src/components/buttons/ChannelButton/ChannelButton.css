@@ -49,6 +49,9 @@
 }
 
 .channel-status-icon-container {
-    margin-right: 10px;
-    margin-top: 3px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 33px;
 }

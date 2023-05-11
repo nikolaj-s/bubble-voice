@@ -16,7 +16,7 @@ import { selectSecondaryColor } from '../../../features/settings/appSettings/app
 import "./Loading.css";
 
 
-export const Loading = ({loading = false, error = false, overflow = true, success_size = {width: 75, height: 75}, show_success = true, zIndex = 6}) => {
+export const Loading = ({loading = false, error = false, overflow = true, success_size = {width: 75, height: 75}, show_success = true, zIndex = 6, forceStop}) => {
 
     const [localLoading, toggleLoading] = React.useState(false);
 
@@ -75,6 +75,17 @@ export const Loading = ({loading = false, error = false, overflow = true, succes
         }
     // eslint-disable-next-line
     }, [error, loading])
+
+    React.useEffect(() => {
+
+        if (loading === false && forceStop) {
+            toggleMounted(false)
+            toggleLoading(false)
+            toggleError(false)
+            toggleSuccess(false)
+        }
+
+    }, [loading])
 
     return (
         <>

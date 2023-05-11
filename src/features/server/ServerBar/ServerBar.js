@@ -144,14 +144,15 @@ const Bar = () => {
         socket.on('user joins channel', (data) => {
             dispatch(userJoinsChannel(data))
             if (window.location.hash.includes(data.channel._id)) {
-                dispatch(playSoundEffect("userJoined"));
+                
+                dispatch(playSoundEffect({default: "userJoined", user: data.display_name}));
             }
         })
         socket.on('user leaves channel', (data) => {
             console.log(data)
             dispatch(userLeavesChannel(data));
             if (window.location.hash.includes(data.id)) {
-                dispatch(playSoundEffect("userDisconnected"))
+                dispatch(playSoundEffect({default: "userDisconnected", user: data.username}))
             }
         })
 
@@ -173,7 +174,7 @@ const Bar = () => {
 
             if (window.location.hash.includes(data.channel_id)) {
 
-                dispatch(playSoundEffect("newMessage"))
+                dispatch(playSoundEffect({default: "newMessage"}))
 
                 dispatch(addNewWidgetOverlayToQueue({...data, action: 'new-message'}));
             
@@ -213,7 +214,7 @@ const Bar = () => {
                 
                 navigate(window.location.hash.split('#')[1].split('/channel')[0])
                 
-                dispatch(playSoundEffect('channelDeleted'))
+                dispatch(playSoundEffect({default: 'channelDeleted'}))
             }
 
             dispatch(deleteChannel(data.channel_id));
@@ -268,7 +269,7 @@ const Bar = () => {
         })
 
         socket.on('poke', (data) => {
-            dispatch(playSoundEffect("youHaveBeenPoked"))
+            dispatch(playSoundEffect({default: "youHaveBeenPoked"}))
 
             dispatch(pushPokeNotification(data.message))
         })
@@ -306,7 +307,7 @@ const Bar = () => {
 
                 if (window.location.hash.includes(data.new_channel)) return;
 
-                dispatch(playSoundEffect('moved'))
+                dispatch(playSoundEffect({default: 'moved'}))
 
                 setTimeout(() => {
                     document.getElementById(`channel-button-${data.new_channel}`).click();
@@ -446,7 +447,7 @@ const Bar = () => {
         
         dispatch(leaveChannel({username: username}));
         
-        dispatch(playSoundEffect('disconnected'));
+        dispatch(playSoundEffect({default: 'disconnected'}));
         
         dispatch(clearWidgetOverLay());
 
@@ -456,7 +457,7 @@ const Bar = () => {
 
     const leaveServer = (kicked) => {
 
-        dispatch(playSoundEffect(kicked ? "userKicked" : "disconnected"));
+        dispatch(playSoundEffect({default: kicked ? "userKicked" : "disconnected"}));
         
         dispatch(clearWidgetOverLay());
 
@@ -760,7 +761,7 @@ const Bar = () => {
         
     // eslint-disable-next-line
     }, [])
-
+    console.log(loading)
     return (
         <motion.div initial={{
             opacity: 0
@@ -769,7 +770,7 @@ const Bar = () => {
             className='server-bar-container'>
             <ServerBanner serverImage={serverBanner} serverName={serverName} />
             <MobileServerBanner serverImage={serverBanner} serverName={serverName} />
-            <Loading loading={loading} /> 
+            <Loading loading={loading} forceStop={true} /> 
             <ChannelList />
             <ServerSettingsMenu />
             <DisconnectButtonWrapper disconnect={disconnect} leave={leaveServer} channel_id={current_channel_id} /> 

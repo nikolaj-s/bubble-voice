@@ -1,0 +1,11 @@
+
+.dynamic-voices {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.dynamic-voices .text-button {
+    width: 33%;
+    margin-bottom: 5px;
+}

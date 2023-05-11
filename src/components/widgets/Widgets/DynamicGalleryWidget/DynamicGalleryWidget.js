@@ -97,7 +97,7 @@ export const DynamicGalleryWidget = ({widget, editing}) => {
                     }
                 }}
                 >
-                    <Image key={page} image={images[imageIndex]?.preview ? images[imageIndex]?.preview : images[imageIndex]} objectFit='contain' />
+                    <Image key={page} image={images[imageIndex]?.preview ? images[imageIndex]?.preview : images[imageIndex]} objectFit='cover' />
                 </motion.div>
             </AnimatePresence>
             <div style={{backgroundColor: color}} className="next" onClick={() => paginate(-1)}>

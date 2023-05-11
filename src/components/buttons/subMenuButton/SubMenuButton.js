@@ -6,7 +6,7 @@ import { selectTextColor } from '../../../features/settings/appSettings/appearan
 // components
 import { ButtonAnimationWrapper } from '../ButtonAnimationWrapper/ButtonAnimationWrapper'
 
-export const SubMenuButton = ({position, top, left, right, zIndex, width = 25, height = 25, borderRadius = 15, target, description, flip_description, padding, right_orientation_desc, altInvert, invert = true, desc_o_mouse_leave, o_mouseLeave, desc_space, margin}) => {
+export const SubMenuButton = ({transparent, position, top, left, right, zIndex, width = 25, height = 25, borderRadius = 15, target, description, flip_description, padding, right_orientation_desc, altInvert, invert = true, desc_o_mouse_leave, o_mouseLeave, desc_space, margin}) => {
 
   const color = useSelector(selectTextColor);
 
@@ -32,6 +32,7 @@ export const SubMenuButton = ({position, top, left, right, zIndex, width = 25, h
 
   return (
     <ButtonAnimationWrapper
+    transparent={transparent}
     o_mouseLeave={o_mouseLeave}
     right_orientation_desc={right_orientation_desc}
     altInvert={altInvert}

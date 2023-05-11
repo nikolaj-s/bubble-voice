@@ -133,10 +133,6 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
         <AnimatePresence exitBeforeEnter>
             {searchingForImage ?
             <motion.div 
-            initial={{opacity: 0}}
-            animate={{opacity: 1}}
-            exit={{opacity: 0}}
-            transition={{duration: 0.1}}
             key="message-image-search-container"
             className='message-image-search-container'>
                 <div 
@@ -176,7 +172,7 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
                                     <VideoPreview action={() => {handleSelectImage({preview: media.media, type: 'video', image: media.media})}} video={{preview: media.media}} />
                                 )
                             })
-                            : (images?.length > 0 ? images : loading ? [] : recommendations.filter(v => v.type === 'image').slice(0, 15)).map((image, key) => {
+                            : (images?.length > 0 ? images : loading ? [] : recommendations.filter(v => v.type === 'image').slice(0, 40)).map((image, key) => {
                                 return (
                                     <ImagePreview tag_action={handleTag} tags={image.tags} image={showFullResPreviews ? image.image : image.preview} action={(e) => {handleSelectImage({...image, preview: image.image})}} />
                                 )

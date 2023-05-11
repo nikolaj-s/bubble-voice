@@ -16,7 +16,7 @@
 
 .music-player-overlay-controls {
     height: auto;
-    width: 55px;
+    width: 45px;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -25,6 +25,26 @@
     cursor: grab;
 }
 
+.behind-music-player-overlay-controls {
+    height: auto;
+    width: 42px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 5px;
+    justify-content: center;
+    position: fixed;
+    display: flex;
+    left: 3px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    height: 290px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.behind-music-player-overlay-controls div,
 .music-player-overlay-controls div {
     margin: 0.2rem 0;
 }
@@ -65,15 +85,18 @@
 .music-overlay-volume-container {
     position: absolute;
     z-index: 5;
-    left: -37px;
-    bottom: 120px;
-    width: 130px;
+    left: -39px;
+    bottom: 148px;
+    padding-left: 4px;
+    width: 100px;
+    height: 30px;
     transform: rotate(-90deg);
 }
 
+
 .music-overlay-volume-container div {
-    width: 150px;
-    height: 55px;
+    width: 100px;
+    height: 50px;
     padding: 0px 5px;
     border-radius: var(--border-radius);
 }

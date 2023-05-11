@@ -11,7 +11,7 @@
     bottom: 75px;
     box-shadow: -5px -5px 30px rgba(0, 0, 0, 0.452);
     right: 6px;
-    transition: 0.3s;
+    transition: 0.1s;
     overflow: hidden;
     border-radius: var(--border-radius);
 }

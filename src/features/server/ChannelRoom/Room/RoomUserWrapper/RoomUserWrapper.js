@@ -44,6 +44,8 @@ export const RoomUserWrapper = ({users, page}) => {
                         v.style.objectFit = 'cover'
                     
                     }
+                    child.style.maxHeight = '540px'
+                    child.style.maxWidth = '960px'
                     child.style.width = '100px'
                     child.style.height = '100px'
                 }
@@ -148,7 +150,8 @@ export const RoomUserWrapper = ({users, page}) => {
             max = max - (margin * 2);
             
             for (const c of children) {
-                
+                c.style.maxHeight = '540px'
+                c.style.maxWidth = '960px'
                 c.style.width = `${max}px`;
                 c.style.height = `${(max * ratio)}px`;
             

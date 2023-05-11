@@ -4,7 +4,8 @@ import React from 'react'
 // state
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAudioOutput } from '../appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
-import { playSoundEffect, removeSoundEffectFromQueue, selectCurrentVoiceOver, selectSocialSoundEffect, selectSoundEffect, selectSoundEffectQueue, selectSoundEffectVolume } from './soundEffectsSlice';
+import { playSoundEffect, removeSoundEffectFromQueue, selectCurrentDynamicVoice, selectCurrentVoiceOver, selectDynamicVoiceAlerts, selectSocialSoundEffect, selectSoundEffect, selectSoundEffectQueue, selectSoundEffectVolume, selectVoicePitch, selectVoiceRate } from './soundEffectsSlice';
+import { selectCurrentChannel, selectServerMembers } from '../../server/ServerSlice';
 
 export const SoundEffects = () => {
 
@@ -24,6 +25,18 @@ export const SoundEffects = () => {
 
     const currentVoiceOver = useSelector(selectCurrentVoiceOver);
 
+    const channel = useSelector(selectCurrentChannel);
+
+    const dynamicVoiceAlerts = useSelector(selectDynamicVoiceAlerts);
+
+    const currentVoice = useSelector(selectCurrentDynamicVoice)
+
+    const voiceRate = useSelector(selectVoiceRate);
+
+    const voicePitch = useSelector(selectVoicePitch);
+
+    const members = useSelector(selectServerMembers);
+
     const soundEffects = {
         'connected': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/connected_pnu1hk.wav",
         'disconnected': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/disconnect_zpef4b.mp3",
@@ -38,6 +51,25 @@ export const SoundEffects = () => {
         'moved': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/moved_jszssq.mp3",
         'deactivate': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/deactivate_naxcd8.mp3",
         "altPop": "https://res.cloudinary.com/drlkgoter/video/upload/v1670015949/cork-85200_m6ej0k.mp3"
+    }
+
+    const dynamicAlert = (message) => {
+        
+        let alert = new SpeechSynthesisUtterance(message);
+
+        let voices = speechSynthesis.getVoices();
+
+        alert.voice = voices[currentVoice];
+
+        alert.volume = soundEffectsVolume;
+        console.log(voicePitch, voiceRate)
+        alert.pitch = voicePitch;
+
+        alert.rate = voiceRate;
+
+        window.speechSynthesis.speak(alert);
+
+        alert.onend = () => {soundEffectFinished()}
     }
 
     React.useEffect(() => {
@@ -59,7 +91,7 @@ export const SoundEffects = () => {
     }, [soundEffect, socialSoundEffect])
 
     const soundEffectFinished = () => {
-
+        
         setPlaying("");
 
         setTimeout(() => {
@@ -82,9 +114,26 @@ export const SoundEffects = () => {
     React.useEffect(() => {
 
         setTimeout(() => {
-
-            setPlaying(soundEffects[soundEffectQueue[0]]);
             
+            if (soundEffectQueue[0]?.default === 'userJoined' && dynamicVoiceAlerts) {
+                
+                dynamicAlert(`${soundEffectQueue[0].user} has joined ${channel.channel_name}`)
+
+            } else if (soundEffectQueue[0]?.default === 'userDisconnected' && dynamicVoiceAlerts) {
+                
+                const i = members.findIndex(u => u.username === soundEffectQueue[0].user);
+
+                if (i !== -1) {
+                    dynamicAlert(`${members[i].display_name} has disconnected`)
+                } else {
+                    setPlaying((soundEffects[soundEffectQueue[0]?.default] ? soundEffects[soundEffectQueue[0].default] : soundEffects[soundEffectQueue[0]]));
+                }
+
+            } else {
+
+                setPlaying((soundEffects[soundEffectQueue[0]?.default] ? soundEffects[soundEffectQueue[0].default] : soundEffects[soundEffectQueue[0]]));
+            
+            }
         }, 10)
 
     // eslint-disable-next-line       

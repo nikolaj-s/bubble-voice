@@ -1,6 +1,6 @@
 .new-account-state-container {
     position: fixed;
-    z-index: 5;
+    z-index: 20;
     top: 0;
     left: 0;
     width: 100%;
@@ -11,7 +11,7 @@
 }
 
 .inner-new-account-state-container {
-    width: 800px;
+    width: 92%;
     height: 800px;
     padding: 0 1rem;
     border-radius: var(--border-radius);
@@ -23,7 +23,10 @@
 }
 
 .inner-new-account-state-container .finish-account-set-up {
-    max-width: 600px;
+    width: 98%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
 }
 
 .new-account-prev-button {

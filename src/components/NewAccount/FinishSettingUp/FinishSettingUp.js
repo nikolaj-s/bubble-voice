@@ -7,7 +7,7 @@ import { InputTitle } from '../../titles/inputTitle/InputTitle';
 
 import { motion } from 'framer-motion';
 
-export const FinishSettingUp = ({setNewUserBanner, setNewUserImage}) => {
+export const FinishSettingUp = ({setNewUserBanner, setNewUserImage, getColor}) => {
 
     const userImage = useSelector(selectUserImage);
 
@@ -23,9 +23,9 @@ export const FinishSettingUp = ({setNewUserBanner, setNewUserImage}) => {
 
     return (
         <motion.div initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} className='finish-account-set-up'>
-            <InputTitle title={"Finish Account Setup By Adding A Banner and Profile Picture."} />
-            <ProfileImage getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userBanner={userBanner} userImage={userImage} />
-            <InputTitle title={"You Can Update This Later Within Account Settings"} />
+            <InputTitle zIndex={3} title={"Finish Account Setup By Adding A Banner and Profile Picture."} />
+            <ProfileImage shape={'circle'} color={getColor} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userBanner={userBanner} userImage={userImage} />
+            <InputTitle zIndex={2} title={"You Can Update This Later Within Account Settings"} />
         </motion.div>
     )
 }

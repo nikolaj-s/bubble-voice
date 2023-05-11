@@ -52,7 +52,7 @@ export const fetchAccount = createAsyncThunk(
 
 export const updateAccount = createAsyncThunk(
     'accountSettingsSlice/updateAccount',
-    async ({userImage, userBanner, newShape}, {rejectWithValue, getState, dispatch}) => {
+    async ({userImage, userBanner, newShape, color}, {rejectWithValue, getState, dispatch}) => {
         const token = await getToken();
 
         const {password, newPassword, confirmNewPassword, display_name, bio} = getState().accountSettingsSlice;
@@ -74,6 +74,8 @@ export const updateAccount = createAsyncThunk(
         data.append("confirmNewPassword", confirmNewPassword);
 
         data.append("profileImageShape", newShape);
+
+        data.append("color", color);
 
         if (!token) return rejectWithValue({error: true, errorMessage: "validation error"})
 
@@ -122,7 +124,8 @@ const accountSettingsSlice = createSlice({
         errorMessage: "",
         change: false,
         new_account: false,
-        bio: ""
+        bio: "",
+        color: ""
     },
     reducers: {
         handleSignOut: (state, action) => {
@@ -151,13 +154,14 @@ const accountSettingsSlice = createSlice({
         [fetchAccount.fulfilled]: (state, action) => {
             
             if (action.payload?.success) {
-                
+                console.log(action.payload.account)
                 state.display_name = action.payload.account.display_name;
                 state.user_image = action.payload.account.user_image;
                 state.user_banner = action.payload.account.user_banner;
                 state.username = action.payload.account.username;
-                state.new_account = action.payload.account.new_account_state
+                state.new_account = action.payload.account.new_account_state || action.payload.account.user_image === "https://res.cloudinary.com/drlkgoter/image/upload/v1663868935/1-Blank-TikTok-Default-PFP_jt6guo.jpg" || action.payload.account.user_banner === "https://res.cloudinary.com/drlkgoter/image/upload/v1663868935/1-Blank-TikTok-Default-PFP_jt6guo.jpg";
                 state.bio = action.payload.account.bio;
+                state.color = action.payload.account.color;
                 if (action.payload.account.profile_picture_shape) {
 
                     state.profilePictureShape = action.payload.account.profile_picture_shape;
@@ -195,6 +199,8 @@ const accountSettingsSlice = createSlice({
 
             state.bio = updated_info.bio;
 
+            state.color = updated_info.color;
+
             if (updated_info.display_name) state.display_name = updated_info.display_name;
 
             if (updated_info.user_banner) state.user_banner = updated_info.user_banner;
@@ -203,7 +209,6 @@ const accountSettingsSlice = createSlice({
 
             if (updated_info.profile_picture_shape) state.profilePictureShape = updated_info.profile_picture_shape;
 
-            console.log(action.payload.serverId);
         },
         [updateAccount.rejected]: (state, action) => {
             state.loading = false;
@@ -243,6 +248,8 @@ export const selectNewAccountState = state => state.accountSettingsSlice.new_acc
 export const selectProfilePictureShape = state => state.accountSettingsSlice.profilePictureShape;
 
 export const selectProfileBio = state => state.accountSettingsSlice.bio;
+
+export const selectProfileColor = state => state.accountSettingsSlice.color;
 
 // actions
 export const {handleUpdateBio, updateNewAccountState, handleSignOut, updateAccountInputState, accountSettingsCloseError } = accountSettingsSlice.actions;

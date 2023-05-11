@@ -190,7 +190,7 @@ export const MusicWidget = ({editing = false, widget}) => {
                     <h2 style={{
                         color: textColor
                     }}>Media</h2>
-                    <SubMenuButton padding={5} width={20} height={20} borderRadius={5} description={"Media Options"} desc_space={15} margin={'0 5px 0 10px'} />
+                    <SubMenuButton transparent={true} padding={5} width={20} height={20} borderRadius={5} description={"Media Options"} desc_space={15} margin={'0 5px 0 10px'} />
                 </div>
                 <div className='music-widget-nav-container'>
                     <TextInput keyCode={handleEnter} inputValue={query} action={handleInput} placeholder={"Add Song To Queue"} marginTop='0' />

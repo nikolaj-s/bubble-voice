@@ -34,6 +34,8 @@ const Settings = () => {
 
     const [newUserBanner, setNewUserBanner] = React.useState({});
 
+    const [color, setColor] = React.useState("");
+
     const [newShape, setNewShape] = React.useState("");
 
     const [previewBio, togglePreviewBio] = React.useState(false);
@@ -76,7 +78,7 @@ const Settings = () => {
     }
     
     const handleApply = () => {
-        dispatch(updateAccount({userImage: newUserImage, userBanner: newUserBanner, newShape: newShape}));
+        dispatch(updateAccount({userImage: newUserImage, userBanner: newUserBanner, newShape: newShape, color: color}));
         setNewUserBanner({});
         setNewUserImage({});
     }
@@ -104,6 +106,12 @@ const Settings = () => {
         setNewShape(shape)
     }
 
+    const updateColor = (color) => {
+  
+        setColor(color);
+       
+    }
+
     const changeProfileBio = (value) => {
         if (value.length > 1024) return;
 
@@ -116,8 +124,8 @@ const Settings = () => {
                 <SettingsHeader title={"User Display"} />
                 <InputTitle title={"Change Display Name"} />
                 <TextInput stateSelector='display_name' action={handleInput} inputValue={displayName} placeholder={""} />
-                <InputTitle title={"Change Banner / Profile Picture"} />
-                <ProfileImage shape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} />
+                <InputTitle zIndex={2} title={"Change Banner / Profile Picture"} />
+                <ProfileImage color={updateColor} shape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} />
                 <ProfilePictureShape action={changeProfileShape} shape={newShape} />
                 <div style={{display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-between'}}>
                     <InputTitle width={'60px'} title={'Bio'} />

@@ -8,7 +8,7 @@ import { selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../..
 import { Image } from '../../../../components/Image/Image';
 import { selectServerGroups, selectServerMembers, throwServerError } from '../../ServerSlice';
 import { TextButton } from '../../../../components/buttons/textButton/TextButton';
-import { selectProfileBio, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
+import { selectProfileBio, selectProfileColor, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
 import { socket } from '../../ServerBar/ServerBar';
 import { ScoreButton } from '../../../../components/buttons/ScoreButton/ScoreButton';
@@ -25,6 +25,10 @@ export const MemberPanel = () => {
     const [member, setMember] = React.useState({});
 
     const [bio, setBio] = React.useState("");
+
+    const [color, setColor] = React.useState(false);
+
+    const userColor = useSelector(selectProfileColor);
 
     const selectedMember = useSelector(selectCurrentMemberPanel);
 
@@ -88,6 +92,8 @@ export const MemberPanel = () => {
                 setBio(userbio);
 
                 toggleLoading(false);
+
+                setColor(userColor)
             } else if (members[u_index]?.username) {
 
                 FetchMemberDetails(members[u_index]?.username)
@@ -95,6 +101,8 @@ export const MemberPanel = () => {
                     if (user.error) return dispatch(throwServerError({error: true, errorMessage: "Fatal Error Fetching Member Details"}))
                     
                     if (user.bio) setBio(user.bio);
+
+                    if (user.color) setColor(user.color);
                     
                     toggleLoading(false);
                 })
@@ -106,6 +114,8 @@ export const MemberPanel = () => {
 
         return () => {
             setBio("");
+
+            setColor(false);
 
             setMember({});
         }
@@ -120,13 +130,13 @@ export const MemberPanel = () => {
             style={{backgroundColor: primaryColor, left: leftPost}}
             className='member-panel-container'>
                 <div className='member-panel-image-container'>
-                    <Image position='absolute' image={member.user_banner} />
+                    <Image disableErr={true} position='absolute' image={member.user_banner} />
                     <div style={{borderRadius: member.profile_picture_shape === 'square' ? '5px' : '50%'}} className='member-panel-profile-picture'>
                         <Image image={member.user_image} />
                     </div>
                 </div>
-                <div style={{backgroundColor: secondaryColor}} className='member-panel-info-container'>
-                    <div>
+                <div style={{backgroundColor: color ? color : secondaryColor}} className='member-panel-info-container'>
+                    <div style={{backgroundColor: primaryColor}} className='username-wrapper-container'>
                         <h3 style={{color: textColor}}>{member.display_name}</h3>
                         <h4 style={{color: textColor, opacity: 0.8}}>#{member.username}</h4>
                         <div className='member-score-container'>
@@ -134,23 +144,23 @@ export const MemberPanel = () => {
                             <p style={{color: textColor}}>{member.server_score}</p>
                         </div>
                     </div>
-                    
-                    <div style={{height: 2, width: '100%', backgroundColor: textColor, margin: '15px 0', flexShrink: 0}}></div>
+                    {member.username !== username && member.status !== 'offline' ? 
                     <div className='member-panel-button-wrapper'>
-                        {member.username !== username && member.status !== 'offline' ? <TextButton action={poke} name={"Poke"} /> : null}
-                        {member.username !== username && member.status !== 'offline' ? <TextButton action={handleOpenDirectMessage} name={"Send Message"} /> : null}
+                        <TextButton id={'member-panel-poke-button'} action={poke} name={"Poke"} /> 
+                        <TextButton action={handleOpenDirectMessage} name={"Send Message"} />
                     </div>
-                    <h3 style={{color: textColor, marginBottom: 10, fontSize: '1.4rem'}}>Status</h3>
-                    <p style={{color: textColor, margin: '0 0 0 5px'}}>{member?.status}</p>
-           
-                    <h3 style={{color: textColor, margin: '10px 0', fontSize: '1.4rem'}}>Member Since</h3>
-                    <p style={{color: textColor, margin: '0 0 0 5px'}}>{member?.join_date?.split('T')[0]}</p>
-                    <h3 style={{color: textColor, margin: '10px 0', fontSize: '1.4rem'}}>Server Group</h3>
-                    <p style={{color: textColor, margin: '0 0 0 5px'}}>{
-                        s_index !== -1 ? serverGroups[s_index]?.server_group_name : null
-                    }</p>
-                    
-                    {bio.length > 0 ? <h3 style={{color: textColor, margin: '10px 0', fontSize: '1.4rem'}}>Bio</h3> : null}
+                    : null}
+                    <div style={{backgroundColor: primaryColor}} className='server-user-details-wrapper-container'>
+                        <h3 style={{color: textColor, marginBottom: 10, fontSize: '1.4rem'}}>Status</h3>
+                        <p style={{color: textColor, margin: '0 0 0 5px'}}>{member?.status}</p>
+            
+                        <h3 style={{color: textColor, margin: '10px 0', fontSize: '1.4rem'}}>Member Since</h3>
+                        <p style={{color: textColor, margin: '0 0 0 5px'}}>{member?.join_date?.split('T')[0]}</p>
+                        <h3 style={{color: textColor, margin: '10px 0', fontSize: '1.4rem'}}>Server Group</h3>
+                        <p style={{color: textColor, margin: '0 0 0 5px'}}>{
+                            s_index !== -1 ? serverGroups[s_index]?.server_group_name : null
+                        }</p>
+                    </div>
                     <UserBio bio={bio} margin={'5px 0px'} />
                    
                 </div>

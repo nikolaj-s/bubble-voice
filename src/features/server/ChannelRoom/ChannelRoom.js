@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { useRoutes } from 'react-router'
 import { ServerSettingsRouteWrapper } from '../serverSettings/ServerSettingsRouteWrapper'
-import { closeServerErrorMessage, selectCurrentChannel, selectCurrentChannelId, selectHideDefaultNotce, selectServerErrorMessage, selectServerErrorState, selectServerId, selectServerName } from '../ServerSlice'
+import { closeServerErrorMessage, selectCurrentChannel, selectCurrentChannelId, selectCurrentlyViewChannelSocial, selectHideDefaultNotce, selectServerErrorMessage, selectServerErrorState, selectServerId, selectServerName } from '../ServerSlice'
 import { CreateChannelMenu } from './CreateChannelMenu/CreateChannelMenu'
 import { Room } from './Room/Room'
 import { Error } from '../../../components/Error/Error';
@@ -49,6 +49,8 @@ export const RoomWrapper = () => {
 
     const musicLoading = useSelector(selectLoadingMusicState);
 
+    const viewingSocial = useSelector(selectCurrentlyViewChannelSocial);
+
     const closeErrorMessage = () => {
         dispatch(closeServerErrorMessage());
     }
@@ -57,7 +59,7 @@ export const RoomWrapper = () => {
 
         toggleDropState(false);
 
-        if (channelId && currentServerPage !== 'social') {
+        if (channelId && currentServerPage !== 'social' && viewingSocial.error) {
             const data = e.dataTransfer.getData('text/plain');
 
             if (data.includes('youtube')) {
@@ -76,8 +78,8 @@ export const RoomWrapper = () => {
     }
 
     const onDragOver = (e) => {
-
-        if (currentServerPage === 'social' || !channelId) return;
+        
+        if (currentServerPage === 'social' || !channelId || viewingSocial?._id) return;
 
         e.preventDefault(); 
 

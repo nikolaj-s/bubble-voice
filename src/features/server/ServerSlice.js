@@ -749,6 +749,7 @@ const serverSlice = createSlice({
             state.serverName = action.payload.server_name;
             state.serverBanner = action.payload.server_banner;
             state.members = action.payload.members;
+            console.log(action.payload.members)
             state.serverGroups = action.payload.server_groups;
             state.serverOwner = action.payload.server_owner;
             state.banList = action.payload.ban_list;

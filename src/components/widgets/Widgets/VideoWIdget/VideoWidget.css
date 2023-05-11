@@ -6,6 +6,7 @@
     object-fit: contain;
     display: flex;
     justify-content: center;
+    border-radius: var(--border-radius);
 }
 
 .video-widget-container div {
