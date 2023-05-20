@@ -16,24 +16,25 @@ import { AudioInit } from '../AudioInit/AudioInit';
 
 // state
 import { HeaderTitle } from '../../components/titles/headerTitle/headerTitle';
-import { selectHeaderTitle } from './contentScreenSlice';
 
 // style's
 import "./ContentScreen.css";
 import { selectAddServerMenuVisible } from '../createServer/createServerSlice';
+import { selectCurrentChannelId } from '../server/ServerSlice';
+import { RoomAmbiance } from '../../components/RoomAmbiance/RoomAmbiance';
 
 export const ContentScreen = () => {
     // content display state
 
-    const headerTitleState = useSelector(selectHeaderTitle);
-
     const addServerMenuVisisble = useSelector(selectAddServerMenuVisible);
+
+    const channelId = useSelector(selectCurrentChannelId);
 
     return (
         <>
             <motion.div className='content-screen-container' >
-                <HeaderTitle title={headerTitleState} spacing={true} />
-                <div style={{marginLeft: 1}} className='content-screen-inner-container'>
+                <HeaderTitle spacing={true} />
+                <div className='content-screen-inner-container'>
                     <Disconnected />
                     <NoServerSelectedDisplay />
                     <SettingsRoutesWrapper />
@@ -45,6 +46,7 @@ export const ContentScreen = () => {
                 <AudioInit />
             </motion.div>
             <ExpandContent />
+            {channelId ? <RoomAmbiance /> : null}
         </>
     )
 }

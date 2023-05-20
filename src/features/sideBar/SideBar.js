@@ -33,6 +33,7 @@ export const SideBar = () => {
     console.log(window.location.hash)
 
     return (
+        <>
             <motion.div className='side-bar-container'>
                 <div className='inner-side-bar-container'>
                     <ServerBar />
@@ -41,5 +42,6 @@ export const SideBar = () => {
                 </div>    
                 <ControlBar />
             </motion.div>
+        </>
     )
 }

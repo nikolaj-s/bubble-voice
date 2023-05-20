@@ -109,7 +109,7 @@ export const ChannelList = () => {
         }}
         animate={{opacity: 1}}
         transition={{duration: 0.3}}
-        style={{backgroundColor: glass ? glassColor : secondaryColor, marginTop: 1}}
+        style={{backgroundColor: glass ? glassColor : secondaryColor}}
         className='channel-list-outer-container'>
                 
                 <div className='channel-list-button-wrapper'>

@@ -25,7 +25,7 @@ import { selectSavedMedia } from '../../../../features/SavedMedia/SavedMediaSlic
 import { selectShowFullResPreviews } from '../../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 
-export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => {
+export const ImageSearchPanel = ({searchingForImage, selectImage, serverId, inputHeight}) => {
 
     const primaryColor = useSelector(selectPrimaryColor);
 
@@ -137,7 +137,8 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
             className='message-image-search-container'>
                 <div 
                 style={{
-                    backgroundColor: secondaryColor
+                    backgroundColor: secondaryColor,
+                    bottom: inputHeight + 10
                 }}
                 className='inner-message-image-search-container'>
                     {mediaType === 'Saves' ? null :
@@ -148,7 +149,7 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
                         style={{color: textColor, backgroundColor: primaryColor}}
                         maxLength={120} onKeyUp={handleEnter} onChange={handleQuery} value={query} placeholder={`Search For ${mediaType}`} />
                         <div className='message-image-search-button'>
-                            <AltSearchButton active={query.length === 0} action={search} margin={'0 0 0 10px'} width={15} height={15} invert={true}  borderRadius={5} />
+                            <AltSearchButton padding={5} active={query.length === 0} action={search} margin={'0 0 0 10px'} width={30} height={18} invert={true}  borderRadius={0} />
                         </div>
                     </div>}
                     <div className='media-search-nav-container'>
@@ -157,7 +158,7 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId}) => 
                         <h3 onClick={() => {handleMediaType("Saves")}} style={{color: textColor, backgroundColor: mediaType === 'Saves' ? primaryColor : null, opacity: mediaType === 'Saves' ? 1 : 0.6}}>Saves</h3>
                     </div>
                     <div className='message-image-search-results-container'>
-                    <ResponsiveMasonry columnsCountBreakPoints={{1000: 2, 1500: 3}}>
+                    <ResponsiveMasonry style={{height: 'auto'}} columnsCountBreakPoints={{1000: 2, 1500: 3}}>
                         <Masonry gutter='5px'>   
                             {mediaType === 'Videos' ?
                             (videos?.length > 0 ? videos : loading ? [] : recommendations.filter(v => v.type === 'video').slice(0, 15)).map(video => {

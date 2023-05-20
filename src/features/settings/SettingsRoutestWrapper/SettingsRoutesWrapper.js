@@ -11,7 +11,7 @@ import { VoiceVideoSettings } from '../appSettings/voiceVideoSettings/VoiceVideo
 import { setHeaderTitle } from '../../contentScreen/contentScreenSlice'
 
 // state
-import { selectSecondaryColor } from '../appSettings/appearanceSettings/appearanceSettingsSlice'
+import { selectSecondaryColor, selectAccentColor } from '../appSettings/appearanceSettings/appearanceSettingsSlice'
 
 // style's
 import "./SettingsRoutesWrapper.css";
@@ -19,13 +19,15 @@ import { SoundSettings } from '../appSettings/soundSettings/SoundSettings'
 import { CloseSettings } from '../../../components/CloseSettings/CloseSettings'
 import { MiscellaneousSettings } from '../appSettings/MiscellaneousSettings/MiscellaneousSettings'
 import { MenuButton } from '../../../components/buttons/MenuButton/MenuButton'
-
+import { motion } from 'framer-motion'
 
 const Wrapper = () => {
     
     const dispatch = useDispatch();
 
     const secondaryColor = useSelector(selectSecondaryColor);
+
+    const textColor = useSelector(selectAccentColor);
 
     const [open, toggleOpen] = React.useState(false);
 
@@ -53,9 +55,12 @@ const Wrapper = () => {
     }
 
     return (
-        <div
+        <motion.div
+        initial={{opacity: 0}}
+        animate={{opacity: 1}}
         style={{
-            backgroundColor: secondaryColor
+            backgroundColor: secondaryColor,
+            borderLeft: `solid 2px ${textColor}`
         }} 
         className='settings-routes-wrapper'>
             <AccountSettings />
@@ -66,7 +71,7 @@ const Wrapper = () => {
             <VoiceVideoSettings />
             <CloseSettings />
             <MenuButton position={'fixed'} action={openMobileSettingsMenu} top={0} right={60} />
-        </div>
+        </motion.div>
     )
 }
 

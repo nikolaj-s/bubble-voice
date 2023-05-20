@@ -1,22 +1,20 @@
 
 
 .content-screen-container {
-    width: calc(66% - 2px);
-    max-width: calc(100% - 20px);
-    margin: 3px 0 0 0px;
+    width: calc(100%);
+    margin: 0px 5px 0px 4px;
     flex-grow: 2;
     height: 100%;
     display: flex;
     flex-direction: column;
+    z-index: 1;
 }
 
 .content-screen-inner-container {
-    height: calc(100% - 33px);
+    height: calc(100% - 37px);
     width: calc(100%);
     border-bottom-right-radius: var(--border-radius);
     display: flex;
-    overflow-y: auto;
-    overflow-x: hidden;
     position: relative;
 }
 

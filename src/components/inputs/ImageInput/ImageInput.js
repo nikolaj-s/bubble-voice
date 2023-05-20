@@ -44,7 +44,7 @@ export const ImageInput = ({
 
     const [percent, setPercent] = React.useState(0);
 
-    const [shadow, setShadow] = React.useState('rgba(0,0,0,0)');
+    const [shadow, setShadow] = React.useState(false);
 
     const animation = useAnimation();
 
@@ -128,11 +128,16 @@ export const ImageInput = ({
 
         if (showShadow === false) return;
 
-        const color = GetImageColorData(e);
+        setTimeout(() => {
 
-        setShadow(color);
+            const color = GetImageColorData(e);
 
-        getColor(color);
+            setShadow(color);
+
+            getColor(color);
+        
+        }, 500)
+            
     }
 
     return (

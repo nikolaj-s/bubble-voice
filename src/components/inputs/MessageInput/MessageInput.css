@@ -13,8 +13,9 @@
 
 .message-input-container {
     bottom: 5px;
-    width: calc(100% - 10px);
-    height: 60px;
+    width: calc(100%);
+    margin-left: 10px;
+    height: 40px;
     flex-shrink: 0;
     border-bottom-right-radius: var(--border-radius);
     display: flex;
@@ -42,8 +43,11 @@
 .message-input-button-wrapper {
     height: 100%;
     display: flex;
-    align-items: center;
-    margin-right: .5rem;
+    margin-top: 2px;
+    width: 150px;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    margin-right: 5px;
 }
 
 .message-input-button-wrapper div svg:focus {
@@ -55,7 +59,7 @@
     height: calc(100% - 20px);
     object-fit: contain;
     background-color: transparent;
-    font-size: 12px;
+    font-size: 15px;
     border: none;
     margin: 0 0 0 0.5rem;
     padding: 10px 0;

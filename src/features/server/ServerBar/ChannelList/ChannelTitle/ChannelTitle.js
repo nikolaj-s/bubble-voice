@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 // component's
 import { AddButton } from '../../../../../components/buttons/AddButton/AddButton'
 import { SettingsButton } from '../../../../../components/buttons/settingsButton/settingsButton';
-import { selectGlassColor, selectGlassState, selectSecondaryColor, selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassColor, selectGlassState, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // state
 import { selectUsersPermissions } from '../../../ServerSlice';
@@ -19,7 +19,7 @@ export const ChannelTitle = ({action}) => {
 
     const textColor = useSelector(selectTextColor);
 
-    const secondaryColor = useSelector(selectSecondaryColor);
+    const secondaryColor = useSelector(selectPrimaryColor);
 
     const glass = useSelector(selectGlassState);
 
@@ -42,7 +42,7 @@ export const ChannelTitle = ({action}) => {
     }
 
     return (
-        <div style={{backgroundColor: glass ? glassColor : secondaryColor}} className='channel-title-container'>
+        <div style={{backgroundColor: secondaryColor}} className='channel-title-container'>
             <h3
             style={{color: textColor}}
             >CHANNELS</h3>

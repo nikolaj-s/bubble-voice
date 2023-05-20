@@ -1,12 +1,12 @@
 .server-settings-menu {
-    position: absolute;
-    z-index: 7;
-    top: 32px;
+    position: fixed;
+    z-index: 10;
+    top: 0px;
     left: 0;
-    bottom: 12px;
-    width: 100%;
-    height: calc(100% - 12px - 32px);
+    width: 25%;
+    height: calc(100%);
     display: flex;
+    min-width: 265px;
     justify-content: center;
 }
 
@@ -15,19 +15,33 @@
     padding: 0px 10px;
     display: flex;
     flex-direction: column;
+    align-items: flex-end;
     justify-content: space-between;
-    border-top-left-radius: 15px;
 }
 
 .server-settings-route-wrapper {
-    position: absolute;
+    position: fixed;
     top: 0;
-    left: 0;
-    width: 100%;
-    min-height: 100%;
+    right: 0;
+    width: calc(75% - 2px - 10px);
+    max-width: calc(100% - 277px);
+    height: 100%;
+    overflow-y: auto;
     display: flex;
-    justify-content: center;
+    padding-left: 10px;
     z-index: 5;
+}
+
+.server-settings-buttons-wrapper {
+    margin-top: 35px;
+    max-width: 200px;
+    width: calc(100% - 10px);
+    margin-right: 5px;
+}
+
+.inner-server-settings-container .settings-category-button {
+    max-width: 200px;
+    width: calc(100% - 10px);
 }
 
 .server-settings-wrapping-container {

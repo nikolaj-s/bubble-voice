@@ -36,10 +36,9 @@ export const MessageOverlay = ({data, onEnd, page}) => {
         style={{
             display: messageOverlayDisabled || (page === 'social' || page === "widgets") ? 'none' : 'flex',
             backgroundColor: secondaryColor,
-            borderBottom: `solid 1px ${accentColor}`
         }}
         transition={{duration: 0.3}}
-        initial={{top: -400}} animate={{top: 31}} exit={{top: -400}} className='message-overlay-container'>
+        initial={{top: -400}} animate={{top: 30}} exit={{top: -400}} className='message-overlay-container'>
             <Message overlay={true} message={data.content} current_message={data} />
         </motion.div>
     )

@@ -30,7 +30,7 @@ export const CharacterCount = ({count = 0}) => {
         <div className='input-character-count'>
             <motion.p
             animate={animation}
-            style={{color: textColor}}
+            style={{color: textColor, padding: 0, margin: '5px 0 0 0'}}
             >{count} / 1024</motion.p>
         </div>
     )

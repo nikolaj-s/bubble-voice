@@ -82,7 +82,7 @@ export const RoomWrapper = () => {
         if (currentServerPage === 'social' || !channelId || viewingSocial?._id) return;
 
         e.preventDefault(); 
-
+        
         toggleDropState(true);
     }
 
@@ -90,20 +90,20 @@ export const RoomWrapper = () => {
         <>
         <CreateChannelMenu />
         <ServerSettingsRouteWrapper />
-        <div onDragOver={onDragOver} onDrop={onDrop} className='server-page-wrapper'>
-            <ServerNavigation />
-            <Room />
-            <ServerDashBoard />
-            <SocialRoute key='social-route' />
-            <Music />
-            <RoomActionOverlay page={currentServerPage} />
-            <DropOverlay action={() => {toggleDropState(false)}} dropState={dropState} />
-        </div>
-        <AnimatePresence>
-            <UserStatusBar key='user-status-bar' />
-            <MemberPanel key='member-panel' />
-            {error ? <Error key={'server-error'} errorMessage={errorMessage} action={closeErrorMessage} /> : null}
-        </AnimatePresence>
+            <div className='outer-server-page-wrapper'>
+                <div onDragOver={onDragOver} onDrop={onDrop} className='server-page-wrapper'>
+                    <SocialRoute key='social-route' />
+                    <ServerNavigation />
+                    <Room />
+                    <ServerDashBoard />
+                    <RoomActionOverlay page={currentServerPage} />
+                    <DropOverlay action={() => {toggleDropState(false)}} dropState={dropState} />
+                </div>
+                <Music />
+            </div>
+        <UserStatusBar key='user-status-bar' />
+        <MemberPanel key='member-panel' />
+        {error ? <Error key={'server-error'} errorMessage={errorMessage} action={closeErrorMessage} /> : null}
         <SetAsDefaultServerNotice serverId={serverId} servername={serverName} visible={hideDefaultNotice ? !hideDefaultNotice : (defaultServer?.label === 'Default' && defaultServer?.id === "")} />
         </>
     )

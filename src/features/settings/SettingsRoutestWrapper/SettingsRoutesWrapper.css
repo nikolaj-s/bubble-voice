@@ -1,12 +1,18 @@
 
 .settings-routes-wrapper {
-    width: 100%;
+    width: calc(75% - 2px - 20px);
+    max-width: calc(100% - 287px);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    min-height: 100%;
-    position: absolute;
+    align-items: flex-start;
+    height: 100%;
+    position: fixed;
     z-index: 5;
+    top: 0;
+    right: 0;
+    overflow-y: auto;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .settings-wrapper {

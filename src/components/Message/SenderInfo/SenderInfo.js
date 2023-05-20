@@ -4,7 +4,7 @@ import { SubMenuButton } from '../../buttons/subMenuButton/SubMenuButton'
 import { Image } from '../../Image/Image'
 import { MessageLoadingIndicator } from '../MessageLoadingIndicator/MessageLoadingIndicator'
 
-export const SenderInfo = ({id, profile_picture_shape, current_message, primaryColor, previous_message, message, pinMessage, pinned, overlay, hover, textColor, index, perm, accentColor, persist, action, display_name, user_image}) => {
+export const SenderInfo = ({color, id, profile_picture_shape, current_message, primaryColor, previous_message, message, pinMessage, pinned, overlay, hover, textColor, index, perm, accentColor, persist, action, display_name, user_image}) => {
 
     return (
         <>
@@ -12,7 +12,7 @@ export const SenderInfo = ({id, profile_picture_shape, current_message, primaryC
         
         style={{
             height: (previous_message?.username !== current_message?.username) || (previous_message?.content?.date?.split("T")[0] !== current_message?.content?.date?.split("T")[0]) ? 15 : 0,
-            padding: (previous_message?.username !== current_message?.username) || (previous_message?.content?.date?.split("T")[0] !== current_message?.content?.date?.split("T")[0]) ? '5px 0 10px 0' : 0,
+            padding: (previous_message?.username !== current_message?.username) || (previous_message?.content?.date?.split("T")[0] !== current_message?.content?.date?.split("T")[0]) ? '5px 0 8px 0' : 0,
         }}
         className='sender-info-container'>
                 
@@ -26,7 +26,7 @@ export const SenderInfo = ({id, profile_picture_shape, current_message, primaryC
                     </div>
                     <h2
                     onClick={action}
-                    style={{color: textColor}}
+                    style={{color: color || textColor, filter: 'brightness(150%)'}}
                     >{display_name}</h2>
                     {!message.loading ?
                     <p
@@ -37,9 +37,9 @@ export const SenderInfo = ({id, profile_picture_shape, current_message, primaryC
                 {message.loading ? 
                 <MessageLoadingIndicator />
                 : hover ?
-                <div style={{top: index === 0 ? 5 : -30, backgroundColor: primaryColor}} className='date-submenu-message-wrapper'>
-                    {(perm && persist) ? <PinButton flip_description={index === 0} description={pinned ? 'unpin' : 'pin'} action={pinMessage} width={15} height={15} pinned={pinned} /> : null}
-                    {perm ? <SubMenuButton altInvert={true} invert={false} target={`${id}-ctx-message-overlay`} flip_description={index === 0} zIndex={2} description={"More"} width={15} height={15} borderRadius={5} /> : null}
+                <div style={{top: index === 0 ? 5 : -20, backgroundColor: primaryColor}} className='date-submenu-message-wrapper'>
+                    {(perm && persist) ? <PinButton borderRadius={5} flip_description={index === 0} desc_width={40} description={pinned ? 'Unpin' : 'Pin'} padding={5} action={pinMessage} width={18} desc_space={12}  height={18} pinned={pinned} /> : null}
+                    {perm ? <SubMenuButton altInvert={true} invert={false} target={`${id}-ctx-message-overlay`} flip_description={index === 0} desc_width={40} zIndex={2} description={"Extra"} desc_space={12} padding={5} width={18} height={18} borderRadius={5} /> : null}
                 </div> 
                 : null}
             </div>

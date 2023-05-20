@@ -7,7 +7,7 @@ import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectText
 // style's
 import "./SettingsCategoryButton.css";
 
-export const SettingsCategoryButton = ({name, link, action, active}) => {
+export const SettingsCategoryButton = ({name, link, action, active, margin}) => {
 
     const animation = useAnimation();
     
@@ -42,6 +42,7 @@ export const SettingsCategoryButton = ({name, link, action, active}) => {
         onClick={handleAction}
         className='settings-category-button'
         style={{
+            margin: margin,
             backgroundColor: active ? accentColor : hover ? primaryColor : secondaryColor,
             cursor: active ? 'default' : 'pointer',
         }}

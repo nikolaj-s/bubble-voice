@@ -5,6 +5,9 @@
     display: flex;
     flex-direction: column;
     position: relative;
+    overflow: hidden;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
 }
 
 #live-chat-wrapper {
@@ -30,7 +33,7 @@
     vertical-align: middle;
     flex: 1;
     z-index: 5;
-    transition: 0.1s;
+    overflow: hidden;
     
 }
 
@@ -40,9 +43,9 @@
     overflow: hidden;
     display: flex;
     align-self: center;
-    border: solid 4px black;
+    border: solid 2px black;
     border-radius: var(--border-radius);
-    margin: 5px;
+    margin: 2px;
     cursor: pointer;
     background-color: black;
     max-width: 960px;
@@ -53,18 +56,4 @@
     width: 100%;
     height: auto;
     object-fit: contain;
-}
-
-@media only screen and (max-width: 1650px) {
-    #live-chat-wrapper {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 500px));
-        grid-auto-rows: minmax(100px, 300px);
-    }
-}
-
-@media only screen and (max-height: 1000px) and (max-width: 1100px) {
-    #live-chat-wrapper {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 300px));
-        grid-auto-rows: minmax(100px, 200px);
-    }
 }

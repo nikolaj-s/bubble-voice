@@ -763,6 +763,7 @@ const Bar = () => {
     }, [])
     console.log(loading)
     return (
+        <>
         <motion.div initial={{
             opacity: 0
             }} animate={animation}
@@ -772,9 +773,10 @@ const Bar = () => {
             <MobileServerBanner serverImage={serverBanner} serverName={serverName} />
             <Loading loading={loading} forceStop={true} /> 
             <ChannelList />
-            <ServerSettingsMenu />
             <DisconnectButtonWrapper disconnect={disconnect} leave={leaveServer} channel_id={current_channel_id} /> 
         </motion.div>
+        <ServerSettingsMenu />
+        </>
     )
 }
 

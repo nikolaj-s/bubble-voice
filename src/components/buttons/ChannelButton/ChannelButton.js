@@ -65,7 +65,6 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
         if (active) return;
 
         animation.start({
-            border: `solid 4px ${color}`,
             backgroundColor: color
         })
     }
@@ -82,7 +81,6 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
     React.useEffect(() => {
        
         animation.start({
-            border: `solid 4px ${active ? primaryColor : transparentPrimaryColor}`,
             backgroundColor: active ? primaryColor : transparentPrimaryColor
         })
 
@@ -187,13 +185,12 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
             onClick={handleAction}
             transition={{duration: 0}}
             style={{
-                border: `solid 4px ${active ? primaryColor : transparentPrimaryColor}`,
                 backgroundColor: active ? accentColor : transparentPrimaryColor,
                 cursor: active ? "default" : "pointer",
             }}
             className='channel-button-container'>
                 <div style={{backgroundColor: unReadMessage && channel.auth ? textColor : null}} className='unread-message-indicator'></div>   
-                <div style={{opacity: (active || mouseEnter || unReadMessage) && channel.auth ? 1 : 0.7}} className='channel-status-icon-container'>
+                <div style={{opacity: (active || mouseEnter || unReadMessage) && channel.auth ? 1 : 0.85}} className='channel-status-icon-container'>
                     {(channel.icon && disableChannelIcons === false) ?
                     <ChannelImageIcon image={channel.icon} /> : null}
                     {channel.locked_channel ?

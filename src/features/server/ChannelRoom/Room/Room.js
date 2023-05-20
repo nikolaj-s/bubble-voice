@@ -12,7 +12,7 @@ import { selectDisplayName, selectProfileColor, selectProfilePictureShape, selec
 import { playSoundEffect, selectMuteSoundEffectsWhileMutedState } from '../../../settings/soundEffects/soundEffectsSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 import { selectAudioState, selectCurrentScreen, selectMicrophoneState, selectScreenShareState, selectWebCamState, setCurrentScreen, setScreens, setSelectingScreensState, toggleConnectionError, toggleConnectionLoading, toggleControlState, toggleLoadingScreenShare, toggleLoadingWebCam } from '../../../controlBar/ControlBarSlice';
-import { selectMusicExpanded, updateMusicState } from './Music/MusicSlice';
+import { selectBehindState, selectMusicExpanded, updateMusicState } from './Music/MusicSlice';
 
 // style
 import "./Room.css";
@@ -30,6 +30,7 @@ import { selectMiscSettingsHideChannelBackground, selectPopOutUserStreams } from
 import { selectGlassColor, selectGlassState, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { audioCtx } from '../../../AudioInit/AudioInit';
 import { selectCurrentServerPageState } from '../ServerNavigation/ServerNavigationSlice';
+import { RoomAmbiance } from '../../../../components/RoomAmbiance/RoomAmbiance';
 
 export let client;
 
@@ -42,6 +43,8 @@ const Component = () => {
     const page = useSelector(selectCurrentServerPageState);
     // state 
     const channel = useSelector(selectCurrentChannel);
+
+    const mediaBehind = useSelector(selectBehindState);
 
     const glass = useSelector(selectGlassState);
 
@@ -726,8 +729,8 @@ const Component = () => {
         if (page === 'social' || page === 'widgets' || musicExpanded === true || page === 'pins' || page === 'media') {
             if (popOutUserStreams) {
                 document.getElementById('user-streams-wrapper').style.position = 'fixed';
-                document.getElementById('user-streams-wrapper').style.left = '40px';
-                document.getElementById('user-streams-wrapper').style.width = "240px";
+                document.getElementById('user-streams-wrapper').style.left = '50px';
+                document.getElementById('user-streams-wrapper').style.width = "220px";
                 document.getElementById('user-streams-wrapper').style.top = 0;
                 document.getElementById('user-streams-wrapper').style.opacity = 1;
                 document.getElementById('user-streams-wrapper').style.pointerEvents = 'none';
@@ -757,7 +760,7 @@ const Component = () => {
         <div className='room-wrapper-outer'>
             <div
             style={
-                (hideChannelBackgrounds || channel.channel_background === undefined) && page !== 'voice' || page === 'social' || page === 'media' || page === 'pins' ? {backgroundColor: glass ? glassColor : secondaryColor} : null
+                ((hideChannelBackgrounds || channel.channel_background === undefined) || page === 'social' || page === 'media' || page === 'pins') ? {backgroundColor: glass ? glassColor : secondaryColor} : null
                 
             }
             id='live-chat-wrapper'>
@@ -772,6 +775,7 @@ const Component = () => {
             <audio hidden={true} id={'microphone-input-source'} />
             
         </div>
+        
         </>
     )
 }

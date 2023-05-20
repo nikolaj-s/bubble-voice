@@ -1,13 +1,11 @@
 
 .channel-icon-image-wrapper {
-    height: 32px;
-    border-top-left-radius: var(--border-radius);
-    border-bottom-left-radius: var(--border-radius);
+    height: 100%;
     overflow: hidden;
     display: flex;
     align-items: center;
     position: absolute;
     z-index: 0;
-    width: 31px;
-    margin-left: -7px;
+    width: calc(100% - 3px);
+    margin-right: 3px;
 }

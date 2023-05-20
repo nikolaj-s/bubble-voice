@@ -5,7 +5,7 @@ import { selectHideUserStatus } from '../../../../settings/appSettings/Miscellan
 
 import "./ChannelBackground.css";
 import { selectServerAmbiance } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
-import { setServerbannerAmbiance } from '../../../ServerSlice';
+import { setRoomColor, setServerbannerAmbiance } from '../../../ServerSlice';
 import { GetImageColorData } from '../../../../../util/GetImageColorData';
 
 export const ChannelBackground = ({channel_background, blur = 1}) => {
@@ -22,8 +22,8 @@ export const ChannelBackground = ({channel_background, blur = 1}) => {
             if (disableServerAmbiance) return;
             
             let color = GetImageColorData(e);    
-        
-            dispatch(setServerbannerAmbiance(color));
+            
+            dispatch(setRoomColor(color));
             
         } catch (err) {
             console.log(err)

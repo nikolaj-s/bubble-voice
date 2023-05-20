@@ -1,6 +1,7 @@
 
 .app-version-container {
-    width: calc(100% - 20px);
+    max-width: 200px;
+   
     padding: 0 10px;
     position: relative;
 }

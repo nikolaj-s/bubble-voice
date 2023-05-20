@@ -8,7 +8,7 @@ import { motion } from 'framer-motion'
 import { SettingsCategoryButton } from '../../../components/buttons/SettingsCategoryButton/SettingsCategoryButton';
 
 // state
-import { selectPrimaryColor, selectSecondaryColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectSecondaryColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { setSideBarHeader } from '../../sideBar/sideBarSlice';
 
 // style
@@ -27,14 +27,49 @@ const Menu = () => {
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
-    const primaryColor = useSelector(selectPrimaryColor);
-
     React.useEffect(() => {
-        dispatch(setSideBarHeader("Server Settings"))
+
         dispatch(toggleServerSettingsOpenState(true))
+        
+        const userStreams =  document.getElementById('user-streams-wrapper');
+
+        const serverSelect = document.getElementById('side-server-list-wrapper');
+
+        const nav = document.getElementsByClassName('server-page-wrapper')[0];
+        
+        const ct = document.getElementsByClassName('content-screen-container')[0];
+
+        const ambiance = document.getElementsByClassName('server-banner-ambiance')[0];
+
+        const rmAmbiance = document.getElementsByClassName('room-ambiance-background')[0];
+
+        if (rmAmbiance) rmAmbiance.style.display = 'none';
+
+        if (ambiance) ambiance.style.display = 'none';
+
+        if (ct) ct.style.zIndex = 0;
+        
+        if (nav) nav.style.zIndex = 0;
+
+        if (userStreams) userStreams.style.display = 'none';
+
+        if (serverSelect) serverSelect.style.zIndex = 0;
+        
         return () => {
             dispatch(toggleServerSettingsOpenState(false))
-            dispatch(setSideBarHeader(""))
+
+            if (rmAmbiance) rmAmbiance.style.display = null;
+
+            if (ambiance) ambiance.style.display = null;
+
+            if (nav) nav.style.zIndex = null;
+
+            if (ct) ct.style.zIndex = null;
+
+            if (userStreams) userStreams.style.display = null;
+
+            if (serverSelect) serverSelect.style.zIndex = null;
+        
         }
     // eslint-disable-next-line
     }, [])
@@ -47,8 +82,8 @@ const Menu = () => {
 
     return (
         <motion.div 
-        initial={{left: "-100%", opacity: 0}}
-        animate={{left: "0%", opacity: 1}}
+        initial={{opacity: 0}}
+        animate={{opacity: 1}}
         className='server-settings-menu'>
             <div 
             style={{backgroundColor: secondaryColor}}
@@ -65,9 +100,9 @@ const Menu = () => {
                     })}
                 </div>
                 {permissions?.server_group_name === 'Owner' ? 
-                <SettingsCategoryButton action={navigateServerSettings} link={'delete-server'} active={window.location.hash.search('delete-server') !== -1} name={'Delete Server'} /> 
+                <SettingsCategoryButton margin={'0 0 10px 0'} action={navigateServerSettings} link={'delete-server'} active={window.location.hash.search('delete-server') !== -1} name={'Delete Server'} /> 
                 :
-                <SettingsCategoryButton name="Dispand Server" />
+                <SettingsCategoryButton margin={'0 0 10px 0'} name="Dispand Server" />
                 }
             </div>
         </motion.div>

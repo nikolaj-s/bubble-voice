@@ -17,7 +17,7 @@ export const ServerBannerAmbiance = () => {
     return (
         <>
         {(server && disableServerAmbiance === false) ?
-        <div style={{boxShadow: `-35px -20px 35px ${serverAmbiance}`}} className='server-banner-ambiance'></div>
+        <div style={{boxShadow: `0 0 10px 10px ${serverAmbiance}`, backgroundColor: serverAmbiance}} className='server-banner-ambiance'></div>
         : null}
         </>
     )

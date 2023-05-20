@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { motion } from 'framer-motion';
 
 // state
-import { selectGlassColor, selectGlassState, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectGlassColor, selectGlassState, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectChannelSocialId, selectCurrentChannelId, selectCurrentlyViewChannelSocial, setChannelSocialId } from '../../ServerSlice'
 
 // component's
@@ -34,6 +34,8 @@ export const SocialRoute = () => {
 
     const primaryColor = useSelector(selectPrimaryColor);
 
+    const accentColor = useSelector(selectAccentColor);
+
     const glass = useSelector(selectGlassState);
 
     const glassColor = useSelector(selectGlassColor);
@@ -58,18 +60,19 @@ export const SocialRoute = () => {
             
             style={{
                 position: 'absolute',
-                zIndex: 4,
+                zIndex: 8,
                 width: 'calc(100%)',
                 left: 0,
                 height: '100%',
+               
             }}
             transition={{duration: 0.2}}
             className='social-route-wrapper-container'>
                 <div 
-                style={{marginBottom: 1, backgroundColor: secondaryColor}}
+                style={{backgroundColor: secondaryColor,  boxShadow: `0px 3px 10px -3px ${accentColor}`}}
                 className='social-route-top-nav'>
                     <div 
-                    style={{}}
+                    
                     className='social-route-title-container'>
                         {channel.text_only ? <TextOnlyIcon /> : null}
                         <h3
@@ -89,8 +92,10 @@ export const SocialRoute = () => {
                 </div>
                 <div
                 style={{
-                    minHeight: 'calc(100% - 36px)',
+                    minHeight: 'calc(100% - 30px)',
+                    marginTop: 30,
                     width: '100%',
+                    zIndex: 5,
                     backgroundColor: glass && !inChannel ? glassColor : secondaryColor
                 }}
                 >

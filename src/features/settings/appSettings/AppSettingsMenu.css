@@ -1,25 +1,31 @@
 
 .app-settings-menu {
-    position: absolute;
-    z-index: 5;
+    position: fixed;
+    z-index: 12;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 25%;
     height: 100%;
+    min-width: 265px;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
     flex-direction: column;
+   
 }
 
 .inner-app-settings-container {
-    width: calc(100% - 20px);
+    max-width: 200px;
+    width: calc(100% - 10px);
     height: 100%;
-    margin-top: 32px;
-    padding: 0 10px;
     flex-grow: 2;
+    margin-right: 5px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     border-top-left-radius: 15px;
+}
+
+.setting-buttons-wrapper {
+    margin-top: 35px;
 }

@@ -133,6 +133,9 @@ const Wrapper = () => {
     }
 
     const handleUpdateChannelName = (value) => {
+
+        if (value.includes('/')) return;
+
         setChannelName(value)
 
         if (value !== channelName) {

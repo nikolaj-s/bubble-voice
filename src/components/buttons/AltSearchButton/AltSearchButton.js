@@ -3,12 +3,13 @@ import { useSelector } from 'react-redux'
 import { selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 import { ButtonAnimationWrapper } from '../ButtonAnimationWrapper/ButtonAnimationWrapper'
 
-export const AltSearchButton = ({action, width, height, invert, borderRadius, margin, active}) => {
+export const AltSearchButton = ({padding, action, width, height, invert, borderRadius, margin, active}) => {
 
     const color = useSelector(selectTextColor);
 
     return (
         <ButtonAnimationWrapper 
+        padding={padding}
         width={width}
         height={height}
         invert={invert}

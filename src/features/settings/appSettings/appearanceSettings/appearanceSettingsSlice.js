@@ -47,7 +47,8 @@ const appearanceSettingsSlice = createSlice({
             {type: 'Green', gradient: 'linear-gradient(to top, #607e5f, #2e3d2f'},
             {type: "Interstellar", gradient: 'radial-gradient(ellipse at 11% 15%,#16213E, #0F3460, #533483, #E94560)'},
             {type: "Sunset", gradient: 'radial-gradient(ellipse at 11% 15%,#F76E11, #FF9F45, #FFBC80, #FC4F4F)'},
-            {type: 'Black Hole', gradient: 'radial-gradient(circle at 50% 50%,#000000, #000000, rgba(179, 76, 51, 1), rgba(0,0,0,1), rgba(0,0,0,1))'}
+            {type: 'Black Hole', gradient: 'radial-gradient(circle at 50% 50%,#000000, #000000, rgba(179, 76, 51, 1), rgba(0,0,0,1), rgba(0,0,0,1))'},
+            {type: "Void", gradient: 'linear-gradient(to top, rgb(0, 0, 0), rgb(0, 0, 0))'}
         ],
         color_themes: {
             light: {

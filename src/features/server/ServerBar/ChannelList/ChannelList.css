@@ -11,12 +11,14 @@
 }
 
 .channel-list-button-wrapper {
-    width: calc(100% - 4px);
+    width: calc(100% - 5px);
     display: flex;
     flex-direction: column;
     flex-shrink: 1;
-    overflow-y: auto;
-    height: calc(100% - 45px);
+    overflow-y: overlay;
+    height: calc(100% - 50px);
     overflow-x: hidden;
+    margin-right: 5px;
+    margin-top: 5px;
 }
 

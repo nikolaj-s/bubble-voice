@@ -18,7 +18,8 @@ export const ScreenButton = ({thumbnail, id, name, action}) => {
 
     const textColor = useSelector(selectTextColor);
 
-    const handleAction = () => {
+    const handleAction = (e) => {
+        e.stopPropagation();
         action(id)
     }
 
@@ -37,7 +38,7 @@ export const ScreenButton = ({thumbnail, id, name, action}) => {
         onMouseOver={() => {handleAnimation(accentColor)}}
         onMouseOut={() => {handleAnimation(secondaryColor)}}
         className='screen-button-container' >
-            <Image cursor='pointer' image={thumbnail} objectFit="contain" />
+            <Image zIndex={0} position='absolute' cursor='pointer' image={thumbnail} objectFit="contain" />
             <p
             style={{color: textColor}}
             >{name}</p>

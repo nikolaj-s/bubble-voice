@@ -17,7 +17,7 @@ export const MicToggleButton = ({action, state, active, id, width = 25, height =
         active={active}
         opacity={0.5}
         id={id}
-        invert={true}
+        altInvert={true}
         description={active ? null : `${state ? 'Mute' : 'Un-Mute'}`}
         zIndex={5}
         borderRadius={5}

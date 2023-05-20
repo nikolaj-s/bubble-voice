@@ -1,14 +1,13 @@
 
 .channel-background-container {
-    position: fixed;
+    position: absolute;
     z-index: 0;
     z-index: 0;
-    top: 32px;
-    left: 55px;
+    top: 0px;
+    left: 0px;
     height: calc(100%);
     width: calc(100%);
     overflow: hidden;
-    border-top-left-radius: 15px;
 }
 
 .channel-background-blur-layer {

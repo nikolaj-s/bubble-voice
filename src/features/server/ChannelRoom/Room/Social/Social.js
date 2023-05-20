@@ -32,7 +32,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
     const [text, setText] = React.useState("");
 
-    const [image, setImage] = React.useState(null);
+    const [image, setImage] = React.useState(false);
 
     const [messagesToRender, setMessagesToRender] = React.useState(15);
 
@@ -104,8 +104,8 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
     const send = async () => {
 
         if (!permission.user_can_post_channel_social) return;
-
-        if (text.length === 0 && image === null) return;
+        
+        if (text.replace(/\s/g, '').length <= 3 && image === false) return dispatch(throwServerError({errorMessage: "Message Cannot be less than 3 characters"}));
 
         if (text.split(' ').join('').length === 0 && image === null) return;
         
@@ -191,21 +191,22 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         if (loadingMore) return;
 
-        let scroll_pos;
-        
-        if ((messagesRef.current.scrollTop + messagesRef.current.scrollHeight) * .5 < e.target.clientHeight) {
+        if ((messagesRef.current.scrollTop + messagesRef.current.scrollHeight) < (e.target.clientHeight + 10)) {
 
             toggleLoadingMore(true);
-
-            scroll_pos = messagesRef.current.scrollTop;
             
             setTimeout(() => {
 
                 setMessagesToRender(messagesToRender + 15);
 
-                toggleLoadingMore(false);
+                setTimeout(() => {
 
-            }, 300);
+                    toggleLoadingMore(false);
+                
+                }, 500)
+                
+
+            }, 500);
 
         }
     

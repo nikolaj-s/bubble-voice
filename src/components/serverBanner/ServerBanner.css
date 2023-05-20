@@ -42,6 +42,7 @@
 
 #server-banner-image {
     bottom: 0;
-    height: 118px !important;
-    border-top-left-radius: 15px;
+    height: 120px !important;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
 }

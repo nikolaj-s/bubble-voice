@@ -1,9 +1,9 @@
 .message-container {
-    width: calc(100% - 5px);
+    width: calc(100% - 10px);
     display: flex;
     height: auto;
     flex-direction: column;
-    margin: 0rem;
+    margin: 0 10px 0 0;
     position: relative;
 }
 
@@ -11,15 +11,17 @@
     width: auto;
     max-width: 800px;
     overflow-wrap: anywhere;
-    margin: 5px 0 5px 60px;
+    margin: 0px 0 5px 50px;
+    font-size: 0.8rem;
 }
 
 .message-container a {
     color: rgb(66, 176, 176);
     cursor: pointer;
-    margin: 5px 0px 5px 60px;
+    margin: 0px 0px 5px 50px;
     word-break: break-all;
     flex-shrink: 0;
+    font-size: 0.8rem;
 }
 
 .message-container a:hover {
@@ -49,9 +51,9 @@
 }
 
 .sender-info-container h2 {
-    margin: 0 1rem 0 0;
+    margin: 0 .5rem 0 0;
     padding: 0;
-    font-size: 1.3rem;
+    font-size: 1rem;
     letter-spacing: var(--font-spacing);
     cursor: pointer;
 }
@@ -74,9 +76,10 @@
 
 .message-image-container {
     max-height: 600px;
+    min-height: 80px;
     overflow: hidden;
     object-fit: contain;
-    margin: 0 5px 0 60px;
+    margin: 0 5px 0 50px;
 }
 
 .message-image-container img {
@@ -91,7 +94,7 @@
     overflow: hidden;
     display: flex;
     justify-content: flex-start;
-    margin-left: 60px;
+    margin-left: 50px;
     margin-right: 5px;
 }
 
@@ -108,10 +111,10 @@
 }
 
 .message-profile-picture {
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     flex-shrink: 0;
     overflow: hidden;
-    margin: 22px 10px 0 5px;
+    margin: 22px 5px 0 5px;
 }

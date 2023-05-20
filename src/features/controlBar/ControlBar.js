@@ -14,7 +14,7 @@ import { ShareScreenButton } from '../../components/buttons/mediaButtons/shareSc
 import { resetControlState, selectAudioState, selectLoadingScreenShare, selectLoadingWebCam, selectMicrophoneState, selectScreenShareState, selectWebCamState, toggleControlState, toggleLoadingWebCam } from './ControlBarSlice';
 import { selectCurrentChannel, selectCurrentChannelId } from '../server/ServerSlice';
 import { playSoundEffect } from '../settings/soundEffects/soundEffectsSlice';
-import { selectSecondaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style's
 import "./ControlBar.css";
@@ -40,7 +40,7 @@ export const ControlBar = () => {
 
     const channel = useSelector(selectCurrentChannel);
 
-    const secondaryColor = useSelector(selectSecondaryColor);
+    const secondaryColor = useSelector(selectPrimaryColor);
 
     const loadingWebCam = useSelector(selectLoadingWebCam);
 
@@ -108,14 +108,14 @@ export const ControlBar = () => {
     return (
         <>
             <div className='control-bar-container' 
-            style={{backgroundColor: secondaryColor, marginTop: '1px'}}
+            style={{backgroundColor: secondaryColor}}
             >
                 <div className='controls-wrapper'>
                     <SettingsButton 
                     width={20}
                     height={20}
                     padding={7}
-                    desc_space={20}
+                    desc_space={23}
                     action={toggleAppSettings} />
                     <WebCamButton 
                     width={20}
@@ -131,7 +131,8 @@ export const ControlBar = () => {
                     width={20}
                     height={20}
                     padding={7}
-                    desc_space={20}
+                    desc_space={23}
+                    
                     action={() => {toggleFunction('microphoneState')}} 
                     state={microphoneState} 
                     active={current_channel_id === null || channel.disable_streams}
@@ -141,7 +142,8 @@ export const ControlBar = () => {
                     width={20}
                     height={20}
                     padding={7}
-                    desc_space={20}
+                    desc_space={23}
+                    altInvert={true}
                     action={() => {toggleFunction('audioState')}} 
                     state={audioState} 
                     active={current_channel_id === null || channel.disable_streams}
@@ -152,7 +154,7 @@ export const ControlBar = () => {
                     width={20}
                     height={20}
                     padding={7}
-                    desc_space={20}
+                    desc_space={23}
                     loading={loadingScreenShare}
                     action={() => {toggleFunction('screenShareState')}} 
                     state={screenShareState} 

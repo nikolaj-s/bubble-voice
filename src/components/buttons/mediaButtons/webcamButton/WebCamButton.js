@@ -17,8 +17,9 @@ export const WebCamButton = ({action, state, active, id, loading = true, width =
     desc_space={desc_space}
     opacity={0.5}
     id={id}
+    altInvert={true}
     position={'relative'}
-    invert={true}
+   
     description={active ? null : `Turn ${state ? 'On' : 'Off'} Webcam`}
     zIndex={5}
     borderRadius={5}

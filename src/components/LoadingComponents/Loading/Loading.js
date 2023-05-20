@@ -16,7 +16,7 @@ import { selectSecondaryColor } from '../../../features/settings/appSettings/app
 import "./Loading.css";
 
 
-export const Loading = ({loading = false, error = false, overflow = true, success_size = {width: 75, height: 75}, show_success = true, zIndex = 6, forceStop}) => {
+export const Loading = ({backgroundColor, loading = false, error = false, overflow = true, success_size = {width: 75, height: 75}, show_success = true, zIndex = 6, forceStop}) => {
 
     const [localLoading, toggleLoading] = React.useState(false);
 
@@ -96,7 +96,8 @@ export const Loading = ({loading = false, error = false, overflow = true, succes
         key={"loading-background-color"}
         
         style={{
-            zIndex: zIndex
+            zIndex: zIndex,
+            backgroundColor: backgroundColor
         }}
         className='loading-container' >
             

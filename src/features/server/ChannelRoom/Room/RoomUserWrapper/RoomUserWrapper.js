@@ -1,8 +1,9 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
 import { selectHideUserStatus, selectMiscSettingsHideNonVideoParticapents } from '../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
-import { selectMusicExpanded } from '../Music/MusicSlice';
+import { selectBehindState, selectMusicExpanded } from '../Music/MusicSlice';
 import { User } from '../User/User'
+import { Music } from '../Music/Music';
 
 export const RoomUserWrapper = ({users, page}) => {
 
@@ -14,7 +15,9 @@ export const RoomUserWrapper = ({users, page}) => {
 
     const musicExpanded = useSelector(selectMusicExpanded);
 
-    let margin = 15;
+    const behindState = useSelector(selectBehindState);
+
+    let margin = 2;
 
     const ratio = (9 / 16);
 
@@ -27,15 +30,35 @@ export const RoomUserWrapper = ({users, page}) => {
             for (const child of parent.children) {
                 if (child.id === expanded) {
 
+                    let wDimension = parent.offsetWidth - 10;
+
+                    let hDimension = parent.offsetHeight;
+
+                    let max = 0;
+
+                    let i = 1;
+
+                    while (i < 5000) {
+                        let a = area(i, hDimension, wDimension, [0])
+                        if (a === false) {
+                            max = i - 1;
+                            break;
+                        }
+                        i++;
+                    }
+        
+                    max = max - (0 * 2);
+
                     const v = child.querySelector('video');
 
                     if (v) {
                         v.style.objectFit = 'contain'
                     }
-                    child.style.width = '100%';
-                    child.style.height = 'calc(100% - 300px)';
-                    child.style.maxHeight = '900px'
-                    child.style.maxWidth = '1600px'
+                    child.style.width = `${max}px`;
+                    child.style.margin = '0px'
+                    child.style.height = `${(max * ratio)}px`;
+                    child.style.maxHeight = `100%`
+                    child.style.maxWidth = `100%`
                 } else {
                     const v = child.querySelector('video');
 
@@ -44,6 +67,7 @@ export const RoomUserWrapper = ({users, page}) => {
                         v.style.objectFit = 'cover'
                     
                     }
+                    child.style.margin = '0px'
                     child.style.maxHeight = '540px'
                     child.style.maxWidth = '960px'
                     child.style.width = '100px'
@@ -57,24 +81,55 @@ export const RoomUserWrapper = ({users, page}) => {
     // eslint-disable-next-line   
     }, [expanded, hidingNonVideoMembers, hidingUserStatus])
 
+
+
     React.useEffect(() => {
-        console.log(page)
+
         setTimeout(() => {
             handleScaling();
-        }, 100)
+        }, 300)
         
-    }, [page, musicExpanded])
-        
+    }, [musicExpanded, behindState])
+    
+    
+    React.useEffect(() => {
+        setTimeout(() => {
+            handleScaling();
+        }, 300)
+    }, [page])
+
+
+    React.useEffect(() => {
+        setTimeout(() => {
+            handleScaling();
+        }, 300)
+    }, [hidingUserStatus])
+
     React.useEffect(() => {
         try {
             handleScaling()
 
-            window.addEventListener('resize', handleScaling);
+            let timeout;
+
+            window.onresize = function() {
+
+                handleScaling();
+
+                setTimeout(() => {
+                    handleScaling();
+                    setTimeout(() => {
+                        handleScaling()
+                    }, 1000)
+                }, 500)
+            }
 
             document.getElementById('user-streams-wrapper').addEventListener('DOMNodeInserted', handleScaling)
 
             document.getElementById('user-streams-wrapper').addEventListener('DOMNodeRemoved', handleScaling)
             return () => {
+                
+                window.onresize = null;
+
                 window.removeEventListener('resize', handleScaling)
 
                 document.getElementById('user-streams-wrapper')?.removeEventListener('DOMNodeInserted', handleScaling)
@@ -123,22 +178,22 @@ export const RoomUserWrapper = ({users, page}) => {
         else return increment;
     }
 
-    const handleScaling = () => {
+    const handleScaling = (timeout = true) => {
         try {
             const parent = document.getElementById('user-streams-wrapper');
 
-            const children = parent.children;
+            const children = parent.children
             
             const c_count = Array.from(children).filter(child => ((child.attributes[2] ? child.attributes[2]["value"].includes('flex') : null && child.className === 'active-user-container') || child.className === 'streaming-video-player-container' || child.className.includes('youtube-player-wrapper')));
             
-            let wDimension = parent.offsetWidth - 14;
+            let wDimension = parent.offsetWidth - 10;
 
-            let hDimension = parent.offsetHeight;
+            let hDimension = parent.offsetHeight - 20;
             
             let max = 0;
             let i = 1;
 
-            while (i < 5000) {
+            while (i < 8000) {
                 let a = area(i, hDimension, wDimension, c_count)
                 if (a === false) {
                     max = i - 1;
@@ -154,8 +209,9 @@ export const RoomUserWrapper = ({users, page}) => {
                 c.style.maxWidth = '960px'
                 c.style.width = `${max}px`;
                 c.style.height = `${(max * ratio)}px`;
-            
+                c.style.margin = '2px'
             }
+
         } catch (error) {
             console.log(error)
         }

@@ -1,25 +1,24 @@
 
 
 .channel-button-container {
-    width: calc(100% - 25px);
-    height: calc(33px - 8px);
+    width: calc(100% - 5px);
+    margin-left: 5px;
+    height: calc(34px);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-radius: 5px;
-    margin-top: 2px;
-    margin-left: 12px;
     position: relative;
-    padding: 0 3px;
+    border-radius: 5px;
 }
 
 .channel-button-container h3 {
-    font-size: 0.8rem;
+    font-size: 1rem;
     font-weight: 400;
+    margin: 0;
+    padding: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     width: 100%;
-    letter-spacing: var(--font-spacing);
     white-space: nowrap;
     word-wrap: normal;
     word-break: keep-all;
@@ -31,20 +30,19 @@
     align-items: center;
     justify-content: flex-end;
     bottom: 0;
-    right: 3px;
+    right: 9px;
     width: 50px;
     height: 100%;
 }
 
 .unread-message-indicator {
     flex-shrink: 0;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    top: 8px;
-    left: -21px;
+    width: 3px;
+    height: 33px;
+    top: 0px;
+    left: -20px;
     z-index: 1;
-    margin-left: 5px;
+    margin-left: 15px;
     position: absolute;
 }
 
@@ -52,6 +50,10 @@
     height: 100%;
     display: flex;
     align-items: center;
+    justify-content: center;
     position: relative;
-    width: 33px;
+    width: 34px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    overflow: hidden;
 }

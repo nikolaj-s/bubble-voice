@@ -11,8 +11,10 @@
     flex-shrink: 0;
     justify-self: flex-end;
     overflow-x: hidden;
-    z-index: 4;
+    z-index: 1;
     align-items: center;
+    border-radius: 8px;
+    margin-left: 4px;
 }
 
 .user-status-bar h4 {

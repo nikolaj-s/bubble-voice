@@ -95,7 +95,7 @@ export const ViewSubReddit = ({expand, explore}) => {
                 : null}
             </div>
             {posts.length > 0 ? 
-            <ResponsiveMasonry style={{width: '100%', marginTop: 10}} columnsCountBreakPoints={explore ? {400: 1} : {800: 1, 1200: 2, 1400: 3}}>
+            <ResponsiveMasonry style={{width: 'calc(100% - 10px)', margin: '10px 5px 0px 5px'}} columnsCountBreakPoints={explore ? {400: 1} : {800: 1, 1200: 2, 1400: 3}}>
                 <Masonry gutter='5px'>
                     {posts.map(post => {
                         return <RedditPost action={expand} data={post} />

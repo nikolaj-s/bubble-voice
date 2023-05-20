@@ -97,21 +97,13 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
 
     const showControls = (enter) => {
 
-        clearTimeout(mouseMoveTimeOut);
-
-        mouseMoveTimeOut = null;
-
         controlAnimation.start({opacity: 1})
 
         if (enter === false) {
-        
-            mouseMoveTimeOut = setTimeout(() => {
 
-                controlAnimation.start({opacity: 0});
+            controlAnimation.start({opacity: 0});
 
-                if (!playing) toggleInteracted(false);
-    
-            }, 2000)
+            if (!playing) toggleInteracted(false);
         } 
         
     }
@@ -195,9 +187,9 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
         className='message-video-container'>
             <video 
             onTimeUpdate={handleProgress}
-            onMouseMove={() => {showControls(false)}}
+            onMouseMove={() => {showControls(true)}}
             ref={ref}
-            
+            onMouseLeave={() => {showControls(false)}}
             loading="lazy"
             style={{objectFit: objectFit}}
             muted={mutedToggled ? true : false}

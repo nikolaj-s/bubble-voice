@@ -34,15 +34,48 @@ const SettingsMenu = () => {
     const primaryColor = useSelector(selectPrimaryColor);
 
     React.useEffect(() => {
-        dispatch(setSideBarHeader("Settings"))
 
         animation.start({
-            left: "0",
             opacity: 1
         })
+        const userStreams =  document.getElementById('user-streams-wrapper');
 
+        const serverSelect = document.getElementById('side-server-list-wrapper');
+
+        const nav = document.getElementsByClassName('server-page-wrapper')[0];
+
+        const ct = document.getElementsByClassName('content-screen-container')[0];
+        
+        const ambiance = document.getElementsByClassName('server-banner-ambiance')[0];
+
+        const rmAmbiance = document.getElementsByClassName('room-ambiance-background')[0];
+
+        if (rmAmbiance) rmAmbiance.style.display = 'none';
+
+        if (ambiance) ambiance.style.display = 'none';
+        
+        if (ct) ct.style.zIndex = 0;
+
+        if (nav) nav.style.zIndex = -1;
+
+        if (userStreams) userStreams.style.display = 'none';
+
+        if (serverSelect) serverSelect.style.zIndex =  0;
+        
         return () => {
-            dispatch(setSideBarHeader(""))
+            if (rmAmbiance) rmAmbiance.style.display = null;
+
+            if (ambiance) ambiance.style.display = null;
+
+            if (ct) ct.style.zIndex = null;
+
+            if (nav) nav.style.zIndex = null;
+
+            if (userStreams) userStreams.style.display = null;
+
+            if (serverSelect) serverSelect.style.zIndex = null;
+        
+
         }
     // eslint-disable-next-line
     }, [])
@@ -66,7 +99,7 @@ const SettingsMenu = () => {
     }
 
     return (
-        <motion.div initial={{left: "-100%", opacity: 0}} animate={animation} className='app-settings-menu'>
+        <motion.div initial={{opacity: 0}} style={{backgroundColor: secondaryColor}}  animate={{opacity: 1}} className='app-settings-menu'>
 
             <div style={{backgroundColor: secondaryColor}} className='inner-app-settings-container'>
                 <div className='setting-buttons-wrapper'>

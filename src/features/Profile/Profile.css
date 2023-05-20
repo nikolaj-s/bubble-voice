@@ -1,15 +1,13 @@
 
 .profile-tab-container {
     position: absolute;
-    top: 32px;
+    top: 31px;
     left: 55px;
     width: 600px;
-    height: calc(100% - 32px - 15px);
+    height: calc(100% - 32px - 20px);
     padding: 5px 5px 10px 5px;
     z-index: 6;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    border-bottom-right-radius: 15px;
+    border-radius: 8px;
     overflow: hidden;
     box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.561);
 }

@@ -24,7 +24,7 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
 
     const [files, setFiles] = React.useState([{}])
 
-    const [inputHeight, setInputHeight] = React.useState(60);
+    const [inputHeight, setInputHeight] = React.useState(40);
 
     const [processingImage, toggleProcessingImage] = React.useState(false);
 
@@ -94,7 +94,7 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
 
         setInputHeight(e.target.scrollHeight)
 
-        updateInputHeight(e.target.scrollHeight + 20)
+        updateInputHeight(e.target.scrollHeight + 30)
     
     }
 
@@ -103,10 +103,13 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
             return
         }
 
-        if (keyCode === 13) {
-            setInputHeight(60); 
-            updateInputHeight(80);
+        if (e.keyCode === 13) {
+            
+            setInputHeight(40); 
+            updateInputHeight(50);
+        
         }
+        
         keyCode(e.keyCode)
     }
 
@@ -114,9 +117,9 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
 
         if (processingImage) return;
 
-        setInputHeight(60)
+        setInputHeight(40)
 
-        updateInputHeight(80)
+        updateInputHeight(50)
 
         send();
     }
@@ -147,7 +150,7 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
         <> 
         <AnimatePresence>
             {persist ? <ImageDropListener key={"image-drop-listener"} root={getRootProps({className: 'dropzone'})} /> : null}
-            <ImageSearchPanel key="message-image-search-container" serverId={serverId} selectImage={selectImage} searchingForImage={searchingForImage} />
+            <ImageSearchPanel inputHeight={inputHeight} key="message-image-search-container" serverId={serverId} selectImage={selectImage} searchingForImage={searchingForImage} />
             <div
             style={{
                 borderBottomRightRadius: socialRoute ? 0 : hideUserStatus ? 10 : 0,
@@ -173,7 +176,7 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
                     id='social-input-selector' onKeyUp={handleKeyCode} onChange={handleText} value={value}  placeholder='Message' type="text" />
                     <div className='message-input-button-wrapper'>
                         <CharacterCount count={value.length} />
-                        <SearchImageButton margin={!persist ? '0 10px 0 0' : null} action={handleSearchingForImageToggle} />
+                        <SearchImageButton margin={!persist ? '0 5px 0 0' : null} action={handleSearchingForImageToggle} />
                         {(persist && !processingImage) ? <ImageButton action={handleImageButton} /> : null}
                         {processingImage ? <ProcessingImageIndicator percent={percent} /> : null}
                         <SendButton color={textColor} action={handleSend} />

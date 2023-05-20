@@ -19,7 +19,7 @@ export const ShareScreenButton = ({action, state, active, loading, id, width = 2
     desc_space={desc_space}
     opacity={0.5}
     position={'relative'}
-    invert={true}
+    altInvert={true}
     id={id}
     description={active ? null : `${state ? 'Share-Screen' : 'Stop-Sharing'}`}
     zIndex={5}

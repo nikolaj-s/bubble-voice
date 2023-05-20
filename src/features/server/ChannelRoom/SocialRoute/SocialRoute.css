@@ -16,11 +16,15 @@
 }
 
 .social-route-top-nav {
-    height: 35px;
+    height: 30px;
     width: calc(100%);
+    position: absolute;
+    top: 0;
+    left: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    z-index: 10;
 }
 
 .social-route-top-nav .close-social-button {
@@ -31,6 +35,7 @@
     align-items: center;
     cursor: pointer;
     margin-left: 1px;
+    flex-shrink: 0;
 }
 
 .social-route-top-nav .close-social-button:hover {
@@ -38,7 +43,7 @@
 }
 
 .social-route-title-container {
-    width: calc(100% - 20px);
+    width: calc(100% - 60px);
     display: flex;
     align-items: center;
     height: 100%;
@@ -50,5 +55,10 @@
     letter-spacing: var(--font-spacing);
     font-size: .9rem;
     padding-left: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: keep-all;
+    word-wrap: normal;
+    white-space: nowrap;
 }
 

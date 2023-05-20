@@ -15,7 +15,7 @@ export const Reccomendations = ({media, count, expand}) => {
         {media?.length === 0 ?
             <NoMedia alt={true} message={"No Server Media, Start Using The Image Search To Populate This Area"} />
             :
-            <ResponsiveMasonry columnsCountBreakPoints={{800: 1, 1000: 2, 1500: 3, 1900: 4, 2500: 5}}>
+            <ResponsiveMasonry style={{width: 'calc(100% - 5px)'}} columnsCountBreakPoints={{800: 1, 1000: 2, 1500: 3, 1900: 4, 2500: 5}}>
                 <Masonry gutter='5px'> 
                     {media.slice(0, count).map((img, key) => {
                         return (

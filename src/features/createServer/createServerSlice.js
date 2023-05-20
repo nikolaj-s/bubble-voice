@@ -106,6 +106,7 @@ const createServerSlice = createSlice({
                 state.serverName = "";
                 state.serverPassword = "";
                 state.confirmServerPassword = "";
+                state.visible = false;
                 window.location.hash = `/dashboard/server/${action.payload.server.server_name}`;
             }
                 

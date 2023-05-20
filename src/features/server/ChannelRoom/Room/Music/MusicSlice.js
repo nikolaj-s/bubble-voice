@@ -37,9 +37,13 @@ const MusicSlice = createSlice({
         errorMessage: "",
         volume: 25,
         expanded: false,
-        loading: false
+        loading: false,
+        behind: false
     },
     reducers: {
+        toggleBehind: (state, action) => {
+            state.behind = action.payload;
+        },
         toggleMusicPlaying: (state, action) => {
             state.playing = action.payload;
         },
@@ -129,7 +133,9 @@ export const selectMusicExpanded = state => state.MusicSlice.expanded;
 
 export const selectLoadingMusicState = state => state.MusicSlice.loading;
 
+export const selectBehindState = state => state.MusicSlice.behind;
+
 // actions
-export const {toggleLoadingMusic,toggleMusicExpanded, removeSongFromQueue, un_like_song, like_song, toggleMusicPlaying, addSongToQueue, skipSong, updateMusicState, throwMusicError, updateMusicVolume} = MusicSlice.actions;
+export const {toggleBehind, toggleLoadingMusic,toggleMusicExpanded, removeSongFromQueue, un_like_song, like_song, toggleMusicPlaying, addSongToQueue, skipSong, updateMusicState, throwMusicError, updateMusicVolume} = MusicSlice.actions;
 
 export default MusicSlice.reducer;

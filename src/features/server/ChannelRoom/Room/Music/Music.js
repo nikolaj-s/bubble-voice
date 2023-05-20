@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { throwServerError } from '../../../ServerSlice';
-import { selectLoadingMusicState, selectMusicExpanded, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, throwMusicError, toggleLoadingMusic, toggleMusicExpanded, updateMusicVolume,} from './MusicSlice';
+import { selectBehindState, selectLoadingMusicState, selectMusicExpanded, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, throwMusicError, toggleBehind, toggleLoadingMusic, toggleMusicExpanded, updateMusicVolume,} from './MusicSlice';
 import YouTube from 'react-youtube'
 import {  selectPrimaryColor, selectSecondaryColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
@@ -34,7 +34,7 @@ export const Music = () => {
 
     const [mouseDown, toggleMouseDown] = React.useState(false);
 
-    const [behind, toggleBehind] = React.useState(false);
+    const behind = useSelector(selectBehindState);
 
     const dispatch = useDispatch();
 
@@ -124,6 +124,7 @@ export const Music = () => {
 
         if (musicQueue.length === 0) {
             dispatch(toggleMusicExpanded(false));
+            dispatch(toggleBehind(false))
         }
     // eslint-disable-next-line    
     }, [musicQueue])
@@ -207,7 +208,8 @@ export const Music = () => {
 
 
     const handleExpansion = () => {
-       dispatch(toggleMusicExpanded(!expanded));
+        dispatch(toggleBehind(false));
+        dispatch(toggleMusicExpanded(!expanded));
     }
 
     const onMouseDown = (e) => {
@@ -241,7 +243,7 @@ export const Music = () => {
 
         if (mouseDown === true) {
             
-            if (e.clientX + offset[0] > 0 && (e.clientX + offset[0]) < window.innerWidth - 60) {
+            if (e.clientX + offset[0] > 55 && (e.clientX + offset[0]) < window.innerWidth - 60) {
                 setLeft((e.clientX + offset[0]))
             } 
             if ((e.clientY + offset[1]) > -120 && (e.clientY + offset[1]) + 460 < window.innerHeight) {
@@ -260,7 +262,9 @@ export const Music = () => {
     }, [])
 
     const handleToggleBehind = () => {
-        toggleBehind(!behind)
+        dispatch(toggleBehind(!behind));
+
+        toggleVisible(true)
     }
 
     return (
@@ -274,16 +278,19 @@ export const Music = () => {
         onMouseMove={onMouseMove}
         onMouseLeave={onMouseUp}
         style={{
-            width: (expanded||behind) ? 'calc(100%)' : visible ? 600 : 55,
-            height: behind ? 'calc(100% - 30px)' : expanded ? "100%" : 300,
+            backgroundColor: behind ? primaryColor : null,
+            width: behind ? 'calc(100% - 4px)' : (expanded) ? 'calc(100%)' : visible ? 600 : 55,
+            height: behind ? 'calc(40% - 4px)' : expanded ? "100%" : 300,
             right: 5,
-            left: behind ? 50 : expanded ? '50%' : left,
-            top: behind ? 30 : expanded ? 0 : top,
+            left: behind ? 0 : expanded ? '50%' : left,
+            top: behind ? 0 : expanded ? 0 : top,
             transform: behind ? null : expanded ? 'translate(-50%, 0%)' : 'translate(0%, 50%)',
             boxShadow: expanded ? '5px 5px 60px rgba(0, 0, 0, 0.8)' : null,
             borderRadius: '10px',
-            position: behind ? 'fixed' : expanded ? 'absolute' : 'fixed',
-            zIndex: behind ? 0 : 10
+            position: behind ? 'relative' : expanded  ? 'absolute' : 'fixed',
+            zIndex: behind ? 0 : 12,
+            marginTop: behind ? 5 : null,
+            border: behind ? `2px solid ${secondaryColor}` : null
         }}
         id={'music-player-component'}
         className='music-player-overlay-wrapper'>
@@ -298,7 +305,7 @@ export const Music = () => {
                 {!musicPlaying ? <PlayButton action={handleTogglePlaying} width={20} height={20}  /> : <PauseButton action={handleTogglePlaying} width={20} height={20} />}
                 
                 <AudioToggleButton width={20} height={20} o_mouseEnter={() => {handleToggleVolumeControls(true)}} o_mouseLeave={() => {handleToggleVolumeControls(false)}} description={muted ? 'Un Mute' : 'Mute'} action={handleMute} state={!muted} />
-                <PlaceBehindButton action={handleToggleBehind} description={"Place Behind"} width={20} height={20} />
+                <PlaceBehindButton action={handleToggleBehind} description={"Pop In"} width={20} height={20} />
                 {volumeControls ?
                 <div style={{right: visible ? 248 : 35}} onMouseLeave={() => {handleToggleVolumeControls(false)}} onMouseEnter={() => {handleToggleVolumeControls(true)}} className='music-overlay-volume-container' >
                     <div style={{backgroundColor: primaryColor}} >
@@ -311,7 +318,7 @@ export const Music = () => {
             
             
             style={{
-            borderRadius: expanded ? '10px' : null, maxWidth: visible ? '100%' : 0, transition: '0.2s', cursor: expanded ? 'default' : 'grab'}} className='youtube-player-wrapper' id="youtube-media-container">
+            borderRadius: (expanded||behind) ? '10px' : null, maxWidth: visible ? '100%' : 0, transition: '0.2s', cursor: expanded ? 'default' : 'grab'}} className='youtube-player-wrapper' id="youtube-media-container">
                 <YouTube 
                 
                 onReady={handleOnReady}

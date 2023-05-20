@@ -51,14 +51,15 @@ export const UserStatus = ({user}) => {
         onClick={openMemberPanel} onMouseEnter={(e) => {handleMouseEnter(e, true)}} onMouseLeave={(e) => {handleMouseLeave(e, false)}} className={`user-status-container ${user._id}-user-status-card status-${user.status}`}>
             <div
             style={{
-                borderRadius: (user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%'
+                borderRadius: (user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%',
+                filter: user?.status === 'offline' || !user?.status ? 'brightness(50%)' : null
             }}
             className='user-status-image-container'>
                 <Image cursor='pointer' image={user.user_image} />
             </div>
             <div 
             className={`user-name-status-wrapper ${user._id}-user-name-status-wrapper`}>
-                <h3 style={{color: textColor}} >{user.display_name}</h3>
+                <h3 style={{color: user.color || textColor, filter: 'brightness(150%)', fontWeight: '600', opacity: user?.status === 'offline' || !user?.status ? 0.4 : null}} >{user.display_name}</h3>
                 <p style={{color: textColor}}>{user.status ? user.status : 'offline'}</p>
             </div>
         </div>

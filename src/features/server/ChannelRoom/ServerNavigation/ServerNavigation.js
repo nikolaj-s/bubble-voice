@@ -6,7 +6,7 @@ import { useAnimation, motion } from 'framer-motion';
 // state
 import { selectCurrentServerPageState, handleChangePage } from './ServerNavigationSlice';
 import { selectCurrentChannelId, selectUsersPermissions } from '../../ServerSlice';
-import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor, selectTransparentPrimaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./ServerNavigation.css";
@@ -203,13 +203,13 @@ export const ServerNavigation = () => {
 
     return (
         <motion.div
-        
+            style={{ boxShadow: `0px 3px 10px -3px ${accentColor}`}}
         className='server-navigation-container'>
             <div style={{backgroundColor: primaryColor}} className='server-navigation-button-wrapper'>
                 {inChannel ?
                 <>
                 <motion.div 
-                transition={{duration: 0.1}}
+                transition={{duration: 0.05}}
                 onMouseEnter={() => {handleDesc('video', true)}}
                 onMouseOver={() => {handleAnimation(secondaryColor, voiceButtonAnimation, 'voice')}}
                 onMouseOut={() => {handleAnimation(`rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`, voiceButtonAnimation, 'voice')}}
@@ -224,7 +224,7 @@ export const ServerNavigation = () => {
                 <>
                 <motion.div 
                 id={'channel-social-tab-button'}
-                transition={{duration: 0.1}}
+                transition={{duration: 0.05}}
                 onMouseEnter={() => {handleDesc('social', true)}}
                 onMouseOver={() => {handleAnimation(secondaryColor, socialButtonAnimation, 'social')}}
                 onMouseOut={() => {handleAnimation(`rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`, socialButtonAnimation, 'social')}}
@@ -238,7 +238,7 @@ export const ServerNavigation = () => {
                 <motion.div 
                 onMouseEnter={() => {handleDesc('widgets', true)}}
                 onMouseLeave={() => {handleDesc('widgets', false)}}
-                transition={{duration: 0.1}}
+                transition={{duration: 0.05}}
                 onMouseOver={() => {handleAnimation(secondaryColor, widgetsButtonAnimation, 'widgets')}}
                 onMouseOut={() => {handleAnimation(`rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`, widgetsButtonAnimation, 'widgets')}}
                 onMouseDown={() => {handleAnimation(accentColor, widgetsButtonAnimation, 'widgets')}}
@@ -254,7 +254,7 @@ export const ServerNavigation = () => {
                 <motion.div 
                 onMouseEnter={() => {handleDesc('pins', true)}}
                 onMouseLeave={() => {handleDesc('pins', false)}}
-                transition={{duration: 0.1}}
+                transition={{duration: 0.05}}
                 onMouseOver={() => {handleAnimation(secondaryColor, pinsButtonAnimation, 'pins')}}
                 onMouseOut={() => {handleAnimation(`rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`, pinsButtonAnimation, 'pins')}}
                 onMouseDown={() => {handleAnimation(accentColor, pinsButtonAnimation, 'pins')}}
@@ -266,7 +266,7 @@ export const ServerNavigation = () => {
                 <motion.div 
                 onMouseEnter={() => {handleDesc('media', true)}}
                 onMouseLeave={() => {handleDesc('media', false)}}
-                transition={{duration: 0.1}}
+                transition={{duration: 0.05}}
                 onMouseOver={() => {handleAnimation(secondaryColor, mediaButtonAnimation, 'media')}}
                 onMouseOut={() => {handleAnimation(`rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`, mediaButtonAnimation, 'media')}}
                 onMouseDown={() => {handleAnimation(accentColor, mediaButtonAnimation, 'media')}}
@@ -278,7 +278,7 @@ export const ServerNavigation = () => {
                
             </div>
             <motion.div transition={{duration: 0.2}} style={{backgroundColor: secondaryColor}} className='server-navigation-filler'></motion.div>
-                {inChannel ? <SubMenuButton margin={"0 0 0 1px"} description={"Room Quick Settings"} right_orientation_desc={true}  target={'live-chat-wrapper'} borderRadius={0} zIndex={3} top={0} height={10} left={null} width={15} /> : null}
+                {inChannel ? <SubMenuButton altInvert={true} invert={true} description={"Room Quick Settings"} right_orientation_desc={true}  target={'live-chat-wrapper'} borderRadius={0} zIndex={3} top={0} height={10} left={null} width={15} /> : null}
         </motion.div>
     )
 }

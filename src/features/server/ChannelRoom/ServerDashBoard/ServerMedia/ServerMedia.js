@@ -76,14 +76,17 @@ export const ServerMedia = ({media, expand}) => {
     }, [page])
     
     return (
-        <div onScroll={handleLoadMore} className='server-media-container'>
+        <>
             <div style={{backgroundColor: secondaryColor}} className='server-media-navigation-container'>
-                <h3 onClick={() => {setPage('recommendations')}} style={{color: textColor, opacity: page === 'recommendations' ? 1 : 0.5, cursor: page === 'recommendations' ? 'default' : 'pointer', backgroundColor: page === 'recommendations' ? accentColor : null}}>Recommendations</h3>
-                <h3 onClick={() => {setPage('subreddit')}} style={{color: textColor, opacity: page === 'subreddit' ? 1 : 0.5, cursor: page === 'subreddit' ? 'default' : 'pointer', backgroundColor: page === 'subreddit' ? accentColor : null}}>Subreddits</h3>
+                    <h3 onClick={() => {setPage('recommendations')}} style={{color: textColor, opacity: page === 'recommendations' ? 1 : 0.5, cursor: page === 'recommendations' ? 'default' : 'pointer', backgroundColor: page === 'recommendations' ? accentColor : null}}>Recommendations</h3>
+                    <h3 onClick={() => {setPage('subreddit')}} style={{color: textColor, opacity: page === 'subreddit' ? 1 : 0.5, cursor: page === 'subreddit' ? 'default' : 'pointer', backgroundColor: page === 'subreddit' ? accentColor : null}}>Subreddits</h3>
             </div>
-            {page === 'recommendations' ? <Reccomendations count={count} expand={expand} media={media} /> : null}
-            {page === 'subreddit' ? <ViewSubReddit expand={expand} /> : null}
-           
-        </div>
-    )
+            <div onScroll={handleLoadMore} className='server-media-container'>
+                
+                {page === 'recommendations' ? <Reccomendations count={count} expand={expand} media={media} /> : null}
+                {page === 'subreddit' ? <ViewSubReddit expand={expand} /> : null}
+            
+            </div>
+        </>
+        )
 }

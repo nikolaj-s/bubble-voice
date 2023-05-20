@@ -49,7 +49,6 @@ export const Message = ({ message, overlay = false, id, channel_id, perm, pinMes
 
         setHoverState(bool);
 
-        document.getElementById(`${id}/${channel_id}`).style.backgroundColor = bool ? disableTransparancyEffects ? primaryColor : `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0.7)` : null;
     }
 
     const openUserPanel = (e) => {
@@ -70,14 +69,15 @@ export const Message = ({ message, overlay = false, id, channel_id, perm, pinMes
         onMouseEnter={(e) => {hoverEffect(e, true)}} onMouseLeave={(e) => {hoverEffect(e, false)}}
         style={{
             padding: overlay ? null : '2px 5px 0px 5px',
+            backgroundColor: hoverState ? primaryColor : null
         }}
         id={`${id}/${channel_id}`}
         className='message-container'>
             <div id={`${id}-ctx-message-overlay`} className={'ctx-message-overlay'} />
-            <SenderInfo profile_picture_shape={user?.profile_picture_shape} primaryColor={primaryColor} display_name={user?.display_name} user_image={user?.user_image} action={openUserPanel} persist={persist} id={id} accentColor={accentColor} hover={hoverState} textColor={textColor} perm={perm} index={index}  message={message} current_message={current_message} previous_message={previous_message} pinMessage={pinMessage} pinned={pinned} overlay={overlay} />
+            <SenderInfo color={user?.color} profile_picture_shape={user?.profile_picture_shape} primaryColor={primaryColor} display_name={user?.display_name} user_image={user?.user_image} action={openUserPanel} persist={persist} id={id} accentColor={accentColor} hover={hoverState} textColor={textColor} perm={perm} index={index}  message={message} current_message={current_message} previous_message={previous_message} pinMessage={pinMessage} pinned={pinned} overlay={overlay} />
             <MessageText color={textColor} text={message.text} />
             <MessageLink link={message.link} />
-            <Iframe marginRight={5} marginLeft={60} link={message.iFrame} />
+            <Iframe marginRight={5} marginLeft={50} link={message.iFrame} />
             <TwitterEmbed id={message.twitter} />
             {message.image ? 
             <div 

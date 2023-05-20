@@ -38,12 +38,11 @@ export const SongStatusOverlay = ({data, onEnd}) => {
     return (
         <motion.div 
         initial={{top: '-60px'}}
-        animate={{top: 31}}
+        animate={{top: 30}}
         exit={{top: '-60px'}}
         key={'song-status-overlay'}
         style={{
             backgroundColor: secondaryColor,
-            borderBottom: `solid 1px ${accentColor}`
         }}
         transition={{duration: 0.3}}
         className='song-skipped-overlay-container'>

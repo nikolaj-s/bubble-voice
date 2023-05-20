@@ -19,6 +19,8 @@ export const SavedMedia = () => {
 
     const visibleState = useSelector(selectSavedMediaOpenState);
 
+    const [saves, setSaves] = React.useState([]);
+
     const savedMedia = useSelector(selectSavedMedia);
 
     const secondaryColor = useSelector(selectSecondaryColor);
@@ -34,6 +36,19 @@ export const SavedMedia = () => {
         dispatch(fetchSavedMedia());
 
     }, [])
+
+    React.useEffect(() => {
+
+        if (visibleState) {
+            setTimeout(() => {
+                setSaves(savedMedia)
+            }, 200)
+        } else {
+            setSaves([])
+        }
+        
+
+    }, [savedMedia, visibleState])
 
     const expand = (media) => {
         dispatch(setExpandedContent(media))
@@ -56,9 +71,9 @@ export const SavedMedia = () => {
                     {savedMedia.length === 0 ?
                     <NoMedia alt={true} message={"You Have No Saved Media, Save Media By Right Clicking On Media And Hitting Save Within The Context Menu"} />
                     : 
-                    <ResponsiveMasonry columnsCountBreakPoints={{1000: 2}}>
+                    <ResponsiveMasonry style={{width: '100% - 10px', margin: '0px 5px'}} columnsCountBreakPoints={{1000: 2}}>
                         <Masonry gutter='5px'> 
-                            {savedMedia.map(media => {
+                            {saves.map(media => {
                                return <div style={{borderRadius: 5, overflow: 'hidden'}}>
                                     {media.type === 'image' ?
                                     <Image cursor='pointer' image={media.media} expandContent={() => {expand(media.media)}} />

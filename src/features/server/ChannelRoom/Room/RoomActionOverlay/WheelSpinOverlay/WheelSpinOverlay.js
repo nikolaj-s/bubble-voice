@@ -28,11 +28,10 @@ export const WheelSpinOverlay = ({data, onEnd, page}) => {
         style={{
             display: (page === "social" || page === "widgets") ? 'none' : 'flex',
             backgroundColor: secondaryColor,
-            border: `solid 1px ${primaryColor}`,
             borderTop: 'none'
         }}
         initial={{top: -750}}
-        animate={{top: 31}}
+        animate={{top: 30}}
         exit={{top: -750}}
         transition={{duration: 0.3}}
         className="wheel-spin-overlay-container"

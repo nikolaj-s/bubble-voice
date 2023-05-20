@@ -3,7 +3,7 @@ html {
 }
 :root {
   --font-variable: "Quicksand", "Inter", sans-serif;
-  --font-spacing: 2px;
+  --font-spacing: 1px;
   --border-radius: 5px;
   --box-shadow: 0px 4px 17px rgba(0, 0, 0, 0.32);
   --range-background: white;
@@ -28,16 +28,18 @@ code {
 }
 
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0);
+  margin: 2px;
+  background: rgba(0, 0, 0, 0.472);
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--range-background);
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {

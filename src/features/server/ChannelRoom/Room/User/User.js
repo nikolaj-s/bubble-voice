@@ -9,6 +9,7 @@ import { selectMiscSettingsHideNonVideoParticapents } from '../../../../settings
 
 // style
 import "./User.css";
+import { selectUsername } from '../../../../settings/appSettings/accountSettings/accountSettingsSlice';
 
 export const User = ({user}) => {
 
@@ -20,20 +21,23 @@ export const User = ({user}) => {
     
     const prefs = USER_PREFS.get(user._id);
 
-    const secondaryColor = useSelector(selectSecondaryColor);
+    const username = useSelector(selectUsername);
 
+    const secondaryColor = useSelector(selectSecondaryColor);
+    
     return (
         <div 
         style={{
-            border: `solid 4px ${(user.active && user.microphone) ? activeColor : user.color ? user.color : accentColor}`,
+            border: `solid 2px ${(user.active && user.microphone) ? activeColor : user.color ? user.color : accentColor}`,
+            
             display: (hideNonVideoParticapents === true && user.webcam === false) || (hideNonVideoParticapents === true && prefs?.disabled_web_cam === true) ? 'none' : 'flex'
         }}
         id={user._id} className='active-user-container'>
-            <Image disableErr={true} backgroundColor={secondaryColor} opacity={(user.webcam && !prefs?.disabled_web_cam) ? 0 : 1} position='absolute' image={user.user_banner} />
+            <Image disableErr={true} backgroundColor={secondaryColor}  position='absolute' image={user.user_banner} />
             <div style={{borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%'}} className='active-user-profile-image-container'>
-                <Image opacity={(user.webcam && !prefs?.disabled_web_cam) ? 0 : 1} objectFit='cover' image={user.user_image} />
+                <Image objectFit='cover' image={user.user_image} />
             </div>
-            <Loading zIndex={-1} show_success={false} loading={user.webcam} />
+            <Loading backgroundColor={'black'} zIndex={1} show_success={false} loading={user.webcam && (user.username === username ? user.webcam : prefs?.disabled_web_cam === false)} />
         </div>
     )
 }

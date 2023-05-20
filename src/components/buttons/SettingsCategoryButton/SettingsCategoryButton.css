@@ -3,10 +3,11 @@
     width: calc(100% - 10px);
     border-radius: 5px;
     padding: 0 5px;
-    margin: 8px 0;
     height: 40px;
     display: flex;
     align-items: center;
+    z-index: 5;
+    -webkit-app-region: no-drag;
 }
 
 .settings-category-button h3 {

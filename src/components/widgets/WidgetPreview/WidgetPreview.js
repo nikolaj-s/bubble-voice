@@ -56,8 +56,8 @@ export const WidgetPreview = ({widgets = [], editing = false, reorder}) => {
             })}
             </Reorder.Group>
             : 
-            <ResponsiveMasonry style={{width: '100%'}} columnsCountBreakPoints={{1299: 1, 1300: 2, 2000: 3}}>
-                <Masonry gutter='2px'>
+            <ResponsiveMasonry style={{width: 'calc(100% - 5px)', margin: '0px 5px 0px 0px',}} columnsCountBreakPoints={{1299: 1, 1300: 2, 2000: 3}}>
+                <Masonry gutter='5px'>
                 {widgets.map((widget, key) => {
                     return (
                         <>

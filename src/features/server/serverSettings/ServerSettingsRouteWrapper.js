@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { useRoutes } from 'react-router'
 import { WidgetMenu } from './ChannelSettings/WidgetMenu/WidgetMenu'
-import { selectSecondaryColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice'
+import { selectSecondaryColor, selectAccentColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 import { BanList } from './BanList/BanList'
 import { ChannelSettings } from './ChannelSettings/ChannelSettings'
 import { EditChannelMenu } from './ChannelSettings/EditChannelMenu/EditChannelMenu'
@@ -11,15 +11,20 @@ import { Members } from './Members/Members'
 import { OverView } from './OverView/OverView'
 import { PermissionGroups } from './PermissionGroups/PermissionGroups'
 import { CloseSettings } from '../../../components/CloseSettings/CloseSettings'
-
+import { motion } from 'framer-motion'
 const Wrapper = () => {
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
+    const accentColor = useSelector(selectAccentColor);
+
     return (
-        <div 
+        <motion.div 
+        initial={{opacity: 0}}
+        animate={{opacity: 1}}
         style={{
-            backgroundColor: secondaryColor
+            backgroundColor: secondaryColor,
+            borderLeft: `2px solid ${accentColor}`
         }}
         className='server-settings-route-wrapper'>
             <div className='server-settings-wrapping-container'>
@@ -33,7 +38,7 @@ const Wrapper = () => {
                 <DeleteServer />
                 <CloseSettings />
             </div>
-        </div>
+        </motion.div>
     )
 }
 
