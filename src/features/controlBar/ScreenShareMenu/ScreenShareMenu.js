@@ -38,7 +38,7 @@ export const ScreenShareMenu = ({selectingScreens}) => {
     const closeScreenShare = () => {
         dispatch(toggleControlState('screenShareState'))
     }
-
+    console.log(screens)
     return (
         <>
         <AnimatePresence>
@@ -64,7 +64,7 @@ export const ScreenShareMenu = ({selectingScreens}) => {
                         <CloseIcon />
                     </div>
                     {screens.map(screen => {
-                        return <ScreenButton action={selectScreen} id={screen.id} name={screen.name} key={screen.id} thumbnail={screen.thumbnail} />
+                        return <ScreenButton action={selectScreen} id={screen.id} name={screen.name} key={screen.id} thumbnail={screen.thumbnail} icon={screen.icon} />
                     })}
                     
                 </motion.div>

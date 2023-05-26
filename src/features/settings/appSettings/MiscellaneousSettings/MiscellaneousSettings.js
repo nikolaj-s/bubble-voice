@@ -107,8 +107,8 @@ const Settings = () => {
             <InputTitle title={"Select Server To Auto Join On App Launch"} />
             <DropDownList action={handleSetDefaultServer} selectedItem={defaultServer.label} list={serversToSelectFrom} />
             <SettingsHeader title={"System Notifcations"} />
-            <InputTitle title={"Toggle Sytem Notifications"} />
-            <ToggleButton state={systemNotifcations} action={() => {handleChannelSpecificStateChange('enabledSystemNotifications')}} />
+            <InputTitle title={"Disable System Notifications"} />
+            <ToggleButton state={systemNotifcations} action={() => {handleChannelSpecificStateChange('disableSystemNotifications')}} />
             <SettingsHeader title={"Activity"} />
             <InputTitle title={"Display Current Activity As Custom Status Message"} />
             <ToggleButton state={activityStatus} action={() => {handleChannelSpecificStateChange('activity')}} />

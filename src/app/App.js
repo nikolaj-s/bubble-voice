@@ -122,10 +122,10 @@ function App() {
   React.useEffect(() => {
 
     let update_interval;
+
+    let ipcRenderer;
     
     setTimeout(() => {
-
-      let ipcRenderer;
 
       try {
 
@@ -175,22 +175,16 @@ function App() {
 
       } catch (error) {
         clearInterval(update_interval);
-        console.log(error)
-        console.log("using web version")
+        console.log(error);
+        console.log("using web version");
       }
 
-      return () => {
-        if (ipcRenderer) {
-          ipcRenderer.removeAllListeners('update available');
-          ipcRenderer.removeAllListeners('update not available');
-          ipcRenderer.removeAllListeners('error updating');
-          ipcRenderer.removeAllListeners('get_app_ver');
-        }
+    }, 10000)
 
-        clearInterval(update_interval);
-      }
-    })
-    
+    return () => {
+
+      clearInterval(update_interval);
+    }
   // eslint-disable-next-line
   }, [])
 

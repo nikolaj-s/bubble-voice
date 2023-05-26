@@ -42,3 +42,7 @@
 .server-media-navigation-container h3:hover {
     opacity: 1 !important;
 }
+
+.server-media-image-search {
+    margin-bottom: 5px;
+}

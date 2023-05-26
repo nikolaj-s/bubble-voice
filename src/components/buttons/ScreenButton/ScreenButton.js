@@ -8,7 +8,7 @@ import "./ScreenButton.css";
 import { useSelector } from 'react-redux';
 import { selectAccentColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
-export const ScreenButton = ({thumbnail, id, name, action}) => {
+export const ScreenButton = ({thumbnail, id, name, action, icon}) => {
 
     const animation = useAnimation();
 
@@ -42,6 +42,9 @@ export const ScreenButton = ({thumbnail, id, name, action}) => {
             <p
             style={{color: textColor}}
             >{name}</p>
+            <div className='screen-app-icon-container'>
+                <Image position='relative' image={icon} />
+            </div>
         </motion.div>
     )
 }

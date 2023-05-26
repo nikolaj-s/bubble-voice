@@ -94,7 +94,7 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
 
         setInputHeight(e.target.scrollHeight)
 
-        updateInputHeight(e.target.scrollHeight + 30)
+        updateInputHeight(e.target.scrollHeight + 10)
     
     }
 

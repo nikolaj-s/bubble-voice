@@ -31,7 +31,6 @@ export const RedditPost = ({data, action}) => {
                 </div>
                 <div style={{backgroundColor: primaryColor}} className='reddit-post-info-container'>
                     <h3 style={{color: textColor}}>{data.title}</h3>
-                    <p style={{color: textColor}}>{data.subreddit_name_prefixed}</p>
                 </div>
 
         </div>

@@ -3,8 +3,21 @@ import { PinButton } from '../../buttons/PinButton/PinButton'
 import { SubMenuButton } from '../../buttons/subMenuButton/SubMenuButton'
 import { Image } from '../../Image/Image'
 import { MessageLoadingIndicator } from '../MessageLoadingIndicator/MessageLoadingIndicator'
+import { CopyButton } from '../../buttons/CopyButton/CopyButton'
 
-export const SenderInfo = ({color, id, profile_picture_shape, current_message, primaryColor, previous_message, message, pinMessage, pinned, overlay, hover, textColor, index, perm, accentColor, persist, action, display_name, user_image}) => {
+export const SenderInfo = ({link, color, id, profile_picture_shape, current_message, primaryColor, previous_message, message, pinMessage, pinned, overlay, hover, textColor, index, perm, accentColor, persist, action, display_name, user_image}) => {
+
+    const handleCopy = () => {
+        try {
+
+            const { clipboard } = window.require('electron');
+
+            clipboard.writeText(link);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <>
@@ -39,6 +52,7 @@ export const SenderInfo = ({color, id, profile_picture_shape, current_message, p
                 : hover ?
                 <div style={{top: index === 0 ? 5 : -20, backgroundColor: primaryColor}} className='date-submenu-message-wrapper'>
                     {(perm && persist) ? <PinButton borderRadius={5} flip_description={index === 0} desc_width={40} description={pinned ? 'Unpin' : 'Pin'} padding={5} action={pinMessage} width={18} desc_space={12}  height={18} pinned={pinned} /> : null}
+                    {link ? <CopyButton action={handleCopy} padding={5} flip_description={index === 0} altInvert={true} width={18} height={18} description={"Copy Link"} desc_width={60} desc_space={12} /> : null}
                     {perm ? <SubMenuButton altInvert={true} invert={false} target={`${id}-ctx-message-overlay`} flip_description={index === 0} desc_width={40} zIndex={2} description={"Extra"} desc_space={12} padding={5} width={18} height={18} borderRadius={5} /> : null}
                 </div> 
                 : null}

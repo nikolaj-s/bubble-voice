@@ -152,7 +152,7 @@ const appearanceSettingsSlice = createSlice({
 
             state.glassColor = `rgba(${state.secondaryColor.split('rgb(')[1].split(')')[0]}, 0.9)`
 
-            document.querySelector(':root').style.setProperty('--range-background', state.color_themes[action.payload.state].accentColor)
+            document.querySelector(':root').style.setProperty('--range-background', state.color_themes[action.payload.state].textColor)
         
             document.querySelector(':root').style.setProperty('--primary-color', state.color_themes[action.payload.state].primaryColor)
         },
@@ -217,7 +217,7 @@ const appearanceSettingsSlice = createSlice({
 
                     state.activationColor = state.color_themes[action.payload.current_theme.state].activationColor;
                     
-                    document.querySelector(':root').style.setProperty('--range-background', state.color_themes[action.payload.current_theme.state].accentColor)
+                    document.querySelector(':root').style.setProperty('--range-background', state.color_themes[action.payload.current_theme.state].textColor)
                 
                     document.querySelector(':root').style.setProperty('--primary-color', state.color_themes[action.payload.current_theme.state].primaryColor)
                 }

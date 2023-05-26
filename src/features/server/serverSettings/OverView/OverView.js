@@ -218,10 +218,11 @@ const Wrapper = () => {
             <InputTitle zIndex={2} title={"Update Server Banner"} />
             <div style={{
                 position: 'relative',
-                height: 500,
-                minHeight: 500
+                height: 300,
+                minHeight: 300,
+                maxWidth: 500
             }}>
-                <ImageInput showShadow={true} getFile={handleBannerChange} initalImage={serverBanner} />
+                <ImageInput getFile={handleBannerChange} initalImage={serverBanner} />
             </div>
             </>
             : 

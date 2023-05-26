@@ -197,7 +197,7 @@ export const MusicWidget = ({editing = false, widget}) => {
                     <AddButton opacity={query.length === 0 ? 0.5 : 1} invert={true} active={query.length === 0} action={handleAddSongToQueue} margin={"0 0 0 2%"} height={"25px"} width={"25px"} />
                 </div> 
                 <div className='music-queue-title-container'>
-                    <h3 style={{color: textColor}}>Saved Media</h3>
+                    <h3 style={{color: textColor}}>Saves</h3>
                 </div> 
                 <div className='saved-music-container'>
                     {savedMusic.length === 0 ?

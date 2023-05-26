@@ -92,7 +92,14 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
 
     const expand = (e) => {
         e.stopPropagation();
-        dispatch(setExpandedContent(video))
+
+        togglePlaying(false);
+
+        document.getElementById(video + id)?.pause();
+        
+        document.getElementById(video + 'audio')?.pause();
+
+        dispatch(setExpandedContent(video));
     }
 
     const showControls = (enter) => {

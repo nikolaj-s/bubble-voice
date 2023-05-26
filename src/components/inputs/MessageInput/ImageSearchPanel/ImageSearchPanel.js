@@ -8,7 +8,7 @@ import { Loading } from '../../../LoadingComponents/Loading/Loading';
 import { AltSearchButton } from '../../../buttons/AltSearchButton/AltSearchButton';
 
 // state
-import { selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectPopularSearches, throwServerError } from '../../../../features/server/ServerSlice';
 
 // util
@@ -23,6 +23,8 @@ import { VideoPreview } from '../../../VideoPreview/VideoPreview';
 import { ImagePreview } from '../../../ImagePreview/ImagePreview';
 import { selectSavedMedia } from '../../../../features/SavedMedia/SavedMediaSlice';
 import { selectShowFullResPreviews } from '../../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { ViewSubReddit } from '../../../../features/server/ChannelRoom/ServerDashBoard/ServerMedia/ViewSubReddits/ViewSubReddit';
+import { selectLoadingNewMedia, selectMedia, setNewMedia } from '../../../../features/server/ChannelRoom/ServerDashBoard/ServerMedia/ServerMediaSlice';
 
 
 export const ImageSearchPanel = ({searchingForImage, selectImage, serverId, inputHeight}) => {
@@ -30,6 +32,8 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId, inpu
     const primaryColor = useSelector(selectPrimaryColor);
 
     const secondaryColor = useSelector(selectSecondaryColor);
+
+    const glassColor = useSelector(selectGlassColor);
 
     const textColor = useSelector(selectTextColor);
 
@@ -45,7 +49,9 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId, inpu
 
     const [loading, toggleLoading] = React.useState(false);
 
-    const [images, setImages] = React.useState([]);
+    const loadingNewMedia = useSelector(selectLoadingNewMedia);
+
+    const images = useSelector(selectMedia);
 
     const [videos, setVideos] = React.useState([]);
 
@@ -75,13 +81,13 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId, inpu
         
         }
         
-        setImages([]);
-        console.log(result)
+        dispatch(setNewMedia([]));
+        
         setTimeout(() => {
             
             toggleLoading(false);
             
-            mediaType === 'Images' ? setImages(result.media) : setVideos(result.media);
+            mediaType === 'Images' ? dispatch(setNewMedia(result.media)) : setVideos(result.media);
 
         }, 100)
         
@@ -94,14 +100,14 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId, inpu
     }
 
     const handleSelectImage = (image) => {
-      
+        console.log(image)
         selectImage(image)
     }
 
     const handleMediaType = (page) => {
         setMediaType(page)
 
-        document.getElementById('message-image-search-input').focus();
+        document.getElementById('message-image-search-input')?.focus();
     } 
 
     React.useEffect(() => {
@@ -141,7 +147,13 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId, inpu
                     bottom: inputHeight + 10
                 }}
                 className='inner-message-image-search-container'>
-                    {mediaType === 'Saves' ? null :
+                    <div className='media-search-nav-container'>
+                        <h3 onClick={() => {handleMediaType("Images")}} style={{color: textColor, backgroundColor: mediaType === 'Images' ? primaryColor : null, opacity: mediaType === 'Images' ? 1 : 0.6}}>Images</h3>
+                        <h3 onClick={() => {handleMediaType("Videos")}} style={{color: textColor, backgroundColor: mediaType === 'Videos' ? primaryColor : null, opacity: mediaType === 'Videos' ? 1 : 0.6}}>Videos</h3>
+                        <h3 onClick={() => {handleMediaType("Reddit")}} style={{color: textColor, backgroundColor: mediaType === 'Reddit' ? primaryColor : null, opacity: mediaType === 'Reddit' ? 1 : 0.6}}>Reddit</h3>
+                        <h3 onClick={() => {handleMediaType("Saves")}} style={{color: textColor, backgroundColor: mediaType === 'Saves' ? primaryColor : null, opacity: mediaType === 'Saves' ? 1 : 0.6}}>Saves</h3>
+                    </div>
+                    {mediaType === 'Saves' || mediaType === 'Reddit' ? null :
                     <div 
                     className='message-image-search-input-wrapper'>
                         <input 
@@ -152,12 +164,11 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId, inpu
                             <AltSearchButton padding={5} active={query.length === 0} action={search} margin={'0 0 0 10px'} width={30} height={18} invert={true}  borderRadius={0} />
                         </div>
                     </div>}
-                    <div className='media-search-nav-container'>
-                        <h3 onClick={() => {handleMediaType("Images")}} style={{color: textColor, backgroundColor: mediaType === 'Images' ? primaryColor : null, opacity: mediaType === 'Images' ? 1 : 0.6}}>Images</h3>
-                        <h3 onClick={() => {handleMediaType("Videos")}} style={{color: textColor, backgroundColor: mediaType === 'Videos' ? primaryColor : null, opacity: mediaType === 'Videos' ? 1 : 0.6}}>Videos</h3>
-                        <h3 onClick={() => {handleMediaType("Saves")}} style={{color: textColor, backgroundColor: mediaType === 'Saves' ? primaryColor : null, opacity: mediaType === 'Saves' ? 1 : 0.6}}>Saves</h3>
-                    </div>
+                    
                     <div className='message-image-search-results-container'>
+                    {mediaType === 'Reddit' ?
+                    <ViewSubReddit expand={(i) => {handleSelectImage({preview: i, image: i})}} />
+                    :
                     <ResponsiveMasonry style={{height: 'auto'}} columnsCountBreakPoints={{1000: 2, 1500: 3}}>
                         <Masonry gutter='5px'>   
                             {mediaType === 'Videos' ?
@@ -173,16 +184,17 @@ export const ImageSearchPanel = ({searchingForImage, selectImage, serverId, inpu
                                     <VideoPreview action={() => {handleSelectImage({preview: media.media, type: 'video', image: media.media})}} video={{preview: media.media}} />
                                 )
                             })
+                            
                             : (images?.length > 0 ? images : loading ? [] : recommendations.filter(v => v.type === 'image').slice(0, 40)).map((image, key) => {
                                 return (
                                     <ImagePreview tag_action={handleTag} tags={image.tags} image={showFullResPreviews ? image.image : image.preview} action={(e) => {handleSelectImage({...image, preview: image.image})}} />
                                 )
                             })}
                         </Masonry>
-                    </ResponsiveMasonry>
+                    </ResponsiveMasonry>}
                     </div>
                 </div>
-                <Loading loading={loading} />
+                <Loading backgroundColor={glassColor} loading={loading || loadingNewMedia}  />
             </motion.div>
             : null}
         </AnimatePresence>

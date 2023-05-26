@@ -11,8 +11,8 @@ import { Loading } from '../../components/LoadingComponents/Loading/Loading';
 import { CtxMenuTitle } from '../../components/titles/ctxMenuTitle/CtxMenuTitle';
 
 // state
-import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleStreamState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCopyLinkState, selectCopyState, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteMesssageState, selectDeleteWidget, selectDisableStream, selectDisableWebCam, selectEditChannelCtxState, selectFlipWebCamState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSelectedMessage, selectSelectedUserCtxState, selectStopStreamingState, selectStreamVolumeState, selectViewSocialState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
-import { assignNewServerGroup, deleteMessage, markWidgetForDeletion, moveUser, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerMembers, selectUsersPermissions, sendDeleteMessageRequest, setChannelSocialId, setEditingChannelId, throwServerError, toggleMembersWebCamState, userBanned } from '../server/ServerSlice';
+import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleStreamState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCopyLinkState, selectCopyState, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteMesssageState, selectDeleteWidget, selectDisableStream, selectDisableWebCam, selectEditChannelCtxState, selectFlipWebCamState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSeeSimilar, selectSelectedMessage, selectSelectedUserCtxState, selectStopStreamingState, selectStreamVolumeState, selectViewSocialState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
+import { assignNewServerGroup, deleteMessage, markWidgetForDeletion, moveUser, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerId, selectServerMembers, selectUsersPermissions, sendDeleteMessageRequest, setChannelSocialId, setEditingChannelId, throwServerError, toggleMembersWebCamState, userBanned } from '../server/ServerSlice';
 
 // style
 import "./ContextMenu.css";
@@ -43,6 +43,9 @@ import { PokeIcon } from '../../components/Icons/PokeIcon/PokeIcon';
 import { PlayOnWidgetIcon } from '../../components/Icons/PlayOnWidgetIcon/PlayOnWidgetIcon';
 import { deleteMedia, saveMedia, selectSavedMedia } from '../SavedMedia/SavedMediaSlice';
 import { SavedIcon } from '../../components/Icons/SavedIcon/SavedIcon';
+import { selectLoadingNewMedia, setNewMedia, toggleLoadingNewMedia } from '../server/ChannelRoom/ServerDashBoard/ServerMedia/ServerMediaSlice';
+import { ImageSearch } from '../../util/ImageSearch';
+import { SearchIcon } from '../../components/Icons/SearchIcon/SearchIcon';
 
 export const ContextMenu = () => {
 
@@ -78,6 +81,8 @@ export const ContextMenu = () => {
     const [mediaWidgetState, setMediaWidgetState] = React.useState(false);
 
     const disableMediaWidget = useSelector(selectDisableMediaWidget);
+
+    const loadingNewMedia = useSelector(selectLoadingNewMedia);
 
     const primaryColor = useSelector(selectPrimaryColor)
 
@@ -126,6 +131,10 @@ export const ContextMenu = () => {
     const socialSoundEffect = useSelector(selectSocialSoundEffect);
 
     const hideUserStatus = useSelector(selectHideUserStatus);
+
+    const seeSimilarImage = useSelector(selectSeeSimilar);
+
+    const serverId = useSelector(selectServerId);
 
     // stream management
     const changeStreamVolumeState = useSelector(selectStreamVolumeState);
@@ -239,6 +248,13 @@ export const ContextMenu = () => {
 
                 if (!p.src.includes('cloudinary')) {
                     dispatch(setContextMenuOptions({state: 'copyLink', value: p.src}));
+                }
+
+                if (p.id.includes('&tags')) {
+
+                    if (p.id.split('&tags')[1].length < 5) return;
+
+                    dispatch(setContextMenuOptions({state: 'seeSimilar', value: p.id.split('&tags=')[1]}))
                 }
             }
 
@@ -379,10 +395,10 @@ export const ContextMenu = () => {
                     isOwner: isOwner !== -1
                 }))
             }
-            if (p.className === 'message-container') {
+            if (p?.className?.includes('message-container')) {
                 dispatch(toggleContextMenu(true));
                 
-                dispatch(setContextMenuOptions({state: "deleteMessage", value: permissions.user_can_manage_channels}));
+                if (!p.className.includes('direct-message-container'))  dispatch(setContextMenuOptions({state: "deleteMessage", value: permissions.user_can_manage_channels}));
 
                 dispatch(setContextMenuOptions({state: 'selectedMessage', value: p.id}));
                 
@@ -1018,14 +1034,38 @@ export const ContextMenu = () => {
 
         }
 
-        console.log(obj)
-
         if (unSave) {
             dispatch(deleteMedia(obj));
         } else {
             dispatch(saveMedia(obj));
         }
         
+    }
+
+    const handleFindSimilarImages = async () => {
+        try {
+            if (loadingNewMedia) return;
+
+            let el = document.getElementsByClassName('server-media-container')[0]
+
+            let searchPanel = document.getElementsByClassName('message-image-search-results-container')[0]
+
+            if (el) el.scrollTop = 0;
+
+            if (searchPanel) searchPanel.scrollTop = 0;
+            
+            dispatch(toggleLoadingNewMedia(true));
+
+            const images = await ImageSearch(seeSimilarImage, serverId);
+
+            dispatch(toggleLoadingNewMedia(false));
+
+            if (images.error) return dispatch(throwServerError({error: true, errorMessage: images.errorMessage}));
+
+            dispatch(setNewMedia(images.media));
+        } catch (err) {
+            dispatch(throwServerError({error: true, errorMessage: "Fatal error finding a similar image"}))
+        }
     }
 
     return (
@@ -1040,6 +1080,7 @@ export const ContextMenu = () => {
         }}
         className='ctx-menu-container'>
             {saveImage ? <CtxButton action={() => {handleSave(true)}} name={"Download Image"} icon={<SaveIcon />} /> : null}
+            {seeSimilarImage ? <CtxButton action={handleFindSimilarImages} name={"Find Similar"} icon={<SearchIcon />}  /> : null}
             {saveVideo ? <CtxButton action={() => {handleSave(false)}} name={"Download Video"} icon={<SaveIcon />} /> : null}
             {saveImage || saveVideo ? <CtxButton action={() => {addToSaves()}} name={unSave ? "Unsave" : "Save"} icon={unSave ? <SavedIcon /> : <SavesIcon />} /> : null}
             {pasteCtxState ? <CtxButton name={"Paste"} action={paste} /> : null}

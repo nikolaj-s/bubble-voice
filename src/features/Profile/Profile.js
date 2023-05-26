@@ -11,6 +11,7 @@ import { AddButton } from '../../components/buttons/AddButton/AddButton';
 import { StatusButton } from '../../components/buttons/StatusButton/StatusButton';
 import { UserStatusMenu } from '../../components/UserStatusMenu/UserStatusMenu';
 import { UserBio } from '../../components/UserBio/UserBio';
+import { selectServerId } from '../server/ServerSlice';
 
 
 export const Profile = () => {
@@ -27,19 +28,15 @@ export const Profile = () => {
 
     const profileColor = useSelector(selectProfileColor);
 
-    const secondaryColor = useSelector(selectSecondaryColor);
-
     const primaryColor = useSelector(selectPrimaryColor);
-
-    const glassState = useSelector(selectGlassState);
-
-    const glassColor = useSelector(selectGlassColor);
 
     const userBanner = useSelector(selectUserBanner);
 
     const userImage = useSelector(selectUserImage);
 
     const bio = useSelector(selectProfileBio);
+
+    const serverId = useSelector(selectServerId);
 
     const handleToggleCreatePostMenu = () => {
         dispatch(toggleCreatePostMenu(!createPostMenuOpen));
@@ -58,18 +55,18 @@ export const Profile = () => {
             exit={{opacity: 0, left: '-600px'}}
             style={{backgroundColor: profileColor}}
             className='profile-tab-container'>
-                <div className='profile-tab-picture-wrappper'>
+                <div style={{marginBottom: serverId ? null : 5}} className='profile-tab-picture-wrappper'>
                     <Image position='absolute' width='100%' image={userBanner} />
                     <div className='profile-picture-tab-container'>
                         <Image image={userImage} />
                     </div>
                     
                 </div>
-                <div style={{backgroundColor: primaryColor}} className='profile-nav-bar'>
+                {serverId ? <div style={{backgroundColor: primaryColor}} className='profile-nav-bar'>
                     <StatusButton action={handleToggleChangeStatusMenu} width={20} height={20} description={"Change Status"} />
                 {//   <AddButton  width={20} height={20} description={'Add Post'} margin={'0px 5px'} /> 
                 }
-                </div>
+                </div> : null}
                 <UserBio bio={bio} />
                 <>
                 {changeStatusMenu ? <UserStatusMenu close={() => {toggleChangeStatusMenu(false)}} /> : null}

@@ -23,6 +23,9 @@ import { PlaceBehindButton } from '../../../../../components/buttons/PlaceBehind
 export const Music = () => {
 
     // handling of music
+    let margin = 0;
+
+    const ratio = (9/16);
 
     const [player, setPlayer] = React.useState(null);
 
@@ -33,6 +36,8 @@ export const Music = () => {
     const [top, setTop] = React.useState(null);
 
     const [mouseDown, toggleMouseDown] = React.useState(false);
+
+    const [behindHeight, setBehindHeight] = React.useState(0)
 
     const behind = useSelector(selectBehindState);
 
@@ -261,11 +266,75 @@ export const Music = () => {
         }
     }, [])
 
+    const area = (increment, hD, wD, active_streams) => {
+        let i = 0;
+        let w = 0;
+        let h = increment * ratio + (margin * 2);
+        while (i < (active_streams.length)) {
+            if ((w + increment) > wD) {
+                w = 0;
+                h = h + (increment * ratio) + (margin * 2);
+            }
+            w = w + increment + (margin * 2);
+            i++;
+        }
+        if (h > hD || increment > wD) return false;
+        else return increment;
+    }
+
+    const handlePopInScale = () => {
+        try {
+
+            const parent = document.getElementsByClassName('outer-server-page-wrapper')[0];
+
+            let wDimension = parent.offsetWidth - 10;
+
+            let hDimension = parent.offsetHeight;
+
+            let max = 0;
+
+            let i = 1;
+
+            while (i < 5000) {
+                let a = area(i, hDimension, wDimension, [0])
+                if (a === false) {
+                    max = i - 1;
+                    break;
+                }
+                i++;
+            }
+
+            max = max - (0 * 2);
+
+            setBehindHeight(`${max * ratio}px`);
+
+        } catch (err) {
+            console.log(err);
+            setBehindHeight('40%')
+            return;
+        }
+    }
+
     const handleToggleBehind = () => {
         dispatch(toggleBehind(!behind));
 
-        toggleVisible(true)
+        toggleVisible(true);
     }
+
+    React.useEffect(() => {
+
+        if (behind) {
+            handlePopInScale();
+
+            window.addEventListener('resize', handlePopInScale);
+        } else {
+            window.removeEventListener('resize', handlePopInScale);
+        }
+
+        return () => {
+            window.removeEventListener('resize', handlePopInScale);
+        }
+    }, [behind])
 
     return (
         <>
@@ -280,7 +349,7 @@ export const Music = () => {
         style={{
             backgroundColor: behind ? primaryColor : null,
             width: behind ? 'calc(100% - 4px)' : (expanded) ? 'calc(100%)' : visible ? 600 : 55,
-            height: behind ? 'calc(40% - 4px)' : expanded ? "100%" : 300,
+            height: behind ? behindHeight : expanded ? "100%" : 300,
             right: 5,
             left: behind ? 0 : expanded ? '50%' : left,
             top: behind ? 0 : expanded ? 0 : top,
@@ -290,6 +359,7 @@ export const Music = () => {
             position: behind ? 'relative' : expanded  ? 'absolute' : 'fixed',
             zIndex: behind ? 0 : 12,
             marginTop: behind ? 5 : null,
+            maxHeight: behind ? '50%' : null,
             border: behind ? `2px solid ${secondaryColor}` : null
         }}
         id={'music-player-component'}

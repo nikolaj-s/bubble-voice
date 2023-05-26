@@ -19,8 +19,8 @@
     border-radius: var(--border-radius);
     overflow: hidden;
     right: 160px;
-    top: 50px;
-    height: calc(100% - 70px);
+    top: 32px;
+    height: calc(100% - 38px);
     box-shadow: -4px -4px 30px rgba(0, 0, 0, 0.424);
 }
 

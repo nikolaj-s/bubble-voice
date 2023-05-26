@@ -23,6 +23,8 @@ let hardwareAccelToggled;
 
 let transparent;
 
+let notification;
+
 const fs = require('fs');
 
 const initPath = path.join(app.getPath('userData'), '../init.json');
@@ -50,6 +52,7 @@ try {
   return;
 
 }
+
 
 // prevent multiple instances from occuring
 
@@ -120,18 +123,25 @@ function createWindow () {
 
   const mainScreen = screen.getPrimaryDisplay();
 
-  transparent = new BrowserWindow({
+  notification = new BrowserWindow({
     width: mainScreen.size.width,
     height: mainScreen.size.height,
     transparent: true,
     frame: false,
     alwaysOnTop: true,
-    icon: __dirname + '/logo.png'
+    icon: __dirname + '/logo.png',
   })
 
-  transparent.setIgnoreMouseEvents(true);
+  notification.setIgnoreMouseEvents(true);
 
-  transparent.setFocusable(false);
+  notification.setFocusable(false);
+
+  notification.setAlwaysOnTop(true, 'level', 20);
+
+  notification.setVisibleOnAllWorkspaces(true);
+
+  notification.setFullScreenable(false);
+
   // Open the DevTools.
   process.env.ELECTRON_START_URL ? win.webContents.openDevTools() : null
 
@@ -161,7 +171,7 @@ function createWindow () {
     
     fs.writeFileSync(initPath, JSON.stringify(window_data))
 
-    transparent.close();
+    notification.close();
   
   })
 
@@ -177,7 +187,7 @@ function createWindow () {
   ipcMain.on('close', () => {
     console.log('closing')
     win.close();
-    transparent.close();
+    notification.close();
   })
   
   ipcMain.on('min', () => {
@@ -192,15 +202,17 @@ function createWindow () {
 }
 
 ipcMain.handle('GET_SOURCES', async () => {
-  const captures = await desktopCapturer.getSources({ types: ['window', 'screen', 'audio']})
+  const captures = await desktopCapturer.getSources({ types: ['window', 'screen', 'audio'], thumbnailSize: {width: 200, height: 200}, fetchWindowIcons: true})
   .then(async sources => {
       const screens = [];
       
       for (const source of sources) {
+        
         screens.push({
           id: source.id,
           name: source.name,
-          thumbnail: source.thumbnail.toDataURL()
+          thumbnail: source.thumbnail.toDataURL(),
+          icon: source?.appIcon?.toDataURL()
         })
       }
 
@@ -449,7 +461,8 @@ app.whenReady().then(() => {
 app.on('before-quit', () => {
 
   win.close();
-//  transparent.close();
+  transparent.close();
+  notification.clse();
 
 })
 
@@ -536,3 +549,16 @@ ipcMain.on('set-window-id', (event, data) => {
   console.log(window_id);
 })
 
+ipcMain.on('push notification', (event, data) => {
+
+  let none = '<div style="display: none;"></div>'
+  
+  let alert = data;
+
+  notification.loadURL(`data:text/html;charset=utf-8,${alert}`)
+
+  setTimeout(() => {
+    notification.loadURL(`data:text/html;charset=utf-8,${none}`);
+  }, 3000)
+
+})

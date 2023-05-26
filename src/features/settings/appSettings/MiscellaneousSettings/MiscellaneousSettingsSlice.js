@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { clearLocalData, fetchHardWareAcceleration, fetchSavedLocalData, saveHardwareAcceleration, saveLocalData } from "../../../../util/LocalData";
+import { BuildSystemNotification } from "../../../../util/BuildSytemNotification";
 
 export const fetchMiscellaneousSettings = createAsyncThunk(
     'fetchMiscellaneousSettings/MiscellaneousSettingsSLice',
@@ -39,6 +40,42 @@ export const fetchSavedHardwareAcceleration = createAsyncThunk(
     }
 )
 
+export const pushSytemNotification = createAsyncThunk(
+    'pushSytemNotification/MiscellaneousSettingsSlice',
+    async (data, {rejectWithValue, getState}) => {
+        try {
+            
+            const {disableSystemNotifications} = getState().MiscellaneousSettingsSlice;
+
+            if (disableSystemNotifications) return;
+
+            const { members, current_channel_id, selectedChannelSocial, channels } = getState().serverSlice;
+
+            if (data.channel_id && (data.channel_id === current_channel_id || data.channel_id === selectedChannelSocial)) return;
+
+            const {textColor, secondaryColor} = getState().appearanceSettingsSlice;
+
+            const ipcRenderer = window.require('electron').ipcRenderer;
+            
+            const member = members.find(u => u.username === data.username);
+
+            const channel = channels.find(c => c._id === data.channel_id);
+           
+            if (member) {
+
+                let msg = {...data, display_name: member.display_name, user_image: member.user_image, textColor: textColor, secondaryColor: secondaryColor, shape: member.profile_picture_shape, channel_name: channel?.channel_name}
+                
+                let notif = BuildSystemNotification(msg);
+
+                ipcRenderer.send('push notification', notif);
+            }
+        } catch (error) {
+            console.log(error)
+            return;
+        }
+    }
+)
+
 const MiscellaneousSettingsSlice = createSlice({
     name: 'MiscellaneousSettingsSlice',
     initialState: {
@@ -65,30 +102,10 @@ const MiscellaneousSettingsSlice = createSlice({
         disableBeingPoked: false,
         videoVolume: 1,
         showFullResPreviews: false,
-        disableChannelIcons: false
+        disableChannelIcons: false,
+        disableSystemNotifications: false
     },
     reducers: {
-        pushSytemNotification: (state, action) => {
-            
-            if (state.enabledSystemNotifications) {
-                
-                try {
-
-                    const notifier = window.require('node-notifier');
-
-                    notifier.notify({
-                        appID: "Bubble",
-                        title: `New Message Posted By ${action.payload.content.display_name}`,
-                        message: action.payload.content.text,
-                        sound: true
-                    })
-                    
-                } catch (error) {
-                    console.log(error);
-                }
-            }
-
-        },
         pushPokeNotification: (state, action) => {
 
             if (state.enabledSystemNotifications) {
@@ -143,7 +160,8 @@ const MiscellaneousSettingsSlice = createSlice({
                 disableTransparancyEffects: state.disableTransparancyEffects,
                 disableMediaWidget: state.disableMediaWidget,
                 showFullResPreviews: state.showFullResPreviews,
-                disableChannelIcons: state.disableChannelIcons
+                disableChannelIcons: state.disableChannelIcons,
+                disableSystemNotifications: state.disableSystemNotifications
             }
 
             saveLocalData("MISC", "MISCSETTINGS", obj);
@@ -219,12 +237,13 @@ const MiscellaneousSettingsSlice = createSlice({
 
             if (saved_data.disableChannelIcons) state.disableChannelIcons = true;
 
+            if (saved_data.disableSystemNotifications) state.disableSystemNotifications = true;
           //  if (saved_data.popOutUserStreams) state.popOutUserStreams = true;
         }
     }
 })
 
-export const selectSystemNotifcations = state => state.MiscellaneousSettingsSlice.enabledSystemNotifications;
+export const selectSystemNotifcations = state => state.MiscellaneousSettingsSlice.disableSystemNotifications;
 
 export const selectDefaultServer = state => state.MiscellaneousSettingsSlice.defaultServer;
 
@@ -268,7 +287,7 @@ export const selectShowFullResPreviews = state => state.MiscellaneousSettingsSli
 
 export const selectDisableChannelIcons = state => state.MiscellaneousSettingsSlice.disableChannelIcons;
 
-export const {setVideoVolume, pushPokeNotification, pushSytemNotification, setDefaultServer, changeRoomScale, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, miscSettingsClearError, miscSettingsChannelSpecificStateChange } = MiscellaneousSettingsSlice.actions;
+export const {setVideoVolume, pushPokeNotification, setDefaultServer, changeRoomScale, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, miscSettingsClearError, miscSettingsChannelSpecificStateChange } = MiscellaneousSettingsSlice.actions;
 
 
 export default MiscellaneousSettingsSlice.reducer;

@@ -6,7 +6,7 @@ export const ImageSearch = async (query, serverId) => {
     try {
 
         const token = await getToken();
-        console.log(serverId)
+        
         const images = await Axios({
             method: "POST",
             url: `${url}/search-for-images`,

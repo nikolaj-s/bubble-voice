@@ -59,6 +59,8 @@ const Wrapper = () => {
 
     const [icon, setChannelIcon] = React.useState(false)
 
+    const [managingWidgets, toggleManagingWidgets] = React.useState(false);
+
     const channel = useSelector(selectChannelToEdit);
 
     const members = useSelector(selectServerMembers);
@@ -304,7 +306,9 @@ const Wrapper = () => {
             <SettingsHeader title={"Widgets"} />
             <TextButton action={openWidgetMenu} name={"Add Widget"} />
             <InputTitle title={`Widgets ${channelToEdit.widgets ? channelToEdit.widgets.length : 0} / 15`} />
-            <WidgetPreview widgets={widgets} editing={true} reorder={updateWidgetOrder} />
+            {managingWidgets === false ?
+            <TextButton name="Manage Widgets" action={() => {toggleManagingWidgets(true)}} />
+            : <WidgetPreview widgets={widgets} editing={true} reorder={updateWidgetOrder} />}
             </>}
             <SettingsHeader title={"Data"} />
             <InputTitle title={"Clear Social Data"} />

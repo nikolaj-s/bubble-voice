@@ -32,7 +32,8 @@ export const Song = ({id, image, name, duration, action, liked, saved, addToQueu
             <p
             className='song-name'
             style={{
-                color: textColor
+                color: textColor,
+                fontSize: '.9rem'
             }}
             >{name}</p>
             <LikeButton desc_space={10} padding={4} toggled={liked} action={action}  width={20} height={20} />

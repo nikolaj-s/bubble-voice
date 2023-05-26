@@ -21,7 +21,7 @@ import { setPanelPosition, setSelectedMember } from '../../features/server/Chann
 import { selectServerMembers } from '../../features/server/ServerSlice';
 import { selectDisableTransparancyEffects } from '../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
-export const Message = ({ message, overlay = false, id, channel_id, perm, pinMessage, pinned, index, previous_message, current_message, persist}) => {
+export const Message = ({direct_message, message, overlay = false, id, channel_id, perm, pinMessage, pinned, index, previous_message, current_message, persist}) => {
 
     const dispatch = useDispatch();
 
@@ -72,9 +72,9 @@ export const Message = ({ message, overlay = false, id, channel_id, perm, pinMes
             backgroundColor: hoverState ? primaryColor : null
         }}
         id={`${id}/${channel_id}`}
-        className='message-container'>
+        className={`message-container ${direct_message ? 'direct-message-container' : null}`}>
             <div id={`${id}-ctx-message-overlay`} className={'ctx-message-overlay'} />
-            <SenderInfo color={user?.color} profile_picture_shape={user?.profile_picture_shape} primaryColor={primaryColor} display_name={user?.display_name} user_image={user?.user_image} action={openUserPanel} persist={persist} id={id} accentColor={accentColor} hover={hoverState} textColor={textColor} perm={perm} index={index}  message={message} current_message={current_message} previous_message={previous_message} pinMessage={pinMessage} pinned={pinned} overlay={overlay} />
+            <SenderInfo link={message.link} color={user?.color} profile_picture_shape={user?.profile_picture_shape} primaryColor={primaryColor} display_name={user?.display_name} user_image={user?.user_image} action={openUserPanel} persist={persist} id={id} accentColor={accentColor} hover={hoverState} textColor={textColor} perm={perm} index={index}  message={message} current_message={current_message} previous_message={previous_message} pinMessage={pinMessage} pinned={pinned} overlay={overlay} />
             <MessageText color={textColor} text={message.text} />
             <MessageLink link={message.link} />
             <Iframe marginRight={5} marginLeft={50} link={message.iFrame} />

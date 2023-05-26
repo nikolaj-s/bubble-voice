@@ -23,6 +23,7 @@ import { Loading } from '../../../../../components/LoadingComponents/Loading/Loa
 import { PersistedDataNotice } from '../../../../../components/PersistedDataNotice/PersistedDataNotice';
 import { saveSocialData, SOCIAL_DATA } from '../../../../../util/LocalData';
 import { sendDirectMessage, updateDirectmessage } from '../../../../Messages/MessagesSlice';
+import { selectGlassColor, selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 export const Social = ({currentChannel, channelId, socialRoute = false, bulletin = false, channelName, direct_message, direct_message_user, status}) => {
 
@@ -49,6 +50,10 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
     const displayName = useSelector(selectDisplayName);
 
     const pinning = useSelector(selectPinningMessage);
+
+    const glassColor = useSelector(selectGlassColor);
+
+    const textColor = useSelector(selectTextColor);
 
     React.useEffect(() => {
         try {
@@ -189,6 +194,8 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
     const handleLoadMoreOnScroll = (e) => {
 
+        if (messagesToRender > messages?.length) return toggleLoadingMore(false);
+
         if (loadingMore) return;
 
         if ((messagesRef.current.scrollTop + messagesRef.current.scrollHeight) < (e.target.clientHeight + 10)) {
@@ -203,10 +210,10 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
                     toggleLoadingMore(false);
                 
-                }, 500)
+                }, 200)
                 
 
-            }, 500);
+            }, 1500);
 
         }
     
@@ -245,12 +252,17 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
         exit={{
             opacity: 0,
         }}>
+            {loadingMore ?
+            <motion.div initial={{opacity: 0, top: '-120px'}} exit={{opacity: 0, top: '-120px'}} animate={{opacity: 1, top: 0}} style={{backgroundColor: glassColor}} className='social-loading-container'>
+                <Loading loading={loadingMore} />
+            </motion.div>
+            : null}
             <div className='social-wrapper-container'>
                 <div  className='social-inner-container'>
                     <ImagePreview cancel={handleCancelImageSend} preview={image?.preview} inputHeight={inputHeight} />
                     <div onScroll={handleLoadMoreOnScroll} ref={messagesRef} className='social-messages-wrapper'>
                         {messages?.slice(0, messagesToRender).map((message, key) => {
-                            return <Message persist={currentChannel.persist_social} current_message={message} previous_message={key === messages.length - 1 ? null : messages[key + 1]} pinned={message?.pinned} pinMessage={() => {pinMessage(message)}} perm={permission?.user_can_post_channel_social} channel_id={message?.channel_id} id={message._id} message={message.content} key={message.content.local_id || message._id} />
+                            return <Message direct_message={direct_message} persist={currentChannel.persist_social} current_message={message} previous_message={key === messages.length - 1 ? null : messages[key + 1]} pinned={message?.pinned} pinMessage={() => {pinMessage(message)}} perm={permission?.user_can_post_channel_social} channel_id={message?.channel_id} id={message._id} message={message.content} key={message.content.local_id || message._id} />
                         })}
                         {direct_message ? null : <PersistedDataNotice channelName={currentChannel.channel_name} persisted={!currentChannel.persist_social} />}
                     </div>

@@ -53,7 +53,7 @@ export const SavedMedia = () => {
     const expand = (media) => {
         dispatch(setExpandedContent(media))
     }
-
+    
     return (
         <AnimatePresence>
             {visibleState ?

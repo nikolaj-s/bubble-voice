@@ -110,7 +110,7 @@ const soundEffectsSlice = createSlice({
 
             if (action.payload.pitch) state.pitch = action.payload.pitch;
         
-            state.voices = speechSynthesis.getVoices();
+            speechSynthesis.getVoices();
         }
     }
 })

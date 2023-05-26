@@ -29,7 +29,6 @@ export const Reccomendations = ({media, count, expand}) => {
                     })}
                 </Masonry>
             </ResponsiveMasonry>}
-            {count > media.length && media.length !== 0 ? <NoMedia alt={true} message={"No More Server Media"} /> : null}
         </>
     )
 }

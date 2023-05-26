@@ -24,7 +24,7 @@ export const ImagePreview = ({preview, cancel, inputHeight}) => {
             </div>
             {preview.includes('.mp4') ?
             <video loop={true} style={{width: '100%', height: '100%'}} src={preview} controls={false} autoPlay /> :
-            <Image position='relative' objectFit='contain' zIndex={1} image={preview} />
+            <Image position='relative' objectFit='cover' zIndex={1} image={preview} />
             }
         </div>
         : null}

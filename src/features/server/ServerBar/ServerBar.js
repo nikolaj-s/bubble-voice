@@ -123,6 +123,8 @@ const Bar = () => {
         })
         socket.on('user joins server', (data) => {
             dispatch(userJoinsServer(data));
+
+            dispatch(pushSytemNotification({username: data.username, content: {text: `Is Now ${data.status}`}, type: 'status'}))
         })
         socket.on('connect_failed', (data) => {
             console.log('server connection error')
@@ -146,6 +148,8 @@ const Bar = () => {
             if (window.location.hash.includes(data.channel._id)) {
                 
                 dispatch(playSoundEffect({default: "userJoined", user: data.display_name}));
+
+                dispatch(pushSytemNotification({username: data.username, content: {text: `${data.display_name} Has Joined Your Channel`}, type: 'status'}))
             }
         })
         socket.on('user leaves channel', (data) => {
@@ -167,6 +171,8 @@ const Bar = () => {
 
         socket.on('user status', (data) => {
             dispatch(updateMemberStatus(data))
+
+            console.log(data)
         })
         socket.on('new message', (data) => {
             
@@ -178,11 +184,9 @@ const Bar = () => {
 
                 dispatch(addNewWidgetOverlayToQueue({...data, action: 'new-message'}));
             
-            } else {
-            
-                dispatch(pushSytemNotification(data));
-                
-            }
+            } 
+
+            dispatch(pushSytemNotification(data));
             
         })
 
@@ -270,8 +274,8 @@ const Bar = () => {
 
         socket.on('poke', (data) => {
             dispatch(playSoundEffect({default: "youHaveBeenPoked"}))
-
-            dispatch(pushPokeNotification(data.message))
+            
+            dispatch(pushSytemNotification({content: {text: 'Has Poked You'}, username: data.username}))
         })
 
         socket.on('kick', (data) => {
@@ -350,6 +354,8 @@ const Bar = () => {
 
         socket.on('user status update', (data) => {
             dispatch(updateMemberActiveStatus(data));
+            
+            dispatch(pushSytemNotification({username: data.username, content: {text: `Is Now ${data.status}`}, type: 'status'}))
         })
 
         socket.on('toggle pinned message', (data) => {
@@ -373,6 +379,8 @@ const Bar = () => {
             dispatch(playSoundEffect('newMessage'));
             
             dispatch(sendDirectMessage({message: data, username: data.username}))
+        
+            dispatch(pushSytemNotification(data));
         })
     }
 
@@ -761,7 +769,7 @@ const Bar = () => {
         
     // eslint-disable-next-line
     }, [])
-    console.log(loading)
+    
     return (
         <>
         <motion.div initial={{

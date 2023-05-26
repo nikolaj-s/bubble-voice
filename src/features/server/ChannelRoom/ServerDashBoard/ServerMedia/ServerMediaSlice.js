@@ -59,7 +59,10 @@ const ServerMediaSlice = createSlice({
         errorMessage: "",
         sort: 'new',
         after: '',
-        scrollPosition: 0
+        scrollPosition: 0,
+        media: [],
+        mediaQuery: "",
+        loadingNewMedia: false
     },
     reducers: {
         toggleLoadingRedditMedia: (state, action) => {
@@ -81,6 +84,19 @@ const ServerMediaSlice = createSlice({
         },
         setScrollPosition: (state, action) => {
             state.scrollPosition = action.payload;
+        },
+        setMediaQuery: (state, action) => {
+            state.mediaQuery = action.payload;
+        },
+        setNewMedia: (state, action) => {
+            state.mediaQuery = "";
+            state.media = action.payload;
+        },
+        addMoreMedia: (state, action) => {
+            state.media = [...state.media, ...action.payload];
+        },
+        toggleLoadingNewMedia: (state, action) => {
+            state.loadingNewMedia = action.payload;
         }
     },
     extraReducers: {
@@ -126,6 +142,12 @@ export const selectNextPostPage = state => state.ServerMediaSlice.after;
 
 export const selectScrollServerMediaScrollPosition = state => state.ServerMediaSlice.scrollPosition;
 
-export const {setScrollPosition, setSubRedditQuery, toggleSortSubPosts, setSubReddit, toggleLoadingRedditMedia, setServerMediaPage} = ServerMediaSlice.actions;
+export const selectMediaQuery = state => state.ServerMediaSlice.mediaQuery;
+
+export const selectMedia = state => state.ServerMediaSlice.media;
+
+export const selectLoadingNewMedia = state => state.ServerMediaSlice.loadingNewMedia;
+
+export const {toggleLoadingNewMedia, addMoreMedia, setNewMedia, setMediaQuery, setScrollPosition, setSubRedditQuery, toggleSortSubPosts, setSubReddit, toggleLoadingRedditMedia, setServerMediaPage} = ServerMediaSlice.actions;
 
 export default ServerMediaSlice.reducer;

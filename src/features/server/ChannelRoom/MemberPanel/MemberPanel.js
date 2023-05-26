@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { selectCurrentMemberPanel, selectPanelLeftPos, setSelectedMember } from './MemberPanelSlice';
 
 import "./MemberPanel.css";
-import { selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { Image } from '../../../../components/Image/Image';
 import { selectServerGroups, selectServerMembers, throwServerError } from '../../ServerSlice';
 import { TextButton } from '../../../../components/buttons/textButton/TextButton';
@@ -28,6 +28,8 @@ export const MemberPanel = () => {
 
     const [color, setColor] = React.useState(false);
 
+    const [transparentColor, setTransparentColor] = React.useState(false);
+
     const userColor = useSelector(selectProfileColor);
 
     const selectedMember = useSelector(selectCurrentMemberPanel);
@@ -37,6 +39,8 @@ export const MemberPanel = () => {
     const username = useSelector(selectUsername);
     
     const primaryColor = useSelector(selectPrimaryColor);
+
+    const glassColor = useSelector(selectGlassColor);
 
     const textColor = useSelector(selectTextColor);
 
@@ -93,7 +97,9 @@ export const MemberPanel = () => {
 
                 toggleLoading(false);
 
-                setColor(userColor)
+                setColor(userColor);
+                
+                setTransparentColor(userColor.split('1)')[0] + '0.5)');
             } else if (members[u_index]?.username) {
 
                 FetchMemberDetails(members[u_index]?.username)
@@ -103,6 +109,8 @@ export const MemberPanel = () => {
                     if (user.bio) setBio(user.bio);
 
                     if (user.color) setColor(user.color);
+
+                    if (user.color) setTransparentColor(user.color.split('1)')[0] + '0.5)');
                     
                     toggleLoading(false);
                 })
@@ -118,6 +126,8 @@ export const MemberPanel = () => {
             setColor(false);
 
             setMember({});
+
+            setTransparentColor(false);
         }
 
     }, [selectedMember, members])
@@ -125,7 +135,7 @@ export const MemberPanel = () => {
     return (
         <>
         {selectedMember ?
-        <div onClick={closePanel} className='outer-member-panel-container'>
+        <div style={{backgroundColor: transparentColor || glassColor}} onClick={closePanel} className='outer-member-panel-container'>
             <div 
             style={{backgroundColor: primaryColor, left: leftPost}}
             className='member-panel-container'>

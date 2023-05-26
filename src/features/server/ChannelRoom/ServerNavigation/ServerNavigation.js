@@ -203,12 +203,13 @@ export const ServerNavigation = () => {
 
     return (
         <motion.div
-            style={{ boxShadow: `0px 3px 10px -3px ${accentColor}`}}
+            style={{ boxShadow: `0px 3px 10px -3px black`}}
         className='server-navigation-container'>
             <div style={{backgroundColor: primaryColor}} className='server-navigation-button-wrapper'>
                 {inChannel ?
                 <>
                 <motion.div 
+                style={{borderTopLeftRadius: 5}}
                 transition={{duration: 0.05}}
                 onMouseEnter={() => {handleDesc('video', true)}}
                 onMouseOver={() => {handleAnimation(secondaryColor, voiceButtonAnimation, 'voice')}}

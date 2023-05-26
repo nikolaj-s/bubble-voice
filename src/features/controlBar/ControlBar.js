@@ -114,13 +114,13 @@ export const ControlBar = () => {
                     <SettingsButton 
                     width={20}
                     height={20}
-                    padding={7}
+                    padding={10}
                     desc_space={23}
                     action={toggleAppSettings} />
                     <WebCamButton 
                     width={20}
                     height={20}
-                    padding={7}
+                    padding={10}
                     action={() => {toggleFunction('webCamState')}} 
                     state={webCamState} 
                     active={current_channel_id === null || channel.disable_streams}
@@ -130,7 +130,7 @@ export const ControlBar = () => {
                     <MicToggleButton 
                     width={20}
                     height={20}
-                    padding={7}
+                    padding={10}
                     desc_space={23}
                     
                     action={() => {toggleFunction('microphoneState')}} 
@@ -141,7 +141,7 @@ export const ControlBar = () => {
                     <AudioToggleButton 
                     width={20}
                     height={20}
-                    padding={7}
+                    padding={10}
                     desc_space={23}
                     altInvert={true}
                     action={() => {toggleFunction('audioState')}} 
@@ -153,7 +153,7 @@ export const ControlBar = () => {
                     <ShareScreenButton 
                     width={20}
                     height={20}
-                    padding={7}
+                    padding={10}
                     desc_space={23}
                     loading={loadingScreenShare}
                     action={() => {toggleFunction('screenShareState')}} 

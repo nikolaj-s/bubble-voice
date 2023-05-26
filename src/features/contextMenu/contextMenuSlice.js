@@ -44,7 +44,8 @@ const contextMenuSlice = createSlice({
         deleteMessage: false,
         selectedMessage: "",
         // copy link
-        copyLink: false
+        copyLink: false,
+        seeSimilar: false
     },
     reducers: {
         setContextMenuOptions: (state, action) => {
@@ -93,6 +94,7 @@ const contextMenuSlice = createSlice({
             state.disableWebCam = false;
             state.disableStream = false;
             state.copyLink = false;
+            state.seeSimilar = false;
         },
         handleChannelCtxState: (state, action) => {
             state.joinChannel = action.payload.join;
@@ -185,6 +187,8 @@ export const selectDisableWebCam = state => state.contextMenuSlice.disableWebCam
 export const selectDisableStream = state => state.contextMenuSlice.disableStream;
 
 export const selectCopyLinkState = state => state.contextMenuSlice.copyLink;
+
+export const selectSeeSimilar = state => state.contextMenuSlice.seeSimilar;
 
 // actions
 export const { handleStreamState, handleCopyPasteCtxState, handleUserManagementCtx, handleChannelCtxState, clearCtxState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } = contextMenuSlice.actions;

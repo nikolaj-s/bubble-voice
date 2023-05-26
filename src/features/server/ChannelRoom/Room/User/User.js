@@ -4,12 +4,17 @@ import { useSelector } from 'react-redux';
 import { Image } from '../../../../../components/Image/Image';
 import { Loading } from '../../../../../components/LoadingComponents/Loading/Loading';
 import { USER_PREFS } from '../../../../../util/LocalData';
-import { selectAccentColor, selectActivationColor, selectSecondaryColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectActivationColor, selectSecondaryColor, selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectMiscSettingsHideNonVideoParticapents } from '../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 // style
 import "./User.css";
 import { selectUsername } from '../../../../settings/appSettings/accountSettings/accountSettingsSlice';
+import { DisabledWebCamIcon } from '../../../../../components/Icons/DisabledWebCamIcon/DisabledWebCamIcon';
+import { DisabledStreamIcon } from '../../../../../components/Icons/DisabledStreamIcon/DisabledStreamIcon';
+import { Muted } from '../../../../../components/Icons/Muted/Muted';
+import { MicMuted } from '../../../../../components/Icons/MicMuted/MicMuted';
+import { ScreenShare } from '../../../../../components/Icons/ScreenShare/ScreenShare';
 
 export const User = ({user}) => {
 
@@ -19,12 +24,14 @@ export const User = ({user}) => {
 
     const hideNonVideoParticapents = useSelector(selectMiscSettingsHideNonVideoParticapents);
     
+    const textColor = useSelector(selectTextColor);
+
     const prefs = USER_PREFS.get(user._id);
 
     const username = useSelector(selectUsername);
 
     const secondaryColor = useSelector(selectSecondaryColor);
-    
+
     return (
         <div 
         style={{
@@ -38,6 +45,14 @@ export const User = ({user}) => {
                 <Image objectFit='cover' image={user.user_image} />
             </div>
             <Loading backgroundColor={'black'} zIndex={1} show_success={false} loading={user.webcam && (user.username === username ? user.webcam : prefs?.disabled_web_cam === false)} />
+            <div 
+            style={{backgroundColor: accentColor}}
+            className='user-status-stream-wrapper'>
+                {user.microphone || user.microphone === undefined ? null : <MicMuted />}
+                {user.muted ? <Muted /> : null}
+                {user.webcam && prefs?.disabled_web_cam ? <DisabledWebCamIcon color={textColor} /> : null}
+                {user.screenshare ? prefs?.disable_stream ? <DisabledStreamIcon color={textColor} /> : <ScreenShare /> : null}
+            </div>
         </div>
     )
 }

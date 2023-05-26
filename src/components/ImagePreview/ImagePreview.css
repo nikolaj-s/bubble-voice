@@ -4,6 +4,7 @@
     border-radius: var(--border-radius);
     overflow: hidden;
     object-fit: cover;
+    min-height: 70px;
 }
 
 .image-preview-result-container:hover {
