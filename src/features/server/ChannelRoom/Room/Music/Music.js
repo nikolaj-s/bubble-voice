@@ -359,7 +359,7 @@ export const Music = () => {
             position: behind ? 'relative' : expanded  ? 'absolute' : 'fixed',
             zIndex: behind ? 0 : 12,
             marginTop: behind ? 5 : null,
-            maxHeight: behind ? '50%' : null,
+            maxHeight: behind ? '500px' : null,
             border: behind ? `2px solid ${secondaryColor}` : null
         }}
         id={'music-player-component'}

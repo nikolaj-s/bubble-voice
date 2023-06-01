@@ -1,7 +1,7 @@
 // library's
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectSecondaryColor, selectTextColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // components
 import { TextInput } from '../../../inputs/TextInput/TextInput';
@@ -43,6 +43,8 @@ export const MusicWidget = ({editing = false, widget}) => {
     const queue = useSelector(selectMusicQueue);
 
     const playing = useSelector(selectMusicPlayingState);
+
+    const primaryColor = useSelector(selectPrimaryColor);
 
     const textColor = useSelector(selectTextColor);
 
@@ -228,20 +230,20 @@ export const MusicWidget = ({editing = false, widget}) => {
                         )
                     })}
                 </div>
-                <div className='music-widget-controls-container'>
+                <div style={{backgroundColor: primaryColor}} className='music-widget-controls-container'>
                     <div className='music-widget-inner-controls-container'>
                         <div>
                             {playing ?
-                            <PauseButton width={25} height={25} action={handlePlayPause} />
+                            <PauseButton width={35} height={16} action={handlePlayPause} />
                             :
-                            <PlayButton width={25} height={25} action={handlePlayPause} />
+                            <PlayButton width={35} height={16} action={handlePlayPause} />
                             }
-                            <SkipButton width={25} height={25} action={handleSkip} />
+                            <SkipButton width={35} height={16} action={handleSkip} />
                         </div>
                         <Range min={0} value={volume} action={handleMusicVolume} max={100} step={0.05} />
                     </div>
                     {queue[0]?.title && editing === false ? 
-                    <Song liked={queue[0]?.liked} action={() => {handleSavingSong(queue[0])}} id={queue[0]._id} key={queue[0]._id} name={queue[0].title} duration={queue[0].duration} image={queue[0].thumbnail} />
+                    <Song width={'calc(100% - 135px)'} liked={queue[0]?.liked} action={() => {handleSavingSong(queue[0])}} id={queue[0]._id} key={queue[0]._id} name={queue[0].title} duration={queue[0].duration} image={queue[0].thumbnail} />
                     :
                     <p
                     style={{

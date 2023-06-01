@@ -202,6 +202,7 @@ function createWindow () {
 }
 
 ipcMain.handle('GET_SOURCES', async () => {
+
   const captures = await desktopCapturer.getSources({ types: ['window', 'screen', 'audio'], thumbnailSize: {width: 200, height: 200}, fetchWindowIcons: true})
   .then(async sources => {
       const screens = [];

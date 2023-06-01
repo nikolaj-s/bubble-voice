@@ -53,16 +53,16 @@ export const UserStatusBar = () => {
             try {
 
                 ipcRenderer = window.require('electron').ipcRenderer;
-
+                
                 interval = setInterval(() => {
                     
                     ipcRenderer.invoke('GET_SOURCES')
                     .then(res => {
-                        let l_windows = res.filter(w => !w.id.includes('screen') && !w.name.includes('Bubble'));
-
+                        let l_windows = res.filter(w => !w.id.includes('screen') && !w.name.includes('Bubble') && !w.name.includes('D3DProxyWindow'));
+                        console.log(currentStatus)
                         // avoid uneccessary server calls
                         if (currentStatus === `Playing ${l_windows[0].name}`) return;
-
+                        
                         dispatch(updateUserStatus({value: `Playing ${l_windows[0].name}`}))
                     })
 
@@ -83,7 +83,7 @@ export const UserStatusBar = () => {
             clearInterval(interval);
         }
 
-    }, [activityStatus])
+    }, [activityStatus, currentStatus])
 
     return (
         <>

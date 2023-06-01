@@ -238,7 +238,7 @@ export const ContextMenu = () => {
                 setMediaWidgetState(true);
             }
 
-            if (p.localName === 'img') {
+            if (p.localName === 'img' && p.className !== 'user-image') {
 
                 dispatch(toggleContextMenu(true));
 

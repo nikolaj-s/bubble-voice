@@ -647,7 +647,7 @@ const Bar = () => {
                         ipcRenderer.invoke("GET_SOURCES").then(res => {
 
                             let l_windows = res.filter(w => !w.id.includes('screen'));
-
+                            console.log(l_windows[0])
                             dispatch(setCurrentScreen(l_windows[0].id));
                             
                             dispatch(playSoundEffect('controlSoundEffect'));

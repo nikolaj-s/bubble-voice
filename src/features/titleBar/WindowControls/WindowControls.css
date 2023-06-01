@@ -13,8 +13,11 @@
     -webkit-app-region: no-drag;
     cursor: pointer;
     padding: 0 12px;
+    opacity: 0.45;
+    width: 20px;
+    height: 20px;
 }
 
 .window-controls-container div:hover {
-    opacity: 0.5;
+    opacity: 1;
 }

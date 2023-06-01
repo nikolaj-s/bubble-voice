@@ -14,7 +14,7 @@ import { Image } from '../../../../Image/Image';
 // style
 import "./Song.css";
 
-export const Song = ({id, image, name, duration, action, liked, saved, addToQueue, inQueue, removeFromQueue}) => {
+export const Song = ({id, image, name, duration, action, liked, saved, addToQueue, inQueue, removeFromQueue, width = null}) => {
 
     const textColor = useSelector(selectTextColor);
 
@@ -24,6 +24,7 @@ export const Song = ({id, image, name, duration, action, liked, saved, addToQueu
     
     return (
         <div 
+        style={{width: width}}
         onMouseLeave={(e) => {e.currentTarget.style.backgroundColor = null}}
         onMouseEnter={(e) => {e.currentTarget.style.backgroundColor = primaryColor}} className='song-container'>
             <div className='song-thumbnail-container'>

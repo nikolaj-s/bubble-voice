@@ -60,10 +60,11 @@ export const ServerNavigation = () => {
     }
 
     const handleAnimation = (color, type, p) => {
+        
         if (p === page) return;
         type.start({
             backgroundColor: color,
-            cursor: 'pointer'
+            cursor: 'pointer',
         })
     }
 
@@ -85,23 +86,23 @@ export const ServerNavigation = () => {
         if (page === 'voice') {
             voiceButtonAnimation.start({
                 backgroundColor: secondaryColor,
-                cursor: 'default'
+                cursor: 'default',
             })
             socialButtonAnimation.start({
                 backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
-                cursor: 'cursor'
+                cursor: 'cursor',
             })
             widgetsButtonAnimation.start({
                 backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
-                cursor: 'cursor'
+                cursor: 'cursor',
             })
             pinsButtonAnimation.start({
                 backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
-                cursor: 'cursor'
+                cursor: 'cursor',
             })
             mediaButtonAnimation.start({
                 backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
-                cursor: 'cursor'
+                cursor: 'cursor',
             })
         } else if (page === 'social') {
             socialButtonAnimation.start({

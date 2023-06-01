@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 // state
 import { selectPrimaryColor, selectSecondaryColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
-export const Image = ({img_id, image, objectFit = 'cover', position = 'relative', zIndex = 0, loadingState = '', opacity = 1, width = '100%', cursor = 'default', altWidth = '100%', imgHeight = '100%', expandContent = () => {}, disableErr = false, hideOnError = false, id, imageError = "https://res.cloudinary.com/drlkgoter/image/upload/v1674339889/no-picture_m4dmai.jpg", onLoad = () => {}, backgroundColor = null}) => {
+export const Image = ({image_class, img_id, image, objectFit = 'cover', position = 'relative', zIndex = 0, loadingState = '', opacity = 1, width = '100%', cursor = 'default', altWidth = '100%', imgHeight = '100%', expandContent = () => {}, disableErr = false, hideOnError = false, id, imageError = "https://res.cloudinary.com/drlkgoter/image/upload/v1674339889/no-picture_m4dmai.jpg", onLoad = () => {}, backgroundColor = null}) => {
 
     const [loading, toggleLoading] = React.useState(true);
 
@@ -57,6 +57,7 @@ export const Image = ({img_id, image, objectFit = 'cover', position = 'relative'
             ></motion.div>         
             : null}
             <motion.img 
+            className={image_class}
             id={img_id}
             onClick={() => {expandContent(image)}}
             onError={handleError} loading={loadingState} draggable={false} style={{maxHeight: '100%',width: width, maxWidth: altWidth, height: imgHeight, objectFit: objectFit, cursor: cursor}} initial={{opacity: 0}} animate={imageAnimation} onLoad={handleImageLoad} src={image} />

@@ -68,9 +68,9 @@ export const DirectMessageButton = ({username, visible, messages}) => {
             onMouseEnter={() => {handleHover(true)}}
             onMouseLeave={() => {handleHover(false)}}
             className='profile-button-container'>
-                {newMessage ? <div style={{position: 'absolute', width: 10, height: 10, backgroundColor: textColor, borderRadius: '50%', zIndex: 5, top: 0, right: 0}}></div> : null}
+                {newMessage ? <div style={{position: 'absolute', width: 15, height: 15, backgroundColor: 'rgb(201, 0, 0)', borderRadius: '50%', zIndex: 5, top: 0, left: 0}}></div> : null}
                 <div style={{borderRadius: visible ? 10 : null}} className='profile-button-picture-wrapper'>
-                    <Image cursor='pointer' objectFit='cover' width='100%'  image={user?.user_image} />
+                    <Image image_class={'user-image'} cursor='pointer' objectFit='cover' width='100%'  image={user?.user_image} />
                 </div>
                 {hover ? 
                 <div style={{backgroundColor: primaryColor}} className='server-button-name-container'>

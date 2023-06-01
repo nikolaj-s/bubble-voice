@@ -6,11 +6,12 @@
     align-items: center;
     position: relative;
     transition: 0.3s;
+    overflow: hidden;
     border-radius: var(--border-radius);
 }
 
 .inner-music-widget-container {
-    width: calc(100% - 10px);
+    width: calc(100%);
 }
 
 .music-top-title-container {
@@ -19,6 +20,7 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    margin-left: 5px;
 }
 
 .music-top-title-container h2 {
@@ -30,9 +32,11 @@
 .music-queue-title-container {
     display: flex;
     justify-content: space-between;
-    width: 100%;
+    width: calc(100% - 10px);
     height: 30px;
     align-items: center;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 .music-queue-title-container h3 {
@@ -45,13 +49,16 @@
     display: flex;
     align-items: center;
     height: 50px;
-    width: 100%;
+    width: calc(100% - 10px);
+    margin-left: 5px;
+    margin-right: 5px;
     margin-top: 3px;
     justify-content: space-between;
 }
 
 .music-queue-container {
-    width: 100%;
+    width: calc(100% - 10px);
+    margin: 0 5px;
     display: flex;
     flex-direction: column-reverse;
 
@@ -70,13 +77,13 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 150px;
+    height: 85px;
+    margin-top: 3px;
 }
 
 .music-widget-inner-controls-container {
     max-width: 120px;
     width: 30%;
-    margin-right: 10px;
     flex-shrink: 0;
 }
 
@@ -86,7 +93,8 @@
 }
 
 .saved-music-container {
-    width: 100%;
+    width: calc(100% - 10px);
+    margin: 0 5px;
     max-height: 300px;
     overflow-y: auto;
 }

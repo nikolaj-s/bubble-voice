@@ -58,7 +58,7 @@ export const ProfileButton = () => {
             onMouseLeave={() => {handleHover(false)}}
             className='profile-button-container'>
                 <div style={{borderRadius: visible ? 10 : null}} className='profile-button-picture-wrapper'>
-                    <Image cursor='pointer' objectFit='cover' width='100%'  image={profilePicture} />
+                    <Image image_class={'user-image'} cursor='pointer' objectFit='cover' width='100%'  image={profilePicture} />
                 </div>
                 {hover ? 
                 <div style={{backgroundColor: primaryColor}} className='server-button-name-container'>

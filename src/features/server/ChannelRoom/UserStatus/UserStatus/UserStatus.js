@@ -55,7 +55,7 @@ export const UserStatus = ({user}) => {
                 filter: user?.status === 'offline' || !user?.status ? 'brightness(50%)' : null
             }}
             className='user-status-image-container'>
-                <Image cursor='pointer' image={user.user_image} />
+                <Image image_class={"user-image"} cursor='pointer' image={user.user_image} />
             </div>
             <div 
             className={`user-name-status-wrapper ${user._id}-user-name-status-wrapper`}>

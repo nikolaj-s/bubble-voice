@@ -6,8 +6,8 @@ export const ExpandWindow = ({ action }) => {
 
     const styles = {
         container: {
-            width: 15,
-            height: 15
+            width: 12,
+            height: '100%'
         },
         icon: {
             width: "100%",

@@ -610,11 +610,16 @@ export class RoomClient {
 
             // let stream_audio;
 
-            // if (screen) {
-            //     console.log(stream.getAudioTracks())
-            //     stream_audio = stream.getAudioTracks()[0];
+             if (screen) {
+                try {
+
+                    
+
+                } catch (error) {
+                    console.log(error)
+                }
             
-            // }  
+             }  
 
             if (!audio) {
                 params.appData = {type: screen ? 'screen share' : 'web cam'}
