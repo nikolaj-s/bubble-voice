@@ -19,9 +19,7 @@ export const BoolButton = ({state, name, action}) => {
     return (
         <div 
         onClick={action}
-        style={{
-            backgroundColor: primaryColor
-        }}
+       
         className='bool-button-container'>
             <div 
             style={{

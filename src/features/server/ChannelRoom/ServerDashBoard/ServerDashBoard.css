@@ -1,13 +1,12 @@
 
 .server-dashboard-container {
     width: calc(100%);
-    height: calc(100% - 30px);
+    height: calc(100%);
     display: flex;
     flex-direction: column;
     overflow: visible;
     position: absolute;
     z-index: 4;
-    top: 30px;
 }
 
 .server-dashboard-title-container {

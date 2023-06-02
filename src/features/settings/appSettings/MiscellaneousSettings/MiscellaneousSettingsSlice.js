@@ -60,7 +60,9 @@ export const pushSytemNotification = createAsyncThunk(
             const member = members.find(u => u.username === data.username);
 
             const channel = channels.find(c => c._id === data.channel_id);
-           
+            
+            if (channel.auth === false) return;
+
             if (member) {
 
                 let msg = {...data, display_name: member.display_name, user_image: member.user_image, textColor: textColor, secondaryColor: secondaryColor, shape: member.profile_picture_shape, channel_name: channel?.channel_name}
@@ -90,7 +92,7 @@ const MiscellaneousSettingsSlice = createSlice({
         hideNonVideoParticapents: false,
         disableGifProfiles: false,
         hideUserStatus: false,
-        popOutUserStreams: true,
+        popOutUserStreams: false,
         autoPlayNativeVideos: true,
         defaultServer: {label: "Default", id: ""},
         roomScale: 1,
@@ -238,7 +240,8 @@ const MiscellaneousSettingsSlice = createSlice({
             if (saved_data.disableChannelIcons) state.disableChannelIcons = true;
 
             if (saved_data.disableSystemNotifications) state.disableSystemNotifications = true;
-          //  if (saved_data.popOutUserStreams) state.popOutUserStreams = true;
+            
+            if (saved_data.popOutUserStreams) state.popOutUserStreams = true;
         }
     }
 })

@@ -104,8 +104,8 @@ function createWindow () {
 
   // Create the browser window.
   win = new BrowserWindow({
-    minWidth: 800,
-    minHeight: 800,
+    minWidth: 730,
+    minHeight: 500,
     webPreferences: {
       nodeIntegration: true,
       preload: __dirname + "/preload.js",

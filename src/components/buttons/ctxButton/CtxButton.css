@@ -7,7 +7,6 @@
     padding: 0 4px;
     justify-content: space-between;
     cursor: pointer;
-    backdrop-filter: blur(20px);
 }
 
 .ctx-button-container p {
@@ -18,5 +17,5 @@
 }
 
 .ctx-button-container:hover {
-    filter: contrast(50%);
+    filter: contrast(20%);
 }

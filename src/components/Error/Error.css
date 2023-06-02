@@ -12,12 +12,14 @@
 
 .inner-error-container {
     width: 80%;
-    height: 80%;
+    height: auto;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     max-width: 600px;
+    border-radius: 8px;
+    padding: 10px;
 }
 
 .error-message-container {

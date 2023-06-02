@@ -110,6 +110,7 @@ export const CreateChannelMenu = () => {
         <AnimatePresence>
             {open ? 
             <motion.div 
+            onClick={handleCancel}
             initial={{opacity: 0}}
             animate={{opacity: 1}}
             exit={{opacity: 0}}
@@ -119,6 +120,7 @@ export const CreateChannelMenu = () => {
             }}
              className='create-channel-menu-container'>
                 <motion.div 
+                onClick={(e) => {e.stopPropagation()}}
                 initial={{scale: 0}}
                 animate={{scale: 1}}
                 exit={{scale: 0}}

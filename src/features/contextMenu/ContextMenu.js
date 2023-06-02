@@ -25,9 +25,9 @@ import { selectUsername } from '../settings/appSettings/accountSettings/accountS
 // USER PREFS
 import { saveUserPrefs, USER_PREFS } from '../../util/LocalData';
 import { BoolButton } from '../../components/buttons/BoolButton/BoolButton';
-import { miscSettingsChannelSpecificStateChange, selectDisableMediaWidget, selectHideUserStatus, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents } from '../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { miscSettingsChannelSpecificStateChange, selectDisableMediaWidget, selectHideUserStatus, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectPopOutUserStreams } from '../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { MoveUser } from '../../components/buttons/MoveUser/MoveUser';
-import { selectPrimaryColor, selectTextColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassState, selectPrimaryColor, selectTextColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectSocialSoundEffect, updateSoundEffectsState } from '../settings/soundEffects/soundEffectsSlice';
 
 import { audioCtx } from '../AudioInit/AudioInit';
@@ -136,6 +136,8 @@ export const ContextMenu = () => {
 
     const serverId = useSelector(selectServerId);
 
+    const popOutUserStreams = useSelector(selectPopOutUserStreams);
+
     // stream management
     const changeStreamVolumeState = useSelector(selectStreamVolumeState);
 
@@ -188,6 +190,8 @@ export const ContextMenu = () => {
 
     // user
     const username = useSelector(selectUsername);
+
+    const glassState = useSelector(selectGlassState);
 
     React.useEffect(() => {
 
@@ -1076,7 +1080,8 @@ export const ContextMenu = () => {
             top: ctxCordinates.y,
             left: ctxCordinates.x,
             translateY: origin ? '-100%' : (ctxCordinates.y - 300) < 0 ? '0%' : '-50%',
-            backgroundColor: primaryColor
+            backgroundColor: glassState ? `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0.5)` : primaryColor,
+            backdropFilter: glassState ? 'blur(5px)' : null
         }}
         className='ctx-menu-container'>
             {saveImage ? <CtxButton action={() => {handleSave(true)}} name={"Download Image"} icon={<SaveIcon />} /> : null}
@@ -1094,7 +1099,7 @@ export const ContextMenu = () => {
             {audio ? 
             <>
             <CtxMenuTitle title={"Change Volume"} />
-            <Range action={handleVolumeChange} fill={true} value={audioLevel} max={1} min={0} step={0.01} />
+            <Range action={handleVolumeChange} fill={false} value={audioLevel} max={1} min={0} step={0.01} />
             </>
              : null}
             {changeUserVolume ? 
@@ -1103,11 +1108,11 @@ export const ContextMenu = () => {
                 <CtxMenuTitle title={"Change User Volume"} />
                 <p style={{color: textColor, fontSize: '0.8rem', marginRight: 5}} >{Math.floor(userVolumeLevel * 100)}%</p>
             </div>
-            <Range save={handleUserVolumeChange} action={(value) => setUserVolumeLevel(value)} step={0.01} value={userVolumeLevel} fill={true} max={1} min={0} /> 
+            <Range save={handleUserVolumeChange} action={(value) => setUserVolumeLevel(value)} step={0.01} value={userVolumeLevel} fill={false} max={1} min={0} /> 
             </>
             : null}
             {changeStreamVolumeState ? <CtxMenuTitle title={"Change Stream Volume"} /> : null}
-            {changeStreamVolumeState ? <Range value={streamAudioLevel} action={handleStreamVolumeChange} fill={true} max={1} min={0} step={0.01} /> : null}
+            {changeStreamVolumeState ? <Range value={streamAudioLevel} action={handleStreamVolumeChange} fill={false} max={1} min={0} step={0.01} /> : null}
             {flipWebCamState ? <BoolButton name={"Flip Web Cam"} state={flippedWebCamState} action={handleFlipWebCamPref} /> : null}
             {disableWebCameState ? <BoolButton name={"Disable Webcam"} state={disabledWebCamLocalState} action={handleDisableWebCam} /> : null}
             {disableStreamState ? <BoolButton name={"Disable Stream"} state={disableStreamLocalState} action={handleDisableStream} /> : null}
@@ -1121,6 +1126,7 @@ export const ContextMenu = () => {
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideNonVideoParticapents")}} state={hideNonVideoParticapents} name={"Hide Non Video Participants"} /> : null}
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("disableMessagePopUp")}} state={disableMessagePopup} name={"Disable Message Overlay"} /> : null}
             {channelSpecificSettingsState ? <BoolButton action={handleToggleSocialSoundEffect} state={socialSoundEffect} name="Enable Social Sound Effect" /> : null}
+            {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange('popOutUserStreams')}} state={popOutUserStreams} name={"Disable User Pop Out"} /> : null}
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideUserStatus")}} state={hideUserStatus} name={"Hide User Status"} /> : null}
             {channelSpecificSettingsState || mediaWidgetState ? <BoolButton action={() => {handleChannelSpecificStateChange('disableMediaWidget')}} state={disableMediaWidget} name={"Disable Media Widget"} /> : null}
             {addToMusicWidget ? <CtxButton action={handlePlayOnMusicWidget} name="Play On Music Widget" icon={<PlayOnWidgetIcon />}/> : null}

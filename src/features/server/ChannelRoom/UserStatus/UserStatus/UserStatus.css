@@ -1,7 +1,7 @@
 .user-status-container {
     height: 45px;
-    width: 137px;
-    max-width: 137px;
+    width: 172px;
+    max-width: 172px;
     display: flex;
     align-items: center;
     position: relative;
@@ -44,7 +44,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     width: 100%;
-    font-weight: 400;
+    font-weight: 500;
     letter-spacing: var(--font-spacing);
     cursor: pointer;
 }

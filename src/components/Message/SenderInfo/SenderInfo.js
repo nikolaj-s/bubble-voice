@@ -35,7 +35,7 @@ export const SenderInfo = ({link, color, id, profile_picture_shape, current_mess
                 ?
                 <div className='sender-info-inner-container'>
                     <div style={{borderRadius: profile_picture_shape === 'square' ? '5px' : '50%'}} onClick={action} className='message-profile-picture'>
-                        <Image cursor='pointer' image={user_image} />
+                        <Image image_class={'user-image'} cursor='pointer' image={user_image} />
                     </div>
                     <h2
                     onClick={action}

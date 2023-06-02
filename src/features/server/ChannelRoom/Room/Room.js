@@ -727,7 +727,7 @@ const Component = () => {
     React.useEffect(() => {
         
         if (page === 'social' || page === 'widgets' || musicExpanded === true || page === 'pins' || page === 'media') {
-            if (popOutUserStreams) {
+            if (!popOutUserStreams) {
                 document.getElementById('user-streams-wrapper').style.position = 'fixed';
                 document.getElementById('user-streams-wrapper').style.left = '50px';
                 document.getElementById('user-streams-wrapper').style.width = "220px";
@@ -736,21 +736,15 @@ const Component = () => {
                 document.getElementById('user-streams-wrapper').style.pointerEvents = 'none';
             } else {
                 document.getElementById('user-streams-wrapper').style.opacity = 0;
-                
+                document.getElementById('user-streams-wrapper').style.zIndex = 0;
             }
             
         } else {
-            if (popOutUserStreams) {
                 document.getElementById('user-streams-wrapper').style.left = '0px';
                 document.getElementById('user-streams-wrapper').style.position = 'relative';
                 document.getElementById('user-streams-wrapper').style.width = '100%'
                 document.getElementById('user-streams-wrapper').style.opacity = 1;
                 document.getElementById('user-streams-wrapper').style.pointerEvents = null;
-            } else {
-                document.getElementById('user-streams-wrapper').style.opacity = 1;
-                document.getElementById('user-streams-wrapper').style.pointerEvents = null;
-            }
-            
         }
     // eslint-disable-next-line      
     }, [page, popOutUserStreams, musicExpanded])

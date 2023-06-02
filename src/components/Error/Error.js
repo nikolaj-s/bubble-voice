@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { TextButton } from "../buttons/textButton/TextButton";
 
 // state 
-import { selectPrimaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style 
 import "./Error.css";
@@ -17,6 +17,8 @@ export const Error = ({errorMessage, action, buttonLabel = "Close"}) => {
     const primaryColor = useSelector(selectPrimaryColor)
 
     const textColor = useSelector(selectTextColor);
+
+    const secondaryColor = useSelector(selectSecondaryColor);
 
     React.useEffect(() => {
 
@@ -50,7 +52,7 @@ export const Error = ({errorMessage, action, buttonLabel = "Close"}) => {
             backgroundColor: 'rgba(' + primaryColor.split('rgb(')[1].split(')')[0] + ', 0.8)'
         }}
         className='error-container' initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} key={"error-componen"}> 
-            <div className='inner-error-container' >
+            <div style={{backgroundColor: secondaryColor}} className='inner-error-container' >
                 <div
                 style={{
                     backgroundColor: primaryColor

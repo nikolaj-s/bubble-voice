@@ -12,9 +12,9 @@ export const ProcessingImageIndicator = ({percent}) => {
         <div
         style={{
             position: 'relative', 
-            width: 50, 
-            height: 50, 
-            borderRadius: 15, 
+            width: 30, 
+            height: 30, 
+            borderRadius: 5, 
             overflow: 'hidden', 
             margin: '0 10px', 
             backgroundColor: secondaryColor,
@@ -25,7 +25,7 @@ export const ProcessingImageIndicator = ({percent}) => {
         >
             <p style={{
                 color: color,
-                fontSize: '1rem'
+                fontSize: '.8rem'
             }}>{percent}%</p>
         </div>
     )

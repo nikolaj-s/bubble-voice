@@ -142,7 +142,7 @@ export const ServerMedia = ({media, expand}) => {
             : null}
             <div onScroll={handleLoadMore} className='server-media-container'>
                 
-                {page === 'recommendations' ? <Reccomendations count={count} expand={expand} media={newMedia.length > 0 ? newMedia : media} /> : null}
+                {page === 'recommendations' ? <Reccomendations count={count} expand={expand} media={loadingNewMedia ? [{}] : newMedia.length > 0 ? newMedia : media} /> : null}
                 {page === 'subreddit' ? <ViewSubReddit expand={expand} /> : null}
                 
             </div>

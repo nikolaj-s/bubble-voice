@@ -32,6 +32,7 @@ import { addPinnedMessage, removePinnedMessage } from '../ChannelRoom/ServerDash
 import { MobileServerBanner } from '../../../components/MobileServerBanner/MobileServerBanner';
 import { clearDirectMessages, sendDirectMessage } from '../../Messages/MessagesSlice';
 import { selectGlassState, selectSecondaryColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { clearMedia } from '../ChannelRoom/ServerDashBoard/ServerMedia/ServerMediaSlice';
 
 export let socket = null;
 
@@ -473,6 +474,8 @@ const Bar = () => {
 
         dispatch(clearDirectMessages());
 
+        dispatch(clearMedia());
+
         navigate('/dashboard')
     
     }
@@ -722,7 +725,7 @@ const Bar = () => {
         // clean up socket
         return () => {
             dispatch(leaveChannel({username: username}));
-            
+            dispatch(clearMedia());
             try {
                 socket.off();
                 socket.emit('left server', {server_id: server_id});

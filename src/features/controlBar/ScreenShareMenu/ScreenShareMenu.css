@@ -13,6 +13,7 @@
     position: fixed;
     width: 500px;
     height: 600px;
+    max-height: calc(100% - 100px);
     bottom: 50px;
     left: 0;
     z-index: 9;

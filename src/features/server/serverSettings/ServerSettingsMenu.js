@@ -42,6 +42,10 @@ const Menu = () => {
         const ambiance = document.getElementsByClassName('server-banner-ambiance')[0];
 
         const rmAmbiance = document.getElementsByClassName('room-ambiance-background')[0];
+        
+        const serverNav = document.getElementsByClassName('server-navigation-container')[0];
+
+        if (serverNav) serverNav.style.display = 'none';
 
         if (rmAmbiance) rmAmbiance.style.display = 'none';
 
@@ -57,6 +61,8 @@ const Menu = () => {
         
         return () => {
             dispatch(toggleServerSettingsOpenState(false))
+
+            if (serverNav) serverNav.style.display = null;
 
             if (rmAmbiance) rmAmbiance.style.display = null;
 

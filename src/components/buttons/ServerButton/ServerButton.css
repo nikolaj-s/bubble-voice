@@ -8,7 +8,7 @@
     cursor: pointer;
     border-radius: 50%;
     transition: 0.1s;
-    margin: 3px 0;
+    margin: 3px 0px;
     position: relative;
     z-index: 10;
 }

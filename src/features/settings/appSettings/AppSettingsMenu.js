@@ -50,6 +50,10 @@ const SettingsMenu = () => {
 
         const rmAmbiance = document.getElementsByClassName('room-ambiance-background')[0];
 
+        const serverNav = document.getElementsByClassName('server-navigation-container')[0];
+
+        if (serverNav) serverNav.style.display = 'none';
+
         if (rmAmbiance) rmAmbiance.style.display = 'none';
 
         if (ambiance) ambiance.style.display = 'none';
@@ -63,6 +67,8 @@ const SettingsMenu = () => {
         if (serverSelect) serverSelect.style.zIndex =  0;
         
         return () => {
+            if (serverNav) serverNav.style.display = null;
+
             if (rmAmbiance) rmAmbiance.style.display = null;
 
             if (ambiance) ambiance.style.display = null;

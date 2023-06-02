@@ -220,7 +220,8 @@ export const MusicWidget = ({editing = false, widget}) => {
                     {queue.length === 0 || editing ?
                     <p 
                     style={{
-                        color: textColor
+                        color: textColor,
+                        marginLeft: 10
                     }}
                     >. . .</p>
                     : queue.map((song, i) => {
@@ -232,13 +233,13 @@ export const MusicWidget = ({editing = false, widget}) => {
                 </div>
                 <div style={{backgroundColor: primaryColor}} className='music-widget-controls-container'>
                     <div className='music-widget-inner-controls-container'>
-                        <div>
+                        <div className='music-widget-inner-controls-container-wrapper'>
                             {playing ?
-                            <PauseButton width={35} height={16} action={handlePlayPause} />
+                            <PauseButton width={28} height={28} borderRadius={'50%'} action={handlePlayPause} />
                             :
-                            <PlayButton width={35} height={16} action={handlePlayPause} />
+                            <PlayButton width={28} height={28} borderRadius={'50%'} action={handlePlayPause} />
                             }
-                            <SkipButton width={35} height={16} action={handleSkip} />
+                            <SkipButton transparent={true} width={18} height={18} action={handleSkip} />
                         </div>
                         <Range min={0} value={volume} action={handleMusicVolume} max={100} step={0.05} />
                     </div>
@@ -247,7 +248,8 @@ export const MusicWidget = ({editing = false, widget}) => {
                     :
                     <p
                     style={{
-                        color: textColor
+                        color: textColor,
+                        marginRight: 40
                     }}
                     >. . .</p>
                     }

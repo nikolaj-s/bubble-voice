@@ -65,6 +65,8 @@ const Settings = () => {
 
     const disableChannelIcons = useSelector(selectDisableChannelIcons);
 
+    const popOutUserStreams = useSelector(selectPopOutUserStreams);
+
     React.useEffect(() => {
 
         dispatch(setHeaderTitle("Miscellaneous Settings"));
@@ -121,10 +123,8 @@ const Settings = () => {
             <ToggleButton action={() => {handleChannelSpecificStateChange("hideNonVideoParticapents")}} state={hideNonVideoParticapents} />
             <InputTitle title={"Hide User Status Bar When In A Channel"} />
             <ToggleButton action={() => {handleChannelSpecificStateChange('hideUserStatus')}} state={hideUserStatusBar} />
-            { //<InputTitle title={"Toggle Hide / Pop Out User Streams On Tab Change"} /> 
-            
-                //<ToggleButton state={popOutUserStreams} action={() => {handleChannelSpecificStateChange("popOutUserStreams")}} />
-            }
+            <InputTitle title={"Disable Popping Out User Streams On Tab Change"} /> 
+            <ToggleButton state={popOutUserStreams} action={() => {handleChannelSpecificStateChange("popOutUserStreams")}} />
             <InputTitle title={'Disable Channel Icons'} />
             <ToggleButton action={() => {handleChannelSpecificStateChange('disableChannelIcons')}} state={disableChannelIcons} />
             <InputTitle title={"Disable Gif Profile Pictures / Banners"} />

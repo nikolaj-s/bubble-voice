@@ -100,8 +100,8 @@ export const ButtonAnimationWrapper = ({desc_width = '100%', onMouseDown = () =>
             animate={null}
             style={{
                 width: desc_width,
-                top: right_orientation_desc ? '3px' : null,
-                right: right_orientation_desc ? '-35px' : null,
+                top: right_orientation_desc ? '2px' : null,
+                right: right_orientation_desc ? '-45px' : null,
                 left: right_orientation_desc ? null : '50%',
                 bottom: right_orientation_desc ? null : flip_description ? '-120%' : height + desc_space,
                 minWidth: right_orientation_desc ? null : desc_width,

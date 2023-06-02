@@ -51,9 +51,17 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
 
     const username = useSelector(selectUsername);
 
-    const active = window.location.hash.includes(channel._id);
+    const active = (currentChannelId === channel._id) || (currentSocialId === channel._id);
 
     const disableChannelIcons = useSelector(selectDisableChannelIcons);
+
+    React.useEffect(() => {
+
+        if (!active && !mouseEnter) {
+            animation.start({backgroundColor: transparentPrimaryColor})
+        }
+
+    }, [active, mouseEnter])
 
     const handleAnimation = (color, enter) => {
         if (enter) {
@@ -74,6 +82,8 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
         if (channel.auth === false) return dispatch(throwServerError({errorMessage: "Whoops This Channel Has Been Made Available To Only Certain Users!"}));
 
         if (channel.text_only) return dispatch(setChannelSocialId(channel._id));
+
+        if (active) dispatch(setChannelSocialId(null));;
 
         action(channel)
     }
@@ -187,6 +197,7 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
             style={{
                 backgroundColor: active ? accentColor : transparentPrimaryColor,
                 cursor: active ? "default" : "pointer",
+                filter: active ? "brightness(120%)" : null
             }}
             className='channel-button-container'>
                 <div style={{backgroundColor: unReadMessage && channel.auth ? textColor : null}} className='unread-message-indicator'></div>   

@@ -50,6 +50,7 @@
     background-color: black;
     max-width: 960px;
     max-height: 540px;
+    transition: 0.05s;
 }
 
 #live-chat-wrapper .streaming-video-player {

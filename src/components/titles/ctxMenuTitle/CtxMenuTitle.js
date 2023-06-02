@@ -17,9 +17,7 @@ export const CtxMenuTitle = ({title}) => {
     return (
         <div
         className='ctx-menu-title'
-        style={{
-            backgroundColor: primaryColor
-        }}
+        
         >
             <p
             style={{

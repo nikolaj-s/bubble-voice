@@ -18,7 +18,9 @@
     align-items: center;
     position: relative;
     height: 700px;
-    max-width: 600px;
+    top: 8px;
+    max-height: calc(100% - 65px);
+    max-width: 550px;
     padding: 10px 20px;
     border-radius: var(--border-radius);
     overflow-y: auto;

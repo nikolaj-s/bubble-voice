@@ -11,7 +11,7 @@ export const ImageButton = ({action}) => {
     <ButtonAnimationWrapper
     width={25}
     height={25}
-    margin="0 3px 0 3px"
+    margin="0px"
     action={action}
     borderRadius={5}
     description={"Upload Image"}

@@ -17,7 +17,6 @@ export const CtxButton = ({name, action, borderRadius, icon}) => {
         onClick={action}
         className='ctx-button-container'
         style={{
-            backgroundColor: primaryColor,
             borderRadius: borderRadius
         }}>
             <p

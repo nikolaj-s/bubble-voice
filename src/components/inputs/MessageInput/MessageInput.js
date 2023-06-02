@@ -90,6 +90,8 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
        
         if (e.target.value.length > 1024) return;
 
+        if (e.target.value.length < 5) setInputHeight(40); updateInputHeight(50);
+
         text(e.target.value)
 
         setInputHeight(e.target.scrollHeight)
@@ -175,7 +177,6 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
                     onFocus={handleText}
                     id='social-input-selector' onKeyUp={handleKeyCode} onChange={handleText} value={value}  placeholder='Message' type="text" />
                     <div className='message-input-button-wrapper'>
-                        <CharacterCount count={value.length} />
                         <SearchImageButton margin={!persist ? '0 5px 0 0' : null} action={handleSearchingForImageToggle} />
                         {(persist && !processingImage) ? <ImageButton action={handleImageButton} /> : null}
                         {processingImage ? <ProcessingImageIndicator percent={percent} /> : null}

@@ -11,7 +11,7 @@ import { AnimatePresence } from 'framer-motion'
 import { SocialRoute } from './SocialRoute/SocialRoute'
 import { ServerDashBoard } from './ServerDashBoard/ServerDashBoard'
 import { UserStatusBar } from './UserStatus/UserStatusBar'
-import { selectDefaultServer } from '../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice'
+import { selectDefaultServer, selectHideUserStatus } from '../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice'
 import { SetAsDefaultServerNotice } from './SetAsDefaultServerNotice/SetAsDefaultServerNotice'
 import { MemberPanel } from './MemberPanel/MemberPanel'
 import { ServerNavigation } from './ServerNavigation/ServerNavigation'
@@ -44,6 +44,8 @@ export const RoomWrapper = () => {
     const currentServerPage = useSelector(selectCurrentServerPageState);
 
     const channelId = useSelector(selectCurrentChannelId);
+
+    const userStatusHidden = useSelector(selectHideUserStatus);
 
     const currentChannel = useSelector(selectCurrentChannel);
 
@@ -90,17 +92,17 @@ export const RoomWrapper = () => {
         <>
         <CreateChannelMenu />
         <ServerSettingsRouteWrapper />
-            <div className='outer-server-page-wrapper'>
-                <div onDragOver={onDragOver} onDrop={onDrop} className='server-page-wrapper'>
-                    <SocialRoute key='social-route' />
-                    <ServerNavigation />
-                    <Room />
-                    <ServerDashBoard />
-                    <RoomActionOverlay page={currentServerPage} />
-                    <DropOverlay action={() => {toggleDropState(false)}} dropState={dropState} />
-                </div>
-                <Music />
+        <div style={{width: (channelId && !userStatusHidden) ? 'calc(100% - 185px)' : null, maxWidth: (channelId && !userStatusHidden) ? 'calc(100% - 185px)' : null}} className='outer-server-page-wrapper'>
+            <div onDragOver={onDragOver} onDrop={onDrop} className='server-page-wrapper'>
+                <SocialRoute key='social-route' />
+                
+                <Room />
+                <ServerDashBoard />
+                <RoomActionOverlay page={currentServerPage} />
+                <DropOverlay action={() => {toggleDropState(false)}} dropState={dropState} />
             </div>
+            <Music />
+        </div>
         <UserStatusBar key='user-status-bar' />
         <MemberPanel key='member-panel' />
         {error ? <Error key={'server-error'} errorMessage={errorMessage} action={closeErrorMessage} /> : null}

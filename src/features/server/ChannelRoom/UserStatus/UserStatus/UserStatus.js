@@ -47,7 +47,7 @@ export const UserStatus = ({user}) => {
     
     return (
         <div 
-        style={{backgroundColor: preview ? primaryColor : null}}
+        style={{backgroundColor: preview ? primaryColor : null, filter: preview ? 'brightness(150%)' : null}}
         onClick={openMemberPanel} onMouseEnter={(e) => {handleMouseEnter(e, true)}} onMouseLeave={(e) => {handleMouseLeave(e, false)}} className={`user-status-container ${user._id}-user-status-card status-${user.status}`}>
             <div
             style={{
@@ -59,7 +59,7 @@ export const UserStatus = ({user}) => {
             </div>
             <div 
             className={`user-name-status-wrapper ${user._id}-user-name-status-wrapper`}>
-                <h3 style={{color: user.color || textColor, filter: 'brightness(150%)', fontWeight: '600', opacity: user?.status === 'offline' || !user?.status ? 0.4 : null}} >{user.display_name}</h3>
+                <h3 style={{color: user.color || textColor, filter: 'brightness(150%)', opacity: user?.status === 'offline' || !user?.status ? 0.4 : null}} >{user.display_name}</h3>
                 <p style={{color: textColor}}>{user.status ? user.status : 'offline'}</p>
             </div>
         </div>

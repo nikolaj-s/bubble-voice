@@ -97,6 +97,15 @@ const ServerMediaSlice = createSlice({
         },
         toggleLoadingNewMedia: (state, action) => {
             state.loadingNewMedia = action.payload;
+        },
+        clearMedia: (state, action) => {
+            state.media = [];
+
+            state.subReddits = [];
+
+            state.redditPosts = [];
+
+            state.scrollPosition = 0;
         }
     },
     extraReducers: {
@@ -148,6 +157,6 @@ export const selectMedia = state => state.ServerMediaSlice.media;
 
 export const selectLoadingNewMedia = state => state.ServerMediaSlice.loadingNewMedia;
 
-export const {toggleLoadingNewMedia, addMoreMedia, setNewMedia, setMediaQuery, setScrollPosition, setSubRedditQuery, toggleSortSubPosts, setSubReddit, toggleLoadingRedditMedia, setServerMediaPage} = ServerMediaSlice.actions;
+export const {clearMedia, toggleLoadingNewMedia, addMoreMedia, setNewMedia, setMediaQuery, setScrollPosition, setSubRedditQuery, toggleSortSubPosts, setSubReddit, toggleLoadingRedditMedia, setServerMediaPage} = ServerMediaSlice.actions;
 
 export default ServerMediaSlice.reducer;

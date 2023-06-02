@@ -14,7 +14,7 @@ export const ImagePreview = ({image, tags, action, tag_action}) => {
     const primaryColor = useSelector(selectPrimaryColor)
 
     return (
-        <div onClick={(e) => {e.stopPropagation(); e.preventDefault(); action(image)}} href={image} className='image-preview-result-container'>
+        <div style={{backgroundColor: primaryColor}} onClick={(e) => {e.stopPropagation(); e.preventDefault(); action(image)}} href={image} className='image-preview-result-container'>
             <SubMenuButton target={`image=${image}&tags=${tags}`} zIndex={1} padding={0} width={30} transparent={true} height={30} borderRadius={3} position={'absolute'} />
             <Image img_id={`image=${image}&tags=${tags}`} objectFit='cover' hideOnError={true} cursor='pointer' image={image} />
         </div>
