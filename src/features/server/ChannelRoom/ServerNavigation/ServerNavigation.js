@@ -6,7 +6,7 @@ import { useAnimation, motion } from 'framer-motion';
 // state
 import { selectCurrentServerPageState, handleChangePage } from './ServerNavigationSlice';
 import { selectCurrentChannelId, selectUsersPermissions } from '../../ServerSlice';
-import { selectAccentColor, selectGlassColor, selectGlassState, selectPrimaryColor, selectSecondaryColor, selectTextColor, selectTransparentPrimaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectGlassColor, selectGlassState, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./ServerNavigation.css";
@@ -324,7 +324,7 @@ export const ServerNavigation = () => {
                
             </div>
             <motion.div transition={{duration: 0.2}} className='server-navigation-filler'></motion.div>
-                {inChannel ? <SubMenuButton transparent={true} altInvert={true} invert={true} description={"Room Quick Settings"} right_orientation_desc={true}  target={'live-chat-wrapper'} borderRadius={3} zIndex={3} top={0} height={7} left={null} width={15} /> : null}
+                {inChannel ? <SubMenuButton desc_width={150} transparent={true} altInvert={true} invert={true} description={"Room Quick Settings"} right_orientation_desc={true}  target={'live-chat-wrapper'} borderRadius={3} zIndex={3} top={0} height={7} left={null} width={15} /> : null}
         </motion.div>
     )
 }

@@ -82,7 +82,7 @@ export const Message = ({direct_message, message, overlay = false, id, channel_i
             {message.image ? 
             <div 
             className='message-image-container'>
-                <Image expandContent={expandContent} imgHeight='auto' cursor='pointer' width={null} altWidth={'100%'} loadingState='eager' objectFit='contain' image={message.image} />
+                <Image  expandContent={expandContent} imgHeight='auto' cursor='pointer' width={null} altWidth={'100%'} loadingState='lazy' objectFit='contain' image={message.image} />
             </div>
             : null}
             {message.video ? 

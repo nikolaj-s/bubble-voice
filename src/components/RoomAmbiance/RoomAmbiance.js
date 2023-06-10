@@ -62,7 +62,7 @@ export const RoomAmbiance = () => {
     return (
         <>
         {!channelBackground ?
-        <div className='room-ambiance-background' style={{opacity: 1,zIndex: 0,boxShadow: `0 0 40px 40px ${roomColor}`,width: size.w, position: 'fixed', left: 269, top: 31, height: size.h, borderRadius: 20}}>
+        <div className='room-ambiance-background' style={{opacity: 1,zIndex: 0,boxShadow: `0 0 40px 40px ${roomColor}`,width: size.w, position: 'absolute', left: 269, top: 31, height: size.h, borderRadius: 20}}>
 
         </div> : null}
         </>

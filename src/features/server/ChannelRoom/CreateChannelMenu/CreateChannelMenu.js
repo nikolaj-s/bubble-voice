@@ -1,6 +1,5 @@
 // library's
 import React from 'react';
-import { useNavigate, useRoutes } from 'react-router';
 import { AnimatePresence, motion, useAnimation} from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -13,7 +12,6 @@ import { InputTitle } from '../../../../components/titles/inputTitle/InputTitle'
 import { TextInput } from '../../../../components/inputs/TextInput/TextInput';
 import { ApplyCancelButton } from '../../../../components/buttons/ApplyCancelButton/ApplyCancelButton';
 import { ToggleButton } from '../../../../components/buttons/ToggleButton/ToggleButton';
-import { BoolButton } from '../../../../components/buttons/BoolButton/BoolButton';
 import { RadioButton } from '../../../../components/buttons/RadioButton/RadioButton'
 
 // style
@@ -21,8 +19,6 @@ import "./CreateChannelMenu.css";
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 import { selectDisableTransparancyEffects } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
-
-
 
 export const CreateChannelMenu = () => {
 
@@ -130,12 +126,6 @@ export const CreateChannelMenu = () => {
                     <TextInput marginBottom='3px' inputValue={channelName} action={handleChannelNameInput} placeholder={"Name"} />
                     <RadioButton action={() => {toggleChannelType('voice')}} state={type === 'voice'} name={'Voice'} />
                     <RadioButton action={() => {toggleChannelType('text')}} state={type === 'text'} name={'Text'} />
-                    {type === 'voice' ?
-                    <>
-                    <InputTitle title={"Persist Channel's Text Messages"} />
-                    <ToggleButton state={persist} action={handleTogglePersist} />
-                    </>
-                    : null}
                     <InputTitle title={"Lock Channel"} />
                     <ToggleButton action={handleLockChannel} state={lock} />
                     {lock ?
@@ -143,7 +133,7 @@ export const CreateChannelMenu = () => {
                     <InputTitle title={"Add Authorized Users"} />
                     <div className='auth-users-container'>
                        {members.filter(m => (m.username !== username && m.username !== serverOwner)).map((member, i) => {
-                            return <BoolButton action={() => {addAuthUser(member._id)}} state={authUsers.findIndex(i => i === member._id) !== -1} name={member.display_name} />
+                            return <RadioButton action={() => {addAuthUser(member._id)}} state={authUsers.findIndex(i => i === member._id) !== -1} name={member.display_name} />
                        })}
                     </div>
                     </>

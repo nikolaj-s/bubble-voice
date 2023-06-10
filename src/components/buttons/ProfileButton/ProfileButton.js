@@ -10,6 +10,7 @@ import { toggleMediaPanel } from '../../../features/SavedMedia/SavedMediaSlice';
 import { toggleAddServerMenu } from '../../../features/createServer/createServerSlice';
 import { toggleExploreTab } from '../../../features/Explore/ExploreSlice';
 import { closeDirectMessage } from '../../../features/Messages/MessagesSlice';
+import { CloseIcon } from '../../Icons/CloseIcon/CloseIcon';
 
 export const ProfileButton = () => {
 
@@ -27,8 +28,8 @@ export const ProfileButton = () => {
 
     const profilePicture = useSelector(selectUserImage);
 
-    const handleHover = (bool) => {
-        toggleHover(bool)
+    const handleHover = (bool, e) => {
+        toggleHover(bool);
     }
 
     const action = () => {
@@ -47,18 +48,16 @@ export const ProfileButton = () => {
     return (
         <div 
             onClick={action}
-            style={{
-                backgroundColor: accentColor,
-                borderRadius: visible ? 10 : null,
-                border: visible ? `solid 2px ${textColor}` : null,
-                width: visible ? 41 : 45,
-                height: visible ? 41 : 45
-            }}
-            onMouseEnter={() => {handleHover(true)}}
+            
+            onMouseEnter={(e) => {handleHover(true, e)}}
             onMouseLeave={() => {handleHover(false)}}
             className='profile-button-container'>
-                <div style={{borderRadius: visible ? 10 : null}} className='profile-button-picture-wrapper'>
-                    <Image image_class={'user-image'} cursor='pointer' objectFit='cover' width='100%'  image={profilePicture} />
+                <div style={{
+                backgroundColor: accentColor,
+                borderRadius: visible ? 10 : null,
+                
+            }} className='profile-button-picture-wrapper'>
+                    {visible ? <CloseIcon /> : <Image image_class={'user-image'} cursor='pointer' objectFit='cover' width='100%'  image={profilePicture} />}
                 </div>
                 {hover ? 
                 <div style={{backgroundColor: primaryColor}} className='server-button-name-container'>

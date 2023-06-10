@@ -1,6 +1,6 @@
 
 export const BuildSystemNotification = (data) => {
-    return ` 
+    return {message: ` 
   <div style="width: 100%; height: 98vh; overflow: hidden; display: flex; justify-content: flex-end; align-items: flex-end;">
   <div style="border-radius: 8px; width: 300px; right: 0; display: flex; height: auto; padding: 5px; overflow: hidden; background-color: ${data.secondaryColor}; flex-direction: column; padding-bottom: 10px;" class="notification">
   <div style="display: flex; align-items: center; height: 45px;">  
@@ -22,5 +22,5 @@ export const BuildSystemNotification = (data) => {
       </div>` : ""} 
     </div>
     </div>
-</div>`
+</div>`, type: data.type}
 } 

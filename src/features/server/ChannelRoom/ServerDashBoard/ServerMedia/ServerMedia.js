@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectAccentColor, selectGlassColor, selectSecondaryColor, selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { Reccomendations } from './Recommendations/Reccomendations';
 import { ViewSubReddit } from './ViewSubReddits/ViewSubReddit';
-import { GetPostsFromSubReddit, addMoreMedia, selectCurrentSubReddit, selectLoadingNewMedia, selectLoadingSubReddit, selectMedia, selectMediaQuery, selectNextPostPage, selectScrollServerMediaScrollPosition, selectServerMediaPage, selectSubRedditSortState, setMediaQuery, setNewMedia, setScrollPosition, setServerMediaPage, toggleLoadingNewMedia, toggleLoadingRedditMedia } from './ServerMediaSlice';
+import { GetPostsFromSubReddit, addMoreMedia, selectCurrentSubReddit, selectLoadingNewMedia, selectLoadingSubReddit, selectMedia, selectMediaQuery, selectNextPostPage, selectScrollServerMediaScrollPosition, selectServerMediaPage, selectSubRedditSortState, setMediaQuery, setNewMedia, setScrollPosition, setServerMediaPage, toggleLoadingNewMedia } from './ServerMediaSlice';
 import { TextInput } from '../../../../../components/inputs/TextInput/TextInput';
 import { Loading } from '../../../../../components/LoadingComponents/Loading/Loading';
 import { ImageSearch } from '../../../../../util/ImageSearch';
@@ -91,6 +91,8 @@ export const ServerMedia = ({media, expand}) => {
 
         if (newSearch) document.getElementsByClassName('server-media-container')[0].scrollTop = 0;
 
+        if (newSearch) dispatch(setNewMedia([{}]));
+
         dispatch(toggleLoadingNewMedia(true));
 
         const images = await ImageSearch(query ? query : mediaQuery, serverId);
@@ -142,7 +144,7 @@ export const ServerMedia = ({media, expand}) => {
             : null}
             <div onScroll={handleLoadMore} className='server-media-container'>
                 
-                {page === 'recommendations' ? <Reccomendations count={count} expand={expand} media={loadingNewMedia ? [{}] : newMedia.length > 0 ? newMedia : media} /> : null}
+                {page === 'recommendations' ? <Reccomendations count={count} expand={expand} media={newMedia.length > 0 ? newMedia : media} /> : null}
                 {page === 'subreddit' ? <ViewSubReddit expand={expand} /> : null}
                 
             </div>

@@ -32,7 +32,6 @@ export const MoveUser = ({move = () => {}, top, left}) => {
         onMouseEnter={() => {handleExpanded(true)}}
         onMouseLeave={() => {handleExpanded(false)}}
         style={{
-            backgroundColor: primaryColor,
             borderRadius: 0
         }}
         className='move-user-button'>

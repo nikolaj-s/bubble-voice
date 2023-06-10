@@ -31,7 +31,7 @@ export const WheelSpinOverlay = ({data, onEnd, page}) => {
             borderTop: 'none'
         }}
         initial={{top: -750}}
-        animate={{top: 30}}
+        animate={{top: 0}}
         exit={{top: -750}}
         transition={{duration: 0.3}}
         className="wheel-spin-overlay-container"

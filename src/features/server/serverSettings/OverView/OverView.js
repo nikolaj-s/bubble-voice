@@ -127,10 +127,9 @@ const Wrapper = () => {
                 if (data.data.server_banner) {
                     dispatch(updateServerBanner(data.data.server_banner));
                 }
-
-                if (data.data.inactive_channel) {
-                    dispatch(updateInactiveChannel(data.data.inactive_channel));
-                }
+                
+                dispatch(updateInactiveChannel(data.data.inactive_channel));
+                
                 dispatch(updateServer({server_id: serverId, server_banner: data.data.server_banner, server_name: data.data.server_name}))
 
                 setServerPassword("");
@@ -164,7 +163,7 @@ const Wrapper = () => {
             })
             .catch(err => {
                 toggleLoading(false);
-                dispatch(throwServerError({errorMessage: err.errorMessage}));
+                dispatch(throwServerError({errorMessage: err}));
             })
 
         } catch (error) {   

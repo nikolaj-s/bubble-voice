@@ -29,6 +29,7 @@
     height: 24px;
     border-radius: 3px;
     -webkit-app-region: no-drag;
+    
 }
 
 .server-navigation-button p {
@@ -42,7 +43,10 @@
     font-size: 0.7rem;
     transform: translateX(-35%);
     min-width: 75px;
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.435);
 }
+
+
 
 .server-navigation-button h3 {
     font-weight: 400;

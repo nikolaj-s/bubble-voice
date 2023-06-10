@@ -10,7 +10,7 @@ export const fetchSavedMedia = createAsyncThunk(
             const data = await fetchSavedLocalData("SAVED", "MEDIA");
             
             if (data?.error || !data || data === undefined) return [];
-            console.log(data)
+
             return data;
 
         } catch (err) {

@@ -71,7 +71,7 @@ export const SavedMedia = () => {
                     {savedMedia.length === 0 ?
                     <NoMedia alt={true} message={"You Have No Saved Media, Save Media By Right Clicking On Media And Hitting Save Within The Context Menu"} />
                     : 
-                    <ResponsiveMasonry style={{width: '100% - 10px', margin: '0px 5px'}} columnsCountBreakPoints={{1000: 2}}>
+                    <ResponsiveMasonry style={{width: '100% - 10px', margin: '0px 5px'}} columnsCountBreakPoints={{1000: 1}}>
                         <Masonry gutter='5px'> 
                             {saves.map(media => {
                                return <div style={{borderRadius: 5, overflow: 'hidden'}}>

@@ -35,8 +35,6 @@ const Wrapper = () => {
 
     React.useEffect(() => {
 
-        dispatch(setHeaderTitle("Edit Channel"));
-
         if (channels.length !== orderedChannels.length) {
 
             setOrderedChannels(channels)
@@ -56,6 +54,16 @@ const Wrapper = () => {
     }
 
     const openCreateChannelMenu = () => {
+
+        if (window.location.hash.includes('appsettings')) {
+                
+            window.location.hash = window.location.hash.split('/appsettings')[0];
+        
+        } else if (window.location.hash.includes('server-settings')) {
+
+            window.location.hash = window.location.hash.split('/server-settings')[0];
+        
+        }
         
         dispatch(toggleCreateChannelMenu(true))
 

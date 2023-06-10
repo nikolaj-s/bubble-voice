@@ -16,7 +16,7 @@ export const TitleBar = () => {
     return (
       <div className='title-bar'>
           <Title />
-          {serverId ? <ServerNavigation /> : null}
+          {(serverId && window.location.hash.includes('server')) ? <ServerNavigation /> : null}
           <WindowControls />
       </div>
     )

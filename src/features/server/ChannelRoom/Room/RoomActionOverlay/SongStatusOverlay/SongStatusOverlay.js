@@ -38,7 +38,7 @@ export const SongStatusOverlay = ({data, onEnd}) => {
     return (
         <motion.div 
         initial={{top: '-60px'}}
-        animate={{top: 30}}
+        animate={{top: 0}}
         exit={{top: '-60px'}}
         key={'song-status-overlay'}
         style={{

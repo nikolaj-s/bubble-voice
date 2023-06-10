@@ -38,7 +38,7 @@ export const MessageOverlay = ({data, onEnd, page}) => {
             backgroundColor: secondaryColor,
         }}
         transition={{duration: 0.3}}
-        initial={{top: -400}} animate={{top: 30}} exit={{top: -400}} className='message-overlay-container'>
+        initial={{top: -400}} animate={{top: 0}} exit={{top: -400}} className='message-overlay-container'>
             <Message overlay={true} message={data.content} current_message={data} />
         </motion.div>
     )

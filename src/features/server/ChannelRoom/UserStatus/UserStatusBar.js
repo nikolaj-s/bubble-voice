@@ -1,6 +1,5 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { InputTitle } from '../../../../components/titles/inputTitle/InputTitle';
 import { selectGlassColor, selectGlassState, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectActivityStatus, selectHideUserStatus } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { selectCurrentChannelId, selectServerGroups, selectServerMembers } from '../../ServerSlice'
@@ -40,7 +39,7 @@ export const UserStatusBar = () => {
     React.useEffect(() => {
 
         dispatch(setUsers(users));
-        console.log(users)
+        
     }, [users])
 
     React.useEffect(() => {
@@ -58,12 +57,24 @@ export const UserStatusBar = () => {
                     
                     ipcRenderer.invoke('GET_SOURCES')
                     .then(res => {
-                        let l_windows = res.filter(w => !w.id.includes('screen') && !w.name.includes('Bubble') && !w.name.includes('D3DProxyWindow'));
-                        console.log(currentStatus)
-                        // avoid uneccessary server calls
-                        if (currentStatus === `Playing ${l_windows[0].name}`) return;
+
+                        let new_status_name;
+
+                        let l_windows = res.filter(w => !w.id.includes('screen') && !w.name.includes('Bubble') && !w.name.includes('D3DProxyWindow') && !w.name.includes("Input Occlusion Window"));
                         
-                        dispatch(updateUserStatus({value: `Playing ${l_windows[0].name}`}))
+                        // avoid uneccessary server calls
+                        
+                        if (!l_windows[0]?.name) return;
+
+                        if (l_windows[0].name.includes('Google Chrome')) {
+                            new_status_name = "Google Chrome"
+                        } else {
+                            new_status_name = l_windows[0].name;
+                        }
+
+                        if (currentStatus === `Playing ${new_status_name}`) return;
+
+                        dispatch(updateUserStatus({value: `Playing ${new_status_name}`}))
                     })
 
                 }, 120000)

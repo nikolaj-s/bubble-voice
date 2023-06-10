@@ -105,15 +105,17 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
             const last_message = SOCIAL_DATA.get(channel._id);
 
             if (channel._id === currentChannelId || channel._id === currentSocialId) return toggleUnReadMessage(false);
-
-            if ((last_message?.message_id !== channel?.social[0]._id)) {
+            
+            if (channel.last_message_id === undefined) return;
+            
+            if (last_message?.message_id !== channel?.last_message_id) {
                 toggleUnReadMessage(true);
             }
 
         } catch (error) {
             return;
         }
-    }, [channel.social, SOCIAL_DATA, currentChannelId, currentSocialId])
+    }, [channel.last_message_id, SOCIAL_DATA, currentChannelId, currentSocialId])
     
     const openSocial = (e) => {
         e.stopPropagation();
@@ -157,7 +159,7 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
         document.getElementById(`channel-wrapper-button-${channel._id}`).style.backgroundColor = 'rgba(0, 0, 0, 0)';
 
         if (channel.text_only) return;
-        console.log(event)
+        
         const id = event.dataTransfer.getData('text');
         
         if (!id) return;

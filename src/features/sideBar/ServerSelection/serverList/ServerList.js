@@ -33,6 +33,7 @@ export const ServerList = ({selectServer, serverList = [], loading = false, anim
             <SavedMediaButton />
             <CreateServerButton />
             <Loading loading={loading} error={serverList.length === 0} />
+            <div className='server-select-nav-bottom-spacer'></div>
         </motion.div>
     )
 }

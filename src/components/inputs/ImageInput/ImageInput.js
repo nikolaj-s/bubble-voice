@@ -30,7 +30,7 @@ export const ImageInput = ({
     size = 1000000,
     maxSize = 0.6,
     showShadow = false,
-    borderWidth = 2,
+    borderWidth = 4,
     maxDimensions = 1920,
     disableIcon = false,
     imageProcessingFontSize,
@@ -43,8 +43,6 @@ export const ImageInput = ({
     const [processingImage, toggleProcessingImage] = React.useState(false);
 
     const [percent, setPercent] = React.useState(0);
-
-    const [shadow, setShadow] = React.useState(false);
 
     const animation = useAnimation();
 
@@ -109,30 +107,33 @@ export const ImageInput = ({
 
     // handle animation's
     const animateEntry = (arg, leaving) => {
-        animation.start({
-            border: `solid ${borderWidth}px ${arg}`
-        })
 
         if (leaving === false) {
             iconAnimation.start({
                 filter: "invert()"
             })
+            animation.start({
+                filter: 'brightness(110%)'
+            })
         } else {
             iconAnimation.start({
                 filter: "none"
+            })
+            animation.start({
+                filter: 'brightness(100%)'
             })
         }
     }
 
     const onLoad = (e) => {
 
+        if (files[0]?.preview.includes('cloudinary')) return;
+
         if (showShadow === false) return;
 
         setTimeout(() => {
 
             const color = GetImageColorData(e);
-
-            setShadow(color);
 
             getColor(color);
         
@@ -143,7 +144,7 @@ export const ImageInput = ({
     return (
         <AnimatePresence>
         <motion.div 
-        transition={{duration: 0.1}}
+        transition={{duration: 0.05}}
         animate={animation}
         onMouseEnter={() => {
             animateEntry(accentColor, false);
@@ -158,26 +159,23 @@ export const ImageInput = ({
             animateEntry(accentColor, false)
         }}
         style={{
-            width: `calc(${width} - 8px)`,
-            height: `calc(${height} - 8px)`,
+            width: `calc(${width})`,
+            height: `calc(${height})`,
             position: "absolute",
             overflow: 'hidden',
             cursor: 'pointer',
             borderRadius: borderRadius,
-            border: `${borderWidth}px solid ${primaryColor}`,
             zIndex: zIndex,
             left: "50%" ,
             top: "50%",
             transform: "translate(-50%, -50%)",
             transition: '0.1s',
-            boxShadow: shadow ? `0 0 25px 25px ${shadow}` : null
-            
         }}
         {...getRootProps({className: 'dropzone'})} className='image-drop-input-container'>
             <input {...getInputProps()} />
             <Image onLoad={onLoad} opacity={blur_amount} disableErr={true} cursor='pointer' image={files[0]?.preview} />
             
-            {disableIcon ? null : <ImageIcon cursor={'pointer'} center={center} zIndex={zIndex} animation={iconAnimation} />}
+            {disableIcon ? null : <ImageIcon cursor={'pointer'} center={center} zIndex={zIndex} />}
         </motion.div>
         {processingImage ? <ImageInputProcessingIndicator fontSize={imageProcessingFontSize} key={"image-processing-indicator"} value={percent} /> : null}
         </AnimatePresence>

@@ -1,8 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { OfflineIcon } from '../../../../../components/Icons/OfflineIcon/OfflineIcon';
 import { Image } from '../../../../../components/Image/Image';
-import { selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor,selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { setPanelPosition, setSelectedMember } from '../../MemberPanel/MemberPanelSlice';
 
 import "./UserStatus.css";
@@ -11,11 +10,7 @@ export const UserStatus = ({user}) => {
 
     const [preview, togglePreview] = React.useState(false);
 
-    const [top, setTop] = React.useState(0);
-
     const textColor = useSelector(selectTextColor);
-
-    const secondaryColor = useSelector(selectSecondaryColor);
 
     const primaryColor = useSelector(selectPrimaryColor);
 

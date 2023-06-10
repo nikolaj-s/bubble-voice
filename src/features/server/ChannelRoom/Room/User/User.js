@@ -36,7 +36,7 @@ export const User = ({user}) => {
         <div 
         style={{
             border: `solid 2px ${(user.active && user.microphone) ? activeColor : user.color ? user.color : accentColor}`,
-            
+            filter: (user.active && user.microphone) ? 'brightness(125%)' : null,
             display: (hideNonVideoParticapents === true && user.webcam === false) || (hideNonVideoParticapents === true && prefs?.disabled_web_cam === true) ? 'none' : 'flex'
         }}
         id={user._id} className='active-user-container'>

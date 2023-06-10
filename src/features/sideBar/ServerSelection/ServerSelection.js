@@ -1,9 +1,7 @@
  // library's
 import React from 'react';
-import {motion, AnimatePresence} from 'framer-motion';
 import { useNavigate } from 'react-router';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux/es/exports';
+import { useDispatch, useSelector } from 'react-redux';
 
 // components
 import { ServerList } from './serverList/ServerList'
@@ -13,18 +11,14 @@ import "./ServerSelection.css";
 import { handleLeavingServer, selectServerId, setServerId, setServerName, setTopPos } from '../../server/ServerSlice';
 import { setHeaderTitle } from '../../contentScreen/contentScreenSlice';
 import { selectLoadingUsersServersState, selectServerList, setSideBarHeader } from '../sideBarSlice';
-import { selectPrimaryColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
 import { clearWidgetOverLay } from '../../server/ChannelRoom/Room/RoomActionOverlay/RoomActionOverlaySlice';
-import { socket } from '../../server/ServerBar/ServerBar';
 
 export const ServerSelection = () => {
   
     const dispatch = useDispatch();
 
     const navigate = useNavigate();
-
-    const accentColor = useSelector(selectPrimaryColor);
 
     // handle users server list
     const serverList = useSelector(selectServerList);
@@ -88,14 +82,8 @@ export const ServerSelection = () => {
     }, [])
 
     return (
-        <div id="side-server-list-wrapper" className='side-bar-inner-container'>
-            <AnimatePresence >
-                <div className='server-list-outer-wrapper'>
-                    <motion.div key={'server-select'} initial={{translateX: '-100%'}} animate={{translateX: '0%'}} exit={{translateX: "-100%"}} className='server-list-wrapper'>
-                        <ServerList selectServer={selectServer} serverList={serverList} loading={loadingUserServerListState} />
-                    </motion.div>
-                </div>
-            </AnimatePresence>
+        <div id="side-server-list-wrapper" className='side-bar-inner-container'>        
+            <ServerList selectServer={selectServer} serverList={serverList} loading={loadingUserServerListState} />
         </div>
     )
 }

@@ -1,8 +1,7 @@
 
 .create-server-button-container {
-    width: 41px;
     border-radius: 50%;
-    height: 41px;
+    height: 45px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -10,6 +9,9 @@
     transition: 0.2s;
     position: relative;
     margin-top: 4px;
+    flex-shrink: 0
+    
+    ;
 }
 
 .create-server-button-container:hover {

@@ -5,14 +5,13 @@ import { m, motion } from 'framer-motion';
 
 // components
 import { CtxButton } from '../../components/buttons/ctxButton/CtxButton';
-import { CtxMenuPlaceHolder } from '../../components/titles/ctxMenuPlaceHolder/CtxMenuPlaceHolder'
 import { AssignPermissionGroupMenu } from '../../components/AssignPermissionGroupMenu/AssignPermissionGroupMenu'
 import { Loading } from '../../components/LoadingComponents/Loading/Loading';
 import { CtxMenuTitle } from '../../components/titles/ctxMenuTitle/CtxMenuTitle';
 
 // state
 import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleStreamState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCopyLinkState, selectCopyState, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteMesssageState, selectDeleteWidget, selectDisableStream, selectDisableWebCam, selectEditChannelCtxState, selectFlipWebCamState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSeeSimilar, selectSelectedMessage, selectSelectedUserCtxState, selectStopStreamingState, selectStreamVolumeState, selectViewSocialState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
-import { assignNewServerGroup, deleteMessage, markWidgetForDeletion, moveUser, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerId, selectServerMembers, selectUsersPermissions, sendDeleteMessageRequest, setChannelSocialId, setEditingChannelId, throwServerError, toggleMembersWebCamState, userBanned } from '../server/ServerSlice';
+import { assignNewServerGroup, markWidgetForDeletion, moveUser, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerId, selectServerMembers, selectUsersPermissions, sendDeleteMessageRequest, setChannelSocialId, setEditingChannelId, throwServerError, toggleMembersWebCamState, userBanned } from '../server/ServerSlice';
 
 // style
 import "./ContextMenu.css";
@@ -46,6 +45,7 @@ import { SavedIcon } from '../../components/Icons/SavedIcon/SavedIcon';
 import { selectLoadingNewMedia, setNewMedia, toggleLoadingNewMedia } from '../server/ChannelRoom/ServerDashBoard/ServerMedia/ServerMediaSlice';
 import { ImageSearch } from '../../util/ImageSearch';
 import { SearchIcon } from '../../components/Icons/SearchIcon/SearchIcon';
+import { RequestDeleteMessage } from '../server/SocialSlice';
 
 export const ContextMenu = () => {
 
@@ -953,7 +953,7 @@ export const ContextMenu = () => {
 
             if (!message_id && !channel_id) return dispatch(throwServerError({errorMessage: "Cannot Delete This Message"}));
 
-            dispatch(sendDeleteMessageRequest({channel_id, message_id}));
+            dispatch(RequestDeleteMessage({channel_id: channel_id, message_id: message_id}));
 
         } catch (error) {
             console.log(error);

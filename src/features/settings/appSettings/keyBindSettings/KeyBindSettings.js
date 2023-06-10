@@ -49,6 +49,8 @@ const Settings = () => {
         
         if (event.key.includes('F')) return;
 
+        console.log(event)
+
         if (event.keyCode === pushToTalkkey.keyCode && (event.keyCode !== "")) return;
         
         if (event.keyCode === muteMicKey.keyCode && (event.keyCode !== "")) return;
@@ -62,8 +64,8 @@ const Settings = () => {
         if (event.keyCode === shareScreenKey.keyCode && (event.keyCode !== "")) return;
         
         if (event.keyCode === pushToMuteKey.keyCode && (event.keyCode !== "")) return;
-
-        const obj = {...local, [state]: {key: event.nativeEvent.key, keyCode: event.keyCode, code: event.code}}
+        
+        const obj = {...local, [state]: {key: event.nativeEvent.key.length === 1 ? event.nativeEvent.key.toUpperCase() : event.nativeEvent.key , keyCode: event.keyCode, code: event.code}}
         
         setLocal(obj)
         

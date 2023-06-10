@@ -1,16 +1,17 @@
 
 .server-button-container {
-    width: 45px;
+    position: relative;
     height: 45px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     cursor: pointer;
     border-radius: 50%;
     transition: 0.1s;
     margin: 3px 0px;
-    position: relative;
-    z-index: 10;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    left: 0;
+    flex-shrink: 0;
+    float: right;
 }
 
 .server-button-image-container {
@@ -21,20 +22,26 @@
     overflow: hidden;
     object-fit: cover;
     transition: 0.2s;
+    flex-shrink: 0;
 }
 
 .server-button-name-container {
-    position: absolute;
+    margin-left: 5px;
+    border-radius: 5px;
+    height: auto;
+    display: flex;
+    align-items: center;
     z-index: 20;
-    left: 50px;
-    border-radius: var(--border-radius);
-    width: 120px;
     padding: 5px;
-    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.395);
+    left: 55px;
+    margin-right: 30px;
+    box-shadow: 5px 5px 20px black;
 }
 
 .server-button-name-container h2 {
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 400;
     text-align: center;
+    margin: 0;
+    padding: 3px;
 }

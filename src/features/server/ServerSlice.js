@@ -1,8 +1,6 @@
 import { createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 
-import { fetchMusicWidgetVolume, setMusicWidgetVolume } from "../../util/LocalData";
-
-import { addPinnedMessage, removePinnedMessage, setPinnedMessages } from "./ChannelRoom/ServerDashBoard/ServerDashBoardSlice";
+import { fetchMusicWidgetVolume } from "../../util/LocalData";
 
 import { socket } from "./ServerBar/ServerBar";
 
@@ -24,66 +22,6 @@ export const unBanMember = createAsyncThunk(
         } catch (error) {
             console.log(error);
             return rejectWithValue({errorMessage: error.message});
-        }
-    }
-)
-
-export const sendDeleteMessageRequest = createAsyncThunk(
-    'serverSlice/sendDeleteMessageRequest',
-    async ({channel_id, message_id}, {rejectWithValue, dispatch}) => {
-        try {
-            
-            const data = await socket.request('delete message', {channel_id: channel_id, message_id: message_id})
-            .then(result => {
-                
-                dispatch(removePinnedMessage({message: {_id: result.message_id}}))
-                
-                return result;
-            })
-            .catch(error => {
-                console.log(error)
-                return rejectWithValue({errorMessage: error});
-            })
-
-            return data;
-
-        } catch (error) {
-            console.log(error);
-            return rejectWithValue({error: true, errorMessage: error.message})
-        }
-    }
-)
-
-export const togglePinMessage = createAsyncThunk(
-    'serverSlice/togglePinMessage',
-    async (data, {rejectWithValue, dispatch}) => {
-        try {
-
-            if (!data._id) return rejectWithValue({errorMessage: "Invalid Message"});
-
-            const pin = await socket.request('toggle pinned message', data)
-            .then(res => {
-                return res;
-            })
-            .catch(err => {
-                return rejectWithValue({errorMessage: err.errorMessage})
-            })
-
-            if (pin.message.pinned) {
-                
-                dispatch(addPinnedMessage(pin))
-            
-            } else {
-                
-                dispatch(removePinnedMessage(pin))
-            
-            }
-
-            return pin;
-
-        } catch (error) {
-            console.log(error);
-            return rejectWithValue({error: true, errorMessage: error.message});
         }
     }
 )
@@ -117,6 +55,8 @@ export const fetchServerDetails = createAsyncThunk(
 
         const { server_id } = getState().serverSlice;
 
+        if (!server_id) return;
+
         const { currentStatus } = getState().UserStatusSlice;
         
         const { username, user_image, user_banner, display_name } = getState().accountSettingsSlice;
@@ -137,8 +77,6 @@ export const fetchServerDetails = createAsyncThunk(
             console.log(error)
             return rejectWithValue({error: true, errorMessage: error});
         })
-
-        dispatch(setPinnedMessages(server.pinned));
 
         return server;
     }
@@ -509,49 +447,14 @@ const serverSlice = createSlice({
         },
         newMessage: (state, action) => {
 
-            const channelIndex = state.channels.findIndex(channel => channel._id === action.payload.channel_id)
+            const channelIndex = state.channels.findIndex(channel => channel._id === action.payload.channel_id);
 
             if (channelIndex === -1) return;
 
-            if (state.channels[channelIndex].auth === false) return console.log('No Auth');
+            state.channels[channelIndex].last_message_id = action.payload._id;
 
-            // verify if message with existing id exists to prevent dupe messages being posted from an issue with duplicate socket instances failing to clean up
-            const index = state.channels[channelIndex].social.findIndex(m => m._id === action.payload._id);
 
-            if (index !== -1) return;
-
-            const message = action.payload;
-
-            state.channels[channelIndex].social.unshift(message);
             
-        },
-        removeInvalidMessage: (state, action) => {
-            const channel_index = state.channels.findIndex(channel => channel._id === action.payload.channel_id);
-
-            const message_index = state.channels[channel_index].social.findIndex(msg => msg.content.local_id === action.payload.content.local_id);
-
-            if (channel_index === -1) return;
-
-            if (message_index === -1) return;
-
-            state.channels[channel_index].social.splice(message_index, 1);
-        },
-        updateMessage: (state, action) => {
-            const channel_index = state.channels.findIndex(channel => channel._id === action.payload.channel_id);
-
-            const memberIndex = state.members.findIndex(member => member.username === action.payload.username);
-
-            const message_index = state.channels[channel_index].social.findIndex(msg => msg.content.local_id === action.payload.content.local_id);
-
-            if (channel_index === -1) return;
-
-            if (message_index === -1) return;
-
-            const message = action.payload;
-
-            state.channels[channel_index].social[message_index]._id = message._id;
-
-            state.channels[channel_index].social[message_index].content = {...message.content, ...{display_name: state.members[memberIndex].display_name}}
         },
         toggleServerPushToTalkState: (state, action) => {
             state.pushToTalkActive = action.payload;
@@ -637,18 +540,6 @@ const serverSlice = createSlice({
         clearServerPing: (state, action) => {
             state.ping = 0;
         },
-        socketToggleMessagePin: (state, action) => {
-
-            const c_index = state.channels.findIndex(action.payload.channel_id);
-
-            if (c_index === -1) return;
-
-            const m_index = state.channels[c_index].social.findIndex(m => m._id === action.payload._id);
-
-            if (m_index === -1) return;
-
-            state.channels[c_index].social[m_index].pinned = action.payload.pinned;
-        },
         toggleMembersWebCamState: (state, action) => {
             if (state.current_channel_id) {
 
@@ -700,9 +591,14 @@ const serverSlice = createSlice({
 
         },
         updateInactiveChannel: (state, action) => {
+
             const c_index = state.channels.findIndex(c => c._id === action.payload);
 
-            if (c_index === -1) return;
+            if (c_index === -1) {
+                state.inactiveChannel = {id: "", label: "No Inactive Channel"};
+
+                return;
+            }
 
             state.inactiveChannel = {id: action.payload, label: state.channels[c_index].channel_name};
         },
@@ -834,59 +730,6 @@ const serverSlice = createSlice({
         [checkConnection.fulfilled]: (state, action) => {
             state.ping = action.payload;
         },
-        [togglePinMessage.pending]: (state, action) => {
-            state.pinningMessage = true;
-        },
-        [togglePinMessage.rejected]: (state, action) => {
-            state.error = true;
-
-            state.errorMessage = action.payload.errorMessage;
-
-            state.pinningMessage = false;
-        },
-        [togglePinMessage.fulfilled]: (state, action) => {
-            try {
-                state.pinningMessage = false;
-
-                state.error = false;
-
-                state.errorMessage = "";
-
-                const c_index = state.channels.findIndex(c => c._id === action.payload.message.channel_id);
-
-                if (c_index === -1) return;
-
-                const m_index = state.channels[c_index].social.findIndex(m => m._id === action.payload.message._id);
-
-                if (m_index === -1) return;
-
-                state.channels[c_index].social[m_index].pinned = action.payload.message.pinned;
-            } catch (error) {
-                state.error = true;
-                state.pinningMessage = false;
-                state.errorMessage = "Error Pinning Message"
-            }
-        },
-        [sendDeleteMessageRequest.pending]: (state, action) => {
-            state.pinningMessage = true;
-        },
-        [sendDeleteMessageRequest.fulfilled]: (state, action) => {
-            state.pinningMessage = false;
-
-            if (!action.payload.message_id && !action.payload.channel_id) return;
-
-            const index = state.channels.findIndex(c => c._id === action.payload.channel_id);
-
-            if (index === -1) return;
-
-            state.channels[index].social = state.channels[index].social.filter(m => m._id !== action.payload.message_id);
-
-        },
-        [sendDeleteMessageRequest.rejected]: (state, action) => {
-            state.pinningMessage = false;
-            state.error = true;
-            state.errorMessage = action.payload.errorMessage;
-        },
         [unBanMember.pending]: (state, action) => {
             state.ban_loading_state = true;
         },
@@ -962,15 +805,6 @@ export const selectUsersPermissions = state => {
     return state.serverSlice.serverGroups[index];
 }
 
-export const selectChannelSocial = state => {
-    const index = state.serverSlice.channels.findIndex(channel => channel._id === state.serverSlice.current_channel_id)
-
-    if (index === -1) {
-        return []
-    } else {
-        return state.serverSlice.channels[index].social;
-    }
-}
 
 export const selectInactiveChannels = state => {
     let arr = [{id: "", label: "No Inactive Channel"}];
@@ -1040,6 +874,6 @@ export const selectConnectionLost = state => state.serverSlice.connection_lost;
 export const selectRoomColor = state => state.serverSlice.roomColor;
 // actions
 
-export const {setRoomColor, toggleConnectionLostState, setServerbannerAmbiance, removeInvalidMessage, updateMemberFile, clearSearchData, updateInactiveChannel, removeSongFromWidget, saveSongToWidget, userBanned, toggleCreateChannelMenu, toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, updateMessage, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
+export const {setRoomColor, toggleConnectionLostState, setServerbannerAmbiance, updateMemberFile, clearSearchData, updateInactiveChannel, removeSongFromWidget, saveSongToWidget, userBanned, toggleCreateChannelMenu, toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
 
 export default serverSlice.reducer;

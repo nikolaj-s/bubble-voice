@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 // component's
 import { AddButton } from '../../../../../components/buttons/AddButton/AddButton'
 import { SettingsButton } from '../../../../../components/buttons/settingsButton/settingsButton';
-import { selectGlassColor, selectGlassState, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassColor, selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // state
 import { selectUsersPermissions } from '../../../ServerSlice';
@@ -18,10 +18,6 @@ export const ChannelTitle = ({action}) => {
     const permissions = useSelector(selectUsersPermissions);
 
     const textColor = useSelector(selectTextColor);
-
-    const secondaryColor = useSelector(selectPrimaryColor);
-
-    const glass = useSelector(selectGlassState);
 
     const glassColor = useSelector(selectGlassColor);
 

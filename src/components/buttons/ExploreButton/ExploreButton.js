@@ -16,6 +16,8 @@ export const ExploreButton = () => {
 
     const [hover, toggleHover] = React.useState(false);
 
+    const [top, setTop] = React.useState(0)
+
     const visible = useSelector(selectExploreTabOpen);
 
     const textColor = useSelector(selectTextColor);
@@ -24,10 +26,12 @@ export const ExploreButton = () => {
     
     const accentColor = useSelector(selectAccentColor);
 
-    const handleHover = (bool) => {
-        toggleHover(bool)
-    }
+    const handleHover = (bool, e) => {
+        toggleHover(bool);
 
+        setTop(e?.target?.y)
+    }
+    
     const action = () => {
 
         dispatch(toggleAddServerMenu(false));
@@ -44,15 +48,13 @@ export const ExploreButton = () => {
     return (
         <div 
         onClick={action}
-        style={{
-            backgroundColor: accentColor,
-            borderRadius: visible ? 10 : null,
-            border: visible ? `solid 2px ${textColor}` : `solid 2px ${accentColor}`
-        }}
-        onMouseEnter={() => {handleHover(true)}}
+        onMouseEnter={(e) => {handleHover(true, e)}}
         onMouseLeave={() => {handleHover(false)}}
+        style={{marginBottom: 3}}
         className='saved-media-container'>
-            {visible ? <CloseIcon /> : <ExploreIcon />}
+            <div style={{backgroundColor: accentColor, borderRadius: hover || visible ? '10px' : '50%', transition: '0.1s'}} className='extra-button-icon-container'>
+                {visible ? <CloseIcon /> : <ExploreIcon />}
+            </div>
             {hover ? 
             <div style={{backgroundColor: primaryColor}} className='server-button-name-container'>
                 <h2 style={{color: textColor}}>Explore</h2>

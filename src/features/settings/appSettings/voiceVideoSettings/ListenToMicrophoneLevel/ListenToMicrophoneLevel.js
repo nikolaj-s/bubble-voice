@@ -20,8 +20,6 @@ export const ListenToMicrophoneLevel = () => {
 
     const [errorMessage, setErrorMessage] = React.useState("");
 
-    const [pos, setPos] = React.useState(60)
-
     const primaryColor = useSelector(selectPrimaryColor);
 
     const voiceActivationSensitivity = useSelector(selectVoiceActivationSensitivity);

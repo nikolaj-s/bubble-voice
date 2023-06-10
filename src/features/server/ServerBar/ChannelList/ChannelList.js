@@ -1,8 +1,7 @@
 // library's
 import React from 'react'
-import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { motion, useAnimation } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 // component's
 import { ChannelTitle } from './ChannelTitle/ChannelTitle'
@@ -20,11 +19,7 @@ import { selectGlassColor, selectGlassState, selectSecondaryColor } from '../../
 
 export const ChannelList = () => {
 
-    const navigate = useNavigate();
-
     const dispatch = useDispatch();
-
-    const animaiton = useAnimation();
 
     const [localChannels, setLocalChannels] = React.useState([])
 
@@ -108,7 +103,7 @@ export const ChannelList = () => {
             opacity: 0
         }}
         animate={{opacity: 1}}
-        transition={{duration: 0.3}}
+        transition={{duration: 0.1}}
         style={{backgroundColor: glass ? glassColor : secondaryColor}}
         className='channel-list-outer-container'>
                 

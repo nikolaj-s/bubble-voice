@@ -121,6 +121,8 @@ function createWindow () {
   
   win.loadURL(startUrl);
 
+  win.once('focus', () => win.flashFrame(false));
+
   const mainScreen = screen.getPrimaryDisplay();
 
   notification = new BrowserWindow({
@@ -141,6 +143,8 @@ function createWindow () {
   notification.setVisibleOnAllWorkspaces(true);
 
   notification.setFullScreenable(false);
+
+  notification.maximize();
 
   // Open the DevTools.
   process.env.ELECTRON_START_URL ? win.webContents.openDevTools() : null
@@ -226,10 +230,25 @@ ipcMain.handle('GET_SOURCES', async () => {
 
 let timeout;
 
+ipcMain.on('RESET_INAC_TIMEOUT', (event, data) => {
+
+  clearTimeout(timeout);
+
+  timeout = setTimeout(() => {
+
+    event.sender.send('inactive');
+
+    console.log('user has gone inactive');
+
+  }, 1800000)
+
+
+})
+
 ipcMain.on("REG_KEYBINDS", (event, data) => {
 
   const keyCodes = data;
-
+  console.log(data)
   try {
     // clean up listeners on new init of reg keybinds to prevent duplicate calls or outadated key bind listening
     
@@ -256,25 +275,27 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
     uIOhook.removeAllListeners();
 
     uIOhook.on('keydown', (key) => {
-
-      if (key.keycode !== UiohookKey[keyCodes.push_to_talk?.code || keyCodes.push_to_talk?.key] && key.keycode !== UiohookKey[keyCodes?.push_to_mute?.code || keyCodes?.push_to_mute?.key]) return;
-
+  
       if (pushToTalkActive) return;
       // push to talk
       
-      if (key.keycode === UiohookKey[keyCodes.push_to_talk?.code || keyCodes.push_to_talk?.key]) {
+      if (key.keycode === UiohookKey[keyCodes.push_to_talk?.key] || key.keycode === UiohookKey[keyCodes.push_to_talk?.code]) {
 
         event.sender.send('push to talk', {active: true})
 
+        pushToTalkActive = true;
+      
       }
 
-      if (key.keycode === UiohookKey[keyCodes?.push_to_mute?.code || keyCodes?.push_to_mute?.key]) {
+      if (key.keycode === UiohookKey[keyCodes?.push_to_mute?.key] || key.keycode === UiohookKey[keyCodes?.push_to_mute?.code]) {
 
         event.sender.send('push to mute', {active: true})
 
+        pushToTalkActive = true;
+      
       }
 
-      pushToTalkActive = true;
+      
     
     })
 
@@ -282,44 +303,45 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
 
       handle_inactivity();
       
-      if (key.keycode !== UiohookKey[keyCodes.push_to_talk?.code || keyCodes.push_to_talk?.key] && key.keycode !== UiohookKey[keyCodes?.push_to_mute?.code || keyCodes?.push_to_mute?.key]) return;
-
       if (!pushToTalkActive) return;
       
       // push to talk
-      if (key.keycode === UiohookKey[keyCodes.push_to_talk?.code || keyCodes.push_to_talk?.key]) {
+      if (key.keycode === UiohookKey[keyCodes.push_to_talk?.key] || key.keycode === UiohookKey[keyCodes.push_to_talk?.code]) {
         event.sender.send('push to talk', {active: false})
+
+        pushToTalkActive = false;
       }
 
-      if (key.keycode === UiohookKey[keyCodes?.push_to_mute?.code || keyCodes?.push_to_mute?.key]) {
+      if (key.keycode === UiohookKey[keyCodes?.push_to_mute?.key] || key.keycode === UiohookKey[keyCodes?.push_to_mute?.code]) {
 
         event.sender.send('push to mute', {active: false})
 
+        pushToTalkActive = false;
       }
 
-      pushToTalkActive = false;
+      
     
     })
 
     uIOhook.on('keyup', (key) => {
 
-      if (key.keycode === UiohookKey[keyCodes.mute_mic?.code || keyCodes.mute_mic?.key]) {
+      if (key.keycode === UiohookKey[keyCodes.mute_mic?.key] || key.keycode === UiohookKey[keyCodes.mute_mic?.code]) {
         event.sender.send('mute mic', {toggle: true})
       }
 
-      if (key.keycode === UiohookKey[keyCodes.mute_audio?.code || keyCodes.mute_audio?.key]) {
+      if (key.keycode === UiohookKey[keyCodes.mute_audio?.key] || key.keycode === UiohookKey[keyCodes.mute_audio?.code]) {
         event.sender.send('mute audio', {toggle: true})
       }
 
-      if (key.keycode === UiohookKey[keyCodes.activate_camera?.code || keyCodes.activate_camera?.key]) {
+      if (key.keycode === UiohookKey[keyCodes.activate_camera?.key] || key.keycode === UiohookKey[keyCodes.activate_camera?.code]) {
         event.sender.send('toggle camera', {toggle: true})
       }
 
-      if (key.keycode === UiohookKey[keyCodes.disconnect?.code || keyCodes.disconnect?.key]) {
+      if (key.keycode === UiohookKey[keyCodes.disconnect?.key] || key.keycode === UiohookKey[keyCodes.disconnect?.code]) {
         event.sender.send('disconnect key', {toggle: true});
       }
 
-      if (key.keycode === UiohookKey[keyCodes.share_screen?.code || keyCodes.share_screen?.key]) {
+      if (key.keycode === UiohookKey[keyCodes.share_screen?.key] || key.keycode === UiohookKey[keyCodes.share_screen?.code]) {
         event.sender.send('screen share', {toggle: true});
       }
 
@@ -556,7 +578,9 @@ ipcMain.on('push notification', (event, data) => {
   
   let alert = data;
 
-  notification.loadURL(`data:text/html;charset=utf-8,${alert}`)
+  notification.loadURL(`data:text/html;charset=utf-8,${alert.message}`)
+
+  if (!win.isFocused() && alert.type === 'direct_message') win.flashFrame(true);
 
   setTimeout(() => {
     notification.loadURL(`data:text/html;charset=utf-8,${none}`);

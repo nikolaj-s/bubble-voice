@@ -29,6 +29,7 @@ import SavedMediaSlice from "../features/SavedMedia/SavedMediaSlice";
 import ProfileSlice from "../features/Profile/ProfileSlice";
 import ExploreSlice from "../features/Explore/ExploreSlice";
 import MessagesSlice from "../features/Messages/MessagesSlice";
+import SocialSlice from "../features/server/SocialSlice";
 
 const { configureStore } = require("@reduxjs/toolkit");
 
@@ -75,7 +76,9 @@ const store = configureStore({
         ExploreSlice: ExploreSlice,
         // profile
         ProfileSlice: ProfileSlice,
-        MessagesSlice: MessagesSlice
+        MessagesSlice: MessagesSlice,
+        // Social
+        SocialSlice: SocialSlice
     }
 })
 

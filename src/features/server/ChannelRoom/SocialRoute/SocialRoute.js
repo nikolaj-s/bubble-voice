@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { motion } from 'framer-motion';
 
 // state
-import { selectAccentColor, selectGlassColor, selectGlassState, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassColor, selectGlassState, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectChannelSocialId, selectCurrentChannelId, selectCurrentlyViewChannelSocial, setChannelSocialId } from '../../ServerSlice'
 
 // component's
@@ -31,10 +31,6 @@ export const SocialRoute = () => {
     const inChannel = window.location.hash.includes('/channel/');
 
     const secondaryColor = useSelector(selectSecondaryColor);
-
-    const primaryColor = useSelector(selectPrimaryColor);
-
-    const accentColor = useSelector(selectAccentColor);
 
     const glass = useSelector(selectGlassState);
 

@@ -18,6 +18,8 @@ export const DirectMessageButton = ({username, visible, messages}) => {
 
     const [newMessage, toggleNewMessage] = React.useState(false);
 
+    const [top, setTop] = React.useState(0)
+
     const textColor = useSelector(selectTextColor);
 
     const primaryColor = useSelector(selectPrimaryColor);
@@ -28,8 +30,10 @@ export const DirectMessageButton = ({username, visible, messages}) => {
 
     const user = members.find(m => m.username === username);
 
-    const handleHover = (bool) => {
-        toggleHover(bool)
+    const handleHover = (bool, e) => {
+        toggleHover(bool);
+
+        setTop(e?.target?.y)
     }
 
     const action = () => {
@@ -58,22 +62,22 @@ export const DirectMessageButton = ({username, visible, messages}) => {
     return (
         <div 
             onClick={action}
-            style={{
+            
+            onMouseEnter={(e) => {handleHover(true, e)}}
+            onMouseLeave={() => {handleHover(false)}}
+            className='profile-button-container'>
+                {newMessage ? <div style={{position: 'absolute', width: 15, height: 15, backgroundColor: 'rgb(201, 0, 0)', borderRadius: '50%', zIndex: 5, top: 0, left: 0}}></div> : null}
+                <div style={{
                 backgroundColor: accentColor,
                 borderRadius: visible ? 10 : null,
                 border: visible ? `solid 2px ${textColor}` : null,
                 width: visible ? 41 : 45,
                 height: visible ? 41 : 45
-            }}
-            onMouseEnter={() => {handleHover(true)}}
-            onMouseLeave={() => {handleHover(false)}}
-            className='profile-button-container'>
-                {newMessage ? <div style={{position: 'absolute', width: 15, height: 15, backgroundColor: 'rgb(201, 0, 0)', borderRadius: '50%', zIndex: 5, top: 0, left: 0}}></div> : null}
-                <div style={{borderRadius: visible ? 10 : null}} className='profile-button-picture-wrapper'>
+            }} className='profile-button-picture-wrapper'>
                     <Image image_class={'user-image'} cursor='pointer' objectFit='cover' width='100%'  image={user?.user_image} />
                 </div>
                 {hover ? 
-                <div style={{backgroundColor: primaryColor}} className='server-button-name-container'>
+                <div style={{backgroundColor: primaryColor, top: top}} className='server-button-name-container'>
                     <h2 style={{color: textColor}}>{user?.display_name}</h2>
                 </div>
                 : null}

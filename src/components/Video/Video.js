@@ -3,7 +3,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { setExpandedContent } from '../../features/ExpandContent/ExpandContentSlice';
-import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectAutoPlayNativeVideos, selectMuteSocialVideos, selectVideoVolume, setVideoVolume } from '../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { ExpandButton } from '../buttons/ExpandButton/ExpandButton';
 import { AudioToggleButton } from '../buttons/mediaButtons/audioToggleButton/AudioToggleButton';
@@ -16,7 +16,7 @@ import {Range} from '../inputs/Range/Range';
 import "./Video.css";
 import { VideoPlayOverlayAnimation } from './VideoPlayOverlayAnimation/VideoPlayOverlayAnimation';
 
-export const Video = ({ video, id, looping = false, objectFit = 'contain', height = "100%", mutedToggled, marginLeft, audio}) => {
+export const Video = ({ video, id, looping = false, objectFit = 'contain', height = "100%", mutedToggled, marginLeft}) => {
 
     const ref = React.useRef();
 
@@ -30,10 +30,6 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
 
     const [progress, setProgress] = React.useState(0);
 
-    const [volumeSlider, toggleVolumeSlider] = React.useState(false);
-
-    const [mouseDown, toggleMouseDown] = React.useState(false);
-
     const videoVolume = useSelector(selectVideoVolume);
 
     const accentColor = useSelector(selectAccentColor);
@@ -45,8 +41,6 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
     const social_mute = useSelector(selectMuteSocialVideos);
 
     const controlAnimation = useAnimation();
-
-    let mouseMoveTimeOut;
 
     const dispatch = useDispatch();
 
@@ -144,12 +138,8 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
 
             document.getElementById(video + 'audio').play();
 
-            mouseMoveTimeOut = setTimeout(() => {
-
-                controlAnimation.start({opacity: 0});
+            controlAnimation.start({opacity: 0});
     
-            }, 2000)
-
             document.getElementById(video + id).volume = videoVolume;
 
             document.getElementById(video + 'audio').volume = videoVolume;
@@ -226,9 +216,7 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
                 
             </motion.div>}
             {interacted ? 
-            <div onMouseDown={() => {toggleMouseDown(true)}}
-            onMouseUp={() => {toggleMouseDown(false)}}
-            
+            <div 
             onClick={scrub}
              className='video-progress-bar-container'>
                 <div style={{height: '100%', width: `${progress}%`, backgroundColor: accentColor, transition: '0.1s'}} ></div>

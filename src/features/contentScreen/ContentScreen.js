@@ -22,6 +22,7 @@ import "./ContentScreen.css";
 import { selectAddServerMenuVisible } from '../createServer/createServerSlice';
 import { selectCurrentChannelId } from '../server/ServerSlice';
 import { RoomAmbiance } from '../../components/RoomAmbiance/RoomAmbiance';
+import { selectServerAmbiance } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 export const ContentScreen = () => {
     // content display state
@@ -29,6 +30,8 @@ export const ContentScreen = () => {
     const addServerMenuVisisble = useSelector(selectAddServerMenuVisible);
 
     const channelId = useSelector(selectCurrentChannelId);
+
+    const disableAmbiance = useSelector(selectServerAmbiance);
 
     return (
         <>

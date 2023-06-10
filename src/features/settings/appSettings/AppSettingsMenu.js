@@ -5,12 +5,11 @@ import { useNavigate, useRoutes } from 'react-router';
 import { motion, useAnimation } from 'framer-motion';
 
 // components
-import { setSideBarHeader } from '../../sideBar/sideBarSlice';
 import { selectAppSettings } from './appSettingsMenuSlice';
 import { SettingsCategoryButton } from '../../../components/buttons/SettingsCategoryButton/SettingsCategoryButton';
 
 // state
-import { selectPrimaryColor, selectSecondaryColor } from './appearanceSettings/appearanceSettingsSlice';
+import { selectSecondaryColor } from './appearanceSettings/appearanceSettingsSlice';
 import { handleSignOut } from '../appSettings/accountSettings/accountSettingsSlice';
 import { signInHandleLogOutState } from '../../LoggingIn/signIn/signInSlice';
 
@@ -18,6 +17,7 @@ import { signInHandleLogOutState } from '../../LoggingIn/signIn/signInSlice';
 import "./AppSettingsMenu.css";
 import { clearToken } from '../../../util/Validation';
 import { AppVersion } from '../../../components/AppVersion/AppVersion';
+import { clearServerState } from '../../server/ServerSlice';
 
 const SettingsMenu = () => {
 
@@ -30,8 +30,6 @@ const SettingsMenu = () => {
     const secondaryColor = useSelector(selectSecondaryColor);
 
     const settings = useSelector(selectAppSettings);
-
-    const primaryColor = useSelector(selectPrimaryColor);
 
     React.useEffect(() => {
 
@@ -89,8 +87,9 @@ const SettingsMenu = () => {
 
     const handleLogOut = () => {
         clearToken();
-        dispatch(handleSignOut())
-        dispatch(signInHandleLogOutState())
+        dispatch(handleSignOut());
+        dispatch(signInHandleLogOutState());
+        dispatch(clearServerState());
         navigate("/signin")
     }
 
@@ -105,7 +104,7 @@ const SettingsMenu = () => {
     }
 
     return (
-        <motion.div initial={{opacity: 0}} style={{backgroundColor: secondaryColor}}  animate={{opacity: 1}} className='app-settings-menu'>
+        <motion.div transition={{duration: 0.1}} initial={{opacity: 0}} style={{backgroundColor: secondaryColor}}  animate={{opacity: 1}} className='app-settings-menu'>
 
             <div style={{backgroundColor: secondaryColor}} className='inner-app-settings-container'>
                 <div className='setting-buttons-wrapper'>

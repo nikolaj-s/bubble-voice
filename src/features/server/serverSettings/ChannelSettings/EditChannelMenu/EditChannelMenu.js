@@ -10,7 +10,6 @@ import { TextInput } from '../../../../../components/inputs/TextInput/TextInput'
 import { ToggleButton } from '../../../../../components/buttons/ToggleButton/ToggleButton';
 import { ApplyCancelButton } from '../../../../../components/buttons/ApplyCancelButton/ApplyCancelButton'
 import { SettingsHeader } from '../../../../../components/titles/SettingsHeader/SettingsHeader'
-import { BoolButton } from '../../../../../components/buttons/BoolButton/BoolButton';
 
 // state
 import { setHeaderTitle } from '../../../../contentScreen/contentScreenSlice';
@@ -28,6 +27,9 @@ import { Range } from '../../../../../components/inputs/Range/Range';
 import { InputPlaceHolder } from '../../../../../components/titles/InputPlaceHolder/InputPlaceHolder';
 import { selectUsername } from '../../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { ChannelIcon } from './ChannelIcon/ChannelIcon';
+import { clearSocialById } from '../../../SocialSlice';
+import { selectGlassColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { RadioButton } from '../../../../../components/buttons/RadioButton/RadioButton';
 
 const Wrapper = () => {
 
@@ -70,6 +72,8 @@ const Wrapper = () => {
     const username = useSelector(selectUsername);
 
     const serverOwner = useSelector(selectServerOwner);
+
+    const glassColor = useSelector(selectGlassColor);
 
     React.useEffect(() => {
         try {
@@ -171,6 +175,8 @@ const Wrapper = () => {
 
         handleToggleLoading(true);
 
+        document.getElementsByClassName('server-settings-route-wrapper')[0].scrollTop = 0;
+
         await socket.request('update channel', 
         {...channelToEdit, widgets: widgets, persist_social: persistChannelSocial, channel_name: channelName, file: channelBackground, background_blur: backgroundBlur, clear_social: clearedSocial, disable_streams: disableStreams, auth_users: authUsers, locked_channel: lockedChannel, icon_file: icon})
         .then(response => {
@@ -186,6 +192,14 @@ const Wrapper = () => {
             setChannelBackground(false);
 
             setChannelIcon(false);
+            
+            toggleClearedSocial(false);
+
+            if (response.cleared_social) {
+                dispatch(clearSocialById(response.channel._id));
+            }
+
+            return;
         })
         .catch(error => {
             console.log(error);
@@ -196,6 +210,8 @@ const Wrapper = () => {
     }
 
     const handleDeleteChannel = async () => {
+
+        document.getElementsByClassName('server-settings-route-wrapper')[0].scrollTop = 0;
 
         handleToggleLoading(true);
 
@@ -325,7 +341,7 @@ const Wrapper = () => {
             <InputTitle title={"Add Authorized Users"} />
             <div className='auth-users-container'>
                 {members.filter(m => (m.username !== username && m.username !== serverOwner)).map((member, i) => {
-                    return <BoolButton action={() => {addAuthUser(member._id)}} state={authUsers.findIndex(i => i === member._id) !== -1} name={member.display_name} />
+                    return <RadioButton action={() => {addAuthUser(member._id)}} state={authUsers.findIndex(i => i === member._id) !== -1} name={member.display_name} />
                 })}
             </div>
             </>
@@ -340,7 +356,7 @@ const Wrapper = () => {
             <InputTitle title={"Delete Channel"} />
             <TextButton action={handleDeleteChannel} name={"Delete Channel"} />
             <ApplyCancelButton position={edited === false ? null : 'fixed'} right={20} toggled={edited === false ? true : null} apply={handleUpdateChannel} cancel={handleCancel} />
-            <Loading loading={loading} />
+            <Loading backgroundColor={glassColor}  loading={loading} />
             </>
         : 
         <NotAuthorizedMessage />

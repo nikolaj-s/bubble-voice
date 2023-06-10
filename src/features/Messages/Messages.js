@@ -33,7 +33,7 @@ export const Messages = () => {
             exit={{opacity: 0, left: '-600px'}}
             style={{backgroundColor: glassState ? glassColor : secondaryColor}}
             className='saved-media-outer-container'>
-                <Social currentChannel={{persist_date: false, social: directMessages[index]?.messages}} direct_message={true} direct_message_user={selectedDirectMessage} status={userStatus?.status !== 'offline'} />
+                <Social currentChannel={{persist_data: false, social: directMessages[index]?.messages}} direct_message={true} direct_message_user={selectedDirectMessage} status={userStatus?.status !== 'offline'} />
             </motion.div>
             : null}
         </AnimatePresence>

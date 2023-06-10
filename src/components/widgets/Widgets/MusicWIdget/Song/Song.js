@@ -38,7 +38,7 @@ export const Song = ({id, image, name, duration, action, liked, saved, addToQueu
             }}
             >{name}</p>
             <LikeButton desc_space={10} padding={4} toggled={liked} action={action}  width={20} height={20} />
-            {(saved && liked) ? <AddButton transparent={true} desc_space={10} padding={4} action={addToQueue} margin={"0 0 0 5px"} width={20} height={20} description={"Add To Queue"} /> : null}
+            {(saved && liked) ? <AddButton desc_width={50} transparent={true} desc_space={10} padding={4} action={addToQueue} margin={"0 0 0 5px"} width={20} height={20} description={"Add To Queue"} /> : null}
             {inQueue ? <RemoveButton transparent={true} desc_space={10} padding={4} action={removeFromQueue} margin={"0 0 0 5px"} width={20} height={20} description={"Remove"} /> : null}
             <p style={{
                 color: textColor

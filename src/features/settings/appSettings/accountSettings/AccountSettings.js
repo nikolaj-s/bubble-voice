@@ -5,7 +5,7 @@ import { useNavigate, useRoutes } from 'react-router'
 import { AnimatePresence } from 'framer-motion';
 
 // state
-import { selectUserBanner, selectUserImage, selectDisplayName, selectAccountSettingsLoading, selectAccountSettingsErrorState, selectAccountSettingsErrorMessage, updateAccount, updateAccountInputState, selectAccountSettingsPassword, selectAccountSettingsNewPassword, selectAccountSettingsConfirmNewPassword, accountSettingsCloseError, selectAccountSettingsStateChanged, selectProfilePictureShape, selectProfileBio, handleUpdateBio } from './accountSettingsSlice';
+import { selectUserBanner, selectUserImage, selectDisplayName, selectAccountSettingsLoading, selectAccountSettingsErrorState, selectAccountSettingsErrorMessage, updateAccount, updateAccountInputState, selectAccountSettingsPassword, selectAccountSettingsNewPassword, selectAccountSettingsConfirmNewPassword, accountSettingsCloseError, selectAccountSettingsStateChanged, selectProfilePictureShape, selectProfileBio, handleUpdateBio, selectProfileColor } from './accountSettingsSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 
 // components
@@ -45,6 +45,8 @@ const Settings = () => {
 
     const profilePictureShape = useSelector(selectProfilePictureShape);
 
+    const profileColor = useSelector(selectProfileColor);
+
     const profileBio = useSelector(selectProfileBio);
 
     const loading = useSelector(selectAccountSettingsLoading);
@@ -69,6 +71,8 @@ const Settings = () => {
         dispatch(setHeaderTitle("Account Settings"));
 
         setNewShape(profilePictureShape);
+
+        setColor(profileColor)
     // eslint-disable-next-line
     }, [])
 
@@ -107,7 +111,7 @@ const Settings = () => {
     }
 
     const updateColor = (color) => {
-  
+        console.log(color)
         setColor(color);
        
     }
@@ -121,22 +125,24 @@ const Settings = () => {
     return (
         <>
             <div className='settings-wrapper'>
-                <SettingsHeader title={"User Display"} />
-                <InputTitle title={"Change Display Name"} />
-                <TextInput stateSelector='display_name' action={handleInput} inputValue={displayName} placeholder={""} />
-                <InputTitle zIndex={2} title={"Change Banner / Profile Picture"} />
-                <ProfileImage color={updateColor} shape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} />
-                <ProfilePictureShape action={changeProfileShape} shape={newShape} />
-                <div style={{display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-between'}}>
-                    <InputTitle width={'60px'} title={'Bio'} />
-                    <TogglePreviewButton active={previewBio} action={() => {togglePreviewBio(!previewBio)}} padding={5} width={20} height={20} description={'Toggle Preview'} desc_height={15} />
+                <SettingsHeader title={"Account Settings"} />
+                <InputTitle title={"Edit User Panel"} />
+                <div style={{backgroundColor: color, padding: '5px', borderRadius: '8px', maxWidth: 500, position: 'relative', width: '100%', overflow: 'hidden'}} className='edit-member-panel-container'>
+                    <ProfileImage color={updateColor} shape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} />
+                    <ProfilePictureShape action={changeProfileShape} shape={newShape} />
+                    <InputTitle title={'Change Display Name'} />
+                    <TextInput stateSelector='display_name' action={handleInput} inputValue={displayName} placeholder={""} />
+                    
+                    <div style={{display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-between'}}>
+                        <InputTitle width={'60px'} title={'Bio'} />
+                        <TogglePreviewButton active={previewBio} action={() => {togglePreviewBio(!previewBio)}} padding={5} width={20} height={20} description={'Toggle Preview'} desc_height={15} />
+                    </div>
+                    {previewBio ?
+                    <UserBio bio={profileBio} />
+                    :
+                    <TextArea inputValue={profileBio} action={changeProfileBio} height={300} />
+                    }
                 </div>
-                {previewBio ?
-                <UserBio bio={profileBio} />
-                :
-                <TextArea inputValue={profileBio} action={changeProfileBio} height={300} />
-                }
-               
                 <SettingsHeader title={"Security"} />
                 <InputTitle title={"Change Password"} />
                 <TextInput stateSelector='password' action={handleInput}  marginBottom='2%' type='password' placeholder={"Current Password"} inputValue={password} />

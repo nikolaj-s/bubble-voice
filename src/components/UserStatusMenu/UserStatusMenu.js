@@ -12,12 +12,15 @@ import { motion } from 'framer-motion';
 // style
 import "./UserStatusMenu.css";
 import { ApplyCancelButton } from '../buttons/ApplyCancelButton/ApplyCancelButton';
+import { TextButton } from '../buttons/textButton/TextButton';
 
 export const UserStatusMenu = ({close = () => {}}) => {
 
     const dispatch = useDispatch();
 
     const [value, setValue] = React.useState("");
+
+    const [changeMade, toggleChangeMade] = React.useState(false);
 
     const primaryColor = useSelector(selectPrimaryColor);
 
@@ -42,11 +45,15 @@ export const UserStatusMenu = ({close = () => {}}) => {
         if (value.length > 56) return; 
 
         dispatch(setCustomState(value.toLowerCase()));
+
+        toggleChangeMade(true);
     
     }
 
     const handleChangeStatus = (value) => {
         setValue(value);
+
+        toggleChangeMade(true);
     }
 
     const handleDynamicActivityStatus = () => {
@@ -56,13 +63,15 @@ export const UserStatusMenu = ({close = () => {}}) => {
         }
 
         dispatch(miscSettingsChannelSpecificStateChange('activity'));
+        
+        toggleChangeMade(true);
     }
 
     const save = () => {
-        console.log(value)
+
         dispatch(updateUserStatus({value: value !== 'online' && value !== 'offline' && value !== 'away' ? customStatus : value}))
         
-        close();
+        toggleChangeMade(false);
     }
 
     return (
@@ -79,7 +88,7 @@ export const UserStatusMenu = ({close = () => {}}) => {
                 <TextInput inputValue={customStatus} action={handleCustomStatus} marginBottom='1%' marginTop='1%' placeholder={'Custom Status'} />
                 <BoolButton action={() => {handleChangeStatus(customStatus)}} state={(value !== 'online' && value !== 'away' && value !== 'offline')} name={"Custom"} />
                 <BoolButton action={handleDynamicActivityStatus} state={activityStatus} name={"Enable Dynamic Activity Status"} />
-                <ApplyCancelButton apply={save} cancel={close} />
+               {changeMade ? <TextButton invert={true} marginBottom={5} name={'Update'} action={save} /> : null}
             </div>
             <Loading loading={loadingCustomStatus} />
         </motion.div>

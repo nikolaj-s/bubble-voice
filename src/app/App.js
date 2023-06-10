@@ -221,9 +221,9 @@ function App() {
     }
 
   }, [])
-
+  
   return (
-    <div style={{transition: '0.1s',background: gradient.gradient ? gradient.gradient : `linear-gradient(to top, ${primaryColor}, ${primaryColor})`}} className={`App`}>
+    <div style={{background: gradient.gradient ? gradient.gradient : `linear-gradient(to top, ${primaryColor}, ${primaryColor})`}} className={`App`}>
       <TitleBar />
       <SplashScreen />
       <Routes>

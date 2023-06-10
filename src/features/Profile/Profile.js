@@ -4,27 +4,21 @@ import { useDispatch, useSelector } from 'react-redux'
 import { selectCreatePostMenuOpen, selectProfileTabOpen, toggleCreatePostMenu } from './ProfileSlice'
 
 import "./Profile.css";
-import { selectGlassColor, selectGlassState, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { Image } from '../../components/Image/Image';
 import { selectProfileBio, selectProfileColor, selectUserBanner, selectUserImage } from '../settings/appSettings/accountSettings/accountSettingsSlice';
-import { AddButton } from '../../components/buttons/AddButton/AddButton';
-import { StatusButton } from '../../components/buttons/StatusButton/StatusButton';
+
 import { UserStatusMenu } from '../../components/UserStatusMenu/UserStatusMenu';
 import { UserBio } from '../../components/UserBio/UserBio';
 import { selectServerId } from '../server/ServerSlice';
+import { TextButton } from '../../components/buttons/textButton/TextButton';
 
 
 export const Profile = () => {
 
     const dispatch = useDispatch();
 
-    const [changeStatusMenu, toggleChangeStatusMenu] = React.useState(false);
-
-    const createPostMenuOpen = useSelector(selectCreatePostMenuOpen);
-
     const visible = useSelector(selectProfileTabOpen);
-
-    const textColor = useSelector(selectTextColor);
 
     const profileColor = useSelector(selectProfileColor);
 
@@ -37,14 +31,6 @@ export const Profile = () => {
     const bio = useSelector(selectProfileBio);
 
     const serverId = useSelector(selectServerId);
-
-    const handleToggleCreatePostMenu = () => {
-        dispatch(toggleCreatePostMenu(!createPostMenuOpen));
-    } 
-
-    const handleToggleChangeStatusMenu = () => {
-        toggleChangeStatusMenu(!changeStatusMenu);
-    }
 
     return (
         <AnimatePresence>
@@ -62,15 +48,10 @@ export const Profile = () => {
                     </div>
                     
                 </div>
-                {serverId ? <div style={{backgroundColor: primaryColor}} className='profile-nav-bar'>
-                    <StatusButton action={handleToggleChangeStatusMenu} width={20} height={20} description={"Change Status"} />
-                {//   <AddButton  width={20} height={20} description={'Add Post'} margin={'0px 5px'} /> 
-                }
-                </div> : null}
-                <UserBio bio={bio} />
-                <>
-                {changeStatusMenu ? <UserStatusMenu close={() => {toggleChangeStatusMenu(false)}} /> : null}
-                </>
+                {serverId ?
+                <UserStatusMenu/>
+                : null}
+                <UserBio margin={'5px 0px 0px 0px'} bio={bio} />
             </motion.div>
             : null}
         </AnimatePresence>

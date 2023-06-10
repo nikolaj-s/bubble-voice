@@ -48,7 +48,7 @@ export const TextButton = ({name, action, textAlign = 'center', toggled = false,
         onMouseUp={() => {handleAnimation(accentColor)}}
         animate={animation} onClick={action} className='text-button' 
         style={{
-            backgroundColor: invert ? 'rgba(0,0,0,0)' : color,
+            backgroundColor: invert ? accentColor : color,
             border: `3px solid ${color}`, 
             textAlign: textAlign, 
             color: textColor, 

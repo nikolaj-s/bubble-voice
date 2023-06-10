@@ -10,8 +10,8 @@ import "./ProfileImage.css";
 export const ProfileImage = ({userImage, userBanner, getNewUserImage, getNewUserBanner, shape, color}) => {
     return (
         <div className='profile-image-container'>
-            <ImageInput getColor={color} showShadow={true} maxDimensions={1600} getFile={getNewUserBanner} initalImage={userBanner} />
-            <ImageInput maxDimensions={300} getFile={getNewUserImage} initalImage={userImage} zIndex='1' center={true} width={"250px"} height={"250px"} borderRadius={shape === 'circle' ? '50%' : '10px'} />
+            <ImageInput getColor={color} showShadow={true} maxDimensions={1600} getFile={getNewUserBanner} initalImage={userBanner} borderRadius='0px' />
+            <ImageInput maxDimensions={300} getFile={getNewUserImage} initalImage={userImage} zIndex='1' width={"150px"} height={"150px"} borderRadius={shape === 'circle' ? '50%' : '10px'} />
         </div>
     )
 }

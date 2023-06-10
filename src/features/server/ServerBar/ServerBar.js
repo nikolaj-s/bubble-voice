@@ -6,14 +6,14 @@ import { io } from "socket.io-client";
 import { useNavigate, useRoutes } from 'react-router';
 
 // state
-import {clearSearchData, addNewChannel, assignNewServerGroup, clearServerState, deleteChannel, deleteMessage, fetchPersistedMusicVolume, fetchServerDetails, handleLeavingServer, leaveChannel, newMessage, removeSongFromWidget, reOrderChannels, saveSongToWidget, selectCurrentChannel, selectCurrentChannelId, selectInactiveChannel, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, selectTopAnimationPoint, setServerName, throwServerError, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateInactiveChannel, updateMemberActiveStatus, updateMemberStatus, updateServerBanner, updateServerGroups, userBanned, userJoinsChannel, userJoinsServer, userLeavesChannel, userLeavesServer, updateMemberFile } from '../ServerSlice';
+import {clearSearchData, addNewChannel, assignNewServerGroup, clearServerState, deleteChannel, fetchPersistedMusicVolume, fetchServerDetails, handleLeavingServer, leaveChannel, newMessage, removeSongFromWidget, reOrderChannels, saveSongToWidget, selectCurrentChannel, selectCurrentChannelId, selectInactiveChannel, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, setServerName, throwServerError, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateInactiveChannel, updateMemberActiveStatus, updateMemberStatus, updateServerBanner, updateServerGroups, userBanned, userJoinsChannel, userJoinsServer, userLeavesChannel, userLeavesServer, updateMemberFile } from '../ServerSlice';
 import { selectUsername } from '../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { getToken, url } from '../../../util/Validation';
 import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
 import { selectActivateCameraKey, selectDisconnectKey, selectMuteAudioKey, selectMuteMicKey, selectPushToMuteKey, selectPushToTalkKey, selectShareScreenKey } from '../../settings/appSettings/keyBindSettings/keyBindSettingsSlice';
 import { selectAudioOutput, selectVoiceDeactivationDelayState } from '../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 import { addNewWidgetOverlayToQueue, clearWidgetOverLay } from '../ChannelRoom/Room/RoomActionOverlay/RoomActionOverlaySlice';
-import { pushPokeNotification, pushSytemNotification } from '../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import {  pushSytemNotification } from '../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { addSongToQueue, like_song, removeSongFromQueue, skipSong, toggleMusicPlaying, un_like_song } from '../ChannelRoom/Room/Music/MusicSlice';
 import { selectCurrentScreen, setCurrentScreen, toggleControlState } from '../../controlBar/ControlBarSlice';
 
@@ -28,11 +28,12 @@ import { DisconnectButtonWrapper } from './DisconnectButtonWrapper/DisconnectBut
 
 // style's
 import "./ServerBar.css"
-import { addPinnedMessage, removePinnedMessage } from '../ChannelRoom/ServerDashBoard/ServerDashBoardSlice';
+import { addPinnedMessage, removePinnedMessage, setPinnedMessages } from '../ChannelRoom/ServerDashBoard/ServerDashBoardSlice';
 import { MobileServerBanner } from '../../../components/MobileServerBanner/MobileServerBanner';
 import { clearDirectMessages, sendDirectMessage } from '../../Messages/MessagesSlice';
-import { selectGlassState, selectSecondaryColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+
 import { clearMedia } from '../ChannelRoom/ServerDashBoard/ServerMedia/ServerMediaSlice';
+import { clearMessages, clearSocialById, deleteMessage, receiveMessage } from '../SocialSlice';
 
 export let socket = null;
 
@@ -176,8 +177,12 @@ const Bar = () => {
             console.log(data)
         })
         socket.on('new message', (data) => {
+
+            dispatch(pushSytemNotification(data));
             
             dispatch(newMessage(data));
+
+            dispatch(receiveMessage(data));
 
             if (window.location.hash.includes(data.channel_id)) {
 
@@ -186,8 +191,6 @@ const Bar = () => {
                 dispatch(addNewWidgetOverlayToQueue({...data, action: 'new-message'}));
             
             } 
-
-            dispatch(pushSytemNotification(data));
             
         })
 
@@ -199,10 +202,8 @@ const Bar = () => {
                 dispatch(setServerName(data.data.server_name));
             }
 
-            if (data.data.inactive_channel) {
-                dispatch(updateInactiveChannel(data.data.inactive_channel));
-            }
-
+            dispatch(updateInactiveChannel(data.data.inactive_channel));
+            
             dispatch(updateServer({server_id: server_id, server_banner: data.data.server_banner, server_name: data.data.server_name}));
         })
 
@@ -212,6 +213,10 @@ const Bar = () => {
 
         socket.on('channel update', (data) => {
             dispatch(updateChannel(data.channel));
+
+            if (data.cleared_social) {
+                dispatch(clearSocialById(data.channel._id));
+            }
         })
 
         socket.on('delete channel', (data) => {
@@ -381,7 +386,7 @@ const Bar = () => {
             
             dispatch(sendDirectMessage({message: data, username: data.username}))
         
-            dispatch(pushSytemNotification(data));
+            dispatch(pushSytemNotification({...data, type: 'direct_message'}));
         })
     }
 
@@ -477,6 +482,10 @@ const Bar = () => {
         dispatch(clearMedia());
 
         navigate('/dashboard')
+
+        dispatch(setPinnedMessages([]));
+
+        dispatch(clearMessages());
     
     }
 
@@ -726,6 +735,8 @@ const Bar = () => {
         return () => {
             dispatch(leaveChannel({username: username}));
             dispatch(clearMedia());
+            dispatch(setPinnedMessages([]))
+            dispatch(clearMessages());
             try {
                 socket.off();
                 socket.emit('left server', {server_id: server_id});

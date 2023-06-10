@@ -1,6 +1,5 @@
 // library's
 import React from 'react'
-import { useNavigate, useRoutes } from 'react-router'
 import { motion } from 'framer-motion'
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -18,16 +17,11 @@ import { InputTitle } from '../../components/titles/inputTitle/InputTitle';
 import { TextInput } from '../../components/inputs/TextInput/TextInput';
 import { ApplyCancelButton } from '../../components/buttons/ApplyCancelButton/ApplyCancelButton';
 import { LoadingErrorComponent } from '../../components/LoadingErrorComponent/LoadingErrorComponent';
-import { handleLeavingServer, selectServerId } from '../server/ServerSlice';
-import { playSoundEffect } from '../settings/soundEffects/soundEffectsSlice';
-import { clearWidgetOverLay } from '../server/ChannelRoom/Room/RoomActionOverlay/RoomActionOverlaySlice';
-
+import { selectServerId } from '../server/ServerSlice';
 
 export const JoinServer = () => {
 
     const dispatch = useDispatch();
-
-    const navigate = useNavigate();
 
     const server = useSelector(selectServerToJoin);
 

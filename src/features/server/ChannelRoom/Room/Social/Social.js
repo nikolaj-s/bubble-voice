@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 // state
 import { selectDisplayName, selectUsername } from '../../../../settings/appSettings/accountSettings/accountSettingsSlice';
-import { newMessage, removeInvalidMessage, selectPinningMessage, selectUsersPermissions, throwServerError, togglePinMessage, updateMessage } from '../../../ServerSlice';
+import { selectPinningMessage, selectUsersPermissions, throwServerError } from '../../../ServerSlice';
 
 // components
 import { MessageInput } from '../../../../../components/inputs/MessageInput/MessageInput';
@@ -21,11 +21,13 @@ import { Loading } from '../../../../../components/LoadingComponents/Loading/Loa
 
 // util
 import { PersistedDataNotice } from '../../../../../components/PersistedDataNotice/PersistedDataNotice';
-import { saveSocialData, SOCIAL_DATA } from '../../../../../util/LocalData';
-import { sendDirectMessage, updateDirectmessage } from '../../../../Messages/MessagesSlice';
-import { selectGlassColor, selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
-export const Social = ({currentChannel, channelId, socialRoute = false, bulletin = false, channelName, direct_message, direct_message_user, status}) => {
+import { sendDirectMessage, updateDirectmessage } from '../../../../Messages/MessagesSlice';
+import { selectGlassColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { fetchMessages, messageCleanUp, selectAllMessages, selectAltSocialLoading, selectLoadingMessages, sendMessage, togglePinMessage } from '../../../SocialSlice';
+import { saveSocialData, SOCIAL_DATA } from '../../../../../util/LocalData';
+
+export const Social = ({currentChannel, channelId, socialRoute = false, bulletin = false, direct_message, direct_message_user, status}) => {
 
     const dispatch = useDispatch();
 
@@ -35,15 +37,15 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
     const [image, setImage] = React.useState(false);
 
-    const [messagesToRender, setMessagesToRender] = React.useState(15);
-
     const [inputHeight, setInputHeight] = React.useState(80);
 
-    const [loadingMore, toggleLoadingMore] = React.useState(false);
+    const [mounting, toggleMounting] = React.useState(true);
+
+    const loadingMore = useSelector(selectLoadingMessages);
+
+    const altLoading = useSelector(selectAltSocialLoading);
 
     const username = useSelector(selectUsername);
-
-    const messages = currentChannel.social;
 
     const permission = useSelector(selectUsersPermissions);
 
@@ -53,22 +55,49 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
     const glassColor = useSelector(selectGlassColor);
 
-    const textColor = useSelector(selectTextColor);
+    const social = useSelector(selectAllMessages);
+
+    let allMessages = direct_message ? currentChannel.social : social[channelId];
 
     React.useEffect(() => {
-        try {
 
-            if (messages[0]._id && currentChannel.persist_social) {
-                
-                SOCIAL_DATA.set(channelId, {message_id: messages[0]._id})
+        if (direct_message) return;
 
-                saveSocialData();
-            }
-        } catch (err) {
-            return;
+        if (social[channelId]) {
+
+            SOCIAL_DATA.set(channelId, {message_id: social[channelId][0]?._id ? social[channelId][0]?._id : ""});
+            
+            saveSocialData();
+
         }
 
-    }, [messages])
+    }, [channelId, allMessages])
+
+    React.useEffect(() => {
+
+        if (direct_message) return;
+        
+        if (social[channelId]) {
+            
+            if (social[channelId][social[channelId]?.length - 1]?.no_more_messages) {
+                return;
+            } else if (social[channelId].length < 15) {
+
+                dispatch(fetchMessages({channel_id: channelId}));
+            
+            }
+
+        } else {
+            
+            dispatch(fetchMessages({channel_id: channelId}));
+        
+        }
+
+        return () => {
+            dispatch(messageCleanUp(channelId));
+        }
+
+    }, [channelId])
 
     React.useEffect(() => {
 
@@ -105,7 +134,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
     const handleTextInput = (value) => {
         setText(value);
     }
-
+   
     const send = async () => {
 
         if (!permission.user_can_post_channel_social) return;
@@ -116,6 +145,8 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
         
         if (text.length > 1024) return dispatch(throwServerError({errorMessage: "Message cannot be longer than 1024 characters"}));
 
+        let local_id = ((Math.random(5 * allMessages?.length) + 1) * 5) + username
+
         let data = {
             send_to: direct_message_user,
             username: username,
@@ -125,13 +156,18 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
                 text: text,
                 video: false,
                 link: false,
-                local_id: Math.random(5 * messages.length) + 1 + username,
+                local_id: local_id,
                 loading: true,
                 display_name: displayName
-            }
+            },
+            valid: true
         }
 
-        direct_message ? dispatch(sendDirectMessage({username: direct_message_user, message: data})) : dispatch(newMessage(data));
+        if (direct_message) {
+            
+            dispatch(sendDirectMessage({username: direct_message_user, message: data})) 
+        
+        }
 
         data = {...data, file: image?.size ? image : null}
 
@@ -153,20 +189,8 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
             })
 
         } else {
-            await socket.request('message', data)
-            .then(response => {
-    
-                if (response.success) {
-                    dispatch(updateMessage(response.message));
-                }
-    
-            }).catch(error => {
-                console.log(error)
-                dispatch(removeInvalidMessage(data));
-    
-                dispatch(throwServerError({errorMessage: error}));
-                
-            })
+            
+            dispatch(sendMessage({username: username, file: image, channel_id: channelId, local_id: local_id, text: text, image_preview: image?.preview}))
         }
 
         setTimeout(() => {
@@ -194,34 +218,23 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
     const handleLoadMoreOnScroll = (e) => {
 
-        if (messagesToRender > messages?.length) return toggleLoadingMore(false);
-
         if (loadingMore) return;
 
         if ((messagesRef.current.scrollTop + messagesRef.current.scrollHeight) < (e.target.clientHeight + 10)) {
 
-            toggleLoadingMore(true);
+            if (!social[channelId]) return; 
+
+            if (!social[channelId][social[channelId]?.length - 1]?.no_more_messages) {
+                
+                dispatch(fetchMessages({channel_id: channelId}));
             
-            setTimeout(() => {
-
-                setMessagesToRender(messagesToRender + 15);
-
-                setTimeout(() => {
-
-                    toggleLoadingMore(false);
-                
-                }, 200)
-                
-
-            }, 1500);
-
+            }
+            
         }
     
     }
 
     const pinMessage = (data) => {
-
-        if (currentChannel.persist_social === false) return;
 
         dispatch(togglePinMessage(data));
     }
@@ -240,7 +253,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
         key={"room-social-content-container"}
         
         transition={{
-            duration: 0.2
+            duration: 0.1
         }}
         className='social-outer-container'
         initial={{
@@ -261,8 +274,10 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
                 <div  className='social-inner-container'>
                     <ImagePreview cancel={handleCancelImageSend} preview={image?.preview} inputHeight={inputHeight} />
                     <div onScroll={handleLoadMoreOnScroll} ref={messagesRef} className='social-messages-wrapper'>
-                        {messages?.slice(0, messagesToRender).map((message, key) => {
-                            return <Message direct_message={direct_message} persist={currentChannel.persist_social} current_message={message} previous_message={key === messages.length - 1 ? null : messages[key + 1]} pinned={message?.pinned} pinMessage={() => {pinMessage(message)}} perm={permission?.user_can_post_channel_social} channel_id={message?.channel_id} id={message._id} message={message.content} key={message.content.local_id || message._id} />
+                        {
+                        allMessages?.map((message, key) => {
+                            return message.no_more_messages ? null :
+                            <Message direct_message={direct_message} persist={currentChannel.persist_social} current_message={message} previous_message={key === allMessages?.length - 1 ? null : allMessages[key + 1]} pinned={message?.pinned} pinMessage={() => {pinMessage(message)}} perm={permission?.user_can_post_channel_social} channel_id={message?.channel_id} id={message._id} message={message.content} key={message.content.local_id || message._id} />
                         })}
                         {direct_message ? null : <PersistedDataNotice channelName={currentChannel.channel_name} persisted={!currentChannel.persist_social} />}
                     </div>
@@ -272,7 +287,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
                      : null}
                 </div>
             </div>
-            <Loading loading={pinning} />
+            <Loading loading={pinning || altLoading} />
         </motion.div>
     )
 }

@@ -21,8 +21,6 @@ export const ButtonAnimationWrapper = ({desc_width = '100%', onMouseDown = () =>
 
     const [desc, toggleDesc] = React.useState(false);
 
-    const [cord, setCord] = React.useState({});
-
     const handleAnimation = (color, e) => {
         if (e) e.stopPropagation();
         
@@ -53,17 +51,6 @@ export const ButtonAnimationWrapper = ({desc_width = '100%', onMouseDown = () =>
 
         o_mouseEnter();
 
-        let el;
-
-        if (e.target.nodeName !== 'div') {
-            el = e.target;
-        } else {
-            el = e.target.parentElement;
-        }
-        
-
-        setCord({x: e.pageX, y: e.pageY});
-        
         toggleDesc(true);
     }
 
@@ -100,13 +87,13 @@ export const ButtonAnimationWrapper = ({desc_width = '100%', onMouseDown = () =>
             animate={null}
             style={{
                 width: desc_width,
+                minWidth: '100%',
                 top: right_orientation_desc ? '2px' : null,
                 right: right_orientation_desc ? '-45px' : null,
                 left: right_orientation_desc ? null : '50%',
                 bottom: right_orientation_desc ? null : flip_description ? '-120%' : height + desc_space,
                 minWidth: right_orientation_desc ? null : desc_width,
-                position: right_orientation_desc ? 'absolute' : 'absolute',
-                width: right_orientation_desc ? 150 : null,
+                position: 'absolute',
                 zIndex: 999,
                 fontWeight: '100',
                 fontSize: '0.8rem',

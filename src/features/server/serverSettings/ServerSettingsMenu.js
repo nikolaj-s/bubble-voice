@@ -9,7 +9,6 @@ import { SettingsCategoryButton } from '../../../components/buttons/SettingsCate
 
 // state
 import { selectSecondaryColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
-import { setSideBarHeader } from '../../sideBar/sideBarSlice';
 
 // style
 import "./ServerSettings.css";
@@ -88,6 +87,7 @@ const Menu = () => {
 
     return (
         <motion.div 
+        transition={{duration: 0.1}}
         initial={{opacity: 0}}
         animate={{opacity: 1}}
         className='server-settings-menu'>

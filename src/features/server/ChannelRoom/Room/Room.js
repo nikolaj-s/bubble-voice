@@ -30,7 +30,6 @@ import { selectMiscSettingsHideChannelBackground, selectPopOutUserStreams } from
 import { selectGlassColor, selectGlassState, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { audioCtx } from '../../../AudioInit/AudioInit';
 import { selectCurrentServerPageState } from '../ServerNavigation/ServerNavigationSlice';
-import { RoomAmbiance } from '../../../../components/RoomAmbiance/RoomAmbiance';
 
 export let client;
 
@@ -416,6 +415,18 @@ const Component = () => {
 
     // handle voice activity
 
+    const handleRestartInactivityTimer = () => {
+        try {
+
+            const ipcRenderer = window.require('electron').ipcRenderer;
+
+            ipcRenderer.send("RESET_INAC_TIMEOUT");
+
+        } catch (error) {
+            return;
+        }
+    }
+
     React.useEffect(() => {
 
         let analyser,
@@ -486,7 +497,8 @@ const Component = () => {
                                 dispatch(updateMemberStatus({username: user.username, action: {active: true}}))
                                 
                                 socket.emit('user status', {username: user.username, action: {active: true, channel_specific: true}})
-                            
+                                
+                                handleRestartInactivityTimer();
                             }
 
                             const onVoiceStop = () => {
@@ -625,6 +637,8 @@ const Component = () => {
                                         dispatch(updateMemberStatus({username: user.username, action: {active: true}}))
                                     
                                         socket.emit('user status', {username: user.username, action: {active: true, channel_specific: true}})
+                                        
+                                        handleRestartInactivityTimer();
                                         
                                     } else if (avg < voiceActivationSensitivity) {
 

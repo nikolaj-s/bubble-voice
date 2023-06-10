@@ -7,14 +7,12 @@ import { closeServerErrorMessage, selectCurrentChannel, selectCurrentChannelId, 
 import { CreateChannelMenu } from './CreateChannelMenu/CreateChannelMenu'
 import { Room } from './Room/Room'
 import { Error } from '../../../components/Error/Error';
-import { AnimatePresence } from 'framer-motion'
 import { SocialRoute } from './SocialRoute/SocialRoute'
 import { ServerDashBoard } from './ServerDashBoard/ServerDashBoard'
 import { UserStatusBar } from './UserStatus/UserStatusBar'
 import { selectDefaultServer, selectHideUserStatus } from '../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice'
 import { SetAsDefaultServerNotice } from './SetAsDefaultServerNotice/SetAsDefaultServerNotice'
 import { MemberPanel } from './MemberPanel/MemberPanel'
-import { ServerNavigation } from './ServerNavigation/ServerNavigation'
 
 import "./ChannelRoom.css";
 import { Music } from './Room/Music/Music'

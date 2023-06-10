@@ -60,8 +60,8 @@ export const pushSytemNotification = createAsyncThunk(
             const member = members.find(u => u.username === data.username);
 
             const channel = channels.find(c => c._id === data.channel_id);
-            
-            if (channel.auth === false) return;
+            console.log(data)
+            if (channel?.auth === false && data.channel_id) return;
 
             if (member) {
 

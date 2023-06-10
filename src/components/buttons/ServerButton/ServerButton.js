@@ -1,6 +1,5 @@
 // library's
 import React from 'react'
-import { motion, useAnimation } from 'framer-motion'
 
 // component's
 import { Image } from '../../Image/Image'
@@ -12,11 +11,11 @@ import { selectPrimaryColor, selectTextColor } from '../../../features/settings/
 import "./ServerButton.css";
 import { selectServerId } from '../../../features/server/ServerSlice'
 
-export const ServerButton = ({_id, action, server_banner, server_name, server_id}) => {
-
-    const animation = useAnimation();
+export const ServerButton = ({action, server_banner, server_name, server_id}) => {
 
     const [hover, toggleHover] = React.useState(false);
+
+    const [top, setTop] = React.useState(0);
 
     const [down, toggleDown] = React.useState(false);
 
@@ -26,7 +25,7 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
 
     const textColor = useSelector(selectTextColor);
 
-    const handleAnimation = (down, state) => {
+    const handleAnimation = (down, state, e) => {
 
         toggleHover(state);
 
@@ -41,16 +40,16 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
     }
 
     return (
-        <motion.div
+        <div
         className='server-button-container'
         id={`server-button-${server_id}`}
         
-        animate={animation}
-        onMouseEnter={() => {handleAnimation(false, true)}}
+        
+        onMouseEnter={(e) => {handleAnimation(false, true, e)}}
         onMouseLeave={() => {handleAnimation(false, false)}}
         onMouseDown={() => {handleAnimation(true, true)}}
         onMouseUp={() => {handleAnimation(false)}}
-        transition={{duration: 0.1}}
+        
         onClick={handleAction}
         >
             <div 
@@ -59,7 +58,8 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
                 borderRadius: hover || server_id === currentServer ? '10px' : '50%' ,
                 height: server_id === currentServer || down ? 41 : 45,
                 border: server_id === currentServer || down ? `solid 2px ${textColor}` : null,
-                cursor: server_id === currentServer ? 'default' : 'pointer'
+                cursor: server_id === currentServer ? 'default' : 'pointer',
+                transition: '0.1s'
             }}
             className='server-button-image-container'
             >
@@ -70,6 +70,6 @@ export const ServerButton = ({_id, action, server_banner, server_name, server_id
                 <h2 style={{color: textColor}}>{server_name}</h2>
             </div>
             : null}
-        </motion.div>
+        </div>
     )
 }

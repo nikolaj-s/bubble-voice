@@ -12,6 +12,7 @@ import { OverView } from './OverView/OverView'
 import { PermissionGroups } from './PermissionGroups/PermissionGroups'
 import { CloseSettings } from '../../../components/CloseSettings/CloseSettings'
 import { motion } from 'framer-motion'
+
 const Wrapper = () => {
 
     const secondaryColor = useSelector(selectSecondaryColor);
@@ -20,6 +21,7 @@ const Wrapper = () => {
 
     return (
         <motion.div 
+        transition={{duration: 0.1}}
         initial={{opacity: 0}}
         animate={{opacity: 1}}
         style={{

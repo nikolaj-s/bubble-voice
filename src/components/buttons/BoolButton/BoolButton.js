@@ -1,14 +1,12 @@
 // library's
 import React from 'react'
 import { useSelector } from 'react-redux';
-import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./BoolButton.css";
 
 export const BoolButton = ({state, name, action}) => {
-
-    const primaryColor = useSelector(selectPrimaryColor);
 
     const textColor = useSelector(selectTextColor);
 

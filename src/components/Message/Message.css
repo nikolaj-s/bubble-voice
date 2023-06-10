@@ -6,6 +6,7 @@
     margin: 0 10px 0 0;
     position: relative;
     border-radius: 5px;
+    transition: 0.1s;
 }
 
 .message-container p {
@@ -57,6 +58,11 @@
     font-size: 1rem;
     letter-spacing: var(--font-spacing);
     cursor: pointer;
+    text-overflow: ellipsis;
+    word-break: keep-all;
+    word-wrap: normal;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .sender-info-container h2:hover {
@@ -67,7 +73,11 @@
     opacity: 0.4;
     font-size: 0.7rem;
     margin: 0;
-    word-wrap: break-word;
+    text-overflow: ellipsis;
+    word-break: keep-all;
+    word-wrap: normal;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .message-loading-container {

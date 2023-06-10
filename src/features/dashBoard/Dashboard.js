@@ -54,7 +54,7 @@ export const Dashboard = () => {
             <Profile />
             <Explore />
             <Messages />
-            <ScreenShareMenu selectingScreens={selectingScreens} />
+            {selectingScreens ? <ScreenShareMenu selectingScreens={selectingScreens} /> : null}
         </div>
     )
 }
