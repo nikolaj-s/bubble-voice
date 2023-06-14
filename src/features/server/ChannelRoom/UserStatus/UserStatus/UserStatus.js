@@ -42,19 +42,19 @@ export const UserStatus = ({user}) => {
     
     return (
         <div 
-        style={{backgroundColor: preview ? primaryColor : null, filter: preview ? 'brightness(150%)' : null}}
+        style={{backgroundColor: preview ? primaryColor : null}}
         onClick={openMemberPanel} onMouseEnter={(e) => {handleMouseEnter(e, true)}} onMouseLeave={(e) => {handleMouseLeave(e, false)}} className={`user-status-container ${user._id}-user-status-card status-${user.status}`}>
             <div
             style={{
                 borderRadius: (user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%',
-                filter: user?.status === 'offline' || !user?.status ? 'brightness(50%)' : null
+                opacity: user?.status === 'offline' || !user?.status ? 0.6 : 1
             }}
             className='user-status-image-container'>
-                <Image image_class={"user-image"} cursor='pointer' image={user.user_image} />
+                <Image image_class={"user-image"} cursor='pointer' image={user.user_image?.includes('gif') ? "" : user.user_image} />
             </div>
             <div 
             className={`user-name-status-wrapper ${user._id}-user-name-status-wrapper`}>
-                <h3 style={{color: user.color || textColor, filter: 'brightness(150%)', opacity: user?.status === 'offline' || !user?.status ? 0.4 : null}} >{user.display_name}</h3>
+                <h3 style={{color: user.color || textColor, opacity: user?.status === 'offline' || !user?.status ? 0.6 : null}} >{user.display_name}</h3>
                 <p style={{color: textColor}}>{user.status ? user.status : 'offline'}</p>
             </div>
         </div>

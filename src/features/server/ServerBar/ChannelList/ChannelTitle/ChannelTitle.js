@@ -38,7 +38,7 @@ export const ChannelTitle = ({action}) => {
     }
 
     return (
-        <div style={{backgroundColor: glassColor, backdropFilter: 'blur(3px)'}} className='channel-title-container'>
+        <div style={{backgroundColor: glassColor}} className='channel-title-container'>
             <h3
             style={{color: textColor}}
             >CHANNELS</h3>

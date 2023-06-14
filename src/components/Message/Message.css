@@ -6,7 +6,6 @@
     margin: 0 10px 0 0;
     position: relative;
     border-radius: 5px;
-    transition: 0.1s;
 }
 
 .message-container p {

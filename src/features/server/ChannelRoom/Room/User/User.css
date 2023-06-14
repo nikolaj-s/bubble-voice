@@ -13,7 +13,6 @@
     cursor: pointer;
     max-width: 960px;
     max-height: 540px;
-    transition: 0.05s;
 }
 
 .active-user-container video {

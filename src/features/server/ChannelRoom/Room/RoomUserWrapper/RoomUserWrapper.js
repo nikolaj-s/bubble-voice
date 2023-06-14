@@ -181,7 +181,7 @@ export const RoomUserWrapper = ({users, page}) => {
     const handleScaling = (timeout = true) => {
         try {
             const parent = document.getElementById('user-streams-wrapper');
-            console.log(parent.offsetWidth)
+            
             const children = parent.children
             
             const c_count = Array.from(children).filter(child => ((child.attributes[2] ? child.attributes[2]["value"].includes('flex') : null && child.className === 'active-user-container') || child.className === 'streaming-video-player-container' || child.className.includes('youtube-player-wrapper')));

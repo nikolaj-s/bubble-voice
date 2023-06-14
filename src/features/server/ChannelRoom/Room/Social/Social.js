@@ -39,7 +39,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
     const [inputHeight, setInputHeight] = React.useState(80);
 
-    const [mounting, toggleMounting] = React.useState(true);
+    const [mounting, toggleMounting] = React.useState(false);
 
     const loadingMore = useSelector(selectLoadingMessages);
 
@@ -218,7 +218,9 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
     const handleLoadMoreOnScroll = (e) => {
 
-        if (loadingMore) return;
+        if (loadingMore || mounting) return;
+
+        
 
         if ((messagesRef.current.scrollTop + messagesRef.current.scrollHeight) < (e.target.clientHeight + 10)) {
 
@@ -226,7 +228,14 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
             if (!social[channelId][social[channelId]?.length - 1]?.no_more_messages) {
                 
-                dispatch(fetchMessages({channel_id: channelId}));
+                toggleMounting(true);
+
+                setTimeout(() => {
+                    dispatch(fetchMessages({channel_id: channelId}));
+
+                    toggleMounting(false);
+                }, 1250)
+                
             
             }
             
@@ -265,9 +274,9 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
         exit={{
             opacity: 0,
         }}>
-            {loadingMore ?
+            {loadingMore || mounting ?
             <motion.div initial={{opacity: 0, top: '-120px'}} exit={{opacity: 0, top: '-120px'}} animate={{opacity: 1, top: 0}} style={{backgroundColor: glassColor}} className='social-loading-container'>
-                <Loading loading={loadingMore} />
+                <Loading loading={loadingMore || mounting} />
             </motion.div>
             : null}
             <div className='social-wrapper-container'>

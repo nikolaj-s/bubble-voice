@@ -94,10 +94,8 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
             backgroundColor: active ? primaryColor : transparentPrimaryColor
         })
 
-        setUsersState(users);
-
     // eslint-disable-next-line
-    }, [channel, users])
+    }, [channel])
 
     React.useEffect(() => {
         try {
@@ -199,7 +197,6 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
             style={{
                 backgroundColor: active ? accentColor : transparentPrimaryColor,
                 cursor: active ? "default" : "pointer",
-                filter: active ? "brightness(120%)" : null
             }}
             className='channel-button-container'>
                 <div style={{backgroundColor: unReadMessage && channel.auth ? textColor : null}} className='unread-message-indicator'></div>   
@@ -223,7 +220,7 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
                 </div> : null}
             </motion.div>
             {channel.auth ?
-            usersState.map((user) => {
+            users.map((user) => {
                 return (
                     <ChannelUserDisplay key={user.username} channel_id={channel._id} user={user} />
                 )

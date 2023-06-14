@@ -174,7 +174,6 @@ const Bar = () => {
         socket.on('user status', (data) => {
             dispatch(updateMemberStatus(data))
 
-            console.log(data)
         })
         socket.on('new message', (data) => {
 

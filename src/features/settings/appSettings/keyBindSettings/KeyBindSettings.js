@@ -43,6 +43,7 @@ const Settings = () => {
     React.useEffect(() => {
         dispatch(setHeaderTitle('Key Bind Settings'))
     // eslint-disable-next-line
+
     }, [])
 
     const handleKeyCodeUpdate = (keyCode, state, event) => {
@@ -69,8 +70,7 @@ const Settings = () => {
         
         setLocal(obj)
         
-        toggleUpdate(true);
-    
+        dispatch(updateKeyCodeState(obj))
     }
 
     const saveKeyBinds = () => {

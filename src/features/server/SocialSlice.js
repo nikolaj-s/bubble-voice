@@ -6,35 +6,36 @@ import { newMessage, throwServerError } from "./ServerSlice";
 export const togglePinMessage = createAsyncThunk(
     'SocialSlice/togglePinMessage',
     async (data, {rejectWithValue, dispatch}) => {
-        try {
+        
+            try {
 
-            if (!data._id) return rejectWithValue({errorMessage: "Invalid Message"});
+                if (!data._id) return rejectWithValue({errorMessage: "Invalid Message"});
 
-            const pin = await socket.request('toggle pinned message', data)
-            .then(res => {
-                return res;
-            })
-            .catch(err => {
-                return rejectWithValue({errorMessage: err.errorMessage})
-            })
-            
-            if (pin.message.pinned) {
+                const pin = await socket.request('toggle pinned message', data)
+                .then(res => {
+                    return res;
+                })
+                .catch(err => {
+                    return rejectWithValue({errorMessage: err.errorMessage})
+                })
                 
-                dispatch(addPinnedMessage(pin))
-            
-            } else {
+                if (pin.message.pinned) {
+                    
+                    dispatch(addPinnedMessage(pin))
                 
-                dispatch(removePinnedMessage(pin))
-            
+                } else {
+                    
+                    dispatch(removePinnedMessage(pin))
+                
+                }
+
+                return pin.message;
+
+            } catch (error) {
+                console.log(error);
+                dispatch(throwServerError({error: true, errorMessage: error.message}))
+                return rejectWithValue({error: true, errorMessage: error.message});
             }
-
-            return pin.message;
-
-        } catch (error) {
-            console.log(error);
-            dispatch(throwServerError({error: true, errorMessage: error.message}))
-            return rejectWithValue({error: true, errorMessage: error.message});
-        }
     }
 )
 
