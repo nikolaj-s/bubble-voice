@@ -2,8 +2,8 @@
     position: fixed;
     z-index: 99;
     top: 0;
-    left: 0;
-    width: 100%;
+    left: 270px;
+    width: calc(100% - 270px);
     height: 100%;
     display: flex;
     justify-content: center;

@@ -58,7 +58,7 @@ export const CreateServerButton = () => {
             </svg>}
             </div>
             {hover ? 
-            <div style={{backgroundColor: primaryColor}} className='server-button-name-container'>
+            <div onMouseEnter={() => {toggleHover(false)}} style={{backgroundColor: primaryColor}} className='server-button-name-container'>
                 <h2 style={{color: textColor}}>Add Server</h2>
             </div>
             : null}

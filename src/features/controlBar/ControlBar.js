@@ -11,13 +11,16 @@ import { AudioToggleButton } from '../../components/buttons/mediaButtons/audioTo
 import { ShareScreenButton } from '../../components/buttons/mediaButtons/shareScreenButton/ShareScreenButton';
 
 // state
-import { resetControlState, selectAudioState, selectLoadingScreenShare, selectLoadingWebCam, selectMicrophoneState, selectScreenShareState, selectWebCamState, toggleControlState, toggleLoadingWebCam } from './ControlBarSlice';
+import { resetControlState, selectAudioState, selectCurrentScreen, selectLoadingScreenShare, selectLoadingWebCam, selectMicrophoneState, selectScreenShareState, selectWebCamState, selectingScreensState, toggleControlState, toggleLoadingWebCam } from './ControlBarSlice';
 import { selectCurrentChannel, selectCurrentChannelId } from '../server/ServerSlice';
 import { playSoundEffect } from '../settings/soundEffects/soundEffectsSlice';
-import { selectPrimaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectPrimaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style's
 import "./ControlBar.css";
+import { ScreenShareMenu } from './ScreenShareMenu/ScreenShareMenu';
+import { AnimatePresence } from 'framer-motion';
+import { Streampreview } from './StreamPreview/Streampreview';
 
 
 
@@ -36,6 +39,8 @@ export const ControlBar = () => {
 
     const screenShareState = useSelector(selectScreenShareState);
 
+    const currentScreen = useSelector(selectCurrentScreen);
+
     const current_channel_id = useSelector(selectCurrentChannelId);
 
     const channel = useSelector(selectCurrentChannel);
@@ -45,6 +50,10 @@ export const ControlBar = () => {
     const loadingWebCam = useSelector(selectLoadingWebCam);
 
     const loadingScreenShare = useSelector(selectLoadingScreenShare);
+
+    const selectingScreen = useSelector(selectingScreensState);
+
+    const accentColor = useSelector(selectAccentColor);
 
     const toggleFunction = (state) => {
 
@@ -107,10 +116,16 @@ export const ControlBar = () => {
 
     return (
         <>
+            
             <div className='control-bar-container' 
-            style={{backgroundColor: secondaryColor}}
-            >
-                <div className='controls-wrapper'>
+            style={{backgroundColor: accentColor, boxShadow: selectingScreen ? '5px 5px 20px rgba(0, 0, 0, 1)' : null}}
+            >   
+                <AnimatePresence>
+                    {selectingScreen ? <ScreenShareMenu key={'screeen-share-menu'} selectingScreens={selectingScreen} /> : null}
+                    {currentScreen ? <Streampreview key={'stream-preview-container'} /> : null}
+                </AnimatePresence>
+                
+                <div style={{backgroundColor: accentColor}} className='controls-wrapper'>
                     <SettingsButton 
                     width={20}
                     height={20}
@@ -143,6 +158,7 @@ export const ControlBar = () => {
                     height={20}
                     padding={10}
                     desc_space={23}
+                    opacity={0.5}
                     altInvert={true}
                     action={() => {toggleFunction('audioState')}} 
                     state={audioState} 
@@ -162,7 +178,9 @@ export const ControlBar = () => {
                     id={"screen-share-toggle-button"}
                     />
                 </div>
+                
             </div>
+            
         </>
     )
 }

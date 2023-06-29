@@ -61,7 +61,10 @@ const Wrapper = () => {
         transition={{duration: 0.1}}
         style={{
             backgroundColor: secondaryColor,
-            borderLeft: `solid 2px ${textColor}`
+            borderLeft: `solid 2px ${textColor}`,
+            borderTop: `30px solid ${secondaryColor}`,
+            borderRight: `8px solid ${secondaryColor}`,
+            borderBottom: `8px solid ${secondaryColor}`
         }} 
         className='settings-routes-wrapper'>
             <AccountSettings />

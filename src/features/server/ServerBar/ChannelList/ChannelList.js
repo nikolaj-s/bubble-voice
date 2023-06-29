@@ -15,9 +15,11 @@ import { selectDisplayName, selectUserBanner, selectUserImage, selectUsername } 
 import "./ChannelList.css";
 import { selectMirroredWebCamState } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 import { selectGlassColor, selectGlassState, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectCurrentScreen } from '../../../controlBar/ControlBarSlice';
+import { LoadingChannelsPlaceHolder } from '../../../../components/LoadingChannelsPlaceHolder/LoadingChannelsPlaceHolder';
 
 
-export const ChannelList = () => {
+export const ChannelList = ({loading}) => {
 
     const dispatch = useDispatch();
 
@@ -48,6 +50,8 @@ export const ChannelList = () => {
     const glass = useSelector(selectGlassState);
 
     const glassColor = useSelector(selectGlassColor);
+
+    const currentScreen = useSelector(selectCurrentScreen);
 
     const openCreateChannelMenu = () => {
         
@@ -99,16 +103,12 @@ export const ChannelList = () => {
         <>
         <ChannelTitle action={openCreateChannelMenu} />
         <motion.div 
-        initial={{
-            opacity: 0
-        }}
-        animate={{opacity: 1}}
-        transition={{duration: 0.1}}
-        style={{backgroundColor: glass ? glassColor : secondaryColor}}
+        style={{backgroundColor: glass ? glassColor : secondaryColor, maxHeight: currentScreen ? 'calc(100% - 331px)' : '100%'}}
         className='channel-list-outer-container'>
                 
                 <div className='channel-list-button-wrapper'>
                     <div>
+                        {loading ? <LoadingChannelsPlaceHolder /> : null}
                         {localChannels.map((channel, key) => {
                             return (
                                 <ChannelButton index={key} action={handleJoinChannel} channel={channel} key={key} users={channel.users} />

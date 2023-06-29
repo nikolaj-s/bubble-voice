@@ -20,15 +20,14 @@ import { SavedMedia } from '../SavedMedia/SavedMedia';
 import { Profile } from '../Profile/Profile';
 import { Explore } from '../Explore/Explore';
 import { Messages } from '../Messages/Messages';
-import { selectingScreensState } from '../controlBar/ControlBarSlice';
-import { ScreenShareMenu } from '../controlBar/ScreenShareMenu/ScreenShareMenu';
-
+import { selectAddServerMenuVisible } from '../createServer/createServerSlice';
+import { CreateServerMenu } from '../createServer/createServerMenu/CreateServerMenu';
 
 export const Dashboard = () => {
 
     const dispatch = useDispatch();
 
-    const selectingScreens = useSelector(selectingScreensState);
+    const addServer = useSelector(selectAddServerMenuVisible);
 
     React.useEffect(() => {
         // disable app title on dashboard mount
@@ -54,7 +53,7 @@ export const Dashboard = () => {
             <Profile />
             <Explore />
             <Messages />
-            {selectingScreens ? <ScreenShareMenu selectingScreens={selectingScreens} /> : null}
+            {addServer ? <CreateServerMenu /> : null}
         </div>
     )
 }

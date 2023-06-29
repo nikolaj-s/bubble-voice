@@ -5,6 +5,7 @@
     border-radius: var(--border-radius);
     cursor: pointer;
     display: flex;
+    background-color: black;
     flex-direction: column;
 }
 
@@ -30,15 +31,20 @@
 }
 
 .inner-video-controls-container {
-    width: 200px;
-    display: flex;
+    width: 80px;
     justify-content: space-between;
+    display: flex;
 }
 
 .video-volume-slider {
-    width: 120px;
+    width: 80px;
     display: flex;
     align-items: center;
+    position: absolute;
+    bottom: 69px;
+    left: 17px;
+    rotate: -90deg;
+    padding: 10px;
 }
 
 .video-progress-bar-container {

@@ -4,8 +4,9 @@ import { throwInitializationError } from "../../../initializingAppScreen/initial
 
 import Axios from 'axios';
 import { getToken, url } from "../../../../util/Validation";
-import { setServerId, setServerName, updateMemberFile } from "../../../server/ServerSlice";
+import { setServerId, setServerName, throwServerError, updateMemberFile } from "../../../server/ServerSlice";
 import { socket } from "../../../server/ServerBar/ServerBar";
+import { toggleSocialAltLoading } from "../../../server/SocialSlice";
 
 export const fetchAccount = createAsyncThunk(
     'accountSettingsSlice/fetchAccount',
@@ -108,6 +109,53 @@ export const updateAccount = createAsyncThunk(
     }
 )
 
+export const handlePinMessageToProfile = createAsyncThunk(
+    'accountSettingsSlice/handlePinMessageToProfile',
+    async ({id}, {rejectWithValue, dispatch}) => {
+        try {
+
+            const token = await getToken();
+
+            if (!token) return rejectWithValue({error: true, errorMessage: "validation error"})
+
+            let data = new FormData();
+
+            data.append('message_id', id);
+
+            dispatch(toggleSocialAltLoading(true));
+
+            const result = await Axios({
+                method: "POST",
+                headers: {"TOKEN": token},
+                url: `${url}/pin-message`,
+                data: data
+            })
+            .then(res => {
+                if (res.data.error) {
+                    dispatch(throwServerError({errorMessage: res.data.errorMessage}));
+                    return rejectWithValue({});
+                }
+
+                return res.data;
+            })
+            .catch(err => {
+                console.log(err)
+
+            })
+
+            console.log(result);
+
+            dispatch(toggleSocialAltLoading(false));
+
+            return result;
+
+        } catch (error) {   
+            console.log(error);
+            dispatch(toggleSocialAltLoading(false));
+        }
+    }
+)
+
 const accountSettingsSlice = createSlice({
     name: "accountSettingsSlice",
     initialState: {
@@ -118,6 +166,7 @@ const accountSettingsSlice = createSlice({
         password: "",
         newPassword: "",
         confirmNewPassword: "",
+        pinned_message: {},
         profilePictureShape: "circle",
         loading: false,
         error: false,
@@ -154,7 +203,7 @@ const accountSettingsSlice = createSlice({
         [fetchAccount.fulfilled]: (state, action) => {
             
             if (action.payload?.success) {
-                console.log(action.payload.account)
+                
                 state.display_name = action.payload.account.display_name;
                 state.user_image = action.payload.account.user_image;
                 state.user_banner = action.payload.account.user_banner;
@@ -167,6 +216,7 @@ const accountSettingsSlice = createSlice({
                     state.profilePictureShape = action.payload.account.profile_picture_shape;
                 
                 }
+                state.pinned_message = action.payload.account.pinned_message;
             } 
 
             state.change = false;
@@ -214,6 +264,15 @@ const accountSettingsSlice = createSlice({
             state.loading = false;
             state.error = action.payload.error;
             state.errorMessage = action.payload.errorMessage;
+        },
+        [handlePinMessageToProfile.pending]: (state, action) => {
+
+        },
+        [handlePinMessageToProfile.fulfilled]: (state, action) => {
+            state.pinned_message = action.payload.message;
+        },
+        [handlePinMessageToProfile.rejected]: (state, action) => {
+
         }
     }
 })
@@ -250,6 +309,8 @@ export const selectProfilePictureShape = state => state.accountSettingsSlice.pro
 export const selectProfileBio = state => state.accountSettingsSlice.bio;
 
 export const selectProfileColor = state => state.accountSettingsSlice.color;
+
+export const selectProfilePinnedMessage = state => state.accountSettingsSlice.pinned_message;
 
 // actions
 export const {handleUpdateBio, updateNewAccountState, handleSignOut, updateAccountInputState, accountSettingsCloseError } = accountSettingsSlice.actions;

@@ -5,9 +5,11 @@ import { useSelector } from 'react-redux';
 
 // state
 import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { EmojiButton } from '../../buttons/EmojiButton/EmojiButton';
 
 // style
 import "./TextArea.css";
+import { EmojiMenu } from '../../EmojiPicker/EmojiMenu';
 
 export const TextArea = ({action = () => {}, placeHolder, inputValue = "", margin, height, maxLength = 1024}) => {
 
@@ -19,9 +21,11 @@ export const TextArea = ({action = () => {}, placeHolder, inputValue = "", margi
 
     const textColor = useSelector(selectTextColor);
 
+    const [emojiOpen, toggleEmojiOpen] = React.useState(false);
+
     const handleAnimation = (color) => {
         animation.start({
-            border: `2px solid ${color}`
+            border: `3px solid ${color}`
         })
     }
 
@@ -30,10 +34,11 @@ export const TextArea = ({action = () => {}, placeHolder, inputValue = "", margi
     }
 
     return (
+        <>
         <motion.div
         animate={animation}
         className='text-area-container'
-        style={{border: `2px solid ${color}`, height: height}}
+        style={{border: `3px solid ${color}`, height: height}}
         onBlur={() => {handleAnimation(color)}}
         onFocus={() => {handleAnimation(textColor)}}
         onMouseOver={(e) => {
@@ -51,6 +56,12 @@ export const TextArea = ({action = () => {}, placeHolder, inputValue = "", margi
             onBlur={returnInputValue}
             onChange={returnInputValue} style={{color: textColor, backgroundColor: color}} placeholder={placeHolder} value={inputValue} />
             <p className='text-area-character-counter' style={{color: textColor}}>{inputValue?.length} / {maxLength} </p>
+            <div className='emoji-button-textarea-container'>
+                <EmojiButton  action={() => {toggleEmojiOpen(!emojiOpen)}} description={'Emojis'} width={20} height={20} />
+            </div>
+            
         </motion.div>
+        {emojiOpen ? <EmojiMenu textArea={true} action={(emoji) => {action(inputValue + " " + emoji.emoji)}} close={() => {toggleEmojiOpen(false)}} /> : null}
+        </>
     )
 }

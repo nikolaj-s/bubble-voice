@@ -42,42 +42,48 @@ export const UserStatusBar = () => {
         
     }, [users])
 
+    const handleDynamicStatus = () => {
+
+        let ipcRenderer;
+
+        try {
+
+            ipcRenderer = window.require('electron').ipcRenderer;
+
+            ipcRenderer.invoke('GET_SOURCES')
+            .then(res => {
+
+                let new_status_name;
+
+                let l_windows = res.filter(w => !w.id.includes('screen') && !w.name.includes('Bubble') && !w.name.includes('D3DProxyWindow') && !w.name.includes("Input Occlusion Window") && !w.name.includes('Overlay'));
+                
+                // avoid uneccessary server calls
+                
+                if (!l_windows[0]?.name) return;
+
+                if (l_windows[0].name.includes('Google Chrome')) {
+                    new_status_name = "Google Chrome"
+                } else {
+                    new_status_name = l_windows[0].name;
+                }
+
+                if (currentStatus === `Playing ${new_status_name}`) return;
+
+                dispatch(updateUserStatus({value: `Playing ${new_status_name}`}))
+            })
+        } catch (error) {
+            return;
+        }
+    }
+
     React.useEffect(() => {
 
         let interval;
 
-        let ipcRenderer;
-
         if (activityStatus) {
             try {
 
-                ipcRenderer = window.require('electron').ipcRenderer;
-                
-                interval = setInterval(() => {
-                    
-                    ipcRenderer.invoke('GET_SOURCES')
-                    .then(res => {
-
-                        let new_status_name;
-
-                        let l_windows = res.filter(w => !w.id.includes('screen') && !w.name.includes('Bubble') && !w.name.includes('D3DProxyWindow') && !w.name.includes("Input Occlusion Window"));
-                        
-                        // avoid uneccessary server calls
-                        
-                        if (!l_windows[0]?.name) return;
-
-                        if (l_windows[0].name.includes('Google Chrome')) {
-                            new_status_name = "Google Chrome"
-                        } else {
-                            new_status_name = l_windows[0].name;
-                        }
-
-                        if (currentStatus === `Playing ${new_status_name}`) return;
-
-                        dispatch(updateUserStatus({value: `Playing ${new_status_name}`}))
-                    })
-
-                }, 120000)
+                interval = setInterval(handleDynamicStatus, 120000)
 
             } catch (error) {
 

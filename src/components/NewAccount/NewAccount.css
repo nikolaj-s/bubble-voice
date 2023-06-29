@@ -12,14 +12,14 @@
 
 .inner-new-account-state-container {
     width: 92%;
-    height: 800px;
-    padding: 0 1rem;
+    height: 90%;
     border-radius: var(--border-radius);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
     position: relative;
+    overflow-y: auto;
+    
 }
 
 .inner-new-account-state-container .finish-account-set-up {
@@ -35,6 +35,9 @@
 
 .new-account-nav-container {
     display: flex;
+    position: fixed;
+    bottom: 8%;
+    right: 10%;
     justify-content: flex-end;
     width: 100%;
     margin-bottom: 5px;
@@ -51,6 +54,7 @@
     margin-left: 1rem;
     padding: 0 1rem;
     cursor: pointer;
+    border-radius: 5px;
 }
 
 .new-next-button-container h3 {

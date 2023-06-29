@@ -42,7 +42,7 @@ export const TextInput = ({action = () => {}, placeholder, inputValue, keyCode =
         if (e !== false) action(e.target.value);
     
         animation.start({
-            border: `2px solid ${color}`
+            border: `3px solid ${color}`
         })
     }
 
@@ -64,7 +64,7 @@ export const TextInput = ({action = () => {}, placeholder, inputValue, keyCode =
         animate={animation} 
         style={{
             backgroundColor: color,
-            border: `solid 2px ${color}`,
+            border: `solid 3px ${color}`,
             marginBottom: marginBottom,
             marginTop: marginTop
         }} 

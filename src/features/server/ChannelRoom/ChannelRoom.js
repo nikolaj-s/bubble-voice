@@ -98,11 +98,12 @@ export const RoomWrapper = () => {
                 <ServerDashBoard />
                 <RoomActionOverlay page={currentServerPage} />
                 <DropOverlay action={() => {toggleDropState(false)}} dropState={dropState} />
-            </div>
+                <MemberPanel key='member-panel' />
+           </div>
             <Music />
         </div>
         <UserStatusBar key='user-status-bar' />
-        <MemberPanel key='member-panel' />
+        
         {error ? <Error key={'server-error'} errorMessage={errorMessage} action={closeErrorMessage} /> : null}
         <SetAsDefaultServerNotice serverId={serverId} servername={serverName} visible={hideDefaultNotice ? !hideDefaultNotice : (defaultServer?.label === 'Default' && defaultServer?.id === "")} />
         </>

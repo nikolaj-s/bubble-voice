@@ -8,11 +8,13 @@ import { ServerList } from './serverList/ServerList'
 
 // style's
 import "./ServerSelection.css";
-import { handleLeavingServer, selectServerId, setServerId, setServerName, setTopPos } from '../../server/ServerSlice';
+import { handleLeavingServer, selectCurrentChannelId, selectServerId, setServerId, setServerName, setTopPos } from '../../server/ServerSlice';
 import { setHeaderTitle } from '../../contentScreen/contentScreenSlice';
 import { selectLoadingUsersServersState, selectServerList, setSideBarHeader } from '../sideBarSlice';
 import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
 import { clearWidgetOverLay } from '../../server/ChannelRoom/Room/RoomActionOverlay/RoomActionOverlaySlice';
+import { ServerButtons } from './ServerButtons/ServerButtons';
+import { setSelectedMember } from '../../server/ChannelRoom/MemberPanel/MemberPanelSlice';
 
 export const ServerSelection = () => {
   
@@ -30,6 +32,8 @@ export const ServerSelection = () => {
     const selectServer = (_id, name, top_pos) => {
         
         if (_id === currentServer) return;
+
+        dispatch(setSelectedMember(""));
 
         if (currentServer) {
 
@@ -84,6 +88,7 @@ export const ServerSelection = () => {
     return (
         <div id="side-server-list-wrapper" className='side-bar-inner-container'>        
             <ServerList selectServer={selectServer} serverList={serverList} loading={loadingUserServerListState} />
+            <ServerButtons />
         </div>
     )
 }

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { useSelector, useDispatch } from 'react-redux';
 
 // state
-import { selectDisplayName, selectUsername } from '../../../../settings/appSettings/accountSettings/accountSettingsSlice';
+import { handlePinMessageToProfile, selectDisplayName, selectUsername } from '../../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { selectPinningMessage, selectUsersPermissions, throwServerError } from '../../../ServerSlice';
 
 // components
@@ -64,11 +64,23 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
         if (direct_message) return;
 
         if (social[channelId]) {
-
+            
             SOCIAL_DATA.set(channelId, {message_id: social[channelId][0]?._id ? social[channelId][0]?._id : ""});
             
             saveSocialData();
 
+        }
+
+        return () => {
+            if (direct_message) return;
+
+            if (social[channelId]) {
+
+                SOCIAL_DATA.set(channelId, {message_id: social[channelId][0]?._id ? social[channelId][0]?._id : ""});
+                
+                saveSocialData();
+
+            }
         }
 
     }, [channelId, allMessages])
@@ -255,25 +267,21 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         setInputHeight(80)
     }
+
+    const pinToProfile = (id) => {
+        if (altLoading) return;
+
+        dispatch(handlePinMessageToProfile({id: id}));
+    }
     
     return (
-        <motion.div 
-        
-        key={"room-social-content-container"}
+        <div 
         
         transition={{
             duration: 0.1
         }}
         className='social-outer-container'
-        initial={{
-            opacity: 0,
-        }}
-        animate={{
-            opacity: 1,
-        }}
-        exit={{
-            opacity: 0,
-        }}>
+        >
             {loadingMore || mounting ?
             <motion.div initial={{opacity: 0, top: '-120px'}} exit={{opacity: 0, top: '-120px'}} animate={{opacity: 1, top: 0}} style={{backgroundColor: glassColor}} className='social-loading-container'>
                 <Loading loading={loadingMore || mounting} />
@@ -286,17 +294,17 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
                         {
                         allMessages?.map((message, key) => {
                             return message.no_more_messages ? null :
-                            <Message direct_message={direct_message} persist={currentChannel.persist_social} current_message={message} previous_message={key === allMessages?.length - 1 ? null : allMessages[key + 1]} pinned={message?.pinned} pinMessage={() => {pinMessage(message)}} perm={permission?.user_can_post_channel_social} channel_id={message?.channel_id} id={message._id} message={message.content} key={message.content.local_id || message._id} />
+                            <Message pin_to_profile={pinToProfile} dashboard={false} direct_message={direct_message} persist={currentChannel.persist_social} current_message={message} previous_message={key === allMessages?.length - 1 ? null : allMessages[key + 1]} pinned={message?.pinned} pinMessage={() => {pinMessage(message)}} perm={permission?.user_can_post_channel_social} channel_id={message?.channel_id} id={message._id} message={message.content} key={message.content.local_id || message._id} />
                         })}
                         {direct_message ? null : <PersistedDataNotice channelName={currentChannel.channel_name} persisted={!currentChannel.persist_social} />}
                     </div>
-                    {(direct_message && status) ? <MessageInput socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : 
+                    {(direct_message && status) ? <MessageInput direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : 
                     permission?.user_can_post_channel_social && !direct_message ?
-                    <MessageInput socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} />
+                    <MessageInput direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} />
                      : null}
                 </div>
             </div>
             <Loading loading={pinning || altLoading} />
-        </motion.div>
+        </div>
     )
 }

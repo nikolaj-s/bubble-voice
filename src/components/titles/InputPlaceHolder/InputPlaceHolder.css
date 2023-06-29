@@ -1,5 +1,5 @@
 .input-placeholder-container {
-    min-height: 70px;
+    min-height: 40px;
     width: calc(100% - 2rem);
     display: flex;
     justify-content: flex-start;

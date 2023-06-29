@@ -26,7 +26,10 @@ const Wrapper = () => {
         animate={{opacity: 1}}
         style={{
             backgroundColor: secondaryColor,
-            borderLeft: `2px solid ${accentColor}`
+            borderTop: `30px solid ${secondaryColor}`,
+            borderRight: `8px solid ${secondaryColor}`,
+            borderBottom: `8px solid ${secondaryColor}`,
+            borderLeft: `solid 5px ${secondaryColor}`
         }}
         className='server-settings-route-wrapper'>
             <div className='server-settings-wrapping-container'>

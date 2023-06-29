@@ -43,10 +43,16 @@
 .message-input-button-wrapper {
     height: 100%;
     display: flex;
-    margin-top: 2px;
     justify-content: space-evenly;
     align-items: flex-start;
-    margin-right: 5px;
+    margin-right: 3px;
+}
+
+.message-input-inner-button-wrapper {
+    display: flex;
+    height: 40px;
+    width: auto;
+    align-items: center;
 }
 
 .message-input-button-wrapper div svg:focus {

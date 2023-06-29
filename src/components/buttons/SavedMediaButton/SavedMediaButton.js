@@ -5,8 +5,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectAccentColor, selectTextColor, selectPrimaryColor} from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { CloseIcon } from '../../Icons/CloseIcon/CloseIcon';
 
-import {motion} from 'framer-motion'
-
 import "./SavedMediaButton.css";
 import { selectSavedMediaOpenState, toggleMediaPanel } from '../../../features/SavedMedia/SavedMediaSlice';
 import { toggleAddServerMenu } from '../../../features/createServer/createServerSlice';
@@ -57,7 +55,7 @@ export const SavedMediaButton = () => {
             </div>
             
             {hover ? 
-            <div style={{backgroundColor: primaryColor}} className='server-button-name-container'>
+            <div onMouseEnter={() => {toggleHover(false)}} style={{backgroundColor: primaryColor}} className='server-button-name-container'>
                 <h2 style={{color: textColor}}>Saves</h2>
             </div>
             : null}

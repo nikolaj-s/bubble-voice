@@ -13,7 +13,7 @@ import { ToggleButton } from '../../../../components/buttons/ToggleButton/Toggle
 import { RadioButton } from '../../../../components/buttons/RadioButton/RadioButton'
 import { TextInput } from '../../../../components/inputs/TextInput/TextInput';
 // state
-import { selectAudioInputList, selectAudioInput, updateSelectedDevice, selectAudioOutput, selectAudioOutputList, selectVideoInput, selectVideoInputList, selectPushToTalkState, selectVoiceActivityState, toggleVoiceActivity, toggleSelectedVoiceVideoState, selectMirroredWebCamState, handleSaveVoiceVideoSettings, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, updateMicInputVolume, getMediaDevices, selectVoiceActivationSensitivity, updateVoiceActivationSensitivity, selectAutoGainControl, toggleAutoGain, selectVoiceDeactivationDelayState, updateVoiceDeactivationDelay, selectAdvancedVoiceActivation } from './voiceVideoSettingsSlice';
+import { selectAudioInputList, selectAudioInput, updateSelectedDevice, selectAudioOutput, selectAudioOutputList, selectVideoInput, selectVideoInputList, selectPushToTalkState, selectVoiceActivityState, toggleVoiceActivity, toggleSelectedVoiceVideoState, selectMirroredWebCamState, handleSaveVoiceVideoSettings, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, updateMicInputVolume, getMediaDevices, selectVoiceActivationSensitivity, updateVoiceActivationSensitivity, selectAutoGainControl, toggleAutoGain, selectVoiceDeactivationDelayState, updateVoiceDeactivationDelay, selectAdvancedVoiceActivation, selectExperimentalAudioCapture } from './voiceVideoSettingsSlice';
 import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/SettingsSpacer';
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 import { Range } from '../../../../components/inputs/Range/Range';
@@ -87,6 +87,8 @@ const Settings = () => {
     const pushToMuteKey = useSelector(selectPushToMuteKey);
 
     const advancedVoiceActivationDetection = useSelector(selectAdvancedVoiceActivation);
+
+    const experimentalAudioCapture = useSelector(selectExperimentalAudioCapture);
 
     React.useEffect(() => {
 
@@ -242,8 +244,9 @@ const Settings = () => {
             <ToggleButton action={() => {handleToggleSelectedVoiceVideoState("echoCancellation")}} state={echoCancellation} />
             <InputTitle title={"Auto Gain Control"} />
             <ToggleButton action={handleToggleAutoGainControl} state={autoGainControl} />
-            
-            
+            <SettingsHeader title={'Stream Settings'} />
+            <InputTitle title={"Enable Experimental Audio Capture"} />
+            <ToggleButton state={experimentalAudioCapture} action={() => {handleToggleSelectedVoiceVideoState('experimentalAudioCapture')}} />
             <SettingsHeader title={"Video Settings"} />
             <InputTitle title={"Mirror Web Cam"} />
             <ToggleButton state={mirroredWebCam} action={() => {handleToggleSelectedVoiceVideoState("mirroredWebCam")}} />

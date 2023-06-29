@@ -8,9 +8,10 @@
     flex-direction: column;
     position: relative;
     align-items: center;
+    justify-content: space-between;
     overflow: hidden;
     flex-shrink: 0;
-    z-index: 1;
+    z-index: 2;
     border-radius: 8px;
     margin-bottom: 6px;
     margin-left: 55px;
@@ -18,10 +19,13 @@
 
 .inner-side-bar-container {
     width: 100%;
-    height: calc(100% - 50px);
+    height: calc(100% - 54px);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
     display: flex;
     justify-content: center;
     position: relative;
+    overflow: hidden;
 }
 
 .side-bar-dashboard-placeholder {

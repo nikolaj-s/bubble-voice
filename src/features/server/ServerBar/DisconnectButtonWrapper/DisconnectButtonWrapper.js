@@ -10,7 +10,6 @@ import { selectPrimaryColor } from '../../../settings/appSettings/appearanceSett
 
 export const DisconnectButtonWrapper = ({disconnect, leave, channel_id}) => {
 
-
     const statusMenuOpen = useSelector(selectStatusMenuState);
 
     const primaryColor = useSelector(selectPrimaryColor);

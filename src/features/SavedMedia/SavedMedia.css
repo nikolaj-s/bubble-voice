@@ -1,8 +1,6 @@
 
 .saved-media-outer-container {
-    position: absolute;
-    top: 31px;
-    left: 55px;
+    position: relative;
     width: 400px;
     height: calc(100% - 32px - 20px);
     padding: 5px 5px 10px 5px;
@@ -38,4 +36,18 @@
     font-weight: 400;
     margin: 0;
     padding: 0;
+}
+
+.no-saves-icon {
+    width: 100%;
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.6;
+}
+
+.no-saves-icon svg {
+    width: 150px;
+    height: 150px;
 }

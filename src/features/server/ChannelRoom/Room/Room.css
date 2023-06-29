@@ -52,6 +52,36 @@
     max-height: 540px;
 }
 
+.stream-title-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    opacity: 0;
+    transition: 0.1s;
+    z-index: 5;
+}
+
+.stream-title-container:hover {
+    opacity: 1;
+}
+
+.stream-title-container p {
+    color: white;
+    margin: 0;
+    padding: 5px;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    
+    background-color: rgba(0, 0, 0, 0.588);
+}
+
 #live-chat-wrapper .streaming-video-player {
     width: 100%;
     height: auto;

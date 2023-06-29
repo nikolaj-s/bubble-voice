@@ -8,7 +8,7 @@ import { motion } from 'framer-motion'
 import { SettingsCategoryButton } from '../../../components/buttons/SettingsCategoryButton/SettingsCategoryButton';
 
 // state
-import { selectSecondaryColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, selectSecondaryColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./ServerSettings.css";
@@ -25,6 +25,8 @@ const Menu = () => {
     const permissions = useSelector(selectUsersPermissions);
 
     const secondaryColor = useSelector(selectSecondaryColor);
+
+    const primaryColor = useSelector(selectPrimaryColor);
 
     React.useEffect(() => {
 
@@ -90,7 +92,9 @@ const Menu = () => {
         transition={{duration: 0.1}}
         initial={{opacity: 0}}
         animate={{opacity: 1}}
-        className='server-settings-menu'>
+        className='server-settings-menu'
+        style={{borderRight: `3px solid ${primaryColor}`}}
+        >
             <div 
             style={{backgroundColor: secondaryColor}}
             className='inner-server-settings-container'>

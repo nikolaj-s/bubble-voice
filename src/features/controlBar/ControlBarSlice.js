@@ -11,6 +11,7 @@ const controlBarSlice = createSlice({
         screens: [],
         selectingScreens: false,
         currentScreen: null,
+        currentScreenName: "",
         loadingWebCam: false,
         loadingScreenShare: false,
         connectionLoading: false,
@@ -51,7 +52,15 @@ const controlBarSlice = createSlice({
         },
         setCurrentScreen: (state, action) => {
             state.selectingScreens = false;
-            state.currentScreen = action.payload;
+
+            if (!action.payload?.id) {
+                state.currentScreen = null;
+            } else {
+                state.currentScreen = action.payload.id;
+                state.currentScreenName = action.payload.name;
+            }
+
+            
         },
         toggleConnectionLoading: (state, action) => {
             state.connectionLoading = action.payload;
@@ -85,6 +94,8 @@ export const selectLoadingScreenShare = state => state.controlBarSlice.loadingSc
 export const selectConnectionLoading = state => state.controlBarSlice.connectionLoading;
 
 export const selectConnectionError = state => state.controlBarSlice.connectionError;
+
+export const selectCurrentScreenName = state => state.controlBarSlice.currentScreenName;
 
 // actions
 

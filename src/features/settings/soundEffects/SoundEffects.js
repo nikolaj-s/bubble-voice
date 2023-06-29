@@ -3,9 +3,10 @@ import React from 'react'
 
 // state
 import { useDispatch, useSelector } from 'react-redux';
-import { selectAudioOutput } from '../appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
+import { selectAudioOutput, selectExperimentalAudioCapture } from '../appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 import { playSoundEffect, removeSoundEffectFromQueue, selectCurrentDynamicVoice, selectCurrentVoiceOver, selectDynamicVoiceAlerts, selectSocialSoundEffect, selectSoundEffect, selectSoundEffectQueue, selectSoundEffectVolume, selectVoicePitch, selectVoiceRate } from './soundEffectsSlice';
 import { selectCurrentChannel, selectServerMembers } from '../../server/ServerSlice';
+import { selectCurrentScreen, selectScreenShareState } from '../../controlBar/ControlBarSlice';
 
 export const SoundEffects = () => {
 
@@ -36,6 +37,10 @@ export const SoundEffects = () => {
     const voicePitch = useSelector(selectVoicePitch);
 
     const members = useSelector(selectServerMembers);
+
+    const sharingScreen = useSelector(selectCurrentScreen);
+
+    const experimentalAudioCapture = useSelector(selectExperimentalAudioCapture);
 
     const soundEffects = {
         'connected': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/connected_pnu1hk.wav",
@@ -73,11 +78,13 @@ export const SoundEffects = () => {
     }
 
     React.useEffect(() => {
-        
+        try {
         document.getElementById('sound-effects-source').volume = soundEffectsVolume;
-    
+        } catch (err) {
+            return;
+        }
     // eslint-disable-next-line
-    }, [soundEffectsVolume])
+    }, [soundEffectsVolume, sharingScreen])
     
     React.useEffect(() => {
 
@@ -103,7 +110,7 @@ export const SoundEffects = () => {
     React.useEffect(() => {
 
         try {
-            document.getElementById('sound-effects-source').setSinkId(audioOutput._id);
+         //   document.getElementById('sound-effects-source').setSinkId(audioOutput._id);
         } catch (error) {
             console.log(error)
         }
@@ -112,6 +119,14 @@ export const SoundEffects = () => {
     }, [audioOutput])
 
     React.useEffect(() => {
+
+        if (sharingScreen && experimentalAudioCapture) {
+            
+            dispatch(removeSoundEffectFromQueue());
+
+            return;
+            
+        }
 
         setTimeout(() => {
             
@@ -134,14 +149,16 @@ export const SoundEffects = () => {
                 setPlaying((soundEffects[soundEffectQueue[0]?.default] ? soundEffects[soundEffectQueue[0].default] : soundEffects[soundEffectQueue[0]]));
             
             }
+
+            
         }, 10)
 
     // eslint-disable-next-line       
-    }, [soundEffectQueue])
+    }, [soundEffectQueue, sharingScreen, experimentalAudioCapture])
 
     return (
         <>
-        <audio id="sound-effects-source" onEnded={soundEffectFinished} src={playing} hidden={true} playsInline={true} autoPlay={true} loop={false} />
+        {(sharingScreen && experimentalAudioCapture) ? null : <audio id="sound-effects-source" onEnded={soundEffectFinished} src={playing} hidden={true} playsInline={true} autoPlay={true} loop={false} />}
         </>
     )
 }

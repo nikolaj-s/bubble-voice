@@ -58,7 +58,8 @@ const voiceVideoSettingsSlice = createSlice({
         autoGainControl: false,
         voiceActivationSensitivity: 60,
         voiceDeactivationDelay: 50,
-        advancedVoiceActivationDetection: true
+        advancedVoiceActivationDetection: true,
+        experimentalAudioCapture: false
     },
     reducers: {
         updateVoiceActivationSensitivity: (state, action) => {
@@ -112,7 +113,8 @@ const voiceVideoSettingsSlice = createSlice({
                 micInputVolume: state.micInputVolume,
                 autoGainControl: state.autoGainControl,
                 voiceDeactivationDelay: state.voiceDeactivationDelay,
-                advancedVoiceActivationDetection: state.advancedVoiceActivationDetection
+                advancedVoiceActivationDetection: state.advancedVoiceActivationDetection,
+                experimentalAudioCapture: state.experimentalAudioCapture
             }
             
             saveLocalData("VOICE/VIDEO", "SETTINGS", obj);
@@ -179,6 +181,8 @@ const voiceVideoSettingsSlice = createSlice({
             }
 
             if (saved_data.advancedVoiceActivationDetection === false) state.advancedVoiceActivationDetection = false;
+
+            if (saved_data.experimentalAudioCapture) state.experimentalAudioCapture = true;
 
             if (action.payload.voice_activation_level) {
                 
@@ -268,6 +272,8 @@ export const selectAutoGainControl = state => state.voiceVideoSettingsSlice.auto
 export const selectVoiceDeactivationDelayState = state => state.voiceVideoSettingsSlice.voiceDeactivationDelay;
 
 export const selectAdvancedVoiceActivation = state => state.voiceVideoSettingsSlice.advancedVoiceActivationDetection;
+
+export const selectExperimentalAudioCapture = state => state.voiceVideoSettingsSlice.experimentalAudioCapture;
 
 export const {updateVoiceDeactivationDelay, toggleAutoGain, updateVoiceActivationSensitivity, toggleSelectedVoiceVideoState, updateSelectedDevice, toggleVoiceActivity, handleSaveVoiceVideoSettings, updateMicInputVolume } = voiceVideoSettingsSlice.actions;
 

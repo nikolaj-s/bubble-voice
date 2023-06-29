@@ -60,7 +60,7 @@ export const ProfileButton = () => {
                     {visible ? <CloseIcon /> : <Image image_class={'user-image'} cursor='pointer' objectFit='cover' width='100%'  image={profilePicture} />}
                 </div>
                 {hover ? 
-                <div style={{backgroundColor: primaryColor}} className='server-button-name-container'>
+                <div onMouseEnter={() => {toggleHover(false)}} style={{backgroundColor: primaryColor}} className='server-button-name-container'>
                     <h2 style={{color: textColor}}>My Profile</h2>
                 </div>
                 : null}

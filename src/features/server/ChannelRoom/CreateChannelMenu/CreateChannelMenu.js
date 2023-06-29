@@ -111,16 +111,14 @@ export const CreateChannelMenu = () => {
             animate={{opacity: 1}}
             exit={{opacity: 0}}
             key="create-channel-menu"
-            style={{
-                backgroundColor: disableTransparancyEffects ? primaryColor : `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0.8)`
-            }}
+            
              className='create-channel-menu-container'>
                 <motion.div 
                 onClick={(e) => {e.stopPropagation()}}
                 initial={{scale: 0}}
                 animate={{scale: 1}}
                 exit={{scale: 0}}
-                style={{backgroundColor: secondaryColor}} className='create-channel-inner-menu-container'>
+                style={{backgroundColor: secondaryColor, boxShadow: '5px 5px 25px black'}} className='create-channel-inner-menu-container'>
                     <SettingsHeader title={"Create Channel"} />
                     <InputTitle title={"Channel Name"} />
                     <TextInput marginBottom='3px' inputValue={channelName} action={handleChannelNameInput} placeholder={"Name"} />

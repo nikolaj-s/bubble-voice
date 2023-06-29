@@ -25,7 +25,6 @@ export const unBanMember = createAsyncThunk(
         }
     }
 )
-
 export const checkConnection = createAsyncThunk(
     'serverSlice/checkConnection',
     async (_, {rejectWithValue}) => {
@@ -54,7 +53,7 @@ export const fetchServerDetails = createAsyncThunk(
         if (socket === null) return rejectWithValue({error: true, errorMessage: "connection error"});
 
         const { server_id } = getState().serverSlice;
-
+        
         if (!server_id) return;
 
         const { currentStatus } = getState().UserStatusSlice;
@@ -77,7 +76,7 @@ export const fetchServerDetails = createAsyncThunk(
             console.log(error)
             return rejectWithValue({error: true, errorMessage: error});
         })
-
+        console.log(server)
         return server;
     }
 )
@@ -406,11 +405,13 @@ const serverSlice = createSlice({
             state.members[index].status = action.payload.status;
         },
         userLeavesServer: (state, action) => {
-            const userIndex = state.members.findIndex(user => user._id === action.payload);
+            const userIndex = state.members.findIndex(user => user._id === action.payload.member_id);
             
             if (userIndex === -1) return;
 
             state.members[userIndex].status = 'offline';
+
+            state.members[userIndex].last_online = action.payload.last_online;
         },
         updateMember: (state, action) => {
             const memberIndex = state.members.findIndex(member => member.username === action.payload.username);
@@ -535,7 +536,12 @@ const serverSlice = createSlice({
             state.joiningChannel = action.payload;
         },
         setChannelSocialId: (state, action) => {
-            state.selectedChannelSocial = action.payload;
+            if (state.selectedChannelSocial === action.payload) {
+                state.selectedChannelSocial = "";
+            } else {
+                state.selectedChannelSocial = action.payload;
+            }
+            
         },
         clearServerPing: (state, action) => {
             state.ping = 0;

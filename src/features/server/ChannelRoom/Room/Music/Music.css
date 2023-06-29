@@ -2,7 +2,7 @@
 .music-player-overlay-wrapper {
     position: fixed;
     bottom: 50%;
-    right: 3px;
+    left: 270px;
     z-index: 10;
     border-bottom-right-radius: 10px;
     border-top-left-radius: 10px;
@@ -16,30 +16,33 @@
 
 .music-player-overlay-controls {
     height: auto;
-    width: 45px;
+    width: 40px;
     display: flex;
     align-items: center;
     flex-direction: column;
     padding: 5px;
     justify-content: center;
     cursor: grab;
+    z-index: 8;
+    flex-shrink: 0;
 }
 
 .behind-music-player-overlay-controls {
     height: auto;
-    width: 42px;
+    width: 40px;
     display: flex;
     align-items: center;
     flex-direction: column;
-    padding: 5px;
+    padding: 0px 5px;
     justify-content: center;
+    
     position: fixed;
     display: flex;
     right: 0px;
     top: 50%;
     transform: translateY(-50%);
     z-index: 10;
-    height: 290px;
+    height: 275px;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
 }
@@ -85,18 +88,18 @@
 .music-overlay-volume-container {
     position: absolute;
     z-index: 5;
-    left: -39px;
-    bottom: 148px;
+    left: -34px;
+    bottom: 132px;
     padding-left: 4px;
     width: 100px;
-    height: 30px;
+    height: 38px;
     transform: rotate(-90deg);
 }
 
 
 .music-overlay-volume-container div {
     width: 100px;
-    height: 50px;
+    height: 45px;
     padding: 0px 5px;
     border-radius: var(--border-radius);
 }

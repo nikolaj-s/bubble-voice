@@ -30,6 +30,7 @@ import ProfileSlice from "../features/Profile/ProfileSlice";
 import ExploreSlice from "../features/Explore/ExploreSlice";
 import MessagesSlice from "../features/Messages/MessagesSlice";
 import SocialSlice from "../features/server/SocialSlice";
+import AudioInitSlice from "../features/AudioInit/AudioInitSlice";
 
 const { configureStore } = require("@reduxjs/toolkit");
 
@@ -78,7 +79,8 @@ const store = configureStore({
         ProfileSlice: ProfileSlice,
         MessagesSlice: MessagesSlice,
         // Social
-        SocialSlice: SocialSlice
+        SocialSlice: SocialSlice,
+        AudioInitSlice: AudioInitSlice
     }
 })
 

@@ -1,17 +1,16 @@
 /// library's
 import React from 'react'
 import { useRoutes } from 'react-router'
-import { AnimatePresence } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import * as mediasoupClient from 'mediasoup-client';
 
 // state
 import { selectCurrentChannel, selectCurrentChannelId, selectPushToTalkActive, selectServerId, toggleLoadingChannel, updateMemberStatus, selectServerMembers, throwServerError, updateJoiningChannelState, setChannelSocialId, selectReconnectingState, toggleReconnectingState, checkConnection, clearServerPing } from '../../ServerSlice';
-import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPushToTalkState, selectMirroredWebCamState, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, selectVoiceActivationSensitivity, selectAutoGainControl, selectVoiceDeactivationDelayState, selectAdvancedVoiceActivation } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
+import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPushToTalkState, selectMirroredWebCamState, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, selectVoiceActivationSensitivity, selectAutoGainControl, selectVoiceDeactivationDelayState, selectAdvancedVoiceActivation, selectExperimentalAudioCapture } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
 import { selectDisplayName, selectProfileColor, selectProfilePictureShape, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { playSoundEffect, selectMuteSoundEffectsWhileMutedState } from '../../../settings/soundEffects/soundEffectsSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { selectAudioState, selectCurrentScreen, selectMicrophoneState, selectScreenShareState, selectWebCamState, setCurrentScreen, setScreens, setSelectingScreensState, toggleConnectionError, toggleConnectionLoading, toggleControlState, toggleLoadingScreenShare, toggleLoadingWebCam } from '../../../controlBar/ControlBarSlice';
+import { selectAudioState, selectCurrentScreen, selectCurrentScreenName, selectMicrophoneState, selectScreenShareState, selectWebCamState, setCurrentScreen, setScreens, setSelectingScreensState, toggleConnectionError, toggleConnectionLoading, toggleControlState, toggleLoadingScreenShare, toggleLoadingWebCam } from '../../../controlBar/ControlBarSlice';
 import { selectBehindState, selectMusicExpanded, updateMusicState } from './Music/MusicSlice';
 
 // style
@@ -28,7 +27,7 @@ import { RoomUserWrapper } from './RoomUserWrapper/RoomUserWrapper';
 import { ChannelBackground } from './ChannelBackground/ChannelBackground';
 import { selectMiscSettingsHideChannelBackground, selectPopOutUserStreams } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { selectGlassColor, selectGlassState, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
-import { audioCtx } from '../../../AudioInit/AudioInit';
+import { AudioInit, audioCtx } from '../../../AudioInit/AudioInit';
 import { selectCurrentServerPageState } from '../ServerNavigation/ServerNavigationSlice';
 
 export let client;
@@ -43,7 +42,7 @@ const Component = () => {
     // state 
     const channel = useSelector(selectCurrentChannel);
 
-    const mediaBehind = useSelector(selectBehindState);
+    const currentScreenName = useSelector(selectCurrentScreenName);
 
     const glass = useSelector(selectGlassState);
 
@@ -102,7 +101,7 @@ const Component = () => {
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
-    const voiceDeactivationDelay = useSelector(selectVoiceDeactivationDelayState);
+    const experimentalAudioCapture = useSelector(selectExperimentalAudioCapture);
 
     const advancedVoiceActivationDetection = useSelector(selectAdvancedVoiceActivation);
 
@@ -196,7 +195,6 @@ const Component = () => {
     }
 
     const handleScreenShare = async () => {
-
         try {
 
             if (currentScreen !== null) return;
@@ -287,25 +285,31 @@ const Component = () => {
 
     // handle state change for screen sharing
     React.useEffect(() => {
+        console.log(experimentalAudioCapture)
         try {
             if (currentScreen !== null) {
+                
                 dispatch(setScreens([]));
                 dispatch(setSelectingScreensState(false));
 
-                const ipcRenderer = window.require('electron').ipcRenderer;
+                setTimeout(() => {
+                    const ipcRenderer = window.require('electron').ipcRenderer;
 
-                ipcRenderer.send("set-window-id", {id: currentScreen});
+                    ipcRenderer.send("set-window-id", {id: currentScreen});
 
-                client?.produce('screenType', currentScreen);
-                dispatch(updateMemberStatus({username: user.username, action: {screenshare: true}}))
-                socket?.emit('user status', {username: user.username, action: {screenshare: true}})
+                    client?.produce('screenType', currentScreen, currentScreenName, experimentalAudioCapture);
+                    dispatch(updateMemberStatus({username: user.username, action: {screenshare: true}}))
+                    socket?.emit('user status', {username: user.username, action: {screenshare: true}})
+                }, 200)
+                    
+            
             }
         } catch (error) {
             console.log(error);
             dispatch(throwServerError({errorMessage: error.message}))
         }
     // eslint-disable-next-line
-    }, [currentScreen, reconnecting])
+    }, [currentScreen, reconnecting, currentScreenName, experimentalAudioCapture])
 
     // handle change of user control state
     React.useEffect(() => {
@@ -741,17 +745,9 @@ const Component = () => {
     React.useEffect(() => {
         
         if (page === 'social' || page === 'widgets' || musicExpanded === true || page === 'pins' || page === 'media') {
-            if (!popOutUserStreams) {
-                document.getElementById('user-streams-wrapper').style.position = 'fixed';
-                document.getElementById('user-streams-wrapper').style.left = '50px';
-                document.getElementById('user-streams-wrapper').style.width = "220px";
-                document.getElementById('user-streams-wrapper').style.top = 0;
-                document.getElementById('user-streams-wrapper').style.opacity = 1;
-                document.getElementById('user-streams-wrapper').style.pointerEvents = 'none';
-            } else {
-                document.getElementById('user-streams-wrapper').style.opacity = 0;
-                document.getElementById('user-streams-wrapper').style.zIndex = 0;
-            }
+            
+            document.getElementById('user-streams-wrapper').style.opacity = 0;
+            document.getElementById('user-streams-wrapper').style.zIndex = 0;
             
         } else {
                 document.getElementById('user-streams-wrapper').style.left = '0px';
@@ -773,17 +769,14 @@ const Component = () => {
             }
             id='live-chat-wrapper'>
                 <RoomUserWrapper page={page} users={channel.users} />
-                <AnimatePresence>
                     {page === "social" ? <Social currentChannel={channel} channelId={current_channel_id} /> : null}
                     {page === "widgets" ? <Widgets /> : null}
-                </AnimatePresence>
             </div>
-            
             <ChannelBackground channel_background={hideChannelBackgrounds ? null : channel.channel_background} blur={channel.background_blur} />
             <audio hidden={true} id={'microphone-input-source'} />
             
         </div>
-        
+        <AudioInit />
         </>
     )
 }

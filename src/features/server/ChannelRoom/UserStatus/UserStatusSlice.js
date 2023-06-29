@@ -80,6 +80,8 @@ const UserStatusSlice = createSlice({
                 
                 }
             }
+
+            state.offlineUsers = state.offlineUsers.sort((a, b) => b.last_online || 0 - a.last_online || 0)
         },
         toggleStatusMenu: (state, action) => {
             state.statusMenuOpen = action.payload;

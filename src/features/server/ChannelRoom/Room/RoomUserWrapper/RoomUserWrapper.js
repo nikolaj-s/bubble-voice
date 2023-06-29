@@ -30,7 +30,7 @@ export const RoomUserWrapper = ({users, page}) => {
             for (const child of parent.children) {
                 if (child.id === expanded) {
 
-                    let wDimension = parent.offsetWidth - 10;
+                    let wDimension = parent.offsetWidth - 4;
 
                     let hDimension = parent.offsetHeight;
 
@@ -51,9 +51,6 @@ export const RoomUserWrapper = ({users, page}) => {
 
                     const v = child.querySelector('video');
 
-                    if (v) {
-                        v.style.objectFit = 'contain'
-                    }
                     child.style.width = `${max}px`;
                     child.style.margin = '0px'
                     child.style.height = `${(max * ratio)}px`;
@@ -62,11 +59,6 @@ export const RoomUserWrapper = ({users, page}) => {
                 } else {
                     const v = child.querySelector('video');
 
-                    if (v) {
-
-                        v.style.objectFit = 'cover'
-                    
-                    }
                     child.style.margin = '0px'
                     child.style.maxHeight = '540px'
                     child.style.maxWidth = '960px'
@@ -210,6 +202,8 @@ export const RoomUserWrapper = ({users, page}) => {
                 c.style.width = `${max}px`;
                 c.style.height = `${(max * ratio)}px`;
                 c.style.margin = '2px'
+                c.style.position = null;
+                c.style.objectFit = 'contain';
             }
 
         } catch (error) {

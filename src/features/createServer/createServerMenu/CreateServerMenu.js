@@ -154,7 +154,7 @@ export const CreateServerMenu = () => {
     const selectServerToJoin = (server_id) => {
         
         const server = serverResults.findIndex(server => server._id === server_id)
-        console.log(server)
+      
         if (server === -1) return;
 
         dispatch(setServerToJoin(serverResults[server]));
@@ -162,14 +162,13 @@ export const CreateServerMenu = () => {
         dispatch(toggleAddServerMenu(true));
     }
 
-
-
     return (
-        <>
+        <div onClick={closeCreateServerMenu} className='side-tab-outer-container'>
         <motion.div
-        initial={{opacity: 0, left: '-600px'}}
-        animate={{opacity: 1, left: 55}}
-        exit={{opacity: 0, left: '-600px'}}
+        onClick={(e) => {e.stopPropagation()}}
+        initial={{opacity: 0, marginLeft: '-600px'}}
+        animate={{opacity: 1, marginLeft: 0}}
+        exit={{opacity: 0, marginLeft: '-600px'}}
         style={{backgroundColor: `rgba(${accentColor.split('rgb(')[1].split(')')[0]}, 0.7)`}} className='add-server-menu-outer-container'>
             
             <motion.div
@@ -199,7 +198,7 @@ export const CreateServerMenu = () => {
                         <div className='search-server-input-wrapper'>
                             <TextInput id={"search-for-server-input"} keyCode={(key) => {if (key === 13) search()}} action={handleServerSearchInput} inputValue={serverSearchQuery} marginTop='10px' placeholder={"Server Name"} />
                             <div className='server-search-button-container'>
-                                <AltSearchButton action={search} borderRadius={0} invert={false} height={18} width={32} />
+                                <AltSearchButton action={search} borderRadius={0} invert={false} height={12} width={32} />
                             </div>
                         </div>
                         <div className='join-server-search-results-container'>
@@ -228,6 +227,6 @@ export const CreateServerMenu = () => {
                 </AnimatePresence>
             </motion.div> 
         </motion.div>
-        </>
+        </div>
     )
 }

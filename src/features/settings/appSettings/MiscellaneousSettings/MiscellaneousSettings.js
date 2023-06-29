@@ -123,8 +123,6 @@ const Settings = () => {
             <ToggleButton action={() => {handleChannelSpecificStateChange("hideNonVideoParticapents")}} state={hideNonVideoParticapents} />
             <InputTitle title={"Hide User Status Bar When In A Channel"} />
             <ToggleButton action={() => {handleChannelSpecificStateChange('hideUserStatus')}} state={hideUserStatusBar} />
-            <InputTitle title={"Disable Popping Out User Streams On Tab Change"} /> 
-            <ToggleButton state={popOutUserStreams} action={() => {handleChannelSpecificStateChange("popOutUserStreams")}} />
             <InputTitle title={'Disable Channel Icons'} />
             <ToggleButton action={() => {handleChannelSpecificStateChange('disableChannelIcons')}} state={disableChannelIcons} />
             <InputTitle title={"Disable Gif Profile Pictures / Banners"} />
@@ -139,6 +137,8 @@ const Settings = () => {
             <ToggleButton state={disableTransparancyEffects} action={() => {handleChannelSpecificStateChange('disableTransparancyEffects')}} />
             <InputTitle title={"Disable Hardware Acceleration"} />
             <ToggleButton action={handleToggleHardwareAcceleration} state={hardwareAcceleration} />
+            <AltError marginTop={'2%'} errorMessage={"Toggling Harware Acceleration Requires An App Restart"} error={restartNotice} />
+            <Loading loading={loading} />
             <SettingsHeader title={"Bandwith"} />
             <InputTitle title={"Disable Media Widget"} />
             <ToggleButton state={disableMediaWidget} action={() => {handleChannelSpecificStateChange('disableMediaWidget')}} />
@@ -147,8 +147,7 @@ const Settings = () => {
             <InputTitle title={"Clear Local Data"} />
             <TextButton action={handleClearLocalData} name={"Clear Data"} />
             <SettingsSpacer />
-            <AltError marginTop={'2%'} errorMessage={"Toggling Harware Acceleration Requires An App Restart"} error={restartNotice} />
-            <Loading loading={loading} />
+           
         </div>
         {error ? <Error action={closeErrorMessage} errorMessage={errorMessage} /> : null}
         </>

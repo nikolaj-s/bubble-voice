@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { throwServerError } from '../../../ServerSlice';
 import { selectBehindState, selectLoadingMusicState, selectMusicExpanded, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, throwMusicError, toggleBehind, toggleLoadingMusic, toggleMusicExpanded, updateMusicVolume,} from './MusicSlice';
 import YouTube from 'react-youtube'
-import {  selectPrimaryColor, selectSecondaryColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import {  selectGlassColor, selectPrimaryColor, selectSecondaryColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 import "./Music.css";
 import { MusicOverlayButton } from '../../../../../components/buttons/MusicOverlayButton/MusicOverlayButton';
@@ -19,6 +19,8 @@ import { ExpandButton } from '../../../../../components/buttons/ExpandButton/Exp
 import { selectDisableMediaWidget } from '../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { selectCurrentDynamicVoice, selectDynamicVoiceAlerts, selectSoundEffectVolume, selectVoicePitch, selectVoiceRate } from '../../../../settings/soundEffects/soundEffectsSlice';
 import { PlaceBehindButton } from '../../../../../components/buttons/PlaceBehindButton/PlaceBehindButton';
+import { selectCurrentScreen } from '../../../../controlBar/ControlBarSlice';
+import { selectExperimentalAudioCapture } from '../../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 
 export const Music = () => {
 
@@ -40,6 +42,8 @@ export const Music = () => {
     const [behindHeight, setBehindHeight] = React.useState(0)
 
     const behind = useSelector(selectBehindState);
+
+    const glassColor = useSelector(selectGlassColor);
 
     const dispatch = useDispatch();
 
@@ -77,6 +81,10 @@ export const Music = () => {
 
     const voicePitch = useSelector(selectVoicePitch);
 
+    const sharingScreen = useSelector(selectCurrentScreen);
+
+    const experimentalAudioCapture = useSelector(selectExperimentalAudioCapture);
+
     React.useEffect(() => {
         try {
             if (player) {
@@ -87,6 +95,11 @@ export const Music = () => {
                     player.playVideo();
                 }
                 player.setVolume(volume);
+
+                if (sharingScreen && experimentalAudioCapture) {
+                    player.mute();
+                    return;
+                }
 
                 if (muted || volume < 1) {
                     player.mute();
@@ -101,7 +114,7 @@ export const Music = () => {
         }
         
     // eslint-disable-next-line
-    }, [musicPlaying, volume, musicPlaying, musicPlaying, player])
+    }, [musicPlaying, volume, musicPlaying, musicPlaying, player, sharingScreen, experimentalAudioCapture])
 
     React.useEffect(() => {
 
@@ -190,6 +203,7 @@ export const Music = () => {
     }
 
     const handleMute = () => {
+        if (experimentalAudioCapture && sharingScreen) return;
         if (!muted) {
             toggleMuted(true);
             player.mute();
@@ -204,6 +218,7 @@ export const Music = () => {
     }
 
     const handleToggleVolumeControls = (bool) => {
+        if (experimentalAudioCapture && sharingScreen) return;
         toggleVolumeControls(bool)
     }
 
@@ -235,8 +250,8 @@ export const Music = () => {
             setLeft(window.innerWidth - 70)
         }
 
-        if (top + 540 > window.innerHeight) {
-            setTop(window.innerHeight - 540)
+        if (top + 480 > window.innerHeight) {
+            setTop(window.innerHeight - 480)
         }
 
     }
@@ -248,10 +263,10 @@ export const Music = () => {
 
         if (mouseDown === true) {
             
-            if (e.clientX + offset[0] > 55 && (e.clientX + offset[0]) < window.innerWidth - 60) {
+            if (e.clientX + offset[0] > 270 && (e.clientX + offset[0]) < window.innerWidth - 70) {
                 setLeft((e.clientX + offset[0]))
             } 
-            if ((e.clientY + offset[1]) > -120 && (e.clientY + offset[1]) + 460 < window.innerHeight) {
+            if ((e.clientY + offset[1]) > -120 && (e.clientY + offset[1]) + 415 < window.innerHeight) {
                 setTop((e.clientY + offset[1]))
             }
             
@@ -348,8 +363,8 @@ export const Music = () => {
         onMouseLeave={onMouseUp}
         style={{
             backgroundColor: behind ? primaryColor : null,
-            width: behind ? 'calc(100% - 4px)' : (expanded) ? 'calc(100%)' : visible ? 600 : 55,
-            height: behind ? behindHeight : expanded ? "100%" : 300,
+            width: behind ? 'calc(100% - 4px)' : (expanded) ? 'calc(100%)' : visible ? 480 : 50,
+            height: behind ? behindHeight : expanded ? "100%" : 275,
             right: 5,
             left: behind ? 0 : expanded ? '50%' : left,
             top: behind ? 0 : expanded ? 0 : top,
@@ -374,7 +389,7 @@ export const Music = () => {
                 <SkipButton action={handleSkip} width={20} height={20} />
                 {!musicPlaying ? <PlayButton action={handleTogglePlaying} width={20} height={20}  /> : <PauseButton action={handleTogglePlaying} width={20} height={20} />}
                 
-                <AudioToggleButton width={20} height={20} o_mouseEnter={() => {handleToggleVolumeControls(true)}} o_mouseLeave={() => {handleToggleVolumeControls(false)}} description={muted ? 'Un Mute' : 'Mute'} action={handleMute} state={!muted} />
+                <AudioToggleButton opacity={0.2} desc_width={120} description={(experimentalAudioCapture && sharingScreen) ? "Disabled While Streaming With Experimental Audio Enabled" : null} active={(experimentalAudioCapture && sharingScreen)} width={20} height={20} o_mouseEnter={() => {handleToggleVolumeControls(true)}} o_mouseLeave={() => {handleToggleVolumeControls(false)}} action={handleMute} state={!muted} />
                 <PlaceBehindButton action={handleToggleBehind} description={"Pop In"} width={20} height={20} />
                 {volumeControls ?
                 <div style={{right: visible ? 248 : 35}} onMouseLeave={() => {handleToggleVolumeControls(false)}} onMouseEnter={() => {handleToggleVolumeControls(true)}} className='music-overlay-volume-container' >
@@ -387,8 +402,7 @@ export const Music = () => {
             <div
             
             
-            style={{
-            borderRadius: (expanded||behind) ? '10px' : null, maxWidth: visible ? '100%' : 0, transition: '0.2s', cursor: expanded ? 'default' : 'grab'}} className='youtube-player-wrapper' id="youtube-media-container">
+            style={{ maxWidth: visible ? '100%' : 0, transition: '0.2s', cursor: expanded ? 'default' : 'grab'}} className='youtube-player-wrapper' id="youtube-media-container">
                 <YouTube 
                 
                 onReady={handleOnReady}
@@ -427,7 +441,7 @@ export const Music = () => {
             <SkipButton action={handleSkip} width={20} height={20} />
             {!musicPlaying ? <PlayButton action={handleTogglePlaying} width={20} height={20}  /> : <PauseButton action={handleTogglePlaying} width={20} height={20} />}
             
-            <AudioToggleButton width={20} height={20} o_mouseEnter={() => {handleToggleVolumeControls(true)}} o_mouseLeave={() => {handleToggleVolumeControls(false)}} description={muted ? 'Un Mute' : 'Mute'} action={handleMute} state={!muted} />
+            <AudioToggleButton opacity={0.2} active={experimentalAudioCapture && sharingScreen} desc_width={120} description={(experimentalAudioCapture && sharingScreen) ? "Disabled While Streaming With Experimental Audio Enabled" : null} width={20} height={20} o_mouseEnter={() => {handleToggleVolumeControls(true)}} o_mouseLeave={() => {handleToggleVolumeControls(false)}} action={handleMute} state={!muted} />
             <PlaceBehindButton action={handleToggleBehind} active={true} description={"Pop Out"} width={20} height={20} />
             {volumeControls ?
             <div style={{right: visible ? 248 : 35}} onMouseLeave={() => {handleToggleVolumeControls(false)}} onMouseEnter={() => {handleToggleVolumeControls(true)}} className='music-overlay-volume-container' >

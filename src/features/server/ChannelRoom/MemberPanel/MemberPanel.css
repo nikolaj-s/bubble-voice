@@ -1,26 +1,41 @@
 .outer-member-panel-container {
-    position: fixed;
+    position: absolute;
     width: 100%;
-    height: 100%;
+    max-height: 100%;
     z-index: 12;
     top: 0;
+    min-height: 100%;
     left: 0;
     pointer-events: all;
+    display: flex;
+    justify-content: center;
+    border-radius: 8px;
+    overflow-y: auto;
+    background-position: center;
+}
+
+.username-wrapper-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.member-score-container {
+    display: flex;
+    align-items: center;
 }
 
 .member-panel-container {
-    position: fixed;
-    z-index: 10;
-    width: 400px;
-    height: auto;
+    flex-shrink: 0;
+    flex-grow: 4;
+    width: 100%;
+    height: 100%;
+    max-width: 700px;
     display: flex;
     flex-direction: column;
     align-items: center;
     border-radius: var(--border-radius);
     overflow: hidden;
-    right: 160px;
-    top: 32px;
-    height: calc(100% - 38px);
     box-shadow: -4px -4px 30px rgba(0, 0, 0, 0.424);
 }
 
@@ -49,37 +64,39 @@
 }
 
 .member-panel-info-container {
-    height: calc(100% - 240px);
+    min-height: calc(100%);
     bottom: 0;
     width: calc(100% - 10px);
     display: flex;
     flex-direction: column;
     padding: 0.5rem;
-    overflow-y: overlay;
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
     border-bottom-left-radius: var(--border-radius);
     border-bottom-right-radius: var(--border-radius);
 }
 
-.member-panel-info-container div {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
+.member-panel-info-container h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
 }
 
 .member-panel-info-container h3,
 .member-panel-info-container h4 {
     margin: 2px 0;
     padding: 0;
-    font-weight: 400;
-    font-size: 1.3rem;
+    
     letter-spacing: var(--font-spacing);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .member-panel-info-container h4 {
     font-size: 0.9rem;
     margin-left: 5px;
+    font-weight: 400;
+    font-size:0.8rem;
 }
 
 .member-score-container {
@@ -115,9 +132,24 @@
     padding: 5px;
     border-radius: var(--border-radius);
 }
-
+.server-user-details-wrapper-container h3 {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
 .server-user-details-wrapper-container h3,
 .server-user-details-wrapper-container p {
     width: 100%;
     text-align: start;
+}
+
+.close-member-panel-button {
+    position: fixed;
+    top: 40px;
+    left: 280px;
+    z-index: 2;
+    cursor: pointer;
+}
+
+.close-member-panel-button:hover {
+    opacity: 0.6;
 }

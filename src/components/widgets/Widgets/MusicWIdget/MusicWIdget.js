@@ -1,7 +1,7 @@
 // library's
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // components
 import { TextInput } from '../../../inputs/TextInput/TextInput';
@@ -39,6 +39,8 @@ export const MusicWidget = ({editing = false, widget}) => {
     const error = useSelector(selectMusicError);
 
     const errorMessage = useSelector(selectMusicErrorMessage);
+
+    const accentColor = useSelector(selectAccentColor);
 
     const queue = useSelector(selectMusicQueue);
 
@@ -192,7 +194,7 @@ export const MusicWidget = ({editing = false, widget}) => {
                     <h2 style={{
                         color: textColor
                     }}>Media</h2>
-                    <SubMenuButton transparent={true} padding={5} width={20} height={20} borderRadius={5} description={"Media Options"} desc_space={15} margin={'0 5px 0 10px'} />
+                    <SubMenuButton transparent={true} padding={5} width={20} height={20} borderRadius={5} desc_space={15} margin={'0 5px 0 10px'} />
                 </div>
                 <div className='music-widget-nav-container'>
                     <TextInput keyCode={handleEnter} inputValue={query} action={handleInput} placeholder={"Add Song To Queue"} marginTop='0' />
@@ -217,7 +219,7 @@ export const MusicWidget = ({editing = false, widget}) => {
                     <h3 style={{color: textColor}}>{queue.length === 0 ? 0 : queue.length - 1} / 10</h3>
                 </div>   
                 <div className='music-queue-container'>
-                    {queue.length === 0 || editing ?
+                    {queue.length <= 1 || editing ?
                     <p 
                     style={{
                         color: textColor,
@@ -235,9 +237,9 @@ export const MusicWidget = ({editing = false, widget}) => {
                     <div className='music-widget-inner-controls-container'>
                         <div className='music-widget-inner-controls-container-wrapper'>
                             {playing ?
-                            <PauseButton width={28} height={28} borderRadius={'50%'} action={handlePlayPause} />
+                            <PauseButton margin="0px 5px 0px 0px" background={accentColor}  width={28} height={28} borderRadius={'50%'} action={handlePlayPause} />
                             :
-                            <PlayButton width={28} height={28} borderRadius={'50%'} action={handlePlayPause} />
+                            <PlayButton margin="0px 5px 0px 0px" background={accentColor} width={28} height={28} borderRadius={'50%'} action={handlePlayPause} />
                             }
                             <SkipButton transparent={true} width={18} height={18} action={handleSkip} />
                         </div>

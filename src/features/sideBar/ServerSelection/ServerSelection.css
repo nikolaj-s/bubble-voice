@@ -4,10 +4,27 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: auto;
+    width: auto !important;
     margin-left: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
+.server-buttons-nav-container {
+    position: sticky;
+    bottom: 15px;
+    width: auto;
+    overflow: visible;
+    margin-bottom: 15px;
+    display: flex;
+    height: auto;
+    flex-direction: column;
+    align-items: flex-start;
+    max-height: 100%;
+    flex-shrink: 0;
+    z-index: 20;
+}
 
 
 .side-bar-inner-container {

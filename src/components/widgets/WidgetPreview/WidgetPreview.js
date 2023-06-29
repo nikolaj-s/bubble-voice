@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { Reorder } from 'framer-motion'
 
 // state
-import { selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // components
 import { DynamicGalleryWidget } from '../Widgets/DynamicGalleryWidget/DynamicGalleryWidget';
@@ -27,6 +27,8 @@ export const WidgetPreview = ({widgets = [], editing = false, reorder}) => {
 
     const textColor = useSelector(selectTextColor);
 
+    const primaryColor = useSelector(selectPrimaryColor);
+
     return (
         <div className='widgets-preview-container'>
             {widgets.length === 0 ? 
@@ -36,10 +38,11 @@ export const WidgetPreview = ({widgets = [], editing = false, reorder}) => {
                 {widgets.map((widget, key) => {
                 return (
                     <Reorder.Item
+                    style={{backgroundColor: primaryColor}}
                     dragMomentum={true}
                     dragTransition={{ bounceStiffness: 600, bounceDamping: 10 }}
                     transition={widget.delete ? {duration: 0} : {}}
-                    as="div" className={`${widget.type} editing-single-widget"`} id={widget._id} key={widget._id} value={widget} >
+                    as="div" className={`${widget.type} editing-single-widget`} id={widget._id} key={widget._id} value={widget} >
                         {widget.type === 'title' && !widget.delete ? <TitleWidget editing={editing} key={widget._id} widget={widget} /> : null}
                         {widget.type === 'plainText' && !widget.delete ? <PlainTextWidget editing={editing} key={widget._id} widget={widget} /> : null}
                         {widget.type === 'list' && !widget.delete ? <ListWidget editing={editing} key={widget._id} widget={widget} /> : null}
@@ -48,9 +51,9 @@ export const WidgetPreview = ({widgets = [], editing = false, reorder}) => {
                         {widget.type === 'dynamicGallery' && !widget.delete ? <DynamicGalleryWidget editing={editing} key={widget._id} widget={widget} /> : null}
                         {widget.type === 'music' && !widget.delete ? <MusicWidget widget={widget} editing={editing} /> : null}
                         {widget.type === 'wheel-spin' && !widget.delete ? <WheelSpinWidget editing={true} key={widget._id} widget={widget} /> : null}
-                        {widget.delete ? null : <SubMenuButton invert={false} altInvert={true} position={"absolute"} borderRadius={5} zIndex={3} top={15} left={'calc(100% - 30px)'} />}
-                        {widget.delete ? <InputPlaceHolder margin={"1% 0"} value={"Hit Apply To Save Changes"} /> : null}
-                        {widget.delete ? null : <MoveButton position={'absolute'} width={25} height={25} top={15} left={'calc(100% - 85px)'} zIndex={3} />}
+                        {widget.delete ? null : <SubMenuButton width={20} height={20} invert={false} altInvert={true} position={"absolute"} borderRadius={5} zIndex={3} top={5} left={'calc(100% - 85px)'} />}
+                        {widget.delete ? <InputPlaceHolder margin={"0px 0px 1px 0px"} height={'200px'} value={"Hit Apply To Save Changes"} /> : null}
+                        {widget.delete ? null : <MoveButton position={'absolute'} width={20} height={20} top={5} left={'calc(100% - 45px)'} zIndex={3} />}
                     </Reorder.Item>
                 )
             })}

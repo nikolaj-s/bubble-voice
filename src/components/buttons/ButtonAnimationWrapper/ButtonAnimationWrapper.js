@@ -5,15 +5,17 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 
 // state
-import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
+import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor, selectTransparentPrimaryColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 
-export const ButtonAnimationWrapper = ({desc_width = '100%', onMouseDown = () => {},display = 'flex', action = () => {}, position = 'relative', zIndex = 0, top = 0, left = 0, className, width = 50, height = 50, borderRadius = '5px', justifyContent = 'center', invert = false, pointerOptions = null, children, active = false, opacity = 1, id = "", margin, right, description, flip_description = false, padding = 10, altInvert = false, right_orientation_desc = false, o_mouseEnter = () => {}, o_mouseLeave = () => {}, desc_o_mouse_leave = () => {}, desc_space = 25, transparent, desc_font_size = '0.7rem'}) => {
+export const ButtonAnimationWrapper = ({active_background, desc_width = '100%', background, onMouseDown = () => {},display = 'flex', action = () => {}, position = 'relative', zIndex = 0, top = 0, left = 0, className, width = 50, height = 50, borderRadius = '5px', justifyContent = 'center', invert = false, pointerOptions = null, children, active = false, opacity = 1, id = "", margin, right, description, flip_description = false, padding = 10, altInvert = false, right_orientation_desc = false, o_mouseEnter = () => {}, o_mouseLeave = () => {}, desc_o_mouse_leave = () => {}, desc_space = 25, transparent, desc_font_size = '0.7rem'}) => {
 
     const animation = useAnimation();
 
     const primaryColor = useSelector(selectPrimaryColor);
 
     const secondaryColor = useSelector(selectSecondaryColor);
+
+    const transparentColor = useSelector(selectTransparentPrimaryColor);
 
     const accentColor = useSelector(selectAccentColor);
 
@@ -27,7 +29,7 @@ export const ButtonAnimationWrapper = ({desc_width = '100%', onMouseDown = () =>
         if (active) return;
         
         animation.start({
-            filter: `contrast(${color})`
+            backgroundColor: color
         })
         
     }
@@ -38,18 +40,19 @@ export const ButtonAnimationWrapper = ({desc_width = '100%', onMouseDown = () =>
 
     React.useEffect(() => {
         
-        animation.start({
-            opacity: active ? opacity : 1,
-            filter: invert ? 'contrast(100%)' : active ? `contrast(${50}%)` : `contrast(${100}%)`
-        })
+            animation.start({
+                opacity: active ? opacity : 1,
+                backgroundColor: active ? (active_background || transparentColor) : (background || transparentColor)
+            })
+        
     // eslint-disable-next-line
     }, [active])
 
     const handleOnMouseEnter = (e) => {
 
-        if (!description) return;
-
         o_mouseEnter();
+
+        if (!description) return;
 
         toggleDesc(true);
     }
@@ -88,8 +91,8 @@ export const ButtonAnimationWrapper = ({desc_width = '100%', onMouseDown = () =>
             style={{
                 width: desc_width,
                 minWidth: '100%',
-                top: right_orientation_desc ? '2px' : null,
-                right: right_orientation_desc ? '-45px' : null,
+                top: right_orientation_desc ? '1px' : null,
+                right: right_orientation_desc ? '-15px' : null,
                 left: right_orientation_desc ? null : '50%',
                 bottom: right_orientation_desc ? null : flip_description ? '-120%' : height + desc_space,
                 minWidth: right_orientation_desc ? null : desc_width,
@@ -97,7 +100,7 @@ export const ButtonAnimationWrapper = ({desc_width = '100%', onMouseDown = () =>
                 zIndex: 999,
                 fontWeight: '100',
                 fontSize: '0.8rem',
-                backgroundColor: accentColor,
+                backgroundColor: primaryColor,
                 padding: 5,
                 borderRadius: 5,
                 display: 'flex',
@@ -106,7 +109,8 @@ export const ButtonAnimationWrapper = ({desc_width = '100%', onMouseDown = () =>
                 pointerEvents: 'none',
                 opacity: 1,
                 transform: 'translateX(-50%)',
-                filter: 'none'
+                filter: 'none',
+                boxShadow: '4px 4px 20px rgba(0, 0, 0, 0.4)'
                 }}>
             <p style={{color: textColor, padding: '0px', margin: 0, textAlign: 'center', fontSize: desc_font_size}}>{description}</p>
             </motion.div>: null}
@@ -115,7 +119,7 @@ export const ButtonAnimationWrapper = ({desc_width = '100%', onMouseDown = () =>
         onClick={handleAction}
         className={className}
         style={{
-            backgroundColor: (active && altInvert) ? null : transparent ? null : invert ? secondaryColor : (active || altInvert) ? primaryColor : secondaryColor,
+            backgroundColor: background || transparentColor,
             borderRadius: borderRadius,
             width: width,
             height: height,
@@ -130,10 +134,10 @@ export const ButtonAnimationWrapper = ({desc_width = '100%', onMouseDown = () =>
             zIndex: zIndex,
         }}
         animate={animation}
-        onMouseEnter={(e) => {handleAnimation('50%', e); handleOnMouseEnter(e)}}
-        onMouseLeave={(e) => {handleAnimation('100%', e); handleOnMouseLeave(e)}}
-        onMouseDown={(e) => {handleAnimation('80%', e); onMouseDown()}}
-        onMouseUp={(e) => {handleAnimation('50%', e)}}
+        onMouseEnter={(e) => {handleAnimation(invert ? primaryColor : secondaryColor, e); handleOnMouseEnter(e)}}
+        onMouseLeave={(e) => {handleAnimation(background || transparentColor, e); handleOnMouseLeave(e)}}
+        onMouseDown={(e) => {handleAnimation(invert ? secondaryColor : accentColor, e); onMouseDown()}}
+        onMouseUp={(e) => {handleAnimation(invert ? primaryColor: secondaryColor, e)}}
         transition={{duration: 0.1}}
         >
            

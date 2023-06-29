@@ -5,8 +5,6 @@ const { autoUpdater } = require('electron-updater')
 
 const { uIOhook, UiohookKey } = require('uiohook-napi');
 
-const url = require('url');
-
 const path = require('path');
 
 const http = require('http');
@@ -24,6 +22,102 @@ let hardwareAccelToggled;
 let transparent;
 
 let notification;
+
+let initial_app_loading;
+
+let loading_template = `
+
+<head>
+<style>
+  * {
+    overflow: hidden;
+  }
+  body {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      color: white;
+      font-family: 'Quicksand', sans-serif;
+      background-color: rgba(8, 8, 8, 1);
+      margin: 0;
+  }
+
+  body h1 {
+      margin: 5px 0px;
+  }
+  .icon-container {
+    width: 50px;
+    height: 50px;
+  }
+
+  .icon-container img {
+      width: 50px;
+      height: 50px;
+  }
+
+  .loading-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-evenly;
+  }
+
+  .lds-ring {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+  }
+  .lds-ring div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border: 8px solid white;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: white transparent transparent transparent;
+  }
+  .lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+  }
+  .lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+  }
+  .lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+  }
+  @keyframes lds-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  </style>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter&family=Raleway:wght@300;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="loading-container" >
+    <div class='icon-container'>
+      <img src="https://res.cloudinary.com/drlkgoter/image/upload/v1668805881/logo_y9odas.png" />
+    </div>
+    <h1>Loading Bubble</h1>
+    <p>This Will Take Just A Second</p>
+    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+  </div>
+</body>
+`
 
 const fs = require('fs');
 
@@ -59,7 +153,7 @@ try {
 const lock = app.requestSingleInstanceLock();
 
 if (data?.toggled) {
-  
+  console.log('Hardware acceleration disabled')
   app.disableHardwareAcceleration();
 
 } 
@@ -102,6 +196,23 @@ if (!process.env.ELECTRON_START_URL && lock) {
 
 function createWindow () {
 
+  initial_app_loading = new BrowserWindow({
+    width: 300,
+    height: 300,
+    maxHeight: 300,
+    maxWidth: 300,
+    titleBarStyle: 'hidden',
+    frame: false,
+    backgroundColor: 'rgba(8, 8, 8, 1)'
+  })
+
+  initial_app_loading.loadURL(`data:text/html;charset=utf-8,${loading_template}`)
+
+  initial_app_loading.webContents.on('did-finish-load', () => {
+    initial_app_loading.show();
+  })
+  
+
   // Create the browser window.
   win = new BrowserWindow({
     minWidth: 730,
@@ -117,9 +228,25 @@ function createWindow () {
     y: data?.bounds?.y,
     width: data?.bounds?.width,
     height: data?.bounds?.height,
+    icon: __dirname + '/logo.png'
   })
   
   win.loadURL(startUrl);
+
+  win.hide();
+
+  win.webContents.on('did-finish-load', () => {
+
+      if (process.argv.includes('--hidden')) {
+          win.hide();
+      } else {
+          win.show();
+      }
+
+      setTimeout(() => {
+        initial_app_loading?.hide();
+      }, 1000)
+  })
 
   win.once('focus', () => win.flashFrame(false));
 
@@ -131,6 +258,8 @@ function createWindow () {
     transparent: true,
     frame: false,
     alwaysOnTop: true,
+    x: mainScreen.bounds.x,
+    y: mainScreen.bounds.y,
     icon: __dirname + '/logo.png',
   })
 
@@ -145,6 +274,8 @@ function createWindow () {
   notification.setFullScreenable(false);
 
   notification.maximize();
+
+  notification.show();
 
   // Open the DevTools.
   process.env.ELECTRON_START_URL ? win.webContents.openDevTools() : null
@@ -192,6 +323,7 @@ function createWindow () {
     console.log('closing')
     win.close();
     notification.close();
+    initial_app_loading?.close();
   })
   
   ipcMain.on('min', () => {
@@ -470,7 +602,7 @@ app.whenReady().then(() => {
     desktopCapturer.getSources({types: ['window', 'screen', 'audio']}).then((sources) => {
       const index = sources.findIndex(s => s.id === window_id);
       
-      callback({video: sources[index], audio: 'loopbackWithMute', enableLocalEcho: false});
+      callback({video: sources[index], audio: 'loopback'});
     })
   })
 
@@ -486,6 +618,7 @@ app.on('before-quit', () => {
   win.close();
   transparent.close();
   notification.clse();
+  initial_app_loading?.close();
 
 })
 

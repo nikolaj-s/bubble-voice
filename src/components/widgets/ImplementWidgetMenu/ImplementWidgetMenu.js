@@ -15,7 +15,7 @@ import { Error } from '../../Error/Error';
 import { AltError } from '../../AltError/AltError'
 import { Video } from '../../Video/Video'
 // state
-import { selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./ImplementWidgetMenu.css";
@@ -62,6 +62,8 @@ export const ImplementWidgetMenu = ({active = false, type, name, close}) => {
     const textColor = useSelector(selectTextColor);
 
     const secondaryColor = useSelector(selectSecondaryColor);
+
+    const accentColor = useSelector(selectAccentColor);
 
     const editingChannelId = useSelector(selectEditingChannelId);
 
@@ -235,7 +237,7 @@ export const ImplementWidgetMenu = ({active = false, type, name, close}) => {
                     {type === 'plainText' || type === 'list' ? <TextArea inputValue={textValue} action={handleTextValue} placeHolder={"Text"} /> : null}
                     {type === 'image' ? 
                     <div className='adding-widget-image'>
-                        <ImageInput maxDimensions={1280} getFile={handleSetImage} borderRadius='5px' /> 
+                        <ImageInput objectFit='contain' backgroundColor={'black'} maxDimensions={1280} getFile={handleSetImage} borderRadius='5px' /> 
                     </div>
                     : null}
                     

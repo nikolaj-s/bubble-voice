@@ -9,7 +9,7 @@ import { selectAppSettings } from './appSettingsMenuSlice';
 import { SettingsCategoryButton } from '../../../components/buttons/SettingsCategoryButton/SettingsCategoryButton';
 
 // state
-import { selectSecondaryColor } from './appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, selectSecondaryColor } from './appearanceSettings/appearanceSettingsSlice';
 import { handleSignOut } from '../appSettings/accountSettings/accountSettingsSlice';
 import { signInHandleLogOutState } from '../../LoggingIn/signIn/signInSlice';
 
@@ -30,6 +30,8 @@ const SettingsMenu = () => {
     const secondaryColor = useSelector(selectSecondaryColor);
 
     const settings = useSelector(selectAppSettings);
+
+    const primaryColor = useSelector(selectPrimaryColor);
 
     React.useEffect(() => {
 
@@ -104,7 +106,7 @@ const SettingsMenu = () => {
     }
 
     return (
-        <motion.div transition={{duration: 0.1}} initial={{opacity: 0}} style={{backgroundColor: secondaryColor}}  animate={{opacity: 1}} className='app-settings-menu'>
+        <motion.div transition={{duration: 0.1}} initial={{opacity: 0}} style={{backgroundColor: secondaryColor, borderRight: `solid 3px ${primaryColor}`}}  animate={{opacity: 1}} className='app-settings-menu'>
 
             <div style={{backgroundColor: secondaryColor}} className='inner-app-settings-container'>
                 <div className='setting-buttons-wrapper'>

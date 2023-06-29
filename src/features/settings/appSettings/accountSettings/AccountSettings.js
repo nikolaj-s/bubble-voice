@@ -12,15 +12,14 @@ import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 import { ApplyCancelButton } from '../../../../components/buttons/ApplyCancelButton/ApplyCancelButton';
 import { TextInput } from '../../../../components/inputs/TextInput/TextInput';
 import { InputTitle } from '../../../../components/titles/inputTitle/InputTitle';
-import { ProfileImage } from './ProfileImage/ProfileImage';
+
 import { Error } from '../../../../components/Error/Error';
 import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
 import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/SettingsSpacer';
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
-import { ProfilePictureShape } from './ProfilePictureShape/ProfilePictureShape';
-import { TextArea } from '../../../../components/inputs/TextArea/TextArea';
-import { TogglePreviewButton } from '../../../../components/buttons/TogglePreviewButton/TogglePreviewButton';
-import { UserBio } from '../../../../components/UserBio/UserBio';
+
+import { EditMemberPanel } from './EditMemberPanel/EditMemberPanel';
+import { selectPrimaryColor } from '../appearanceSettings/appearanceSettingsSlice';
 
 const Settings = () => {
 
@@ -67,12 +66,14 @@ const Settings = () => {
 
     const stateChanged = useSelector(selectAccountSettingsStateChanged);
 
+    const primaryColor = useSelector(selectPrimaryColor)
+
     React.useEffect(() => {
         dispatch(setHeaderTitle("Account Settings"));
 
         setNewShape(profilePictureShape);
 
-        setColor(profileColor)
+        setColor(profileColor || primaryColor);
     // eslint-disable-next-line
     }, [])
 
@@ -127,22 +128,7 @@ const Settings = () => {
             <div className='settings-wrapper'>
                 <SettingsHeader title={"Account Settings"} />
                 <InputTitle title={"Edit User Panel"} />
-                <div style={{backgroundColor: color, padding: '5px', borderRadius: '8px', maxWidth: 500, position: 'relative', width: '100%', overflow: 'hidden'}} className='edit-member-panel-container'>
-                    <ProfileImage color={updateColor} shape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} />
-                    <ProfilePictureShape action={changeProfileShape} shape={newShape} />
-                    <InputTitle title={'Change Display Name'} />
-                    <TextInput stateSelector='display_name' action={handleInput} inputValue={displayName} placeholder={""} />
-                    
-                    <div style={{display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-between'}}>
-                        <InputTitle width={'60px'} title={'Bio'} />
-                        <TogglePreviewButton active={previewBio} action={() => {togglePreviewBio(!previewBio)}} padding={5} width={20} height={20} description={'Toggle Preview'} desc_height={15} />
-                    </div>
-                    {previewBio ?
-                    <UserBio bio={profileBio} />
-                    :
-                    <TextArea inputValue={profileBio} action={changeProfileBio} height={300} />
-                    }
-                </div>
+                <EditMemberPanel color={color} updateColor={updateColor} newShape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} changeProfileShape={changeProfileShape} handleInput={handleInput} displayName={displayName} previewBio={previewBio} togglePreviewBio={togglePreviewBio} profileBio={profileBio} changeProfileBio={changeProfileBio} />
                 <SettingsHeader title={"Security"} />
                 <InputTitle title={"Change Password"} />
                 <TextInput stateSelector='password' action={handleInput}  marginBottom='2%' type='password' placeholder={"Current Password"} inputValue={password} />

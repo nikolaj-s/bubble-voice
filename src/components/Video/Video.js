@@ -2,8 +2,8 @@
 
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { setExpandedContent } from '../../features/ExpandContent/ExpandContentSlice';
-import { selectAccentColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { setExpandedContent, setVideoStartTime } from '../../features/ExpandContent/ExpandContentSlice';
+import { selectAccentColor, selectGlassColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectAutoPlayNativeVideos, selectMuteSocialVideos, selectVideoVolume, setVideoVolume } from '../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { ExpandButton } from '../buttons/ExpandButton/ExpandButton';
 import { AudioToggleButton } from '../buttons/mediaButtons/audioToggleButton/AudioToggleButton';
@@ -16,7 +16,7 @@ import {Range} from '../inputs/Range/Range';
 import "./Video.css";
 import { VideoPlayOverlayAnimation } from './VideoPlayOverlayAnimation/VideoPlayOverlayAnimation';
 
-export const Video = ({ video, id, looping = false, objectFit = 'contain', height = "100%", mutedToggled, marginLeft}) => {
+export const Video = ({maxHeight = '100%', video, id, looping = false, objectFit = 'contain', height = "100%", mutedToggled, marginLeft, forceAutoPlay = false, currentTime = 0}) => {
 
     const ref = React.useRef();
 
@@ -30,11 +30,15 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
 
     const [progress, setProgress] = React.useState(0);
 
+    const [showVolume, toggleShowVolume] = React.useState(false);
+
     const videoVolume = useSelector(selectVideoVolume);
 
     const accentColor = useSelector(selectAccentColor);
 
     const color = useSelector(selectTextColor);
+
+    const glassColor = useSelector(selectGlassColor);
 
     const social_autoplay = useSelector(selectAutoPlayNativeVideos);
 
@@ -94,6 +98,8 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
         document.getElementById(video + 'audio')?.pause();
 
         dispatch(setExpandedContent(video));
+
+        dispatch(setVideoStartTime(document.getElementById(video + id)?.currentTime))
     }
 
     const showControls = (enter) => {
@@ -129,7 +135,7 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
 
     React.useEffect(() => {
 
-        if (visible && social_autoplay) {
+        if (visible && social_autoplay || forceAutoPlay) {
             togglePlaying(true);
 
             toggleInteracted(true);
@@ -143,6 +149,11 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
             document.getElementById(video + id).volume = videoVolume;
 
             document.getElementById(video + 'audio').volume = videoVolume;
+
+            if (currentTime !== 0) {
+                document.getElementById(video + id).currentTime = currentTime;
+            }
+           
         } else {
             togglePlaying(false);
 
@@ -188,9 +199,10 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
             ref={ref}
             onMouseLeave={() => {showControls(false)}}
             loading="lazy"
-            style={{objectFit: objectFit}}
+            
+            style={{objectFit: objectFit, maxHeight: maxHeight}}
             muted={mutedToggled ? true : false}
-            onEnded={onVideoEnd} autoPlay={looping ? true : false} id={video + id} controls={false} loop={true} 
+            onEnded={onVideoEnd} autoPlay={forceAutoPlay ? true : looping ? true : false} id={video + id} controls={false} loop={true} 
             src={video}
             />
             <audio hidden={true} muted={mutedToggled ? true : false} loop={true} src={video?.includes('v.redd') ? video?.split('_')[0] + '_audio.mp4' : null} autoPlay={looping ? true : false} id={video + 'audio'} />
@@ -203,14 +215,14 @@ export const Video = ({ video, id, looping = false, objectFit = 'contain', heigh
             className='message-video-controls-container'>
                 <div className='inner-video-controls-container'>
                     {playing ?
-                    <PauseButton  width={15} height={15} action={handlePlayState} />
+                    <PauseButton background={glassColor} width={15} height={15} action={handlePlayState} />
                     :
-                    <PlayButton width={15} height={15} action={handlePlayState} />
+                    <PlayButton background={glassColor} width={15} height={15} action={handlePlayState} />
                     }
-                    <AudioToggleButton  width={15} height={15} description={!muted ? 'un-mute' : 'mute'} action={handleMuteState} state={muted} />
-                    <div className='video-volume-slider'>
+                    <AudioToggleButton background={glassColor} o_mouseEnter={() => {toggleShowVolume(true)}} o_mouseLeave={() => {toggleShowVolume(false)}}  width={15} height={15} action={handleMuteState} state={muted} />
+                    {showVolume ? <div onMouseEnter={() => {toggleShowVolume(true)}} onMouseLeave={() => {toggleShowVolume(false)}}  className='video-volume-slider'>
                         <Range action={handleVolumeChange} value={videoVolume} min={0} max={1} step={0.01} />
-                    </div>
+                    </div> : null}
                 </div>
                 <ExpandButton width={15} height={15} description={"max"} action={expand} />
                 

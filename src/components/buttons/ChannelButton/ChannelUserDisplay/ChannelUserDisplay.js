@@ -73,7 +73,7 @@ export const ChannelUserDisplay = ({user, channel_id}) => {
             <div 
             style={{border: (user.active && user.microphone && currentChannelId === channel_id) ? `solid 2px ${activityColor}` : null, borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%', width: (user.active && user.microphone) ? 26 : 30, height: (user.active && user.microphone) ? 26 : 30}}
             className='channel-user-placeholder-user-image'>
-                <Image image_class={'user-image'} cursor='pointer' objectFit='cover' image={user.user_image} />
+                <Image image_class={'user-image'} cursor='pointer' objectFit='cover' image={user.user_image?.includes('.gif') ? "" : user.user_image} />
             </div>
             <h3 style={{color: user?.color || textColor, opacity: (user.active && user.microphone) ? 1 : 0.8, filter: 'brightness(150%)', fontWeight: '600'}}>{user.display_name}</h3>
             <div 

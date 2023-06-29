@@ -1,6 +1,6 @@
 {
   "name": "bubble",
-  "version": "0.8.95",
+  "version": "0.9.0",
   "private": false,
   "dependencies": {
     "@popmotion/popcorn": "^0.4.4",
@@ -13,6 +13,7 @@
     "axios": "^0.27.2",
     "browser-image-compression": "^2.0.0",
     "electron-updater": "^5.2.1",
+    "emoji-picker-react": "^4.4.9",
     "framer-motion": "^6.3.3",
     "history": "^5.3.0",
     "keytar": "^7.9.0",
@@ -63,7 +64,7 @@
       "publish": "github"
     },
     "nsis": {
-      "oneClick": false,
+      "oneClick": true,
       "perMachine": false,
       "createDesktopShortcut": true,
       "allowToChangeInstallationDirectory": true
@@ -88,7 +89,7 @@
     ]
   },
   "devDependencies": {
-    "electron": "^23.2.1",
+    "electron": "^25.2.0",
     "electron-builder": "^23.1.0"
   },
   "repository": {

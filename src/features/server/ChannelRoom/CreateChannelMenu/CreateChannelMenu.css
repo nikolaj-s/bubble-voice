@@ -1,10 +1,10 @@
 
 .create-channel-menu-container {
-    width: 100%;
+    width: calc(100% - 268px);
     height: 100%;
     position: fixed;
     top: 0;
-    left: 0;
+    left: 268px;
     z-index: 11;
     display: flex;
     align-items: center;

@@ -15,6 +15,7 @@ import { AppSettingsMenu } from '../settings/appSettings/AppSettingsMenu';
 
 // style
 import "./SideBar.css";
+
 export const SideBar = () => {
 
     const dispatch = useDispatch();
@@ -29,8 +30,6 @@ export const SideBar = () => {
         dispatch(fetchUsersServerList());
     // eslint-disable-next-line
     }, [])
-
-    console.log(window.location.hash)
 
     return (
         <>

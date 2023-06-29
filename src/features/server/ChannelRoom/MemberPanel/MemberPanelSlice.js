@@ -12,7 +12,12 @@ const MemberPanelSlice = createSlice({
     },
     reducers: {
         setSelectedMember: (state, action) => {
-            state.selectedMember = action.payload;
+            if (state.selectedMember === action.payload) {
+                state.selectedMember = ""
+            } else {
+                state.selectedMember = action.payload;
+            }
+            
         },
         setPanelPosition: (state, action) => {
             state.posX = action.payload.x;

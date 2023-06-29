@@ -10,14 +10,15 @@ import { TextInput } from '../../../../../components/inputs/TextInput/TextInput'
 import { ToggleButton } from '../../../../../components/buttons/ToggleButton/ToggleButton';
 import { ApplyCancelButton } from '../../../../../components/buttons/ApplyCancelButton/ApplyCancelButton'
 import { SettingsHeader } from '../../../../../components/titles/SettingsHeader/SettingsHeader'
-
+import { DownIcon } from '../../../../../components/Icons/DownIcon/DownIcon';
+import { WidgetsIcon } from '../../../../../components/Icons/WidgetsIcon/WidgetsIcon'
 // state
 import { setHeaderTitle } from '../../../../contentScreen/contentScreenSlice';
 import { deleteChannel, selectChannelToEdit, selectServerMembers, selectServerOwner, selectUsersPermissions, throwServerError, updateChannel } from '../../../ServerSlice';
 import { TextButton } from '../../../../../components/buttons/textButton/TextButton';
 import { NotAuthorizedMessage } from '../../../../../components/NotAuthorizedMessage/NotAuthorizedMessage';
 import { WidgetPreview } from '../../../../../components/widgets/WidgetPreview/WidgetPreview';
-
+import { DeleteIcon } from '../../../../../components/Icons/DeleteIcon/DeleteIcon'
 // socket
 import { socket } from '../../../ServerBar/ServerBar';
 import { Loading } from '../../../../../components/LoadingComponents/Loading/Loading';
@@ -28,7 +29,7 @@ import { InputPlaceHolder } from '../../../../../components/titles/InputPlaceHol
 import { selectUsername } from '../../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { ChannelIcon } from './ChannelIcon/ChannelIcon';
 import { clearSocialById } from '../../../SocialSlice';
-import { selectGlassColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassColor, selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { RadioButton } from '../../../../../components/buttons/RadioButton/RadioButton';
 
 const Wrapper = () => {
@@ -68,6 +69,8 @@ const Wrapper = () => {
     const members = useSelector(selectServerMembers);
 
     const permission = useSelector(selectUsersPermissions);
+
+    const textColor = useSelector(selectTextColor);
 
     const username = useSelector(selectUsername);
 
@@ -150,10 +153,6 @@ const Wrapper = () => {
         
     }
 
-    const handleTogglePersistSocial = () => {
-        setPersistChannelSocial(!persistChannelSocial);
-        toggleEdited(true);
-    }
 
     const handleToggleLoading = (bool) => {
         if (bool) {
@@ -305,31 +304,30 @@ const Wrapper = () => {
         {(permission?.user_can_manage_channels && (channelToEdit.locked_channel ? channelToEdit.auth : true)) ?
             <>
             <SettingsHeader title={'General'} />
-            <InputTitle title={"Edit Channel Name / Icon"} />
-            <div style={{display: 'flex', alignItems: 'center'}} >
+            <InputTitle title={"Edit Icon / Channel Name"} />
+            <div style={{display: 'flex', alignItems: 'center', position: 'relative'}} >
+           
             <ChannelIcon initial={channelToEdit?.icon} locked={lockedChannel} textOnly={channelToEdit?.text_only} getFile={updateChannelIcon}  />
             <TextInput action={handleUpdateChannelName} inputValue={channelName} />
             </div>
             {channelToEdit.text_only ? null :
             <>
-            <InputTitle title={"Toggle Persist Social Data *persists new data upon activation"} />
-            <ToggleButton action={handleTogglePersistSocial} state={persistChannelSocial} />
             <SettingsHeader title={"Channel Background"} />
             <InputTitle zIndex={2} title={"Image"} />
             <ChannelBackgroundInput blur={backgroundBlur} initialImage={channelToEdit.channel_background} getFile={handleSettingChannelBackground} />
             <InputTitle title={"Background Opacity"} />
             <Range action={handleBlurChange} value={backgroundBlur} min={0} max={1} step={0.05} />
             <SettingsHeader title={"Widgets"} />
-            <TextButton action={openWidgetMenu} name={"Add Widget"} />
+            <TextButton action={openWidgetMenu} name={"Add Widget"} icon={<WidgetsIcon color={textColor} />} />
             <InputTitle title={`Widgets ${channelToEdit.widgets ? channelToEdit.widgets.length : 0} / 15`} />
             {managingWidgets === false ?
-            <TextButton name="Manage Widgets" action={() => {toggleManagingWidgets(true)}} />
+            <TextButton name="Manage Widgets" action={() => {toggleManagingWidgets(true)}} icon={<DownIcon />} />
             : <WidgetPreview widgets={widgets} editing={true} reorder={updateWidgetOrder} />}
             </>}
             <SettingsHeader title={"Data"} />
             <InputTitle title={"Clear Social Data"} />
             {clearedSocial === false ?
-            <TextButton action={handleClearSocial} name={"Clear Social Data"} />
+            <TextButton action={handleClearSocial} name={"Clear Social Data"} icon={<DeleteIcon />} />
             :
             <InputPlaceHolder value={"Hit Apply To Save Changes"} />
             }
@@ -354,7 +352,7 @@ const Wrapper = () => {
             </>
             }
             <InputTitle title={"Delete Channel"} />
-            <TextButton action={handleDeleteChannel} name={"Delete Channel"} />
+            <TextButton action={handleDeleteChannel} name={"Delete Channel"} icon={<DeleteIcon />} />
             <ApplyCancelButton position={edited === false ? null : 'fixed'} right={20} toggled={edited === false ? true : null} apply={handleUpdateChannel} cancel={handleCancel} />
             <Loading backgroundColor={glassColor}  loading={loading} />
             </>

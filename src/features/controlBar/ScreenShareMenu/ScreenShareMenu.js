@@ -18,21 +18,13 @@ export const ScreenShareMenu = ({selectingScreens}) => {
 
     const screens = useSelector(selectScreens);
 
-    const accentColor = useSelector(selectAccentColor);
-
     const primaryColor = useSelector(selectPrimaryColor);
 
-    const secondaryColor = useSelector(selectSecondaryColor);
-
-    const textColor = useSelector(selectTextColor);
-
-    const glassColor = useSelector(selectGlassColor);
-
-    const selectScreen = (id) => {
+    const selectScreen = (id, name) => {
         
         dispatch(playSoundEffect({default: 'newMessage'}))
 
-        dispatch(setCurrentScreen(id));
+        dispatch(setCurrentScreen({id: id, name: name}));
     }
 
     const closeScreenShare = () => {
@@ -40,38 +32,35 @@ export const ScreenShareMenu = ({selectingScreens}) => {
     }
     
     return (
-        <>
-        <AnimatePresence>
-            {selectingScreens ?
-            <div style={{backgroundColor: glassColor}} onClick={closeScreenShare} className='outer-screen-select-container'>
-                <motion.div
-                initial={{
-                    left: '-600px'
-                }}
-                animate={{
-                    left: '0px'
-                }}
-                exit={{
-                    left: '-600px'
-                }}
-                style={{
-                    backgroundColor: secondaryColor,
-                    border: `solid 2px ${primaryColor}`
-                }}
-                key={"share-screen-menu"}
-                className='screen-share-menu'>
-                    <div  style={{backgroundColor: primaryColor}} className='close-share-menu-container'>
-                        <CloseIcon />
-                    </div>
-                    {screens.map(screen => {
-                        return <ScreenButton action={selectScreen} id={screen.id} name={screen.name} key={screen.id} thumbnail={screen.thumbnail} icon={screen.icon} />
-                    })}
-                    
-                </motion.div>
+        <motion.div
+        initial={{
+            height: 20,
+            width:190,
+            bottom: 5,
+            opacity: 0
+        }}
+        animate={{
+            height: 345,
+            width: 345,
+            bottom: 6,
+            opacity: 1
+        }}
+        exit={{
+            width: 190,
+            height:10,
+            maxHeight: 10,
+            opacity: 0
+        }}
+        key={"screen-share-menu"}
+        className='screen-share-menu'>
+            <div onClick={closeScreenShare} className='close-share-menu-container'>
+                <CloseIcon />
             </div>
-                
-            : null}
-        </AnimatePresence> 
-        </>
+            <div className='inner-screen-button-wrapper'>
+            {screens.map(screen => {
+                    return <ScreenButton action={selectScreen} id={screen.id} name={screen.name} key={screen.id} thumbnail={screen.thumbnail} icon={screen.icon} />
+                })}
+            </div> 
+        </motion.div>
     )
 }

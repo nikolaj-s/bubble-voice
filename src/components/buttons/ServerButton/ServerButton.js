@@ -66,7 +66,7 @@ export const ServerButton = ({action, server_banner, server_name, server_id}) =>
                 <Image cursor={server_id === currentServer ? 'default' : 'pointer'} image={server_banner} />
             </div>
             {hover ? 
-            <div style={{backgroundColor: primaryColor}} className='server-button-name-container'>
+            <div onMouseEnter={() => {toggleHover(false)}} style={{backgroundColor: primaryColor}} className='server-button-name-container'>
                 <h2 style={{color: textColor}}>{server_name}</h2>
             </div>
             : null}

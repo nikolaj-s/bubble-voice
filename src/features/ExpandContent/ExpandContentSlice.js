@@ -6,9 +6,13 @@ const ExpandContentSlice = createSlice({
     initialState: {
         selectedContent: false,
         iframe: false,
-        reddit: false
+        reddit: false,
+        videoStartTime: 0
     },
     reducers: {
+        setVideoStartTime: (state, action) => {
+            state.videoStartTime = action.payload;
+        },
         setExpandedContent: (state, action) => {
             if (state.selectedContent !== false) {
                 state.selectedContent = false;
@@ -27,7 +31,7 @@ const ExpandContentSlice = createSlice({
                         
                             state.iframe = "https://redgifs.com/ifr/" + (text.split('redgifs.com/')[1]?.includes('watch') ? text.split('redgifs.com/')[1]?.split('watch/')[1].toLowerCase() : text.split('redgifs.com/')[1]?.split('-')[0].toLowerCase());
                         
-                        } else if (text.includes('youtu')) {
+                        } else if (text.includes('youtu.be') || text.includes('youtube.com')) {
             
                             state.iframe = "https://www.youtube.com/embed/" + (text.split('/')[3].includes('watch?') ? text.split('/')[3].split('watch?v=')[1].split('&')[0] : text.split('/')[3]);
             
@@ -68,6 +72,8 @@ export const selectIframeExpanded = state => state.ExpandContentSlice.iframe;
 
 export const selectExpandedContent = state => state.ExpandContentSlice.selectedContent;
 
-export const { setExpandedContent } = ExpandContentSlice.actions;
+export const selectVideoStartTime = state => state.ExpandContentSlice.videoStartTime;
+
+export const { setExpandedContent, setVideoStartTime } = ExpandContentSlice.actions;
 
 export default ExpandContentSlice.reducer;

@@ -1,15 +1,21 @@
 
 
 .control-bar-container {
-    width: calc(100% - 10px);
-    height: 50px;
+    width: auto;
+    height: auto;
     padding: 0 5px;
     min-height: 50px;
+    border-radius: 8px;
     display: flex;
-    justify-content: space-evenly;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     flex-shrink: 0;
     bottom: 0;
+    z-index:5;
+    position: fixed;
+    left: 55px;
+    bottom: 6px;
+    transition: 0.1s;
 }
 
 .control-bar-container div {
@@ -17,9 +23,12 @@
 }
 
 .controls-wrapper {
-    width: 100%;
-    height: 100%;
+    width: 200px;
+    height: 50px;
+    flex-shrink: 0;
+    z-index: 3;
     align-items: center;
     display: flex;
     justify-content: center;
+    border-radius: 8px;
 }

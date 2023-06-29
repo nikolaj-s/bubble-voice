@@ -7,9 +7,9 @@ export const BuildSystemNotification = (data) => {
       <div style='width: 40px; height: 40px; border-radius: ${data.shape === 'square' ? '5px' : '50%'}; overflow: hidden; flex-shrink: 0;' class="image-container">
           <image style="width: 100%; height: 100%; object-fit: cover;"src="${data.user_image}" />
         </div>    
-    <h3 style="margin-left: 10px; font-family: sans-serif; color: ${data.textColor}; word-break: keep-all; word-wrap: normal; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${data.display_name}${data.channel_name ? ' / ' + data.channel_name : ""}</h3>
+    <h3 style="font-size: 0.9rem;margin-left: 10px; font-family: sans-serif; color: ${data.textColor}; word-break: keep-all; word-wrap: normal; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${data.display_name}${data.channel_name ? ' / ' + data.channel_name : ""}</h3>
   </div >
-    <div style="margin-left: 50px; margin-top: 0px; font-family: sans-serif; color: white; font-size: 14px; overflow: hidden;">
+    <div style="margin-left: 50px; margin-top: 0px; font-family: sans-serif; color: white; font-size: 12px; overflow: hidden;">
       ${data?.content?.text ?
       `<p style="margin: 0px; color: ${data.textColor};">${data?.content?.text}</p> `
       : ""}

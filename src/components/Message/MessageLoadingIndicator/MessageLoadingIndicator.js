@@ -1,14 +1,16 @@
 import React from 'react'
 import {motion} from 'framer-motion'
 import { useSelector } from 'react-redux'
-import { selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
+import { selectPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 
 export const MessageLoadingIndicator = () => {
 
   const color = useSelector(selectTextColor);
 
+  const primaryColor = useSelector(selectPrimaryColor);
+
   return (
-    <div className='message-loading-container'>
+    <div style={{backgroundColor: primaryColor}} className='message-loading-container'>
         <motion.svg  
             animate={{rotate: ["0deg", "360deg"]}}
             transition={{ease: "linear", duration: "1", repeat: Infinity}}

@@ -1,6 +1,6 @@
 
 .user-status-menu-container {
-    
+    position: relative;
     width: calc(100%);
     display: flex;
     top: 0;
@@ -15,12 +15,17 @@
     margin-top: 5px;
 }
 
+.user-status-menu-container h2 {
+    padding: 0px;
+    margin: 6px 5px;
+    font-weight: 400;
+}
+
 .inner-status-menu-container {
     flex-grow: 4;
-    border-radius: var(--border-radius);
     overflow: hidden;
-    width: 100%;
-    max-height: 370px;
+    width: calc(100% - 10px);
+    padding: 5px;
 }
 
 .inner-status-menu-spacer {
@@ -34,4 +39,5 @@
     padding: 0;
     margin: 0 auto;
     border-radius: 5px;
+    width: calc(100% - 6px);
 }

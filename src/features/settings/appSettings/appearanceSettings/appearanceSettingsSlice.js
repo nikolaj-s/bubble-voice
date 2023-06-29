@@ -27,7 +27,8 @@ const appearanceSettingsSlice = createSlice({
         accentColor: "rgb(217, 217, 217)",
         textColor: "rgb(0, 0, 0)",
         activationColor: "rgb(58, 235, 52)",
-        glassColor: "",
+        glassColor: "rgb(236, 236, 236, 0.8)",
+        transparentPrimary: 'rgba(255, 255, 255, 0)',
         darkModeEnabled: true,
         rgbBackground: false,
         changeMade: false,
@@ -113,11 +114,25 @@ const appearanceSettingsSlice = createSlice({
                 accentColor: "rgb(51, 71, 86)",
                 textColor: "rgb(255, 255, 255)",
                 activationColor: "rgb(255, 76, 41)"
+            },
+            vintage: {
+                primaryColor: "rgb(45, 67, 86)",
+                secondaryColor: "rgb(67, 91, 102)",
+                accentColor: "rgb(167, 111, 111)",
+                textColor: "rgb(250, 240, 228)",
+                activationColor: "rgb(255, 76, 41)"
+            },
+            pastel_dark: {
+                primaryColor: "rgb(57, 62, 70)",
+                secondaryColor: "rgb(34, 40, 49)",
+                accentColor: "rgb(181, 84, 0)",
+                textColor: "rgb(238, 238, 238)",
+                activationColor: "rgb(255, 76, 41)"
             }
         },
         glass: false,
         current_theme: {label: 'Light', state: 'light'},
-        theme_options: [{label: 'Light', state: 'light'}, {label: 'Dark', state: 'dark'}, {label: 'Custom', state: 'custom'}, {label: "Fall", state: 'fall'}, {label: "Forest", state: 'forest'}, {label: 'Neon', state: 'neon'}, {label: 'Coffee', state: 'coffee'}, {label: 'Green', state: 'green'}, {label: 'Dusk', state: 'dusk'}]
+        theme_options: [{label: 'Light', state: 'light'}, {label: 'Dark', state: 'dark'}, {label: 'Custom', state: 'custom'}, {label: "Fall", state: 'fall'}, {label: "Forest", state: 'forest'}, {label: 'Neon', state: 'neon'}, {label: 'Coffee', state: 'coffee'}, {label: 'Green', state: 'green'}, {label: 'Dusk', state: 'dusk'}, {label: "Vintage", state: 'vintage'}, {label: "Pastel Dark", state: "pastel_dark"}]
     },
     reducers: {
         updateColorValue: (state, action) => {
@@ -134,6 +149,8 @@ const appearanceSettingsSlice = createSlice({
 
             if (action.payload.type === 'primaryColor') {
                 document.querySelector(':root').style.setProperty('--primary-color', state.primaryColor)
+
+                state.transparentPrimary = `rgba(${state.primaryColor.split('rgb(')[1].split(')')[0]}, 0)`
             }
 
             if (action.payload.type === 'primaryColor') {
@@ -151,6 +168,8 @@ const appearanceSettingsSlice = createSlice({
             state.activationColor = state.color_themes[action.payload.state].activationColor;
 
             state.glassColor = `rgba(${state.secondaryColor.split('rgb(')[1].split(')')[0]}, 0.9)`
+
+            state.transparentPrimary = `rgba(${state.primaryColor.split('rgb(')[1].split(')')[0]}, 0)`
 
             document.querySelector(':root').style.setProperty('--range-background', state.color_themes[action.payload.state].textColor)
         
@@ -217,6 +236,8 @@ const appearanceSettingsSlice = createSlice({
 
                     state.activationColor = state.color_themes[action.payload.current_theme.state].activationColor;
                     
+                    state.transparentPrimary = `rgba(${state.primaryColor.split('rgb(')[1].split(')')[0]}, 0)`
+
                     document.querySelector(':root').style.setProperty('--range-background', state.color_themes[action.payload.current_theme.state].textColor)
                 
                     document.querySelector(':root').style.setProperty('--primary-color', state.color_themes[action.payload.current_theme.state].primaryColor)
@@ -234,7 +255,7 @@ const appearanceSettingsSlice = createSlice({
 
                 if (action.payload.disableServerAmbiance) state.disableServerAmbiance = true;
 
-                state.glassColor = `rgba(${state.secondaryColor.split('rgb(')[1].split(')')[0]}, 0.6)`
+                state.glassColor = `rgba(${state.secondaryColor.split('rgb(')[1].split(')')[0]}, 0.8)`
 
                 return;
             } catch (error) {
@@ -252,9 +273,7 @@ const appearanceSettingsSlice = createSlice({
 export const {toggleDisableServerAmbiance, updateGlassState, updateGradient, updateColorValue, changeTheme, saveTheme, toggleRgbBackGround } = appearanceSettingsSlice.actions;
 
 // color selectors
-export const selectTransparentPrimaryColor = state => {
-    return `rgba(${state.appearanceSettingsSlice.primaryColor.split('rgb(')[1].split(')'[0])}, 0)`
-}
+export const selectTransparentPrimaryColor = state => state.appearanceSettingsSlice.transparentPrimary;
 
 export const selectPrimaryColor = state => state.appearanceSettingsSlice.primaryColor;
 

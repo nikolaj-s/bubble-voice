@@ -1,0 +1,23 @@
+
+.date-spacer-container {
+    width: 98%;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    opacity: 0.5;
+    flex-shrink: 0;
+    margin: 15px 0px;
+}
+
+.date-spacer-container p {
+    flex-shrink: 0;
+    white-space: nowrap;
+    margin: 0px 5px;
+    cursor: default;
+}
+
+.date-spacer-line {
+    width: 100%;
+    height: 1px;
+}

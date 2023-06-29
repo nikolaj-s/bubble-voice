@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Image } from '../../components/Image/Image';
 
 // state
-import { selectExpandedContent, selectIframeExpanded, selectRedditExpanded, setExpandedContent } from './ExpandContentSlice'
+import { selectExpandedContent, selectIframeExpanded, selectRedditExpanded, selectVideoStartTime, setExpandedContent } from './ExpandContentSlice'
 
 // style
 import "./ExpandContent.css";
@@ -41,6 +41,8 @@ export const ExpandContent = () => {
     const textColor = useSelector(selectTextColor);
 
     const disableTransparancyEffects = useSelector(selectDisableTransparancyEffects);
+
+    const videoStartTime = useSelector(selectVideoStartTime);
 
     const closeExpanded = () => {
         dispatch(setExpandedContent(false));
@@ -127,7 +129,7 @@ export const ExpandContent = () => {
                 <Iframe maxWidth={"90%"} link={iframe} />
                 :
                 expandedContent?.includes('mp4') ?
-                <Video video={expandedContent} /> 
+                <Video forceAutoPlay={true} video={expandedContent} currentTime={videoStartTime} /> 
                 :        
                 <Image objectFit='contain' image={expandedContent} />}
             </div>

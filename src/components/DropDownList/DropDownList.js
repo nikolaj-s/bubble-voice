@@ -1,7 +1,8 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
-import { selectPrimaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassColor, selectPrimaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { TextButton } from '../buttons/textButton/TextButton';
+import {RadioButton} from '../buttons/RadioButton/RadioButton';
 
 import "./DropDownList.css";
 import { DownIcon } from '../Icons/DownIcon/DownIcon';
@@ -11,6 +12,8 @@ export const DropDownList = ({selectedItem, list = ["No Options"], action, state
     const primaryColor = useSelector(selectPrimaryColor);
 
     const textColor = useSelector(selectTextColor);
+
+    const glassColor = useSelector(selectGlassColor);
 
     const [open, toggleOpen] = React.useState(false)
 
@@ -26,38 +29,37 @@ export const DropDownList = ({selectedItem, list = ["No Options"], action, state
     }
 
     return (
-        <div 
-        className='drop-down-container'>
-            <TextButton textAlign='start' action={toggleDropDown} name={selectedItem} />
-            <div style={{rotate: open ? '-180deg' : null}} className='drop-down-icon-wrapper'>
-                <DownIcon />
+        <>
+            <div 
+            className='drop-down-container'>
+                <TextButton textAlign='start' action={toggleDropDown} name={selectedItem} />
+                <div style={{rotate: open ? '-180deg' : null}} className='drop-down-icon-wrapper'>
+                    <DownIcon />
+                </div>
+                
             </div>
             {open && stateType !== 'error' ?
-            <div 
-            style={{
-                backgroundColor: primaryColor
-                }}
-            className='drop-down-content'>
-                {list.length === 0 ? 
-                <li
+                <div 
+                onClick={() => {toggleDropDown()}}
                 style={{
-                    color: textColor
-                }}
-                >No Devices Available</li>
-                :
-                list.map((item, key) => {
-                    return (
-                        <li 
-                        onClick={() => {
-                            selectItem(item)
-                        }}
+                    backgroundColor: glassColor
+                    }}
+                className='drop-down-content'>
+                    <div onClick={(e) => {e.stopPropagation()}} style={{backgroundColor: primaryColor}} className='inner-drop-down-container'>
+                        {list.length === 0 ? 
+                        <li
                         style={{
-                        color: textColor,
-                        backgroundColor: primaryColor
-                        }} key={key} >{item.label}</li>
-                        )
-                    })}
-            </div> : null}
-        </div>
+                            color: textColor
+                        }}
+                        >No Devices Available</li>
+                        :
+                        list.map((item, key) => {
+                            return (
+                                <RadioButton  name={item.label} action={() => {selectItem(item)}} state={item.label === selectedItem} />
+                                )
+                            })}
+                    </div>
+                </div> : null}
+        </>
     )
 }

@@ -3,11 +3,16 @@ import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react'
 
 import "./VideoPlayOverlayAnimation.css";
+import { useSelector } from 'react-redux';
+import { selectGlassColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 export const VideoPlayOverlayAnimation = ({interacted, playing, color}) => {
-  return (
+    
+    const glassColor = useSelector(selectGlassColor);
+
+    return (
     <AnimatePresence exitBeforeEnter>
-        <div style={{pointerEvents: interacted ? 'none' : 'all'}} className='video-component-play-overlay'>
+        <div style={{pointerEvents: interacted ? 'none' : 'all', backgroundColor: interacted ? null : glassColor}} className='video-component-play-overlay'>
             {!interacted ? 
             
                 <svg className='video-component-initial-play-button-display' width="11" height="14" viewBox="0 0 11 14" fill="none" xmlns="http://www.w3.org/2000/svg">

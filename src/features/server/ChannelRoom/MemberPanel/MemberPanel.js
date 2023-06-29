@@ -1,20 +1,24 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { selectCurrentMemberPanel, selectPanelLeftPos, setSelectedMember } from './MemberPanelSlice';
+import { selectCurrentMemberPanel, setSelectedMember } from './MemberPanelSlice';
 
 import "./MemberPanel.css";
 import { selectGlassColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { Image } from '../../../../components/Image/Image';
 import { selectServerGroups, selectServerMembers, throwServerError } from '../../ServerSlice';
 import { TextButton } from '../../../../components/buttons/textButton/TextButton';
-import { selectProfileBio, selectProfileColor, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
+import { selectProfileBio, selectProfileColor, selectProfilePinnedMessage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
 import { socket } from '../../ServerBar/ServerBar';
 import { ScoreButton } from '../../../../components/buttons/ScoreButton/ScoreButton';
 import { openDirectMessage } from '../../../Messages/MessagesSlice';
 import { UserBio } from '../../../../components/UserBio/UserBio';
 import { FetchMemberDetails } from '../../../../util/FetchMemberDetails';
+import { CloseIcon } from '../../../../components/Icons/CloseIcon/CloseIcon';
+import { AnimatePresence, motion } from 'framer-motion';
+import { PinnedProfileMessage } from '../../../../components/PinnedProfileMessage/PinnedProfileMessage';
+import { GetTimeDifference } from '../../../../util/GetTimeDifference';
 
 export const MemberPanel = () => {
 
@@ -28,7 +32,9 @@ export const MemberPanel = () => {
 
     const [color, setColor] = React.useState(false);
 
-    const [transparentColor, setTransparentColor] = React.useState(false);
+    const [message, setMessage] = React.useState({});
+
+    const [timeStamp, setTimeStamp] = React.useState("");
 
     const userColor = useSelector(selectProfileColor);
 
@@ -50,13 +56,11 @@ export const MemberPanel = () => {
 
     const s_index = serverGroups.findIndex(s => s._id === member.server_group)
 
-    const leftPost = useSelector(selectPanelLeftPos);
-
     const userbio = useSelector(selectProfileBio);
 
-    const closePanel = (e) => {
+    const pinned_message = useSelector(selectProfilePinnedMessage);
 
-        if (e.target.className !== 'outer-member-panel-container') return;
+    const closePanel = (e) => {
 
         dispatch(setSelectedMember(""))
     }
@@ -81,7 +85,11 @@ export const MemberPanel = () => {
         dispatch(setSelectedMember(""));
     }
 
+    let timeout;
+
     React.useEffect(() => {
+
+        clearTimeout(timeout);
 
         toggleLoading(true);
 
@@ -98,22 +106,29 @@ export const MemberPanel = () => {
                 toggleLoading(false);
 
                 setColor(userColor);
+
+                setMessage(pinned_message);
                 
-                setTransparentColor(userColor.split('1)')[0] + '0.5)');
             } else if (members[u_index]?.username) {
 
-                FetchMemberDetails(members[u_index]?.username)
-                .then(user => {
-                    if (user.error) return dispatch(throwServerError({error: true, errorMessage: "Fatal Error Fetching Member Details"}))
-                    
-                    if (user.bio) setBio(user.bio);
+                if (members[u_index]?.color) setColor(members[u_index]?.color);
 
-                    if (user.color) setColor(user.color);
+                setTimeStamp(GetTimeDifference(members[u_index]?.last_online))
 
-                    if (user.color) setTransparentColor(user.color.split('1)')[0] + '0.5)');
-                    
-                    toggleLoading(false);
-                })
+                timeout = setTimeout(() => {
+                    FetchMemberDetails(members[u_index]?.username)
+                    .then(user => {
+                        if (user.error) return dispatch(throwServerError({error: true, errorMessage: "Fatal Error Fetching Member Details"}))
+                        
+                        if (user.bio) setBio(user.bio);
+
+                        
+                        
+                        if (user.pinned_message) setMessage(user.pinned_message);
+
+                        toggleLoading(false);
+                    })
+                }, 600)
 
             }
         }
@@ -121,63 +136,76 @@ export const MemberPanel = () => {
        
 
         return () => {
+
+            clearTimeout(timeout);
+
             setBio("");
 
             setColor(false);
 
             setMember({});
 
-            setTransparentColor(false);
+            setMessage({});
         }
 
-    }, [selectedMember, members])
+    }, [selectedMember, members, pinned_message])
     
     return (
         <>
-        {selectedMember ?
-        <div style={{backgroundColor: transparentColor || glassColor}} onClick={closePanel} className='outer-member-panel-container'>
-            <div 
-            style={{backgroundColor: primaryColor, left: leftPost}}
-            className='member-panel-container'>
-                <div className='member-panel-image-container'>
-                    <Image disableErr={true} position='absolute' image={member.user_banner} />
-                    <div style={{borderRadius: member.profile_picture_shape === 'square' ? '5px' : '50%'}} className='member-panel-profile-picture'>
-                        <Image image={member.user_image} />
-                    </div>
+        <AnimatePresence>
+            {selectedMember ?
+            <motion.div 
+            key={'member-panel-' + member.username}
+            initial={{top: '-100%'}}
+            animate={{top: '0%'}}
+            exit={{top: '100%'}}
+            style={{backgroundColor: color ? color : secondaryColor}} onClick={closePanel} className='outer-member-panel-container'>
+                <div onClick={closePanel} className='close-member-panel-button'>
+                    <CloseIcon />
                 </div>
-                <div style={{backgroundColor: color ? color : secondaryColor}} className='member-panel-info-container'>
-                    <div style={{backgroundColor: primaryColor}} className='username-wrapper-container'>
-                        <h3 style={{color: textColor}}>{member.display_name}</h3>
-                        <h4 style={{color: textColor, opacity: 0.8}}>#{member.username}</h4>
-                        <div className='member-score-container'>
-                            <ScoreButton description={"Server Score"} padding={3} width={15} height={15}  />
-                            <p style={{color: textColor}}>{member.server_score}</p>
+                <div 
+                onClick={(e) => {e.stopPropagation()}}
+                style={{backgroundColor: color || primaryColor, boxShadow: `0 0 50px 50px rgba(0, 0, 0, 0.5)`}}
+                className='member-panel-container'>
+                    <div className='member-panel-image-container'>
+                        <Image disableErr={true} position='absolute' image={member.user_banner} />
+                        <div style={{borderRadius: member.profile_picture_shape === 'square' ? '5px' : '50%'}} className='member-panel-profile-picture'>
+                            <Image image={member.user_image} />
                         </div>
                     </div>
-                    {member.username !== username && member.status !== 'offline' ? 
-                    <div className='member-panel-button-wrapper'>
-                        <TextButton id={'member-panel-poke-button'} action={poke} name={"Poke"} /> 
-                        <TextButton action={handleOpenDirectMessage} name={"Send Message"} />
+                    <div style={{backgroundColor: color ? color : secondaryColor}} className='member-panel-info-container'>
+                        <div style={{backgroundColor: primaryColor}} className='username-wrapper-container'>
+                            <h3 style={{color: color || textColor}}>{member.display_name}</h3>
+                            <h4 style={{color: textColor, opacity: 0.8}}>#{member.username}</h4>
+                            <div className='member-score-container'>
+                                <ScoreButton description={"Server Score"} padding={3} width={15} height={15}  />
+                                <p style={{color: textColor}}>{member.server_score}</p>
+                            </div>
+                        </div>
+                        {member.username !== username && member.status !== 'offline' ? 
+                        <div className='member-panel-button-wrapper'>
+                            <TextButton id={'member-panel-poke-button'} action={poke} name={"Poke"} /> 
+                            <TextButton action={handleOpenDirectMessage} name={"Send Message"} />
+                        </div>
+                        : null}
+                        <div style={{backgroundColor: primaryColor}} className='server-user-details-wrapper-container'>
+                            <h3 style={{color: textColor, marginBottom: 10}}>Status</h3>
+                            <p style={{color: textColor, margin: '0 0 0 5px'}}>{member?.status === 'offline' && timeStamp !== "" ? 'Last Online: ' + timeStamp : member.status}</p>
+                
+                            <h3 style={{color: textColor, margin: '10px 0'}}>Member Since</h3>
+                            <p style={{color: textColor, margin: '0 0 0 5px'}}>{member?.join_date?.split('T')[0]}</p>
+                            <h3 style={{color: textColor, margin: '10px 0'}}>Server Group</h3>
+                            <p style={{color: textColor, margin: '0 0 0 5px'}}>{
+                                s_index !== -1 ? serverGroups[s_index]?.server_group_name : null
+                            }</p>
+                        </div>
+                        <UserBio loading={loading} bio={bio} margin={'5px 0px'} />
+                        <PinnedProfileMessage loading={loading} message={message} />   
                     </div>
-                    : null}
-                    <div style={{backgroundColor: primaryColor}} className='server-user-details-wrapper-container'>
-                        <h3 style={{color: textColor, marginBottom: 10, fontSize: '1.4rem'}}>Status</h3>
-                        <p style={{color: textColor, margin: '0 0 0 5px'}}>{member?.status}</p>
-            
-                        <h3 style={{color: textColor, margin: '10px 0', fontSize: '1.4rem'}}>Member Since</h3>
-                        <p style={{color: textColor, margin: '0 0 0 5px'}}>{member?.join_date?.split('T')[0]}</p>
-                        <h3 style={{color: textColor, margin: '10px 0', fontSize: '1.4rem'}}>Server Group</h3>
-                        <p style={{color: textColor, margin: '0 0 0 5px'}}>{
-                            s_index !== -1 ? serverGroups[s_index]?.server_group_name : null
-                        }</p>
-                    </div>
-                    <UserBio bio={bio} margin={'5px 0px'} />
-                   
                 </div>
-                <Loading loading={loading} />
-            </div>
-        </div>
-        : null}
+            </motion.div>
+            : null}
+        </AnimatePresence>
         </>
     )
 }

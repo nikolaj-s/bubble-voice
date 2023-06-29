@@ -3,10 +3,10 @@
     z-index: 10;
     top: 0px;
     left: 0;
-    width: 25%;
+    
     height: calc(100%);
     display: flex;
-    min-width: 265px;
+    width: 262px;
     justify-content: center;
 }
 
@@ -23,9 +23,9 @@
     position: fixed;
     top: 0;
     right: 0;
-    width: calc(75% - 2px - 10px);
-    max-width: calc(100% - 277px);
-    height: 100%;
+    width: calc(100% - 262px);
+    max-width: calc(100% - 275px - 8px - 5px);
+    height: calc(100% - 39px);
     overflow-y: auto;
     display: flex;
     padding-left: 10px;

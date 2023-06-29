@@ -9,8 +9,8 @@ export const ImageButton = ({action}) => {
 
   return (
     <ButtonAnimationWrapper
-    width={25}
-    height={25}
+    width={22}
+    height={22}
     margin="0px"
     action={action}
     borderRadius={5}

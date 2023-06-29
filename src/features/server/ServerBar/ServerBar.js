@@ -24,7 +24,6 @@ import { setHeaderTitle } from '../../contentScreen/contentScreenSlice';
 import { removeServer, setSideBarHeader, updateServer } from '../../sideBar/sideBarSlice';
 import { ChannelList } from './ChannelList/ChannelList';
 import { ServerSettingsMenu } from '../serverSettings/ServerSettingsMenu';
-import { DisconnectButtonWrapper } from './DisconnectButtonWrapper/DisconnectButtonWrapper';
 
 // style's
 import "./ServerBar.css"
@@ -341,6 +340,8 @@ const Bar = () => {
 
                 dispatch(deleteMessage(data));
 
+                dispatch(newMessage(data));
+
                 dispatch(removePinnedMessage({message: {_id: data.message_id}}));
             } catch (error) {
                 console.log(error)
@@ -350,7 +351,7 @@ const Bar = () => {
         socket.on('left server', (data) => {
             try {
                 
-                dispatch(userLeavesServer(data.member_id));
+                dispatch(userLeavesServer(data));
             
             } catch (error) {
                 console.log(error)
@@ -659,7 +660,7 @@ const Bar = () => {
 
                             let l_windows = res.filter(w => !w.id.includes('screen'));
                             console.log(l_windows[0])
-                            dispatch(setCurrentScreen(l_windows[0].id));
+                            dispatch(setCurrentScreen({id: l_windows[0].id, name: l_windows[0].name}));
                             
                             dispatch(playSoundEffect('controlSoundEffect'));
 
@@ -769,7 +770,7 @@ const Bar = () => {
             }
 
         } catch (error) {
-            console.log(error)
+            return;
         }
     }, [current_channel, audioOutput])
     
@@ -792,9 +793,8 @@ const Bar = () => {
             className='server-bar-container'>
             <ServerBanner serverImage={serverBanner} serverName={serverName} />
             <MobileServerBanner serverImage={serverBanner} serverName={serverName} />
-            <Loading loading={loading} forceStop={true} /> 
-            <ChannelList />
-            <DisconnectButtonWrapper disconnect={disconnect} leave={leaveServer} channel_id={current_channel_id} /> 
+            
+            <ChannelList loading={loading} />
         </motion.div>
         <ServerSettingsMenu />
         </>

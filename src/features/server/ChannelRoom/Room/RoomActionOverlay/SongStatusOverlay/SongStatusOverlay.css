@@ -3,16 +3,20 @@
     position: absolute;
     top: 0px;
     width: auto;
-    width: 100%;
+    width: calc(100% - 5px);
+    padding-left: 5px;
     z-index: 5;
     height: 55px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
 }
 
 .song-skipped-overlay-container p {
     font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .song-skip-notification-image {
@@ -21,5 +25,5 @@
     border-radius: 50%;
     overflow: hidden;
     flex-shrink: 0;
-    margin-right: 2rem;
+    margin: 0px 5px;
 }

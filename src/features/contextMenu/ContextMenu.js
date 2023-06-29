@@ -328,11 +328,11 @@ export const ContextMenu = () => {
                 dispatch(setContextMenuOptions({state: 'copyLink', value: p.src}));
             
             }
-
-            if (p.className === 'streaming-video-player-container' || p.className === 'streaming-video-player') {
+            
+            if (p.className === 'streaming-video-player-container') {
                 try {
-                    const id = p.children[0].classList[1];
-
+                    const id = p.children[1].classList[1];
+                    console.log(p.children)
                     if (id) {
                         if (id !== `${username}-streaming-player`) {
                             const L_stream_vol = USER_PREFS.get(id);
@@ -673,45 +673,9 @@ export const ContextMenu = () => {
 
         try {
 
-            document.getElementsByClassName(`audio-source-for-user-${memberId}`)[0].volume = value > 1 ? 1 : value;
+            let el = document.getElementsByClassName(`audio-source-for-user-${memberId}`)[0]
             
-            // const consumer = client.getConsumer(el.id);
-
-            // if (!el || !consumer) return;
-
-            // const stream = new MediaStream();
-
-            // stream.addTrack(consumer.track);
-
-            // new_el = document.createElement('audio');
-
-            // new_el.volume = value > 1 ? 1 : value;
-
-            // new_el.hidden = true;
-
-            // new_el.id = consumer.id;
-
-            // new_el.autoplay = true;
-
-            // new_el.className = `audio-source-for-user-${memberId}`;
-
-            // let audCtxSrc = audioCtx.createMediaStreamSource(stream);
-
-            // let dst = audioCtx.createMediaStreamDestination();
-
-            // let gainNode = audioCtx.createGain();
-
-            // audCtxSrc.connect(gainNode);
-
-            // gainNode.connect(dst);
-            
-            // gainNode.gain.value = value > 1 ? value : 1;
-
-            // new_el.srcObject = dst.stream;
-
-            // el.remove();
-            
-            // document.getElementById(memberId).appendChild(new_el);
+            el.volume = value > 1 ? 1 : value;
 
         } catch (error) {
             console.log(error)
@@ -854,6 +818,8 @@ export const ContextMenu = () => {
 
             const stream = document.getElementsByClassName(`${memberId}-screen-share-stream`);
 
+            const stream_audio = document.getElementsByClassName(`${memberId}-stream-audio`)
+            console.log(stream_audio)
             if (stream.length > 0) {
 
                 const consumerId = stream[0].id;
@@ -873,6 +839,25 @@ export const ContextMenu = () => {
                     })
 
                     document.getElementById(`${consumerId}container`).style.display = 'flex'
+                }
+
+            }
+
+            if (stream_audio.length > 0) {
+
+                const consumerId = stream_audio[0].id;
+
+                if (!disableStreamLocalState === true) {
+                    await socket.request('pauseConsumer', {consumerId: consumerId})
+                    .catch(error => {
+                        dispatch(throwServerError({errorMessage: error.errorMessage}));
+                    })
+
+                } else {
+                    await socket.request('resumeConsumer', {consumerId: consumerId})
+                    .catch(error => {
+                        dispatch(throwServerError({errorMessage: error.errorMessage}));
+                    })
                 }
 
             }
@@ -1126,7 +1111,7 @@ export const ContextMenu = () => {
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideNonVideoParticapents")}} state={hideNonVideoParticapents} name={"Hide Non Video Participants"} /> : null}
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("disableMessagePopUp")}} state={disableMessagePopup} name={"Disable Message Overlay"} /> : null}
             {channelSpecificSettingsState ? <BoolButton action={handleToggleSocialSoundEffect} state={socialSoundEffect} name="Enable Social Sound Effect" /> : null}
-            {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange('popOutUserStreams')}} state={popOutUserStreams} name={"Disable User Pop Out"} /> : null}
+           
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideUserStatus")}} state={hideUserStatus} name={"Hide User Status"} /> : null}
             {channelSpecificSettingsState || mediaWidgetState ? <BoolButton action={() => {handleChannelSpecificStateChange('disableMediaWidget')}} state={disableMediaWidget} name={"Disable Media Widget"} /> : null}
             {addToMusicWidget ? <CtxButton action={handlePlayOnMusicWidget} name="Play On Music Widget" icon={<PlayOnWidgetIcon />}/> : null}

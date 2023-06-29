@@ -244,6 +244,8 @@ export class RoomClient {
                 
                 this.consumers.set(consumer.id, consumer);
 
+                const prefs = USER_PREFS.get(user._id);
+
                 let el;
 
                 let par;
@@ -263,8 +265,6 @@ export class RoomClient {
 
                     el.playsInline = false;
 
-                    const prefs = USER_PREFS.get(user._id);
-
                     el.style.transform = (user.mirror_web_cam && prefs?.flip_web_cam) ? null : (user.mirror_web_cam && !prefs?.flip_web_cam) ? 'scaleX(-1)' : null;
 
                     el.autoplay = true;
@@ -282,8 +282,6 @@ export class RoomClient {
                     
                 } else if (consumer.rtpParameters.codecs[0].mimeType === 'video/H264' || consumer.rtpParameters.codecs[0].mimeType === 'video/rtx' || appData.type === 'screen share') {
                     // display incoming screen stream
-
-                    const prefs = USER_PREFS.get(user._id);
 
                     stream.getVideoTracks()[0].contentHint = 'motion'
                     
@@ -305,6 +303,12 @@ export class RoomClient {
 
                         el = document.createElement('video');
 
+                        let stream_title_container = document.createElement('div');
+                        let stream_title = document.createElement('p');
+                        stream_title_container.className = 'stream-title-container';
+                        stream_title.innerHTML = appData?.name;
+                        stream_title_container.append(stream_title);
+
                         el.srcObject = stream;
                         
                         par.id = consumer.id + 'container';
@@ -315,11 +319,13 @@ export class RoomClient {
 
                         el.className = `streaming-video-player ${user._id} ${user._id}-screen-share-stream`
 
-                        el.playsInline = false;
+                        el.playsInline = true;
 
-                        el.muted = false;
+                        el.muted = true;
 
                         el.volume = 1;
+
+                        par.appendChild(stream_title_container);
 
                         par.appendChild(el);
 
@@ -344,13 +350,24 @@ export class RoomClient {
 
                     el.autoplay = true;
                     // handle incoming audio
-                    if (appData?.type === 'screen share') {
+                    
+                    if (appData?.type === 'stream audio') {
 
-                        const user_stream_volume = USER_PREFS.get(user._id);
+                        const existing_audio = document.getElementsByClassName(`${user._id}-stream-audio`);
+
+                        if (existing_audio.length > 0) existing_audio[0].remove();
+                    
+                        if (prefs?.disable_stream) {
+                            this.pauseConsumerById(consumer.id)
+                        }
 
                         el.className = `${user._id}-stream-audio`;
+                        console.log(prefs?.stream_volume)
+                        el.volume = 1;
 
-                        el.volume = user_stream_volume?.stream_volume ? user_stream_volume.stream_volume : 1;
+                        el.srcObject = stream;
+                        
+                        audioCtx.resume();
 
                         document.getElementById('live-chat-wrapper').appendChild(el);
                     
@@ -495,7 +512,7 @@ export class RoomClient {
         }
     }
 
-    async produce(type, deviceId = null) {
+    async produce(type, deviceId = null, screenName, experimental_audio = false) {
 
         let producer;
 
@@ -577,7 +594,7 @@ export class RoomClient {
         let microphone_stream;
 
         try {
-            stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
+            stream = (screen && experimental_audio) ? await navigator.mediaDevices.getDisplayMedia({video: {frameRate: 30, echoCancellation: true, deviceId: deviceId, width: 1280, height: 720}, audio: {deviceId: deviceId, echoCancellation: true, autoGainControl: false, noiseSuppression: false}, systemAudio: 'exclude'}) : await navigator.mediaDevices.getUserMedia(mediaConstraints);
 
             if (screen) {
 
@@ -593,7 +610,7 @@ export class RoomClient {
                 let dst = audioCtx.createMediaStreamDestination();
 
                 let gainNode = audioCtx.createGain();
-                
+             
                 gainNode.gain.value = this.microphoneInputVolume;
                 
                 [audCtxSrc, gainNode, dst].reduce((a, b) => a && a.connect(b));
@@ -606,49 +623,34 @@ export class RoomClient {
             
             let params = {
                 track 
-            }
-
-            // let stream_audio;
-
-             if (screen) {
-                try {
-
-                    
-
-                } catch (error) {
-                    console.log(error)
-                }
-            
-             }  
+            } 
 
             if (!audio) {
-                params.appData = {type: screen ? 'screen share' : 'web cam'}
-                params.encodings = [
-                    {
-                    rid: 'r0',
-                    maxBitrate: 100000,
-                    scalabilityMode: 'L3T2',
-                    maxFramerate: 30.0,
-                    },
-                    {
-                    rid: 'r1',
-                    maxBitrate: 300000,
-                    scalabilityMode: 'L3T2',
-                    maxFramerate: 30.0
-                    },
-                    {
-                    rid: 'r2',
-                    maxBitrate: 900000,
-                    scalabilityMode: 'L3T2',
-                    maxFramerate: 30.0
-                    }
-                ]
+                params.appData = {type: screen ? 'screen share' : 'web cam', name: screenName}
+                // params.encodings = [
+                //     {
+                //     rid: 'r0',
+                //     maxBitrate: 100000,
+                //     scalabilityMode: 'L3T2',
+                //     maxFramerate: 30.0,
+                //     },
+                //     {
+                //     rid: 'r1',
+                //     maxBitrate: 300000,
+                //     scalabilityMode: 'L3T2',
+                //     maxFramerate: 30.0
+                //     },
+                //     {
+                //     rid: 'r2',
+                //     maxBitrate: 900000,
+                //     scalabilityMode: 'L3T2',
+                //     maxFramerate: 30.0
+                //     }
+                // ]
 
                 params.codec = this.device.rtpCapabilities.codecs.find(codec => codec.mimeType === 'video/H264');
                 // document change video bitrate start
-                params.codecOptions = {
-                    videoGoogleStartBitrate: 2000
-                }
+                
             }
 
             if (audio) {
@@ -696,55 +698,62 @@ export class RoomClient {
                 }
                 
                 stream[type] = 'screen'
-                par = document.createElement('div');
-                par.className = `streaming-video-player-container`
+
                 el = document.createElement('video');
+                
                 el.srcObject = stream;
+
                 el.id = producer.id;
-                par.id = producer.id + 'container';
+
                 el.autoplay = true;
-                el.className = 'stream';
+
                 el.muted = true;
+
                 el.volume = 0;
-                el.className = `streaming-video-player ${this.user.username}-streaming-player`
+
+                el.className = `user-stream-preview-source ${this.user.username}-streaming-player`
+
                 el.playsInline = true;
-                par.appendChild(el)
-                document.getElementById(this.user._id).parentNode.appendChild(par)
+                
+                document.getElementById('user-stream-source-wrapper').appendChild(el)
             
             }
 
             let stream_audio_producer;
 
-            // if (stream_audio) {
-            //   //  stream_audio.applyConstraints({echoCancellation: true, suppressLocalAudioPlayback: true})
-            //     let stream_audio_producer = await this.producerTransport.produce({ track: stream_audio })
+            if (screen && experimental_audio) {
+              //  stream_audio.applyConstraints({echoCancellation: true, suppressLocalAudioPlayback: true})
 
-            //     this.producers.set(stream_audio_producer.id, stream_audio_producer);
+                let stream_audio = stream.getAudioTracks()[0]
+
+                let stream_audio_producer = await this.producerTransport.produce({ track: stream_audio, appData: {type: 'stream audio'}})
+
+                this.producers.set(stream_audio_producer.id, stream_audio_producer);
             
-            //     stream_audio_producer.on('trackended', () => {
-            //         this.closeProducer(type);
-            //     })
+                stream_audio_producer.on('trackended', () => {
+                    this.closeProducer(type);
+                })
     
-            //     stream_audio_producer.on('transportclose', () => {
-            //         if (!audio) {
-            //             el.srcObject.getTracks().forEach(track => {
-            //                 track.stop();
-            //             })
-            //         }
+                stream_audio_producer.on('transportclose', () => {
+                    if (!audio) {
+                        el.srcObject.getTracks().forEach(track => {
+                            track.stop();
+                        })
+                    }
     
-            //         this.producers.delete(producer.id);
-            //     })
+                    this.producers.delete(producer.id);
+                })
     
-            //     stream_audio_producer.on('close', () => {
-            //         if (!audio) {
-            //             el.srcObject.getTracks().forEach(track => {
-            //                 track.stop();
-            //             })
-            //         }
+                stream_audio_producer.on('close', () => {
+                    if (!audio) {
+                        el.srcObject.getTracks().forEach(track => {
+                            track.stop();
+                        })
+                    }
     
-            //         this.producers.delete(producer.id);
-            //     })
-            // }
+                    this.producers.delete(producer.id);
+                })
+            }
             
             producer.on('trackended', () => {
                 this.closeProducer(type);
@@ -809,6 +818,8 @@ export class RoomClient {
             this.dispatch({action: 'webcam-loading-state', value: false})
 
             this.dispatch({action: 'screen-share-loading-state', value: false})
+
+            this.closeProducer(type);
 
             if (error.message.includes('Queue')) {
                 

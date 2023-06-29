@@ -114,6 +114,8 @@ export const RequestDeleteMessage = createAsyncThunk(
             const data = await socket.request('delete message', {channel_id: channel_id, message_id: message_id})
             .then(result => {
                 
+                dispatch(newMessage(result));
+
                 dispatch(removePinnedMessage({message: {_id: result.message_id}}))
                 
                 return result;
@@ -194,14 +196,11 @@ const SocialSlice = createSlice({
         messageCleanUp: (state, action) => {
             if (state.messages[action.payload]) {
 
-                state.messages[action.payload].forEach(m => {
-                    if (m.content?.image) {
-                        caches.delete(m.content.image)
-                    }
-                })
-
                 state.messages[action.payload] = state.messages[action.payload].slice(0, 15);
             }
+        },
+        toggleSocialAltLoading: (state, action) => {
+            state.altLoading = action.payload;
         }
     },
     extraReducers: {
@@ -293,6 +292,6 @@ export const selectLoadingMessages = state => state.SocialSlice.loading;
 
 export const selectAltSocialLoading = state => state.SocialSlice.altLoading;
 
-export const { receiveMessage, deleteMessage, clearSocialById, clearMessages, messageCleanUp } = SocialSlice.actions;
+export const { toggleSocialAltLoading, receiveMessage, deleteMessage, clearSocialById, clearMessages, messageCleanUp } = SocialSlice.actions;
 
 export default SocialSlice.reducer;

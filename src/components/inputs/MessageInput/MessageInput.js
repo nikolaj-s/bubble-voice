@@ -12,15 +12,16 @@ import { ImageButton } from './ImageButton/ImageButton';
 // style
 import "./MessageInput.css";
 import { SendButton } from './SendButton/SendButton';
-import { CharacterCount } from './CharacterCount/CharacterCount';
 import { ProcessingImageIndicator } from './ProcessingImageIndicator/ProcessingImageIndicator';
 import { ImageDropListener } from './ImageDropListener/ImageDropListener';
 import { SearchImageButton } from './SearchImageButton/SearchImageButton';
 import { ImageSearchPanel } from './ImageSearchPanel/ImageSearchPanel';
 import { selectHideUserStatus } from '../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { selectServerId } from '../../../features/server/ServerSlice';
+import { EmojiButton } from '../../buttons/EmojiButton/EmojiButton';
+import { EmojiMenu } from '../../EmojiPicker/EmojiMenu';
 
-export const MessageInput = ({send, text, keyCode, image, value, persist, updateInputHeight, socialRoute}) => {
+export const MessageInput = ({send, text, keyCode, image, value, persist, updateInputHeight, socialRoute, direct_message}) => {
 
     const [files, setFiles] = React.useState([{}])
 
@@ -31,6 +32,8 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
     const [percent, setPercent] = React.useState(0)
 
     const [searchingForImage, toggleSearchingForImage] = React.useState(false);
+
+    const [emojiMenu, toggleEmojiMenu] = React.useState(false);
 
     const primaryColor = useSelector(selectPrimaryColor);
     
@@ -109,7 +112,7 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
             
             setInputHeight(40); 
             updateInputHeight(50);
-        
+            
         }
         
         keyCode(e.keyCode)
@@ -124,6 +127,8 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
         updateInputHeight(50)
 
         send();
+
+        
     }
 
     const handleImageButton = () => {
@@ -148,11 +153,16 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
         
     }
 
+    const handleEmoji = (emoji) => {
+        text(value + " " + emoji.emoji)
+    }
+    
     return (
         <> 
         <AnimatePresence>
             {persist ? <ImageDropListener key={"image-drop-listener"} root={getRootProps({className: 'dropzone'})} /> : null}
-            <ImageSearchPanel inputHeight={inputHeight} key="message-image-search-container" serverId={serverId} selectImage={selectImage} searchingForImage={searchingForImage} />
+            <ImageSearchPanel direct_message={direct_message} close={toggleSearchingForImage} inputHeight={inputHeight} key="message-image-search-container" serverId={serverId} selectImage={selectImage} searchingForImage={searchingForImage} />
+            {emojiMenu ? <EmojiMenu direct_message={direct_message} action={handleEmoji} close={() => {toggleEmojiMenu(false)}} /> : null}
             <div
             style={{
                 borderBottomRightRadius: socialRoute ? 0 : hideUserStatus ? 10 : 0,
@@ -177,10 +187,13 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
                     onFocus={handleText}
                     id='social-input-selector' onKeyUp={handleKeyCode} onChange={handleText} value={value}  placeholder='Message' type="text" />
                     <div className='message-input-button-wrapper'>
-                        <SearchImageButton margin={!persist ? '0 5px 0 0' : null} action={handleSearchingForImageToggle} />
-                        {(persist && !processingImage) ? <ImageButton action={handleImageButton} /> : null}
-                        {processingImage ? <ProcessingImageIndicator percent={percent} /> : null}
-                        <SendButton color={textColor} action={handleSend} />
+                        <div className='message-input-inner-button-wrapper'>
+                            <EmojiButton action={() => {toggleEmojiMenu(!emojiMenu)}} desc_space={22} description={'Emoji'} width={18} height={18} padding={8} transparent={true} />
+                            <SearchImageButton action={handleSearchingForImageToggle} />
+                            {(persist && !processingImage) ? <ImageButton action={handleImageButton} /> : null}
+                            {processingImage ? <ProcessingImageIndicator percent={percent} /> : null}
+                            <SendButton color={textColor} action={handleSend} />
+                        </div>   
                     </div>
                 </motion.div>
             </div>

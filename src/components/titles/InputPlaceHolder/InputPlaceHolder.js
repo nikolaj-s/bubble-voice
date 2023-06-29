@@ -8,7 +8,7 @@ import { selectPrimaryColor, selectTextColor } from '../../../features/settings/
 // style
 import "./InputPlaceHolder.css";
 
-export const InputPlaceHolder = ({value, fontSize = '1.2rem', margin}) => {
+export const InputPlaceHolder = ({value, fontSize = '1.2rem', margin, height}) => {
 
     const primaryColor = useSelector(selectPrimaryColor);
 
@@ -20,7 +20,8 @@ export const InputPlaceHolder = ({value, fontSize = '1.2rem', margin}) => {
         style={{
             backgroundColor: primaryColor,
             fontSize: fontSize,
-            margin: margin
+            margin: margin,
+            height: height
         }}
         >
             <h3

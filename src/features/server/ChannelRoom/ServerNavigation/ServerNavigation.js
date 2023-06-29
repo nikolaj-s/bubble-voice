@@ -5,7 +5,7 @@ import { useAnimation, motion } from 'framer-motion';
 
 // state
 import { selectCurrentServerPageState, handleChangePage } from './ServerNavigationSlice';
-import { selectCurrentChannelId, selectUsersPermissions } from '../../ServerSlice';
+import { selectChannelSocialId, selectCurrentChannelId, selectCurrentlyViewChannelSocial, selectUsersPermissions, setChannelSocialId } from '../../ServerSlice';
 import { selectAccentColor, selectGlassColor, selectGlassState, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
@@ -15,8 +15,10 @@ import { SocialIcon } from '../../../../components/Icons/SocialIcon/SocialIcon';
 import { WidgetsIcon } from '../../../../components/Icons/WidgetsIcon/WidgetsIcon';
 import { PinIcon } from '../../../../components/Icons/PinIcon/PinIcon';
 import { MediaIcon } from '../../../../components/Icons/MediaIcon/MediaIcon';
-import { SubMenuButton } from '../../../../components/buttons/subMenuButton/SubMenuButton';
+import { AltCloseButton } from '../../../../components/buttons/AltCloseButton/AltCloseButton'
 import { selectHideUserStatus } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { OptionsButton } from '../../../../components/buttons/OptionsButton/OptionsButton';
+import { TextOnlyIcon } from '../../../../components/Icons/TextOnlyIcon/TextOnlyIcon';
 
 export const ServerNavigation = () => {
 
@@ -53,6 +55,10 @@ export const ServerNavigation = () => {
     const  glassState = useSelector(selectGlassState);
 
     const permissions = useSelector(selectUsersPermissions);
+
+    const socialId = useSelector(selectChannelSocialId);
+
+    const socialChannel = useSelector(selectCurrentlyViewChannelSocial);
     
     const [videoDesc, toggleVideoDesc] = React.useState(false);
 
@@ -89,6 +95,10 @@ export const ServerNavigation = () => {
         } else {
             toggleSocialDesc(action);
         }
+    }
+
+    const closeSocialRoute = () => {
+        dispatch(setChannelSocialId(""));
     }
 
     React.useEffect(() => {
@@ -199,7 +209,7 @@ export const ServerNavigation = () => {
             })
         }
     // eslint-disable-next-line
-    }, [page])
+    }, [page, socialChannel])
 
     const resize = () => {
         const el = document.getElementsByClassName('outer-server-page-wrapper')[0];
@@ -250,6 +260,7 @@ export const ServerNavigation = () => {
 
         style={{width: width}}
         className='server-navigation-container'>
+            {!socialId ?
             <div className='server-navigation-button-wrapper'>
                 {inChannel ?
                 <>
@@ -322,9 +333,19 @@ export const ServerNavigation = () => {
                     <MediaIcon color={textColor} />
                 </motion.div>
                
+            </div> :
+            <div className='channel-social-header-container'>
+                <div className='channel-social-header-wrapper'>
+                    <TextOnlyIcon />
+                    <h3 style={{color: textColor}}>{socialChannel.channel_name}</h3>
+                </div>
+                <div className='close-social-route-button'>
+                    <AltCloseButton action={closeSocialRoute} margin="0px 0px 0px 5px" width={25} borderRadius={3} height={16} padding={5} />
+                </div>
             </div>
-            <motion.div transition={{duration: 0.2}} className='server-navigation-filler'></motion.div>
-                {inChannel ? <SubMenuButton desc_width={150} transparent={true} altInvert={true} invert={true} description={"Room Quick Settings"} right_orientation_desc={true}  target={'live-chat-wrapper'} borderRadius={3} zIndex={3} top={0} height={7} left={null} width={15} /> : null}
+            }
+            {!socialId ? <div className='server-navigation-filler'></div> : null}
+            {inChannel ? <OptionsButton desc_width={100} transparent={true} description={"Room Options"} right_orientation_desc={true}  target={'live-chat-wrapper'} borderRadius={3} zIndex={3} top={0} height={7} left={null} width={15} /> : null}
         </motion.div>
     )
 }

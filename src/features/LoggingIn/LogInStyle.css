@@ -15,7 +15,7 @@
     width: 60%;
     height: 65%;
     min-width: 400px;
-    min-height: 700px;
+    min-height: 420px;
     max-width: 800px;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
@@ -41,8 +41,9 @@
 }
 
 .content-wrapper h2 {
-    font-size: 2.6rem;
+    font-size: 1.7rem;
     font-weight: 400;
+    margin-top: 0px;
     letter-spacing: var(--font-spacing);
 }
 

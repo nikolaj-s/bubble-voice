@@ -20,7 +20,7 @@ export const ScreenButton = ({thumbnail, id, name, action, icon}) => {
 
     const handleAction = (e) => {
         e.stopPropagation();
-        action(id)
+        action(id, name)
     }
 
     const handleAnimation = (color) => {
@@ -33,10 +33,10 @@ export const ScreenButton = ({thumbnail, id, name, action, icon}) => {
         <motion.div 
         onClick={handleAction}
         animate={animation}
-        style={{backgroundColor: secondaryColor}}
+        style={{backgroundColor: accentColor}}
         transition={{duration: 0.1}}
-        onMouseOver={() => {handleAnimation(accentColor)}}
-        onMouseOut={() => {handleAnimation(secondaryColor)}}
+        onMouseOver={() => {handleAnimation(secondaryColor)}}
+        onMouseOut={() => {handleAnimation(accentColor)}}
         className='screen-button-container' >
             <Image zIndex={0} position='absolute' cursor='pointer' image={thumbnail} objectFit="contain" />
             <p

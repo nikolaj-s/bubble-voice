@@ -1,9 +1,11 @@
 import React from 'react'
 
 import { ButtonAnimationWrapper } from '../ButtonAnimationWrapper/ButtonAnimationWrapper'
+import { useSelector } from 'react-redux'
+import { selectPrimaryColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 
 export const GradientButton = ({action, gradient, active, description}) => {
-
+    const primaryColor = useSelector(selectPrimaryColor);
     return (
         <ButtonAnimationWrapper
         action={action}
@@ -13,7 +15,9 @@ export const GradientButton = ({action, gradient, active, description}) => {
         description={description}
         active={active}
         margin={"5px"}
+        invert={true}
         desc_space={15}
+        active_background={primaryColor}
         >
             <div
             style={{

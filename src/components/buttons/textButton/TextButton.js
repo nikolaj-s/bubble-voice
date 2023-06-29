@@ -5,7 +5,7 @@ import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../..
 
 import "./TextButton.css";
 
-export const TextButton = ({name, action, textAlign = 'center', toggled = false, marginBottom, marginTop, id, invert, altInvert}) => {
+export const TextButton = ({name, action, textAlign = 'center', toggled = false, marginBottom, marginTop, id, invert, altInvert, icon}) => {
 
     const color = useSelector(selectPrimaryColor);
 
@@ -55,6 +55,7 @@ export const TextButton = ({name, action, textAlign = 'center', toggled = false,
             marginBottom: marginBottom,
             marginTop: marginTop}}>
             {name}
+            {icon}
         </motion.button>
     )
 }

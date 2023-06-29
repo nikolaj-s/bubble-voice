@@ -22,6 +22,7 @@ import { uploadImage } from '../../../../util/UploadRoute';
 import { TextButton } from '../../../../components/buttons/textButton/TextButton';
 import { DropDownList } from '../../../../components/DropDownList/DropDownList';
 import { updateServer } from '../../../sideBar/sideBarSlice';
+import { selectAccentColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 
 const Wrapper = () => {
@@ -52,6 +53,8 @@ const Wrapper = () => {
     const permissions = useSelector(selectUsersPermissions);
 
     const inactiveChannels = useSelector(selectInactiveChannels);
+
+    const accentColor = useSelector(selectAccentColor);
 
     const currentInactiveChannel = useSelector(selectInactiveChannel);
 
@@ -221,7 +224,7 @@ const Wrapper = () => {
                 minHeight: 300,
                 maxWidth: 500
             }}>
-                <ImageInput getFile={handleBannerChange} initalImage={serverBanner} />
+                <ImageInput getFile={handleBannerChange} backgroundColor={accentColor} initalImage={serverBanner} />
             </div>
             </>
             : 

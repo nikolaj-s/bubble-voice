@@ -24,6 +24,7 @@ export const ImageInput = ({
     borderRadius = "5px",
     center = false,
     zIndex = "0",
+    backgroundColor,
     getFile = () => {},
     blur = false,
     blur_amount = 8,
@@ -110,14 +111,14 @@ export const ImageInput = ({
 
         if (leaving === false) {
             iconAnimation.start({
-                filter: "invert()"
+                opacity: 1
             })
             animation.start({
                 filter: 'brightness(110%)'
             })
         } else {
             iconAnimation.start({
-                filter: "none"
+                opacity: 0.5
             })
             animation.start({
                 filter: 'brightness(100%)'
@@ -169,13 +170,13 @@ export const ImageInput = ({
             left: "50%" ,
             top: "50%",
             transform: "translate(-50%, -50%)",
-            transition: '0.1s',
+            backgroundColor: backgroundColor
         }}
         {...getRootProps({className: 'dropzone'})} className='image-drop-input-container'>
             <input {...getInputProps()} />
             <Image onLoad={onLoad} opacity={blur_amount} disableErr={true} cursor='pointer' image={files[0]?.preview} />
             
-            {disableIcon ? null : <ImageIcon cursor={'pointer'} center={center} zIndex={zIndex} />}
+            {disableIcon ? null : <ImageIcon cursor={'pointer'} center={center} zIndex={zIndex} animation={iconAnimation} />}
         </motion.div>
         {processingImage ? <ImageInputProcessingIndicator fontSize={imageProcessingFontSize} key={"image-processing-indicator"} value={percent} /> : null}
         </AnimatePresence>

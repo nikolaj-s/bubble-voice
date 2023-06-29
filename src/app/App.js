@@ -57,6 +57,13 @@ function App() {
 
   const __init__ = async () => {
 
+    navigator.mediaSession.setActionHandler('play', function() { /* Code excerpted. */ });
+    navigator.mediaSession.setActionHandler('pause', function() { /* Code excerpted. */ });
+    navigator.mediaSession.setActionHandler('seekbackward', function() { /* Code excerpted. */ });
+    navigator.mediaSession.setActionHandler('seekforward', function() { /* Code excerpted. */ });
+    navigator.mediaSession.setActionHandler('previoustrack', function() { /* Code excerpted. */ });
+    navigator.mediaSession.setActionHandler('nexttrack', function() { /* Code excerpted. */ });
+
     dispatch(incrementLoadingPercentage({percent: 10, state: "Fetching Media Devices"}));
 
     dispatch(getMediaDevices());

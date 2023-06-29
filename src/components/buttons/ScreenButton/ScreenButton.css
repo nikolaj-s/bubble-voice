@@ -1,12 +1,14 @@
 .screen-button-container {
-    width: 48%;
-    height: 200px;
-    margin: 4px;
+    width: 145px;
+    height: 145px;
+    margin: 2.5px;
+    padding: 5px;
     cursor: pointer;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: flex-end;
+    overflow: hidden;
     position: relative;
     border-radius: var(--border-radius);
 }
@@ -19,6 +21,7 @@
     text-overflow: ellipsis;
     word-wrap: break-word;
     text-align: center;
+    white-space: nowrap;
 }
 
 .screen-app-icon-container {

@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectExploreScrollPos, selectExploreTabOpen, setExploreScrollPos } from './ExploreSlice'
+import { selectExploreScrollPos, selectExploreTabOpen, setExploreScrollPos, toggleExploreTab } from './ExploreSlice'
 import { selectGlassColor, selectGlassState, selectSecondaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 
 import "./Explore.css";
@@ -81,24 +81,30 @@ export const Explore = () => {
         
     }
 
+    const close = () => {
+        dispatch(toggleExploreTab(false));
+    }
+
     return (
         <AnimatePresence>
             {visible ? 
-            <motion.div 
-
-            style={{backgroundColor: glassState ? glassColor : secondaryColor}}
-            initial={{opacity: 0, left: '-600px'}}
-            animate={{opacity: 1, left: 55}}
-            exit={{opacity: 0, left: '-600px'}}
-            className='explore-tab-container'>
-                <div onScroll={handleLoadMore} className='explore-tab-inner-container'>
-                    <ViewSubReddit explore={true} expand={expand} />
-                </div>
-                {scrollPos > window.innerHeight ?
-                <div className='back-to-top-container'>
-                    <TextButton action={backToTop} name={"Back To Top"} />
-                </div>: null}
-            </motion.div>
+            <div onClick={close} className='side-tab-outer-container'>
+                <motion.div 
+                onClick={(e) => {e.stopPropagation()}}
+                style={{backgroundColor: glassState ? glassColor : secondaryColor}}
+                initial={{opacity: 0, marginLeft: '-600px'}}
+                animate={{opacity: 1, marginLeft: 0}}
+                exit={{opacity: 0, marginLeft: '-600px'}}
+                className='explore-tab-container'>
+                    <div onScroll={handleLoadMore} className='explore-tab-inner-container'>
+                        <ViewSubReddit explore={true} expand={expand} />
+                    </div>
+                    {scrollPos > window.innerHeight ?
+                    <div className='back-to-top-container'>
+                        <TextButton action={backToTop} name={"Back To Top"} />
+                    </div>: null}
+                </motion.div>
+            </div>
             : null}
         </AnimatePresence>
     )

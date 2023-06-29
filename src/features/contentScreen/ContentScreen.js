@@ -6,32 +6,26 @@ import { useSelector } from 'react-redux';
 // components
 import { NoServerSelectedDisplay } from './NoServerSelectedDisplay/NoServerSelectedDisplay';
 import { SettingsRoutesWrapper } from '../settings/SettingsRoutestWrapper/SettingsRoutesWrapper';
-import { CreateServerMenu } from '../createServer/createServerMenu/CreateServerMenu';
 import { ChannelRoom } from '../server/ChannelRoom/ChannelRoom';
 
 import { Disconnected } from '../../components/disconnected/Disconnected';
 import { ExpandContent } from '../ExpandContent/ExpandContent';
 import { NewAccount } from '../../components/NewAccount/NewAccount';
-import { AudioInit } from '../AudioInit/AudioInit';
 
 // state
 import { HeaderTitle } from '../../components/titles/headerTitle/headerTitle';
 
 // style's
 import "./ContentScreen.css";
-import { selectAddServerMenuVisible } from '../createServer/createServerSlice';
+
 import { selectCurrentChannelId } from '../server/ServerSlice';
 import { RoomAmbiance } from '../../components/RoomAmbiance/RoomAmbiance';
-import { selectServerAmbiance } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
-
+import { selectNewAccountState } from '../settings/appSettings/accountSettings/accountSettingsSlice';
 export const ContentScreen = () => {
-    // content display state
-
-    const addServerMenuVisisble = useSelector(selectAddServerMenuVisible);
-
+    // content
     const channelId = useSelector(selectCurrentChannelId);
 
-    const disableAmbiance = useSelector(selectServerAmbiance);
+    const newAccount = useSelector(selectNewAccountState);
 
     return (
         <>
@@ -41,14 +35,14 @@ export const ContentScreen = () => {
                     <Disconnected />
                     <NoServerSelectedDisplay />
                     <SettingsRoutesWrapper />
-                    {addServerMenuVisisble ? <CreateServerMenu /> : null}
+                    
                     <ChannelRoom />
                     
-                    <NewAccount />
+                    
                 </div>
-                <AudioInit />
             </motion.div>
             <ExpandContent />
+            {newAccount ? <NewAccount /> : null}
             {channelId ? <RoomAmbiance /> : null}
         </>
     )
