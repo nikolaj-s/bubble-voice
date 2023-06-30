@@ -52,14 +52,14 @@ export const UserStatus = ({user}) => {
             <div
             style={{
                 borderRadius: (user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%',
-               
+                border: `2px solid ${user?.color || primaryColor}`
             }}
             className='user-status-image-container'>
                 <Image image_class={"user-image"} cursor='pointer' image={user.user_image?.includes('gif') ? "" : user.user_image} />
             </div>
             <div 
             className={`user-name-status-wrapper ${user._id}-user-name-status-wrapper`}>
-                <h3 style={{color: user.color || textColor,}} >{user.display_name}</h3>
+                <h3 style={{color: textColor,}} >{user.display_name}</h3>
                 <p style={{color: textColor}}>{(user.status === 'offline' && timeStamp !== "") ? "Last Online: " + timeStamp : user.status ? user.status : 'offline'}</p>
             </div>
         </div>

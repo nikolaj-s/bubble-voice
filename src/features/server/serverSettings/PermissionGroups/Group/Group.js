@@ -3,6 +3,7 @@ import { RadioButton } from '../../../../../components/buttons/RadioButton/Radio
 import { TextButton } from '../../../../../components/buttons/textButton/TextButton'
 import { InputTitle } from '../../../../../components/titles/inputTitle/InputTitle'
 import { InputPlaceHolder } from '../../../../../components/titles/InputPlaceHolder/InputPlaceHolder'
+import { DeleteIcon } from '../../../../../components/Icons/DeleteIcon/DeleteIcon';
 
 export const Group = ({permission, action, handleDelete}) => {
     return (
@@ -20,7 +21,7 @@ export const Group = ({permission, action, handleDelete}) => {
             }
         })}
         {permission.server_group_name !== "Owner" && permission.server_group_name !== "Guest" && permission.delete !== true ?
-        <TextButton action={() => {handleDelete(permission._id)}} name={`Delete ${permission.server_group_name}`} />
+        <TextButton action={() => {handleDelete(permission._id)}} name={`Delete ${permission.server_group_name}`} icon={<DeleteIcon />} />
         :null
         }
         </>

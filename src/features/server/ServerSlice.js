@@ -47,6 +47,35 @@ export const checkConnection = createAsyncThunk(
     }
 )
 
+export const navigateToServer = createAsyncThunk(
+    'serverSlice/navigateToServer',
+    async ({server_to_join_id}, {rejectWithValue, getState, dispatch}) => {
+        try {
+
+            const { server_id } = getState().serverSlice;
+
+            if (window.location.hash.includes('channel')) {
+                document.getElementById('disconnect-from-channel-button').click();
+            }
+
+            if (server_id) {
+                let res = await socket.request("left server")
+                .then(res => {
+                    return res;
+                })
+                .catch(error => {
+                    return rejectWithValue({error: error.errorMessage});
+                })
+            }
+
+            return server_to_join_id;
+        
+        } catch (error) {
+            rejectWithValue({error: "Fatal Error Joining Server"});
+        }
+    }
+)
+
 export const fetchServerDetails = createAsyncThunk(
     'serverSlice/fetchServerDetails',
     async ({channel_id}, {rejectWithValue, getState, dispatch}) => {
@@ -147,7 +176,7 @@ export const handleLeavingServer = createAsyncThunk(
                 return rejectWithValue(error.errorMessage);
             })
             
-            socket?.disconnect();
+         //   socket?.disconnect();
 
             return res;
         } catch (error) {
@@ -646,6 +675,21 @@ const serverSlice = createSlice({
             state.error = true;
             state.errorMessage = "Error Moving User";
         },
+        [navigateToServer.pending]: (state, action) => {
+            state.loading = true;
+        },
+        [navigateToServer.fulfilled]: (state, action) => {
+            state.loading = false;
+            
+            state.server_id = action.payload;
+
+        },
+        [navigateToServer.rejected]: (state, action) => {
+            state.error = true;
+            state.loading = false;
+            state.connection_lost = false;
+            state.errorMessage = action.payload.error;
+        },
         [fetchServerDetails.pending]: (state, action) => {
             state.loading = true;
         },
@@ -661,7 +705,7 @@ const serverSlice = createSlice({
             state.banList = action.payload.ban_list;
             state.user = action.payload.user;
             state.popular_searches = action.payload.recent_searches;
-
+            state.connection_lost = false;
             const memberIndex = state.members.findIndex(member => member.username === action.payload.username);
 
             if (memberIndex !== -1) {

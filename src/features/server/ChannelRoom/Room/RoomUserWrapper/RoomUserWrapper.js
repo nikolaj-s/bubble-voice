@@ -17,7 +17,7 @@ export const RoomUserWrapper = ({users, page}) => {
 
     const behindState = useSelector(selectBehindState);
 
-    let margin = 4
+    let margin = 8
 
     const ratio = (9 / 16);
 
@@ -47,7 +47,7 @@ export const RoomUserWrapper = ({users, page}) => {
                         i++;
                     }
         
-                    max = max - (0 * 2);
+                    max = max - (2 * 2);
 
                     const v = child.querySelector('video');
 

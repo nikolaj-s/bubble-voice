@@ -8,7 +8,7 @@ import { ServerList } from './serverList/ServerList'
 
 // style's
 import "./ServerSelection.css";
-import { handleLeavingServer, selectCurrentChannelId, selectServerId, setServerId, setServerName, setTopPos } from '../../server/ServerSlice';
+import { handleLeavingServer, navigateToServer, selectCurrentChannelId, selectServerId, setServerId, setServerName, setTopPos } from '../../server/ServerSlice';
 import { setHeaderTitle } from '../../contentScreen/contentScreenSlice';
 import { selectLoadingUsersServersState, selectServerList, setSideBarHeader } from '../sideBarSlice';
 import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
@@ -37,29 +37,7 @@ export const ServerSelection = () => {
 
         if (currentServer) {
 
-            dispatch(playSoundEffect("disconnected"));
-
-            dispatch(clearWidgetOverLay());
-
-            dispatch(handleLeavingServer());
-
-            navigate('/dashboard');
-
-         //   socket?.disconnect();
-            
-            setTimeout(() => {
-                dispatch(setServerId(_id));
-
-                dispatch(setTopPos(top_pos));
-        
-                dispatch(setServerName(name));
-        
-                setTimeout(() => {
-        
-                    navigate(`/dashboard/server/${name}`)
-                
-                }, 5)
-            }, 100)
+            dispatch(navigateToServer({server_to_join_id: _id}))
 
         } else {
             dispatch(setServerId(_id));

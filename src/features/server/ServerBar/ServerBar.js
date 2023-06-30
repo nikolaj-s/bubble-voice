@@ -6,7 +6,7 @@ import { io } from "socket.io-client";
 import { useNavigate, useRoutes } from 'react-router';
 
 // state
-import {clearSearchData, addNewChannel, assignNewServerGroup, clearServerState, deleteChannel, fetchPersistedMusicVolume, fetchServerDetails, handleLeavingServer, leaveChannel, newMessage, removeSongFromWidget, reOrderChannels, saveSongToWidget, selectCurrentChannel, selectCurrentChannelId, selectInactiveChannel, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, setServerName, throwServerError, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateInactiveChannel, updateMemberActiveStatus, updateMemberStatus, updateServerBanner, updateServerGroups, userBanned, userJoinsChannel, userJoinsServer, userLeavesChannel, userLeavesServer, updateMemberFile } from '../ServerSlice';
+import {clearSearchData, addNewChannel, assignNewServerGroup, clearServerState, deleteChannel, fetchPersistedMusicVolume, fetchServerDetails, handleLeavingServer, leaveChannel, newMessage, removeSongFromWidget, reOrderChannels, saveSongToWidget, selectCurrentChannel, selectCurrentChannelId, selectInactiveChannel, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, setServerName, throwServerError, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateInactiveChannel, updateMemberActiveStatus, updateMemberStatus, updateServerBanner, updateServerGroups, userBanned, userJoinsChannel, userJoinsServer, userLeavesChannel, userLeavesServer, updateMemberFile, toggleConnectionLostState } from '../ServerSlice';
 import { selectUsername } from '../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { getToken, url } from '../../../util/Validation';
 import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
@@ -95,9 +95,7 @@ const Bar = () => {
 
             document.getElementById('disconnect-from-channel-button').click();
 
-        } 
-
-        window.location.hash =  new_redirect;
+        }
         
         dispatch(leaveChannel({username: username}));
         
@@ -106,6 +104,8 @@ const Bar = () => {
         dispatch(clearServerState());
 
         socket.disconnect();
+
+        dispatch(toggleConnectionLostState(true));
 
         // reset socket to avoid mismatch socket id errors
         socket = null;
@@ -416,7 +416,7 @@ const Bar = () => {
             })
             
             socket.on('disconnect', (data) => {
-                console.log('server change')
+                console.log('server change, or network loss')
                 handleConnectionLost();
             })
 
@@ -749,7 +749,7 @@ const Bar = () => {
             }
         }
     // eslint-disable-next-line   
-    }, [])
+    }, [server_id])
 
     // handle header title when user closes server settings
     React.useEffect(() => {

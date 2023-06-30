@@ -1,4 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
+export const fetchSavedDirectMessages = createAsyncThunk(
+    'fetchSavedDirectMessages',
+    async (_) => {
+        try {
+
+        } catch (err) {
+            return [];
+        }
+    }
+)
 
 const MessagesSlice = createSlice({
     name: "MessagesSlice",
@@ -23,7 +34,7 @@ const MessagesSlice = createSlice({
 
                 if (dm_index === -1) {
 
-                    state.direct_messages.unshift({username: action.payload.username, messages: []})
+                    state.direct_messages.unshift({username: action.payload.username, messages: [], user_image: action.payload.user_image})
 
                     state.selected_direct_message = action.payload.username;
 
@@ -43,7 +54,7 @@ const MessagesSlice = createSlice({
             const dm_index = state.direct_messages.findIndex(o => o.username === action.payload.username);
 
             if (dm_index === -1) {
-                state.direct_messages.unshift({username: action.payload.username, messages: [action.payload.message]})
+                state.direct_messages.unshift({username: action.payload.username, messages: [action.payload.message], user_image: action.payload.user_image})
             } else {
                 state.direct_messages[dm_index].messages.unshift(action.payload.message);
             }

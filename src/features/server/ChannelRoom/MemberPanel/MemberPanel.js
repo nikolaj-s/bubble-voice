@@ -19,6 +19,8 @@ import { CloseIcon } from '../../../../components/Icons/CloseIcon/CloseIcon';
 import { AnimatePresence, motion } from 'framer-motion';
 import { PinnedProfileMessage } from '../../../../components/PinnedProfileMessage/PinnedProfileMessage';
 import { GetTimeDifference } from '../../../../util/GetTimeDifference';
+import { PokeIcon } from '../../../../components/Icons/PokeIcon/PokeIcon';
+import { SocialIcon } from '../../../../components/Icons/SocialIcon/SocialIcon'
 
 export const MemberPanel = () => {
 
@@ -159,13 +161,13 @@ export const MemberPanel = () => {
             initial={{top: '-100%'}}
             animate={{top: '0%'}}
             exit={{top: '100%'}}
-            style={{backgroundColor: color ? color : secondaryColor}} onClick={closePanel} className='outer-member-panel-container'>
+            style={{backgroundColor: primaryColor}} onClick={closePanel} className='outer-member-panel-container'>
                 <div onClick={closePanel} className='close-member-panel-button'>
                     <CloseIcon />
                 </div>
                 <div 
                 onClick={(e) => {e.stopPropagation()}}
-                style={{backgroundColor: color || primaryColor, boxShadow: `0 0 50px 50px rgba(0, 0, 0, 0.5)`}}
+                style={{backgroundColor: primaryColor}}
                 className='member-panel-container'>
                     <div className='member-panel-image-container'>
                         <Image disableErr={true} position='absolute' image={member.user_banner} />
@@ -175,7 +177,7 @@ export const MemberPanel = () => {
                     </div>
                     <div style={{backgroundColor: color ? color : secondaryColor}} className='member-panel-info-container'>
                         <div style={{backgroundColor: primaryColor}} className='username-wrapper-container'>
-                            <h3 style={{color: color || textColor}}>{member.display_name}</h3>
+                            <h3 style={{color: textColor}}>{member.display_name}</h3>
                             <h4 style={{color: textColor, opacity: 0.8}}>#{member.username}</h4>
                             <div className='member-score-container'>
                                 <ScoreButton description={"Server Score"} padding={3} width={15} height={15}  />
@@ -184,8 +186,8 @@ export const MemberPanel = () => {
                         </div>
                         {member.username !== username && member.status !== 'offline' ? 
                         <div className='member-panel-button-wrapper'>
-                            <TextButton id={'member-panel-poke-button'} action={poke} name={"Poke"} /> 
-                            <TextButton action={handleOpenDirectMessage} name={"Send Message"} />
+                            <TextButton id={'member-panel-poke-button'} action={poke} name={"Poke"} icon={<PokeIcon />} /> 
+                            <TextButton action={handleOpenDirectMessage} name={"Send Message"} icon={<SocialIcon />} />
                         </div>
                         : null}
                         <div style={{backgroundColor: primaryColor}} className='server-user-details-wrapper-container'>

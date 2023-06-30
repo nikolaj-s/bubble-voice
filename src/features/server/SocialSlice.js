@@ -16,6 +16,7 @@ export const togglePinMessage = createAsyncThunk(
                     return res;
                 })
                 .catch(err => {
+                    console.log(err)
                     return rejectWithValue({errorMessage: err.errorMessage})
                 })
                 
@@ -46,17 +47,20 @@ export const fetchMessages = createAsyncThunk(
         try {
             const { messages } = getState().SocialSlice;
 
+            if (!socket) return [];
+
             const count = messages[channel_id] ? messages[channel_id].length + 15 : 15;
 
             const data = await socket.request('fetch messages', {channel_id: channel_id, count: count})
             .then(res => res)
             .catch(error => {
-                console.log(error);
+                dispatch(throwServerError({error: true, errorMessage: error.errorMessage}))
             })
             
             return data;
            
         } catch (error) {
+            console.log(error)
             dispatch(throwServerError({error: true, errorMessage: error.message}))
             return rejectWithValue({error: true, errorMessage: error.message});
         }

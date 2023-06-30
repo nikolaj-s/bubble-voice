@@ -108,8 +108,8 @@ export const ChannelList = ({loading}) => {
                 
                 <div className='channel-list-button-wrapper'>
                     <div>
-                        {loading ? <LoadingChannelsPlaceHolder /> : null}
-                        {localChannels.map((channel, key) => {
+                        {loading ? <LoadingChannelsPlaceHolder /> : 
+                        localChannels.map((channel, key) => {
                             return (
                                 <ChannelButton index={key} action={handleJoinChannel} channel={channel} key={key} users={channel.users} />
                             )

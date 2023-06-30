@@ -19,7 +19,7 @@ export const MessagesNavigation = () => {
         <div style={{backgroundColor: textColor}} className="application-navigation-spacer"></div>
         
         {directMessages.map(m => {
-            return <DirectMessageButton username={m.username} visible={m.username === selectedDirectMessage} messages={m.messages} />
+            return <DirectMessageButton username={m.username} visible={m.username === selectedDirectMessage} user_image={m.user_image} messages={m.messages} />
         })}
         </>
         : null}

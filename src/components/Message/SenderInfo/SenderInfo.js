@@ -41,13 +41,15 @@ export const SenderInfo = ({timeStamp, direct_message, pin_to_profile, link, col
                 (previous_message?.content?.date?.split("T")[0] !== current_message?.content?.date?.split("T")[0])
                 ?
                 <div className='sender-info-inner-container'>
-                    <div style={{borderRadius: profile_picture_shape === 'square' ? '5px' : '50%'}} onClick={action} className='message-profile-picture'>
-                        <Image image_class={'user-image'} cursor='pointer' image={user_image} />
+                    <div style={{borderRadius: profile_picture_shape === 'square' ? '5px' : '50%',
+                    border: `solid 2px ${color || primaryColor}`
+                    }} onClick={action} className='message-profile-picture'>
+                        <Image image_class={'user-image'} cursor='pointer' image={user_image || current_message.user_image} />
                     </div>
                     <h2
                     onClick={action}
-                    style={{color: color || textColor}}
-                    >{display_name}</h2>
+                    style={{color: textColor}}
+                    >{display_name || current_message.username}</h2>
                     {!message.loading ?
                     <p
                         style={{color: textColor, marginRight: 10}}

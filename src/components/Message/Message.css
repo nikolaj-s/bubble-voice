@@ -48,13 +48,13 @@
 .sender-info-inner-container {
     display: flex;
     align-items: center;
-    padding: 10px 0;
+    height: 20px;
 }
 
 .sender-info-container h2 {
     margin: 0 .5rem 0 0;
     padding: 0;
-    font-size: 1.2rem;
+    font-size: 1rem;
     letter-spacing: var(--font-spacing);
     cursor: pointer;
     text-overflow: ellipsis;
@@ -130,5 +130,5 @@
     border-radius: 50%;
     flex-shrink: 0;
     overflow: hidden;
-    margin: 22px 5px 0 5px;
+    margin: 22px 5px 0 0px;
 }

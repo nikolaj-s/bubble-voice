@@ -32,13 +32,10 @@ export const ContentScreen = () => {
             <motion.div className='content-screen-container' >
                 <HeaderTitle spacing={true} />
                 <div className='content-screen-inner-container'>
-                    <Disconnected />
                     <NoServerSelectedDisplay />
                     <SettingsRoutesWrapper />
-                    
                     <ChannelRoom />
-                    
-                    
+                    <Disconnected />
                 </div>
             </motion.div>
             <ExpandContent />

@@ -15,7 +15,7 @@ import { TitleWidget } from '../Widgets/TitleWidget/TitleWidget';
 import { VideoWidget } from '../Widgets/VideoWIdget/VideoWidget';
 import { SubMenuButton } from '../../buttons/subMenuButton/SubMenuButton';
 import { InputPlaceHolder } from '../../titles/InputPlaceHolder/InputPlaceHolder'
-
+import { NoWidgetsIcon } from '../../Icons/NoWidgetsIcon/NoWidgetsIcon';
 // style
 import "./WidgetPreview.css";
 import { MusicWidget } from '../Widgets/MusicWIdget/MusicWIdget';
@@ -32,7 +32,10 @@ export const WidgetPreview = ({widgets = [], editing = false, reorder}) => {
     return (
         <div className='widgets-preview-container'>
             {widgets.length === 0 ? 
-            <h3 style={{color: textColor}}>This Channel Has No Widgets</h3> :
+            <div className='no-widgets-wrapper'>
+            <NoWidgetsIcon /> 
+            </div>
+            :
             editing ?
             <Reorder.Group transition={{duration: 0}} as="div" className='editing-widgets-preview-container' values={widgets} onReorder={reorder} >
                 {widgets.map((widget, key) => {

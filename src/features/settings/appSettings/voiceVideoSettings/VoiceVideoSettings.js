@@ -24,7 +24,8 @@ import { AltError } from '../../../../components/AltError/AltError';
 import { TextButton } from '../../../../components/buttons/textButton/TextButton';
 import { VoiceDeactivationDelay } from './VoiceDeactivationDelay/VoiceDeactivationDelay';
 import { selectActivateCameraKey, selectDisconnectKey, selectMuteAudioKey, selectMuteMicKey, selectPushToMuteKey, selectPushToTalkKey, selectShareScreenKey, updateKeyCodeState } from '../keyBindSettings/keyBindSettingsSlice';
-
+import { selectCurrentChannelId } from '../../../server/ServerSlice';
+import { MicMutedIndicator } from './MicMutedIndicator/MicMutedIndicator';
 const Settings = () => {
 
     const dispatch = useDispatch();
@@ -89,6 +90,8 @@ const Settings = () => {
     const advancedVoiceActivationDetection = useSelector(selectAdvancedVoiceActivation);
 
     const experimentalAudioCapture = useSelector(selectExperimentalAudioCapture);
+
+    const channelId = useSelector(selectCurrentChannelId);
 
     React.useEffect(() => {
 
@@ -191,7 +194,7 @@ const Settings = () => {
         
         if (event.keyCode === pushToMuteKey.keyCode && (event.keyCode !== "")) return;
 
-        const obj = {[state]: {key: event.nativeEvent.key, keyCode: event.keyCode}}
+        const obj = {[state]: {key: event.nativeEvent.key.length === 1 ? event.nativeEvent.key.toUpperCase() : event.nativeEvent.key , keyCode: event.keyCode, code: event.code}}
         
         dispatch(updateKeyCodeState(obj));
     }
@@ -255,6 +258,7 @@ const Settings = () => {
             <PreviewWebCam preview={previewingWebCam} deviceId={selectedVideoInput._id} mirrored={mirroredWebCam} />
             <ApplyCancelButton apply={() => {handleTogglePreviewWebCam(true)}} cancel={() => {handleTogglePreviewWebCam(false)}} toggled={previewingWebCam} cancelName='Stop' name='Start' />
             <SettingsSpacer />
+            {channelId ? <MicMutedIndicator /> : null}
         </div>
     )
 }

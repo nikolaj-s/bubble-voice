@@ -67,9 +67,9 @@ export const UserStatusBar = () => {
                     new_status_name = l_windows[0].name;
                 }
 
-                if (currentStatus === `Playing ${new_status_name}`) return;
+                if (currentStatus === `${new_status_name}`) return;
 
-                dispatch(updateUserStatus({value: `Playing ${new_status_name}`}))
+                dispatch(updateUserStatus({value: `${new_status_name}`}))
             })
         } catch (error) {
             return;

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { useSelector, useDispatch } from 'react-redux';
 
 // state
-import { handlePinMessageToProfile, selectDisplayName, selectUsername } from '../../../../settings/appSettings/accountSettings/accountSettingsSlice';
+import { handlePinMessageToProfile, selectDisplayName, selectUserImage, selectUsername } from '../../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { selectPinningMessage, selectUsersPermissions, throwServerError } from '../../../ServerSlice';
 
 // components
@@ -56,6 +56,8 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
     const glassColor = useSelector(selectGlassColor);
 
     const social = useSelector(selectAllMessages);
+
+    const userImage = useSelector(selectUserImage);
 
     let allMessages = direct_message ? currentChannel.social : social[channelId];
 
@@ -191,7 +193,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         if (direct_message) {
 
-            await socket.request('send direct message', data)
+            await socket.request('send direct message', {...data, user_image: userImage})
             .then(res => {
                 console.log(res)
                 dispatch(updateDirectmessage({...res.message, send_to: direct_message_user}))

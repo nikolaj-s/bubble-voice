@@ -7,14 +7,19 @@ import { selectSecondaryColor, selectTextColor } from '../../features/settings/a
 import { motion } from "framer-motion";
 // style
 import "./Disconnected.css";
+import { selectConnectionLost } from '../../features/server/ServerSlice';
 
-const Wrapper = () => {
+export const Disconnected = () => {
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
     const color = useSelector(selectTextColor);
 
+    const connectionLostState = useSelector(selectConnectionLost);
+
     return (
+        <>
+        {connectionLostState ?
         <div className='disconnected-outer-container'>
             <div style={{
                 backgroundColor: secondaryColor
@@ -51,14 +56,7 @@ const Wrapper = () => {
                     </motion.div>
                 </div>
             </div>
-        </div>
+        </div> : null}
+        </>
     )
 }
-
-export const Disconnected = () => useRoutes([
-    {path: "/server/:id/create-channel-menu/disconnected/*", element: <Wrapper />},
-    {path: "/server/:id/channel/:id/create-channel-menu/disconnected/*", element: <Wrapper />},
-    {path: "/server/:id/channel/:id/disconnected/*", element: <Wrapper />},
-    {path: "/server/:id/disconnected/*", element: <Wrapper />},
-    {path: "/disconnected/*", element: <Wrapper />}
-])

@@ -10,7 +10,7 @@ import { toggleExploreTab } from '../../../features/Explore/ExploreSlice';
 import { selectServerMembers } from '../../../features/server/ServerSlice';
 import { openDirectMessage } from '../../../features/Messages/MessagesSlice';
 
-export const DirectMessageButton = ({username, visible, messages}) => {
+export const DirectMessageButton = ({username, visible, messages, user_image}) => {
 
     const dispatch = useDispatch();
 
@@ -74,11 +74,11 @@ export const DirectMessageButton = ({username, visible, messages}) => {
                 width: visible ? 41 : 45,
                 height: visible ? 41 : 45
             }} className='profile-button-picture-wrapper'>
-                    <Image image_class={'user-image'} cursor='pointer' objectFit='cover' width='100%'  image={user?.user_image} />
+                    <Image image_class={'user-image'} cursor='pointer' objectFit='cover' width='100%'  image={user?.user_image || user_image} />
                 </div>
                 {hover ? 
                 <div style={{backgroundColor: primaryColor, top: top}} className='server-button-name-container'>
-                    <h2 style={{color: textColor}}>{user?.display_name}</h2>
+                    <h2 style={{color: textColor}}>{user?.display_name || messages.username}</h2>
                 </div>
                 : null}
             </div>

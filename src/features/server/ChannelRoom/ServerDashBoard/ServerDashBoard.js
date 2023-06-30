@@ -68,7 +68,7 @@ export const ServerDashBoard = () => {
         <div className='server-dashboard-container'>
             <div style={{backgroundColor: inChannel ? null : glass ? glassColor : secondaryColor}} className='server-dashboard-inner-container'>
                 {loadingPins || serverLoading ? <MessagePlaceHolderLoader /> : null}
-                {page === 'pins' ? <Pins initLoading={loadingPins} key={'server-pins'} handlePin={handlePin} pins={pins} permission={permission} /> : null}
+                {page === 'pins' ? <Pins initLoading={loadingPins || serverLoading} key={'server-pins'} handlePin={handlePin} pins={pins} permission={permission} /> : null}
                 {page === 'media' ? <ServerMedia key={'server-media'} media={media} expand={expand} /> : null}
             </div>
             <Loading loading={pinning} />

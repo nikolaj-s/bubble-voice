@@ -71,11 +71,11 @@ export const ChannelUserDisplay = ({user, channel_id}) => {
     return (
         <div onDragStart={onDragStart} onDragEnd={onDragEnd} draggable={true} onClick={openMemberPanel} onMouseEnter={(e) => {hoverEffect(e, true)}} onMouseLeave={(e) => {hoverEffect(e, false)}} id={`${user._id}-channel-user-display-channel-id-${channel_id}`} style={{zIndex: 1, backgroundColor: hover ? primaryColor : null, opacity: (user.active && user.microphone && currentChannelId === channel_id) ? 1 : 0.6}} key={user.username} className='channel-user-placeholder'>
             <div 
-            style={{border: (user.active && user.microphone && currentChannelId === channel_id) ? `solid 2px ${activityColor}` : null, borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%', width: (user.active && user.microphone) ? 26 : 30, height: (user.active && user.microphone) ? 26 : 30}}
+            style={{border: (user.active && user.microphone && currentChannelId === channel_id) ? `solid 2px ${activityColor}` : `solid 2px ${user?.color || primaryColor}`, borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%', width: 26, height: 26}}
             className='channel-user-placeholder-user-image'>
                 <Image image_class={'user-image'} cursor='pointer' objectFit='cover' image={user.user_image?.includes('.gif') ? "" : user.user_image} />
             </div>
-            <h3 style={{color: user?.color || textColor, opacity: (user.active && user.microphone) ? 1 : 0.8, filter: 'brightness(150%)', fontWeight: '600'}}>{user.display_name}</h3>
+            <h3 style={{color: textColor, opacity: (user.active && user.microphone) ? 1 : 0.8}}>{user.display_name}</h3>
             <div 
             style={{backgroundColor: accentColor}}
             className='user-status-wrapper'>
