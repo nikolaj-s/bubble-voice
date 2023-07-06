@@ -15,6 +15,10 @@
     max-height: 540px;
 }
 
+.active-user-container .loading-container {
+    border-radius: var(--border-radius);
+}
+
 .active-user-container video {
     position: absolute;
     z-index: 4;
@@ -22,6 +26,7 @@
     height: 100%;
     object-fit: cover;
     background-color: black;
+    border-radius: var(--border-radius);
 }
 
 .active-user-profile-image-container {
@@ -29,7 +34,6 @@
     height: 150px;
     flex-shrink: 0;
     position: relative;
-    border-radius: 50%;
     overflow: hidden;
 }
 .user-status-stream-wrapper {
@@ -52,4 +56,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+#stream-room-user-banner {
+    border-radius: var(--border-radius);
+    overflow: hidden;
 }

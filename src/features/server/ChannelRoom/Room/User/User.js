@@ -36,14 +36,15 @@ export const User = ({user}) => {
         <div 
         style={{
             border: `solid 4px ${(user.active && user.microphone) ? activeColor : user.color ? user.color : accentColor}`,
+            backgroundColor: user.color ? user.color : null,
             display: (hideNonVideoParticapents === true && user.webcam === false) || (hideNonVideoParticapents === true && prefs?.disabled_web_cam === true) ? 'none' : 'flex'
         }}
         id={user._id} className='active-user-container'>
-            <Image image_class={'user-image'} disableErr={true} backgroundColor={secondaryColor}  position='absolute' image={user.user_banner} />
+            <Image id="stream-room-user-banner" image_class={'user-image'} disableErr={true} backgroundColor={secondaryColor}  position='absolute' image={user.user_banner} />
             <div style={{borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%'}} className='active-user-profile-image-container'>
                 <Image image_class={'user-image'} objectFit='cover' image={user.user_image} />
             </div>
-            <Loading backgroundColor={'black'} zIndex={1} show_success={false} loading={user.webcam && (user.username === username ? user.webcam : !prefs?.disabled_web_cam)} />
+            <Loading  backgroundColor={'black'} zIndex={1} show_success={false} loading={user.webcam && (user.username === username ? user.webcam : !prefs?.disabled_web_cam)} />
             <div 
             style={{backgroundColor: accentColor}}
             className='user-status-stream-wrapper'>

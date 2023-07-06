@@ -1,7 +1,7 @@
 // library's
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 // state
 import { selectGlassColor, selectGlassState, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
@@ -44,11 +44,14 @@ export const SocialRoute = () => {
     }, [channelId, current_channel_id])
 
     return (
-        <>
+        <AnimatePresence>
             {currentSocial ?
             <motion.div 
-            key={"social-route"}
-            
+            key={`social-route-${channelId}`}
+            initial={{opacity: 0}}
+            animate={{opacity: 1}}
+            exit={{opacity: 0}}
+            transition={{duration: 0.1}}
             style={{
                 position: 'absolute',
                 zIndex: 8,
@@ -57,7 +60,7 @@ export const SocialRoute = () => {
                 height: '100%',
                
             }}
-            transition={{duration: 0.2}}
+            
             className='social-route-wrapper-container'>
                
                 <div
@@ -73,6 +76,6 @@ export const SocialRoute = () => {
                 </div>
                     
             </motion.div> : null}
-        </>
+        </AnimatePresence>
     )
 }

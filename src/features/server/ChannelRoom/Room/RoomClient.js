@@ -313,6 +313,8 @@ export class RoomClient {
                         
                         par.id = consumer.id + 'container';
 
+                        par.style.display = 'flex';
+
                         el.id = consumer.id;
 
                         el.autoplay = true;

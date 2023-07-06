@@ -94,38 +94,20 @@ export const setMusicWidgetVolume = async (volume) => {
 
 // SOCIAL DATA
 export const saveSocialData = async () => {
-    try {
-        const keytar = window.require('keytar');
+    
+    localStorage.setItem("SOCIALDATA", JSON.stringify(Array.from(SOCIAL_DATA.entries())));
 
-        await keytar.setPassword("SOCIAL", "DATA", JSON.stringify(Array.from(SOCIAL_DATA.entries())));
-        
-        return;
-    } catch (error) {
-
-        localStorage.setItem("SOCIALDATA", JSON.stringify(Array.from(SOCIAL_DATA.entries())));
-
-    }
+    return;
+    
 }
 
 export const fetchSocialData = async () => {
-    try {
+    
+    const w_data = localStorage.getItem("SOCIALDATA");
 
-        const keytar = window.require('keytar');
+    SOCIAL_DATA = new Map(JSON.parse(w_data));
 
-        const data = await keytar.getPassword("SOCIAL", "DATA");
-
-        SOCIAL_DATA = new Map(JSON.parse(data));
-
-        return;
-    } catch (eror) {
-        
-        const w_data = localStorage.getItem("SOCIALDATA");
-
-        SOCIAL_DATA = new Map(JSON.parse(w_data));
-
-        return;
-
-    }
+    return;
 }
 
 // USER PREFS

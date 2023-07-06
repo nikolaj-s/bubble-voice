@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectAudioOutput, selectExperimentalAudioCapture } from '../appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 import { playSoundEffect, removeSoundEffectFromQueue, selectCurrentDynamicVoice, selectCurrentVoiceOver, selectDynamicVoiceAlerts, selectSocialSoundEffect, selectSoundEffect, selectSoundEffectQueue, selectSoundEffectVolume, selectVoicePitch, selectVoiceRate } from './soundEffectsSlice';
 import { selectCurrentChannel, selectServerMembers } from '../../server/ServerSlice';
-import { selectCurrentScreen, selectScreenShareState } from '../../controlBar/ControlBarSlice';
+import { selectCurrentScreen } from '../../controlBar/ControlBarSlice';
 
 export const SoundEffects = () => {
 
@@ -60,6 +60,8 @@ export const SoundEffects = () => {
 
     const dynamicAlert = (message) => {
         
+        if (sharingScreen && experimentalAudioCapture) return soundEffectFinished();
+
         let alert = new SpeechSynthesisUtterance(message);
 
         let voices = speechSynthesis.getVoices();
@@ -67,7 +69,7 @@ export const SoundEffects = () => {
         alert.voice = voices[currentVoice];
 
         alert.volume = soundEffectsVolume;
-        console.log(voicePitch, voiceRate)
+        
         alert.pitch = voicePitch;
 
         alert.rate = voiceRate;
@@ -145,7 +147,7 @@ export const SoundEffects = () => {
                 }
 
             } else {
-
+                
                 setPlaying((soundEffects[soundEffectQueue[0]?.default] ? soundEffects[soundEffectQueue[0].default] : soundEffects[soundEffectQueue[0]]));
             
             }

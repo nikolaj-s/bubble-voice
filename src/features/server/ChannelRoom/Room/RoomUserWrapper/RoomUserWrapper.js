@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { selectHideUserStatus, selectMiscSettingsHideNonVideoParticapents } from '../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { selectBehindState, selectMusicExpanded } from '../Music/MusicSlice';
 import { User } from '../User/User'
-import { Music } from '../Music/Music';
+import { selectTriggerRoomRescale, triggerRoomRescale } from '../../../ServerSlice';
 
 export const RoomUserWrapper = ({users, page}) => {
 
@@ -16,6 +16,8 @@ export const RoomUserWrapper = ({users, page}) => {
     const musicExpanded = useSelector(selectMusicExpanded);
 
     const behindState = useSelector(selectBehindState);
+
+    const roomRescale = useSelector(selectTriggerRoomRescale);
 
     let margin = 8
 
@@ -90,6 +92,12 @@ export const RoomUserWrapper = ({users, page}) => {
         }, 300)
     }, [page])
 
+
+    React.useEffect(() => {
+        
+        handleScaling();
+       
+    }, [roomRescale])
 
     React.useEffect(() => {
         
@@ -176,7 +184,7 @@ export const RoomUserWrapper = ({users, page}) => {
             
             const children = parent.children
             
-            const c_count = Array.from(children).filter(child => ((child.attributes[2] ? child.attributes[2]["value"].includes('flex') : null && child.className === 'active-user-container') || child.className === 'streaming-video-player-container' || child.className.includes('youtube-player-wrapper')));
+            const c_count = Array.from(children).filter(child => ((child.attributes[2] ? child.attributes[2]["value"].includes('flex') : null && child.className === 'active-user-container') || (child.className === 'streaming-video-player-container' && child.attributes[2]["value"].includes('flex'))));
             
             let wDimension = parent.offsetWidth - 10;
 

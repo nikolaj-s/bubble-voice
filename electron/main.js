@@ -203,15 +203,13 @@ function createWindow () {
     maxWidth: 300,
     titleBarStyle: 'hidden',
     frame: false,
+    transparent: true,
     backgroundColor: 'rgba(8, 8, 8, 1)'
   })
 
   initial_app_loading.loadURL(`data:text/html;charset=utf-8,${loading_template}`)
 
-  initial_app_loading.webContents.on('did-finish-load', () => {
-    initial_app_loading.show();
-  })
-  
+  initial_app_loading.show();
 
   // Create the browser window.
   win = new BrowserWindow({
@@ -717,6 +715,6 @@ ipcMain.on('push notification', (event, data) => {
 
   setTimeout(() => {
     notification.loadURL(`data:text/html;charset=utf-8,${none}`);
-  }, 3000)
+  }, 3100)
 
 })

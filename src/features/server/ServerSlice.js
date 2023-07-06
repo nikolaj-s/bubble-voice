@@ -220,6 +220,7 @@ const serverSlice = createSlice({
         errorMessage: "",
         // settings
         serverSettingsOpen: false,
+        triggerRoomRescale: false,
         // local push to talk state
         pushToTalkActive: false,
         pushToTalkTimeOut: null,
@@ -242,6 +243,9 @@ const serverSlice = createSlice({
 
     },
     reducers: {
+        triggerRoomRescale: (state, action) => {
+            state.triggerRoomRescale = !state.triggerRoomRescale;
+        },
         setRoomColor: (state, action) => {
             state.roomColor = action.payload;
         },
@@ -922,8 +926,10 @@ export const selectServerBannerAmbiance = state => state.serverSlice.serverBanne
 export const selectConnectionLost = state => state.serverSlice.connection_lost;
 
 export const selectRoomColor = state => state.serverSlice.roomColor;
+
+export const selectTriggerRoomRescale = state => state.serverSlice.triggerRoomRescale;
 // actions
 
-export const {setRoomColor, toggleConnectionLostState, setServerbannerAmbiance, updateMemberFile, clearSearchData, updateInactiveChannel, removeSongFromWidget, saveSongToWidget, userBanned, toggleCreateChannelMenu, toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
+export const {triggerRoomRescale, setRoomColor, toggleConnectionLostState, setServerbannerAmbiance, updateMemberFile, clearSearchData, updateInactiveChannel, removeSongFromWidget, saveSongToWidget, userBanned, toggleCreateChannelMenu, toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
 
 export default serverSlice.reducer;

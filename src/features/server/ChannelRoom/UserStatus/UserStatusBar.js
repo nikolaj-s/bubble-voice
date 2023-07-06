@@ -114,12 +114,12 @@ export const UserStatusBar = () => {
 
                 return (
                     <div className='online-user-wrapper' style={{display: onlineUsers.findIndex(u => u.server_group === server_group._id) !== -1 ? null : 'none', width: '100%'}} >
-                    <h4 style={{color: textColor}}>{server_group.server_group_name}</h4>
-                    {onlineUsers.map(u => {
-                        if (u.server_group === server_group._id) {
-                            return <UserStatus user={u} key={u._id} />
-                        }
-                    })}
+                        <h4 key={server_group.server_group_name}  style={{color: textColor}}>{server_group.server_group_name}</h4>
+                        {onlineUsers.map(u => {
+                            if (u.server_group === server_group._id) {
+                                return <UserStatus user={u} key={u._id} />
+                            }
+                        })}
                     </div>
                 )
             })}
@@ -127,17 +127,17 @@ export const UserStatusBar = () => {
                 if (server_group.server_group_name === "Guest") {
                     return (
                         <div className='online-user-wrapper' style={{display: onlineUsers.findIndex(u => u.server_group === server_group._id) !== -1 ? null : 'none', width: '100%'}} >
-                        <h4 style={{color: textColor}}>{server_group.server_group_name}</h4>
-                        {onlineUsers.map(u => {
-                            if (u.server_group === server_group._id) {
-                                return <UserStatus user={u} key={u._id} />
-                            }
-                        })}
+                            <h4 style={{color: textColor}}>{server_group.server_group_name}</h4>
+                            {onlineUsers.map(u => {
+                                if (u.server_group === server_group._id) {
+                                    return <UserStatus user={u} key={u._id} />
+                                }
+                            })}
                         </div>
                     )
                 }
             })}
-            {offlineUsers.length !== 0 ? <h4 style={{color: textColor}}>Offline</h4> : null}
+            {offlineUsers.length !== 0 ? <h4 key="offline-title-header" style={{color: textColor}}>Offline</h4> : null}
             {offlineUsers.map((u) => {
                 return <UserStatus user={u} key={u._id} />
             })}

@@ -47,7 +47,7 @@ const soundEffectsSlice = createSlice({
            
             if (state.soundEffectsQueue[0] === action.payload) return;
 
-            if (action.payload?.default && (action.payload?.default ===state.soundEffectsQueue[0]?.default)) return;
+            if (action.payload?.default && (action.payload?.default === state.soundEffectsQueue[0]?.default)) return;
 
             state.soundEffectsQueue.push(action.payload);
         },

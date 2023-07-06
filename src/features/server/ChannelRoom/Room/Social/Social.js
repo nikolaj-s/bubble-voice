@@ -66,23 +66,12 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
         if (direct_message) return;
 
         if (social[channelId]) {
+            if (!social[channelId][0]._id) return;
             
             SOCIAL_DATA.set(channelId, {message_id: social[channelId][0]?._id ? social[channelId][0]?._id : ""});
             
             saveSocialData();
 
-        }
-
-        return () => {
-            if (direct_message) return;
-
-            if (social[channelId]) {
-
-                SOCIAL_DATA.set(channelId, {message_id: social[channelId][0]?._id ? social[channelId][0]?._id : ""});
-                
-                saveSocialData();
-
-            }
         }
 
     }, [channelId, allMessages])
@@ -279,9 +268,6 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
     return (
         <div 
         
-        transition={{
-            duration: 0.1
-        }}
         className='social-outer-container'
         >
             {loadingMore || mounting ?

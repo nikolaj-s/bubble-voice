@@ -100,6 +100,16 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
         setInputHeight(e.target.scrollHeight)
 
         updateInputHeight(e.target.scrollHeight + 10)
+
+        let imageFormats = ['.png', '.jpeg', '.jpg', '.webp']
+
+        let i = imageFormats.some(format => (e.target.value.includes(format) && e.target.value.includes('redgifs') === false && e.target.value.includes('mp4') === false && e.target.value.includes('https')));
+
+        if (i) {
+            image({preview: e.target.value});
+        } else {
+            image({});
+        }
     
     }
 

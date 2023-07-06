@@ -43,7 +43,7 @@
     overflow: hidden;
     display: flex;
     align-self: center;
-    border: solid 2px black;
+    border: solid 4px black;
     border-radius: var(--border-radius);
     margin: 2px;
     cursor: pointer;

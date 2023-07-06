@@ -182,6 +182,7 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
         onDragOver={(event) => {onDragOver(event)}}
             onDragLeave={() => {onDragLeave()}}
             onDrop={onDrop}
+            style={{marginBottom: users.length > 0 ? '10px' : null}}
         >
             <motion.div 
             
@@ -197,6 +198,7 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
             style={{
                 backgroundColor: active ? accentColor : transparentPrimaryColor,
                 cursor: active ? "default" : "pointer",
+                
             }}
             className='channel-button-container'>
                 <div style={{backgroundColor: unReadMessage && channel.auth ? textColor : null}} className='unread-message-indicator'></div>   

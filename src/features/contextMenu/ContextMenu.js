@@ -11,7 +11,7 @@ import { CtxMenuTitle } from '../../components/titles/ctxMenuTitle/CtxMenuTitle'
 
 // state
 import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleStreamState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCopyLinkState, selectCopyState, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteMesssageState, selectDeleteWidget, selectDisableStream, selectDisableWebCam, selectEditChannelCtxState, selectFlipWebCamState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSeeSimilar, selectSelectedMessage, selectSelectedUserCtxState, selectStopStreamingState, selectStreamVolumeState, selectViewSocialState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
-import { assignNewServerGroup, markWidgetForDeletion, moveUser, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerId, selectServerMembers, selectUsersPermissions, sendDeleteMessageRequest, setChannelSocialId, setEditingChannelId, throwServerError, toggleMembersWebCamState, userBanned } from '../server/ServerSlice';
+import { assignNewServerGroup, markWidgetForDeletion, moveUser, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerId, selectServerMembers, selectUsersPermissions, sendDeleteMessageRequest, setChannelSocialId, setEditingChannelId, throwServerError, toggleMembersWebCamState, triggerRoomRescale, userBanned } from '../server/ServerSlice';
 
 // style
 import "./ContextMenu.css";
@@ -790,6 +790,8 @@ export const ContextMenu = () => {
                         dispatch(throwServerError({errorMessage: error.errorMessage}));
                     }) 
                 }
+
+                dispatch(triggerRoomRescale());
             }
 
             dispatch(toggleMembersWebCamState({id: memberId, value: !disabledWebCamLocalState}));
@@ -832,6 +834,7 @@ export const ContextMenu = () => {
 
                     document.getElementById(`${consumerId}container`).style.display = 'none'
 
+                    
                 } else {
                     await socket.request('resumeConsumer', {consumerId: consumerId})
                     .catch(error => {
@@ -840,6 +843,8 @@ export const ContextMenu = () => {
 
                     document.getElementById(`${consumerId}container`).style.display = 'flex'
                 }
+
+                dispatch(triggerRoomRescale());
 
             }
 
