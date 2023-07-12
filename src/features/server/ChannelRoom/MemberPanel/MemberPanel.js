@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { selectCurrentMemberPanel, setSelectedMember } from './MemberPanelSlice';
 
 import "./MemberPanel.css";
-import { selectGlassColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectGlassColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { Image } from '../../../../components/Image/Image';
 import { selectServerGroups, selectServerMembers, throwServerError } from '../../ServerSlice';
 import { TextButton } from '../../../../components/buttons/textButton/TextButton';
@@ -19,14 +19,17 @@ import { CloseIcon } from '../../../../components/Icons/CloseIcon/CloseIcon';
 import { AnimatePresence, motion } from 'framer-motion';
 import { PinnedProfileMessage } from '../../../../components/PinnedProfileMessage/PinnedProfileMessage';
 import { GetTimeDifference } from '../../../../util/GetTimeDifference';
-import { PokeIcon } from '../../../../components/Icons/PokeIcon/PokeIcon';
-import { SocialIcon } from '../../../../components/Icons/SocialIcon/SocialIcon'
+import { AltMessageIcon } from '../../../../components/Icons/AltMessageIcon/AltMessageIcon';
+import { PokeButton } from '../../../../components/buttons/PokeButton/PokeButton';
+import { TextInput } from '../../../../components/inputs/TextInput/TextInput';
 
 export const MemberPanel = () => {
 
     const dispatch = useDispatch();
 
     const [loading, toggleLoading] = React.useState(false);
+
+    const [poking, togglePoking] = React.useState(false);
 
     const [member, setMember] = React.useState({});
 
@@ -37,6 +40,8 @@ export const MemberPanel = () => {
     const [message, setMessage] = React.useState({});
 
     const [timeStamp, setTimeStamp] = React.useState("");
+
+    const [pokeMessage, setPokeMessage] = React.useState("Hey Wake Up");
 
     const userColor = useSelector(selectProfileColor);
 
@@ -62,22 +67,29 @@ export const MemberPanel = () => {
 
     const pinned_message = useSelector(selectProfilePinnedMessage);
 
+    const accentColor = useSelector(selectAccentColor);
+
     const closePanel = (e) => {
 
         dispatch(setSelectedMember(""))
     }
     const poke = async () => {
 
-        if (loading) return;
+        if (poking) return;
 
-        toggleLoading(true);
+        togglePoking(true);
 
-        await socket.request('poke', {member_id: member._id})
+        await socket.request('poke', {member_id: member._id, message: pokeMessage, type: 'poke'})
         .catch(error => {
             dispatch(throwServerError({errorMessage: error}));
-        })
+        });
+        
+        setTimeout(() => {
 
-        toggleLoading(false);
+            togglePoking(false);
+        
+        }, 2000)
+        
     }
 
     const handleOpenDirectMessage = () => {
@@ -152,6 +164,12 @@ export const MemberPanel = () => {
 
     }, [selectedMember, members, pinned_message])
     
+    const setCustomPokeMessage = (value) => {
+        if (value.length > 100) return;
+
+        setPokeMessage(value);
+    }
+
     return (
         <>
         <AnimatePresence>
@@ -161,12 +179,11 @@ export const MemberPanel = () => {
             initial={{top: '-100%'}}
             animate={{top: '0%'}}
             exit={{top: '100%'}}
-            style={{backgroundColor: primaryColor}} onClick={closePanel} className='outer-member-panel-container'>
-                <div onClick={closePanel} className='close-member-panel-button'>
+            style={{backgroundColor: primaryColor}} className='outer-member-panel-container'>
+                <div onClick={closePanel} style={{backgroundColor: accentColor}} className='close-member-panel-button'>
                     <CloseIcon />
                 </div>
                 <div 
-                onClick={(e) => {e.stopPropagation()}}
                 style={{backgroundColor: primaryColor}}
                 className='member-panel-container'>
                     <div className='member-panel-image-container'>
@@ -186,8 +203,9 @@ export const MemberPanel = () => {
                         </div>
                         {member.username !== username && member.status !== 'offline' ? 
                         <div className='member-panel-button-wrapper'>
-                            <TextButton id={'member-panel-poke-button'} action={poke} name={"Poke"} icon={<PokeIcon />} /> 
-                            <TextButton action={handleOpenDirectMessage} name={"Send Message"} icon={<SocialIcon />} />
+                            <TextInput action={setCustomPokeMessage} inputValue={pokeMessage} />
+                            <PokeButton active_background={accentColor} description={poking ? 'On Timeout' : null} active={poking} action={poke} width={30} height={30} padding={5} margin={"0px 5px"} background={primaryColor} />
+                            <TextButton action={handleOpenDirectMessage} name={"Send Message"} icon={<AltMessageIcon />} />
                         </div>
                         : null}
                         <div style={{backgroundColor: primaryColor}} className='server-user-details-wrapper-container'>

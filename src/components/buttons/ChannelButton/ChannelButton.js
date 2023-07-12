@@ -23,6 +23,7 @@ import { handleChangePage } from '../../../features/server/ChannelRoom/ServerNav
 import { selectUsername } from '../../../features/settings/appSettings/accountSettings/accountSettingsSlice';
 import { ChannelImageIcon } from '../../ChannelImageIcon/ChannelImageIcon';
 import { selectDisableChannelIcons } from '../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { setSelectedMember } from '../../../features/server/ChannelRoom/MemberPanel/MemberPanelSlice';
 
 
 export const ChannelButton = ({channel, action = () => {}, users, index}) => {
@@ -85,6 +86,8 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
 
         if (active) dispatch(setChannelSocialId(null));;
 
+        dispatch(setSelectedMember(""));
+
         action(channel)
     }
 
@@ -128,6 +131,8 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
         } else {
             dispatch(setChannelSocialId(channel._id));
         }
+
+        dispatch(setSelectedMember(""))
 
         
     }
@@ -182,7 +187,7 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
         onDragOver={(event) => {onDragOver(event)}}
             onDragLeave={() => {onDragLeave()}}
             onDrop={onDrop}
-            style={{marginBottom: users.length > 0 ? '10px' : null}}
+            style={{marginBottom: users.length > 0 && channel.auth ? '10px' : null}}
         >
             <motion.div 
             

@@ -162,6 +162,10 @@ const SocialSlice = createSlice({
         receiveMessage: (state, action) => {
             if (state.messages[action.payload.channel_id]) {
                 
+                const index = state.messages[action.payload.channel_id].findIndex(m => m._id === action.payload._id);
+
+                if (index !== -1) return;
+
                 state.messages[action.payload.channel_id].unshift(action.payload);
             
             } else {

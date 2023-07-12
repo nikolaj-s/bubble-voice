@@ -32,9 +32,7 @@
     justify-content: center;
     vertical-align: middle;
     flex: 1;
-    z-index: 5;
     overflow: hidden;
-    
 }
 
 .streaming-video-player-container {
@@ -86,4 +84,5 @@
     width: 100%;
     height: auto;
     object-fit: contain;
+    border-radius: var(--border-radius);
 }

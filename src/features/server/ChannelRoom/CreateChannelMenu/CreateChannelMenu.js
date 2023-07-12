@@ -107,9 +107,9 @@ export const CreateChannelMenu = () => {
             {open ? 
             <motion.div 
             onClick={handleCancel}
-            initial={{opacity: 0}}
-            animate={{opacity: 1}}
-            exit={{opacity: 0}}
+            initial={{translateX: '-100%'}}
+            animate={{translateX: '0%'}}
+            exit={{translateX: '-100%'}}
             key="create-channel-menu"
             
              className='create-channel-menu-container'>

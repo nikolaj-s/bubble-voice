@@ -29,6 +29,7 @@ import { selectMiscSettingsHideChannelBackground, selectPopOutUserStreams } from
 import { selectGlassColor, selectGlassState, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { AudioInit, audioCtx } from '../../../AudioInit/AudioInit';
 import { selectCurrentServerPageState } from '../ServerNavigation/ServerNavigationSlice';
+import { AnimatePresence, motion, useAnimation } from 'framer-motion';
 
 export let client;
 
@@ -297,7 +298,7 @@ const Component = () => {
 
                     ipcRenderer.send("set-window-id", {id: currentScreen});
 
-                    client?.produce('screenType', currentScreen, currentScreenName, experimentalAudioCapture);
+                    client?.produce('screenType', currentScreen, currentScreenName, experimentalAudioCapture, profileColor);
                     dispatch(updateMemberStatus({username: user.username, action: {screenshare: true}}))
                     socket?.emit('user status', {username: user.username, action: {screenshare: true}})
                 }, 200)
@@ -477,6 +478,9 @@ const Component = () => {
                         },
                         video: false
                     }).then((audio) => {
+
+                        
+
                         if (advancedVoiceActivationDetection) { 
                             analyser = audioCtx.createAnalyser();
 
@@ -743,25 +747,25 @@ const Component = () => {
     }, [pushToTalk, voiceActivityDetection, loaded, current_channel_id, microphoneState, pushToTalkActive, reconnecting, advancedVoiceActivationDetection])
     
     React.useEffect(() => {
-        
-        if (page === 'social' || page === 'widgets' || musicExpanded === true || page === 'pins' || page === 'media') {
-            
-            document.getElementById('user-streams-wrapper').style.opacity = 0;
-            document.getElementById('user-streams-wrapper').style.zIndex = 0;
-            
-        } else {
-                document.getElementById('user-streams-wrapper').style.left = '0px';
-                document.getElementById('user-streams-wrapper').style.position = 'relative';
-                document.getElementById('user-streams-wrapper').style.width = '100%'
-                document.getElementById('user-streams-wrapper').style.opacity = 1;
-                document.getElementById('user-streams-wrapper').style.pointerEvents = null;
+        try {
+
+            const el = document.getElementById('user-streams-wrapper');
+
+            if (!el) return;
+
+            if (page === 'social' || page === 'widgets' || musicExpanded === true || page === 'pins' || page === 'media') {
+                
+            } else {
+            }
+        } catch (err) {
+            console.log(err);
         }
     // eslint-disable-next-line      
     }, [page, popOutUserStreams, musicExpanded])
-
+    console.log(page)
     return (
         <>
-        <div className='room-wrapper-outer'>
+        <motion.div initial={{translateX: '-100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}} className='room-wrapper-outer'>
             <div
             style={
                 ((hideChannelBackgrounds || channel.channel_background === undefined) || page === 'social' || page === 'media' || page === 'pins') ? {backgroundColor: glass ? glassColor : secondaryColor} : null
@@ -769,13 +773,23 @@ const Component = () => {
             }
             id='live-chat-wrapper'>
                 <RoomUserWrapper page={page} users={channel.users} />
-                    {page === "social" ? <Social currentChannel={channel} channelId={current_channel_id} /> : null}
-                    {page === "widgets" ? <Widgets /> : null}
+                <AnimatePresence>       
+                    {page === "social" ? 
+                    <motion.div style={{height: '100%', width: '100%', top: '0px', left: '0px', position: 'absolute', zIndex: 2}} key={'social-page-wrapper'} initial={{translateX: '100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}} >
+                        <Social currentChannel={channel} channelId={current_channel_id} /> 
+                    </motion.div>
+                    : null}
+                    {page === "widgets" ? 
+                    <motion.div key={'room-widgets-preview'} style={{height: '100%', width: '100%', top: '0px', left: '0px', position: 'absolute', zIndex: 4, backgroundColor: secondaryColor}} initial={{translateX: '100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}} >
+                        <Widgets key={'widgets'} /> 
+                    </motion.div>
+                    : null}
+                </AnimatePresence>
             </div>
             <ChannelBackground channel_background={hideChannelBackgrounds ? null : channel.channel_background} blur={channel.background_blur} />
             <audio hidden={true} id={'microphone-input-source'} />
             
-        </div>
+        </motion.div>
         <AudioInit />
         </>
     )

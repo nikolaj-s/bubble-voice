@@ -54,7 +54,7 @@ export const TextButton = ({name, action, textAlign = 'center', toggled = false,
             color: textColor, 
             marginBottom: marginBottom,
             marginTop: marginTop}}>
-            {name}
+           <p style={{maxWidth: icon ? 'calc(100% - 30px)' : null}}>{name}</p>
             {icon}
         </motion.button>
     )

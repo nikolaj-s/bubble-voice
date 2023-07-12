@@ -188,7 +188,7 @@ if (!process.env.ELECTRON_START_URL && lock) {
 
     res.end(file.toString());
 
-    if (req.url.includes('index.js')) server.close();
+//    if (req.url.includes('index.js')) server.close();
 
   }).listen(8382);
 

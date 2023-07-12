@@ -11,6 +11,7 @@ import { TextInput } from '../../../../../components/inputs/TextInput/TextInput'
 import { Loading } from '../../../../../components/LoadingComponents/Loading/Loading';
 import { ImageSearch } from '../../../../../util/ImageSearch';
 import { selectServerId, throwServerError } from '../../../ServerSlice';
+import {motion} from 'framer-motion';
 
 export const ServerMedia = ({media, expand}) => {
     
@@ -132,7 +133,7 @@ export const ServerMedia = ({media, expand}) => {
     }, [page])
     
     return (
-        <>
+        <motion.div className='server-media-wrappers' initial={{translateX: '100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}}>
             <div style={{backgroundColor: secondaryColor}} className='server-media-navigation-container'>
                     <h3 onClick={() => {setPage('recommendations')}} style={{color: textColor, opacity: page === 'recommendations' ? 1 : 0.5, cursor: page === 'recommendations' ? 'default' : 'pointer', backgroundColor: page === 'recommendations' ? accentColor : null}}>Media</h3>
                     <h3 onClick={() => {setPage('subreddit')}} style={{color: textColor, opacity: page === 'subreddit' ? 1 : 0.5, cursor: page === 'subreddit' ? 'default' : 'pointer', backgroundColor: page === 'subreddit' ? accentColor : null}}>Subreddits</h3>
@@ -149,6 +150,6 @@ export const ServerMedia = ({media, expand}) => {
                 
             </div>
             <Loading backgroundColor={glassColor} loading={loadingNewMedia} />
-        </>
+        </motion.div>
         )
 }

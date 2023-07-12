@@ -46,3 +46,13 @@
 .server-media-image-search {
     margin-bottom: 5px;
 }
+
+.server-media-wrappers {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 5px;
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    z-index: 2;
+}

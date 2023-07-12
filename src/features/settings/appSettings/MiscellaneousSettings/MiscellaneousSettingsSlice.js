@@ -44,7 +44,8 @@ export const pushSytemNotification = createAsyncThunk(
     'pushSytemNotification/MiscellaneousSettingsSlice',
     async (data, {rejectWithValue, getState}) => {
         try {
-            
+            if (data.type === 'status' && data?.content?.text.includes('offline')) return;
+
             const {disableSystemNotifications} = getState().MiscellaneousSettingsSlice;
 
             if (disableSystemNotifications) return;

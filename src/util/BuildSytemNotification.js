@@ -12,7 +12,7 @@ export const BuildSystemNotification = (data) => {
           posistion: absolute;
           bottom: -100%;
           right: 0px;
-          animation: fadeInOut 3s ease-in-out;
+          animation: fadeInOut 3.1s ease-in-out;
           padding: 5px 5px 5px 5px;
           flex-shrink: 0;
           min-height: 80px;

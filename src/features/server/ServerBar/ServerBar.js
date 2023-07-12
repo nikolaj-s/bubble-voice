@@ -125,7 +125,7 @@ const Bar = () => {
         socket.on('user joins server', (data) => {
             dispatch(userJoinsServer(data));
 
-            dispatch(pushSytemNotification({username: data.username, content: {text: `Is Now ${data.status}`}, type: 'status'}))
+            dispatch(pushSytemNotification({username: data.username, content: {text: `Is Now Playing ${data.status}`}, type: 'status'}))
         })
         socket.on('connect_failed', (data) => {
             console.log('server connection error')
@@ -277,9 +277,9 @@ const Bar = () => {
         })
 
         socket.on('poke', (data) => {
-            dispatch(playSoundEffect({default: "youHaveBeenPoked"}))
+            dispatch(playSoundEffect({default: "youHaveBeenPoked", type: 'poke', message: data.message}))
             
-            dispatch(pushSytemNotification({content: {text: 'Has Poked You'}, username: data.username}))
+            dispatch(pushSytemNotification({content: {text: data.message}, username: data.username}))
         })
 
         socket.on('kick', (data) => {

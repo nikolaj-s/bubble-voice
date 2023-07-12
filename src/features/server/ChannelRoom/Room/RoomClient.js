@@ -308,8 +308,6 @@ export class RoomClient {
                         stream_title_container.className = 'stream-title-container';
                         stream_title.innerHTML = appData?.name;
                         stream_title_container.append(stream_title);
-
-                        el.srcObject = stream;
                         
                         par.id = consumer.id + 'container';
 
@@ -319,6 +317,10 @@ export class RoomClient {
 
                         el.autoplay = true;
 
+                        par.style.border = `4px solid ${appData.color}`;
+
+                        par.style.backgroundColor = appData.color;
+
                         el.className = `streaming-video-player ${user._id} ${user._id}-screen-share-stream`
 
                         el.playsInline = true;
@@ -326,6 +328,8 @@ export class RoomClient {
                         el.muted = true;
 
                         el.volume = 1;
+
+                        el.srcObject = stream;
 
                         par.appendChild(stream_title_container);
 
@@ -514,7 +518,7 @@ export class RoomClient {
         }
     }
 
-    async produce(type, deviceId = null, screenName, experimental_audio = false) {
+    async produce(type, deviceId = null, screenName, experimental_audio = false, color = 'rgb(0, 0, 0)') {
 
         let producer;
 
@@ -628,7 +632,7 @@ export class RoomClient {
             } 
 
             if (!audio) {
-                params.appData = {type: screen ? 'screen share' : 'web cam', name: screenName}
+                params.appData = {type: screen ? 'screen share' : 'web cam', name: screenName, color: color}
                 // params.encodings = [
                 //     {
                 //     rid: 'r0',

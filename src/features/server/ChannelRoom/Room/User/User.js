@@ -44,7 +44,7 @@ export const User = ({user}) => {
             <div style={{borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%'}} className='active-user-profile-image-container'>
                 <Image image_class={'user-image'} objectFit='cover' image={user.user_image} />
             </div>
-            <Loading  backgroundColor={'black'} zIndex={1} show_success={false} loading={user.webcam && (user.username === username ? user.webcam : !prefs?.disabled_web_cam)} />
+            <Loading  backgroundColor={user.color || 'black'} zIndex={1} show_success={false} loading={user.webcam && (user.username === username ? user.webcam : !prefs?.disabled_web_cam)} />
             <div 
             style={{backgroundColor: accentColor}}
             className='user-status-stream-wrapper'>

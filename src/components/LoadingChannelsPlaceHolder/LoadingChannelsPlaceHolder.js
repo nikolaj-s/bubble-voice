@@ -13,6 +13,7 @@ export const LoadingChannelsPlaceHolder = () => {
         {[1, 2, 3, 4, 5, 6, 7, 8].map(i => {
             return (
                 <div
+                key={i}
                     style={{
                         width: 'calc(100% - 5px)',
                         height: '34px',

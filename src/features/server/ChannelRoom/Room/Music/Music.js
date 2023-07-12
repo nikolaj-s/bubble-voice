@@ -266,7 +266,7 @@ export const Music = () => {
             if (e.clientX + offset[0] > 270 && (e.clientX + offset[0]) < window.innerWidth - 70) {
                 setLeft((e.clientX + offset[0]))
             } 
-            if ((e.clientY + offset[1]) > -120 && (e.clientY + offset[1]) + 415 < window.innerHeight) {
+            if ((e.clientY + offset[1]) > -108 && (e.clientY + offset[1]) + 415 < window.innerHeight) {
                 setTop((e.clientY + offset[1]))
             }
             

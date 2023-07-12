@@ -76,6 +76,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    max-width: calc(100% - 50px);
 }
 
 .channel-social-header-wrapper h3 {
@@ -83,11 +84,14 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    width: 100%;
     padding: 0;
     font-weight: 400;
     font-size: 1rem;
+    flex-shrink: 3;
 }
 
 .close-social-route-button {
+    flex-shrink: 0;
     -webkit-app-region: no-drag;
 }

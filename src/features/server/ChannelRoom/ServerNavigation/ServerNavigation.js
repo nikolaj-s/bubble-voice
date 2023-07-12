@@ -19,6 +19,7 @@ import { AltCloseButton } from '../../../../components/buttons/AltCloseButton/Al
 import { selectHideUserStatus } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { OptionsButton } from '../../../../components/buttons/OptionsButton/OptionsButton';
 import { TextOnlyIcon } from '../../../../components/Icons/TextOnlyIcon/TextOnlyIcon';
+import { setSelectedMember } from '../MemberPanel/MemberPanelSlice';
 
 export const ServerNavigation = () => {
 
@@ -72,6 +73,8 @@ export const ServerNavigation = () => {
 
     const handleAction = (p) => {
         dispatch(handleChangePage(p));
+
+        dispatch(setSelectedMember(""));
     }
 
     const handleAnimation = (color, type, p) => {
@@ -99,113 +102,138 @@ export const ServerNavigation = () => {
 
     const closeSocialRoute = () => {
         dispatch(setChannelSocialId(""));
+        dispatch(setSelectedMember(""))
     }
 
     React.useEffect(() => {
         if (page === 'voice') {
             voiceButtonAnimation.start({
-                backgroundColor: glassState ? glassColor : secondaryColor,
+                backgroundColor: accentColor,
                 cursor: 'default',
+               
             })
             socialButtonAnimation.start({
-                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
                 cursor: 'cursor',
+                
             })
             widgetsButtonAnimation.start({
-                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
                 cursor: 'cursor',
+                
             })
             pinsButtonAnimation.start({
-                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
                 cursor: 'cursor',
+                
             })
             mediaButtonAnimation.start({
-                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
                 cursor: 'cursor',
+                
             })
         } else if (page === 'social') {
             socialButtonAnimation.start({
-                backgroundColor: glassState ? glassColor : secondaryColor,
-                cursor: 'default'
+                backgroundColor: accentColor,
+                cursor: 'default',
+               
             })
             voiceButtonAnimation.start({
-                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
-                cursor: 'cursor'
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
+                
             })
             widgetsButtonAnimation.start({
-                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
-                cursor: 'cursor'
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
+                
             })
             pinsButtonAnimation.start({
-                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
-                cursor: 'cursor'
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
+                
             })
             mediaButtonAnimation.start({
-                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
-                cursor: 'cursor'
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
+                
             })
         } else if (page === 'widgets') {
             widgetsButtonAnimation.start({
-                backgroundColor: glassState ? glassColor : secondaryColor,
-                cursor: 'default'
+                backgroundColor: accentColor,
+                cursor: 'default',
+               
             })
             socialButtonAnimation.start({
-                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
-                cursor: 'cursor'
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
+                
             })
             voiceButtonAnimation.start({
-                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
-                cursor: 'cursor'
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
+                
             })
             pinsButtonAnimation.start({
-                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
-                cursor: 'cursor'
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
+                
             })
             mediaButtonAnimation.start({
-                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
-                cursor: 'cursor'
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
+                
             })
         } else if (page === 'pins') {
             pinsButtonAnimation.start({
-                backgroundColor: glassState ? glassColor : secondaryColor,
-                cursor: 'default'
+                backgroundColor: accentColor,
+                cursor: 'default',
+               
             })
             mediaButtonAnimation.start({
-                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
                 cursor: 'cursor'
             })
             widgetsButtonAnimation.start({
-                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
-                cursor: 'cursor'
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
+                
             })
             socialButtonAnimation.start({
-                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
-                cursor: 'cursor'
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
+                
             })
             voiceButtonAnimation.start({
-                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
-                cursor: 'cursor'
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
+                
             })
         } else if (page === 'media') {
             pinsButtonAnimation.start({
-                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
-                cursor: 'cursor'
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
+               
             })
             mediaButtonAnimation.start({
-                backgroundColor: glassState ? glassColor : secondaryColor,
-                cursor: 'default'
+                backgroundColor: accentColor,
+                cursor: 'default',
+                
             })
             widgetsButtonAnimation.start({
-                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
-                cursor: 'cursor'
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
+                
             })
             socialButtonAnimation.start({
-                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
-                cursor: 'cursor'
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
+                
             })
             voiceButtonAnimation.start({
-                backgroundColor: `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
-                cursor: 'cursor'
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
+                
             })
         }
     // eslint-disable-next-line
@@ -268,14 +296,14 @@ export const ServerNavigation = () => {
                 style={{borderTopLeftRadius: 5}}
                 transition={{duration: 0.05}}
                 onMouseEnter={() => {handleDesc('video', true)}}
-                onMouseOver={() => {handleAnimation(glassState ? glassColor : secondaryColor, voiceButtonAnimation, 'voice')}}
-                onMouseOut={() => {handleAnimation(`rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`, voiceButtonAnimation, 'voice')}}
+                onMouseOver={() => {handleAnimation(secondaryColor, voiceButtonAnimation, 'voice')}}
+                onMouseOut={() => {handleAnimation(`rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`, voiceButtonAnimation, 'voice')}}
                 onMouseLeave={() => {handleDesc('video', false)}}
                 onMouseDown={() => {handleAnimation(accentColor, voiceButtonAnimation, 'voice')}}
-                onMouseUp={() => {handleAnimation(glassState ? glassColor : secondaryColor, voiceButtonAnimation, 'voice')}}
+                onMouseUp={() => {handleAnimation(secondaryColor, voiceButtonAnimation, 'voice')}}
                 animate={voiceButtonAnimation} onClick={() => {handleAction('voice')}} className='server-navigation-button stream-server-button'>
                     {videoDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Stream Room</p> : null}
-                    <VideoRoomIcon color={textColor} />
+                    <VideoRoomIcon opacity={page === 'voice' ? 1 : 0.6} color={textColor} />
                 </motion.div>
                 {permissions?.user_can_view_channel_content ? 
                 <>
@@ -283,26 +311,26 @@ export const ServerNavigation = () => {
                 id={'channel-social-tab-button'}
                 transition={{duration: 0.05}}
                 onMouseEnter={() => {handleDesc('social', true)}}
-                onMouseOver={() => {handleAnimation(glassState ? glassColor : secondaryColor, socialButtonAnimation, 'social')}}
-                onMouseOut={() => {handleAnimation(`rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`, socialButtonAnimation, 'social')}}
+                onMouseOver={() => {handleAnimation(secondaryColor, socialButtonAnimation, 'social')}}
+                onMouseOut={() => {handleAnimation(`rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`, socialButtonAnimation, 'social')}}
                 onMouseLeave={() => {handleDesc('social', false)}}
                 onMouseDown={() => {handleAnimation(accentColor, socialButtonAnimation, 'social')}}
-                onMouseUp={() => {handleAnimation(glassState ? glassColor : secondaryColor, socialButtonAnimation, 'social')}}
+                onMouseUp={() => {handleAnimation(secondaryColor, socialButtonAnimation, 'social')}}
                 animate={socialButtonAnimation} onClick={() => {handleAction('social')}} className='server-navigation-button'>
                     {socialDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Social</p> : null}
-                    <SocialIcon color={textColor} />
+                    <SocialIcon opacity={page === 'social' ? 1 : 0.6} color={textColor} />
                 </motion.div>
                 <motion.div 
                 onMouseEnter={() => {handleDesc('widgets', true)}}
                 onMouseLeave={() => {handleDesc('widgets', false)}}
                 transition={{duration: 0.05}}
-                onMouseOver={() => {handleAnimation(glassState ? glassColor : secondaryColor, widgetsButtonAnimation, 'widgets')}}
-                onMouseOut={() => {handleAnimation(`rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`, widgetsButtonAnimation, 'widgets')}}
+                onMouseOver={() => {handleAnimation(secondaryColor, widgetsButtonAnimation, 'widgets')}}
+                onMouseOut={() => {handleAnimation(`rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`, widgetsButtonAnimation, 'widgets')}}
                 onMouseDown={() => {handleAnimation(accentColor, widgetsButtonAnimation, 'widgets')}}
-                onMouseUp={() => {handleAnimation(glassState ? glassColor : secondaryColor, widgetsButtonAnimation, 'widgets')}}
+                onMouseUp={() => {handleAnimation(secondaryColor, widgetsButtonAnimation, 'widgets')}}
                 animate={widgetsButtonAnimation} onClick={() => {handleAction('widgets')}} className='server-navigation-button'>
                     {widgetDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Widgets</p> : null}
-                    <WidgetsIcon color={textColor} />
+                    <WidgetsIcon opacity={page === 'widgets' ? 1 : 0.6} color={textColor} />
                 </motion.div>
                 </>
                 : null}
@@ -312,25 +340,25 @@ export const ServerNavigation = () => {
                 onMouseEnter={() => {handleDesc('pins', true)}}
                 onMouseLeave={() => {handleDesc('pins', false)}}
                 transition={{duration: 0.05}}
-                onMouseOver={() => {handleAnimation(glassState ? glassColor : secondaryColor, pinsButtonAnimation, 'pins')}}
-                onMouseOut={() => {handleAnimation(`rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`, pinsButtonAnimation, 'pins')}}
+                onMouseOver={() => {handleAnimation(secondaryColor, pinsButtonAnimation, 'pins')}}
+                onMouseOut={() => {handleAnimation(`rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`, pinsButtonAnimation, 'pins')}}
                 onMouseDown={() => {handleAnimation(accentColor, pinsButtonAnimation, 'pins')}}
-                onMouseUp={() => {handleAnimation(glassState ? glassColor : secondaryColor, pinsButtonAnimation, 'pins')}}
+                onMouseUp={() => {handleAnimation(secondaryColor, pinsButtonAnimation, 'pins')}}
                 animate={pinsButtonAnimation} onClick={() => {handleAction('pins')}} className='server-navigation-button'>
                     {pinsDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Pins</p> : null}
-                    <PinIcon color={textColor} />
+                    <PinIcon opacity={page === 'pins' ? 1 : 0.6} color={textColor} />
                 </motion.div>
                 <motion.div 
                 onMouseEnter={() => {handleDesc('media', true)}}
                 onMouseLeave={() => {handleDesc('media', false)}}
                 transition={{duration: 0.05}}
-                onMouseOver={() => {handleAnimation(glassState ? glassColor : secondaryColor, mediaButtonAnimation, 'media')}}
-                onMouseOut={() => {handleAnimation(`rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0)`, mediaButtonAnimation, 'media')}}
+                onMouseOver={() => {handleAnimation(secondaryColor, mediaButtonAnimation, 'media')}}
+                onMouseOut={() => {handleAnimation(`rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`, mediaButtonAnimation, 'media')}}
                 onMouseDown={() => {handleAnimation(accentColor, mediaButtonAnimation, 'media')}}
-                onMouseUp={() => {handleAnimation(glassState ? glassColor : secondaryColor, mediaButtonAnimation, 'media')}}
+                onMouseUp={() => {handleAnimation(secondaryColor, mediaButtonAnimation, 'media')}}
                 animate={mediaButtonAnimation} onClick={() => {handleAction('media')}} className='server-navigation-button'>
                     {mediaDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Media</p> : null}
-                    <MediaIcon color={textColor} />
+                    <MediaIcon opacity={page === 'media' ? 1 : 0.6} color={textColor} />
                 </motion.div>
                
             </div> :

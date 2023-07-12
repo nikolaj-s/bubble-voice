@@ -15,6 +15,7 @@ import { setExpandedContent } from '../../../ExpandContent/ExpandContentSlice';
 import { selectCurrentServerPageState } from '../ServerNavigation/ServerNavigationSlice';
 import { togglePinMessage } from '../../SocialSlice';
 import { MessagePlaceHolderLoader } from '../../../../components/MessagePlaceHolderLoader/MessagePlaceHolderLoader';
+import { AnimatePresence } from 'framer-motion';
 
 export const ServerDashBoard = () => {
 
@@ -64,12 +65,15 @@ export const ServerDashBoard = () => {
 
     return (
         <>
-        {socialOpen || (page !== 'pins' && page  !== 'media') ? null :
+        {(page !== 'pins' && page  !== 'media') ? null :
         <div className='server-dashboard-container'>
-            <div style={{backgroundColor: inChannel ? null : glass ? glassColor : secondaryColor}} className='server-dashboard-inner-container'>
+            <div style={{backgroundColor: glass ? glassColor : secondaryColor}} className='server-dashboard-inner-container'>
                 {loadingPins || serverLoading ? <MessagePlaceHolderLoader /> : null}
-                {page === 'pins' ? <Pins initLoading={loadingPins || serverLoading} key={'server-pins'} handlePin={handlePin} pins={pins} permission={permission} /> : null}
-                {page === 'media' ? <ServerMedia key={'server-media'} media={media} expand={expand} /> : null}
+                <AnimatePresence>
+                    {page === 'pins' && !socialOpen ? <Pins initLoading={loadingPins || serverLoading} key={'server-pins'} handlePin={handlePin} pins={pins} permission={permission} /> : null}
+                    {page === 'media' && !socialOpen ? <ServerMedia key={'server-media'} media={media} expand={expand} /> : null}
+                </AnimatePresence>
+                
             </div>
             <Loading loading={pinning} />
         </div>}

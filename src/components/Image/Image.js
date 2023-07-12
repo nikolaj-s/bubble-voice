@@ -60,7 +60,7 @@ export const Image = ({image_class, img_id, image, objectFit = 'cover', position
             className={image_class}
             id={img_id}
             onClick={() => {expandContent(image)}}
-            onError={handleError} loading={loadingState} draggable={false} style={{maxHeight: altHeight, width: width, maxWidth: altWidth, height: imgHeight, objectFit: objectFit, cursor: cursor, opacity: (!image || image === "") ? 0 : 1}} transition={{duration: 0.05}} initial={{opacity: 0}} animate={imageAnimation} onLoad={handleImageLoad} src={image} />
+            onError={handleError} loading={loadingState} draggable={false} style={{maxHeight: altHeight, width: width, maxWidth: altWidth, height: imgHeight, objectFit: objectFit, cursor: cursor, opacity: (!image || image === "") ? 0 : 1, transition: '0.1s'}} transition={{duration: 0.05}} initial={{opacity: 0}} animate={imageAnimation} onLoad={handleImageLoad} src={image} />
         </div>
     )
 }

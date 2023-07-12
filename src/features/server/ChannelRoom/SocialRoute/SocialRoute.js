@@ -48,10 +48,9 @@ export const SocialRoute = () => {
             {currentSocial ?
             <motion.div 
             key={`social-route-${channelId}`}
-            initial={{opacity: 0}}
-            animate={{opacity: 1}}
-            exit={{opacity: 0}}
-            transition={{duration: 0.1}}
+            initial={{translateX: '-100%'}}
+            animate={{translateX: '0%'}}
+            exit={{translateX: '-100%'}}
             style={{
                 position: 'absolute',
                 zIndex: 8,

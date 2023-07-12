@@ -131,7 +131,7 @@ export const SoundEffects = () => {
         }
 
         setTimeout(() => {
-            
+           
             if (soundEffectQueue[0]?.default === 'userJoined' && dynamicVoiceAlerts) {
                 
                 dynamicAlert(`${soundEffectQueue[0].user} has joined ${channel.channel_name}`)
@@ -145,6 +145,9 @@ export const SoundEffects = () => {
                 } else {
                     setPlaying((soundEffects[soundEffectQueue[0]?.default] ? soundEffects[soundEffectQueue[0].default] : soundEffects[soundEffectQueue[0]]));
                 }
+            } else if (soundEffectQueue[0]?.type === 'poke') {
+
+                dynamicAlert(soundEffectQueue[0]?.message);
 
             } else {
                 

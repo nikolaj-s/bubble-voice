@@ -23,9 +23,10 @@ import { Loading } from '../../../../../components/LoadingComponents/Loading/Loa
 import { PersistedDataNotice } from '../../../../../components/PersistedDataNotice/PersistedDataNotice';
 
 import { sendDirectMessage, updateDirectmessage } from '../../../../Messages/MessagesSlice';
-import { selectGlassColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassColor, selectGlassState, selectSecondaryColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { fetchMessages, messageCleanUp, selectAllMessages, selectAltSocialLoading, selectLoadingMessages, sendMessage, togglePinMessage } from '../../../SocialSlice';
 import { saveSocialData, SOCIAL_DATA } from '../../../../../util/LocalData';
+import { MessagePlaceHolderLoader } from '../../../../../components/MessagePlaceHolderLoader/MessagePlaceHolderLoader';
 
 export const Social = ({currentChannel, channelId, socialRoute = false, bulletin = false, direct_message, direct_message_user, status}) => {
 
@@ -41,6 +42,8 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
     const [mounting, toggleMounting] = React.useState(false);
 
+    const [initialMount, toggleInitialMount] = React.useState(true);
+
     const loadingMore = useSelector(selectLoadingMessages);
 
     const altLoading = useSelector(selectAltSocialLoading);
@@ -54,6 +57,10 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
     const pinning = useSelector(selectPinningMessage);
 
     const glassColor = useSelector(selectGlassColor);
+
+    const secondaryColor = useSelector(selectSecondaryColor);
+
+    const glassState = useSelector(selectGlassState);
 
     const social = useSelector(selectAllMessages);
 
@@ -78,6 +85,10 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
     React.useEffect(() => {
 
+        setTimeout(() => {
+            toggleInitialMount(false);
+        }, 400)
+
         if (direct_message) return;
         
         if (social[channelId]) {
@@ -95,6 +106,9 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
             dispatch(fetchMessages({channel_id: channelId}));
         
         }
+
+        
+    
 
         return () => {
             dispatch(messageCleanUp(channelId));
@@ -264,10 +278,9 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         dispatch(handlePinMessageToProfile({id: id}));
     }
-    
     return (
         <div 
-        
+        style={{backgroundColor: glassState ? glassColor : secondaryColor}}
         className='social-outer-container'
         >
             {loadingMore || mounting ?
@@ -278,11 +291,14 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
             <div className='social-wrapper-container'>
                 <div  className='social-inner-container'>
                     <ImagePreview cancel={handleCancelImageSend} preview={image?.preview} inputHeight={inputHeight} />
+                    
                     <div onScroll={handleLoadMoreOnScroll} ref={messagesRef} className='social-messages-wrapper'>
-                        {
+                        {initialMount ? 
+                        <MessagePlaceHolderLoader />
+                        :
                         allMessages?.map((message, key) => {
                             return message.no_more_messages ? null :
-                            <Message pin_to_profile={pinToProfile} dashboard={false} direct_message={direct_message} persist={currentChannel.persist_social} current_message={message} previous_message={key === allMessages?.length - 1 ? null : allMessages[key + 1]} pinned={message?.pinned} pinMessage={() => {pinMessage(message)}} perm={permission?.user_can_post_channel_social} channel_id={message?.channel_id} id={message._id} message={message.content} key={message.content.local_id || message._id} />
+                            <Message pin_to_profile={pinToProfile} dashboard={false} direct_message={direct_message} persist={currentChannel.persist_social} current_message={message} previous_message={key === allMessages?.length - 1 ? null : allMessages[key + 1]} pinned={message?.pinned} pinMessage={() => {pinMessage(message)}} perm={permission?.user_can_post_channel_social} channel_id={message?.channel_id} id={message._id} message={message.content} key={message._id || message.content.local_id} />
                         })}
                         {direct_message ? null : <PersistedDataNotice channelName={currentChannel.channel_name} persisted={!currentChannel.persist_social} />}
                     </div>

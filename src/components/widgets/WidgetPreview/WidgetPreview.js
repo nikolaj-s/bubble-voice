@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { Reorder } from 'framer-motion'
 
 // state
-import { selectPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassColor, selectGlassState, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // components
 import { DynamicGalleryWidget } from '../Widgets/DynamicGalleryWidget/DynamicGalleryWidget';
@@ -28,6 +28,12 @@ export const WidgetPreview = ({widgets = [], editing = false, reorder}) => {
     const textColor = useSelector(selectTextColor);
 
     const primaryColor = useSelector(selectPrimaryColor);
+
+    const glassColor = useSelector(selectGlassColor);
+
+    const secondaryColor = useSelector(selectSecondaryColor);
+
+    const glassState = useSelector(selectGlassState);
 
     return (
         <div className='widgets-preview-container'>
@@ -62,7 +68,7 @@ export const WidgetPreview = ({widgets = [], editing = false, reorder}) => {
             })}
             </Reorder.Group>
             : 
-            <ResponsiveMasonry style={{width: 'calc(100% - 5px)', margin: '0px 5px 0px 0px',}} columnsCountBreakPoints={{1299: 1, 1300: 2, 2000: 3}}>
+            <ResponsiveMasonry style={{width: 'calc(100% - 5px)', margin: '0px 5px 0px 0px'}} columnsCountBreakPoints={{1299: 1, 1300: 2, 2000: 3}}>
                 <Masonry gutter='5px'>
                 {widgets.map((widget, key) => {
                     return (

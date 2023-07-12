@@ -10,6 +10,7 @@ import { selectCurrentAppVersion } from '../../app/appSlice';
 import "./AppVersion.css";
 
 import { Loading } from '../LoadingComponents/Loading/Loading';
+import { PaypalDonateButton } from '../PaypalDonateButton/PaypalDonateButton';
 
 export const AppVersion = () => {
     
@@ -58,9 +59,12 @@ export const AppVersion = () => {
     }
 
     return (
+        <>
+       
         <div 
         style={{backgroundColor: secondaryColor}}
         className='app-version-container'>
+            
             <p
             style={{color: color}}
             >App Version: {appVersion}</p>
@@ -69,5 +73,7 @@ export const AppVersion = () => {
             <p onClick={checkForUpdate} className='app-version-buttons' style={{color: color, cursor: 'pointer'}}>Check For Updates</p>
             <Loading loading={loading} />
         </div>
+        <PaypalDonateButton />
+        </>
     )
 }

@@ -16,6 +16,12 @@
     justify-content: space-between;
 }
 
+.text-button p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .text-button svg {
     flex-shrink: 0;
 }
