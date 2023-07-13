@@ -9,10 +9,10 @@
 .message-image-search-container {
     display: flex;
     flex-direction: column;
-    width: calc(100% - 11px - 275px);
+    width: calc(100% - 40px);
     height: auto;
     max-height: 85%;
-    max-width: 700px;
+    max-width: 500px;
     position: absolute;
     height: auto;
     z-index: 5;

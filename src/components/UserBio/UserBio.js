@@ -47,7 +47,7 @@ export const UserBio = ({bio = "", margin, loading}) => {
     const expand = (ct) => {
         dispatch(setExpandedContent(ct))
     }
-
+console.log(bio)
     return (
         <>
         
@@ -70,7 +70,7 @@ export const UserBio = ({bio = "", margin, loading}) => {
              transition={{ease: 'linear', duration: 3, repeat: Infinity}}
              ></motion.div>  
             : null}
-            {bio.length > 0 ?
+            {bio.length > 0 && bio !== 'undefined' ?
             <div className='inner-bio-wrapper'>
                 <div className='bio-images-wrapper'>
                     {images.map(i => {

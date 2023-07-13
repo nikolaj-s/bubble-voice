@@ -6,7 +6,7 @@ import { Loading } from '../LoadingComponents/Loading/Loading'
 export const LoadingErrorComponent = ({error, errorMessage, loading, action, label="Ok"}) => {
     return (
         <AnimatePresence>
-            {error ? <Error errorMessage={errorMessage} action={action} buttonLabel={label} /> : null}
+            {error ? <Error position='absolute' errorMessage={errorMessage} action={action} buttonLabel={label} /> : null}
             <Loading loading={loading} error={error} />
         </AnimatePresence>
     )

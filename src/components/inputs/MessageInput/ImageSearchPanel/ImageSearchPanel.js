@@ -174,7 +174,7 @@ export const ImageSearchPanel = ({direct_message, searchingForImage, selectImage
                         {mediaType === 'Reddit' ?
                         <ViewSubReddit expand={(i) => {handleSelectImage({preview: i, image: i})}} />
                         :
-                        <ResponsiveMasonry style={{height: 'auto'}} columnsCountBreakPoints={{1000: 2, 1500: 3}}>
+                        <ResponsiveMasonry style={{height: 'auto'}} columnsCountBreakPoints={{700: 1, 1000: 2}}>
                             <Masonry gutter='5px'>   
                                 {mediaType === 'Videos' ?
                                 (videos?.length > 0 ? videos : loading ? [] : recommendations.filter(v => v.type === 'video').slice(0, 15)).map(video => {

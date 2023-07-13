@@ -84,7 +84,7 @@ export const SignUp = () => {
                     <TextButton action={navigateToSignIn} name={"Sign In"} />
                 </motion.div>
                 <AnimatePresence>
-                    {error ? <Error action={handleError} errorMessage={errorMessage} buttonLabel={"Ok"} /> : null}
+                    {error ? <Error position='absolute' action={handleError} errorMessage={errorMessage} buttonLabel={"Ok"} /> : null}
                     <Loading loading={loading} error={error} />
                 </AnimatePresence>
             </div>

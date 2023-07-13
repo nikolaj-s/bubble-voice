@@ -7,7 +7,6 @@
     left: 268px;
     z-index: 11;
     display: flex;
-    align-items: center;
     justify-content: flex-start;
 }
 
@@ -18,7 +17,7 @@
     align-items: center;
     position: relative;
     height: 700px;
-    top: 8px;
+    top: 145px;
     width: 500px;
     max-height: calc(100% - 65px);
     max-width: calc(100% - 30px);
