@@ -19,7 +19,7 @@
     height: 700px;
     top: 145px;
     width: 500px;
-    max-height: calc(100% - 65px);
+    max-height: calc(100% - 172px);
     max-width: calc(100% - 30px);
     padding: 10px 20px;
     border-radius: var(--border-radius);

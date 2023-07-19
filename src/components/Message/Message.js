@@ -21,6 +21,7 @@ import { setPanelPosition, setSelectedMember } from '../../features/server/Chann
 import { selectServerMembers } from '../../features/server/ServerSlice';
 import { DateSpacer } from './DateSpacer/DateSpacer';
 import { GetTimeDifference } from '../../util/GetTimeDifference';
+import { AltSocialMedia } from './AltSocialMedia/AltSocialMedia';
 
 export const Message = ({dashboard = false, direct_message, message, overlay = false, id, channel_id, perm, pinMessage, pinned, index, previous_message, current_message, persist, pin_to_profile}) => {
 
@@ -81,6 +82,7 @@ export const Message = ({dashboard = false, direct_message, message, overlay = f
                 <SenderInfo timeStamp={timeStamp} direct_message={direct_message} pin_to_profile={pin_to_profile} link={message.link} color={user?.color} profile_picture_shape={user?.profile_picture_shape} primaryColor={primaryColor} display_name={user?.display_name} user_image={user?.user_image} action={openUserPanel} persist={persist} id={id} accentColor={accentColor} hover={hoverState} textColor={textColor} perm={perm} index={index}  message={message} current_message={current_message} previous_message={previous_message} pinMessage={pinMessage} pinned={pinned} overlay={overlay} />
                 <MessageText color={textColor} text={message.text} />
                 <MessageLink link={message.link} />
+                <AltSocialMedia link={message.link} />
                 <Iframe marginRight={5} marginLeft={50} link={message.iFrame} />
                 <TwitterEmbed id={message.twitter} />
                 {message.image ? 

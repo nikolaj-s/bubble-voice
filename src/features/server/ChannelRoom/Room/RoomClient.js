@@ -326,8 +326,8 @@ export class RoomClient {
                         el.playsInline = true;
 
                         el.muted = true;
-
-                        el.volume = 1;
+                        console.log(prefs.stream_volume)
+                        el.volume = prefs.stream_volume ? prefs.stream_volume : 1;
 
                         el.srcObject = stream;
 
@@ -545,16 +545,8 @@ export class RoomClient {
                 mediaConstraints = {
                     audio: false,
                     video: {
-                        width: {
-                            min: 540,
-                            ideal: 1280,
-                            max: 1280
-                        },
-                        height: {
-                            min: 360,
-                            ideal: 720,
-                            max: 720
-                        },
+                        width: 640,
+                        height: 480,
                         deviceId: deviceId,
                         maxFrameRate: 30
                     }
@@ -567,12 +559,10 @@ export class RoomClient {
                         mandatory: {
                             chromeMediaSource: 'desktop',
                             chromeMediaSourceId: deviceId,
-                            minWidth: 960,
-                            maxWidth: 1280,
-                            minHeight: 540,
-                            maxHeight: 720,
-                            maxFrameRate: 30,
-                            minFrameRate: 30,
+                            width: 640,
+                            height: 480,
+                            maxFrameRate: 24,
+                            minFrameRate: 24,
                         }
                     }
                 };
@@ -600,7 +590,7 @@ export class RoomClient {
         let microphone_stream;
 
         try {
-            stream = (screen && experimental_audio) ? await navigator.mediaDevices.getDisplayMedia({video: {frameRate: 30, echoCancellation: true, deviceId: deviceId, width: 1280, height: 720}, audio: {deviceId: deviceId, echoCancellation: true, autoGainControl: false, noiseSuppression: false}, systemAudio: 'exclude'}) : await navigator.mediaDevices.getUserMedia(mediaConstraints);
+            stream = (screen && experimental_audio) ? await navigator.mediaDevices.getDisplayMedia({video: {frameRate: 24, echoCancellation: true, deviceId: deviceId, width: 640, height: 480}, audio: {deviceId: deviceId, echoCancellation: true, autoGainControl: false, noiseSuppression: false}, systemAudio: 'exclude'}) : await navigator.mediaDevices.getUserMedia(mediaConstraints);
 
             if (screen) {
 
@@ -707,6 +697,8 @@ export class RoomClient {
 
                 el = document.createElement('video');
                 
+                console.log(stream.getVideoTracks()[0].getSettings())
+
                 el.srcObject = stream;
 
                 el.id = producer.id;

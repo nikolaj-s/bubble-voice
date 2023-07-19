@@ -81,13 +81,14 @@
 }
 
 .message-loading-container {
-    width: 45px;
-    height: 45px;
+    width: 46px;
+    height: 46px;
     display: flex;
     justify-content: center;
     align-items: center;
     position: absolute;
     border-radius: 5px;
+    top: 5px;
 }
 
 .message-image-container {
