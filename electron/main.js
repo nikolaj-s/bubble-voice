@@ -235,15 +235,16 @@ function createWindow () {
 
   win.webContents.on('did-finish-load', () => {
 
-      if (process.argv.includes('--hidden')) {
-          win.hide();
-      } else {
-          win.show();
-      }
-
       setTimeout(() => {
         initial_app_loading?.hide();
-      }, 1000)
+
+        if (process.argv.includes('--hidden')) {
+          win.hide();
+        } else {
+            win.show();
+        }
+
+      }, 2000)
   })
 
   win.once('focus', () => win.flashFrame(false));
@@ -334,6 +335,55 @@ function createWindow () {
   }
   
 }
+
+ipcMain.handle('SCREEN_SHOT', async () => {
+  try {
+    const capture = await desktopCapturer.getSources({types: ['window'], thumbnailSize: {width: 1920, height: 1080}})
+    .then(captures => {
+     
+      const pickCurrent = (sources, index = 0) => {
+        
+        if (sources.length === index) {
+          return {error: 'error capturing screen shot'};
+        }
+
+        if (sources[index].name.toLowerCase().includes('bubble') || sources[index].name.toLowerCase().includes('overlay')) {
+          return pickCurrent(sources, index++);
+        }
+
+        return {data: sources[index].thumbnail.toPNG(), preview: sources[index].thumbnail.toDataURL()}
+      }
+      console.log(captures[0])
+      return pickCurrent(captures, 0);
+    
+    })
+
+    return capture;
+  } catch (error) {
+    console.log(error);
+    return {error: "error capturing screen shot"}
+  }
+})
+
+ipcMain.handle("DYNAMIC_STATUS", async () => {
+  const captures = await desktopCapturer.getSources({ types: ['window'], thumbnailSize: {width: 0, height: 0}})
+  .then(async sources => {
+      const screens = [];
+      
+      for (const source of sources) {
+        
+        screens.push({
+          id: source.id,
+          name: source.name
+        })
+      }
+
+      return screens;
+
+  })
+
+  return captures;
+})
 
 ipcMain.handle('GET_SOURCES', async () => {
 
@@ -475,6 +525,10 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
         event.sender.send('screen share', {toggle: true});
       }
 
+      if (key.keycode === UiohookKey[keyCodes.screen_shot?.key] || key.keycode === UiohookKey[keyCodes.screen_shot?.code]) {
+        event.sender.send('screen shot', {toggle: true});
+      }
+
       keyDown = false;
     })
 
@@ -539,6 +593,10 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
 
       if (key.button === keyCodes.disconnect?.keyCode) {
         event.sender.send('disconnect key', {toggle: true});
+      }
+
+      if (key.button === keyCodes.share_screen?.keyCode) {
+        event.sender.send('share screen', {toggle: true});
       }
 
       keyDown = false;

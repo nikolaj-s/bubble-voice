@@ -1,0 +1,11 @@
+
+.screen-shot-display-container {
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
+    width: 250px;
+    height: 150px;
+    z-index: 20;
+    background-color: black;
+    border-radius: 5px;
+}

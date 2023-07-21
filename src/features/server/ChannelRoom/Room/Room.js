@@ -30,6 +30,7 @@ import { selectGlassColor, selectGlassState, selectSecondaryColor } from '../../
 import { AudioInit, audioCtx } from '../../../AudioInit/AudioInit';
 import { selectCurrentServerPageState } from '../ServerNavigation/ServerNavigationSlice';
 import { AnimatePresence, motion, useAnimation } from 'framer-motion';
+import { ScreenShot } from './ScreenShot/ScreenShot';
 
 export let client;
 
@@ -740,7 +741,16 @@ const Component = () => {
             analyser?.disconnect();
             scriptProcessor?.disconnect();
             source?.disconnect();
-            
+            try {
+
+                const {webFrame} = window.require('electron');
+                
+                webFrame.clearCache();
+
+            } catch (err) {
+                console.log(err)
+                return;
+            }
         }
        
     // eslint-disable-next-line   
@@ -791,6 +801,7 @@ const Component = () => {
             
         </motion.div>
         <AudioInit />
+        <ScreenShot channelId={current_channel_id} username={username} />
         </>
     )
 }

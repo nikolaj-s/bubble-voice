@@ -72,8 +72,10 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         if (direct_message) return;
 
+        if (!social[channelId]) return;
+
         if (social[channelId]) {
-            if (!social[channelId][0]._id) return;
+            if (!social[channelId][0]?._id) return;
             
             SOCIAL_DATA.set(channelId, {message_id: social[channelId][0]?._id ? social[channelId][0]?._id : ""});
             
@@ -112,6 +114,17 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         return () => {
             dispatch(messageCleanUp(channelId));
+
+            try {
+
+                const {webFrame} = window.require('electron');
+
+                webFrame.clearCache();
+
+            } catch (err) {
+                console.log(err)
+                return;
+            }
         }
 
     }, [channelId])
@@ -193,7 +206,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
         setText("");
 
         setImage(false);
-
+console.log(image)
         if (direct_message) {
 
             await socket.request('send direct message', {...data, user_image: userImage})
@@ -207,7 +220,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         } else {
             
-            dispatch(sendMessage({username: username, file: image, channel_id: channelId, local_id: local_id, text: text, image_preview: image?.preview}))
+            dispatch(sendMessage({username: username, file: image, channel_id: channelId, local_id: local_id, text: text}))
         }
 
         setTimeout(() => {

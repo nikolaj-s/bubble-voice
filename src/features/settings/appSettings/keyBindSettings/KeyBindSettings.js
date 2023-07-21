@@ -12,7 +12,7 @@ import { SettingsHeader } from '../../../../components/titles/SettingsHeader/Set
 
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { selectActivateCameraKey, selectDisconnectKey, selectMuteAudioKey, selectMuteMicKey, selectPushToMuteKey, selectPushToTalkKey, selectShareScreenKey, updateKeyCodeState } from './keyBindSettingsSlice';
+import { selectActivateCameraKey, selectDisconnectKey, selectMuteAudioKey, selectMuteMicKey, selectPushToMuteKey, selectPushToTalkKey, selectScreenShotKey, selectShareScreenKey, updateKeyCodeState } from './keyBindSettingsSlice';
 
 // style
 import "./KeyBindSettings.css";
@@ -40,6 +40,8 @@ const Settings = () => {
 
     const pushToMuteKey = useSelector(selectPushToMuteKey);
 
+    const screenShotKey = useSelector(selectScreenShotKey);
+
     React.useEffect(() => {
         dispatch(setHeaderTitle('Key Bind Settings'))
     // eslint-disable-next-line
@@ -66,8 +68,10 @@ const Settings = () => {
         
         if (event.keyCode === pushToMuteKey.keyCode && (event.keyCode !== "")) return;
         
+        if (event.keyCode === screenShotKey.keyCode && (event.keyCode !== "")) return;
+
         const obj = {...local, [state]: {key: event.nativeEvent.key.length === 1 ? event.nativeEvent.key.toUpperCase() : event.nativeEvent.key , keyCode: event.keyCode, code: event.code}}
-        
+        console.log(obj)
         setLocal(obj)
         
         dispatch(updateKeyCodeState(obj))
@@ -116,6 +120,11 @@ const Settings = () => {
                 <TextInput keyCode={handleKeyCodeUpdate} stateSelector='share_screen' inputValue={local['share_screen'] ? local['share_screen'].key : shareScreenKey.key} />
                 <ClearButton invert={true} width={35} height={35} action={() => {handleKeyCodeUpdate({}, "share_screen", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} name={"Clear Bind"} />
             </div>    
+            <InputTitle title={"Screen Shot *Screen Shots Auto Share To Your Current Channel"} />
+            <div className='key-bind-input-wrapper'>
+                <TextInput keyCode={handleKeyCodeUpdate} stateSelector='screen_shot' inputValue={local['screen_shot'] ? local['screen_shot'].key : screenShotKey.key} />
+                <ClearButton invert={true} width={35} height={35} action={() => {handleKeyCodeUpdate({}, "screen_shot", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} name={"Clear Bind"} />
+            </div>   
             <SettingsHeader title={"Misc"} />
             <InputTitle title={"Disconnect"} />
             <div className='key-bind-input-wrapper'>

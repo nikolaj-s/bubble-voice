@@ -30,6 +30,17 @@ export const ScreenShareMenu = ({selectingScreens}) => {
     const closeScreenShare = () => {
         dispatch(toggleControlState('screenShareState'))
     }
+
+    React.useEffect(() => {
+
+        return () => {
+            for (const screen of screens) {
+                URL.revokeObjectURL(screen.thumbnail);
+                URL.revokeObjectURL(screen.icon);
+            }
+        }
+
+    }, [screens])
     
     return (
         <motion.div

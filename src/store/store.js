@@ -31,7 +31,7 @@ import ExploreSlice from "../features/Explore/ExploreSlice";
 import MessagesSlice from "../features/Messages/MessagesSlice";
 import SocialSlice from "../features/server/SocialSlice";
 import AudioInitSlice from "../features/AudioInit/AudioInitSlice";
-
+import {FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER} from 'redux-persist';
 const { configureStore } = require("@reduxjs/toolkit");
 
 // state store
@@ -81,7 +81,13 @@ const store = configureStore({
         // Social
         SocialSlice: SocialSlice,
         AudioInitSlice: AudioInitSlice
-    }
+    },
+    middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 })
 
 export default store;

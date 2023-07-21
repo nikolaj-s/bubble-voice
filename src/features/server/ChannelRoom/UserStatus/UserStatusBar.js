@@ -50,7 +50,7 @@ export const UserStatusBar = () => {
 
             ipcRenderer = window.require('electron').ipcRenderer;
 
-            ipcRenderer.invoke('GET_SOURCES')
+            ipcRenderer.invoke('DYNAMIC_STATUS')
             .then(res => {
 
                 let new_status_name;

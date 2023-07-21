@@ -1,8 +1,8 @@
 .add-server-menu-outer-container {
     
     width: 400px;
-    height: calc(100% - 32px - 20px);
-    padding: 5px 5px 10px 5px;
+    height: calc(100% - 36px);
+    
     z-index: 10;
     border-radius: 8px;
     overflow: hidden;

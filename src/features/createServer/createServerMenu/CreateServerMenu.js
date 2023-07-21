@@ -169,7 +169,7 @@ export const CreateServerMenu = () => {
         initial={{opacity: 0, marginLeft: '-600px'}}
         animate={{opacity: 1, marginLeft: 0}}
         exit={{opacity: 0, marginLeft: '-600px'}}
-        style={{backgroundColor: `rgba(${accentColor.split('rgb(')[1].split(')')[0]}, 0.7)`}} className='add-server-menu-outer-container'>
+        style={{backgroundColor: secondaryColor}} className='add-server-menu-outer-container'>
             
             <motion.div
             style={{

@@ -130,6 +130,20 @@ export const ServerMedia = ({media, expand}) => {
         } catch (err) {
             return;
         }
+
+        return () => {
+            try {
+
+                const {webFrame} = window.require('electron');
+                console.log(webFrame.getResourceUsage())
+                webFrame.clearCache();
+
+                console.log('performing ram clean')
+            } catch (err) {
+                console.log(err)
+                return;
+            }
+        }
     }, [page])
     
     return (

@@ -5,12 +5,16 @@ import { useSelector } from 'react-redux';
 
 // state
 import { selectPrimaryColor, selectSecondaryColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { useRef } from 'react';
+import { useIntersection } from '../useIntersection/useIntersection';
 
 export const Image = ({image_class, img_id, image, objectFit = 'cover', position = 'relative', zIndex = 0, loadingState = 'lazy', opacity = 1, width = '100%', cursor = 'default', altWidth = '100%', imgHeight = '100%', expandContent = () => {}, disableErr = false, hideOnError = false, id, imageError = "https://res.cloudinary.com/drlkgoter/image/upload/v1674339889/no-picture_m4dmai.jpg", onLoad = () => {}, backgroundColor = null, altHeight = '100%'}) => {
 
     const [loading, toggleLoading] = React.useState(true);
 
     const [error, toggleError] = React.useState(false);
+
+    const [size, setSize] = React.useState({});
 
     const primaryColor = useSelector(selectPrimaryColor);
 
@@ -56,7 +60,9 @@ export const Image = ({image_class, img_id, image, objectFit = 'cover', position
             transition={{ease: 'linear', duration: 3, repeat: Infinity}}
             ></motion.div>         
             : null}
+            
             <motion.img 
+            
             className={image_class}
             id={img_id}
             onClick={() => {expandContent(image)}}

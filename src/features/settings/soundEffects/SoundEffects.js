@@ -55,7 +55,8 @@ export const SoundEffects = () => {
         'lostConnection': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/lost-connection_aeqih2.mp3",
         'moved': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/moved_jszssq.mp3",
         'deactivate': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/deactivate_naxcd8.mp3",
-        "altPop": "https://res.cloudinary.com/drlkgoter/video/upload/v1670015949/cork-85200_m6ej0k.mp3"
+        "altPop": "https://res.cloudinary.com/drlkgoter/video/upload/v1670015949/cork-85200_m6ej0k.mp3",
+        'screenShot': 'https://res.cloudinary.com/drlkgoter/video/upload/v1689884407/screenshotsound_deprq1.mp3'
     }
 
     const dynamicAlert = (message) => {
