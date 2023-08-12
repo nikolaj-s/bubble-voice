@@ -13,7 +13,7 @@ export const ImageDropListener = (props) => {
         
     }
 
-    const handleDragEnd = () => {
+    const handleDragEnd = (e) => {
 
         toggleDragged(false);
     

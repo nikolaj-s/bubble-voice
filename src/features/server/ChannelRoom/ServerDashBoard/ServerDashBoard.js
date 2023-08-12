@@ -13,7 +13,7 @@ import { Pins } from './Pins/Pins';
 import { ServerMedia } from './ServerMedia/ServerMedia';
 import { setExpandedContent } from '../../../ExpandContent/ExpandContentSlice';
 import { selectCurrentServerPageState } from '../ServerNavigation/ServerNavigationSlice';
-import { togglePinMessage } from '../../SocialSlice';
+import { selectAltSocialLoading, togglePinMessage } from '../../SocialSlice';
 import { MessagePlaceHolderLoader } from '../../../../components/MessagePlaceHolderLoader/MessagePlaceHolderLoader';
 import { AnimatePresence } from 'framer-motion';
 
@@ -38,6 +38,8 @@ export const ServerDashBoard = () => {
     const permission = useSelector(selectUsersPermissions);
 
     const pinning = useSelector(selectPinningMessage);
+
+    const altLoading = useSelector(selectAltSocialLoading);
 
     const inChannel = useSelector(selectCurrentChannelId);
 
@@ -75,7 +77,7 @@ export const ServerDashBoard = () => {
                 </AnimatePresence>
                 
             </div>
-            <Loading loading={pinning} />
+            <Loading loading={pinning || altLoading} />
         </div>}
         </>
     )

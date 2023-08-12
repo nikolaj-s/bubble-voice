@@ -4,7 +4,7 @@
     vertical-align: middle;
     display: flex;
     align-self: center;
-    z-index: 2;
+   
     border-radius: var(--border-radius);
     overflow: hidden;
     justify-content: center;
@@ -13,6 +13,13 @@
     cursor: pointer;
     max-width: 960px;
     max-height: 540px;
+}
+
+.room-user-status-icon {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    z-index: 3;
 }
 
 .active-user-container .loading-container {

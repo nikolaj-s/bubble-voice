@@ -1,8 +1,8 @@
 
 .user-status-bar {
-    min-width: 180px;
-    width: 180px;
-    max-width: 180px;
+    min-width: 184px;
+    width: 184px;
+    max-width: 184px;
     height: 100%;
     right: 0;
     display: flex;
@@ -13,8 +13,7 @@
     overflow-x: hidden;
     z-index: 1;
     align-items: center;
-    border-radius: 8px;
-    margin-left: 4px;
+    margin-left: 1px;
 }
 
 .user-status-bar:hover {
@@ -24,8 +23,9 @@
 .user-status-bar h4 {
     width: 100%;
     margin: 10px 0px 10px 8px;
-    font-weight: 400;
+    font-weight: 600;
     font-size: 0.8rem;
+    opacity: 0.6;
 }
 
 .online-user-wrapper {

@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 import { selectProfilePinnedMessage, selectUsername } from '../../../features/settings/appSettings/accountSettings/accountSettingsSlice'
 import { PinToProfileButton } from '../../buttons/PinToProfileButton/PinToProfileButton'
 
-export const SenderInfo = ({timeStamp, direct_message, pin_to_profile, link, color, id, profile_picture_shape, current_message, primaryColor, previous_message, message, pinMessage, pinned, overlay, hover, textColor, index, perm, accentColor, persist, action, display_name, user_image}) => {
+export const SenderInfo = ({timeStamp, direct_message, pin_to_profile, link, id, current_message, primaryColor, previous_message, message, pinMessage, pinned, overlay, hover, textColor, index, perm, accentColor, persist, action, display_name, user_image}) => {
 
     const userName = useSelector(selectUsername);
 
@@ -32,7 +32,7 @@ export const SenderInfo = ({timeStamp, direct_message, pin_to_profile, link, col
         
         style={{
             height: (previous_message?.username !== current_message?.username) || (previous_message?.content?.date?.split("T")[0] !== current_message?.content?.date?.split("T")[0]) ? 15 : 0,
-            padding: (previous_message?.username !== current_message?.username) || (previous_message?.content?.date?.split("T")[0] !== current_message?.content?.date?.split("T")[0]) ? '5px 0 8px 0' : 0,
+            padding: (previous_message?.username !== current_message?.username) || (previous_message?.content?.date?.split("T")[0] !== current_message?.content?.date?.split("T")[0]) ? '0px 0 8px 0' : 0,
         }}
         className='sender-info-container'>
                 
@@ -41,11 +41,7 @@ export const SenderInfo = ({timeStamp, direct_message, pin_to_profile, link, col
                 (previous_message?.content?.date?.split("T")[0] !== current_message?.content?.date?.split("T")[0])
                 ?
                 <div className='sender-info-inner-container'>
-                    <div style={{borderRadius: profile_picture_shape === 'square' ? '5px' : '50%',
-                    border: `solid 2px ${color || primaryColor}`
-                    }} onClick={action} className='message-profile-picture'>
-                        <Image image_class={'user-image'} cursor='pointer' image={user_image || current_message.user_image} />
-                    </div>
+                    
                     <h2
                     onClick={action}
                     style={{color: textColor}}
@@ -57,7 +53,7 @@ export const SenderInfo = ({timeStamp, direct_message, pin_to_profile, link, col
                 </div>
                 : null}
                 {message.loading ? 
-                <MessageLoadingIndicator />
+                null
                 : hover ?
                 <div style={{top: index === 0 ? 5 : -20, backgroundColor: primaryColor, boxShadow: '5px 5px 20px rgba(0, 0, 0, 0.6)'}} className='date-submenu-message-wrapper'>
                     {(userName === current_message.username && !direct_message) ? <PinToProfileButton pinned={profilePin?._id === current_message?._id} action={() => {pin_to_profile(current_message?._id)}} width={18} padding={5} height={18} /> : null}

@@ -11,13 +11,13 @@ import { Error } from '../../../../components/Error/Error';
 import { ToggleButton } from '../../../../components/buttons/ToggleButton/ToggleButton';
 import { AltError } from '../../../../components/AltError/AltError';
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader'
-import { DropDownList } from '../../../../components/DropDownList/DropDownList';
 import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/SettingsSpacer'
 
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 import { miscSettingsChannelSpecificStateChange, miscSettingsClearError, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, selectActivityStatus, selectAutoPlayNativeVideos, selectDefaultServer, selectDisableChannelIcons, selectDisableMediaWidget, selectDisableTransparancyEffects, selectHardwareAcceleration, selectHideUserStatus, selectMiscSettingsDisableGifProfiles, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsError, selectMiscSettingsErrorMessage, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectMiscSettingsLoading, selectMuteSocialVideos, selectPopOutUserStreams, selectRestartNotice, selectShowFullResPreviews, selectSystemNotifcations, setDefaultServer } from './MiscellaneousSettingsSlice';
 import { selectServerList } from '../../../sideBar/sideBarSlice';
+import { clearSaves } from '../../../SavedMedia/SavedMediaSlice';
 
 const Settings = () => {
 
@@ -36,24 +36,16 @@ const Settings = () => {
     const restartNotice = useSelector(selectRestartNotice);
 
     const disableGifProfiles = useSelector(selectMiscSettingsDisableGifProfiles);
-
-    const disableMessagePopUp = useSelector(selectMiscSettingsDisableMessagePopUp);
-
+    
     const hideChannelBackground = useSelector(selectMiscSettingsHideChannelBackground);
 
     const hideNonVideoParticapents = useSelector(selectMiscSettingsHideNonVideoParticapents);
 
     const hideUserStatusBar = useSelector(selectHideUserStatus);
 
-    const defaultServer = useSelector(selectDefaultServer);
-
     const servers = useSelector(selectServerList);
 
     const systemNotifcations = useSelector(selectSystemNotifcations);
-
-    const autoPlaySocialVideos = useSelector(selectAutoPlayNativeVideos);
-
-    const muteSocialVideos = useSelector(selectMuteSocialVideos);
 
     const activityStatus = useSelector(selectActivityStatus);
 
@@ -64,8 +56,6 @@ const Settings = () => {
     const showFullResPreviews = useSelector(selectShowFullResPreviews);
 
     const disableChannelIcons = useSelector(selectDisableChannelIcons);
-
-    const popOutUserStreams = useSelector(selectPopOutUserStreams);
 
     React.useEffect(() => {
 
@@ -98,16 +88,10 @@ const Settings = () => {
         dispatch(miscSettingsChannelSpecificStateChange(state));
     }
 
-    const handleSetDefaultServer = (state, value) => {
-        dispatch(setDefaultServer(value));
-    }
 
     return (
         <>
         <div className='settings-wrapper'>
-            <SettingsHeader title={"Default Server"} />
-            <InputTitle title={"Select Server To Auto Join On App Launch"} />
-            <DropDownList action={handleSetDefaultServer} selectedItem={defaultServer.label} list={serversToSelectFrom} />
             <SettingsHeader title={"System Notifcations"} />
             <InputTitle title={"Disable System Notifications"} />
             <ToggleButton state={systemNotifcations} action={() => {handleChannelSpecificStateChange('disableSystemNotifications')}} />
@@ -115,8 +99,7 @@ const Settings = () => {
             <InputTitle title={"Display Current Activity As Custom Status Message"} />
             <ToggleButton state={activityStatus} action={() => {handleChannelSpecificStateChange('activity')}} />
             <SettingsHeader title={"Channel Specific"} />
-            <InputTitle title={"Disable Message Pop Up's"} />
-            <ToggleButton action={() => {handleChannelSpecificStateChange("disableMessagePopUp")}} state={disableMessagePopUp} />
+            
             <InputTitle title={"Hide Channel Backgrounds"} />
             <ToggleButton action={() => {handleChannelSpecificStateChange("hideChannelBackground")}} state={hideChannelBackground} />
             <InputTitle title={"Hide Non Video Particapents"} />
@@ -127,11 +110,7 @@ const Settings = () => {
             <ToggleButton action={() => {handleChannelSpecificStateChange('disableChannelIcons')}} state={disableChannelIcons} />
             <InputTitle title={"Disable Gif Profile Pictures / Banners"} />
             <ToggleButton action={() => {handleChannelSpecificStateChange("disableGifProfiles")}} state={disableGifProfiles} />
-            <SettingsHeader title={"Social"} />
-            <InputTitle title={"Toggle Auto Play Native Videos"} />
-            <ToggleButton action={() => {handleChannelSpecificStateChange('autoPlayNativeVideos')}} state={autoPlaySocialVideos}  />
-            <InputTitle title={"Mute Videos By Default Within Social"} />
-            <ToggleButton action={() => {handleChannelSpecificStateChange("muteSocialVideos")}} state={muteSocialVideos}  /> 
+            
             <SettingsHeader title={"App Specific"} />
             <InputTitle title={"Disable Transparency Effects"} />
             <ToggleButton state={disableTransparancyEffects} action={() => {handleChannelSpecificStateChange('disableTransparancyEffects')}} />
@@ -146,6 +125,8 @@ const Settings = () => {
             <ToggleButton state={showFullResPreviews} action={() => {handleChannelSpecificStateChange('showFullResPreviews')}} />
             <InputTitle title={"Clear Local Data"} />
             <TextButton action={handleClearLocalData} name={"Clear Data"} />
+            <InputTitle title={"Clear Saves"} />
+            <TextButton action={() => {dispatch(clearSaves())}} name={"Clear Saved Media"} />
             <SettingsSpacer />
            
         </div>

@@ -1,9 +1,10 @@
 .channel-user-placeholder {
-    width: calc(100% - 20px);
-    margin-left: 20px;
+    width: calc(100% - 22px);
+    margin-left: 18px;
     display: flex;
-    height: 30px;
-    margin-bottom: 2px;
+    height: 34px;
+    margin-right: 2px;
+    padding-left: 2px;
     align-items: center;
     position: relative;
     cursor: pointer;
@@ -40,6 +41,7 @@
     height: 30px;
     border-radius: 4px;
     transition: 0.5s;
+    margin-right: 2px;
 }
 
 .user-status-wrapper .extra-media-icon {

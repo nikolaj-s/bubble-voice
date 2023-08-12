@@ -24,9 +24,10 @@ import { PersistedDataNotice } from '../../../../../components/PersistedDataNoti
 
 import { sendDirectMessage, updateDirectmessage } from '../../../../Messages/MessagesSlice';
 import { selectGlassColor, selectGlassState, selectSecondaryColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
-import { fetchMessages, messageCleanUp, selectAllMessages, selectAltSocialLoading, selectLoadingMessages, sendMessage, togglePinMessage } from '../../../SocialSlice';
+import { fetchMessages, messageCleanUp, selectAllMessages, selectAltSocialLoading, selectLoadingMessages, sendMessage, togglePinMessage, toggleSocialAltLoading } from '../../../SocialSlice';
 import { saveSocialData, SOCIAL_DATA } from '../../../../../util/LocalData';
 import { MessagePlaceHolderLoader } from '../../../../../components/MessagePlaceHolderLoader/MessagePlaceHolderLoader';
+import { clearCache } from '../../../../../util/ClearCaches';
 
 export const Social = ({currentChannel, channelId, socialRoute = false, bulletin = false, direct_message, direct_message_user, status}) => {
 
@@ -114,17 +115,8 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         return () => {
             dispatch(messageCleanUp(channelId));
-
-            try {
-
-                const {webFrame} = window.require('electron');
-
-                webFrame.clearCache();
-
-            } catch (err) {
-                console.log(err)
-                return;
-            }
+            
+            clearCache();
         }
 
     }, [channelId])
@@ -156,6 +148,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
             } catch (e) {
                 return;
             }
+            dispatch(toggleSocialAltLoading(false));
         }
 
     // eslint-disable-next-line
@@ -206,7 +199,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
         setText("");
 
         setImage(false);
-console.log(image)
+
         if (direct_message) {
 
             await socket.request('send direct message', {...data, user_image: userImage})
@@ -220,7 +213,7 @@ console.log(image)
 
         } else {
             
-            dispatch(sendMessage({username: username, file: image, channel_id: channelId, local_id: local_id, text: text}))
+            dispatch(sendMessage({username: username, file: image, channel_id: channelId, local_id: local_id, text: text, image_preview: image.preview}))
         }
 
         setTimeout(() => {
@@ -314,6 +307,7 @@ console.log(image)
                             <Message pin_to_profile={pinToProfile} dashboard={false} direct_message={direct_message} persist={currentChannel.persist_social} current_message={message} previous_message={key === allMessages?.length - 1 ? null : allMessages[key + 1]} pinned={message?.pinned} pinMessage={() => {pinMessage(message)}} perm={permission?.user_can_post_channel_social} channel_id={message?.channel_id} id={message._id} message={message.content} key={message._id || message.content.local_id} />
                         })}
                         {direct_message ? null : <PersistedDataNotice channelName={currentChannel.channel_name} persisted={!currentChannel.persist_social} />}
+                        
                     </div>
                     {(direct_message && status) ? <MessageInput direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : 
                     permission?.user_can_post_channel_social && !direct_message ?

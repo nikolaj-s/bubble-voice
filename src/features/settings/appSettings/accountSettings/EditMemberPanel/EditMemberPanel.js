@@ -6,6 +6,8 @@ import { TextInput } from '../../../../../components/inputs/TextInput/TextInput'
 import { TogglePreviewButton } from '../../../../../components/buttons/TogglePreviewButton/TogglePreviewButton'
 import { UserBio } from '../../../../../components/UserBio/UserBio'
 import { TextArea } from '../../../../../components/inputs/TextArea/TextArea'
+import { ToggleButton } from '../../../../../components/buttons/ToggleButton/ToggleButton';
+import { ScreenShotShowCase } from '../../../../../components/ScreenShotShowCase/ScreenShotShowCase'
 
 export const EditMemberPanel = ({
     color, 
@@ -21,7 +23,10 @@ export const EditMemberPanel = ({
     previewBio, 
     togglePreviewBio, 
     profileBio, 
-    changeProfileBio}) => {
+    changeProfileBio,
+    showCaseScreenShots,
+    toggleShowCaseScreenShots,
+screenShots}) => {
     
     return (
         <div style={{backgroundColor: color, padding: '5px', borderRadius: '8px', maxWidth: 500, position: 'relative', width: '100%', overflow: 'hidden', boxShadow: '5px 5px 20px black', minHeight: 800}} className='edit-member-panel-container'>
@@ -39,6 +44,10 @@ export const EditMemberPanel = ({
             :
             <TextArea inputValue={profileBio} action={changeProfileBio} height={300} />
             }
+            <InputTitle title={"Showcase Recent Screen Shots"} />
+            <ToggleButton state={showCaseScreenShots} action={toggleShowCaseScreenShots} />
+            <div style={{height: 5, flexShrink: 0}}></div>
+            {showCaseScreenShots ? <ScreenShotShowCase screenShots={screenShots} /> : null}
         </div>
     )
 }

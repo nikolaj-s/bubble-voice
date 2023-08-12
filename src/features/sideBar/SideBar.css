@@ -1,9 +1,9 @@
 
 .side-bar-container {
-    min-width: 210px;
-    max-width: 210px;
+    min-width: 186px;
+    max-width: 186px;
     width: 100%;
-    height: calc(100% - 6px);
+    height: calc(100% - 5px);
     display: flex;
     flex-direction: column;
     position: relative;
@@ -12,16 +12,13 @@
     overflow: hidden;
     flex-shrink: 0;
     z-index: 2;
-    border-radius: 8px;
     margin-bottom: 6px;
     margin-left: 55px;
 }
 
 .inner-side-bar-container {
     width: 100%;
-    height: calc(100% - 54px);
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
+    height: calc(100%);
     display: flex;
     justify-content: center;
     position: relative;
@@ -31,9 +28,7 @@
 .side-bar-dashboard-placeholder {
     position: absolute;
     z-index: 0;
-    height: calc(100% - 32px);
-    top: 32px;
+    height: calc(100% - 31px);
+    top: 31px;
     width: 100%;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
 }

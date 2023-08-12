@@ -37,6 +37,9 @@
     font-weight: 400;
     text-align: center;
     border-radius: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .server-media-navigation-container h3:hover {

@@ -15,6 +15,7 @@ import { AppSettingsMenu } from '../settings/appSettings/AppSettingsMenu';
 
 // style
 import "./SideBar.css";
+import { selectCurrentChannelId } from '../server/ServerSlice';
 
 export const SideBar = () => {
 
@@ -26,6 +27,8 @@ export const SideBar = () => {
 
     const glassColor = useSelector(selectGlassColor);
 
+    const channel = useSelector(selectCurrentChannelId);
+
     React.useEffect(() => {
         dispatch(fetchUsersServerList());
     // eslint-disable-next-line
@@ -34,13 +37,14 @@ export const SideBar = () => {
     return (
         <>
             <motion.div className='side-bar-container'>
-                <div className='inner-side-bar-container'>
+                <div style={{height: 'calc(100% - 46px)',}} className='inner-side-bar-container'>
                     <ServerBar />
                     <AppSettingsMenu />
                     {window.location.hash === '#/dashboard' ? <div style={{backgroundColor: glass ? glassColor : secondaryColor}} className='side-bar-dashboard-placeholder'></div> : null}
                 </div>    
-                <ControlBar />
+                
             </motion.div>
+            <ControlBar />
         </>
     )
 }

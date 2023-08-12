@@ -22,15 +22,21 @@ import "./MusicWidget.css";
 
 // socket
 import { socket } from '../../../../features/server/ServerBar/ServerBar'
-import { removeSongFromWidget, saveSongToWidget, selectCurrentChannelId, selectMusicSavedState, throwServerError } from '../../../../features/server/ServerSlice';
+import { removeSongFromWidget, saveSongToWidget, selectCurrentChannel, selectCurrentChannelId, selectMusicSavedState, selectUsersPermissions, throwServerError } from '../../../../features/server/ServerSlice';
 import { selectDisableTransparancyEffects } from '../../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { SubMenuButton } from '../../../buttons/subMenuButton/SubMenuButton';
+import { SettingsButton } from '../../../buttons/settingsButton/settingsButton';
+import { MediaSettings } from './MediaSettings/MediaSettings';
+import { selectUsername } from '../../../../features/settings/appSettings/accountSettings/accountSettingsSlice';
+import { LockedChannelIcon } from '../../../Icons/LockedChannelIcon/LockedChannelIcon';
 
-export const MusicWidget = ({editing = false, widget}) => {
+export const MusicWidget = ({editing = false, widget, controls = true}) => {
 
     const dispatch = useDispatch();
 
     const [query, setQuery] = React.useState("");
+
+    const [mediaSettings, toggleMediaSettings] = React.useState(false);
 
     const loading = useSelector(selectLoadingMusicState);
 
@@ -53,6 +59,12 @@ export const MusicWidget = ({editing = false, widget}) => {
     const secondaryColor = useSelector(selectSecondaryColor);
 
     const currentChannelId = useSelector(selectCurrentChannelId);
+
+    const username = useSelector(selectUsername);
+
+    const permission = useSelector(selectUsersPermissions);
+
+    const channel = useSelector(selectCurrentChannel);
 
     const savedMusic = useSelector(selectMusicSavedState);
 
@@ -185,6 +197,10 @@ export const MusicWidget = ({editing = false, widget}) => {
         dispatch(toggleLoadingMusic(false));
     }
     
+    const toggleSettings = () => {
+        toggleMediaSettings(!mediaSettings)
+    }
+
     return (
         <div 
         style={{backgroundColor: disableTransparancyEffects ? secondaryColor : `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0.8)`}}
@@ -194,11 +210,13 @@ export const MusicWidget = ({editing = false, widget}) => {
                     <h2 style={{
                         color: textColor
                     }}>Media</h2>
-                    <SubMenuButton transparent={true} padding={5} width={20} height={20} borderRadius={5} desc_space={15} margin={'0 5px 0 10px'} />
+                    <SettingsButton margin="0px 5px" action={toggleSettings} description={false}  flip_desc={true} width={16} height={16} padding={3} invert={true} />
                 </div>
+                {(channel?.locked_media === true && channel?.media_auth?.includes(username)) || channel.channel_owner === username || permission.server_group_name === 'Owner' || !channel.locked_media? 
+                <>
                 <div className='music-widget-nav-container'>
                     <TextInput keyCode={handleEnter} inputValue={query} action={handleInput} placeholder={"Add Song To Queue"} marginTop='0' />
-                    <AddButton opacity={query.length === 0 ? 0.5 : 1} invert={true} active={query.length === 0} action={handleAddSongToQueue} margin={"0 0 0 2%"} height={"25px"} width={"25px"} />
+                    <AddButton opacity={query.length === 0 ? 0.5 : 1} invert={true} active={query.length === 0} action={handleAddSongToQueue} margin={"0 0 0 2%"} height={"21px"} width={"21px"} />
                 </div> 
                 <div className='music-queue-title-container'>
                     <h3 style={{color: textColor}}>Saves</h3>
@@ -229,14 +247,15 @@ export const MusicWidget = ({editing = false, widget}) => {
                     : queue.map((song, i) => {
                         return (
                             i === 0 ? null :
-                            <Song removeFromQueue={() => {handleRemoveFromQueue(song)}} inQueue={true} liked={song.liked} action={() => {handleSavingSong(song)}} id={song._id} key={song._id} name={song.title} duration={song.duration} image={song.thumbnail} />
+                            <Song added_by={song.added_by} removeFromQueue={() => {handleRemoveFromQueue(song)}} inQueue={true} liked={song.liked} action={() => {handleSavingSong(song)}} id={song._id} key={song._id} name={song.title} duration={song.duration} image={song.thumbnail} />
                         )
                     })}
                 </div>
                 <div style={{backgroundColor: primaryColor}} className='music-widget-controls-container'>
-                    <div className='music-widget-inner-controls-container'>
+                    {controls ? <div className='music-widget-inner-controls-container'>
+                        
                         <div className='music-widget-inner-controls-container-wrapper'>
-                            {playing ?
+                            {playing ? 
                             <PauseButton margin="0px 5px 0px 0px" background={accentColor}  width={28} height={28} borderRadius={'50%'} action={handlePlayPause} />
                             :
                             <PlayButton margin="0px 5px 0px 0px" background={accentColor} width={28} height={28} borderRadius={'50%'} action={handlePlayPause} />
@@ -244,21 +263,32 @@ export const MusicWidget = ({editing = false, widget}) => {
                             <SkipButton transparent={true} width={18} height={18} action={handleSkip} />
                         </div>
                         <Range min={0} value={volume} action={handleMusicVolume} max={100} step={0.05} />
-                    </div>
+                    </div> : null}
                     {queue[0]?.title && editing === false ? 
-                    <Song width={'calc(100% - 135px)'} liked={queue[0]?.liked} action={() => {handleSavingSong(queue[0])}} id={queue[0]._id} key={queue[0]._id} name={queue[0].title} duration={queue[0].duration} image={queue[0].thumbnail} />
+                    <Song added_by={queue[0]?.added_by} liked={queue[0]?.liked} action={() => {handleSavingSong(queue[0])}} id={queue[0]._id} key={queue[0]._id} name={queue[0].title} duration={queue[0].duration} image={queue[0].thumbnail} />
                     :
                     <p
                     style={{
                         color: textColor,
-                        marginRight: 40
+                        marginRight: 40,
+                        marginLeft: 5
                     }}
                     >. . .</p>
                     }
+                </div> 
+                </>
+                :
+                
+                <div style={{width: '100%', height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
+                    <LockedChannelIcon width={'40%'} height={'40%'} />
+                    <p style={{color: textColor, textAlign: 'center'}}>Whoops Looks Like Your Not Allowed To Interact With The Media Player In This Channel</p>
                 </div>
+                }
+                {error ? <Error action={closeError} position='absolute' errorMessage={errorMessage} /> : null}
+                {mediaSettings ? <MediaSettings close={toggleSettings} secondaryColor={secondaryColor} /> : null}
             </div>
             <Loading loading={loading} error={error} />
-            {error ? <Error action={closeError} errorMessage={errorMessage} /> : null}
+           
         </div>
     )
 }

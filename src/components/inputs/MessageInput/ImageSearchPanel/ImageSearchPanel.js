@@ -8,7 +8,7 @@ import { Loading } from '../../../LoadingComponents/Loading/Loading';
 import { AltSearchButton } from '../../../buttons/AltSearchButton/AltSearchButton';
 
 // state
-import { selectGlassColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectGlassColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectPopularSearches, throwServerError } from '../../../../features/server/ServerSlice';
 
 // util
@@ -18,7 +18,6 @@ import { ImageSearch } from '../../../../util/ImageSearch';
 import "./ImageSearchPanel.css";
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { VideoSearch } from '../../../../util/VideoSearch';
-
 import { VideoPreview } from '../../../VideoPreview/VideoPreview';
 import { ImagePreview } from '../../../ImagePreview/ImagePreview';
 import { selectSavedMedia } from '../../../../features/SavedMedia/SavedMediaSlice';
@@ -26,11 +25,16 @@ import { selectShowFullResPreviews } from '../../../../features/settings/appSett
 import { ViewSubReddit } from '../../../../features/server/ChannelRoom/ServerDashBoard/ServerMedia/ViewSubReddits/ViewSubReddit';
 import { selectLoadingNewMedia, selectMedia, setNewMedia } from '../../../../features/server/ChannelRoom/ServerDashBoard/ServerMedia/ServerMediaSlice';
 import { NoSavesIcon } from '../../../Icons/NoSavesIcon/NoSavesIcon';
-
-
-export const ImageSearchPanel = ({direct_message, searchingForImage, selectImage, serverId, inputHeight, close}) => {
+import { ImageButton } from '../ImageButton/ImageButton';
+import { AltImageIcon } from '../../../Icons/AltImageIcon/AltImageIcon';
+import { AltVideoIcon } from '../../../Icons/AltVideoIcon/AltVideoIcon';
+import { RedditIcon } from '../../../Icons/RedditIcon/RedditIcon'
+import { SavesIcon } from '../../../Icons/SavesIcon/SavesIcon'
+export const ImageSearchPanel = ({direct_message, searchingForImage, selectImage, serverId, inputHeight, close, upload_image, persist}) => {
 
     const primaryColor = useSelector(selectPrimaryColor);
+
+    const accentColor = useSelector(selectAccentColor);
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
@@ -141,7 +145,7 @@ export const ImageSearchPanel = ({direct_message, searchingForImage, selectImage
             {searchingForImage ?
             <div onClick={() => {close(false)}} className='image-search-outer-wrapper'>
                 <motion.div 
-                style={{left: direct_message ? '100px' : null, right: direct_message ? null : '20px'}}
+                style={{left: direct_message ? '100px' : null, right: direct_message ? null : '20px', backgroundColor: secondaryColor}}
                 onClick={(e) => {e.stopPropagation()}}
                 key="message-image-search-container"
                 className='message-image-search-container'>
@@ -153,10 +157,25 @@ export const ImageSearchPanel = ({direct_message, searchingForImage, selectImage
                     }}
                     className='inner-message-image-search-container'>
                         <div className='media-search-nav-container'>
-                            <h3 onClick={() => {handleMediaType("Images")}} style={{color: textColor, backgroundColor: mediaType === 'Images' ? primaryColor : null, opacity: mediaType === 'Images' ? 1 : 0.6}}>Images</h3>
-                            <h3 onClick={() => {handleMediaType("Videos")}} style={{color: textColor, backgroundColor: mediaType === 'Videos' ? primaryColor : null, opacity: mediaType === 'Videos' ? 1 : 0.6}}>Videos</h3>
-                            <h3 onClick={() => {handleMediaType("Reddit")}} style={{color: textColor, backgroundColor: mediaType === 'Reddit' ? primaryColor : null, opacity: mediaType === 'Reddit' ? 1 : 0.6}}>Reddit</h3>
-                            <h3 onClick={() => {handleMediaType("Saves")}} style={{color: textColor, backgroundColor: mediaType === 'Saves' ? primaryColor : null, opacity: mediaType === 'Saves' ? 1 : 0.6}}>Saves</h3>
+                            <div className='inner-media-search-nav-wrapper'>
+                                <div className='add-media-nav-button' onClick={() => {handleMediaType("Images")}} style={{color: textColor, backgroundColor: mediaType === 'Images' ? accentColor : primaryColor, opacity: mediaType === 'Images' ? 1 : null, borderRadius: mediaType === "Images" ? 8 : null}}>
+                                    <AltImageIcon />
+                                </div>
+                                <div className='add-media-nav-button' onClick={() => {handleMediaType("Videos")}} style={{color: textColor, backgroundColor: mediaType === 'Videos' ? accentColor : primaryColor, opacity: mediaType === 'Videos' ? 1 : null, borderRadius: mediaType === "Videos" ? 8 : null}}>
+                                    <AltVideoIcon />
+                                </div>
+                                <div className='add-media-nav-button' onClick={() => {handleMediaType("Reddit")}} style={{color: textColor, backgroundColor: mediaType === 'Reddit' ? accentColor : primaryColor, opacity: mediaType === 'Reddit' ? 1 : null, borderRadius: mediaType === "Reddit" ? 8 : null}}>
+                                    <RedditIcon />
+                                </div>
+                                <div className='add-media-nav-button' onClick={() => {handleMediaType("Saves")}} style={{color: textColor, backgroundColor: mediaType === 'Saves' ? accentColor : primaryColor, opacity: mediaType === 'Saves' ? 1 : null, borderRadius: mediaType === "Saves" ? 8 : null}}>
+                                    <SavesIcon />
+                                </div>
+                            </div>
+                            {persist ? 
+                            <div style={{backgroundColor: primaryColor, marginBottom: 10}} onClick={upload_image} className='add-media-nav-button'>
+                                <ImageButton />
+                            </div>
+                            : null}
                         </div>
                         {mediaType === 'Saves' || mediaType === 'Reddit' ? null :
                         <div 
@@ -169,38 +188,39 @@ export const ImageSearchPanel = ({direct_message, searchingForImage, selectImage
                                 <AltSearchButton padding={5} active={query.length === 0} action={search} margin={'0 0 0 10px'} width={30} height={18} invert={true}  borderRadius={0} />
                             </div>
                         </div>}
-                        
-                        <div className='message-image-search-results-container'>
-                        {mediaType === 'Reddit' ?
-                        <ViewSubReddit expand={(i) => {handleSelectImage({preview: i, image: i})}} />
-                        :
-                        <ResponsiveMasonry style={{height: 'auto'}} columnsCountBreakPoints={{700: 1, 1000: 2}}>
-                            <Masonry gutter='5px'>   
-                                {mediaType === 'Videos' ?
-                                (videos?.length > 0 ? videos : loading ? [] : recommendations.filter(v => v.type === 'video').slice(0, 15)).map(video => {
-                                    return <VideoPreview video={video} action={handleSelectImage} />
-                                })
-                                : mediaType === 'Saves' ?
-                                savedMedia.length === 0 ?
-                                <NoSavesIcon className={'image-search-panel-no-saves'} />
-                                :
-                                savedMedia.map(media => {
-                                    return (
-                                        media.type === 'image' ?
-                                        <ImagePreview action={() => {handleSelectImage({preview: media.media, type: 'image', image: media.media})}} image={media.media} />
-                                        :
-                                        <VideoPreview action={() => {handleSelectImage({preview: media.media, type: 'video', image: media.media})}} video={{preview: media.media}} />
-                                    )
-                                })
-                                
-                                : (images?.length > 0 ? images : loading ? [] : recommendations.filter(v => v.type === 'image').slice(0, 40)).map((image, key) => {
-                                    return (
-                                        <ImagePreview tag_action={handleTag} tags={image.tags} image={showFullResPreviews ? image.image : image.preview} action={(e) => {handleSelectImage({...image, preview: image.image})}} />
-                                    )
-                                })}
-                            </Masonry>
-                        </ResponsiveMasonry>}
-                        </div>
+                        <AnimatePresence exitBeforeEnter>
+                        <motion.div transition={{duration: 0.1}} key={mediaType} initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} className='message-image-search-results-container'>
+                            {mediaType === 'Reddit' ?
+                            <ViewSubReddit expand={(i) => {handleSelectImage({preview: i, image: i})}} />
+                            :
+                            <ResponsiveMasonry style={{height: 'auto'}} columnsCountBreakPoints={{700: 1, 1000: 2}}>
+                                <Masonry gutter='5px'>   
+                                    {mediaType === 'Videos' ?
+                                    (videos?.length > 0 ? videos : loading ? [] : recommendations.filter(v => v.type === 'video').slice(0, 15)).map(video => {
+                                        return <VideoPreview video={video} action={handleSelectImage} />
+                                    })
+                                    : mediaType === 'Saves' ?
+                                    savedMedia.length === 0 ?
+                                    <NoSavesIcon className={'image-search-panel-no-saves'} />
+                                    :
+                                    savedMedia.map(media => {
+                                        return (
+                                            media.type === 'image' ?
+                                            <ImagePreview action={() => {handleSelectImage({preview: media.media, type: 'image', image: media.media})}} image={media.media} />
+                                            :
+                                            <VideoPreview action={() => {handleSelectImage({preview: media.media, type: 'video', image: media.media})}} video={{preview: media.media}} />
+                                        )
+                                    })
+                                    
+                                    : (images?.length > 0 ? images : loading ? [] : recommendations.filter(v => v.type === 'image').slice(0, 40)).map((image, key) => {
+                                        return (
+                                            <ImagePreview tag_action={handleTag} tags={image.tags} image={showFullResPreviews ? image.image : image.preview} action={(e) => {handleSelectImage({...image, preview: image.image})}} />
+                                        )
+                                    })}
+                                </Masonry>
+                            </ResponsiveMasonry>}
+                        </motion.div>
+                        </AnimatePresence>
                     </div>
                     <Loading backgroundColor={glassColor} loading={loading || loadingNewMedia}  />
                 </motion.div>

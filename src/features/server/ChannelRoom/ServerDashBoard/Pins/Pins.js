@@ -5,7 +5,7 @@ import { NoMedia } from '../../../../../components/NoMedia/NoMedia'
 
 export const Pins = ({permission, pins, handlePin, initLoading}) => {
   return (
-    <motion.div className='server-media-wrappers' initial={{translateX: '100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}}>
+    <motion.div style={{padding: 0, width: '100%', height: '100%'}} className='server-media-wrappers' initial={{translateX: '100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}}>
       {initLoading ? null : pins?.length <= 1 ?
       <NoMedia message={"Currently No Pinned Messages"} />
       : pins?.map((p, key) => {

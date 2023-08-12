@@ -14,7 +14,7 @@ import { Image } from '../../../../Image/Image';
 // style
 import "./Song.css";
 
-export const Song = ({id, image, name, duration, action, liked, saved, addToQueue, inQueue, removeFromQueue, width = null}) => {
+export const Song = ({id, image, name, duration, action, liked, saved, addToQueue, inQueue, removeFromQueue, width = null, added_by}) => {
 
     const textColor = useSelector(selectTextColor);
 
@@ -30,13 +30,24 @@ export const Song = ({id, image, name, duration, action, liked, saved, addToQueu
             <div className='song-thumbnail-container'>
                 <Image objectFit='cover' image={image} />
             </div>
-            <p
-            className='song-name'
-            style={{
-                color: textColor,
-                fontSize: '.9rem'
-            }}
-            >{name}</p>
+            <div className='song-name-container'>
+                <p
+                className='song-name'
+                style={{
+                    color: textColor,
+                    fontSize: '.9rem'
+                }}
+                >{name}</p>
+                {added_by ?
+                <p 
+                className='added-by-song-title'
+                style={{color: textColor}}
+                >
+                Added By: {added_by}
+                </p>
+                : null}
+            </div>
+                
             <LikeButton desc_space={10} padding={4} toggled={liked} action={action}  width={20} height={20} />
             {(saved && liked) ? <AddButton desc_width={50} transparent={true} desc_space={10} padding={4} action={addToQueue} margin={"0 0 0 5px"} width={20} height={20} description={"Add To Queue"} /> : null}
             {inQueue ? <RemoveButton desc_width={60} transparent={true} desc_space={10} padding={4} action={removeFromQueue} margin={"0 0 0 5px"} width={20} height={20} description={"Remove"} /> : null}

@@ -13,8 +13,8 @@ export const PauseButton = (props) => {
         description={"Pause"}
         >
             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M7 3L7 22" stroke={color} strokeWidth="1.5" stroke-linecap="round"/>
-<path d="M18 3V22" stroke={color} strokeWidth="1.5" stroke-linecap="round"/>
+<path d="M7 3L7 22" stroke={color} strokeWidth="1.5" strokeLinecap="round"/>
+<path d="M18 3V22" stroke={color} strokeWidth="1.5" strokeLinecap="round"/>
 </svg>
 
         </ButtonAnimationWrapper>

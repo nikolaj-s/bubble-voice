@@ -106,7 +106,10 @@ const MiscellaneousSettingsSlice = createSlice({
         videoVolume: 1,
         showFullResPreviews: false,
         disableChannelIcons: false,
-        disableSystemNotifications: false
+        disableSystemNotifications: false,
+        hideLinksOnMedia: false,
+        hideProfileImagesOnMessages: false,
+        maximizeMediaSize: false
     },
     reducers: {
         pushPokeNotification: (state, action) => {
@@ -149,22 +152,7 @@ const MiscellaneousSettingsSlice = createSlice({
             state[action.payload] = !state[action.payload];
 
             const obj = {
-                disableMessagePopUp: state.disableMessagePopUp,
-                hideChannelBackground: state.hideChannelBackground,
-                hideNonVideoParticapents: state.hideNonVideoParticapents,
-                disableGifProfiles: state.disableGifProfiles,
-                hideUserStatus: state.hideUserStatus,
-                defaultServer: state.defaultServer,
-                enabledSystemNotifications: state.enabledSystemNotifications,
-                autoPlayNativeVideos: state.autoPlayNativeVideos,
-                muteSocialVideos: state.muteSocialVideos,
-                activity: state.activity,
-                popOutUserStreams: state.popOutUserStreams,
-                disableTransparancyEffects: state.disableTransparancyEffects,
-                disableMediaWidget: state.disableMediaWidget,
-                showFullResPreviews: state.showFullResPreviews,
-                disableChannelIcons: state.disableChannelIcons,
-                disableSystemNotifications: state.disableSystemNotifications
+                ...state
             }
 
             saveLocalData("MISC", "MISCSETTINGS", obj);
@@ -177,16 +165,7 @@ const MiscellaneousSettingsSlice = createSlice({
             state.defaultServer = action.payload;
 
             const obj = {
-                disableMessagePopUp: state.disableMessagePopUp,
-                hideChannelBackground: state.hideChannelBackground,
-                hideNonVideoParticapents: state.hideNonVideoParticapents,
-                disableGifProfiles: state.disableGifProfiles,
-                hideUserStatus: state.hideUserStatus,
-                defaultServer: state.defaultServer,
-                enabledSystemNotifications: state.enabledSystemNotifications,
-                disableMediaWidget: state.disableMediaWidget,
-                showFullResPreviews: state.showFullResPreviews,
-                disableChannelIcons: state.disableChannelIcons
+                ...state
             }
 
             saveLocalData("MISC", "MISCSETTINGS", obj);
@@ -243,6 +222,12 @@ const MiscellaneousSettingsSlice = createSlice({
             if (saved_data.disableSystemNotifications) state.disableSystemNotifications = true;
             
             if (saved_data.popOutUserStreams) state.popOutUserStreams = true;
+
+            if (saved_data.hideProfileImagesOnMessages) state.hideProfileImagesOnMessages = true;
+
+            if (saved_data.maximizeMediaSize) state.maximizeMediaSize = true;
+
+            if (saved_data.hideLinksOnMedia) state.hideLinksOnMedia = true;
         }
     }
 })
@@ -290,6 +275,12 @@ export const selectVideoVolume = state => state.MiscellaneousSettingsSlice.video
 export const selectShowFullResPreviews = state => state.MiscellaneousSettingsSlice.showFullResPreviews;
 
 export const selectDisableChannelIcons = state => state.MiscellaneousSettingsSlice.disableChannelIcons;
+
+export const selectHideLinksOnMedia = state => state.MiscellaneousSettingsSlice.hideLinksOnMedia;
+
+export const selectMaximizeMedia = state => state.MiscellaneousSettingsSlice.maximizeMediaSize;
+
+export const selectHideProfileImagesOnMessages = state => state.MiscellaneousSettingsSlice.hideProfileImagesOnMessages;
 
 export const {setVideoVolume, pushPokeNotification, setDefaultServer, changeRoomScale, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, miscSettingsClearError, miscSettingsChannelSpecificStateChange } = MiscellaneousSettingsSlice.actions;
 

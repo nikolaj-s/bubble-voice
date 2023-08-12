@@ -293,7 +293,6 @@ export const ServerNavigation = () => {
                 {inChannel ?
                 <>
                 <motion.div 
-                style={{borderTopLeftRadius: 5}}
                 transition={{duration: 0.05}}
                 onMouseEnter={() => {handleDesc('video', true)}}
                 onMouseOver={() => {handleAnimation(secondaryColor, voiceButtonAnimation, 'voice')}}

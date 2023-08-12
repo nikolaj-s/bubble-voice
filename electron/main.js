@@ -25,6 +25,8 @@ let notification;
 
 let initial_app_loading;
 
+let scraping_window;
+
 let loading_template = `
 
 <head>
@@ -34,16 +36,19 @@ let loading_template = `
   }
   body {
       display: flex;
-      width: 100%;
-      height: 100%;
+      width: 405px;
+      height: 230px;
+      padding: 10px;
       color: white;
       font-family: 'Quicksand', sans-serif;
       background-color: rgba(8, 8, 8, 1);
       margin: 0;
+      border-radius: 10px;
   }
 
   body h1 {
       margin: 5px 0px;
+      font-weight: 500;
   }
   .icon-container {
     width: 50px;
@@ -120,6 +125,7 @@ let loading_template = `
 `
 
 const fs = require('fs');
+const { default: axios } = require('axios');
 
 const initPath = path.join(app.getPath('userData'), '../init.json');
 
@@ -188,7 +194,7 @@ if (!process.env.ELECTRON_START_URL && lock) {
 
     res.end(file.toString());
 
-//    if (req.url.includes('index.js')) server.close();
+    if (req.url.includes('index.js')) server.close();
 
   }).listen(8382);
 
@@ -197,14 +203,15 @@ if (!process.env.ELECTRON_START_URL && lock) {
 function createWindow () {
 
   initial_app_loading = new BrowserWindow({
-    width: 300,
-    height: 300,
-    maxHeight: 300,
-    maxWidth: 300,
+    width: 425,
+    height: 250,
+    maxHeight: 250,
+    maxWidth: 425,
     titleBarStyle: 'hidden',
     frame: false,
     transparent: true,
-    backgroundColor: 'rgba(8, 8, 8, 1)'
+    backgroundColor: 'rgba(8, 8, 8, 1)',
+    
   })
 
   initial_app_loading.loadURL(`data:text/html;charset=utf-8,${loading_template}`)
@@ -289,13 +296,12 @@ function createWindow () {
   
   win.webContents.on('new-window', handleRedirect);
 
-
   win.webContents.on('did-create-window', (window, details) => {
     window.close()
 
     shell.openExternal(details.url);
   })
-
+  
   win.on('close', () => {
 
     let window_data = {
@@ -306,6 +312,8 @@ function createWindow () {
     fs.writeFileSync(initPath, JSON.stringify(window_data))
 
     notification.close();
+
+    initial_app_loading?.close();
   
   })
 
@@ -351,7 +359,7 @@ ipcMain.handle('SCREEN_SHOT', async () => {
           return pickCurrent(sources, index++);
         }
 
-        return {data: sources[index].thumbnail.toPNG(), preview: sources[index].thumbnail.toDataURL()}
+        return {data: sources[index].thumbnail.toPNG(), preview: sources[index].thumbnail.toDataURL(), text: sources[index].name}
       }
       console.log(captures[0])
       return pickCurrent(captures, 0);
@@ -374,7 +382,7 @@ ipcMain.handle("DYNAMIC_STATUS", async () => {
         
         screens.push({
           id: source.id,
-          name: source.name
+          name: source.name,
         })
       }
 
@@ -383,6 +391,17 @@ ipcMain.handle("DYNAMIC_STATUS", async () => {
   })
 
   return captures;
+})
+
+ipcMain.handle("CLEAR_CACHE", async () => {
+  try {
+    win.webContents.session.clearCache();
+    return;
+  } catch (err) {
+    console.log(err);
+    return;
+  }
+  
 })
 
 ipcMain.handle('GET_SOURCES', async () => {
@@ -420,7 +439,7 @@ ipcMain.on('RESET_INAC_TIMEOUT', (event, data) => {
 
     console.log('user has gone inactive');
 
-  }, 1800000)
+  }, 900000)
 
 
 })

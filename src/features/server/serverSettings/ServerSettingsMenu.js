@@ -45,7 +45,9 @@ const Menu = () => {
         const rmAmbiance = document.getElementsByClassName('room-ambiance-background')[0];
         
         const serverNav = document.getElementsByClassName('server-navigation-container')[0];
+        const controlBar = document.getElementsByClassName('control-bar-container')[0];
 
+        if (controlBar) controlBar.style.display = 'none'
         if (serverNav) serverNav.style.display = 'none';
 
         if (rmAmbiance) rmAmbiance.style.display = 'none';
@@ -62,7 +64,7 @@ const Menu = () => {
         
         return () => {
             dispatch(toggleServerSettingsOpenState(false))
-
+            if (controlBar) controlBar.style.display = null;
             if (serverNav) serverNav.style.display = null;
 
             if (rmAmbiance) rmAmbiance.style.display = null;

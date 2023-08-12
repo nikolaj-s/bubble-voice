@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { socket } from "../../ServerBar/ServerBar";
+import { throwServerError } from "../../ServerSlice";
 
 export const FetchPins = createAsyncThunk(
     'FetchPins/ServerDashBoardSlice',
@@ -25,11 +26,36 @@ export const FetchPins = createAsyncThunk(
     }
 )
 
+export const FetchScreenShots = createAsyncThunk(
+    'FetchScreenShots/ServerDashBoardSlice',
+    async (_, {rejectWithValue, dispatch}) => {
+        try {
+
+            const data = await socket.request('fetch screen shots', {count: 20})
+            .then(res => {
+                return res;
+            })
+            .catch(err => {
+                return rejectWithValue({error: true, errorMessage: err.errorMessage})
+            })
+            console.log(data)
+            return data.screen_shots;
+
+        } catch (error) {
+            rejectWithValue({error: true});
+            dispatch(throwServerError({error: true, errorMessage: "Error Fetching Screen Shots"}));
+            return;
+        }
+    }
+)
+
 const ServerDashBoardSlice = createSlice({
     name: "ServerDashBoardSlice",
     initialState: {
         pins: [],
+        screenShots: [],
         loadingPins: true,
+        loadingScreenShots: true,
         error: false,
         errorMessage: ""
     },
@@ -62,6 +88,21 @@ const ServerDashBoardSlice = createSlice({
             state.error = true;
 
             state.errorMessage = action.payload.errorMessage;
+        },
+        [FetchScreenShots.pending]: (state, action) => {
+            state.loadingScreenShots = true;
+        },
+        [FetchScreenShots.fulfilled]: (state, action) => {
+            state.loadingScreenShots = false;
+            
+            state.screenShots = action.payload;
+        },
+        [FetchScreenShots.rejected]: (state, action) => {
+            state.loadingScreenShots = false;
+
+            state.error = true;
+
+            state.errorMessage = 'Error Fetching Screen Shots';
         }
     }
 })
@@ -70,6 +111,10 @@ const ServerDashBoardSlice = createSlice({
 export const selectPinnedMessages = state => state.ServerDashBoardSlice.pins;
 
 export const selectLoadingPins = state => state.ServerDashBoardSlice.loadingPins;
+
+export const selectScreenShots = state => state.ServerDashBoardSlice.screenShots;
+
+export const selectLoadingScreenShots = state => state.ServerDashBoardSlice.loadingScreenShots;
 
 export const { setPinnedMessages, removePinnedMessage, addPinnedMessage  } = ServerDashBoardSlice.actions;
 

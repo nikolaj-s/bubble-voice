@@ -5,13 +5,12 @@
     justify-content: space-between;
     align-items: center;
     overflow: hidden;
-    transition: 0;
     z-index: 9;
     flex-shrink: 0;
     position: fixed;
     top: 0;
-    max-width: calc(100% - 380px);
-    left: 270px;
+    max-width: calc(100% - 360px);
+    left: 241px;
 }
 
 .server-navigation-button-wrapper {
@@ -22,25 +21,25 @@
 }
 
 .server-navigation-button {
-    padding: 0 0.65rem;
-    margin-right: 2px;
+    padding: 0 0.6rem;
     display: flex;
     align-items: center;
-    height: 24px;
+    height: 25px;
     border-radius: 3px;
+    margin: 0px 2px;
     -webkit-app-region: no-drag;
     
 }
 
 .server-navigation-button p {
     position: fixed;
-    top: 20px;
+    top: 25px;
     padding: 5px;
     border-radius: 5px;
     z-index: 5;
     text-align: center;
     letter-spacing: var(--font-spacing);
-    font-size: 0.7rem;
+    font-size: .9rem;
     transform: translateX(-35%);
     min-width: 75px;
     box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.435);

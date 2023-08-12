@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectGlassColor, selectGlassState, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectGlassColor, selectGlassState, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectActivityStatus, selectHideUserStatus } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { selectCurrentChannelId, selectServerGroups, selectServerMembers } from '../../ServerSlice'
 import { UserStatus } from './UserStatus/UserStatus';
@@ -36,6 +36,8 @@ export const UserStatusBar = () => {
 
     const textColor = useSelector(selectTextColor);
 
+    const accentColor = useSelector(selectAccentColor)
+
     React.useEffect(() => {
 
         dispatch(setUsers(users));
@@ -55,21 +57,31 @@ export const UserStatusBar = () => {
 
                 let new_status_name;
 
-                let l_windows = res.filter(w => !w.id.includes('screen') && !w.name.includes('Bubble') && !w.name.includes('D3DProxyWindow') && !w.name.includes("Input Occlusion Window") && !w.name.includes('Overlay'));
+                let l_windows = res.filter(w => !w.id.includes('screen') && !w.name.includes('Bubble') && !w.name.includes('D3DProxyWindow') && !w.name.includes("Input Occlusion Window") && !w.name.includes('Overlay') && !w.name.includes('.mp4') && !w.name.includes('.jpg') && !w.name.includes('.png') && !w.name.includes('.jpeg'));
                 
                 // avoid uneccessary server calls
                 
                 if (!l_windows[0]?.name) return;
 
+                if (l_windows[0].name.includes('Backstop Window')) return;
+
+                if (l_windows[0].name.includes('Windows Default')) return;
+
                 if (l_windows[0].name.includes('Google Chrome')) {
                     new_status_name = "Google Chrome"
+                } else if (l_windows[0].name.includes('Visual Studio Code')) {
+                    new_status_name = "Visual Studio Code"
                 } else {
                     new_status_name = l_windows[0].name;
                 }
 
                 if (currentStatus === `${new_status_name}`) return;
 
-                dispatch(updateUserStatus({value: `${new_status_name}`}))
+                dispatch(updateUserStatus({value: `${new_status_name}`, icon: ""}));
+
+                for (const w of l_windows) {
+                    URL.revokeObjectURL(w?.icon);
+                }
             })
         } catch (error) {
             return;
@@ -106,7 +118,7 @@ export const UserStatusBar = () => {
         <>
         {(channelId && hideUserStatusBar) ? null :
         <div 
-        style={{backgroundColor: glass ? glassColor : secondaryColor}}
+        style={{backgroundColor: secondaryColor}}
         className='user-status-bar'>
             {serverGroups.map((server_group) => {
 

@@ -25,7 +25,7 @@ export const ScreenShot = ({channelId, username}) => {
 
         let spam_stopper = false;
 
-        let options = {maxSizeMB: 0.6, maxIteration: 30, maxWidthOrHeight: 1600}
+        let options = {maxSizeMB: 0.6, maxIteration: 30, maxWidthOrHeight: 1920}
 
         try {
 
@@ -55,7 +55,7 @@ export const ScreenShot = ({channelId, username}) => {
                    
                     let local_id = ((Math.random(5 * Math.random(55)) + 1) * 5) + username;
                     
-                    dispatch(sendMessage({username: username, file: file, channel_id: channelId, local_id: local_id, text: "", image_preview: data?.preview}))
+                    dispatch(sendMessage({username: username, file: file, channel_id: channelId, local_id: local_id, text: `Shared A Screen Shot Of ${data.text}`, image_preview: data?.preview, screen_shot: true}))
                     
                     setTimeout(() => {
                         setImage({});
@@ -71,6 +71,13 @@ export const ScreenShot = ({channelId, username}) => {
                         }, 5000)
                         
                     }, 1000)
+                }).catch(err => {
+                    dispatch(throwServerError({errorMessage: "Error Capturing Screen Shot"}));
+
+                    setTimeout(() => {
+                        spam_stopper = false;
+                        toggleLoading(false);
+                    }, 5000)
                 })
 
                 
@@ -85,7 +92,7 @@ export const ScreenShot = ({channelId, username}) => {
         
         } catch (err) {
             console.log(err)
-            dispatch(throwServerError({errorMessage: "Error Capturing Screen Shot"}));
+            return;
         }
 
     }, [])

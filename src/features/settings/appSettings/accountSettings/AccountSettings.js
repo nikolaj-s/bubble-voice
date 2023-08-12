@@ -5,7 +5,7 @@ import { useNavigate, useRoutes } from 'react-router'
 import { AnimatePresence } from 'framer-motion';
 
 // state
-import { selectUserBanner, selectUserImage, selectDisplayName, selectAccountSettingsLoading, selectAccountSettingsErrorState, selectAccountSettingsErrorMessage, updateAccount, updateAccountInputState, selectAccountSettingsPassword, selectAccountSettingsNewPassword, selectAccountSettingsConfirmNewPassword, accountSettingsCloseError, selectAccountSettingsStateChanged, selectProfilePictureShape, selectProfileBio, handleUpdateBio, selectProfileColor } from './accountSettingsSlice';
+import { selectUserBanner, selectUserImage, selectDisplayName, selectAccountSettingsLoading, selectAccountSettingsErrorState, selectAccountSettingsErrorMessage, updateAccount, updateAccountInputState, selectAccountSettingsPassword, selectAccountSettingsNewPassword, selectAccountSettingsConfirmNewPassword, accountSettingsCloseError, selectAccountSettingsStateChanged, selectProfilePictureShape, selectProfileBio, handleUpdateBio, selectProfileColor, selectShowCaseScreenShotsState, selectUsersScreenShots, toggleShowCaseScreenShots } from './accountSettingsSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 
 // components
@@ -19,7 +19,7 @@ import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/Se
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 
 import { EditMemberPanel } from './EditMemberPanel/EditMemberPanel';
-import { selectPrimaryColor } from '../appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, selectSecondaryColor } from '../appearanceSettings/appearanceSettingsSlice';
 
 const Settings = () => {
 
@@ -66,7 +66,13 @@ const Settings = () => {
 
     const stateChanged = useSelector(selectAccountSettingsStateChanged);
 
-    const primaryColor = useSelector(selectPrimaryColor)
+    const primaryColor = useSelector(selectPrimaryColor);
+
+    const secondaryColor = useSelector(selectSecondaryColor);
+
+    const showCaseScreenShots = useSelector(selectShowCaseScreenShotsState);;
+
+    const screenShots = useSelector(selectUsersScreenShots);
 
     React.useEffect(() => {
         dispatch(setHeaderTitle("Account Settings"));
@@ -74,6 +80,7 @@ const Settings = () => {
         setNewShape(profilePictureShape);
 
         setColor(profileColor || primaryColor);
+
     // eslint-disable-next-line
     }, [])
 
@@ -123,12 +130,16 @@ const Settings = () => {
         dispatch(handleUpdateBio(value));
     }
 
+    const handleToggleShowScreenShots = () => {
+        dispatch(toggleShowCaseScreenShots());
+    }
+
     return (
         <>
             <div className='settings-wrapper'>
                 <SettingsHeader title={"Account Settings"} />
                 <InputTitle title={"Edit User Panel"} />
-                <EditMemberPanel color={color} updateColor={updateColor} newShape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} changeProfileShape={changeProfileShape} handleInput={handleInput} displayName={displayName} previewBio={previewBio} togglePreviewBio={togglePreviewBio} profileBio={profileBio} changeProfileBio={changeProfileBio} />
+                <EditMemberPanel screenShots={screenShots} toggleShowCaseScreenShots={handleToggleShowScreenShots} showCaseScreenShots={showCaseScreenShots} color={color || secondaryColor} updateColor={updateColor} newShape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} changeProfileShape={changeProfileShape} handleInput={handleInput} displayName={displayName} previewBio={previewBio} togglePreviewBio={togglePreviewBio} profileBio={profileBio} changeProfileBio={changeProfileBio} />
                 <SettingsHeader title={"Security"} />
                 <InputTitle title={"Change Password"} />
                 <TextInput stateSelector='password' action={handleInput}  marginBottom='2%' type='password' placeholder={"Current Password"} inputValue={password} />

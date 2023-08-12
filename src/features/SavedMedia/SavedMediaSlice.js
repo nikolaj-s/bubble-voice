@@ -56,6 +56,11 @@ const SavedMediaSlice = createSlice({
         },
         toggleMediaPanel: (state, action) => {
             state.open = action.payload;
+        },
+        clearSaves: (state, action) => {
+            state.saves = [];
+
+            saveLocalData("SAVED", "MEDIA", []);
         }
     },
     extraReducers: {
@@ -69,6 +74,6 @@ export const selectSavedMediaOpenState = state => state.SavedMediaSlice.open;
 
 export const selectSavedMedia = state => state.SavedMediaSlice.saves;
 
-export const { saveMedia, deleteMedia, toggleMediaPanel } = SavedMediaSlice.actions;
+export const {clearSaves, saveMedia, deleteMedia, toggleMediaPanel } = SavedMediaSlice.actions;
 
 export default SavedMediaSlice.reducer;

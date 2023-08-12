@@ -31,15 +31,16 @@ export const User = ({user}) => {
     const username = useSelector(selectUsername);
 
     const secondaryColor = useSelector(selectSecondaryColor);
-
+    
     return (
         <div 
         style={{
             border: `solid 4px ${(user.active && user.microphone) ? activeColor : user.color ? user.color : accentColor}`,
-            backgroundColor: user.color ? user.color : null,
+            backgroundColor: user.active ? activeColor : user.color ? user.color : accentColor,
             display: (hideNonVideoParticapents === true && user.webcam === false) || (hideNonVideoParticapents === true && prefs?.disabled_web_cam === true) ? 'none' : 'flex'
         }}
         id={user._id} className='active-user-container'>
+           
             <Image id="stream-room-user-banner" image_class={'user-image'} disableErr={true} backgroundColor={secondaryColor}  position='absolute' image={user.user_banner} />
             <div style={{borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%'}} className='active-user-profile-image-container'>
                 <Image image_class={'user-image'} objectFit='cover' image={user.user_image} />

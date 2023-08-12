@@ -19,8 +19,8 @@ import { HeaderTitle } from '../../components/titles/headerTitle/headerTitle';
 import "./ContentScreen.css";
 
 import { selectCurrentChannelId } from '../server/ServerSlice';
-import { RoomAmbiance } from '../../components/RoomAmbiance/RoomAmbiance';
 import { selectNewAccountState } from '../settings/appSettings/accountSettings/accountSettingsSlice';
+
 export const ContentScreen = () => {
     // content
     const channelId = useSelector(selectCurrentChannelId);
@@ -40,7 +40,6 @@ export const ContentScreen = () => {
             </motion.div>
             <ExpandContent />
             {newAccount ? <NewAccount /> : null}
-            {channelId ? <RoomAmbiance /> : null}
         </>
     )
 }

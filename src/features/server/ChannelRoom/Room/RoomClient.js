@@ -621,28 +621,32 @@ export class RoomClient {
                 track 
             } 
 
+            if (!audio && !screen) {
+                params.encodings = [
+                    {
+                    rid: 'r0',
+                    maxBitrate: 100000,
+                    scalabilityMode: 'L3T2',
+                    maxFramerate: 30.0,
+                    },
+                    {
+                    rid: 'r1',
+                    maxBitrate: 300000,
+                    scalabilityMode: 'L3T2',
+                    maxFramerate: 30.0
+                    },
+                    {
+                    rid: 'r2',
+                    maxBitrate: 900000,
+                    scalabilityMode: 'L3T2',
+                    maxFramerate: 30.0
+                    }
+                ]
+            }
+
             if (!audio) {
                 params.appData = {type: screen ? 'screen share' : 'web cam', name: screenName, color: color}
-                // params.encodings = [
-                //     {
-                //     rid: 'r0',
-                //     maxBitrate: 100000,
-                //     scalabilityMode: 'L3T2',
-                //     maxFramerate: 30.0,
-                //     },
-                //     {
-                //     rid: 'r1',
-                //     maxBitrate: 300000,
-                //     scalabilityMode: 'L3T2',
-                //     maxFramerate: 30.0
-                //     },
-                //     {
-                //     rid: 'r2',
-                //     maxBitrate: 900000,
-                //     scalabilityMode: 'L3T2',
-                //     maxFramerate: 30.0
-                //     }
-                // ]
+                
 
                 params.codec = this.device.rtpCapabilities.codecs.find(codec => codec.mimeType === 'video/H264');
                 // document change video bitrate start

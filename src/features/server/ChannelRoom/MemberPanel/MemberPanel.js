@@ -8,7 +8,7 @@ import { selectAccentColor, selectGlassColor, selectPrimaryColor, selectSecondar
 import { Image } from '../../../../components/Image/Image';
 import { selectServerGroups, selectServerMembers, throwServerError } from '../../ServerSlice';
 import { TextButton } from '../../../../components/buttons/textButton/TextButton';
-import { selectProfileBio, selectProfileColor, selectProfilePinnedMessage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
+import { selectProfileBio, selectProfileColor, selectProfilePinnedMessage, selectShowCaseScreenShotsState, selectUsername, selectUsersScreenShots } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
 import { socket } from '../../ServerBar/ServerBar';
 import { ScoreButton } from '../../../../components/buttons/ScoreButton/ScoreButton';
@@ -22,6 +22,7 @@ import { GetTimeDifference } from '../../../../util/GetTimeDifference';
 import { AltMessageIcon } from '../../../../components/Icons/AltMessageIcon/AltMessageIcon';
 import { PokeButton } from '../../../../components/buttons/PokeButton/PokeButton';
 import { TextInput } from '../../../../components/inputs/TextInput/TextInput';
+import { ScreenShotShowCase } from '../../../../components/ScreenShotShowCase/ScreenShotShowCase';
 
 export const MemberPanel = () => {
 
@@ -43,6 +44,8 @@ export const MemberPanel = () => {
 
     const [pokeMessage, setPokeMessage] = React.useState("Hey Wake Up");
 
+    const [screenShots, setScreenShots] = React.useState([]);
+
     const userColor = useSelector(selectProfileColor);
 
     const selectedMember = useSelector(selectCurrentMemberPanel);
@@ -60,6 +63,10 @@ export const MemberPanel = () => {
     const secondaryColor = useSelector(selectSecondaryColor);
 
     const serverGroups = useSelector(selectServerGroups);
+
+    const showCaseScreenShots = useSelector(selectShowCaseScreenShotsState);
+
+    const local_screenShots = useSelector(selectUsersScreenShots);
 
     const s_index = serverGroups.findIndex(s => s._id === member.server_group)
 
@@ -93,7 +100,7 @@ export const MemberPanel = () => {
     }
 
     const handleOpenDirectMessage = () => {
-        
+        console.log(member)
         dispatch(openDirectMessage(member));
 
         dispatch(setSelectedMember(""));
@@ -122,6 +129,8 @@ export const MemberPanel = () => {
                 setColor(userColor);
 
                 setMessage(pinned_message);
+
+               setScreenShots(local_screenShots);
                 
             } else if (members[u_index]?.username) {
 
@@ -136,7 +145,7 @@ export const MemberPanel = () => {
                         
                         if (user.bio) setBio(user.bio);
 
-                        
+                        setScreenShots(user.screenShots)
                         
                         if (user.pinned_message) setMessage(user.pinned_message);
 
@@ -160,6 +169,8 @@ export const MemberPanel = () => {
             setMember({});
 
             setMessage({});
+
+            setScreenShots([]);
         }
 
     }, [selectedMember, members, pinned_message])
@@ -179,20 +190,26 @@ export const MemberPanel = () => {
             initial={{top: '-100%'}}
             animate={{top: '0%'}}
             exit={{top: '100%'}}
-            style={{backgroundColor: primaryColor}} className='outer-member-panel-container'>
+            style={{backgroundColor: color || secondaryColor}} className='outer-member-panel-container'>
                 <div onClick={closePanel} style={{backgroundColor: accentColor}} className='close-member-panel-button'>
                     <CloseIcon />
                 </div>
+                <div className='member-panel-banner-container'>    
+                    <div className='inner-member-banner'>
+                        <Image disableErr={true} imgHeight='calc(80%)' objectFit='cover' image={member.user_banner} />
+                        <div style={{height: '20%', flexShrink: 0, width: '100%', boxShadow: `0 0 200px 200px ${color}`, position: 'absolute', bottom: 0}}></div>
+                    </div>
+                </div>
                 <div 
-                style={{backgroundColor: primaryColor}}
+                style={{backgroundColor: color || secondaryColor}}
                 className='member-panel-container'>
                     <div className='member-panel-image-container'>
-                        <Image disableErr={true} position='absolute' image={member.user_banner} />
+                        
                         <div style={{borderRadius: member.profile_picture_shape === 'square' ? '5px' : '50%'}} className='member-panel-profile-picture'>
                             <Image image={member.user_image} />
                         </div>
                     </div>
-                    <div style={{backgroundColor: color ? color : secondaryColor}} className='member-panel-info-container'>
+                    <div  className='member-panel-info-container'>
                         <div style={{backgroundColor: primaryColor}} className='username-wrapper-container'>
                             <h3 style={{color: textColor}}>{member.display_name}</h3>
                             <h4 style={{color: textColor, opacity: 0.8}}>#{member.username}</h4>
@@ -209,17 +226,24 @@ export const MemberPanel = () => {
                         </div>
                         : null}
                         <div style={{backgroundColor: primaryColor}} className='server-user-details-wrapper-container'>
-                            <h3 style={{color: textColor, marginBottom: 10}}>Status</h3>
-                            <p style={{color: textColor, margin: '0 0 0 5px'}}>{member?.status === 'offline' && timeStamp !== "" ? 'Last Online: ' + timeStamp : member.status}</p>
-                
-                            <h3 style={{color: textColor, margin: '10px 0'}}>Member Since</h3>
+                            <h4 style={{color: textColor, marginBottom: 10}}>Status</h4>
+                            <div className='member-panel-user-status-wrapper'>
+                                {member?.status_icon ? 
+                                <div className='member-panel-status-icon'>
+                                    <Image  objectFit='contain' image={member?.status_icon} />
+                                </div>
+                                : null}
+                                <p style={{color: textColor, margin: '0 0 0 5px'}}>{member?.status === 'offline' && timeStamp !== "" ? 'Last Online: ' + timeStamp : member.status}</p>
+                            </div>
+                            <h4 style={{color: textColor, margin: '10px 0'}}>Member Since</h4>
                             <p style={{color: textColor, margin: '0 0 0 5px'}}>{member?.join_date?.split('T')[0]}</p>
-                            <h3 style={{color: textColor, margin: '10px 0'}}>Server Group</h3>
+                            <h4 style={{color: textColor, margin: '10px 0'}}>Server Group</h4>
                             <p style={{color: textColor, margin: '0 0 0 5px'}}>{
                                 s_index !== -1 ? serverGroups[s_index]?.server_group_name : null
                             }</p>
                         </div>
                         <UserBio loading={loading} bio={bio} margin={'5px 0px'} />
+                        <ScreenShotShowCase marginTop={0} screenShots={screenShots} />
                         <PinnedProfileMessage loading={loading} message={message} />   
                     </div>
                 </div>

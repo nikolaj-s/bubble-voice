@@ -40,7 +40,7 @@ export const AltConnectionIndicator = ({active}) => {
     return (
         <div 
         onClick={action}
-        style={{margin: '5px 0px', opacity: !active ? 0.6 : 1, cursor: !active ? 'default' : 'pointer'}}
+        style={{margin: '5px 0px 0px 0px', opacity: !active ? 0.6 : 1, cursor: !active ? 'default' : 'pointer'}}
         onMouseEnter={() => {handleHover(true)}}
         onMouseLeave={() => {handleHover(false)}}
         className='saved-media-container'>

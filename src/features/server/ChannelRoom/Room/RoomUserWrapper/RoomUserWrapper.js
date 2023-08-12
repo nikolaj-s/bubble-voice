@@ -4,8 +4,9 @@ import { selectHideUserStatus, selectMiscSettingsHideNonVideoParticapents } from
 import { selectBehindState, selectMusicExpanded } from '../Music/MusicSlice';
 import { User } from '../User/User'
 import { selectTriggerRoomRescale, triggerRoomRescale } from '../../../ServerSlice';
+import { Music } from '../Music/Music';
 
-export const RoomUserWrapper = ({users, page}) => {
+export const RoomUserWrapper = ({users, page, loaded}) => {
 
     const [expanded, setExpanded] = React.useState("");
 
@@ -238,12 +239,17 @@ export const RoomUserWrapper = ({users, page}) => {
     }
 
     return (
-        <div id='user-streams-wrapper'>
-        {!users ? null :
-        users.map(obj => {
-            return <User user={obj} key={obj.username} />
-        })
-        }
-        </div>
+        <>
+            <div
+            
+            id='user-streams-wrapper'>
+                {!users ? null :
+                users.map(obj => {
+                    return <User user={obj} key={obj.username} />
+                })
+                }
+                {loaded ? <Music /> : null}
+            </div>
+        </>
     )
 }

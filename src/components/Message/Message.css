@@ -1,25 +1,30 @@
 .message-container {
-    width: calc(100% - 10px);
+    width: calc(100% - 5px);
     display: flex;
     height: auto;
-    flex-direction: column;
-    margin: 0 10px 0 0;
+    margin: 0 5px 0 0;
     position: relative;
     border-radius: 3px;
+}
+
+
+.message-inner-container {
+    width: 100%;
+    
 }
 
 .message-container p {
     width: auto;
     max-width: 800px;
     overflow-wrap: anywhere;
-    margin: 0px 0px 0px 50px;
+    margin: 0px 0px 0px 0px;
     font-size: 15px;
 }
 
 .message-container a {
     color: rgb(66, 176, 176);
     cursor: pointer;
-    margin: -4px 0px 0px 50px;
+    margin: -4px 0px 0px 0px;
     word-break: break-all;
     flex-shrink: 0;
     font-size: 15px;
@@ -42,12 +47,15 @@
 .sender-info-container {
     display: flex;
     width: 100%;
+    margin-top: 4px;
+    overflow: hidden;
     justify-content: flex-start;
 }
 
 .sender-info-inner-container {
     display: flex;
     align-items: center;
+    overflow: hidden;
     height: 20px;
 }
 
@@ -87,16 +95,17 @@
     justify-content: center;
     align-items: center;
     position: absolute;
-    border-radius: 5px;
-    top: 5px;
+    border-radius: 4px;
+    top: 4px;
+    left: 7px;
+    z-index: 2;
 }
 
 .message-image-container {
     max-height: 400px;
-    min-height: 80px;
     overflow: hidden;
     object-fit: contain;
-    margin: 0 5px 0 50px;
+    margin: 0 5px 0 0px;
 }
 
 .message-image-container img {
@@ -109,14 +118,14 @@
     overflow: hidden;
     display: flex;
     justify-content: flex-start;
-    margin-left: 50px;
+    margin-left: 0px;
     margin-right: 5px;
 }
 
 .date-submenu-message-wrapper {
     position: absolute;
-    top: -10px;
-    right: 20px;
+    top: -20px;
+    right: 10px;
     display: flex;
     align-items: center;
     margin-left: auto;
@@ -131,5 +140,18 @@
     border-radius: 50%;
     flex-shrink: 0;
     overflow: hidden;
-    margin: 22px 5px 0 0px;
+    margin: 4px 6px 0 0px;
+}
+
+.message-gallery-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.message-gallery-image-container {
+    max-height: 500px;
+    border-radius: 5px;
+    cursor: pointer;
+    overflow: hidden;
+    margin-right: 2px;
 }

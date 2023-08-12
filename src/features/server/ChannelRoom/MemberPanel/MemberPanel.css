@@ -9,7 +9,6 @@
     pointer-events: all;
     display: flex;
     justify-content: center;
-    border-radius: 8px;
     overflow-y: auto;
     overflow-x: hidden;
     background-position: center;
@@ -63,11 +62,10 @@
 }
 
 .member-panel-info-container {
-    
+    z-index: 1;
     flex-shrink: 0;
     bottom: 0;
     width: calc(100% - 10px);
-    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.253);
     max-width: 700px;
     display: flex;
     flex-direction: column;
@@ -137,7 +135,12 @@
 .server-user-details-wrapper-container h3 {
     font-size: 1.2rem;
     font-weight: 500;
+
 }
+.server-user-details-wrapper-container p {
+    font-size: 1.4rem;
+}
+
 .server-user-details-wrapper-container h3,
 .server-user-details-wrapper-container p {
     width: 100%;
@@ -147,7 +150,7 @@
 .close-member-panel-button {
     position: fixed;
     top: 40px;
-    left: 280px;
+    left: 250px;
     z-index: 2;
     cursor: pointer;
     display: flex;
@@ -158,6 +161,38 @@
     align-items: center;
 }
 
+.member-panel-user-status-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.member-panel-status-icon {
+    max-width: 120px;
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
 .close-member-panel-button:hover {
     opacity: 0.6;
+}
+
+.member-panel-banner-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.inner-member-banner {
+    height: 100%;
+    width: 100%;
+    
+    display: flex;
+    flex-direction: column;
 }

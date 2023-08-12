@@ -24,8 +24,8 @@ const appearanceSettingsSlice = createSlice({
     initialState: {
         primaryColor: "rgb(255, 255, 255)",
         secondaryColor: "rgb(236, 236, 236)",
-        accentColor: "rgb(217, 217, 217)",
-        textColor: "rgb(0, 0, 0)",
+        accentColor: "rgb(191, 191, 191)",
+        textColor: "rgb(64, 64, 64)",
         activationColor: "rgb(58, 235, 52)",
         glassColor: "rgb(236, 236, 236, 0.8)",
         transparentPrimary: 'rgba(255, 255, 255, 0)',
@@ -34,6 +34,7 @@ const appearanceSettingsSlice = createSlice({
         changeMade: false,
         disableServerAmbiance: false,
         gradient: {type: 'none', gradient: false},
+        scale: {name: 'default', scale: 0},
         gradients: [
             {type: 'none', gradient: false},
             {type: "Witching Hour", gradient: 'linear-gradient(to top, #c31432, #240b36)'},
@@ -55,8 +56,8 @@ const appearanceSettingsSlice = createSlice({
             light: {
                 primaryColor: "rgb(255, 255, 255)",
                 secondaryColor: "rgb(236, 236, 236)",
-                accentColor: "rgb(217, 217, 217)",
-                textColor: "rgb(0, 0, 0)",
+                accentColor: "rgb(191, 191, 191)",
+                textColor: "rgb(64, 64, 64)",
                 activationColor: "rgb(58, 235, 52)",
             },
             dark: {
@@ -181,7 +182,9 @@ const appearanceSettingsSlice = createSlice({
         updateGlassState: (state, action) => {
             state.glass = !state.glass;
         },
-
+        updateScaleState: (state, action) => {
+            state.scale = action.payload;
+        },
         saveTheme: (state, action) => {
 
             state.changeMade = false;
@@ -200,7 +203,8 @@ const appearanceSettingsSlice = createSlice({
                 rgbBackground: state.rgbBackground,
                 gradient: state.gradient,
                 glass: state.glass,
-                disableServerAmbiance: state.disableServerAmbiance
+                disableServerAmbiance: state.disableServerAmbiance,
+                scale: state.scale
             }
 
             state.color_themes = {...state.color_themes, custom: new_theme_object.themes.custom};
@@ -257,6 +261,17 @@ const appearanceSettingsSlice = createSlice({
 
                 state.glassColor = `rgba(${state.secondaryColor.split('rgb(')[1].split(')')[0]}, 0.8)`
 
+                if (action.payload.scale) {
+                    state.scale = action.payload.scale;
+
+                    try {
+                        const {webFrame} = window.require('electron');
+                        console.log(action.payload.scale)
+                        webFrame.setZoomLevel(action.payload.scale.scale);
+                    } catch (e) {
+                        return;
+                    }
+                }
                 return;
             } catch (error) {
                 // use system defaults if error thrown
@@ -270,7 +285,7 @@ const appearanceSettingsSlice = createSlice({
 })
 
 // actions
-export const {toggleDisableServerAmbiance, updateGlassState, updateGradient, updateColorValue, changeTheme, saveTheme, toggleRgbBackGround } = appearanceSettingsSlice.actions;
+export const {updateScaleState, toggleDisableServerAmbiance, updateGlassState, updateGradient, updateColorValue, changeTheme, saveTheme, toggleRgbBackGround } = appearanceSettingsSlice.actions;
 
 // color selectors
 export const selectTransparentPrimaryColor = state => state.appearanceSettingsSlice.transparentPrimary;
@@ -304,6 +319,8 @@ export const selectGlassState = state => state.appearanceSettingsSlice.glass;
 export const selectGlassColor = state => state.appearanceSettingsSlice.glassColor;
 
 export const selectServerAmbiance = state => state.appearanceSettingsSlice.disableServerAmbiance;
+
+export const selectScaleState = state => state.appearanceSettingsSlice.scale;
 
 // export appearance settings reducer
 export default appearanceSettingsSlice.reducer;

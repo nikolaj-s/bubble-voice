@@ -46,6 +46,7 @@ import { selectLoadingNewMedia, setNewMedia, toggleLoadingNewMedia } from '../se
 import { ImageSearch } from '../../util/ImageSearch';
 import { SearchIcon } from '../../components/Icons/SearchIcon/SearchIcon';
 import { RequestDeleteMessage } from '../server/SocialSlice';
+import { openDirectMessage } from '../Messages/MessagesSlice';
 
 export const ContextMenu = () => {
 
@@ -1062,6 +1063,20 @@ export const ContextMenu = () => {
         }
     }
 
+    const handleMessageUser = () => {
+
+        if (!selectedUserToManage) return;
+
+        const m_username = selectedUserToManage.split('-')[0];
+
+        const m_info = members.findIndex(u => u.username === m_username);
+
+        if (m_info === -1) return;
+
+        dispatch(openDirectMessage(members[m_info]));
+
+    }
+
     return (
         <>
         {ctxActive ? 
@@ -1084,7 +1099,7 @@ export const ContextMenu = () => {
             {joinChannelState ? <CtxButton action={handleJoinChannel} name={"Join Channel"} /> : null}
             {leaveChannelState ? <CtxButton action={handleLeaveChannel} name={'Leave Channel'} /> : null}
             {editChannelState ? <CtxButton action={handleEditChannel} name={"Edit Channel"} icon={<EditIcon />} /> : null}
-            {viewSocial ? <CtxButton action={viewSocialFeed} name={"Social"} icon={<SocialIcon color={textColor} />} /> : null}
+            {viewSocial ? <CtxButton action={viewSocialFeed}  name={"Social"} icon={<SocialIcon color={textColor} />} /> : null}
             {assignPermissions ? <AssignPermissionGroupMenu action={assignNewPermissionGroup} permission_groups={permissionGroups} current_permission_group={selectedUserToManage.split('-channel')[0]}  /> : null}
             {audio ? 
             <>
@@ -1108,9 +1123,10 @@ export const ContextMenu = () => {
             {disableStreamState ? <BoolButton name={"Disable Stream"} state={disableStreamLocalState} action={handleDisableStream} /> : null}
             {deleteWidget ? <CtxButton action={handleDeleteWidget} name={"Delete Widget"} icon={<DeleteIcon />} /> : null}
             {moveUserState ? <MoveUser top={ctxCordinates.y} left={ctxCordinates.x} move={handleMoveUser} /> : null}
-            {kickUser ? <CtxButton name="Kick User" action={handleKickUser} icon={<KickIcon />} /> : null}
-            {pokeUser ? <CtxButton name="Poke User" action={handlePokeUser} icon={<PokeIcon />} /> : null}
-            {canBanUser ? <CtxButton action={handleBanUser} name={"Ban User"} icon={<BanIcon />}/> : null}
+            {kickUser ? <CtxButton name="Kick" action={handleKickUser} icon={<KickIcon />} /> : null}
+            {pokeUser ? <CtxButton name="Poke" action={handlePokeUser} icon={<PokeIcon />} /> : null}
+            {pokeUser ? <CtxButton action={handleMessageUser} name="Message" icon={<SocialIcon />} /> : null}
+            {canBanUser ? <CtxButton action={handleBanUser} name={"Ban"} icon={<BanIcon />}/> : null}
             {channelSpecificSettingsState ? <CtxMenuTitle title={"Room Preferences"} /> : null}
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideChannelBackground")}} state={hideChannelBackground} name={"Hide Channel Background"} /> : null}
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideNonVideoParticapents")}} state={hideNonVideoParticapents} name={"Hide Non Video Participants"} /> : null}

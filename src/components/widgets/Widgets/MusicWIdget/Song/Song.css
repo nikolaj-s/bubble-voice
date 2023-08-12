@@ -3,6 +3,7 @@
     height: 60px;
     width: calc(100% - 10px);
     padding: 0 5px;
+    max-width: calc(100% - 10px);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -25,6 +26,27 @@
     cursor: default;
     min-width: 60px;
     text-align: center;
+    flex-shrink: 4;
+}
+
+.song-name-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-shrink: 4;
+    overflow: hidden;
+    width: 100%;
+    justify-content: center;
+}
+
+.song-name-container p {
+    padding: 0;
+    margin: 0 0 0 5px;
+}
+
+.added-by-song-title {
+    font-size: 0.6rem;
+    opacity: 0.7;
 }
 
 .song-name {

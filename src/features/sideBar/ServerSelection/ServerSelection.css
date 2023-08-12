@@ -6,6 +6,7 @@
     left: 0;
     width: auto !important;
     margin-left: 5px;
+    height: calc(100%);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -13,10 +14,10 @@
 
 .server-buttons-nav-container {
     position: sticky;
-    bottom: 15px;
+    bottom: 5px;
     width: auto;
     overflow: visible;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
     display: flex;
     height: auto;
     flex-direction: column;

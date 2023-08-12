@@ -1,6 +1,7 @@
 
 .stream-preview-wrapper {
-    width: 200px;
+    width: 175px;
+    margin-left: 5px;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -21,7 +22,7 @@
 
 .inner-user-streaming-preview-container {
     background-color: rgb(0, 0, 0);
-    border-radius: 8px;
+    
     overflow: hidden;
     width: calc(100% - 3px);
     height: 120px;

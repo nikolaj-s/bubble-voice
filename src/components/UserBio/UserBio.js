@@ -47,7 +47,7 @@ export const UserBio = ({bio = "", margin, loading}) => {
     const expand = (ct) => {
         dispatch(setExpandedContent(ct))
     }
-console.log(bio)
+
     return (
         <>
         
@@ -72,6 +72,9 @@ console.log(bio)
             : null}
             {bio.length > 0 && bio !== 'undefined' ?
             <div className='inner-bio-wrapper'>
+                <p style={{color: textColor}}>
+                {text}
+                </p>
                 <div className='bio-images-wrapper'>
                     {images.map(i => {
                     return (
@@ -82,9 +85,7 @@ console.log(bio)
                     })
                     }
                 </div>
-                <p style={{color: textColor}}>
-                {text}
-                </p>
+                
             </div>
             : 
             <div className='no-bio-container'>

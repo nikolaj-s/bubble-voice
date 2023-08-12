@@ -22,7 +22,7 @@
 }
 
 .inner-drop-down-container {
-    max-width: 500px;
+    max-width: calc(100% - 350px);
     width: 100%;
     display: flex;
     flex-direction: column;

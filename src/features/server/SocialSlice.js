@@ -5,7 +5,7 @@ import { newMessage, throwServerError } from "./ServerSlice";
 
 export const togglePinMessage = createAsyncThunk(
     'SocialSlice/togglePinMessage',
-    async (data, {rejectWithValue, dispatch}) => {
+    async (data, {rejectWithValue, dispatch, getState}) => {
         
             try {
 
@@ -70,7 +70,7 @@ export const fetchMessages = createAsyncThunk(
 
 export const sendMessage = createAsyncThunk(
     'SocialSlice/sendMessage',
-    async ({username, file, channel_id, local_id, text, image_preview}, {rejectWithValue, getState, dispatch}) => {
+    async ({username, file, channel_id, local_id, text, image_preview, screen_shot = false}, {rejectWithValue, getState, dispatch}) => {
         try {
 
             const message = {
@@ -85,7 +85,8 @@ export const sendMessage = createAsyncThunk(
                     loading: true,
                 },
                 file: file?.size ? file : null,
-                valid: true
+                valid: true,
+                screen_shot: screen_shot
             }
             console.log(message)
             const data = await socket.request('message', message)

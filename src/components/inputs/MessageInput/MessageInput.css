@@ -7,20 +7,21 @@
     border-bottom-right-radius: var(--border-radius);
     display: flex;
     justify-content: center;
-    padding: 5px 0 8px 0;
+    padding: 5px 0 3px 0;
     z-index: 5;
 }
 
 .message-input-container {
-    bottom: 5px;
-    width: calc(100%);
+    bottom: 3px;
+    width: calc(100% - 4px);
     margin-left: 10px;
-    height: 40px;
+    height: 32px;
     flex-shrink: 0;
     border-bottom-right-radius: var(--border-radius);
     display: flex;
     align-content: center;
     border-radius: var(--border-radius);
+    transition: 0.1s;
 }
 
 #image-drop-listener {
@@ -50,7 +51,7 @@
 
 .message-input-inner-button-wrapper {
     display: flex;
-    height: 40px;
+    height: 32px;
     width: auto;
     align-items: center;
 }
@@ -61,13 +62,13 @@
 
 .message-input-container textarea {
     width: calc(100%);
-    height: calc(100% - 20px);
+    height: calc(100% - 5px - 4px);
     object-fit: contain;
     background-color: transparent;
     font-size: 15px;
     border: none;
     margin: 0 0 0 0.5rem;
-    padding: 10px 0;
+    padding: 5px 0 4px 0px;
     font-weight: 400;
     letter-spacing: var(--font-spacing);
     font-family: var(--font-variable);
@@ -86,5 +87,13 @@
     font-size: 0.7rem;
     opacity: 0.6;
 }
-
-
+.local-error-alert-social {
+    bottom: 42px;
+    position: absolute;
+    font-size: 1rem;
+    left: 5px;
+    padding: 0px;
+    margin: 0;
+    opacity: 0.8;
+    font-size: 0.8rem;
+}

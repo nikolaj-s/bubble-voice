@@ -20,6 +20,7 @@ import { CloseSettings } from '../../../components/CloseSettings/CloseSettings'
 import { MiscellaneousSettings } from '../appSettings/MiscellaneousSettings/MiscellaneousSettings'
 import { MenuButton } from '../../../components/buttons/MenuButton/MenuButton'
 import { motion } from 'framer-motion'
+import { SocialSettings } from '../appSettings/socialSettings/socialSettings'
 
 const Wrapper = () => {
     
@@ -61,7 +62,7 @@ const Wrapper = () => {
         transition={{duration: 0.1}}
         style={{
             backgroundColor: secondaryColor,
-            borderLeft: `solid 2px ${textColor}`,
+            borderLeft: `solid 2px ${secondaryColor}`,
             borderTop: `30px solid ${secondaryColor}`,
             borderRight: `8px solid ${secondaryColor}`,
             borderBottom: `8px solid ${secondaryColor}`
@@ -73,6 +74,7 @@ const Wrapper = () => {
             <MiscellaneousSettings />
             <SoundSettings />
             <VoiceVideoSettings />
+            <SocialSettings />
             <CloseSettings />
             <MenuButton position={'fixed'} action={openMobileSettingsMenu} top={0} right={60} />
         </motion.div>

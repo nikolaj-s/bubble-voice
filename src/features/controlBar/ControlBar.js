@@ -45,6 +45,8 @@ export const ControlBar = () => {
 
     const channel = useSelector(selectCurrentChannel);
 
+    const inChannel = useSelector(selectCurrentChannelId);
+
     const secondaryColor = useSelector(selectPrimaryColor);
 
     const loadingWebCam = useSelector(selectLoadingWebCam);
@@ -92,22 +94,6 @@ export const ControlBar = () => {
         }
 
     }
-    
-    const toggleAppSettings = () => {
-        const url = window.location.hash.split('#')[1]
-
-        if (url.search('/appsettings') === -1) {
-            if (url.includes('server-settings')) {
-                navigate(url.split('/server-settings')[0] + '/appsettings/account')
-            } else {
-                navigate(url + "/appsettings/account")
-            }
-            
-        } else {
-            navigate(url.split('/appsettings')[0])
-        }
-            
-    }
 
     React.useEffect(() => {
         dispatch(resetControlState());
@@ -118,20 +104,15 @@ export const ControlBar = () => {
         <>
             
             <div className='control-bar-container' 
-            style={{backgroundColor: accentColor, boxShadow: selectingScreen ? '5px 5px 20px rgba(0, 0, 0, 1)' : null}}
+            style={{backgroundColor: accentColor, boxShadow: selectingScreen ? '5px 5px 20px rgba(0, 0, 0, 1)' : null,}}
             >   
                 <AnimatePresence>
                     {selectingScreen ? <ScreenShareMenu key={'screeen-share-menu'} selectingScreens={selectingScreen} /> : null}
                     {currentScreen ? <Streampreview key={'stream-preview-container'} /> : null}
                 </AnimatePresence>
                 
-                <div style={{backgroundColor: accentColor}} className='controls-wrapper'>
-                    <SettingsButton 
-                    width={20}
-                    height={20}
-                    padding={10}
-                    desc_space={23}
-                    action={toggleAppSettings} />
+                <div style={{backgroundColor: accentColor}} className='controls-wrapper'>  
+                   
                     <WebCamButton 
                     width={20}
                     height={20}

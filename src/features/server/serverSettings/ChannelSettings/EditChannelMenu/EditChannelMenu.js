@@ -46,6 +46,8 @@ const Wrapper = () => {
 
     const [loading, toggleLoading] = React.useState(false);
 
+    const [channelOwner, setChannelOwner] = React.useState('');
+
     const [channelBackground, setChannelBackground] = React.useState(false);
 
     const [backgroundBlur, setBackgroundBlur] = React.useState(1);
@@ -63,6 +65,10 @@ const Wrapper = () => {
     const [icon, setChannelIcon] = React.useState(false)
 
     const [managingWidgets, toggleManagingWidgets] = React.useState(false);
+
+    const [lockedMediaPlayer, toggleLockedMediaPlayer] = React.useState(false);
+
+    const [authMediaUsers, setAuthMediaUsers] = React.useState([]);
 
     const channel = useSelector(selectChannelToEdit);
 
@@ -100,6 +106,18 @@ const Wrapper = () => {
 
             if (channelToEdit.disable_streams) {
                 toggleDisableStreams(true);
+            }
+
+            if (channelToEdit.channel_owner) {
+                setChannelOwner(channelToEdit.channel_owner);
+            }
+
+            if (channelToEdit.locked_media) {
+                toggleLockedMediaPlayer(channelToEdit.locked_media);
+            }
+
+            if (channelToEdit.media_auth) {
+                setAuthMediaUsers(channelToEdit.media_auth)
             }
 
             for (const w of channel.widgets) {
@@ -168,6 +186,12 @@ const Wrapper = () => {
         }
     }
 
+    const handleAssignChannelOwner = (value) => {
+        setChannelOwner(value);
+
+        toggleEdited(true);
+    }
+
     const handleUpdateChannel = async () => {
 
         if (channelBackground?.size > 950000) return dispatch(throwServerError({errorMessage: 'image cannot be larger than 1mb'}));
@@ -177,7 +201,7 @@ const Wrapper = () => {
         document.getElementsByClassName('server-settings-route-wrapper')[0].scrollTop = 0;
 
         await socket.request('update channel', 
-        {...channelToEdit, widgets: widgets, persist_social: persistChannelSocial, channel_name: channelName, file: channelBackground, background_blur: backgroundBlur, clear_social: clearedSocial, disable_streams: disableStreams, auth_users: authUsers, locked_channel: lockedChannel, icon_file: icon})
+        {...channelToEdit, widgets: widgets, persist_social: persistChannelSocial, channel_name: channelName, file: channelBackground, background_blur: backgroundBlur, clear_social: clearedSocial, disable_streams: disableStreams, auth_users: authUsers, locked_channel: lockedChannel, icon_file: icon, channel_owner: channelOwner, lock_media_player: lockedMediaPlayer, authMediaUsers: authMediaUsers})
         .then(response => {
 
             dispatch(updateChannel(response.channel));
@@ -299,6 +323,27 @@ const Wrapper = () => {
         toggleEdited(true);
     }
 
+    const handleToggleLockMedia = () => {
+
+        toggleEdited(true);
+
+        toggleLockedMediaPlayer(!lockedMediaPlayer);
+    }
+
+    const addAuthMediaUser = (username) => {
+        toggleEdited(true);
+
+        let current_auth_media = [...authMediaUsers];
+
+        if (current_auth_media.findIndex(i => i === username) !== -1) {
+            current_auth_media = current_auth_media.filter(u => u !== username)
+        } else {
+            current_auth_media.push(username);
+        }
+
+        setAuthMediaUsers(current_auth_media);
+    }
+
     return (
         <>
         {(permission?.user_can_manage_channels && (channelToEdit.locked_channel ? channelToEdit.auth : true)) ?
@@ -315,8 +360,7 @@ const Wrapper = () => {
             <SettingsHeader title={"Channel Background"} />
             <InputTitle zIndex={2} title={"Image"} />
             <ChannelBackgroundInput blur={backgroundBlur} initialImage={channelToEdit.channel_background} getFile={handleSettingChannelBackground} />
-            <InputTitle title={"Background Opacity"} />
-            <Range action={handleBlurChange} value={backgroundBlur} min={0} max={1} step={0.05} />
+            
             <SettingsHeader title={"Widgets"} />
             <TextButton action={openWidgetMenu} name={"Add Widget"} icon={<WidgetsIcon color={textColor} />} />
             <InputTitle title={`Widgets ${channelToEdit.widgets ? channelToEdit.widgets.length : 0} / 15`} />
@@ -344,6 +388,20 @@ const Wrapper = () => {
             </div>
             </>
             : null}
+            {channelOwner === username || permission.server_group_name === 'Owner' ?
+            <>
+            <InputTitle title={"Lock Media Player To Certain Users"} />
+            <ToggleButton action={handleToggleLockMedia} state={lockedMediaPlayer} />
+            {lockedMediaPlayer ? 
+            <>
+            <InputTitle title={"Select Users That Can Use The Media Player"} />
+            {members.filter(m => (m.username !== channelOwner && m.username !== serverOwner)).map(m => {
+                return <RadioButton action={() => {addAuthMediaUser(m.username)}} state={authMediaUsers.includes(m.username)} name={m.display_name} />
+            })}
+            </>
+            : null}
+            </>
+            : null}
             {channelToEdit.text_only ? null :
             <>
             <SettingsHeader title={"Disable Video / Audio Streams"} />
@@ -351,6 +409,14 @@ const Wrapper = () => {
             <ToggleButton action={handleToggleDisableStreams} state={disableStreams} />
             </>
             }
+            {permission.server_group_name === 'Owner' ?
+            <>
+            <InputTitle title={'Assign Channel Owner'} />
+            {members.map(m => {
+                return <RadioButton action={() => {handleAssignChannelOwner(m.username)}} name={m.display_name} state={m.username === channelOwner} />
+            })}
+            </>
+            : null}
             <InputTitle title={"Delete Channel"} />
             <TextButton action={handleDeleteChannel} name={"Delete Channel"} icon={<DeleteIcon />} />
             <ApplyCancelButton position={edited === false ? null : 'fixed'} right={20} toggled={edited === false ? true : null} apply={handleUpdateChannel} cancel={handleCancel} />

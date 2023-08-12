@@ -1,0 +1,18 @@
+
+.media-settings-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    padding: 0px 5px;
+    width: calc(100% - 10px);
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.close-media-settings-wrapper {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}

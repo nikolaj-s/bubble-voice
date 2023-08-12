@@ -57,7 +57,7 @@ export const AltLeaveServerButton = ({active}) => {
         <div 
         onClick={action}
         id='disconnect-from-server-button'
-        style={{opacity: !active ? 0.6 : 1, cursor: !active ? 'default' : 'pointer'}}
+        style={{opacity: !active ? 0.6 : 1, cursor: !active ? 'default' : 'pointer', margin: '7px 0px 0px 0px'}}
         onMouseEnter={() => {handleHover(true)}}
         onMouseLeave={() => {handleHover(false)}}
         className='saved-media-container'>

@@ -235,7 +235,7 @@ const Bar = () => {
 
         socket.on('music-widget/new-song', (data) => {
 
-            dispatch(addSongToQueue(data.song));
+            dispatch(addSongToQueue({...data.song, added_by: data.user.display_name}));
 
             dispatch(addNewWidgetOverlayToQueue({action: 'song-status', message: `${data.user.display_name} added ${data.song.title}`, user: data.user}));
             

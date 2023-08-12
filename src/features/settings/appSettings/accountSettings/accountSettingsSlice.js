@@ -14,8 +14,6 @@ export const fetchAccount = createAsyncThunk(
 
         const token = await getToken();
 
-        const { defaultServer } = getState().MiscellaneousSettingsSlice;
-
         if (token) {
             const account = await Axios({
                 method: 'GET',
@@ -31,14 +29,12 @@ export const fetchAccount = createAsyncThunk(
             }).catch(error => {
                 dispatch(throwInitializationError("Connection Error"))
             })
+            console.log(account)
+            if (account.account.last_server) {
 
-            if (defaultServer.id) {
+                dispatch(setServerId(account.account.last_server));
 
-                dispatch(setServerId(defaultServer.id));
-
-                dispatch(setServerName(defaultServer.server_name));
-
-                window.location.hash = `/dashboard/server/${defaultServer.server_name}`;
+                window.location.hash = `/dashboard/server/${account.account.last_server}`;
 
             } else {
                 window.location.hash = '/dashboard';
@@ -56,7 +52,7 @@ export const updateAccount = createAsyncThunk(
     async ({userImage, userBanner, newShape, color}, {rejectWithValue, getState, dispatch}) => {
         const token = await getToken();
 
-        const {password, newPassword, confirmNewPassword, display_name, bio} = getState().accountSettingsSlice;
+        const {password, newPassword, confirmNewPassword, display_name, bio, showCaseScreenShots} = getState().accountSettingsSlice;
 
         const data = new FormData();
 
@@ -77,6 +73,8 @@ export const updateAccount = createAsyncThunk(
         data.append("profileImageShape", newShape);
 
         data.append("color", color);
+
+        data.append("showCaseScreenShots", showCaseScreenShots);
 
         if (!token) return rejectWithValue({error: true, errorMessage: "validation error"})
 
@@ -174,9 +172,15 @@ const accountSettingsSlice = createSlice({
         change: false,
         new_account: false,
         bio: "",
-        color: ""
+        color: "",
+        steamLink: "",
+        showCaseScreenShots: false,
+        screenShots: []
     },
     reducers: {
+        handleUpdateSteamLink: (state, action) => {
+            state.steamLink = action.payload;
+        },
         handleSignOut: (state, action) => {
             state.user_image = "";
             state.user_banner = "";
@@ -197,6 +201,10 @@ const accountSettingsSlice = createSlice({
         handleUpdateBio: (state, action) => {
             state.bio = action.payload;
             state.change = true;
+        },
+        toggleShowCaseScreenShots: (state, action) => {
+            state.showCaseScreenShots = !state.showCaseScreenShots;
+            state.change = true;
         }
     },
     extraReducers: {
@@ -216,7 +224,9 @@ const accountSettingsSlice = createSlice({
                     state.profilePictureShape = action.payload.account.profile_picture_shape;
                 
                 }
+                state.showCaseScreenShots = action.payload.account.showCaseScreenShots
                 state.pinned_message = action.payload.account.pinned_message;
+                state.screenShots = action.payload.account.screen_shots;
             } 
 
             state.change = false;
@@ -312,7 +322,13 @@ export const selectProfileColor = state => state.accountSettingsSlice.color;
 
 export const selectProfilePinnedMessage = state => state.accountSettingsSlice.pinned_message;
 
+export const selectSteamLink = state => state.accountSettingsSlice.steamLink;
+
+export const selectUsersScreenShots = state => state.accountSettingsSlice.screenShots;
+
+export const selectShowCaseScreenShotsState = state => state.accountSettingsSlice.showCaseScreenShots;
+
 // actions
-export const {handleUpdateBio, updateNewAccountState, handleSignOut, updateAccountInputState, accountSettingsCloseError } = accountSettingsSlice.actions;
+export const {toggleShowCaseScreenShots, handleUpdateSteamLink, handleUpdateBio, updateNewAccountState, handleSignOut, updateAccountInputState, accountSettingsCloseError } = accountSettingsSlice.actions;
 
 export default accountSettingsSlice.reducer;

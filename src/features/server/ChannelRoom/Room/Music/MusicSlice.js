@@ -38,9 +38,14 @@ const MusicSlice = createSlice({
         volume: 25,
         expanded: false,
         loading: false,
-        behind: false
+        behind: false,
+        mute: false,
+        color: ""
     },
     reducers: {
+        toggleMuted: (state, action) => {
+            state.mute = !state.mute;
+        },
         toggleBehind: (state, action) => {
             state.behind = action.payload;
         },
@@ -103,6 +108,9 @@ const MusicSlice = createSlice({
         },
         toggleLoadingMusic: (state, action) => {
             state.loading = action.payload;
+        },
+        setMediaColor: (state, action) => {
+            state.color = action.payload;
         }
     },
     extraReducers: {
@@ -135,7 +143,11 @@ export const selectLoadingMusicState = state => state.MusicSlice.loading;
 
 export const selectBehindState = state => state.MusicSlice.behind;
 
+export const selectMuteState = state => state.MusicSlice.mute;
+
+export const selectMediaColor = state => state.MusicSlice.color;
+
 // actions
-export const {toggleBehind, toggleLoadingMusic,toggleMusicExpanded, removeSongFromQueue, un_like_song, like_song, toggleMusicPlaying, addSongToQueue, skipSong, updateMusicState, throwMusicError, updateMusicVolume} = MusicSlice.actions;
+export const {setMediaColor, toggleMuted, toggleBehind, toggleLoadingMusic,toggleMusicExpanded, removeSongFromQueue, un_like_song, like_song, toggleMusicPlaying, addSongToQueue, skipSong, updateMusicState, throwMusicError, updateMusicVolume} = MusicSlice.actions;
 
 export default MusicSlice.reducer;

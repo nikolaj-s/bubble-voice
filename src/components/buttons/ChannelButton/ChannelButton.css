@@ -1,7 +1,7 @@
 
 
 .channel-button-container {
-    width: calc(100% - 5px);
+    width: calc(100% - 7px);
     margin-left: 5px;
     height: calc(34px);
     display: flex;

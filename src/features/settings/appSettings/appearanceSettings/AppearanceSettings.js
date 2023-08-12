@@ -10,11 +10,12 @@ import { DropDownList } from '../../../../components/DropDownList/DropDownList'
 import { ToggleButton } from '../../../../components/buttons/ToggleButton/ToggleButton';
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { changeTheme, saveTheme, selectAccentColor, selectActivationColor, selectAppearanceChangeMade, selectCurrentTheme, selectGlassState, selectGradient, selectGradients, selectPrimaryColor, selectSecondaryColor, selectTextColor, selectThemeOptions, updateColorValue, updateGlassState, updateGradient } from './appearanceSettingsSlice';
+import { changeTheme, saveTheme, selectAccentColor, selectActivationColor, selectAppearanceChangeMade, selectCurrentTheme, selectGlassState, selectGradient, selectGradients, selectPrimaryColor, selectScaleState, selectSecondaryColor, selectTextColor, selectThemeOptions, updateColorValue, updateGlassState, updateGradient, updateScaleState } from './appearanceSettingsSlice';
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 import { ColorInput } from '../../../../components/inputs/ColorInput/ColorInput';
 import { TextButton } from '../../../../components/buttons/textButton/TextButton';
 import { Gradients } from './Gradients/Gradients';
+import { RadioButton } from '../../../../components/buttons/RadioButton/RadioButton';
 
 const Settings = () => {
 
@@ -26,6 +27,8 @@ const Settings = () => {
     
         // eslint-disable-next-line
     }, [])
+
+    const scale = useSelector(selectScaleState);
 
     const primaryColor = useSelector(selectPrimaryColor);
 
@@ -78,6 +81,24 @@ const Settings = () => {
     }
 
     
+    const handleUpdateScale = (value) => {
+
+        dispatch(updateScaleState(value));
+
+        dispatch(saveTheme());
+        
+        try {
+
+            const {webFrame} = window.require('electron');
+
+            webFrame.setZoomLevel(value.scale)
+
+        } catch (err) {
+            console.log(err)
+        }
+
+    }
+
     return (
         <div className='settings-wrapper'>
             <SettingsHeader title={"Presets"} />
@@ -99,6 +120,10 @@ const Settings = () => {
             <ColorInput selector="activationColor" action={handleInput} rgb={activationColor} />
             <InputTitle title={"Glass UI"} />
             <ToggleButton action={handleGlassUi} state={glass} />
+            <InputTitle title={'App Scale'} />
+            <RadioButton name={'Default'} state={scale.name === 'default'} action={() => {handleUpdateScale({name: 'default', scale: 0})}} />
+            <RadioButton  name={'Small'} state={scale.name === 'small'} action={() => {handleUpdateScale({name: 'small', scale: -0.8})}}  />
+            <RadioButton name={'Large'} state={scale.name === 'large'} action={() => {handleUpdateScale({name: 'large', scale: 1.3})}} />
             {changeMade ? <TextButton marginTop={"2%"} action={handleSaveAppearanceChanges} name="Save Changes" /> : null}
             <SettingsSpacer />
         </div>

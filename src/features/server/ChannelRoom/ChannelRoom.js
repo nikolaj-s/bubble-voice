@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { useRoutes } from 'react-router'
 import { ServerSettingsRouteWrapper } from '../serverSettings/ServerSettingsRouteWrapper'
-import { closeServerErrorMessage, selectCurrentChannel, selectCurrentChannelId, selectCurrentlyViewChannelSocial, selectHideDefaultNotce, selectServerErrorMessage, selectServerErrorState, selectServerId, selectServerName } from '../ServerSlice'
+import { closeServerErrorMessage, selectCurrentChannel, selectCurrentChannelId, selectCurrentlyViewChannelSocial, selectHideDefaultNotce, selectServerErrorMessage, selectServerErrorState, selectServerId, selectServerName, selectUsersPermissions } from '../ServerSlice'
 import { CreateChannelMenu } from './CreateChannelMenu/CreateChannelMenu'
 import { Room } from './Room/Room'
 import { Error } from '../../../components/Error/Error';
@@ -11,7 +11,6 @@ import { SocialRoute } from './SocialRoute/SocialRoute'
 import { ServerDashBoard } from './ServerDashBoard/ServerDashBoard'
 import { UserStatusBar } from './UserStatus/UserStatusBar'
 import { selectDefaultServer, selectHideUserStatus } from '../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice'
-import { SetAsDefaultServerNotice } from './SetAsDefaultServerNotice/SetAsDefaultServerNotice'
 import { MemberPanel } from './MemberPanel/MemberPanel'
 
 import "./ChannelRoom.css";
@@ -20,6 +19,8 @@ import { selectCurrentServerPageState } from './ServerNavigation/ServerNavigatio
 import { RoomActionOverlay } from './Room/RoomActionOverlay/RoomActionOverlay'
 import { handleAddingMedia, selectLoadingMusicState } from './Room/Music/MusicSlice'
 import { DropOverlay } from '../../../components/DropOverlay/DropOverlay'
+import { selectUsername } from '../../settings/appSettings/accountSettings/accountSettingsSlice'
+import { sendMessage } from '../SocialSlice'
 
 export const RoomWrapper = () => {
 
@@ -51,6 +52,12 @@ export const RoomWrapper = () => {
 
     const viewingSocial = useSelector(selectCurrentlyViewChannelSocial);
 
+    const channel = useSelector(selectCurrentChannel);
+
+    const permissions = useSelector(selectUsersPermissions);
+
+    const username = useSelector(selectUsername);
+
     const closeErrorMessage = () => {
         dispatch(closeServerErrorMessage());
     }
@@ -58,10 +65,12 @@ export const RoomWrapper = () => {
     const onDrop = async (e) => {
 
         toggleDropState(false);
+      
+       // if ((channel?.locked_media && !channel?.media_auth?.includes(username)) || channel.channel_owner !== username || permissions.server_group_name !== 'Owner') return;
 
         if (channelId && currentServerPage !== 'social' && viewingSocial.error) {
             const data = e.dataTransfer.getData('text/plain');
-
+            console.log(data)
             if (data.includes('youtube')) {
 
                 if (musicLoading) return;
@@ -72,7 +81,10 @@ export const RoomWrapper = () => {
                     dispatch(handleAddingMedia(data));
                 }
             } else if (data.startsWith('https')) {
-                
+                let local_id = ((Math.random(5 * 32) + 1) * 5) + username
+
+                dispatch(sendMessage({username: username, channel_id: channel._id, local_id: local_id, text: e.dataTransfer.getData('text/plain')}))
+
             }
         }
     }
@@ -90,7 +102,7 @@ export const RoomWrapper = () => {
         <>
         <CreateChannelMenu />
         <ServerSettingsRouteWrapper />
-        <div style={{width: (channelId && !userStatusHidden) ? 'calc(100% - 185px)' : null, maxWidth: (channelId && !userStatusHidden) ? 'calc(100% - 185px)' : null}} className='outer-server-page-wrapper'>
+        <div style={{width: (channelId && !userStatusHidden) ? 'calc(100% - 184px)' : null, maxWidth: (channelId && !userStatusHidden) ? 'calc(100% - 184px)' : null}} className='outer-server-page-wrapper'>
             <div onDragOver={onDragOver} onDrop={onDrop} className='server-page-wrapper'>
                 <SocialRoute key='social-route' />
                 
@@ -100,12 +112,11 @@ export const RoomWrapper = () => {
                 <DropOverlay action={() => {toggleDropState(false)}} dropState={dropState} />
                 <MemberPanel key='member-panel' />
            </div>
-            <Music />
         </div>
         <UserStatusBar key='user-status-bar' />
         
         {error ? <Error key={'server-error'} errorMessage={errorMessage} action={closeErrorMessage} /> : null}
-        <SetAsDefaultServerNotice serverId={serverId} servername={serverName} visible={hideDefaultNotice ? !hideDefaultNotice : (defaultServer?.label === 'Default' && defaultServer?.id === "")} />
+        
         </>
     )
 }

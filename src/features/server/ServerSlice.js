@@ -436,6 +436,8 @@ const serverSlice = createSlice({
             if (index === -1) return;
 
             state.members[index].status = action.payload.status;
+
+            state.members[index].status_icon = action.payload.icon;
         },
         userLeavesServer: (state, action) => {
             const userIndex = state.members.findIndex(user => user._id === action.payload.member_id);

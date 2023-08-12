@@ -11,6 +11,14 @@ export const UserStatus = ({user}) => {
 
     const [preview, togglePreview] = React.useState(false);
 
+    const [timeStamp, setTimeStamp] = React.useState(false);
+
+    React.useEffect(() => {
+        
+        setTimeStamp(GetTimeDifference(user?.last_online))
+        console.log('process user')
+    }, [user.status, user.last_online])
+
     const textColor = useSelector(selectTextColor);
 
     const primaryColor = useSelector(selectPrimaryColor);
@@ -42,8 +50,8 @@ export const UserStatus = ({user}) => {
         
         dispatch(setPanelPosition({y: l_top - scroll_top, x: e.pageX, origin: (e.view.innerHeight - e.pageY) < 500 ? true : false, left: null}));
     }
-
-    const timeStamp = GetTimeDifference(user?.last_online);
+    
+    
 
     return (
         <div 
@@ -57,6 +65,11 @@ export const UserStatus = ({user}) => {
             className='user-status-image-container'>
                 <Image image_class={"user-image"} cursor='pointer' image={user.user_image?.includes('gif') ? "" : user.user_image} />
             </div>
+            {user.status_icon && user?.status?.length > 1 ?
+            <div className='user-status-icon-container'>
+                <Image image={user.status_icon} />
+            </div>
+            : null}
             <div 
             className={`user-name-status-wrapper ${user._id}-user-name-status-wrapper`}>
                 <h3 style={{color: textColor,}} >{user.display_name}</h3>

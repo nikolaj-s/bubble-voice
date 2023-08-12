@@ -6,13 +6,13 @@ import { selectCreatePostMenuOpen, selectProfileTabOpen, toggleCreatePostMenu, t
 import "./Profile.css";
 import { selectPrimaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { Image } from '../../components/Image/Image';
-import { selectProfileBio, selectProfileColor, selectProfilePinnedMessage, selectUserBanner, selectUserImage } from '../settings/appSettings/accountSettings/accountSettingsSlice';
+import { selectProfileBio, selectProfileColor, selectProfilePinnedMessage, selectUserBanner, selectUserImage, selectUsersScreenShots } from '../settings/appSettings/accountSettings/accountSettingsSlice';
 
 import { UserStatusMenu } from '../../components/UserStatusMenu/UserStatusMenu';
 import { UserBio } from '../../components/UserBio/UserBio';
 import { selectServerId } from '../server/ServerSlice';
 import {PinnedProfileMessage } from '../../components/PinnedProfileMessage/PinnedProfileMessage';
-
+import { ScreenShotShowCase } from '../../components/ScreenShotShowCase/ScreenShotShowCase';
 
 export const Profile = () => {
 
@@ -33,6 +33,8 @@ export const Profile = () => {
     const bio = useSelector(selectProfileBio);
 
     const serverId = useSelector(selectServerId);
+
+    const usersScreenShots = useSelector(selectUsersScreenShots);
 
     const close = () => {
         dispatch(toggleProfileTab(false))
@@ -59,7 +61,8 @@ export const Profile = () => {
                     {serverId ?
                     <UserStatusMenu/>
                     : null}
-                    <UserBio margin={'5px 0px 0px 0px'} bio={bio} />
+                    <UserBio margin={'5px 0px 5px 0px'} bio={bio} />
+                    <ScreenShotShowCase screenShots={usersScreenShots} />
                     <PinnedProfileMessage margin={'5px 0px'} message={pinnedMessage} />
                 </motion.div>
             </div>

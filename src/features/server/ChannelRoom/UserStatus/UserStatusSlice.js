@@ -17,7 +17,7 @@ export const updateUserStatus = createAsyncThunk(
                     return rejectWithValue({error: true});
                 })
 
-                dispatch(updateMemberActiveStatus(data));
+                dispatch(updateMemberActiveStatus({...data}));
 
                 return status;
 
@@ -76,7 +76,9 @@ const UserStatusSlice = createSlice({
 
                 } else {
 
-                    state.offlineUsers.push(u)
+                    URL.revokeObjectURL(u.status_icon);
+
+                    state.offlineUsers.push({...u, status_icon: false})
                 
                 }
             }
@@ -106,6 +108,8 @@ const UserStatusSlice = createSlice({
             state.loading = false;
 
             state.currentStatus = action.payload.value;
+
+            if (action.payload.value !== 'online' && action.payload.value !== 'offline' && action.payload.value !== state.customStatus) return;
 
             saveLocalData("USERSTATUS", "CUSTOM", {custom_status: state.customStatus, current_status: action.payload.value});
         }

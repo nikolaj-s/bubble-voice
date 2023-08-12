@@ -12,6 +12,8 @@ import { Loading } from '../../../../../components/LoadingComponents/Loading/Loa
 import { ImageSearch } from '../../../../../util/ImageSearch';
 import { selectServerId, throwServerError } from '../../../ServerSlice';
 import {motion} from 'framer-motion';
+import { clearCache } from '../../../../../util/ClearCaches';
+import { ScreenShots } from './ScreenShots/ScreenShots';
 
 export const ServerMedia = ({media, expand}) => {
     
@@ -66,7 +68,7 @@ export const ServerMedia = ({media, expand}) => {
                     console.log(newMedia[newMedia.length - 1])
                     searchMedia(false, newMedia[newMedia.length - 1]?.tags)
                 }
-            } else {
+            } else if (page === 'subreddit') {
                 dispatch(GetPostsFromSubReddit({subreddit: selectedSubReddit.url, sort: sortState, after: nextPostPage}))
             }   
         }
@@ -132,24 +134,16 @@ export const ServerMedia = ({media, expand}) => {
         }
 
         return () => {
-            try {
-
-                const {webFrame} = window.require('electron');
-                console.log(webFrame.getResourceUsage())
-                webFrame.clearCache();
-
-                console.log('performing ram clean')
-            } catch (err) {
-                console.log(err)
-                return;
-            }
+            clearCache();
         }
     }, [page])
     
     return (
         <motion.div className='server-media-wrappers' initial={{translateX: '100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}}>
             <div style={{backgroundColor: secondaryColor}} className='server-media-navigation-container'>
-                    <h3 onClick={() => {setPage('recommendations')}} style={{color: textColor, opacity: page === 'recommendations' ? 1 : 0.5, cursor: page === 'recommendations' ? 'default' : 'pointer', backgroundColor: page === 'recommendations' ? accentColor : null}}>Media</h3>
+                    
+                    <h3 onClick={() => {setPage('recommendations')}} style={{color: textColor, opacity: page === 'recommendations' ? 1 : 0.5, cursor: page === 'recommendations' ? 'default' : 'pointer', backgroundColor: page === 'recommendations' ? accentColor : null}}>Recommendations</h3>
+                    <h3 onClick={() => {setPage('screenShots')}} style={{color: textColor, opacity: page === 'screenShots' ? 1 : 0.5, cursor: page === 'screenShots' ? 'default' : 'pointer', backgroundColor: page === 'screenShots' ? accentColor : null}} >Screen Shots</h3>
                     <h3 onClick={() => {setPage('subreddit')}} style={{color: textColor, opacity: page === 'subreddit' ? 1 : 0.5, cursor: page === 'subreddit' ? 'default' : 'pointer', backgroundColor: page === 'subreddit' ? accentColor : null}}>Subreddits</h3>
             </div>
             {page === 'recommendations' ?
@@ -157,12 +151,13 @@ export const ServerMedia = ({media, expand}) => {
                 <TextInput keyCode={handleEnter} action={handleQueryInput} inputValue={mediaQuery} placeholder={'Search Media'} />
             </div>
             : null}
-            <div onScroll={handleLoadMore} className='server-media-container'>
+            <div style={{height: page === 'screenShots' ? 'calc(100% - 40px)' : null}} onScroll={handleLoadMore} className='server-media-container'>
                 
                 {page === 'recommendations' ? <Reccomendations count={count} expand={expand} media={newMedia.length > 0 ? newMedia : media} /> : null}
                 {page === 'subreddit' ? <ViewSubReddit expand={expand} /> : null}
-                
+                {page === 'screenShots' ? <ScreenShots /> : null}
             </div>
+            
             <Loading backgroundColor={glassColor} loading={loadingNewMedia} />
         </motion.div>
         )

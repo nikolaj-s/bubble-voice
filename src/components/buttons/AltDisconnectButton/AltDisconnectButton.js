@@ -51,7 +51,7 @@ export const AltDisconnectButton = ({active}) => {
         <div 
         id={"disconnect-from-channel-button"}
         onClick={action}
-        style={{margin: '5px 0px',opacity: !active ? 0.6 : 1, cursor: !active ? 'default' : 'pointer'}}
+        style={{margin: '7px 0px 0px 0px',opacity: !active ? 0.6 : 1, cursor: !active ? 'default' : 'pointer'}}
         onMouseEnter={() => {handleHover(true)}}
         onMouseLeave={() => {handleHover(false)}}
         className='saved-media-container'>

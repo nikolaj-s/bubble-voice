@@ -1,10 +1,11 @@
 
 .create-channel-menu-container {
-    width: calc(100% - 268px);
+    width: calc(100% - 242px);
+    max-width: calc(100% - 242px - 5px);
     height: 100%;
     position: fixed;
     top: 0;
-    left: 268px;
+    left: 242px;
     z-index: 11;
     display: flex;
     justify-content: flex-start;
@@ -17,9 +18,10 @@
     align-items: center;
     position: relative;
     height: 700px;
-    top: 145px;
+    top: 31px;
     width: 500px;
-    max-height: calc(100% - 172px);
+    max-height: calc(100% - 56px);
+    height: 100%;
     max-width: calc(100% - 30px);
     padding: 10px 20px;
     border-radius: var(--border-radius);

@@ -31,6 +31,7 @@ import { AudioInit, audioCtx } from '../../../AudioInit/AudioInit';
 import { selectCurrentServerPageState } from '../ServerNavigation/ServerNavigationSlice';
 import { AnimatePresence, motion, useAnimation } from 'framer-motion';
 import { ScreenShot } from './ScreenShot/ScreenShot';
+import { MediaControls } from './Music/MediaControls';
 
 export let client;
 
@@ -39,6 +40,8 @@ const Component = () => {
     const dispatch = useDispatch();
 
     const [loaded, setLoaded] = React.useState(false);
+
+    const [hover, toggleHover] = React.useState(false);
 
     const page = useSelector(selectCurrentServerPageState);
     // state 
@@ -772,7 +775,7 @@ const Component = () => {
         }
     // eslint-disable-next-line      
     }, [page, popOutUserStreams, musicExpanded])
-    console.log(page)
+    
     return (
         <>
         <motion.div initial={{translateX: '-100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}} className='room-wrapper-outer'>
@@ -781,8 +784,10 @@ const Component = () => {
                 ((hideChannelBackgrounds || channel.channel_background === undefined) || page === 'social' || page === 'media' || page === 'pins') ? {backgroundColor: glass ? glassColor : secondaryColor} : null
                 
             }
+            onMouseEnter={() => {toggleHover(true)}}
+            onMouseLeave={() => {toggleHover(false)}}
             id='live-chat-wrapper'>
-                <RoomUserWrapper page={page} users={channel.users} />
+                <RoomUserWrapper page={page} users={channel.users} loaded={loaded} />
                 <AnimatePresence>       
                     {page === "social" ? 
                     <motion.div style={{height: '100%', width: '100%', top: '0px', left: '0px', position: 'absolute', zIndex: 2}} key={'social-page-wrapper'} initial={{translateX: '100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}} >
@@ -794,6 +799,7 @@ const Component = () => {
                         <Widgets key={'widgets'} /> 
                     </motion.div>
                     : null}
+                    <MediaControls key={'media-controls'} hover={hover} />
                 </AnimatePresence>
             </div>
             <ChannelBackground channel_background={hideChannelBackgrounds ? null : channel.channel_background} blur={channel.background_blur} />
