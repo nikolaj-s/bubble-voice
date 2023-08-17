@@ -355,7 +355,7 @@ ipcMain.handle('SCREEN_SHOT', async () => {
           return {error: 'error capturing screen shot'};
         }
 
-        if (sources[index].name.toLowerCase().includes('bubble') || sources[index].name.toLowerCase().includes('overlay')) {
+        if (sources[index].name.toLowerCase().includes('bubble') || sources[index].name.toLowerCase().includes('overlay') || sources[index].name.includes('D3DProxyWindow')) {
           return pickCurrent(sources, index++);
         }
 

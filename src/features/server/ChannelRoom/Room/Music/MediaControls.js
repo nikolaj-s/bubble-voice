@@ -21,6 +21,7 @@ import { motion } from 'framer-motion'
 import { Image } from '../../../../../components/Image/Image';
 import { GetImageColorData } from '../../../../../util/GetImageColorData';
 import { miscSettingsChannelSpecificStateChange, selectDisableMediaWidget } from '../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { ImageButton } from '../../../../../components/buttons/ImageButton/ImageButton';
 
 export const MediaControls = ({hover}) => {
 
@@ -127,9 +128,7 @@ export const MediaControls = ({hover}) => {
         exit={{opacity: 0}}
         key={'media-room-controls'}
         transition={{duration: 0.1}}
-        style={{
-        backgroundColor: primaryColor,
-        }}
+       
         className='behind-music-player-overlay-controls'>
             {showMediaWidget ?
             <motion.div
@@ -145,21 +144,20 @@ export const MediaControls = ({hover}) => {
                 <MusicWidget controls={false} />
             </motion.div>
             : null}
-            <div className='media-player-inner-controls-wrapper'>
-                <div onClick={toggleHideVideo} className='media-player-thumbnail'>
-                    <Image cursor='pointer' image={musicQueue[0]?.thumbnail} />
-                </div>
+            <div
+            style={{backgroundColor: primaryColor}}
+            className='media-player-inner-controls-wrapper'>
+                <ImageButton description={hideVideo ? "Show Video" : "Hide Video"} desc_space={14} width={32} height={32} image={musicQueue[0]?.thumbnail} action={toggleHideVideo} padding={4} />
                 <MusicOverlayButton description={showMediaWidget ? 'Hide Media Widget' : "Show Media Widget"} action={() => {toggleShowMediaWidget(!showMediaWidget)}} playing={(musicPlaying && musicQueue.length > 0)} width={20} height={20} />
 
                 {(channel?.locked_media && channel?.media_auth?.includes(username)) || channel?.channel_owner === username || permissions?.server_group_name === 'Owner' || !channel?.locked_media ? !musicPlaying ? <PlayButton action={handleTogglePlaying} width={20} height={20}  /> : <PauseButton action={handleTogglePlaying} width={20} height={20} /> : <LockedIcon width={30} height={85} padding={5} i_height={25} i_width={25}  />}
                 {(channel?.locked_media && channel?.media_auth?.includes(username)) || channel?.channel_owner === username || permissions?.server_group_name === 'Owner' || !channel?.locked_media ? <SkipButton action={handleSkip} width={20} height={20} /> : null}
                 <AudioToggleButton opacity={0.2} active={experimentalAudioCapture && sharingScreen} description={muted ? 'UnMute' : "Mute"} width={20} height={20} o_mouseEnter={() => {handleToggleVolumeControls(true)}} o_mouseLeave={() => {handleToggleVolumeControls(false)}} action={handleMute} state={!muted} />
-
-                {volumeControls ?<div onMouseLeave={() => {handleToggleVolumeControls(false)}} onMouseEnter={() => {handleToggleVolumeControls(true)}} className='music-overlay-volume-container' >
+                <div onMouseLeave={() => {handleToggleVolumeControls(false)}} onMouseEnter={() => {handleToggleVolumeControls(true)}} className='music-overlay-volume-container' >
                     <div style={{backgroundColor: primaryColor}} >
                         <Range action={handleVolumeChange} min={0} max={100} value={volume} step={0.01} />
-                    </div> 
-                </div> : null}
+                    </div>
+                </div>
             </div>
         </motion.div>
         : null}

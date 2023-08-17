@@ -8,4 +8,5 @@
     position: relative;
     overflow: hidden;
     flex-shrink: 4;
+    border-radius: 8px;
 }

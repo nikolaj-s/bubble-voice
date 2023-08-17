@@ -545,10 +545,10 @@ export class RoomClient {
                 mediaConstraints = {
                     audio: false,
                     video: {
-                        width: 640,
-                        height: 480,
+                        width: 961,
+                        height: 541,
                         deviceId: deviceId,
-                        maxFrameRate: 30
+                        maxFrameRate: 24
                     }
                 }
                 break

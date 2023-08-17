@@ -5,9 +5,7 @@ import { useSelector } from 'react-redux';
 
 // state
 import { selectPrimaryColor, selectSecondaryColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
-import { useRef } from 'react';
-import { useIntersection } from '../useIntersection/useIntersection';
-
+import {AltImageIcon } from '../Icons/AltImageIcon/AltImageIcon'
 export const Image = ({image_class, img_id, image, objectFit = 'cover', position = 'relative', zIndex = 0, loadingState = 'lazy', opacity = 1, width = '100%', cursor = 'default', altWidth = '100%', imgHeight = '100%', expandContent = () => {}, disableErr = false, hideOnError = false, id, imageError = "https://res.cloudinary.com/drlkgoter/image/upload/v1674339889/no-picture_m4dmai.jpg", onLoad = () => {}, backgroundColor = null, altHeight = '100%'}) => {
 
     const [loading, toggleLoading] = React.useState(true);
@@ -37,14 +35,12 @@ export const Image = ({image_class, img_id, image, objectFit = 'cover', position
         if (disableErr) return toggleLoading(false);
 
         toggleError(true);
-
-        e.target.src = imageError
     
     }
 
     return (
         <div id={id} style={{zIndex: zIndex, position: position, objectFit: objectFit, width: width, height: '100%', opacity: opacity, display: (error && hideOnError) ? 'none' : null, backgroundColor: backgroundColor}}>
-            {loading && image !== "" && image !== undefined && disableErr === false ?
+            {loading && image !== "" && image !== undefined && disableErr === false && error === false ?
             <motion.div 
             style={{
                 background: `linear-gradient(270deg, ${secondaryColor}, ${primaryColor}, ${secondaryColor})`,
@@ -61,12 +57,14 @@ export const Image = ({image_class, img_id, image, objectFit = 'cover', position
             ></motion.div>         
             : null}
             
-            <motion.img 
+            {error ?
+            <AltImageIcon />
+            : <motion.img 
             
             className={image_class}
             id={img_id}
             onClick={() => {expandContent(image)}}
-            onError={handleError} loading={loadingState} draggable={false} style={{maxHeight: altHeight, width: width, maxWidth: altWidth, height: imgHeight, objectFit: objectFit, cursor: cursor, opacity: (!image || image === "") ? 0 : 1, transition: '0.1s'}} transition={{duration: 0.05}} initial={{opacity: 0}} animate={imageAnimation} onLoad={handleImageLoad} src={image} />
+            onError={handleError} loading={loadingState} draggable={false} style={{maxHeight: altHeight, width: width, maxWidth: altWidth, height: imgHeight, objectFit: objectFit, cursor: cursor, opacity: (!image || image === "") ? 0 : 1, transition: '0.1s'}} transition={{duration: 0.05}} initial={{opacity: 0}} animate={imageAnimation} onLoad={handleImageLoad} src={image} />}
         </div>
     )
 }

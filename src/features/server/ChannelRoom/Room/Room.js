@@ -759,22 +759,6 @@ const Component = () => {
     // eslint-disable-next-line   
     }, [pushToTalk, voiceActivityDetection, loaded, current_channel_id, microphoneState, pushToTalkActive, reconnecting, advancedVoiceActivationDetection])
     
-    React.useEffect(() => {
-        try {
-
-            const el = document.getElementById('user-streams-wrapper');
-
-            if (!el) return;
-
-            if (page === 'social' || page === 'widgets' || musicExpanded === true || page === 'pins' || page === 'media') {
-                
-            } else {
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    // eslint-disable-next-line      
-    }, [page, popOutUserStreams, musicExpanded])
     
     return (
         <>
@@ -799,7 +783,8 @@ const Component = () => {
                         <Widgets key={'widgets'} /> 
                     </motion.div>
                     : null}
-                    <MediaControls key={'media-controls'} hover={hover} />
+                    {page === ''}
+                    {page === 'voice' ? <MediaControls key={'media-controls'} hover={hover} /> : null}
                 </AnimatePresence>
             </div>
             <ChannelBackground channel_background={hideChannelBackgrounds ? null : channel.channel_background} blur={channel.background_blur} />

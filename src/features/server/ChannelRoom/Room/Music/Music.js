@@ -6,25 +6,16 @@ import YouTube from 'react-youtube'
 import {  selectAccentColor, selectGlassColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 import "./Music.css";
-import { MusicOverlayButton } from '../../../../../components/buttons/MusicOverlayButton/MusicOverlayButton';
-import { PlayButton } from '../../../../../components/buttons/PlayButton/PlayButton';
-import { PauseButton } from '../../../../../components/buttons/PauseButton/PauseButton';
-import { SkipButton } from '../../../../../components/buttons/SkipButton/SkipButton';
-import { AudioToggleButton } from '../../../../../components/buttons/mediaButtons/audioToggleButton/AudioToggleButton';
 
-import { socket } from '../../../ServerBar/ServerBar';
-import { Range } from '../../../../../components/inputs/Range/Range';
 import { Loading } from '../../../../../components/LoadingComponents/Loading/Loading';
-import { ExpandButton } from '../../../../../components/buttons/ExpandButton/ExpandButton';
+
 import { selectDisableMediaWidget } from '../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { selectCurrentDynamicVoice, selectDynamicVoiceAlerts, selectSoundEffectVolume, selectVoicePitch, selectVoiceRate } from '../../../../settings/soundEffects/soundEffectsSlice';
-import { PlaceBehindButton } from '../../../../../components/buttons/PlaceBehindButton/PlaceBehindButton';
+
 import { selectCurrentScreen } from '../../../../controlBar/ControlBarSlice';
 import { selectExperimentalAudioCapture } from '../../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 import { selectUsername } from '../../../../settings/appSettings/accountSettings/accountSettingsSlice';
-import { LockedChannelIcon } from '../../../../../components/Icons/LockedChannelIcon/LockedChannelIcon';
-import { LockedIcon } from '../../../../../components/Icons/LockedIcon/LockedIcon';
-import { GetImageColorData } from '../../../../../util/GetImageColorData';
+;
 
 export const Music = () => {
 
@@ -132,7 +123,30 @@ export const Music = () => {
         }
         
     // eslint-disable-next-line
-    }, [musicPlaying, volume, musicPlaying, musicPlaying, player, sharingScreen, experimentalAudioCapture])
+    }, [musicPlaying, volume, musicPlaying, musicPlaying, player, sharingScreen, experimentalAudioCapture, currentlyPlaying])
+
+
+    React.useEffect(() => {
+
+        try {
+
+            if (player) {
+
+                setTimeout(() => {
+                    if (Number(volume) < 1) {
+                        player.mute();
+                    } else {
+                        player.unMute();
+                    }
+                }, 10)
+                
+            }
+
+        } catch (err) {
+            return;
+        }
+
+    }, [player, musicQueue, volume, currentlyPlaying])
 
     React.useEffect(() => {
 
@@ -205,6 +219,7 @@ export const Music = () => {
    
 
     const handleOnReady = (event) => {
+        console.log('loaded')
         setPlayer(event.target);
     }
 
@@ -214,8 +229,8 @@ export const Music = () => {
         <div 
         style={{
             display: disableMediaWidget ? 'none' : (currentlyPlaying) ? 'flex' : 'none',
-            border: `solid 4px ${(color || accentColor)}`,
-            backgroundColor: (color || accentColor)
+            border: `solid 4px black`,
+            backgroundColor: 'black'
 
         }}
         id={'room-media-player-component'}
@@ -242,7 +257,6 @@ export const Music = () => {
                         modestbranding: 1,
                         disablekb: 1
                     }}} style={{
-                        borderBottomRightRadius: 15,
                         width: '100%',
                         height: '100%'
                     }} />

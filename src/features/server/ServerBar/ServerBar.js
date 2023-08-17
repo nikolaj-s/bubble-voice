@@ -255,10 +255,13 @@ const Bar = () => {
         })
 
         socket.on('music-widget/skipped-song', (data) => {
-            
-            dispatch(skipSong());
+            try {
+                dispatch(skipSong());
         
-            dispatch(addNewWidgetOverlayToQueue({action: 'song-status', message: `${data.user.display_name} skipped a song`, user: data.user}));
+                dispatch(addNewWidgetOverlayToQueue({action: 'song-status', message: `${data.user.display_name} skipped a song`, user: data.user}));
+            } catch (e) {
+                return;
+            }
             
         })
 

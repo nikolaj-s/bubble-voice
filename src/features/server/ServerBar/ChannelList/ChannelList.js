@@ -103,7 +103,7 @@ export const ChannelList = ({loading}) => {
         <>
         <ChannelTitle action={openCreateChannelMenu} />
         <motion.div 
-        style={{backgroundColor: glass ? glassColor : secondaryColor, maxHeight: currentScreen ? 'calc(100% - 331px)' : '100%'}}
+        style={{backgroundColor: glass ? glassColor : secondaryColor, maxHeight: currentScreen ? 'calc(100% - 307px)' : 'calc(100%)'}}
         className='channel-list-outer-container'>
                 
                 <div className='channel-list-button-wrapper'>

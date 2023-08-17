@@ -70,6 +70,16 @@ export const MusicWidget = ({editing = false, widget, controls = true}) => {
 
     const disableTransparancyEffects = useSelector(selectDisableTransparancyEffects);
 
+    React.useEffect(() => {
+
+        const i = document.getElementById('music-widget-input');
+
+        if (i) {
+            i.focus();
+        }
+
+    }, [])
+
     const handleAddSongToQueue = async () => {
         if (query.length === 0 || editing === true) return;
 
@@ -215,7 +225,7 @@ export const MusicWidget = ({editing = false, widget, controls = true}) => {
                 {(channel?.locked_media === true && channel?.media_auth?.includes(username)) || channel.channel_owner === username || permission.server_group_name === 'Owner' || !channel.locked_media? 
                 <>
                 <div className='music-widget-nav-container'>
-                    <TextInput keyCode={handleEnter} inputValue={query} action={handleInput} placeholder={"Add Song To Queue"} marginTop='0' />
+                    <TextInput id={'music-widget-input'} keyCode={handleEnter} inputValue={query} action={handleInput} placeholder={"Add Song To Queue"} marginTop='0' />
                     <AddButton opacity={query.length === 0 ? 0.5 : 1} invert={true} active={query.length === 0} action={handleAddSongToQueue} margin={"0 0 0 2%"} height={"21px"} width={"21px"} />
                 </div> 
                 <div className='music-queue-title-container'>

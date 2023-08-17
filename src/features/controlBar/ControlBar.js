@@ -114,7 +114,7 @@ export const ControlBar = () => {
                 <div style={{backgroundColor: accentColor}} className='controls-wrapper'>  
                    
                     <WebCamButton 
-                    width={20}
+                    width={22}
                     height={20}
                     padding={10}
                     action={() => {toggleFunction('webCamState')}} 
@@ -124,7 +124,7 @@ export const ControlBar = () => {
                     loading={loadingWebCam}
                     />
                     <MicToggleButton 
-                    width={20}
+                    width={22}
                     height={20}
                     padding={10}
                     desc_space={23}
@@ -135,7 +135,7 @@ export const ControlBar = () => {
                     id={"toggle-microphone-button"}
                     />
                     <AudioToggleButton 
-                    width={20}
+                    width={22}
                     height={20}
                     padding={10}
                     desc_space={23}
@@ -148,7 +148,7 @@ export const ControlBar = () => {
                     description={(current_channel_id === null  || channel.disable_streams) ? null : `${audioState ? 'Deafen' : 'Un-Deafen'}`}
                     />
                     <ShareScreenButton 
-                    width={20}
+                    width={22}
                     height={20}
                     padding={10}
                     desc_space={23}

@@ -5,7 +5,7 @@
     display: flex;
     align-self: center;
    
-    border-radius: var(--border-radius);
+    border-radius: 8px;
     overflow: hidden;
     justify-content: center;
     align-items: center;
@@ -13,6 +13,7 @@
     cursor: pointer;
     max-width: 960px;
     max-height: 540px;
+    transition: 0.05s;
 }
 
 .room-user-status-icon {
@@ -33,7 +34,7 @@
     height: 100%;
     object-fit: cover;
     background-color: black;
-    border-radius: var(--border-radius);
+    border-radius: 8px;
 }
 
 .active-user-profile-image-container {
@@ -52,7 +53,7 @@
     justify-content: flex-end;
     justify-content: space-evenly;
     border-radius: 4px;
-    z-index: 5;
+    z-index: 2;
     opacity: 0.8;
     max-width: calc(100% - 10px);
     flex-wrap: wrap;

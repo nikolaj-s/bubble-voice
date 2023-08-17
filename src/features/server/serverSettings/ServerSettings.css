@@ -24,8 +24,8 @@
     top: 0;
     right: 0;
     width: calc(100% - 262px);
-    max-width: calc(100% - 275px - 8px - 5px);
-    height: calc(100% - 39px);
+    max-width: calc(100% - 274px - 8px - 5px);
+    height: calc(100% - 37px);
     overflow-y: auto;
     display: flex;
     padding-left: 10px;

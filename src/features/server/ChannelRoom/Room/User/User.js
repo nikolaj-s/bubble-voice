@@ -41,9 +41,9 @@ export const User = ({user}) => {
         }}
         id={user._id} className='active-user-container'>
            
-            <Image id="stream-room-user-banner" image_class={'user-image'} disableErr={true} backgroundColor={secondaryColor}  position='absolute' image={user.user_banner} />
+            <Image cursor='pointer' id="stream-room-user-banner" image_class={'user-image'} disableErr={true} backgroundColor={secondaryColor}  position='absolute' image={user.user_banner} />
             <div style={{borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%'}} className='active-user-profile-image-container'>
-                <Image image_class={'user-image'} objectFit='cover' image={user.user_image} />
+                <Image cursor='pointer' image_class={'user-image'} objectFit='cover' image={user.user_image} />
             </div>
             <Loading  backgroundColor={user.color || 'black'} zIndex={1} show_success={false} loading={user.webcam && (user.username === username ? user.webcam : !prefs?.disabled_web_cam)} />
             <div 
