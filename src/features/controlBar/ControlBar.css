@@ -12,9 +12,10 @@
     flex-shrink: 0;
     position: fixed;
     left: 55px;
-    bottom: 5px;
+    bottom: 6px;
     transition: 0.1s;
     z-index: 5;
+    border-radius: 8px;
 }
 
 .control-bar-container div {

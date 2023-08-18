@@ -1,9 +1,8 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentChannel, selectUsersPermissions, throwServerError } from '../../../ServerSlice';
-import { selectBehindState, selectLoadingMusicState, selectMusicExpanded, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, selectMuteState, throwMusicError, toggleBehind, toggleLoadingMusic, toggleMusicExpanded, updateMusicVolume,} from './MusicSlice';
+import { selectLoadingMusicState, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, selectMuteState, toggleBehind,  toggleMusicExpanded, } from './MusicSlice';
 import YouTube from 'react-youtube'
-import {  selectAccentColor, selectGlassColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 import "./Music.css";
 
@@ -12,48 +11,24 @@ import { Loading } from '../../../../../components/LoadingComponents/Loading/Loa
 import { selectDisableMediaWidget } from '../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { selectCurrentDynamicVoice, selectDynamicVoiceAlerts, selectSoundEffectVolume, selectVoicePitch, selectVoiceRate } from '../../../../settings/soundEffects/soundEffectsSlice';
 
-import { selectCurrentScreen } from '../../../../controlBar/ControlBarSlice';
+import {  selectCurrentScreen } from '../../../../controlBar/ControlBarSlice';
 import { selectExperimentalAudioCapture } from '../../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
-import { selectUsername } from '../../../../settings/appSettings/accountSettings/accountSettingsSlice';
-;
 
 export const Music = () => {
 
     // handling of music
-    let margin = 0;
-
-    const ratio = (9/16);
 
     const [player, setPlayer] = React.useState(null);
 
-    const [offset, setOffset] = React.useState([0, 0]);
-
-    const [left, setLeft] = React.useState(null);
-
-    const [top, setTop] = React.useState(null);
-
-    const [mouseDown, toggleMouseDown] = React.useState(false);
-
-    const [behindHeight, setBehindHeight] = React.useState(0)
-
-    const behind = useSelector(selectBehindState);
-
-    const glassColor = useSelector(selectGlassColor);
 
     const dispatch = useDispatch();
 
     const [currentlyPlaying, setCurrentlyPlaying] = React.useState("");
 
-    const [visible, toggleVisible] = React.useState(false);
-
-    const expanded = useSelector(selectMusicExpanded);
 
     const loading = useSelector(selectLoadingMusicState);
 
     const muted = useSelector(selectMuteState);
-
-
-    const [color, setColor] = React.useState("");
 
     const disableMediaWidget = useSelector(selectDisableMediaWidget);
 
@@ -65,11 +40,6 @@ export const Music = () => {
 
     const soundEffectsVolume = useSelector(selectSoundEffectVolume)
 
-    const secondaryColor = useSelector(selectSecondaryColor);
-
-    const primaryColor = useSelector(selectPrimaryColor);
-
-    const accentColor = useSelector(selectAccentColor);
 
     const dynamicVoiceAlerts = useSelector(selectDynamicVoiceAlerts);
 
@@ -84,12 +54,6 @@ export const Music = () => {
     const experimentalAudioCapture = useSelector(selectExperimentalAudioCapture);
 
     const textColor = useSelector(selectTextColor);
-
-    const channel = useSelector(selectCurrentChannel);
-
-    const permissions = useSelector(selectUsersPermissions);
-
-    const username = useSelector(selectUsername);
 
     React.useEffect(() => {
         try {
@@ -123,48 +87,8 @@ export const Music = () => {
         }
         
     // eslint-disable-next-line
-    }, [musicPlaying, volume, musicPlaying, musicPlaying, player, sharingScreen, experimentalAudioCapture, currentlyPlaying])
+    }, [musicPlaying, volume, musicPlaying, musicPlaying, player, sharingScreen, experimentalAudioCapture, currentlyPlaying, muted])
 
-
-    React.useEffect(() => {
-
-        try {
-
-            if (player) {
-
-                setTimeout(() => {
-                    if (Number(volume) < 1) {
-                        player.mute();
-                    } else {
-                        player.unMute();
-                    }
-                }, 10)
-                
-            }
-
-        } catch (err) {
-            return;
-        }
-
-    }, [player, musicQueue, volume, currentlyPlaying])
-
-    React.useEffect(() => {
-
-        try {
-            if (player) {
-
-                if (muted) {
-                    player.mute();
-                } else {
-                    player.unMute();
-                }
-            }
-        } catch(err) {
-            return;
-        }
-            
-
-    }, [player, muted])
 
     React.useEffect(() => {
 
@@ -198,29 +122,10 @@ export const Music = () => {
     // eslint-disable-next-line    
     }, [musicQueue])
 
-    const toggleVisibility = () => {
-        if (visible) {
-            dispatch(toggleMusicExpanded(false));
-        }
-
-        if (visible === false) {
-            if (window.innerWidth - left < 650) {
-                setLeft(window.innerWidth - 650)
-            }
-        }
-
-        toggleVisible(!visible);
-    }
-
-    
-
-    
-
-   
-
     const handleOnReady = (event) => {
-        console.log('loaded')
+       
         setPlayer(event.target);
+
     }
 
     return (

@@ -1,11 +1,11 @@
 
 .create-channel-menu-container {
     width: calc(100% - 242px);
-    max-width: calc(100% - 242px - 5px);
+    max-width: calc(100% - 243px - 5px);
     height: 100%;
     position: fixed;
     top: 0;
-    left: 242px;
+    left: 243px;
     z-index: 11;
     display: flex;
     justify-content: flex-start;
