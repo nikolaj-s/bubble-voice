@@ -59,7 +59,7 @@
     align-items: flex-end;
     opacity: 0;
     transition: 0.1s;
-    z-index: 5;
+    z-index: 1;
 }
 
 .stream-title-container:hover {

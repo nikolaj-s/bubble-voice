@@ -108,7 +108,7 @@ export const Message = ({dashboard = false, direct_message, message, overlay = f
                     <div 
                     style={{maxHeight: maximizeMediaSize ? '100%' : 400}}
                     className='message-image-container'>
-                        <Image altHeight={maximizeMediaSize ? '100%' : 400}  expandContent={expandContent} imgHeight='auto' cursor='pointer' width={null} altWidth={'100%'} loadingState='eager' objectFit='contain' image={message.image} />
+                        <Image minLoadHeight={300} altHeight={maximizeMediaSize ? '100%' : 400}  expandContent={expandContent} imgHeight='auto' cursor='pointer' width={null} altWidth={'100%'} loadingState='eager' objectFit='contain' image={message.image} />
                     </div>
                     : null}
                     {message.video ? 

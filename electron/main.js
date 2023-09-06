@@ -194,6 +194,11 @@ if (!process.env.ELECTRON_START_URL && lock) {
 
     res.end(file.toString());
 
+    req.on('error', (err) => {
+      console.log(err);
+      return;
+    })
+
     if (req.url.includes('index.js')) server.close();
 
   }).listen(8382);
@@ -355,7 +360,7 @@ ipcMain.handle('SCREEN_SHOT', async () => {
           return {error: 'error capturing screen shot'};
         }
 
-        if (sources[index].name.toLowerCase().includes('bubble') || sources[index].name.toLowerCase().includes('overlay') || sources[index].name.includes('D3DProxyWindow')) {
+        if (sources[index].name.toLowerCase().includes('bubble') || sources[index].name.toLowerCase().includes('overlay')) {
           return pickCurrent(sources, index++);
         }
 
