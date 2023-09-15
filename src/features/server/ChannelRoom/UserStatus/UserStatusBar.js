@@ -71,6 +71,8 @@ export const UserStatusBar = () => {
                     new_status_name = "Google Chrome"
                 } else if (l_windows[0].name.includes('Visual Studio Code')) {
                     new_status_name = "Visual Studio Code"
+                } else if (l_windows[0].name.includes('Discord')) { 
+                    new_status_name = 'Discord'
                 } else {
                     new_status_name = l_windows[0].name;
                 }
@@ -118,7 +120,7 @@ export const UserStatusBar = () => {
         <>
         {(channelId && hideUserStatusBar) ? null :
         <div 
-        style={{backgroundColor: secondaryColor}}
+        style={{backgroundColor: glass ? glassColor : secondaryColor,}}
         className='user-status-bar'>
             {serverGroups.map((server_group) => {
 

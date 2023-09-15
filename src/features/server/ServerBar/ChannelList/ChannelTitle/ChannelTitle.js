@@ -1,25 +1,41 @@
 // library's
 import React from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 // component's
-import { AddButton } from '../../../../../components/buttons/AddButton/AddButton'
-import { SettingsButton } from '../../../../../components/buttons/settingsButton/settingsButton';
-import { selectGlassColor, selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import {DownIcon } from '../../../../../components/Icons/DownIcon/DownIcon'
+import { selectGlassColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // state
-import { selectUsersPermissions } from '../../../ServerSlice';
+import { handleLeavingServer, selectUsersPermissions } from '../../../ServerSlice';
 
 // style's
 import "./ChannelTitle.css";
+import { DropDownButton } from '../../../../../components/buttons/DropDownButton/DropDownButton';
+import { AltDownIcon } from '../../../../../components/Icons/AltDownIcon/AltDownIcon';
+import { ServerManageMenu } from '../ServerManageMenu/ServerManageMenu';
+import { playSoundEffect } from '../../../../settings/soundEffects/soundEffectsSlice';
+import { clearWidgetOverLay } from '../../../ChannelRoom/Room/RoomActionOverlay/RoomActionOverlaySlice';
+import { clearDirectMessages } from '../../../../Messages/MessagesSlice';
+import { clearMedia } from '../../../ChannelRoom/ServerDashBoard/ServerMedia/ServerMediaSlice';
+import { setPinnedMessages } from '../../../ChannelRoom/ServerDashBoard/ServerDashBoardSlice';
+import { clearMessages } from '../../../SocialSlice';
 
 export const ChannelTitle = ({action}) => {
 
     const permissions = useSelector(selectUsersPermissions);
 
+    const [open, toggleOpen] = React.useState(false);
+
+    const [hover, toggleHover] = React.useState(false);
+
     const textColor = useSelector(selectTextColor);
 
     const glassColor = useSelector(selectGlassColor);
+
+    const primaryColor = useSelector(selectPrimaryColor);
+
+    const dispatch = useDispatch();
 
     const toggleServerSettings = () => {
 
@@ -37,15 +53,44 @@ export const ChannelTitle = ({action}) => {
         }
     }
 
+    const handleLeave = () => {
+
+        dispatch(playSoundEffect({default: 'disconnected'}));
+        
+        dispatch(clearWidgetOverLay());
+        
+        dispatch(handleLeavingServer());
+
+        dispatch(clearDirectMessages());
+
+        dispatch(clearMedia());
+
+        dispatch(setPinnedMessages([]));
+
+        dispatch(clearMessages());
+
+        toggleHover(false);
+
+        window.location.hash = '/dashboard'
+    }
+
     return (
-        <div style={{backgroundColor: glassColor}} className='channel-title-container'>
+        <>
+        <div
+        onClick={() => {toggleOpen(!open)}}
+        onMouseEnter={() => {toggleHover(true)}}
+        onMouseLeave={() => {toggleHover(false)}}
+        style={{backgroundColor: hover ? primaryColor : glassColor}} className='channel-title-container'>
             <h3
             style={{color: textColor}}
-            >CHANNELS</h3>
-            <div className='channel-title-buttons-container'>
-                {permissions?.user_can_manage_channels ? <AddButton desc_space={15} padding={'6px'} transparent={true} borderRadius={'5px'} description={"Add"} width={15}  height={15} action={action} /> : null}
-                <SettingsButton transparent={true} id="server-settings-button" action={toggleServerSettings} description='Edit' desc_space={12} width={19} height={19} padding={4}  />
+            >{hover ? "MANAGE" : "CHANNELS"}</h3>
+            <div style={{height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', rotate: open ? '180deg' : '0deg', transition: '0.1s'}}>
+                <AltDownIcon />
             </div>
+            
+        
         </div>
+        <ServerManageMenu leaveServer={handleLeave} openAddChannel={action} openServerSettings={toggleServerSettings} permissions={permissions} open={open} />
+        </>
     )
 }

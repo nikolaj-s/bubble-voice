@@ -67,7 +67,7 @@ export const UserStatus = ({user}) => {
             </div>
             {user.status_icon && user?.status?.length > 1 ?
             <div className='user-status-icon-container'>
-                <Image image={user.status_icon} />
+                <Image hideOnError={true} image={user.status_icon} />
             </div>
             : null}
             <div 

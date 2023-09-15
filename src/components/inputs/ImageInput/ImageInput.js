@@ -160,8 +160,8 @@ export const ImageInput = ({
             animateEntry(accentColor, false)
         }}
         style={{
-            width: `calc(${width})`,
-            height: `calc(${height})`,
+            width: `calc(${width} - 4px)`,
+            height: `calc(${height} - 4px)`,
             position: "absolute",
             overflow: 'hidden',
             cursor: 'pointer',
@@ -170,7 +170,8 @@ export const ImageInput = ({
             left: "50%" ,
             top: "50%",
             transform: "translate(-50%, -50%)",
-            backgroundColor: backgroundColor
+            backgroundColor: backgroundColor,
+            border: `2px dashed rgba(${textColor.split('rgb(')[1].split(')')[0]}, 0.5)`
         }}
         {...getRootProps({className: 'dropzone'})} className='image-drop-input-container'>
             <input {...getInputProps()} />

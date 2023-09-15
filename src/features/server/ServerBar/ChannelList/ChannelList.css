@@ -20,7 +20,10 @@
     overflow-y: hidden;
     height: calc(100% - 10px);
     overflow-x: hidden;
-    margin-top: 5px;
+}
+
+.channel-list-button-wrapper::-webkit-scrollbar {
+    width: 3px;
 }
 
 .channel-list-button-wrapper:hover {

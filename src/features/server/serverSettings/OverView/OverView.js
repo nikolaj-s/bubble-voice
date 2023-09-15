@@ -205,19 +205,19 @@ const Wrapper = () => {
         <SettingsHeader title={"Banner"} />
         {permissions?.user_can_edit_server_name ?
         <>
-        <InputTitle title={"Update Server Name"} />
+        <InputTitle title={"Update Bubble Name"} />
         <TextInput action={handleServerNameChange} inputValue={newServerName} />
         </>
         : 
         <>
-        <InputTitle title={"Server Name"} />
+        <InputTitle title={"Bubble Name"} />
         <InputPlaceHolder value={serverName} /> 
         </>
         }
         
             {permissions?.user_can_edit_server_banner ?
             <>
-            <InputTitle zIndex={2} title={"Update Server Banner"} />
+            <InputTitle zIndex={2} title={"Update Bubble Banner"} />
             <div style={{
                 position: 'relative',
                 height: 300,

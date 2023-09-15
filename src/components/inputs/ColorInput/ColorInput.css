@@ -1,6 +1,6 @@
 
 .color-picker-input-container {
-    width: calc(100% - 8px);
+    width: 120px;
     height: 40px;
     display: flex;
     flex-shrink: 0;
@@ -33,4 +33,9 @@
 
 .color-picker-input:active {
     outline: none;
+}
+.edit-pencil-color-icon {
+    position: absolute;
+    right: 0px;
+    top: 0px;
 }

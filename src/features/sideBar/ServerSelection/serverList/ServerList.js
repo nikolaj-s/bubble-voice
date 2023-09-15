@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 // component's
 import { ServerButton } from '../../../../components/buttons/ServerButton/ServerButton';
-import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
+
 import { BubbleLogo } from '../../../../components/Icons/bubbleLogo/BubbleLogo'
 // style's
 import "./ServerList.css";
@@ -23,7 +23,7 @@ export const ServerList = ({selectServer, serverList = [], loading = false, anim
     const channel = useSelector(selectCurrentChannelId);
 
     return (
-        <motion.div style={{maxHeight: channel ? 'calc(100% - 222px)' : 'calc(100% - 130px)'}} animate={animation} className='server-list-container'>
+        <motion.div style={{maxHeight: channel ? 'calc(100% - 175px)' : 'calc(100% - 72px)'}} animate={animation} className='server-list-container'>
             <BubbleLogo />
             {serverList.map(servers => {
                 return <ServerButton action={selectServer} key={servers._id} {...servers} />

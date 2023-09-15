@@ -59,7 +59,7 @@ export const CreateServerButton = () => {
             </div>
             {hover ? 
             <div onMouseEnter={() => {toggleHover(false)}} style={{backgroundColor: primaryColor}} className='server-button-name-container'>
-                <h2 style={{color: textColor}}>Add Server</h2>
+                <h2 style={{color: textColor}}>Add a Bubble</h2>
             </div>
             : null}
         </div>

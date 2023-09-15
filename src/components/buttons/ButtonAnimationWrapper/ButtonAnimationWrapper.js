@@ -46,7 +46,7 @@ export const ButtonAnimationWrapper = ({active_background, desc_width = '100%', 
             })
         
     // eslint-disable-next-line
-    }, [active])
+    }, [active, background])
 
     const handleOnMouseEnter = (e) => {
 
@@ -100,6 +100,7 @@ export const ButtonAnimationWrapper = ({active_background, desc_width = '100%', 
                 zIndex: 999,
                 fontWeight: '100',
                 fontSize: '0.8rem',
+                flexShrink: 0,
                 backgroundColor: primaryColor,
                 padding: 5,
                 borderRadius: 5,
@@ -110,7 +111,8 @@ export const ButtonAnimationWrapper = ({active_background, desc_width = '100%', 
                 opacity: 1,
                 transform: 'translateX(-50%)',
                 filter: 'none',
-                boxShadow: '4px 4px 20px rgba(0, 0, 0, 0.4)'
+                boxShadow: '4px 4px 20px rgba(0, 0, 0, 0.4)',
+                animation: 'pop-in forwards linear 0.1s',
                 }}>
             <p style={{color: textColor, padding: '0px', margin: 0, textAlign: 'center', fontSize: desc_font_size}}>{description}</p>
             </motion.div>: null}

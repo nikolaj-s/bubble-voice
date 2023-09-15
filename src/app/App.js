@@ -33,6 +33,8 @@ import './App.css';
 
 import "./Mobile.css";
 
+import "./Animations.css";
+
 function App() {
 
   const dispatch = useDispatch();

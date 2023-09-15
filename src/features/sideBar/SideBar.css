@@ -31,4 +31,5 @@
     height: calc(100% - 31px);
     top: 31px;
     width: 100%;
+    border-radius: 8px;
 }

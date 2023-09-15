@@ -8,9 +8,9 @@
 }
 
 .music-overlay-button-wrapper span {
-    width: 2px;
+    width: 3px;
     height: 100%;
-    border-radius: 3px;
+    border-radius: 4px;
     content: '';
     transform-origin: bottom;
     animation: bounce 2.2s ease alternate;

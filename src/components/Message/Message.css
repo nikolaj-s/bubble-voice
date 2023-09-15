@@ -5,12 +5,13 @@
     margin: 0 5px 0 0;
     position: relative;
     border-radius: 3px;
+    padding-bottom: 4px;
 }
 
 
 .message-inner-container {
     width: 100%;
-    
+    padding-bottom: 5px;
 }
 
 .message-container p {
@@ -155,3 +156,9 @@
     overflow: hidden;
     margin-right: 2px;
 }
+
+
+.message-loading-text {
+    animation: fade-in-out 2s ease-in-out infinite;
+}
+

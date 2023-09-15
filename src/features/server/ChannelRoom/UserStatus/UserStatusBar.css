@@ -1,8 +1,8 @@
 
 .user-status-bar {
-    min-width: 184px;
-    width: 184px;
-    max-width: 184px;
+    min-width: 186px;
+    width: 186px;
+    max-width: 186px;
     height: 100%;
     right: 0;
     display: flex;
@@ -15,6 +15,10 @@
     align-items: center;
     margin-left: 2px;
     border-radius: 8px;
+}
+
+.user-status-bar::-webkit-scrollbar {
+    width: 3px;
 }
 
 .user-status-bar:hover {

@@ -9,14 +9,13 @@ export const ProfileImage = ({previous_message, current_message, user_image, pri
 
     return (
         <>
-        <div style={{width: hideProfileImagesOnMessages ? 0 : 46, flexShrink: 0, borderLeft: `solid 5px ${color || primaryColor}`, marginRight: 5}}>
+        <div style={{width: hideProfileImagesOnMessages ? 0 : 46, flexShrink: 0, borderLeft: `solid 3px ${color || primaryColor}`, marginRight: 5}}>
         {hideProfileImagesOnMessages ? null :
         (previous_message?.username !== current_message?.username)
                 ||
         (previous_message?.content?.date?.split("T")[0] !== current_message?.content?.date?.split("T")[0])  ?
             <div style={{borderRadius: profile_picture_shape === 'square' ? '5px' : '50%',
-            border: `solid 3px ${color || primaryColor}`,
-            marginLeft: 2
+            marginLeft: 5
             }} onClick={action} className='message-profile-picture'>
                 <Image image_class={'user-image'} cursor='pointer' image={user_image || current_message.user_image} />
             </div>

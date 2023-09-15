@@ -1,11 +1,11 @@
 
 .input-title {
     padding-left: 1rem;
-    font-size: 1rem;
+    font-size: .8rem;
     letter-spacing: var(--font-spacing);
-    font-weight: 400;
+    font-weight: 300;
     width: calc(100% - 1rem);
-    opacity: 0.8;
+    opacity: .9;
     overflow: hidden;
     text-overflow: ellipsis;
     width: 100%;

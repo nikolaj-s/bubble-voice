@@ -18,6 +18,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    animation: pop-in forwards 0.4s linear;
 }
 
 .expanded-content-navigation-container {

@@ -15,6 +15,7 @@ import {Range} from '../inputs/Range/Range';
 // style's
 import "./Video.css";
 import { VideoPlayOverlayAnimation } from './VideoPlayOverlayAnimation/VideoPlayOverlayAnimation';
+import Axios from 'axios';
 
 export const Video = ({maxHeight = '100%', video, id, looping = false, objectFit = 'contain', height = "100%", mutedToggled, marginLeft, forceAutoPlay = false, currentTime = 0}) => {
 
@@ -176,12 +177,25 @@ export const Video = ({maxHeight = '100%', video, id, looping = false, objectFit
 
     }, [social_mute])
 
+
+
     const handleVolumeChange = (value) => {
         dispatch(setVideoVolume(value));
 
         document.getElementById(video + id).volume = value;
 
         document.getElementById(video + 'audio').volume = value;
+    }
+
+    const handleAltVideoLoad = async (e) => {
+
+        // const d = await fetch(video, {
+        //     headers: {
+        //         "Access-Control-Allow-Origin": "*"
+        //     }
+        // })
+        // .then(res => res.blob())
+
     }
 
     return (
@@ -199,7 +213,7 @@ export const Video = ({maxHeight = '100%', video, id, looping = false, objectFit
             ref={ref}
             onMouseLeave={() => {showControls(false)}}
             loading="lazy"
-            
+            onError={handleAltVideoLoad}
             style={{objectFit: objectFit, maxHeight: maxHeight}}
             muted={mutedToggled ? true : false}
             onEnded={onVideoEnd} autoPlay={forceAutoPlay ? true : looping ? true : false} id={video + id} controls={false} loop={true} 

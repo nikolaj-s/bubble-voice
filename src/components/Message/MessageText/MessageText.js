@@ -1,10 +1,10 @@
 import React from 'react'
 
-export const MessageText = ({text, color}) => {
+export const MessageText = ({text, color, loading}) => {
   return (
     <>
     {text ?
-    <p style={{color: color}}>{text}</p>
+    <p className={loading ? 'message-loading-text' : null} style={{color: color}}>{text}</p>
     :null}
     </>
   )

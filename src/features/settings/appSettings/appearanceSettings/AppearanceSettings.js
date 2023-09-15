@@ -10,7 +10,7 @@ import { DropDownList } from '../../../../components/DropDownList/DropDownList'
 import { ToggleButton } from '../../../../components/buttons/ToggleButton/ToggleButton';
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { changeTheme, saveTheme, selectAccentColor, selectActivationColor, selectAppearanceChangeMade, selectCurrentTheme, selectGlassState, selectGradient, selectGradients, selectPrimaryColor, selectScaleState, selectSecondaryColor, selectTextColor, selectThemeOptions, updateColorValue, updateGlassState, updateGradient, updateScaleState } from './appearanceSettingsSlice';
+import { changeTheme, saveTheme, selectAccentColor, selectActivationColor, selectAppearanceChangeMade, selectCurrentTheme, selectGlassState, selectGradient, selectGradients, selectPrimaryColor, selectScaleState, selectSecondaryColor, selectTextColor, selectThemeOptions, selectUseImageBackgroundState, updateColorValue, updateGlassState, updateGradient, updateImageBackgroundState, updateScaleState } from './appearanceSettingsSlice';
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 import { ColorInput } from '../../../../components/inputs/ColorInput/ColorInput';
 import { TextButton } from '../../../../components/buttons/textButton/TextButton';
@@ -27,6 +27,8 @@ const Settings = () => {
     
         // eslint-disable-next-line
     }, [])
+
+    const useImageBackground = useSelector(selectUseImageBackgroundState);
 
     const scale = useSelector(selectScaleState);
 
@@ -99,12 +101,23 @@ const Settings = () => {
 
     }
 
+    const handleToggleImageBackground = () => {
+        dispatch(updateImageBackgroundState());
+
+        dispatch(saveTheme());
+    }
+
     return (
         <div className='settings-wrapper'>
             <SettingsHeader title={"Presets"} />
             <InputTitle title={"Change Preset"} />
             <DropDownList action={handleToggleAppearanceModes} selectedItem={currentTheme.label} list={themeOptions} />
-            <SettingsHeader title={"Choose An Accent Gradient"} />
+            {/** 
+                <SettingsHeader title={"Choose Background"} />
+            <RadioButton action={handleToggleImageBackground} name={'Use Gradients'} state={!useImageBackground} />
+            <RadioButton action={handleToggleImageBackground} name={"Use An Image"} state={useImageBackground} />
+            
+            */}
             <InputTitle title={"Gradients"} />
             <Gradients action={handleUpdateGradient} gradients={gradients} current_gradient={gradient} />
             <SettingsHeader title={"Custom Color Scheme"} />

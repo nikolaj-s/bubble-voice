@@ -1,9 +1,13 @@
 import React from 'react'
 import { DropImageIcon } from '../../../Icons/DropImageIcon/DropImageIcon';
+import { useSelector } from 'react-redux';
+import { selectGlassColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 export const ImageDropListener = (props) => {
 
     const [dragged, toggleDragged] = React.useState(false);
+
+    const glassColor = useSelector(selectGlassColor);
 
     const handleDragOver = (e) => {
         
@@ -42,7 +46,8 @@ export const ImageDropListener = (props) => {
         style={{
             pointerEvents: dragged ? 'all' : 'none',
             opacity: dragged ? 1 : 0,
-            backdropFilter: dragged ? 'blur(5px)' : null
+            backgroundColor: dragged ? glassColor : null,
+            transition: '0.1s'
         }}
         draggable={true} {...props.root} id='image-drop-listener'>
             <DropImageIcon action={handleDragEnd} />

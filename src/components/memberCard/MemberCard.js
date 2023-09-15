@@ -15,8 +15,8 @@ export const MemberCard = ({member}) => {
         className='manage-member-card'
         style={{
             backgroundColor: primaryColor,
-            width: "calc(100% - 1rem)",
-            height: 65,
+            width: "calc(100% - 3px)",
+            height: 45,
             borderRadius: "5px",
             display: 'flex',
             justifyContent: 'space-between',
@@ -28,22 +28,22 @@ export const MemberCard = ({member}) => {
             <h3
             style={{
                 fontWeight: '400',
-                letterSpacing: '4px',
-                margin: "0 0 0 1rem",
+                margin: 0,
+                fontSize: '.9rem',
                 color: textColor
             }}
             >{member.display_name}</h3>
             <p
             style={{
                 fontWeight: '400',
-                letterSpacing: '4px',
                 opacity: 0.4,
-                margin: "0 0 0 1rem",
-                color: textColor
+                margin: 0,
+                color: textColor,
+                fontSize: '.7rem'
             }}
             >id: {member.username}</p>
             </div>
-            <SubMenuButton width={15} height={15} borderRadius={5} description={"User Management"} />
+            <SubMenuButton desc_width={60} invert={true} width={15} height={15} borderRadius={5} description={"User Management"} />
         </div>
     )
 }

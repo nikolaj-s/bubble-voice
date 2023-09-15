@@ -203,7 +203,7 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
             style={{
                 backgroundColor: active ? accentColor : transparentPrimaryColor,
                 cursor: active ? "default" : "pointer",
-                
+                marginBottom: users.length > 0 && channel.auth ? '5px' : null
             }}
             className='channel-button-container'>
                 <div style={{backgroundColor: unReadMessage && channel.auth ? textColor : null}} className='unread-message-indicator'></div>   

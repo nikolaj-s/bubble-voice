@@ -31,7 +31,7 @@ export const Iframe = ({link, marginLeft, maxWidth = 800, marginRight}) => {
                 onLoad={loaded}
                 
                 title={link}
-                sandbox='allow-scripts allow-same-origin allow-presentation allow-popups' loading='lazy' src={link} allow="clipboard-write; encrypted-media;" frameBorder='0' scrolling='no' allowFullScreen={false} ></iframe>
+                sandbox='allow-scripts allow-same-origin allow-presentation allow-popups ' loading='lazy' src={link} allow="clipboard-write; encrypted-media;" frameBorder='0' scrolling='no' allowFullScreen={false} ></iframe>
                 {!rendered ?
                 <motion.div 
             style={{

@@ -8,6 +8,7 @@ import { UserBio } from '../../../../../components/UserBio/UserBio'
 import { TextArea } from '../../../../../components/inputs/TextArea/TextArea'
 import { ToggleButton } from '../../../../../components/buttons/ToggleButton/ToggleButton';
 import { ScreenShotShowCase } from '../../../../../components/ScreenShotShowCase/ScreenShotShowCase'
+import { ColorInput } from '../../../../../components/inputs/ColorInput/ColorInput'
 
 export const EditMemberPanel = ({
     color, 
@@ -29,7 +30,7 @@ export const EditMemberPanel = ({
 screenShots}) => {
     
     return (
-        <div style={{backgroundColor: color, padding: '5px', borderRadius: '8px', maxWidth: 500, position: 'relative', width: '100%', overflow: 'hidden', boxShadow: '5px 5px 20px black', minHeight: 800}} className='edit-member-panel-container'>
+        <div style={{flexShrink: 0,backgroundColor: color, padding: '5px', borderRadius: '8px', maxWidth: 500, position: 'relative', width: '100%', overflow: 'hidden', boxShadow: '5px 5px 20px black', minHeight: 800}} className='edit-member-panel-container'>
             <ProfileImage color={updateColor} shape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} />
             <ProfilePictureShape action={changeProfileShape} shape={newShape} />
             <InputTitle title={'Change Display Name'} />
@@ -44,6 +45,8 @@ screenShots}) => {
             :
             <TextArea inputValue={profileBio} action={changeProfileBio} height={300} />
             }
+            <InputTitle title={"Change Accent Color"} />
+            <ColorInput rgb={color} action={updateColor} />
             <InputTitle title={"Showcase Recent Screen Shots"} />
             <ToggleButton state={showCaseScreenShots} action={toggleShowCaseScreenShots} />
             <div style={{height: 5, flexShrink: 0}}></div>

@@ -48,11 +48,12 @@ export const Error = ({errorMessage, action, buttonLabel = "Close", position = '
 
     return (
         <motion.div 
+        onClick={action}
         style={{
             backgroundColor: 'rgba(' + primaryColor.split('rgb(')[1].split(')')[0] + ', 0.8)',
             position: position,
-            left: position === 'fixed' ? '240px' : '0px',
-            width: position === 'fixed' ? 'calc(100% - 240px)' : '100%'
+            left: '0px',
+            width: '100%'
         }}
         className='error-container' initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} key={"error-componen"}> 
             <div style={{backgroundColor: secondaryColor}} className='inner-error-container' >

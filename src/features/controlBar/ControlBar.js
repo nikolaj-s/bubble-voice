@@ -112,21 +112,10 @@ export const ControlBar = () => {
                 </AnimatePresence>
                 
                 <div style={{backgroundColor: accentColor}} className='controls-wrapper'>  
-                   
-                    <WebCamButton 
-                    width={22}
-                    height={20}
-                    padding={10}
-                    action={() => {toggleFunction('webCamState')}} 
-                    state={webCamState} 
-                    active={current_channel_id === null || channel.disable_streams}
-                    id={'web-cam-toggle-button'}
-                    loading={loadingWebCam}
-                    />
                     <MicToggleButton 
-                    width={22}
+                    width={28}
                     height={20}
-                    padding={10}
+                    padding={7}
                     desc_space={23}
                     
                     action={() => {toggleFunction('microphoneState')}} 
@@ -135,9 +124,9 @@ export const ControlBar = () => {
                     id={"toggle-microphone-button"}
                     />
                     <AudioToggleButton 
-                    width={22}
+                    width={28}
                     height={20}
-                    padding={10}
+                    padding={7}
                     desc_space={23}
                     opacity={0.5}
                     altInvert={true}
@@ -147,16 +136,27 @@ export const ControlBar = () => {
                     id={"mute-audio-toggle-button"}
                     description={(current_channel_id === null  || channel.disable_streams) ? null : `${audioState ? 'Deafen' : 'Un-Deafen'}`}
                     />
-                    <ShareScreenButton 
-                    width={22}
+                    <WebCamButton 
+                    width={28}
                     height={20}
-                    padding={10}
+                    padding={7}
+                    action={() => {toggleFunction('webCamState')}} 
+                    state={webCamState} 
+                    active={current_channel_id === null || channel.disable_streams}
+                    id={'web-cam-toggle-button'}
+                    loading={loadingWebCam}
+                    />
+                    <ShareScreenButton 
+                    width={28}
+                    height={20}
+                    padding={7}
                     desc_space={23}
                     loading={loadingScreenShare}
                     action={() => {toggleFunction('screenShareState')}} 
                     state={screenShareState} 
                     active={current_channel_id === null || channel.disable_streams}
                     id={"screen-share-toggle-button"}
+                    sharing_screen={currentScreen}
                     />
                 </div>
                 

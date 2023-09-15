@@ -100,9 +100,9 @@ export const RoomWrapper = () => {
 
     return (
         <>
-        <CreateChannelMenu />
+        
         <ServerSettingsRouteWrapper />
-        <div style={{width: (channelId && !userStatusHidden) ? 'calc(100% - 184px)' : null, maxWidth: (channelId && !userStatusHidden) ? 'calc(100% - 184px)' : null}} className='outer-server-page-wrapper'>
+        <div style={{width: (channelId && !userStatusHidden) ? 'calc(100% - 188px)' : null, maxWidth: (channelId && !userStatusHidden) ? 'calc(100% - 184px)' : null}} className='outer-server-page-wrapper'>
             <div onDragOver={onDragOver} onDrop={onDrop} className='server-page-wrapper'>
                 <SocialRoute key='social-route' />
                 
@@ -114,8 +114,6 @@ export const RoomWrapper = () => {
            </div>
         </div>
         <UserStatusBar key='user-status-bar' />
-        
-        {error ? <Error key={'server-error'} errorMessage={errorMessage} action={closeErrorMessage} /> : null}
         
         </>
     )

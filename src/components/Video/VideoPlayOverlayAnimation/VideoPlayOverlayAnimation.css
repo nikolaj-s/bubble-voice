@@ -12,12 +12,24 @@
     transition: 0.1s;
 }
 
+.video-controls-overlay-inner {
+    width: 90px;
+    height: 90px;
+    max-width: 90px;
+    max-height: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
 .video-component-play-overlay:hover {
     opacity: 1;
 }
 
 .video-component-play-overlay svg {
-    width: 90px;
-    height: 90px;
+    width: 50px;
+    height: 50px;
+    margin-left: 10px;
 }
 

@@ -1,7 +1,7 @@
 // library's
 import { AnimatePresence, motion, useAnimation } from 'framer-motion';
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useDropzone } from 'react-dropzone';
 import imageCompression from 'browser-image-compression';
 
@@ -15,12 +15,13 @@ import { ProcessingImageIndicator } from './ProcessingImageIndicator/ProcessingI
 import { ImageDropListener } from './ImageDropListener/ImageDropListener';
 import { ImageSearchPanel } from './ImageSearchPanel/ImageSearchPanel';
 import { selectHideUserStatus } from '../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
-import { selectServerId } from '../../../features/server/ServerSlice';
+import { selectServerId, throwServerError } from '../../../features/server/ServerSlice';
 import { EmojiButton } from '../../buttons/EmojiButton/EmojiButton';
 import { EmojiMenu } from '../../EmojiPicker/EmojiMenu';
 import { AddMediaButton } from '../../buttons/AddMediaButton/AddMediaButton';
+import { ImagePreview } from './ImagePreview/ImagePreview';
 
-export const MessageInput = ({send, text, keyCode, image, value, persist, updateInputHeight, socialRoute, direct_message}) => {
+export const MessageInput = ({cancel_image, send, text, keyCode, image, value, persist, updateInputHeight, socialRoute, direct_message}) => {
 
     const [files, setFiles] = React.useState([{}])
 
@@ -35,6 +36,8 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
     const [emojiMenu, toggleEmojiMenu] = React.useState(false);
 
     const [localError, setLocalError] = React.useState(false);
+
+    const dispatch = useDispatch();
 
     const primaryColor = useSelector(selectPrimaryColor);
     
@@ -64,35 +67,50 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
 
     const {getRootProps} = useDropzone({
         accept: {
-            "image/*": ['.jpeg', '.png', '.webp', '.jpg', '.gif']
+            "image/*": ['.jpeg', '.png', '.webp', '.jpg', '.gif'],
+            "video/*": ['.mp4', '.webm'],
         },
         maxFiles: 1,
         onDrop: async (acceptedFiles, e) => {
             console.log(acceptedFiles)
             if (acceptedFiles.length === 0) return;
 
-            toggleProcessingImage(true);
+            if (acceptedFiles[0].type.includes('video')) {
 
-            const options = {maxSizeMB: 0.6, onProgress: incrementPrecentage, maxIteration: 30, maxWidthOrHeight: 1600}
+                if (acceptedFiles[0].size > 50000000) return dispatch(throwServerError({error: true, errorMessage: "Video File Size Exceeds 50mb"}));
 
-            let compressed_image;
+                setFiles([Object.assign(acceptedFiles[0], {preview: URL.createObjectURL(acceptedFiles[0])})]);
 
-            if (acceptedFiles[0].type.includes('gif') && acceptedFiles[0].size < 950000) {
-                compressed_image = acceptedFiles[0];
             } else {
-                compressed_image = await imageCompression(acceptedFiles[0], options);
+                toggleProcessingImage(true);
+
+                const options = {maxSizeMB: 0.6, onProgress: incrementPrecentage, maxIteration: 30, maxWidthOrHeight: 1600}
+    
+                let compressed_image;
+    
+                if (acceptedFiles[0].type.includes('gif') && acceptedFiles[0].size < 950000) {
+                    compressed_image = acceptedFiles[0];
+                } else {
+                    compressed_image = await imageCompression(acceptedFiles[0], options);
+                }
+    
+                setFiles([Object.assign(compressed_image, {preview: URL.createObjectURL(acceptedFiles[0])})])
+    
+                toggleProcessingImage(false);
+    
+                try {
+                    document.getElementById('social-input-selector').focus();
+                } catch (e) {
+                    return;
+                }
             }
-
-            setFiles([Object.assign(compressed_image, {preview: URL.createObjectURL(acceptedFiles[0])})])
-
-            toggleProcessingImage(false);
         }
 
     })
 
     React.useEffect(() => {
         
-        if (files[0].size) image(files[0]);
+        if (files[0]?.size) image(files[0]);
         
         return () => files.forEach(file => URL.revokeObjectURL(file.preview));
     // eslint-disable-next-line
@@ -131,8 +149,10 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
 
         if (e.keyCode === 13) {
             
-            setInputHeight(40); 
-            updateInputHeight(50);
+            setInputHeight(32); 
+            updateInputHeight(42);
+
+            handleCancel();
             
         }
         
@@ -143,13 +163,13 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
 
         if (processingImage) return;
 
-        setInputHeight(40)
+        setInputHeight(32)
 
-        updateInputHeight(50)
+        updateInputHeight(42)
 
         send();
 
-        
+        handleCancel();
     }
 
     const handleImageButton = () => {
@@ -179,6 +199,20 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
     const handleEmoji = (emoji) => {
         text(value + " " + emoji.emoji)
     }
+
+    const handleCancel = () => {
+        try {
+
+            URL.revokeObjectURL(files[0]?.preview)
+
+            setFiles([{}]);
+
+            cancel_image();
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
     
     return (
         <> 
@@ -192,7 +226,7 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
                 borderBottomRightRadius: socialRoute ? 0 : hideUserStatus ? 10 : 0,
             }}
             className='message-input-wrapper'>
-                
+                <ImagePreview type={files[0]?.type} fileName={files[0]?.name} cancel={handleCancel} preview={files[0]?.preview} />
                 <motion.div 
                 key={"message-text-input"}
                 animate={animation}
@@ -214,7 +248,7 @@ export const MessageInput = ({send, text, keyCode, image, value, persist, update
                     id='social-input-selector' onKeyUp={handleKeyCode} onChange={handleText} value={value}  placeholder='Message' type="text" />
                     <div className='message-input-button-wrapper'>
                         <div className='message-input-inner-button-wrapper'>
-                            <EmojiButton action={() => {toggleEmojiMenu(!emojiMenu)}} desc_space={22} description={'Emoji'} width={18} height={18} padding={8} transparent={true} />
+                            <EmojiButton zIndex={3} action={() => {toggleEmojiMenu(!emojiMenu)}} desc_space={22} description={'Emoji'} width={18} height={18} padding={8} transparent={true} />
                             <AddMediaButton action={handleSearchingForImageToggle}
                             
                             width={22}

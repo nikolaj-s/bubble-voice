@@ -20,7 +20,7 @@ export const ServerButtons = () => {
             <div style={{backgroundColor: color}} className="application-navigation-spacer"></div>
             {channel ? <AltConnectionIndicator active={channel} /> : null}
             {channel ? <AltDisconnectButton active={channel} /> : null}
-            <AltLeaveServerButton active={server} />
+
             <AltSettingsButton active={true} />
         </div>
     )

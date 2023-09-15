@@ -22,17 +22,18 @@ const appearanceSettingsSlice = createSlice({
     name: "appearanceSettingsSlice",
     // inital state is default color scheme
     initialState: {
-        primaryColor: "rgb(255, 255, 255)",
-        secondaryColor: "rgb(236, 236, 236)",
-        accentColor: "rgb(191, 191, 191)",
-        textColor: "rgb(64, 64, 64)",
+        primaryColor: "rgb(65, 65, 65)",
+        secondaryColor: "rgb(44, 44, 44)",
+        accentColor: "rgb(24, 24, 24)",
+        textColor: "rgb(255, 255, 255)",
         activationColor: "rgb(58, 235, 52)",
-        glassColor: "rgb(236, 236, 236, 0.8)",
-        transparentPrimary: 'rgba(255, 255, 255, 0)',
+        glassColor: "rgba(44, 44, 44, 0.8)",
+        transparentPrimary: "rgba(65, 65, 65, 0)",
         darkModeEnabled: true,
         rgbBackground: false,
         changeMade: false,
         disableServerAmbiance: false,
+        useImageBackground: false,
         gradient: {type: 'none', gradient: false},
         scale: {name: 'default', scale: 0},
         gradients: [
@@ -50,7 +51,8 @@ const appearanceSettingsSlice = createSlice({
             {type: "Interstellar", gradient: 'radial-gradient(ellipse at 11% 15%,#16213E, #0F3460, #533483, #E94560)'},
             {type: "Sunset", gradient: 'radial-gradient(ellipse at 11% 15%,#F76E11, #FF9F45, #FFBC80, #FC4F4F)'},
             {type: 'Black Hole', gradient: 'radial-gradient(circle at 50% 50%,#000000, #000000, rgba(179, 76, 51, 1), rgba(0,0,0,1), rgba(0,0,0,1))'},
-            {type: "Void", gradient: 'linear-gradient(to top, rgb(0, 0, 0), rgb(0, 0, 0))'}
+            {type: "Void", gradient: 'linear-gradient(to top, rgb(0, 0, 0), rgb(0, 0, 0))'},
+            {type: "Emerald", gradient: 'linear-gradient(45deg, rgba(69,168,66,1) 19%, rgba(0,232,255,1) 52%, rgba(59,163,66,1) 83%)'}
         ],
         color_themes: {
             light: {
@@ -132,8 +134,8 @@ const appearanceSettingsSlice = createSlice({
             }
         },
         glass: false,
-        current_theme: {label: 'Light', state: 'light'},
-        theme_options: [{label: 'Light', state: 'light'}, {label: 'Dark', state: 'dark'}, {label: 'Custom', state: 'custom'}, {label: "Fall", state: 'fall'}, {label: "Forest", state: 'forest'}, {label: 'Neon', state: 'neon'}, {label: 'Coffee', state: 'coffee'}, {label: 'Green', state: 'green'}, {label: 'Dusk', state: 'dusk'}, {label: "Vintage", state: 'vintage'}, {label: "Pastel Dark", state: "pastel_dark"}]
+        current_theme: {label: 'Dark', state: 'dark'},
+        theme_options: [{label: 'Dark', state: 'dark'}, {label: 'Light', state: 'light'}, {label: 'Custom', state: 'custom'}, {label: "Fall", state: 'fall'}, {label: "Forest", state: 'forest'}, {label: 'Neon', state: 'neon'}, {label: 'Coffee', state: 'coffee'}, {label: 'Green', state: 'green'}, {label: 'Dusk', state: 'dusk'}, {label: "Vintage", state: 'vintage'}, {label: "Pastel Dark", state: "pastel_dark"}]
     },
     reducers: {
         updateColorValue: (state, action) => {
@@ -185,6 +187,9 @@ const appearanceSettingsSlice = createSlice({
         updateScaleState: (state, action) => {
             state.scale = action.payload;
         },
+        updateImageBackgroundState: (state, action) => {
+            state.useImageBackground = !state.useImageBackground;
+        },
         saveTheme: (state, action) => {
 
             state.changeMade = false;
@@ -204,7 +209,8 @@ const appearanceSettingsSlice = createSlice({
                 gradient: state.gradient,
                 glass: state.glass,
                 disableServerAmbiance: state.disableServerAmbiance,
-                scale: state.scale
+                scale: state.scale,
+                useImageBackground: state.useImageBackground
             }
 
             state.color_themes = {...state.color_themes, custom: new_theme_object.themes.custom};
@@ -259,6 +265,8 @@ const appearanceSettingsSlice = createSlice({
 
                 if (action.payload.disableServerAmbiance) state.disableServerAmbiance = true;
 
+                if (action.payload.useImageBackground) state.useImageBackground = true;
+
                 state.glassColor = `rgba(${state.secondaryColor.split('rgb(')[1].split(')')[0]}, 0.8)`
 
                 if (action.payload.scale) {
@@ -285,7 +293,7 @@ const appearanceSettingsSlice = createSlice({
 })
 
 // actions
-export const {updateScaleState, toggleDisableServerAmbiance, updateGlassState, updateGradient, updateColorValue, changeTheme, saveTheme, toggleRgbBackGround } = appearanceSettingsSlice.actions;
+export const {updateImageBackgroundState, updateScaleState, toggleDisableServerAmbiance, updateGlassState, updateGradient, updateColorValue, changeTheme, saveTheme, toggleRgbBackGround } = appearanceSettingsSlice.actions;
 
 // color selectors
 export const selectTransparentPrimaryColor = state => state.appearanceSettingsSlice.transparentPrimary;
@@ -321,6 +329,8 @@ export const selectGlassColor = state => state.appearanceSettingsSlice.glassColo
 export const selectServerAmbiance = state => state.appearanceSettingsSlice.disableServerAmbiance;
 
 export const selectScaleState = state => state.appearanceSettingsSlice.scale;
+
+export const selectUseImageBackgroundState = state => state.appearanceSettingsSlice.useImageBackground;
 
 // export appearance settings reducer
 export default appearanceSettingsSlice.reducer;

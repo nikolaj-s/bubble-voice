@@ -1,0 +1,17 @@
+
+.processing-indicator-container {
+    width: 70%;
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.processing-bar-indication {
+    height: 15px;
+    width: 100%;
+    flex-shrink: 0;
+    border-radius: 5px;
+}

@@ -11,8 +11,8 @@
 }
 
 .inner-new-account-state-container {
-    width: 92%;
-    height: 90%;
+    width: 100%;
+    height: 100%;
     border-radius: var(--border-radius);
     display: flex;
     flex-direction: column;

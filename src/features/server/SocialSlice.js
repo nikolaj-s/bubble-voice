@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { socket } from "./ServerBar/ServerBar";
 import { removePinnedMessage, addPinnedMessage } from "./ChannelRoom/ServerDashBoard/ServerDashBoardSlice";
 import { newMessage, throwServerError } from "./ServerSlice";
+import { UploadVideo } from "../../util/UploadVideo";
 
 export const togglePinMessage = createAsyncThunk(
     'SocialSlice/togglePinMessage',
@@ -80,15 +81,30 @@ export const sendMessage = createAsyncThunk(
                     image: false,
                     text: text,
                     video: false,
+                    video_upload: false,
                     link: false,
                     local_id: local_id,
                     loading: true,
                 },
-                file: file?.size ? file : null,
                 valid: true,
-                screen_shot: screen_shot
+                screen_shot: screen_shot,
+                file: null
             }
-            console.log(message)
+            console.log(file)
+            if (file?.type?.includes('video')) {
+
+                let data = await UploadVideo(file);
+            
+                if (data.error) {
+                    dispatch(throwServerError({error: true, errorMessage: data.error}));
+                    return rejectWithValue({error: true})
+                }
+                message.content.video_upload = {link: data.link, name: data.data.fileName};
+                
+            } else if (file?.type?.includes('image')) {
+                message.file = file;
+            }
+
             const data = await socket.request('message', message)
             .then(res => {
                 return res.message;

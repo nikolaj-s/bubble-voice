@@ -1,21 +1,24 @@
 
 .channel-title-container {
-    width: 100%;
+    width: calc(100% - 10px);
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 25px;
-    padding: 5px 0;
+    padding: 5px 5px;
     z-index: 3;
     top: 145px;
+    cursor: pointer;
+    transition: 0.1s;
 }
 
 .channel-title-container h3 {
     font-size: 0.7rem;
     font-weight: 400;
     letter-spacing: var(--font-spacing);
-    cursor: default;
-    margin-left: 5px;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
 }
 
 .channel-title-buttons-container {

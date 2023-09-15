@@ -119,7 +119,7 @@ const Settings = () => {
     }
 
     const updateColor = (color) => {
-        console.log(color)
+        dispatch(updateAccountInputState({state: 'change', value: true}))
         setColor(color);
        
     }

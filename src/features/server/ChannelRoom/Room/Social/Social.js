@@ -10,7 +10,6 @@ import { selectPinningMessage, selectUsersPermissions, throwServerError } from '
 // components
 import { MessageInput } from '../../../../../components/inputs/MessageInput/MessageInput';
 import { Message } from '../../../../../components/Message/Message';
-import { ImagePreview } from './ImagePreview/ImagePreview';
 
 // style
 import "./Social.css";
@@ -28,6 +27,7 @@ import { fetchMessages, messageCleanUp, selectAllMessages, selectAltSocialLoadin
 import { saveSocialData, SOCIAL_DATA } from '../../../../../util/LocalData';
 import { MessagePlaceHolderLoader } from '../../../../../components/MessagePlaceHolderLoader/MessagePlaceHolderLoader';
 import { clearCache } from '../../../../../util/ClearCaches';
+import { UploadVideo } from '../../../../../util/UploadVideo';
 
 export const Social = ({currentChannel, channelId, socialRoute = false, bulletin = false, direct_message, direct_message_user, status}) => {
 
@@ -162,22 +162,26 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         if (!permission.user_can_post_channel_social) return;
         
-        if (text.replace(/\s/g, '').length <= 3 && image === false) return dispatch(throwServerError({errorMessage: "Message Cannot be less than 3 characters"}));
+        if (text.replace(/\s/g, '').length < 1 && !image.size) return;
 
-        if (text.split(' ').join('').length === 0 && image === null) return;
+        if (text.length === 0 && !image.size) return;
         
         if (text.length > 1024) return dispatch(throwServerError({errorMessage: "Message cannot be longer than 1024 characters"}));
 
         let local_id = ((Math.random(5 * allMessages?.length) + 1) * 5) + username
+
+        let video = false;
+
+        console.log(image)
 
         let data = {
             send_to: direct_message_user,
             username: username,
             channel_id: channelId,
             content: {
-                image: image ? image.preview : false,
+                image: image ? true : false,
                 text: text,
-                video: false,
+                video: video,
                 link: false,
                 local_id: local_id,
                 loading: true,
@@ -192,8 +196,8 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
         
         }
 
-        data = {...data, file: image?.size ? image : null}
-
+        data = {...data, file: image?.size && !image?.type?.includes('video') ? image : null}
+        console.log(data)
         messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
         
         setText("");
@@ -213,7 +217,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         } else {
             
-            dispatch(sendMessage({username: username, file: image, channel_id: channelId, local_id: local_id, text: text, image_preview: image.preview}))
+            dispatch(sendMessage({username: username, file: image, channel_id: channelId, local_id: local_id, text: text, image_preview: image.preview ? true : false}))
         }
 
         setTimeout(() => {
@@ -221,6 +225,8 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
             messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
 
         }, 200)
+
+        URL.revokeObjectURL(image?.preview);
         
     }
 
@@ -232,7 +238,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
     const handleImage = (image) => {
 
-        if (image.size > 1000000) {
+        if (image.size > 1000000 && !image.type.includes('video')) {
             dispatch(throwServerError({errorMessage: "Image File Size Cannot Be Larger Than 1MB"}));
             return;
         }
@@ -296,7 +302,6 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
             : null}
             <div className='social-wrapper-container'>
                 <div  className='social-inner-container'>
-                    <ImagePreview cancel={handleCancelImageSend} preview={image?.preview} inputHeight={inputHeight} />
                     
                     <div onScroll={handleLoadMoreOnScroll} ref={messagesRef} className='social-messages-wrapper'>
                         {initialMount ? 
@@ -309,7 +314,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
                         {direct_message ? null : <PersistedDataNotice channelName={currentChannel.channel_name} persisted={!currentChannel.persist_social} />}
                         
                     </div>
-                    {(direct_message && status) ? <MessageInput direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : 
+                    {(direct_message && status) ? <MessageInput cancel_image={handleCancelImageSend} direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : 
                     permission?.user_can_post_channel_social && !direct_message ?
                     <MessageInput direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} />
                      : null}

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 // state
 import { createChannel, selectCreateChannelMenuState, selectServerMembers, selectServerOwner, toggleCreateChannelMenu } from '../../ServerSlice';
-import { selectPrimaryColor, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassColor, selectPrimaryColor, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // components
 import { InputTitle } from '../../../../components/titles/inputTitle/InputTitle';
@@ -41,6 +41,8 @@ export const CreateChannelMenu = () => {
     const animation = useAnimation();
 
     const primaryColor = useSelector(selectPrimaryColor);
+
+    const glassColor = useSelector(selectGlassColor);
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
@@ -106,19 +108,19 @@ export const CreateChannelMenu = () => {
         <AnimatePresence>
             {open ? 
             <motion.div 
+            initial={{opacity: 0}}
+            animate={{opacity: 1}}
+            exit={{opacity: 0}}
             onClick={handleCancel}
-            initial={{translateX: '-100%'}}
-            animate={{translateX: '0%'}}
-            exit={{translateX: '-100%'}}
             key="create-channel-menu"
-            
+            style={{backgroundColor: glassColor}}
              className='create-channel-menu-container'>
                 <motion.div 
                 onClick={(e) => {e.stopPropagation()}}
-                initial={{scale: 0}}
+                initial={{scale: 0.2}}
                 animate={{scale: 1}}
-                exit={{scale: 0}}
-                style={{backgroundColor: secondaryColor, boxShadow: '5px 5px 25px black'}} className='create-channel-inner-menu-container'>
+                exit={{scale: 0.2}}
+                style={{backgroundColor: secondaryColor,}} className='create-channel-inner-menu-container'>
                     <SettingsHeader title={"Create Channel"} />
                     <InputTitle title={"Channel Name"} />
                     <TextInput marginBottom='3px' inputValue={channelName} action={handleChannelNameInput} placeholder={"Name"} />

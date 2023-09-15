@@ -3,6 +3,7 @@
     max-height: calc(100%);
     overflow: hidden;
     width: 100%;
+    border-bottom-left-radius: 8px;
 }
 
 .no-server-selected-display .home-content-wrapper {

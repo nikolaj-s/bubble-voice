@@ -182,8 +182,8 @@ export const CreateServerMenu = () => {
                 <div 
                 style={{backgroundColor: primaryColor, borderBottom: `solid 2px ${primaryColor}`}}
                 className='add-server-nav-container'>
-                    <h3 onClick={() => {navigatePage("join")}} style={{color: textColor, backgroundColor: page === 'join' ? secondaryColor : primaryColor}}>Join Server</h3>
-                    <h3 onClick={() => {navigatePage("create")}} style={{color: textColor, backgroundColor: page === 'create' ? secondaryColor : primaryColor}} >Create Server</h3>
+                    <h3 onClick={() => {navigatePage("join")}} style={{color: textColor, backgroundColor: page === 'join' ? secondaryColor : primaryColor}}>Join a Bubble</h3>
+                    <h3 onClick={() => {navigatePage("create")}} style={{color: textColor, backgroundColor: page === 'create' ? secondaryColor : primaryColor}} >Create a Bubble</h3>
                     <div style={{height: '100%',width: '100%', backgroundColor: secondaryColor}} />
                     <div onClick={closeCreateServerMenu} style={{backgroundColor: secondaryColor}} className='close-add-server-screen'>
                         <svg width="70%" height="70%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -196,7 +196,7 @@ export const CreateServerMenu = () => {
                     {page === 'join' ?
                     <div className='inner-create-server-menu-container'>
                         <div className='search-server-input-wrapper'>
-                            <TextInput id={"search-for-server-input"} keyCode={(key) => {if (key === 13) search()}} action={handleServerSearchInput} inputValue={serverSearchQuery} marginTop='10px' placeholder={"Server Name"} />
+                            <TextInput id={"search-for-server-input"} keyCode={(key) => {if (key === 13) search()}} action={handleServerSearchInput} inputValue={serverSearchQuery} marginTop='10px' placeholder={"Bubble Name"} />
                             <div className='server-search-button-container'>
                                 <AltSearchButton action={search} borderRadius={0} invert={false} height={12} width={32} />
                             </div>
@@ -209,13 +209,13 @@ export const CreateServerMenu = () => {
                     </div>
                     :
                     <div className='inner-create-server-menu-container'>
-                        <InputTitle title={"Server Name"} />
+                        <InputTitle title={"Bubble Name"} />
                         <TextInput id={"new-server-name-input"} inputValue={serverName} action={handleInput} stateSelector={"serverName"} placeholder={"Name"} />
-                        <InputTitle title={"Server Banner"} />
+                        <InputTitle title={"Bubble Banner"} />
                         <div className='create-server-banner-container'>
                             <ImageInput getFile={setServerBanner} center={true} />
                         </div>
-                        <InputTitle title={"Enter Server Password"} />
+                        <InputTitle title={"Enter Bubble Password"} />
                         <TextInput inputValue={serverPassword} action={handleInput} stateSelector={"serverPassword"} marginBottom='2%' type='password' placeholder={"Password"} />
                         <TextInput inputValue={confirmServerPassword} action={handleInput} stateSelector={"confirmServerPassword"} type='password' placeholder={'Confirm Password'} />
                         <ApplyCancelButton apply={handleApplyButton} cancel={closeCreateServerMenu} name={"Create"} />

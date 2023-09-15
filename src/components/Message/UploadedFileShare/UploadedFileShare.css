@@ -1,0 +1,8 @@
+
+.shared-file-container {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    padding: 5px;
+    border-radius: 5px;
+}

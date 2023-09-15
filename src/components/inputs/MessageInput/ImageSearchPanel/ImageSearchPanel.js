@@ -184,7 +184,7 @@ export const ImageSearchPanel = ({direct_message, searchingForImage, selectImage
                             id="message-image-search-input"
                             style={{color: textColor, backgroundColor: primaryColor}}
                             maxLength={120} onKeyUp={handleEnter} onChange={handleQuery} value={query} placeholder={`Search For ${mediaType}`} />
-                            <div className='message-image-search-button'>
+                            <div style={{opacity: query.length > 0 ? 1 : 0.5}} className='message-image-search-button'>
                                 <AltSearchButton padding={5} active={query.length === 0} action={search} margin={'0 0 0 10px'} width={30} height={18} invert={true}  borderRadius={0} />
                             </div>
                         </div>}

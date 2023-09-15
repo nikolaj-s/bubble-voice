@@ -126,6 +126,7 @@ let loading_template = `
 
 const fs = require('fs');
 const { default: axios } = require('axios');
+const { Session } = require('inspector');
 
 const initPath = path.join(app.getPath('userData'), '../init.json');
 
@@ -293,7 +294,8 @@ function createWindow () {
 
   const handleRedirect = (e, url) => {
     e.preventDefault();
-  
+    
+
     shell.openExternal(url);
   }
   
@@ -303,7 +305,7 @@ function createWindow () {
 
   win.webContents.on('did-create-window', (window, details) => {
     window.close()
-
+    
     shell.openExternal(details.url);
   })
   
@@ -774,8 +776,10 @@ autoUpdater.on('update-downloaded', () => {
 })
 
 // handle open links
-ipcMain.on('open-link', (event, data) => {
+ipcMain.on('open-link', async (event, data) => {
+
   shell.openExternal(data.url);
+
 })
 
 ipcMain.on('set-window-id', (event, data) => {

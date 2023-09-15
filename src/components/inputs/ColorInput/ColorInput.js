@@ -5,6 +5,7 @@ import { selectAccentColor } from '../../../features/settings/appSettings/appear
 
 // style
 import "./ColorInput.css";
+import { EditIcon } from '../../Icons/EditIcon/EditIcon';
 
 export const ColorInput = ({rgb, action, selector}) => {
 
@@ -55,10 +56,13 @@ export const ColorInput = ({rgb, action, selector}) => {
     return (
         <div 
         style={{
-            border: `solid ${accentColor} 4px`,
+            border: `solid ${accentColor} 3px`,
             backgroundColor: rgb
         }}
         className='color-picker-input-container'>
+            <div className='edit-pencil-color-icon'>
+                <EditIcon />
+            </div>
             <input 
             className='color-picker-input' onChange={handleChange} type="color" value={hex}  />
         </div>

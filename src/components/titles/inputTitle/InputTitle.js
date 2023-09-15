@@ -6,7 +6,7 @@ import { selectTextColor } from '../../../features/settings/appSettings/appearan
 // style's
 import "./InputTitle.css";
 
-export const InputTitle = ({title, marginBottom, marginTop, fontSize = '1rem', zIndex = null, width}) => {
+export const InputTitle = ({title, marginBottom, marginTop, fontSize = '.8rem', zIndex = null, width}) => {
   
   const textColor = useSelector(selectTextColor)
 
