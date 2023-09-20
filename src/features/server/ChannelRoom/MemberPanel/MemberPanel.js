@@ -190,18 +190,11 @@ export const MemberPanel = () => {
             initial={{top: '-100%'}}
             animate={{top: '0%'}}
             exit={{top: '100%'}}
-            style={{backgroundColor: color || secondaryColor}} className='outer-member-panel-container'>
+            style={{backgroundPosition: 'center',background: member.user_banner ? `URL(${member.user_banner})` : secondaryColor, backgroundRepeat: 'no-repeat', backgroundSize: 'cover'}} className='outer-member-panel-container'>
                 <div onClick={closePanel} style={{backgroundColor: accentColor}} className='close-member-panel-button'>
                     <CloseIcon />
                 </div>
-                <div className='member-panel-banner-container'>    
-                    <div className='inner-member-banner'>
-                        <Image disableErr={true} imgHeight='calc(80%)' objectFit='cover' image={member.user_banner} />
-                        <div style={{height: '20%', flexShrink: 0, width: '100%', boxShadow: `0 0 200px 200px ${color}`, position: 'absolute', bottom: 0}}></div>
-                    </div>
-                </div>
                 <div 
-                style={{backgroundColor: color || secondaryColor}}
                 className='member-panel-container'>
                     <div className='member-panel-image-container'>
                         
@@ -209,7 +202,7 @@ export const MemberPanel = () => {
                             <Image image={member.user_image} />
                         </div>
                     </div>
-                    <div  className='member-panel-info-container'>
+                    <div style={{backgroundColor: (color  || secondaryColor)}} className='member-panel-info-container'>
                         <div style={{backgroundColor: primaryColor}} className='username-wrapper-container'>
                             <h3 style={{color: textColor}}>{member.display_name}</h3>
                             <h4 style={{color: textColor, opacity: 0.8}}>#{member.username}</h4>
@@ -230,7 +223,7 @@ export const MemberPanel = () => {
                             <div className='member-panel-user-status-wrapper'>
                                 {member?.status_icon ? 
                                 <div className='member-panel-status-icon'>
-                                    <Image  objectFit='contain' image={member?.status_icon} />
+                                    <Image borderRadius={'5px'} objectFit='contain' image={member?.status_icon} />
                                 </div>
                                 : null}
                                 <p style={{color: textColor, margin: '0 0 0 5px'}}>{member?.status === 'offline' && timeStamp !== "" ? 'Last Online: ' + timeStamp : member.status}</p>

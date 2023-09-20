@@ -68,8 +68,13 @@ export const ServerDashBoard = () => {
     return (
         <>
         {(page !== 'pins' && page  !== 'media') ? null :
-        <div className='server-dashboard-container'>
-            <div style={{backgroundColor: glass ? glassColor : secondaryColor}} className='server-dashboard-inner-container'>
+        <div 
+        style={{borderTop: `solid 4px ${glass ? glassColor : secondaryColor}`,
+        borderRight: `solid 4px ${glass ? glassColor : secondaryColor}`,
+        borderBottom: `solid 4px ${glass ? glassColor : secondaryColor}`}}
+        className='server-dashboard-container'>
+            <div style={{backgroundColor: glass ? glassColor : secondaryColor, 
+                }} className='server-dashboard-inner-container'>
                 {loadingPins || serverLoading ? <MessagePlaceHolderLoader /> : null}
                 <AnimatePresence>
                     {page === 'pins' && !socialOpen ? <Pins initLoading={loadingPins || serverLoading} key={'server-pins'} handlePin={handlePin} pins={pins} permission={permission} /> : null}

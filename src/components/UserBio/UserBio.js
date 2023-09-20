@@ -23,7 +23,7 @@ export const UserBio = ({bio = "", margin, loading}) => {
         let l_text = "";
 
         for (const i of text_arr) {
-            if (i.includes('.jpg') || i.includes('.png') || i.includes('.jpeg') || i.includes('.gif')) {
+            if (i.includes('jpg') || i.includes('png') || i.includes('jpeg') || i.includes('gif')) {
                 
                 l_images.push(i);
                 

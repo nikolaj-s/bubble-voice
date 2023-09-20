@@ -1,18 +1,19 @@
 
 
 .channel-button-container {
-    width: calc(100% - 7px);
-    margin-left: 5px;
-    height: calc(34px);
+    width: calc(100% - 11px);
+    margin-left: 4px;
+    height: calc(32px);
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: relative;
     border-radius: 3px;
+    padding-right: 3px;
 }
 
 .channel-button-container h3 {
-    font-size: 1rem;
+    font-size: .9rem;
     font-weight: 400;
     margin: 0 0 0 2px;
     padding: 0;
@@ -29,8 +30,8 @@
     align-items: center;
     justify-content: flex-end;
     bottom: 0;
-    margin-right: 4px;
-    right: 9px;
+    margin-right: 2px;
+    right: 7px;
     height: 100%;
 }
 

@@ -1,8 +1,8 @@
 .channel-user-placeholder {
-    width: calc(100% - 16px);
-    margin-left: 12px;
+    width: calc(100% - 24px);
+    margin-left: 18px;
     display: flex;
-    height: 34px;
+    height: 30px;
     margin-right: 2px;
     padding-left: 2px;
     align-items: center;
@@ -12,7 +12,7 @@
 }
 
 .channel-user-placeholder h3 {
-    font-size: 1rem;
+    font-size: .75rem;
     font-weight: 500;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -38,13 +38,13 @@
     position: absolute;
     right: 0px;
     justify-content: flex-end;
-    height: 30px;
+    height: 24px;
     border-radius: 4px;
     margin-right: 2px;
 }
 
 .user-status-wrapper .extra-media-icon {
-    margin: 0 .5rem;
+    margin: 0 .35rem;
     display: flex;
     align-items: center;
     justify-content: center;
