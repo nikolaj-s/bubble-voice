@@ -4,7 +4,7 @@ import { Image } from '../../../Image/Image';
 import { selectTextColor, selectPrimaryColor, selectAccentColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { DeleteButton } from '../../../buttons/DeleteButton/DeleteButton';
 
-export const ImagePreview = ({preview, cancel, inputHeight, fileName, type}) => {
+export const ImagePreview = ({preview, cancel, inputHeight, fileName, type, processingImage, percent = 0}) => {
     
     const textColor = useSelector(selectTextColor);
 
@@ -15,8 +15,14 @@ export const ImagePreview = ({preview, cancel, inputHeight, fileName, type}) => 
     return (
         <>
         
-        {preview ? 
+        {preview || processingImage ? 
         <div style={{bottom: inputHeight, backgroundColor: primaryColor}} className='image-social-post-preview'>
+            {processingImage ?
+            <div style={{backgroundColor: accentColor}} className='compressing-image-container-status-indicator'>
+                <h3 style={{color: textColor}}>{percent}%</h3>
+            </div>
+            :
+            <>
             <div 
             style={{backgroundColor: accentColor}}
             className='image-prev-cancel-hover-effect'>
@@ -28,8 +34,12 @@ export const ImagePreview = ({preview, cancel, inputHeight, fileName, type}) => 
                 <Image borderRadius={'5px'} width='auto' position='relative' objectFit='contain' zIndex={1} image={preview} />
                 }
             </div> 
-
             <p className='image-post-preview-file-name' style={{color: textColor}}>{fileName}</p>
+            </>
+            }
+            
+            
+            
         </div>
         : null}
         </>

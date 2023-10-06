@@ -317,8 +317,6 @@ export class RoomClient {
 
                         el.autoplay = true;
 
-                        par.style.border = `4px solid ${appData.color}`;
-
                         par.style.backgroundColor = appData.color;
 
                         el.className = `streaming-video-player ${user._id} ${user._id}-screen-share-stream`
@@ -326,8 +324,8 @@ export class RoomClient {
                         el.playsInline = true;
 
                         el.muted = true;
-                        console.log(prefs.stream_volume)
-                        el.volume = prefs.stream_volume ? prefs.stream_volume : 1;
+                        
+                        el.volume = prefs?.stream_volume ? prefs?.stream_volume : 1;
 
                         el.srcObject = stream;
 

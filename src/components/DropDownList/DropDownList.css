@@ -19,6 +19,7 @@
     align-items: center;
     justify-content: center;
     z-index: 5;
+    
 }
 
 .inner-drop-down-container {
@@ -29,6 +30,7 @@
     margin-left: 250px;
     border-radius: 8px;
     padding: 5px;
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.363);
 }
 
 .drop-down-content li {

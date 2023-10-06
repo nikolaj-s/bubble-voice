@@ -2,7 +2,7 @@
 import React from 'react';
 import { useDropzone } from 'react-dropzone';
 import { AnimatePresence, motion, useAnimation } from 'framer-motion'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import imageCompression from 'browser-image-compression';
 
 // state
@@ -12,10 +12,15 @@ import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../..
 import { Image } from "../../Image/Image";
 import { ImageIcon } from '../../Icons/ImageIcon/ImageIcon';
 import {GetImageColorData} from '../../../util/GetImageColorData'
+import { SearchIcon } from '../../Icons/SearchIcon/SearchIcon';
+
 
 // style
 import "./ImageInput.css";
 import { ImageInputProcessingIndicator } from './ImageInputProcessingIndicator/ImageInputProcessingIndicator';
+import { ImageSearchIcon } from '../../Icons/ImageSearchIcon/ImageSearchIcon';
+import { ImageSearchPanel } from '../MessageInput/ImageSearchPanel/ImageSearchPanel';
+import { throwServerError } from '../../../features/server/ServerSlice';
 
 export const ImageInput = ({
     initalImage,
@@ -35,15 +40,18 @@ export const ImageInput = ({
     maxDimensions = 1920,
     disableIcon = false,
     imageProcessingFontSize,
-    getColor = () => {}
+    getColor = () => {},
+    centerButtons = false
 }) => {
-
+    const dispatch = useDispatch();
     // state
     const [files, setFiles] = React.useState([{preview: initalImage}]);
 
     const [processingImage, toggleProcessingImage] = React.useState(false);
 
     const [percent, setPercent] = React.useState(0);
+
+    const [imageSearchOpen, toggleImageSearchOpen] = React.useState(false);
 
     const animation = useAnimation();
 
@@ -70,7 +78,7 @@ export const ImageInput = ({
             if (acceptedFiles.length === 0) return;
 
             toggleProcessingImage(true);
-            
+            console.log(acceptedFiles[0].type)
             const options = {maxSizeMB: maxSize, onProgress: handlePercent, maxIteration: 30, type: acceptedFiles[0].type, maxWidthOrHeight: maxDimensions}
 
             let compressed_image;
@@ -99,7 +107,7 @@ export const ImageInput = ({
     React.useEffect(() => {
         if (files.length === 0) return;
 
-        if (files[0]?.size) getFile(files[0]);
+        if (files[0]?.size || files[0]?.from_search) getFile(files[0]);
         
         return () => files.forEach(file => URL.revokeObjectURL(file.preview));
     // eslint-disable-next-line
@@ -130,6 +138,8 @@ export const ImageInput = ({
 
         if (files[0]?.preview.includes('cloudinary')) return;
 
+        if (files[0]?.from_search) return;
+
         if (showShadow === false) return;
 
         setTimeout(() => {
@@ -140,6 +150,38 @@ export const ImageInput = ({
         
         }, 500)
             
+    }
+
+    const openSearchImageMenu = (e) => {
+        e.stopPropagation();
+        toggleImageSearchOpen(true)
+    }
+
+    const handleSelectImage = async (data) => {
+        toggleImageSearchOpen(false);
+
+        await fetch(data.image)
+        .then(async response => {
+
+            toggleProcessingImage(true);
+
+            const c_type = response.headers.get('content-type');
+            
+            const b = await response.blob();
+
+            const file = new File([b], 'profile_image.jpg', {type: c_type});
+
+            const options = {maxSizeMB: maxSize, onProgress: handlePercent, maxIteration: 30, type: file.type, maxWidthOrHeight: maxDimensions}
+
+            let compressed_image = await imageCompression(file, options);
+
+            setFiles([Object.assign(compressed_image, {preview: URL.createObjectURL(file)})]);
+
+            toggleProcessingImage(false);
+
+        }).catch(error => {
+            dispatch(throwServerError({error: true, errorMessage: "The Third Party Host Has Blocked The Download of The Selected Image"}))
+        })
     }
 
     return (
@@ -177,9 +219,31 @@ export const ImageInput = ({
             <input {...getInputProps()} />
             <Image onLoad={onLoad} opacity={blur_amount} disableErr={true} cursor='pointer' image={files[0]?.preview} />
             
-            {disableIcon ? null : <ImageIcon cursor={'pointer'} center={center} zIndex={zIndex} animation={iconAnimation} />}
+            {disableIcon ? null :
+            <div 
+            style={centerButtons ? 
+            {
+                top: '50%',
+                left: '50%',
+                translate: '-50% -50%'
+            } :
+            {
+                top: 10,
+                left: 10
+            }}
+            className='image-input-nav-options-container'>
+                <div className='image-input-button-wrapper'>
+                    <ImageIcon cursor={'pointer'} center={center} zIndex={zIndex} animation={iconAnimation} />
+                </div>
+                <h4 style={{color: textColor}}>|</h4>
+                <div onClick={openSearchImageMenu} className='image-input-button-wrapper'>
+                    <ImageSearchIcon />
+                </div>
+            </div>
+        }
         </motion.div>
         {processingImage ? <ImageInputProcessingIndicator fontSize={imageProcessingFontSize} key={"image-processing-indicator"} value={percent} /> : null}
+        {imageSearchOpen ? <ImageSearchPanel selectImage={handleSelectImage} hideOptions={true} close={() => {toggleImageSearchOpen(false)}} searchingForImage={imageSearchOpen} /> : null}
         </AnimatePresence>
     )
 }

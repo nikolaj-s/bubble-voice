@@ -129,12 +129,6 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
             setTimeout(() => {
                 messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
 
-                setTimeout(() => {
-
-                    document.getElementsByClassName('social-messages-wrapper')[0].style.scrollBehavior = 'smooth';
-
-                }, 400)
-
             }, 300)
         
         if (permission.user_can_post_channel_social) document.getElementById('social-input-selector').focus();

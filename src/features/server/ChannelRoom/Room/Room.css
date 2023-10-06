@@ -39,13 +39,13 @@
     overflow: hidden;
     display: flex;
     align-self: center;
-    border: solid 4px black;
     border-radius: 8px;
     margin: 2px;
     cursor: pointer;
     background-color: black;
     max-width: 960px;
     max-height: 540px;
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.7);
 }
 
 .stream-title-container {

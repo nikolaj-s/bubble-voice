@@ -134,7 +134,7 @@ export const Music = () => {
         <div 
         style={{
             display: disableMediaWidget ? 'none' : (currentlyPlaying) ? 'flex' : 'none',
-            border: `solid 4px black`,
+           
             backgroundColor: 'black'
 
         }}
@@ -163,7 +163,8 @@ export const Music = () => {
                         disablekb: 1
                     }}} style={{
                         width: '100%',
-                        height: '100%'
+                        height: '100%',
+                        borderRadius: 8
                     }} />
                     <div className='youtube-disable-clicking'>
                         <div className='song-title-container'>

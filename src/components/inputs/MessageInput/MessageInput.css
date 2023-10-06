@@ -152,3 +152,21 @@
     opacity: 0.8;
     font-size: 0.8rem;
 }
+
+.compressing-image-container-status-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 120px;
+    border-radius: 5px;
+    margin: 5px 0px 0px 5px;
+}
+
+.compressing-image-container-status-indicator h3,
+.compressing-image-container-status-indicator h4 {
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}

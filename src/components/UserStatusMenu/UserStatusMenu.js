@@ -93,13 +93,16 @@ export const UserStatusMenu = ({close = () => {}}) => {
             {open ?
             <>
                 <div style={{backgroundColor: primaryColor}} className='inner-status-menu-container'>
-                    <RadioButton action={() => {handleChangeStatus('online')}} state={value === 'online'} name={"Online"} />
-                    <RadioButton action={() => {handleChangeStatus('away')}} state={value === 'away'} name={"Away"} />
-                    <RadioButton action={() => {handleChangeStatus('offline')}} state={value === 'offline'} name={"Offline"} />
-                    <TextInput inputValue={customStatus} action={handleCustomStatus} marginBottom='1%' marginTop='1%' placeholder={'Custom Status'} />
-                    <RadioButton action={() => {handleChangeStatus(customStatus)}} state={(value !== 'online' && value !== 'away' && value !== 'offline')} name={"Custom"} />
-                    <RadioButton action={handleDynamicActivityStatus} state={activityStatus} name={"Enable Dynamic Activity Status"} />
-                {changeMade ? <TextButton invert={true} marginBottom={5} name={'Update'} action={save} /> : null}
+                    <RadioButton margin={"0 0 3px 0"} action={() => {handleChangeStatus('online')}} state={value === 'online'} name={"Online"} />
+                    <RadioButton margin={"0 0 3px 0"} action={() => {handleChangeStatus('away')}} state={value === 'away'} name={"Away"} />
+                    <RadioButton margin={"0 0 3px 0"} action={() => {handleChangeStatus('offline')}} state={value === 'offline'} name={"Offline"} />
+                    
+                    <RadioButton margin={"0 0 3px 0"} action={() => {handleChangeStatus(customStatus)}} state={(value !== 'online' && value !== 'away' && value !== 'offline')} name={"Custom"} />
+                    {(value !== 'online' && value !== 'away' && value !== 'offline') ?
+                    <TextInput invert={true} inputValue={customStatus} action={handleCustomStatus} marginBottom='1%' marginTop='1%' placeholder={'Custom Status'} />
+                    : null}
+                    <RadioButton margin={"0 0 3px 0"} action={handleDynamicActivityStatus} state={activityStatus} name={"Enable Dynamic Activity Status"} />
+                {changeMade ? <TextButton width={'90px'} invert={true} marginBottom={5} name={'Update'} action={save} /> : null}
                 </div>
                 <Loading loading={loadingCustomStatus} />
             </>

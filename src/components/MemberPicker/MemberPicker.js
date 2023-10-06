@@ -1,15 +1,13 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
-import { selectGlassColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassColor, selectPrimaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { TextButton } from '../buttons/textButton/TextButton';
 import {RadioButton} from '../buttons/RadioButton/RadioButton';
-
-import "./DropDownList.css";
 import { DownIcon } from '../Icons/DownIcon/DownIcon';
 
 export const DropDownList = ({selectedItem, list = ["No Options"], action, stateType}) => {
 
-    const primaryColor = useSelector(selectSecondaryColor);
+    const primaryColor = useSelector(selectPrimaryColor);
 
     const textColor = useSelector(selectTextColor);
 
@@ -51,11 +49,11 @@ export const DropDownList = ({selectedItem, list = ["No Options"], action, state
                         style={{
                             color: textColor
                         }}
-                        >No Devices Available</li>
+                        >No Options Available</li>
                         :
                         list.map((item, key) => {
                             return (
-                                <RadioButton  name={item.label} action={() => {selectItem(item)}} state={item.label === selectedItem} />
+                                <RadioButton  name={item.display_name} action={() => {selectItem(item)}} state={item.username === selectedItem} />
                                 )
                             })}
                     </div>

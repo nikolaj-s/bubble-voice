@@ -1,13 +1,15 @@
 import { motion, useAnimation } from 'framer-motion';
 import React from 'react'
 import { useSelector } from 'react-redux';
-import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 import "./TextInput.css";
 
-export const TextInput = ({action = () => {}, placeholder, inputValue, keyCode = false, type = 'text', stateSelector = "", marginBottom = '0', marginTop = '0', id}) => {
+export const TextInput = ({action = () => {}, placeholder, inputValue, keyCode = false, type = 'text', stateSelector = "", marginBottom = '0', marginTop = '0', id, invert}) => {
 
     const color = useSelector(selectPrimaryColor);
+
+    const secondaryColor = useSelector(selectSecondaryColor);
 
     const accentColor = useSelector(selectAccentColor);
 
@@ -58,13 +60,13 @@ export const TextInput = ({action = () => {}, placeholder, inputValue, keyCode =
         }}
         onMouseOut={(e) => {
             if (e.currentTarget.children[0] !== document.activeElement) {
-                handleAnimation(false, color)
+                handleAnimation(false, invert ? secondaryColor :  color)
             }
         }}
         animate={animation} 
         style={{
-            backgroundColor: color,
-            border: `solid 3px ${color}`,
+            backgroundColor: invert ? secondaryColor : color,
+            border: `solid 3px ${invert ? secondaryColor : color}`,
             marginBottom: marginBottom,
             marginTop: marginTop
         }} 

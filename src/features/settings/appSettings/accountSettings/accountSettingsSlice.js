@@ -58,11 +58,11 @@ export const updateAccount = createAsyncThunk(
 
         data.append("displayName", display_name);
 
-        data.append("userImage", userImage);
+        data.append("userImage", userImage?.from_search ? userImage.url : userImage);
 
         data.append("bio", bio);
 
-        data.append("userBanner", userBanner);
+        data.append("userBanner", userBanner?.from_search ? userImage.url : userBanner);
 
         data.append("password", password);
 

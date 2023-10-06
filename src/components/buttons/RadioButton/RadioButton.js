@@ -2,18 +2,18 @@
 import { useAnimation, motion } from 'framer-motion'
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { selectAccentColor, selectPrimaryColor, selectTextColor, selectTransparentPrimaryColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
+import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor, selectTransparentPrimaryColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 
 // style
 import "./RadioButton.css"
 
-export const RadioButton = ({name, state, action}) => {
+export const RadioButton = ({name, state, action, margin}) => {
 
     const animation = useAnimation();
 
     const primaryColor = useSelector(selectPrimaryColor);
 
-    const transparentColor = useSelector(selectTransparentPrimaryColor);
+    const secondaryColor = useSelector(selectSecondaryColor);
 
     const textColor = useSelector(selectTextColor);
 
@@ -34,12 +34,13 @@ export const RadioButton = ({name, state, action}) => {
         onClick={handleAction}
         animate={animation}
         onMouseEnter={() => {handleAnimation(accentColor)}}
-        onMouseLeave={() => {handleAnimation(transparentColor)}}
+        onMouseLeave={() => {handleAnimation(secondaryColor)}}
         transition={{duration: 0.1}}
+        style={{backgroundColor: secondaryColor, margin: margin}}
         className='radio-button-container'>
             <div style={{
-                width: 25,
-                height: 25,
+                width: 15,
+                height: 15,
                 borderRadius: '50%',
                 flexShrink: 0,
                 backgroundColor: state ? textColor : primaryColor

@@ -5,7 +5,7 @@ import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../..
 
 import "./TextButton.css";
 
-export const TextButton = ({name, action, textAlign = 'center', toggled = false, marginBottom, marginTop, id, invert, altInvert, icon}) => {
+export const TextButton = ({name, action, textAlign = 'center', toggled = false, marginBottom, marginTop, id, invert, altInvert, icon, width}) => {
 
     const color = useSelector(selectPrimaryColor);
 
@@ -53,6 +53,7 @@ export const TextButton = ({name, action, textAlign = 'center', toggled = false,
             textAlign: textAlign, 
             color: textColor, 
             marginBottom: marginBottom,
+            width: width,
             marginTop: marginTop}}>
            <p style={{maxWidth: icon ? 'calc(100% - 30px)' : null}}>{name}</p>
             {icon}

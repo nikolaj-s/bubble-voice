@@ -8,10 +8,6 @@
     cursor: pointer;
 }
 
-.bool-button-container:hover {
-    filter: contrast(50%);
-}
-
 .bool-button-container p {
     margin: 0;
     padding: 0;

@@ -29,9 +29,6 @@ export const RedditPost = ({data, action}) => {
                 <Image expandContent={() => {action(data.url)}} objectFit='contain' cursor='pointer' image={data.url} />
                 }
                 </div>
-                <div style={{backgroundColor: primaryColor}} className='reddit-post-info-container'>
-                    <h3 style={{color: textColor}}>{data.title}</h3>
-                </div>
 
         </div>
     )

@@ -30,7 +30,7 @@ import { AltImageIcon } from '../../../Icons/AltImageIcon/AltImageIcon';
 import { AltVideoIcon } from '../../../Icons/AltVideoIcon/AltVideoIcon';
 import { RedditIcon } from '../../../Icons/RedditIcon/RedditIcon'
 import { SavesIcon } from '../../../Icons/SavesIcon/SavesIcon'
-export const ImageSearchPanel = ({direct_message, searchingForImage, selectImage, serverId, inputHeight, close, upload_image, persist}) => {
+export const ImageSearchPanel = ({hideOptions = false,direct_message, searchingForImage, selectImage, serverId, inputHeight, close, upload_image, persist}) => {
 
     const primaryColor = useSelector(selectPrimaryColor);
 
@@ -153,9 +153,11 @@ export const ImageSearchPanel = ({direct_message, searchingForImage, selectImage
                     style={{
                         backgroundColor: secondaryColor,
                         bottom: inputHeight + 10,
-                        
+                        paddingLeft: hideOptions ? 0 : null,
+                        width: hideOptions ? '100%' : null
                     }}
                     className='inner-message-image-search-container'>
+                        {hideOptions ? null :
                         <div className='media-search-nav-container'>
                             <div className='inner-media-search-nav-wrapper'>
                                 <div className='add-media-nav-button' onClick={() => {handleMediaType("Images")}} style={{color: textColor, backgroundColor: mediaType === 'Images' ? accentColor : primaryColor, opacity: mediaType === 'Images' ? 1 : null, borderRadius: mediaType === "Images" ? 8 : null}}>
@@ -177,6 +179,7 @@ export const ImageSearchPanel = ({direct_message, searchingForImage, selectImage
                             </div>
                             : null}
                         </div>
+                            }
                         {mediaType === 'Saves' || mediaType === 'Reddit' ? null :
                         <div 
                         className='message-image-search-input-wrapper'>
@@ -193,7 +196,7 @@ export const ImageSearchPanel = ({direct_message, searchingForImage, selectImage
                             {mediaType === 'Reddit' ?
                             <ViewSubReddit expand={(i) => {handleSelectImage({preview: i, image: i})}} />
                             :
-                            <ResponsiveMasonry style={{height: 'auto'}} columnsCountBreakPoints={{700: 1, 1000: 2}}>
+                            <ResponsiveMasonry style={{height: 'auto'}} columnsCountBreakPoints={{700: 2}}>
                                 <Masonry gutter='5px'>   
                                     {mediaType === 'Videos' ?
                                     (videos?.length > 0 ? videos : loading ? [] : recommendations.filter(v => v.type === 'video').slice(0, 15)).map(video => {

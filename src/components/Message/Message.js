@@ -87,8 +87,7 @@ export const Message = ({dashboard = false, direct_message, message, overlay = f
     return (
         <>
            
-            <div 
-            onMouseEnter={(e) => {hoverEffect(e, true)}} onMouseOut={(e) => {hoverEffect(e, false)}} onMouseOver={(e) => {hoverEffect(e, true)}} onMouseLeave={(e) => {hoverEffect(e, false)}}
+            <div onMouseOut={(e) => {hoverEffect(e, false)}} onMouseOver={(e) => {hoverEffect(e, true)}}
             style={{
                 padding: overlay ? null : '0px 5px 0px 0px',
                 backgroundColor: hoverState ? primaryColor : transparentColor
@@ -114,16 +113,16 @@ export const Message = ({dashboard = false, direct_message, message, overlay = f
                     :
                     message.image && !message.gallery ? 
                     <div 
-                    style={{maxHeight: maximizeMediaSize ? '100%' : 400}}
+                    style={{maxHeight: maximizeMediaSize ? '100%' : 350}}
                     className='message-image-container'>
-                        <Image minLoadHeight={300} altHeight={maximizeMediaSize ? '100%' : 400}  expandContent={expandContent} imgHeight='auto' cursor='pointer' width={null} altWidth={'100%'} loadingState='eager' objectFit='contain' image={message.image} />
+                        <Image minLoadHeight={300} altHeight={maximizeMediaSize ? '100%' : 350}  expandContent={expandContent} imgHeight='auto' cursor='pointer' width={null} altWidth={'100%'} loadingState='eager' objectFit='contain' image={message.image} />
                     </div>
                     : null}
                     {message.video ? 
                     <div 
-                    style={{maxHeight: maximizeMediaSize ? '100%' : 400}}
+                    style={{maxHeight: maximizeMediaSize ? '100%' : 350}}
                     className='message-outer-video-container'>
-                        <Video maxHeight={maximizeMediaSize ? '100%' : 400} id={message.local_id} video={message.video} />
+                        <Video maxHeight={maximizeMediaSize ? '100%' : 350} id={message.local_id} video={message.video} />
                     </div>
                     : null}
                 </div> 

@@ -90,6 +90,7 @@ const Settings = () => {
     }
     
     const handleApply = () => {
+        console.log(newUserImage, newUserBanner)
         dispatch(updateAccount({userImage: newUserImage, userBanner: newUserBanner, newShape: newShape, color: color}));
         setNewUserBanner({});
         setNewUserImage({});

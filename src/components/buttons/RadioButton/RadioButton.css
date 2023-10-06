@@ -3,7 +3,7 @@
     display: flex;
     justify-content: flex-start;
     width: calc(100% - 10px);
-    height: 30px;
+    height: 20px;
     align-items: center;
     cursor: pointer;
     padding: 5px;
@@ -15,7 +15,7 @@
     letter-spacing: var(--font-spacing);
     margin-left: 1rem;
     text-transform: capitalize;
-    font-size: 1rem;
+    font-size: .9rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

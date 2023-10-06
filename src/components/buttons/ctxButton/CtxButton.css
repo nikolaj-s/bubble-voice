@@ -15,7 +15,3 @@
     font-size: 0.7rem;
     letter-spacing: var(--font-spacing);
 }
-
-.ctx-button-container:hover {
-    filter: contrast(20%);
-}

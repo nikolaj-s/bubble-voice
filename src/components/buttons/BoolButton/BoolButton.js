@@ -8,6 +8,8 @@ import "./BoolButton.css";
 
 export const BoolButton = ({state, name, action}) => {
 
+    const [hover, toggleHover] = React.useState(false);
+
     const textColor = useSelector(selectTextColor);
 
     const secondaryColor = useSelector(selectSecondaryColor);
@@ -17,17 +19,22 @@ export const BoolButton = ({state, name, action}) => {
     return (
         <div 
         onClick={action}
-       
+        onMouseEnter={() => {toggleHover(true)}}
+        onMouseLeave={() => {toggleHover(false)}}
+        style={{
+            backgroundColor: hover ? accentColor : null
+        }}
         className='bool-button-container'>
             <div 
             style={{
-                backgroundColor: secondaryColor
+                backgroundColor: secondaryColor,
+               
             }}
             className='bool-button-state'>
                 {state ?
                 <div 
                 style={{
-                    backgroundColor: accentColor,
+                    backgroundColor: textColor,
                     borderRadius: 5
                 }}
                 className='bool-state-true'></div>

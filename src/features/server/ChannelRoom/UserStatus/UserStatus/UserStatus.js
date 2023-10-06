@@ -60,10 +60,11 @@ export const UserStatus = ({user}) => {
             <div
             style={{
                 borderRadius: (user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%',
-                border: `2px solid ${user?.color || primaryColor}`
+                border: `2px solid ${user?.color || primaryColor}`,
+                backgroundColor: (user?.color || primaryColor),
             }}
             className='user-status-image-container'>
-                <Image image_class={"user-image"} cursor='pointer' image={user.user_image?.includes('gif') ? "" : user.user_image} />
+                <Image hideOnError={true} image_class={"user-image"} cursor='pointer' image={user.user_image?.includes('gif') ? "" : user.user_image} />
             </div>
             {user.status_icon && user?.status?.length > 1 ?
             <div className='user-status-icon-container'>

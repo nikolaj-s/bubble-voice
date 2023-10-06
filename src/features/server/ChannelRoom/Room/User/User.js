@@ -18,6 +18,8 @@ import { ScreenShare } from '../../../../../components/Icons/ScreenShare/ScreenS
 
 export const User = ({user}) => {
 
+    const [hover, toggleHover] = React.useState(false);
+
     const accentColor = useSelector(selectAccentColor)
 
     const activeColor = useSelector(selectActivationColor);
@@ -35,13 +37,26 @@ export const User = ({user}) => {
     return (
         <div 
         style={{
-            border: `solid 4px ${(user.active && user.microphone) ? activeColor : user.color ? user.color : accentColor}`,
+            
             backgroundColor: user.active ? activeColor : user.color ? user.color : accentColor,
-            display: (hideNonVideoParticapents === true && user.webcam === false) || (hideNonVideoParticapents === true && prefs?.disabled_web_cam === true) ? 'none' : 'flex'
+            display: (hideNonVideoParticapents === true && user.webcam === false) || (hideNonVideoParticapents === true && prefs?.disabled_web_cam === true) ? 'none' : 'flex',
+            boxShadow: `5px 5px 20px rgba(0, 0, 0, 0.7)`
         }}
         id={user._id} className='active-user-container'>
-           
-            <Image cursor='pointer' id="stream-room-user-banner" image_class={'user-image'} disableErr={true} backgroundColor={secondaryColor}  position='absolute' image={user.user_banner} />
+            <div 
+            onMouseEnter={() => {toggleHover(true)}}
+            onMouseLeave={() => {toggleHover(false)}}
+            style={{
+                border: `solid 4px ${(user.active && user.microphone) ? activeColor : 'rgba(0, 0, 0, 0)'}`,
+            }}
+            className='user-stream-overlay-wrapper'>
+               
+                    <h3
+                    style={{color: textColor, opacity: hover ? 1 : 0}}
+                    >{user.display_name}</h3>
+                
+            </div>
+            <Image borderRadius={0} cursor='pointer' id="stream-room-user-banner" image_class={'user-image'} disableErr={true} backgroundColor={secondaryColor}  position='absolute' image={user.user_banner} />
             <div style={{borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%'}} className='active-user-profile-image-container'>
                 <Image cursor='pointer' image_class={'user-image'} objectFit='cover' image={user.user_image} />
             </div>
@@ -49,8 +64,8 @@ export const User = ({user}) => {
             <div 
             style={{backgroundColor: accentColor}}
             className='user-status-stream-wrapper'>
-                {user.microphone || user.microphone === undefined ? null : <MicMuted />}
-                {user.muted ? <Muted /> : null}
+                <MicMuted display={user.microphone || user.microphone === undefined ? 'none' : null} />
+                <Muted display={user.muted ? null : 'none'} />
                 {user.webcam && prefs?.disabled_web_cam ? <DisabledWebCamIcon color={textColor} /> : null}
                 {user.screenshare ? prefs?.disable_stream ? <DisabledStreamIcon color={textColor} /> : <ScreenShare /> : null}
             </div>

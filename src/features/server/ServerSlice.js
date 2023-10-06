@@ -361,6 +361,10 @@ const serverSlice = createSlice({
             const channelIndex = state.channels.findIndex(channel => channel._id === action.payload.id);
 
             state.channels[channelIndex].users = state.channels[channelIndex].users.filter(user => user.username !== action.payload.username)
+
+            if (state.channels[channelIndex].users.length === 0) {
+                state.channels[channelIndex].status = false;
+            }
         },
         joinChannel: (state, action) => {
 
@@ -405,6 +409,10 @@ const serverSlice = createSlice({
             state.channels[currentChannelIndex].users = state.channels[currentChannelIndex].users.filter(user => user.username !== action.payload.username)
             
             state.channels[currentChannelIndex].active = false;
+
+            if (state.channels[currentChannelIndex].users.length === 0) {
+                state.channels[currentChannelIndex].status = false;
+            }
 
             state.current_channel_id = null;
 
@@ -674,6 +682,13 @@ const serverSlice = createSlice({
                 })
             }
 
+        },
+        updateChannelStatus: (state, action) => {
+            const l_index = state.channels.findIndex(c => c._id === action.payload.channel_id);
+
+            if (l_index === -1) return;
+
+            state.channels[l_index].status = action.payload.status;
         }
     },
     extraReducers: {
@@ -932,6 +947,6 @@ export const selectRoomColor = state => state.serverSlice.roomColor;
 export const selectTriggerRoomRescale = state => state.serverSlice.triggerRoomRescale;
 // actions
 
-export const {triggerRoomRescale, setRoomColor, toggleConnectionLostState, setServerbannerAmbiance, updateMemberFile, clearSearchData, updateInactiveChannel, removeSongFromWidget, saveSongToWidget, userBanned, toggleCreateChannelMenu, toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
+export const {updateChannelStatus, triggerRoomRescale, setRoomColor, toggleConnectionLostState, setServerbannerAmbiance, updateMemberFile, clearSearchData, updateInactiveChannel, removeSongFromWidget, saveSongToWidget, userBanned, toggleCreateChannelMenu, toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
 
 export default serverSlice.reducer;

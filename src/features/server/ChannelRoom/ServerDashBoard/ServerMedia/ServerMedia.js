@@ -151,7 +151,7 @@ export const ServerMedia = ({media, expand}) => {
                 <TextInput keyCode={handleEnter} action={handleQueryInput} inputValue={mediaQuery} placeholder={'Search Media'} />
             </div>
             : null}
-            <div style={{height: page === 'screenShots' ? 'calc(100% - 40px)' : null}} onScroll={handleLoadMore} className='server-media-container'>
+            <div style={{height: page === 'subreddit' ? 'calc(100% - 40px)' : page === 'screenShots' ? 'calc(100% - 40px)' : null}} onScroll={handleLoadMore} className='server-media-container'>
                 
                 {page === 'recommendations' ? <Reccomendations count={count} expand={expand} media={newMedia.length > 0 ? newMedia : media} /> : null}
                 {page === 'subreddit' ? <ViewSubReddit expand={expand} /> : null}

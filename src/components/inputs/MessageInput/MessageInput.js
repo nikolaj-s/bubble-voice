@@ -25,7 +25,7 @@ export const MessageInput = ({cancel_image, send, text, keyCode, image, value, p
 
     const [files, setFiles] = React.useState([{}])
 
-    const [inputHeight, setInputHeight] = React.useState(32);
+    const [inputHeight, setInputHeight] = React.useState(34);
 
     const [processingImage, toggleProcessingImage] = React.useState(false);
 
@@ -72,7 +72,13 @@ export const MessageInput = ({cancel_image, send, text, keyCode, image, value, p
         },
         maxFiles: 1,
         onDrop: async (acceptedFiles, e) => {
-            console.log(acceptedFiles)
+            
+            if (files[0]?.preview) {
+                files.forEach(file => URL.revokeObjectURL(file.preview));
+
+                setFiles([{}]);
+            }
+
             if (acceptedFiles.length === 0) return;
 
             if (acceptedFiles[0].type.includes('video')) {
@@ -149,7 +155,7 @@ export const MessageInput = ({cancel_image, send, text, keyCode, image, value, p
 
         if (e.keyCode === 13) {
             
-            setInputHeight(32); 
+            setInputHeight(34); 
             updateInputHeight(42);
 
             handleCancel();
@@ -163,7 +169,7 @@ export const MessageInput = ({cancel_image, send, text, keyCode, image, value, p
 
         if (processingImage) return;
 
-        setInputHeight(32)
+        setInputHeight(34)
 
         updateInputHeight(42)
 
@@ -193,7 +199,9 @@ export const MessageInput = ({cancel_image, send, text, keyCode, image, value, p
 
         image({preview: i.image});
 
-        
+        setTimeout(() => {
+            document.getElementById('social-send-button')?.click();
+        }, 100)
     }
 
     const handleEmoji = (emoji) => {
@@ -213,6 +221,10 @@ export const MessageInput = ({cancel_image, send, text, keyCode, image, value, p
             console.log(error);
         }
     }
+
+    React.useState(() => {
+        return () => files.forEach(file => URL.revokeObjectURL(file.preview));
+    }, [])
     
     return (
         <> 
@@ -226,7 +238,7 @@ export const MessageInput = ({cancel_image, send, text, keyCode, image, value, p
                 borderBottomRightRadius: socialRoute ? 0 : hideUserStatus ? 10 : 0,
             }}
             className='message-input-wrapper'>
-                <ImagePreview type={files[0]?.type} fileName={files[0]?.name} cancel={handleCancel} preview={files[0]?.preview} />
+                <ImagePreview processingImage={processingImage} percent={percent} type={files[0]?.type} fileName={files[0]?.name} cancel={handleCancel} preview={files[0]?.preview} />
                 <motion.div 
                 key={"message-text-input"}
                 animate={animation}
@@ -248,7 +260,7 @@ export const MessageInput = ({cancel_image, send, text, keyCode, image, value, p
                     id='social-input-selector' onKeyUp={handleKeyCode} onChange={handleText} value={value}  placeholder='Message' type="text" />
                     <div className='message-input-button-wrapper'>
                         <div className='message-input-inner-button-wrapper'>
-                            <EmojiButton zIndex={3} action={() => {toggleEmojiMenu(!emojiMenu)}} desc_space={22} description={'Emoji'} width={18} height={18} padding={8} transparent={true} />
+                            
                             <AddMediaButton action={handleSearchingForImageToggle}
                             
                             width={22}
@@ -258,7 +270,6 @@ export const MessageInput = ({cancel_image, send, text, keyCode, image, value, p
                             zIndex={3}
                             desc_space={18}
                             padding={6} />
-                            {processingImage ? <ProcessingImageIndicator percent={percent} /> : null}
                             {value.length > 1 || files[0]?.size ? <SendButton color={textColor} action={handleSend} /> : null}
                         </div>   
                     </div>

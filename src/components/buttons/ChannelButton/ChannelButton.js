@@ -24,6 +24,7 @@ import { selectUsername } from '../../../features/settings/appSettings/accountSe
 import { ChannelImageIcon } from '../../ChannelImageIcon/ChannelImageIcon';
 import { selectDisableChannelIcons } from '../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { setSelectedMember } from '../../../features/server/ChannelRoom/MemberPanel/MemberPanelSlice';
+import { ChannelStatus } from './ChannelStatus/ChannelStatus';
 
 
 export const ChannelButton = ({channel, action = () => {}, users, index}) => {
@@ -203,7 +204,7 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
             style={{
                 backgroundColor: active ? accentColor : transparentPrimaryColor,
                 cursor: active ? "default" : "pointer",
-                marginBottom: users.length > 0 && channel.auth ? '5px' : null
+                marginBottom: users.length > 0 && channel.auth && !channel.status ? '5px' : null
             }}
             className='channel-button-container'>
                 <div style={{backgroundColor: unReadMessage && channel.auth ? textColor : null}} className='unread-message-indicator'></div>   
@@ -226,6 +227,9 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
                     <SubMenuButton invert={false} altInvert={true} o_mouseLeave={() => {handleAnimation(transparentPrimaryColor, false)}} desc_o_mouse_leave={() => {handleAnimation(transparentPrimaryColor, false)}} flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} description={"More"} target={`channel-button-${channel._id}`} padding={4} width={16} height={16} borderRadius={4} desc_space={12} />
                 </div> : null}
             </motion.div>
+            {channel?.status ?
+            <ChannelStatus status={channel.status} active={active} />
+            : null}
             {channel.auth ?
             users.map((user) => {
                 return (

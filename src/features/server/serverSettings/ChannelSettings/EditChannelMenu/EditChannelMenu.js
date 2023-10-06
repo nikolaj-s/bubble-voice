@@ -24,7 +24,7 @@ import { socket } from '../../../ServerBar/ServerBar';
 import { Loading } from '../../../../../components/LoadingComponents/Loading/Loading';
 import { playSoundEffect } from '../../../../settings/soundEffects/soundEffectsSlice';
 import { ChannelBackgroundInput } from './ChannelBackgroundInput/ChannelBackgroundInput';
-import { Range } from '../../../../../components/inputs/Range/Range';
+import { DropDownList } from '../../../../../components/DropDownList/DropDownList';
 import { InputPlaceHolder } from '../../../../../components/titles/InputPlaceHolder/InputPlaceHolder';
 import { selectUsername } from '../../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { ChannelIcon } from './ChannelIcon/ChannelIcon';
@@ -69,6 +69,12 @@ const Wrapper = () => {
     const [lockedMediaPlayer, toggleLockedMediaPlayer] = React.useState(false);
 
     const [authMediaUsers, setAuthMediaUsers] = React.useState([]);
+
+    const [manageAuthUsers, toggleManageAuthUsers] = React.useState(false);
+
+    const [manageMediaUsers, toggleManageMediaUsers] = React.useState(false);
+
+    const [assigningChannelOwner, toggleAssigningChannelOwner] = React.useState(false);
 
     const channel = useSelector(selectChannelToEdit);
 
@@ -364,8 +370,9 @@ const Wrapper = () => {
             <SettingsHeader title={"Widgets"} />
             <TextButton action={openWidgetMenu} name={"Add Widget"} icon={<WidgetsIcon color={textColor} />} />
             <InputTitle title={`Widgets ${channelToEdit.widgets ? channelToEdit.widgets.length : 0} / 15`} />
-            {managingWidgets === false ?
-            <TextButton name="Manage Widgets" action={() => {toggleManagingWidgets(true)}} icon={<DownIcon />} />
+            
+            <TextButton marginBottom={managingWidgets ? '5px' : null} name="Manage Widgets" action={() => {toggleManagingWidgets(!managingWidgets)}} icon={<DownIcon flip={managingWidgets} />} />
+            {managingWidgets === false ? null 
             : <WidgetPreview widgets={widgets} editing={true} reorder={updateWidgetOrder} />}
             </>}
             <SettingsHeader title={"Data"} />
@@ -380,24 +387,29 @@ const Wrapper = () => {
             <ToggleButton state={lockedChannel} action={handleLockChannel}  />
             {lockedChannel ?
             <>
+            
             <InputTitle title={"Add Authorized Users"} />
+            <TextButton marginBottom={manageAuthUsers ? '5px' : null} name={"Manage"} action={() => {toggleManageAuthUsers(!manageAuthUsers)}} icon={<DownIcon flip={manageAuthUsers} />} />
+            {manageAuthUsers ?
             <div className='auth-users-container'>
                 {members.filter(m => (m.username !== username && m.username !== serverOwner)).map((member, i) => {
                     return <RadioButton action={() => {addAuthUser(member._id)}} state={authUsers.findIndex(i => i === member._id) !== -1} name={member.display_name} />
                 })}
-            </div>
+            </div> : null}
             </>
             : null}
-            {channelOwner === username || permission.server_group_name === 'Owner' ?
+            {channelToEdit.text_only ? null : channelOwner === username || permission.server_group_name === 'Owner' ?
             <>
             <InputTitle title={"Lock Media Player To Certain Users"} />
             <ToggleButton action={handleToggleLockMedia} state={lockedMediaPlayer} />
             {lockedMediaPlayer ? 
             <>
             <InputTitle title={"Select Users That Can Use The Media Player"} />
-            {members.filter(m => (m.username !== channelOwner && m.username !== serverOwner)).map(m => {
+            <TextButton marginBottom={manageMediaUsers ? '5px' : null} name={"Manage"} action={() => {toggleManageMediaUsers(!manageMediaUsers)}} icon={<DownIcon flip={manageMediaUsers} />} />
+            {manageMediaUsers ?
+            members.filter(m => (m.username !== channelOwner && m.username !== serverOwner)).map(m => {
                 return <RadioButton action={() => {addAuthMediaUser(m.username)}} state={authMediaUsers.includes(m.username)} name={m.display_name} />
-            })}
+            }) : null}
             </>
             : null}
             </>
@@ -412,9 +424,11 @@ const Wrapper = () => {
             {permission.server_group_name === 'Owner' ?
             <>
             <InputTitle title={'Assign Channel Owner'} />
-            {members.map(m => {
+            <TextButton marginBottom={assigningChannelOwner ? '5px' : null} name={"Manage"} action={() => {toggleAssigningChannelOwner(!assigningChannelOwner)}} icon={<DownIcon flip={assigningChannelOwner} />} />
+            {assigningChannelOwner ?
+            members.map(m => {
                 return <RadioButton action={() => {handleAssignChannelOwner(m.username)}} name={m.display_name} state={m.username === channelOwner} />
-            })}
+            }) : null}
             </>
             : null}
             <InputTitle title={"Delete Channel"} />

@@ -77,7 +77,6 @@ export const ChannelUserDisplay = ({user, channel_id}) => {
             </div>
             <h3 style={{color: textColor, opacity: (user.active && user.microphone) ? 1 : 0.6,}}>{user.display_name}</h3>
             <div 
-            style={{backgroundColor: accentColor}}
             className='user-status-wrapper'>
                 {user.microphone || user.microphone === undefined ? null : <MicMuted />}
                 {user.muted ? <Muted /> : null}

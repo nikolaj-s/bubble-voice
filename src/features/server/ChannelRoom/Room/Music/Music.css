@@ -1,4 +1,6 @@
-
+#room-music-player {
+    border-radius: 8px;
+}
 
 .behind-music-player-overlay-controls {
     position: absolute;
@@ -64,6 +66,7 @@
     padding: 5px;
     opacity: 0;
     transition: 0.1s;
+    border-radius: 8px;
 }
 
 .youtube-disable-clicking p {

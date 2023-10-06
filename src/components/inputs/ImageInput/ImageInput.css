@@ -1,3 +1,25 @@
 .image-drop-input-container:focus {
     outline: none;
 }
+
+.image-input-nav-options-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+}
+
+.image-input-nav-options-container h4 {
+    margin: 0;
+    padding: 0;
+    opacity: 0.5;
+}
+
+.image-input-nav-options-container svg {
+    opacity: 0.5;
+}
+
+.image-input-nav-options-container svg:hover {
+    opacity: 1;
+}

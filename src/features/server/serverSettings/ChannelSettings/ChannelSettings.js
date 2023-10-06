@@ -119,7 +119,7 @@ const Wrapper = () => {
                     <MoveButton invert={true} margin={"0 4px 0px 0px"} width={20} height={20} />
                     <TextButton action={() => {
                     navigateToChannel(channel.channel_name, channel._id) 
-                    }} marginBottom="2%" textAlign='start' name={channel.channel_name} key={channel._id}  />
+                    }} marginBottom="4px" textAlign='start' name={channel.channel_name} key={channel._id}  />
                 </Reorder.Item>
                     
                 )

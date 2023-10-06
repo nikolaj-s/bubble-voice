@@ -735,7 +735,9 @@ export const ContextMenu = () => {
             const el = document.getElementById(memberId)
 
             const video = el.querySelector('video');
-            
+
+            setFlippedWebCamState(!flippedWebCamState);
+
             if (video) {
 
                 if (video.style.getPropertyValue('transform') === 'scaleX(-1)') {
@@ -746,9 +748,8 @@ export const ContextMenu = () => {
             
             }
 
-            setFlippedWebCamState(!flippedWebCamState);
         } catch (error) {
-            dispatch(throwServerError({errorMessage: "error flipping users webcam"}))
+          //  dispatch(throwServerError({errorMessage: "error flipping users webcam"}))
         }
     }
 
