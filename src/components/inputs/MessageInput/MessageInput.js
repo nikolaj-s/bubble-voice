@@ -21,7 +21,7 @@ import { EmojiMenu } from '../../EmojiPicker/EmojiMenu';
 import { AddMediaButton } from '../../buttons/AddMediaButton/AddMediaButton';
 import { ImagePreview } from './ImagePreview/ImagePreview';
 
-export const MessageInput = ({cancel_image, send, text, keyCode, image, value, persist, updateInputHeight, socialRoute, direct_message}) => {
+export const MessageInput = ({cancel_image, send, text, keyCode, image, value, persist, updateInputHeight, socialRoute, direct_message, channel_name}) => {
 
     const [files, setFiles] = React.useState([{}])
 
@@ -257,7 +257,7 @@ export const MessageInput = ({cancel_image, send, text, keyCode, image, value, p
                         border: 'none',
                     }}
                     onFocus={handleText}
-                    id='social-input-selector' onKeyUp={handleKeyCode} onChange={handleText} value={value}  placeholder='Message' type="text" />
+                    id='social-input-selector' onKeyUp={handleKeyCode} onChange={handleText} value={value}  placeholder={channel_name ? `Post In #${channel_name}` : 'Message'} type="text" />
                     <div className='message-input-button-wrapper'>
                         <div className='message-input-inner-button-wrapper'>
                             

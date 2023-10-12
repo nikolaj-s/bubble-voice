@@ -8,7 +8,7 @@ import { SubMenuButton } from '../subMenuButton/SubMenuButton';
 import { ChannelUserDisplay } from './ChannelUserDisplay/ChannelUserDisplay';
 
 // state
-import {  selectAccentColor, selectPrimaryColor, selectTextColor, selectTransparentPrimaryColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import {  selectAccentColor, selectGlassColor, selectGlassPrimaryColor, selectPrimaryColor, selectTextColor, selectTransparentPrimaryColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./ChannelButton.css";
@@ -38,6 +38,8 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
     const [unReadMessage, toggleUnReadMessage] = React.useState(false);
 
     const animation = useAnimation();
+
+    const glassColor = useSelector(selectGlassPrimaryColor);
 
     const primaryColor = useSelector(selectPrimaryColor);
 
@@ -188,8 +190,14 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
         onDragOver={(event) => {onDragOver(event)}}
             onDragLeave={() => {onDragLeave()}}
             onDrop={onDrop}
-            style={{marginBottom: users.length > 0 && channel.auth ? '10px' : null}}
         >
+            <div 
+            style={{
+                backgroundColor: users.length > 0 && channel.auth ? glassColor : null,
+                paddingBottom: users.length > 0 && channel.auth ? '5px' : null,
+                marginBottom: users.length > 0 && channel.auth ? '5px' : null
+            }}
+            className='channel-button-surround-wrapper'>
             <motion.div 
             
             id={`channel-button-${channel._id}`}
@@ -204,7 +212,9 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
             style={{
                 backgroundColor: active ? accentColor : transparentPrimaryColor,
                 cursor: active ? "default" : "pointer",
-                marginBottom: users.length > 0 && channel.auth && !channel.status ? '5px' : null
+                marginBottom: users.length > 0 && channel.auth && !channel.status ? '5px' : null,
+                borderBottomLeftRadius: users.length > 0 && channel.auth ? 0 : null,
+                borderBottomRightRadius: users.length > 0 && channel.auth ? 0 : null,
             }}
             className='channel-button-container'>
                 <div style={{backgroundColor: unReadMessage && channel.auth ? textColor : null}} className='unread-message-indicator'></div>   
@@ -236,6 +246,7 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
                     <ChannelUserDisplay key={user.username} channel_id={channel._id} user={user} />
                 )
             }) : null}
+            </div>
         </div>
     )
 }

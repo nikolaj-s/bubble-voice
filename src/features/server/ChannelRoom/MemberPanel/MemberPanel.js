@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { selectCurrentMemberPanel, setSelectedMember } from './MemberPanelSlice';
+import { selectCurrentMemberPanel, selectPanelOrigin, selectPanelPositionX, selectPanelPositionY, setSelectedMember } from './MemberPanelSlice';
 
 import "./MemberPanel.css";
 import { selectAccentColor, selectGlassColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
@@ -23,6 +23,7 @@ import { AltMessageIcon } from '../../../../components/Icons/AltMessageIcon/AltM
 import { PokeButton } from '../../../../components/buttons/PokeButton/PokeButton';
 import { TextInput } from '../../../../components/inputs/TextInput/TextInput';
 import { ScreenShotShowCase } from '../../../../components/ScreenShotShowCase/ScreenShotShowCase';
+import { MessageButton } from '../../../../components/buttons/MessageButton/MessageButton';
 
 export const MemberPanel = () => {
 
@@ -55,6 +56,12 @@ export const MemberPanel = () => {
     const username = useSelector(selectUsername);
     
     const primaryColor = useSelector(selectPrimaryColor);
+
+    const posY = useSelector(selectPanelPositionY);
+
+    const posX = useSelector(selectPanelPositionX);
+
+    const origin = useSelector(selectPanelOrigin);
 
     const glassColor = useSelector(selectGlassColor);
 
@@ -185,19 +192,23 @@ export const MemberPanel = () => {
         <>
         <AnimatePresence>
             {selectedMember ?
+            <div 
+            onClick={closePanel}
+            className='member-panel-app-wrapper'>
             <motion.div 
             key={'member-panel-' + member.username}
-            initial={{top: '-100%'}}
-            animate={{top: '0%'}}
-            exit={{top: '100%'}}
-            style={{backgroundPosition: 'center',background: member.user_banner ? `URL(${member.user_banner})` : secondaryColor, backgroundRepeat: 'no-repeat', backgroundSize: 'cover'}} className='outer-member-panel-container'>
-                <div onClick={closePanel} style={{backgroundColor: accentColor}} className='close-member-panel-button'>
-                    <CloseIcon />
-                </div>
+            onClick={(e) => {e.stopPropagation()}}
+            style={{backgroundPosition: 'center',background: secondaryColor, 
+            backgroundRepeat: 'no-repeat', 
+            backgroundSize: 'cover', top: posY, left: posX,
+            translateY: origin ? '-100%' : (posY - 500) < 0 ? '0%' : '-50%',}} className='outer-member-panel-container'>
+                
                 <div 
                 className='member-panel-container'>
                     <div className='member-panel-image-container'>
-                        
+                        <div className='member-panel-banner-container'>
+                            <Image image={member.user_banner} />
+                        </div>
                         <div style={{borderRadius: member.profile_picture_shape === 'square' ? '5px' : '50%'}} className='member-panel-profile-picture'>
                             <Image image={member.user_image} />
                         </div>
@@ -215,7 +226,7 @@ export const MemberPanel = () => {
                         <div className='member-panel-button-wrapper'>
                             <TextInput action={setCustomPokeMessage} inputValue={pokeMessage} />
                             <PokeButton active_background={accentColor} description={poking ? 'On Timeout' : null} active={poking} action={poke} width={30} height={30} padding={5} margin={"0px 5px"} background={primaryColor} />
-                            <TextButton action={handleOpenDirectMessage} name={"Send Message"} icon={<AltMessageIcon />} />
+                            <MessageButton width={30} height={30} padding={5} background={primaryColor} action={handleOpenDirectMessage} />
                         </div>
                         : null}
                         <div style={{backgroundColor: primaryColor}} className='server-user-details-wrapper-container'>
@@ -241,8 +252,10 @@ export const MemberPanel = () => {
                     </div>
                 </div>
             </motion.div>
+            </div>
             : null}
         </AnimatePresence>
+        
         </>
     )
 }

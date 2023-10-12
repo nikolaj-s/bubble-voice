@@ -7,7 +7,7 @@ import { Image } from '../Image/Image'
 import { Video } from '../Video/Video'
 
 // state
-import {  selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor, selectTransparentPrimaryColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import {  selectAccentColor, selectGlassPrimaryColor, selectPrimaryColor, selectSecondaryColor, selectTextColor, selectTransparentPrimaryColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./Message.css";
@@ -29,6 +29,7 @@ import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { MessageGallery } from './MessageGallery/MessageGallery';
 import { ProcessingIndicator } from './ProcessingIndicator/ProcessingIndicator';
 import { UploadedFileShare } from './UploadedFileShare/UploadeFileShare';
+import { LinkPreview } from './LinkPreview/LinkPreview';
 
 export const Message = ({dashboard = false, direct_message, message, overlay = false, id, channel_id, perm, pinMessage, pinned, index, previous_message, current_message, persist, pin_to_profile}) => {
 
@@ -53,6 +54,8 @@ export const Message = ({dashboard = false, direct_message, message, overlay = f
     const maximizeMediaSize = useSelector(selectMaximizeMedia);
 
     const hideLinksOnMedia = useSelector(selectHideLinksOnMedia);
+
+    const glassPrimary = useSelector(selectGlassPrimaryColor);
 
     React.useEffect(() => {
         setUser(members.find(member => member.username === current_message.username))
@@ -80,17 +83,17 @@ export const Message = ({dashboard = false, direct_message, message, overlay = f
 
         dispatch(setSelectedMember(current_message.username));
 
-        dispatch(setPanelPosition({y: l_top - scroll_top, x: e.pageX, origin: (e.view.innerHeight - e.pageY) < 500 ? true : false, left: 330}));
+        dispatch(setPanelPosition({y: (e.view.innerHeight - 600) < 0 ? 30 : e.pageY, x: e.pageX, origin: e.view.innerHeight - 600 < 0 ? false : (e.view.innerHeight - e.pageY) < 500 ? true : false, left: 330}));
     
     }
-    
+
     return (
         <>
            
             <div onMouseOut={(e) => {hoverEffect(e, false)}} onMouseOver={(e) => {hoverEffect(e, true)}}
             style={{
                 padding: overlay ? null : '0px 5px 0px 0px',
-                backgroundColor: hoverState ? primaryColor : transparentColor
+                backgroundColor: hoverState ? glassPrimary : transparentColor
             }}
             id={`${id}/${channel_id}`}
             className={`message-container ${direct_message ? 'direct-message-container' : null}`}>
@@ -100,7 +103,9 @@ export const Message = ({dashboard = false, direct_message, message, overlay = f
                     <div id={`${id}-ctx-message-overlay`} className={'ctx-message-overlay'} />
                     <SenderInfo timeStamp={timeStamp} direct_message={direct_message} pin_to_profile={pin_to_profile} link={message.link} color={user?.color} profile_picture_shape={user?.profile_picture_shape} primaryColor={primaryColor} display_name={user?.display_name} user_image={user?.user_image} action={openUserPanel} persist={persist} id={id} accentColor={accentColor} hover={hoverState} textColor={textColor} perm={perm} index={index}  message={message} current_message={current_message} previous_message={previous_message} pinMessage={pinMessage} pinned={pinned} overlay={overlay} />
                     <MessageText loading={message.loading} color={textColor} text={message.text} />
-                    {hideLinksOnMedia && (message.image || message.video || message.iFrame) || message.gallery ? null : <MessageLink link={message.link} />}
+                    {hideLinksOnMedia && (message.image || message.video || message.iFrame) || message.gallery ? null : message.link_preview ?
+                    <LinkPreview data={message.link_preview} />
+                    : <MessageLink link={message.link} />}
                     <AltSocialMedia link={message.link} />
                     <Iframe marginRight={5}  link={message.iFrame} />
                     <TwitterEmbed id={message.twitter} />
@@ -115,7 +120,7 @@ export const Message = ({dashboard = false, direct_message, message, overlay = f
                     <div 
                     style={{maxHeight: maximizeMediaSize ? '100%' : 350}}
                     className='message-image-container'>
-                        <Image minLoadHeight={300} altHeight={maximizeMediaSize ? '100%' : 350}  expandContent={expandContent} imgHeight='auto' cursor='pointer' width={null} altWidth={'100%'} loadingState='eager' objectFit='contain' image={message.image} />
+                        <Image minLoadHeight={'300px'} altHeight={maximizeMediaSize ? '100%' : 350}  expandContent={expandContent} imgHeight='auto' cursor='pointer' width={null} altWidth={'100%'} loadingState='eager' objectFit='contain' image={message.image} />
                     </div>
                     : null}
                     {message.video ? 

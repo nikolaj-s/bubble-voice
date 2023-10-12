@@ -332,5 +332,9 @@ export const selectScaleState = state => state.appearanceSettingsSlice.scale;
 
 export const selectUseImageBackgroundState = state => state.appearanceSettingsSlice.useImageBackground;
 
+export const selectGlassPrimaryColor = state => {
+    return `rgba(${state.appearanceSettingsSlice.primaryColor.split('rgb(')[1].split(')')[0]}, 0.4)`
+}
+
 // export appearance settings reducer
 export default appearanceSettingsSlice.reducer;

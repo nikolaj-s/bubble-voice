@@ -1,7 +1,7 @@
 import { motion, useAnimation } from 'framer-motion'
 import React from 'react'
 import { useSelector } from 'react-redux';
-import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 import "./TextButton.css";
 
@@ -13,6 +13,8 @@ export const TextButton = ({name, action, textAlign = 'center', toggled = false,
 
     const accentColor = useSelector(selectAccentColor);
 
+    const secondaryColor = useSelector(selectSecondaryColor);
+
     const animation = useAnimation();
 
     React.useEffect(() => {
@@ -20,13 +22,15 @@ export const TextButton = ({name, action, textAlign = 'center', toggled = false,
             animation.start({
                 opacity: altInvert ? 1 : 0.5,
                 cursor: 'default',
-                border: `solid 3px ${color}`
+                border: `solid 3px ${color}`,
+                backgroundColor: color
             })
         } else {
             animation.start({
                 opacity: altInvert ? 0.5 : 1,
                 cursor: 'pointer',
-                border: `solid 3px ${color}`
+                border: `solid 3px ${color}`,
+                backgroundColor: color
             })
         }
     // eslint-disable-next-line
@@ -36,11 +40,13 @@ export const TextButton = ({name, action, textAlign = 'center', toggled = false,
         if (toggled) return
         animation.start({
             border: `solid 3px ${arg}`,
+            backgroundColor: arg === textColor ? secondaryColor : arg
         })
     }
 
     return (
         <motion.button 
+        transition={{duration: 0.1}}
         id={id}
         onMouseEnter={() => {handleAnimation(accentColor)}}
         onMouseLeave={() => {handleAnimation(color)}}

@@ -21,7 +21,7 @@
     display: flex;
     position: relative;
     flex-direction: column;
-    height: 550px;
+    height: 350px;
     width: calc(100% - 10px);
     padding: 5px;
     border-radius: 5px;

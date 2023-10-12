@@ -18,7 +18,6 @@ export const ChannelStatus = ({status, active}) => {
         <div 
         onMouseEnter={() => {toggleHover(true)}}
         onMouseLeave={() => {toggleHover(false)}}
-        style={{backgroundColor: active ? accentColor : primaryColor}}
         className={`channel-status-wrapper ${hover ? 'channel-status-wrapper-animation' : ''}`}>
             <p
             style={{color: textColor, opacity: 0.7}}

@@ -9,7 +9,7 @@ import imageCompression from 'browser-image-compression';
 import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // componenents
-import { Image } from "../../Image/Image";
+import { Image as ImageComp } from "../../Image/Image";
 import { ImageIcon } from '../../Icons/ImageIcon/ImageIcon';
 import {GetImageColorData} from '../../../util/GetImageColorData'
 import { SearchIcon } from '../../Icons/SearchIcon/SearchIcon';
@@ -182,6 +182,11 @@ export const ImageInput = ({
         }).catch(error => {
             dispatch(throwServerError({error: true, errorMessage: "The Third Party Host Has Blocked The Download of The Selected Image"}))
         })
+
+        
+
+
+
     }
 
     return (
@@ -217,7 +222,7 @@ export const ImageInput = ({
         }}
         {...getRootProps({className: 'dropzone'})} className='image-drop-input-container'>
             <input {...getInputProps()} />
-            <Image onLoad={onLoad} opacity={blur_amount} disableErr={true} cursor='pointer' image={files[0]?.preview} />
+            <ImageComp onLoad={onLoad} opacity={blur_amount} disableErr={true} cursor='pointer' image={files[0]?.preview} />
             
             {disableIcon ? null :
             <div 

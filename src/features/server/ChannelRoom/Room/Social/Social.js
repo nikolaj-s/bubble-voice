@@ -284,8 +284,36 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         dispatch(handlePinMessageToProfile({id: id}));
     }
+
+    const focusTextInput = () => {
+        
+        if (document.getElementsByClassName('image-search-outer-wrapper').length > 0) return;
+
+        if (document.getElementsByClassName('social-outer-container').length > 1) return;
+        
+        try {
+            document.getElementById('social-input-selector').focus();
+        } catch(e){
+            return;
+        }
+
+    }
+
+    React.useEffect(() => {
+
+        if (direct_message) return;
+
+        window.addEventListener('keypress', focusTextInput);
+
+        return () => {
+            window.removeEventListener('keypress', focusTextInput);
+        }
+
+    }, [])
+
     return (
         <div 
+        onKeyUp={focusTextInput}
         style={{backgroundColor: glassState ? glassColor : secondaryColor}}
         className='social-outer-container'
         >
@@ -310,7 +338,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
                     </div>
                     {(direct_message && status) ? <MessageInput cancel_image={handleCancelImageSend} direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : 
                     permission?.user_can_post_channel_social && !direct_message ?
-                    <MessageInput direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} />
+                    <MessageInput channel_name={currentChannel?.channel_name} direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} />
                      : null}
                 </div>
             </div>

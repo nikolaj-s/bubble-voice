@@ -9,8 +9,8 @@
     flex-shrink: 0;
     position: fixed;
     top: 0;
-    max-width: calc(100% - 360px);
-    left: 241px;
+    max-width: calc(100% - 364px);
+    left: 245px;
 }
 
 .server-navigation-button-wrapper {

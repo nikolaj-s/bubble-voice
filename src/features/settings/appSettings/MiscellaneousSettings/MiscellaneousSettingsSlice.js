@@ -66,7 +66,7 @@ export const pushSytemNotification = createAsyncThunk(
 
             if (member) {
 
-                let msg = {...data, display_name: member.display_name, user_image: member.user_image, textColor: textColor, secondaryColor: secondaryColor, shape: member.profile_picture_shape, channel_name: channel?.channel_name}
+                let msg = {...data, display_name: member.display_name, user_image: member.user_image, textColor: textColor, secondaryColor: secondaryColor, shape: member.profile_picture_shape, channel_name: channel?.channel_name, user_color: member.color}
                 
                 let notif = BuildSystemNotification(msg);
 

@@ -48,7 +48,7 @@ export const UserStatus = ({user}) => {
         
         dispatch(setSelectedMember(user._id));
         
-        dispatch(setPanelPosition({y: l_top - scroll_top, x: e.pageX, origin: (e.view.innerHeight - e.pageY) < 500 ? true : false, left: null}));
+        dispatch(setPanelPosition({y: (e.view.innerHeight - 600) < 0 ? 30 : e.pageY, x: (e.view.innerWidth - e.pageX) < 350 ? (e.pageX - 350) : e.pageX, origin: e.view.innerHeight - 600 < 0 ? false : (e.view.innerHeight - e.pageY) < 500 ? true : false, left: null}));
     }
     
     

@@ -1,0 +1,9 @@
+
+.server-manage-menu-container {
+    width: calc(100% - 6px);
+    padding: 3px 3px;
+    display: flex;
+    flex-direction: column;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}

@@ -22,6 +22,7 @@ import { closeServerErrorMessage, selectCurrentChannelId, selectServerErrorMessa
 import { selectNewAccountState } from '../settings/appSettings/accountSettings/accountSettingsSlice';
 import { CreateChannelMenu } from '../server/ChannelRoom/CreateChannelMenu/CreateChannelMenu';
 import { Error } from '../../components/Error/Error';
+import { MemberPanel } from '../server/ChannelRoom/MemberPanel/MemberPanel';
 
 export const ContentScreen = () => {
     // content
@@ -52,6 +53,7 @@ export const ContentScreen = () => {
             </motion.div>
             <ExpandContent />
             <CreateChannelMenu />
+            <MemberPanel />
             {error ? <Error action={closeError} errorMessage={errorMessage} position='fixed' /> : null}
             {newAccount ? <NewAccount /> : null}
         </>

@@ -1,0 +1,32 @@
+
+.link-preview-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    overflow: hidden;
+    cursor: pointer;
+    max-width: 400px;
+    padding: 3px;
+}
+.link-preview-container:hover {
+    filter: brightness(110%);
+}
+
+.image-link-preview-wrapper {
+    width: 100%;
+    flex-shrink: 0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.link-info-preview-wrapper {
+    margin-left: 2px;
+}
+
+
+.link-info-preview-wrapper h3,
+.link-info-preview-wrapper p {
+    margin: 5px 0px;
+    color: rgb(66, 176, 176);
+}

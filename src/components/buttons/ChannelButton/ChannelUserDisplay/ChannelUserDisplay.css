@@ -1,9 +1,9 @@
 .channel-user-placeholder {
-    width: calc(100% - 24px);
-    margin-left: 18px;
+    width: calc(100% - 12px);
+    margin-left: 5px;
     display: flex;
-    height: 30px;
-    margin-right: 2px;
+    height: 33px;
+    margin-right: 5px;
     padding-left: 2px;
     align-items: center;
     position: relative;

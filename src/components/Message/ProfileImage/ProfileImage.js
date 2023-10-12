@@ -9,7 +9,7 @@ export const ProfileImage = ({previous_message, current_message, user_image, pri
 
     return (
         <>
-        <div style={{width: hideProfileImagesOnMessages ? 0 : 46, flexShrink: 0, borderLeft: `solid 3px ${color || primaryColor}`, marginRight: 5}}>
+        <div style={{width: hideProfileImagesOnMessages ? 0 : 46, flexShrink: 0, borderLeft: `solid 5px ${color || primaryColor}`, marginRight: 5}}>
         {hideProfileImagesOnMessages ? null :
         (previous_message?.username !== current_message?.username)
                 ||

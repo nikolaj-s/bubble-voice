@@ -1,10 +1,21 @@
+.member-panel-app-wrapper {
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
 .outer-member-panel-container {
     position: absolute;
-    width: 100%;
+    width: 340px;
     max-height: 100%;
+    height: 500px;
     z-index: 12;
     top: 0;
-    min-height: 100%;
+    border-radius: 8px;
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.631);
     left: 0;
     pointer-events: all;
     display: flex;
@@ -25,6 +36,12 @@
     align-items: center;
 }
 
+.member-score-container p {
+    padding: 0;
+    margin: 0;
+    font-size: 0.8rem;
+}
+
 .member-panel-container {
     flex-shrink: 0;
     flex-grow: 4;
@@ -38,7 +55,7 @@
 
 .member-panel-image-container {
     width: 100%;
-    height: 450px;
+    height: 200px;
     flex-shrink: 0;
     position: relative;
     display: flex;
@@ -51,12 +68,11 @@
     border-radius: var(--border-radius);
     width: calc(100% - 10px);
     padding: 5px;
-    min-height: 45px;
 }
 
 .member-panel-profile-picture {
-    width: 150px;
-    height: 150px;
+    width: 85px;
+    height: 85px;
     border-radius: 50%;
     overflow: hidden;
 }
@@ -70,11 +86,10 @@
     display: flex;
     flex-direction: column;
     padding: 0.5rem;
-    border-radius: 8px;
 }
 
 .member-panel-info-container h3 {
-    font-size: 1.4rem;
+    font-size: 1rem;
     font-weight: 600;
 }
 
@@ -90,10 +105,9 @@
 }
 
 .member-panel-info-container h4 {
-    font-size: 0.9rem;
+    font-size: 0.7rem;
     margin-left: 5px;
     font-weight: 400;
-    font-size:0.8rem;
     opacity: 0.7;
 }
 
@@ -136,7 +150,7 @@
 
 }
 .server-user-details-wrapper-container p {
-    font-size: 1.4rem;
+    font-size: 1rem;
 }
 
 .server-user-details-wrapper-container h3,

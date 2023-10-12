@@ -55,7 +55,7 @@ export const ChannelUserDisplay = ({user, channel_id}) => {
     
         dispatch(setSelectedMember(user._id));
 
-        dispatch(setPanelPosition({y: l_top - scroll_top, x: e.pageX, origin: (e.view.innerHeight - e.pageY) < 500 ? true : false, left: 250}))
+        dispatch(setPanelPosition({y: (e.view.innerHeight - 600) < 0 ? 30 : e.pageY, x: e.pageX, origin: e.view.innerHeight - 600 < 0 ? false : (e.view.innerHeight - e.pageY) < 500 ? true : false, left: 250}))
     }
     
     const onDragStart = (e) => {
@@ -69,7 +69,7 @@ export const ChannelUserDisplay = ({user, channel_id}) => {
     }
 
     return (
-        <div onDragStart={onDragStart} onDragEnd={onDragEnd} draggable={true} onClick={openMemberPanel} onMouseEnter={(e) => {hoverEffect(e, true)}} onMouseLeave={(e) => {hoverEffect(e, false)}} id={`${user._id}-channel-user-display-channel-id-${channel_id}`} style={{zIndex: 1, backgroundColor: hover ? primaryColor : null,}} key={user.username} className='channel-user-placeholder'>
+        <div onDragStart={onDragStart} onDragEnd={onDragEnd} draggable={true} onClick={openMemberPanel} onMouseEnter={(e) => {hoverEffect(e, true)}} onMouseLeave={(e) => {hoverEffect(e, false)}} id={`${user._id}-channel-user-display-channel-id-${channel_id}`} style={{zIndex: 1, backgroundColor: hover ? primaryColor : null, opacity: currentChannelId === channel_id ? 1 : 0.8}} key={user.username} className='channel-user-placeholder'>
             <div 
             style={{border: (user.active && user.microphone && currentChannelId === channel_id) ? `solid 2px ${activityColor}` : `solid 2px ${user?.color || primaryColor}`, borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%', width: 26, height: 26}}
             className='channel-user-placeholder-user-image'>

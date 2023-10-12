@@ -110,7 +110,7 @@ export const RoomWrapper = () => {
                 <ServerDashBoard />
                 <RoomActionOverlay page={currentServerPage} />
                 <DropOverlay action={() => {toggleDropState(false)}} dropState={dropState} />
-                <MemberPanel key='member-panel' />
+                
            </div>
         </div>
         <UserStatusBar key='user-status-bar' />

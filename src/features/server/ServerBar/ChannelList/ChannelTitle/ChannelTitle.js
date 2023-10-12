@@ -13,7 +13,7 @@ import { handleLeavingServer, selectUsersPermissions } from '../../../ServerSlic
 import "./ChannelTitle.css";
 import { DropDownButton } from '../../../../../components/buttons/DropDownButton/DropDownButton';
 import { AltDownIcon } from '../../../../../components/Icons/AltDownIcon/AltDownIcon';
-import { ServerManageMenu } from '../ServerManageMenu/ServerManageMenu';
+import { ServerManageMenu } from '../../../../../components/serverBanner/ServerManageMenu/ServerManageMenu';
 import { playSoundEffect } from '../../../../settings/soundEffects/soundEffectsSlice';
 import { clearWidgetOverLay } from '../../../ChannelRoom/Room/RoomActionOverlay/RoomActionOverlaySlice';
 import { clearDirectMessages } from '../../../../Messages/MessagesSlice';
@@ -37,42 +37,6 @@ export const ChannelTitle = ({action}) => {
 
     const dispatch = useDispatch();
 
-    const toggleServerSettings = () => {
-
-        if (window.location.hash.includes('server-settings')) {
-           
-            window.location.hash = window.location.hash.split('/server-settings')[0]
-            
-        } else {
-            if (window.location.hash.includes('appsettings')) {
-                window.location.hash = window.location.hash.split('/appsettings')[0] + "/server-settings/overview"
-            } else {
-                window.location.hash = window.location.hash + '/server-settings/overview'
-            }
-            
-        }
-    }
-
-    const handleLeave = () => {
-
-        dispatch(playSoundEffect({default: 'disconnected'}));
-        
-        dispatch(clearWidgetOverLay());
-        
-        dispatch(handleLeavingServer());
-
-        dispatch(clearDirectMessages());
-
-        dispatch(clearMedia());
-
-        dispatch(setPinnedMessages([]));
-
-        dispatch(clearMessages());
-
-        toggleHover(false);
-
-        window.location.hash = '/dashboard'
-    }
 
     return (
         <>
@@ -90,7 +54,6 @@ export const ChannelTitle = ({action}) => {
             
         
         </div>
-        <ServerManageMenu leaveServer={handleLeave} openAddChannel={action} openServerSettings={toggleServerSettings} permissions={permissions} open={open} />
         </>
     )
 }

@@ -125,8 +125,6 @@ let loading_template = `
 `
 
 const fs = require('fs');
-const { default: axios } = require('axios');
-const { Session } = require('inspector');
 
 const initPath = path.join(app.getPath('userData'), '../init.json');
 

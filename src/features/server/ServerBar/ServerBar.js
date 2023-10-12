@@ -792,6 +792,26 @@ const Bar = () => {
     // eslint-disable-next-line
     }, [])
     
+    
+    const handleLeave = () => {
+
+        dispatch(playSoundEffect({default: 'disconnected'}));
+        
+        dispatch(clearWidgetOverLay());
+        
+        dispatch(handleLeavingServer());
+
+        dispatch(clearDirectMessages());
+
+        dispatch(clearMedia());
+
+        dispatch(setPinnedMessages([]));
+
+        dispatch(clearMessages());
+
+        window.location.hash = '/dashboard'
+    }
+
     return (
         <>
         <motion.div initial={{
@@ -799,7 +819,7 @@ const Bar = () => {
             }} animate={animation}
             transition={{duration: 0.3}} 
             className='server-bar-container'>
-            <ServerBanner serverImage={serverBanner} serverName={serverName} />
+            <ServerBanner handleLeave={handleLeave} serverImage={serverBanner} serverName={serverName} />
             <MobileServerBanner serverImage={serverBanner} serverName={serverName} />
             
             <ChannelList loading={loading} />

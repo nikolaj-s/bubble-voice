@@ -2,12 +2,12 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
-
+import { Reorder } from 'framer-motion';
 // component's
 import { ChannelTitle } from './ChannelTitle/ChannelTitle'
 
 // state
-import { joinChannel, leaveChannel, selectCreateChannelMenuState, selectCurrentChannelId, selectJoiningChannelState, selectServerChannels, selectServerMembers, toggleCreateChannelMenu } from '../../ServerSlice';
+import { joinChannel, leaveChannel, reOrderChannels, selectCreateChannelMenuState, selectCurrentChannelId, selectJoiningChannelState, selectServerChannels, selectServerMembers, selectUsersPermissions, throwServerError, toggleCreateChannelMenu } from '../../ServerSlice';
 import { ChannelButton } from '../../../../components/buttons/ChannelButton/ChannelButton';
 import { selectDisplayName, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 
@@ -17,6 +17,7 @@ import { selectMirroredWebCamState } from '../../../settings/appSettings/voiceVi
 import { selectGlassColor, selectGlassState, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectCurrentScreen } from '../../../controlBar/ControlBarSlice';
 import { LoadingChannelsPlaceHolder } from '../../../../components/LoadingChannelsPlaceHolder/LoadingChannelsPlaceHolder';
+import { socket } from '../ServerBar';
 
 
 export const ChannelList = ({loading}) => {
@@ -53,11 +54,7 @@ export const ChannelList = ({loading}) => {
 
     const currentScreen = useSelector(selectCurrentScreen);
 
-    const openCreateChannelMenu = () => {
-        
-        dispatch(toggleCreateChannelMenu(!createChannelMenuOpen))
-
-    }
+    const permissions = useSelector(selectUsersPermissions);
 
     const handleJoinChannel = (channel) => {
 
@@ -99,22 +96,54 @@ export const ChannelList = ({loading}) => {
 
     // handle mount animation
 
+    let timeout;
+
+    const handleReorder = async (value) => {
+
+        if (!permissions.user_can_manage_channels) return;
+
+        clearTimeout(timeout);
+
+        const id_array = value.map(c => c._id);
+
+        dispatch(reOrderChannels(id_array));
+    }
+
+    const handleSave = async () => {
+
+        if (!permissions.user_can_manage_channels) return;
+
+        const id_array = channels.map(c => c._id);
+
+        await socket.request('reorganize channels', {new_order: id_array})
+        .then(result => {
+           
+            dispatch(reOrderChannels(result.new_order));
+        })
+        .catch(error => {
+            return;
+          //  dispatch(throwServerError({errorMessage: error.message}))
+        })
+    }
+
     return (
         <>
-        <ChannelTitle action={openCreateChannelMenu} />
         <motion.div 
-        style={{backgroundColor: glass ? glassColor : secondaryColor, maxHeight: currentScreen ? 'calc(100% - 307px)' : 'calc(100%)'}}
+        style={{backgroundColor: glass ? glassColor : secondaryColor, maxHeight: currentScreen ? 'calc(100% - 275px)' : 'calc(100%)'}}
         className='channel-list-outer-container'>
                 
                 <div className='channel-list-button-wrapper'>
-                    <div>
+                    <Reorder.Group onEnded={handleSave} as='div' axis='y' onReorder={handleReorder} values={channels}>
                         {loading ? <LoadingChannelsPlaceHolder /> : 
                         localChannels.map((channel, key) => {
                             return (
-                                <ChannelButton index={key} action={handleJoinChannel} channel={channel} key={key} users={channel.users} />
+                                <Reorder.Item transition={{duration: 0.1}} onDragEnd={handleSave} as='div' dragMomentum={false} value={channel} key={channel._id}>
+                                    <ChannelButton index={key} action={handleJoinChannel} channel={channel} key={key} users={channel.users} />
+                                </Reorder.Item>
+                                
                             )
                         })}
-                    </div>
+                    </Reorder.Group>
                 </div>
         </motion.div>
         </>

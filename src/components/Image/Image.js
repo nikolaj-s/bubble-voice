@@ -40,7 +40,7 @@ export const Image = ({draggable = false,image_class, img_id, image, objectFit =
     }
 
     return (
-        <div id={id} style={{zIndex: zIndex, position: position, objectFit: objectFit, width: width, height: '100%', opacity: opacity, display: (error && hideOnError) ? 'none' : null, backgroundColor: backgroundColor}}>
+        <div id={id} style={{zIndex: zIndex, position: position, objectFit: objectFit, width: width, minHeight: loading && !error ? minLoadHeight : null, height: '100%', opacity: opacity, display: (error && hideOnError) ? 'none' : null, backgroundColor: backgroundColor}}>
             {loading && image !== "" && image !== undefined && disableErr === false && error === false ?
             <motion.div 
             style={{
@@ -52,7 +52,8 @@ export const Image = ({draggable = false,image_class, img_id, image, objectFit =
                 height: '100%',
                 backgroundSize: '600% 600%',
                 minHeight: minLoadHeight,
-                flexShrink: minLoadHeight ? '0' : null
+                flexShrink: minLoadHeight ? '0' : null,
+                borderRadius: borderRadius
             }}
             initial={{backgroundPosition: '0% 50%'}}
             animate={{backgroundPosition: ['0% 50%', '300% 50%']}}

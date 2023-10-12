@@ -1,5 +1,6 @@
 
 export const BuildSystemNotification = (data) => {
+  
     return {message: ` 
       <head>
         <style>
@@ -36,7 +37,7 @@ export const BuildSystemNotification = (data) => {
       </head>
     <body>
       <div style="width: 100%; height: 100%; overflow: hidden; display: flex; justify-content: flex-end; align-items: flex-end; position: relative;">
-        <div id="system-notification" style="border-radius: 3px; width: 300px; right: 0; display: flex; height: auto; overflow: hidden; background-color: ${data.secondaryColor}; flex-direction: column;" class="notification">
+        <div id="system-notification" style="border-radius: 3px; width: 300px; right: 0; display: flex; height: auto; overflow: hidden; background-color: ${data.secondaryColor}; flex-direction: column; border-left: solid 4px ${data.user_color};" class="notification">
           <div style="display: flex; align-items: center; height: 45px;">  
               <div style='width: 40px; height: 40px; border-radius: ${data.shape === 'square' ? '5px' : '50%'}; overflow: hidden; flex-shrink: 0;' class="image-container">
                   <image style="width: 100%; height: 100%; object-fit: cover;"src="${data.user_image}" />
