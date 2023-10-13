@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 // state
 import { fetchReleaseNotes, selectLoadingReleaseNotes, selectReleaseNotes, selectUpdateAvailableState } from '../../app/appSlice'
-import {  selectAccentColor, selectSecondaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import {  selectAccentColor, selectGlassColor, selectSecondaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // components
 import { Loading } from '../LoadingComponents/Loading/Loading';
@@ -14,6 +14,7 @@ import { ReleaseNote } from '../../features/contentScreen/ReleaseNotes/ReleaseNo
 
 // style
 import "./UpdateAvailable.css";
+import { RestartIcon } from '../Icons/RestartIcon/RestartIcon';
 
 export const UpdateAvailable = () => {
 
@@ -24,6 +25,8 @@ export const UpdateAvailable = () => {
     const secondaryColor = useSelector(selectSecondaryColor);
 
     const accentColor = useSelector(selectAccentColor);
+
+    const glassColor = useSelector(selectGlassColor);
 
     const textColor = useSelector(selectTextColor);
 
@@ -58,13 +61,13 @@ export const UpdateAvailable = () => {
         {updateAvailable ?
             <div 
             style={{
-                backdropFilter: 'blur(10px)'
+                backgroundColor: glassColor
             }}
             className='update-available-container'>
                 <div 
                 style={{
                     backgroundColor: secondaryColor,
-                    border: `solid 4px ${accentColor}`
+                    boxShadow: '10px 10px 30px rgba(0,0,0,0.8)'
                 }}
                 className='update-available-inner-container'>
                     <div className='new-release-note-wrapper'>
@@ -78,7 +81,7 @@ export const UpdateAvailable = () => {
                         color: textColor
                     }}
                     >A new update is ready to be installed, and is required for continued use of the application.</p>
-                    <TextButton marginBottom={'1rem'} action={restartNow} name={"Restart And Install"} />
+                    <TextButton marginBottom={'1rem'} action={restartNow} name={"Restart And Install"} icon={<RestartIcon />} />
                 </div>
             </div>
         : null}

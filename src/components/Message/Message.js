@@ -15,17 +15,14 @@ import { setExpandedContent } from '../../features/ExpandContent/ExpandContentSl
 import { Iframe } from '../Iframe/Iframe';
 import { MessageLink } from './MessageLink/MessageLink';
 import { MessageText } from './MessageText/MessageText';
-import { TwitterEmbed } from '../TwitterEmbed/TwitterEmbed';
 import { SenderInfo } from './SenderInfo/SenderInfo';
 import { setPanelPosition, setSelectedMember } from '../../features/server/ChannelRoom/MemberPanel/MemberPanelSlice';
 import { selectServerMembers } from '../../features/server/ServerSlice';
 import { DateSpacer } from './DateSpacer/DateSpacer';
 import { GetTimeDifference } from '../../util/GetTimeDifference';
-import { AltSocialMedia } from './AltSocialMedia/AltSocialMedia';
 import { ProfileImage } from './ProfileImage/ProfileImage';
 import { selectHideLinksOnMedia, selectMaximizeMedia } from '../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
-import { MessageLoadingIndicator } from './MessageLoadingIndicator/MessageLoadingIndicator';
-import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
+
 import { MessageGallery } from './MessageGallery/MessageGallery';
 import { ProcessingIndicator } from './ProcessingIndicator/ProcessingIndicator';
 import { UploadedFileShare } from './UploadedFileShare/UploadeFileShare';
@@ -106,9 +103,7 @@ export const Message = ({dashboard = false, direct_message, message, overlay = f
                     {hideLinksOnMedia && (message.image || message.video || message.iFrame) || message.gallery ? null : message.link_preview ?
                     <LinkPreview data={message.link_preview} />
                     : <MessageLink link={message.link} />}
-                    <AltSocialMedia link={message.link} />
                     <Iframe marginRight={5}  link={message.iFrame} />
-                    <TwitterEmbed id={message.twitter} />
                     <MessageGallery gallery={message.gallery} expand={expandContent} />
                     {message.video_upload ?
                     <UploadedFileShare video={message.video_upload} />

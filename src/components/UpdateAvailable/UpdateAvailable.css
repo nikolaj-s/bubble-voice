@@ -24,10 +24,7 @@
 
 .update-available-inner-container p {
     font-weight: 400;
-    font-size: 1.5rem;
-    text-align: center;
     letter-spacing: var(--font-spacing);
-    width: calc(100% - 2rem);
 }
 
 .new-release-note-wrapper {
