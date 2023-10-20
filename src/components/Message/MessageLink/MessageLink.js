@@ -19,7 +19,7 @@ export const MessageLink = ({link}) => {
     return (
         <>
         {link ?
-        <a onClick={handleLink} draggable={false} style={{overflow: 'hidden'}} href={link} target="_blank" >{link}</a>
+        <a onClick={handleLink} draggable={false} style={{overflow: 'hidden'}} href={link} target="_blank" rel='noreferrer' >{link}</a>
         : null}
         </>
     )

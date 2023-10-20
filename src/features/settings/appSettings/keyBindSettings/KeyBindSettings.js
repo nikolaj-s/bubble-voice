@@ -45,12 +45,11 @@ const Settings = () => {
     React.useEffect(() => {
         dispatch(setHeaderTitle('Key Bind Settings'))
     // eslint-disable-next-line
-
     }, [])
 
     const handleKeyCodeUpdate = (keyCode, state, event) => {
         
-        if (event.key.includes('F')) return;
+        if (event.key.includes('F') && !event.key.includes('F12')) return;
 
         console.log(event)
 

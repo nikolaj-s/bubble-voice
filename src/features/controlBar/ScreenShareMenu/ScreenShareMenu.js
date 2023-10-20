@@ -5,12 +5,15 @@ import { ScreenButton } from '../../../components/buttons/ScreenButton/ScreenBut
 import { AnimatePresence, motion } from 'framer-motion'
 
 // state
-import { selectAccentColor, selectGlassColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import {  selectPrimaryColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectScreens, setCurrentScreen, toggleControlState } from '../ControlBarSlice';
+import { BoolButton } from '../../../components/buttons/BoolButton/BoolButton'
 import {CloseIcon} from '../../../components/Icons/CloseIcon/CloseIcon'
+
 // style's
 import "./ScreenShareMenu.css";
 import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
+import { handleSaveVoiceVideoSettings, selectExperimentalAudioCapture, toggleSelectedVoiceVideoState } from '../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 
 export const ScreenShareMenu = ({selectingScreens}) => {
 
@@ -19,6 +22,8 @@ export const ScreenShareMenu = ({selectingScreens}) => {
     const screens = useSelector(selectScreens);
 
     const primaryColor = useSelector(selectPrimaryColor);
+
+    const enableAudio = useSelector(selectExperimentalAudioCapture);
 
     const selectScreen = (id, name) => {
         
@@ -41,8 +46,15 @@ export const ScreenShareMenu = ({selectingScreens}) => {
         }
 
     }, [screens])
+
+    const handleAudioToggle = () => {
+        dispatch(toggleSelectedVoiceVideoState('experimentalAudioCapture'));
+
+        dispatch(handleSaveVoiceVideoSettings());
+    }
     
     return (
+        <>
         <motion.div
         initial={{
             height: 20,
@@ -72,6 +84,9 @@ export const ScreenShareMenu = ({selectingScreens}) => {
                     return <ScreenButton action={selectScreen} id={screen.id} name={screen.name} key={screen.id} thumbnail={screen.thumbnail} icon={screen.icon} />
                 })}
             </div> 
+            
         </motion.div>
+        <BoolButton action={handleAudioToggle} name={"Capture Audio"} state={enableAudio} />
+        </>
     )
 }

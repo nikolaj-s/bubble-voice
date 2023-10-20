@@ -4,7 +4,7 @@
 
 .behind-music-player-overlay-controls {
     position: absolute;
-    bottom: 0px;
+    bottom: 5px;
    
     left: 0px;
     display: flex;
@@ -21,7 +21,8 @@
     display: flex;
     height: 50px;
     align-items: center;
-    width: 100%;
+    padding: 0px 5px;
+    border-radius: 5px;
     justify-content: center;
     align-items: center;
     flex-shrink: 0;

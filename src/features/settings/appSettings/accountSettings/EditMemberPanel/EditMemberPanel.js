@@ -36,8 +36,8 @@ screenShots}) => {
             <InputTitle title={'Change Display Name'} />
             <TextInput stateSelector='display_name' action={handleInput} inputValue={displayName} placeholder={""} />
             
-            <div style={{display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-between'}}>
-                <InputTitle width={'60px'} title={'Bio'} />
+            <div style={{display: 'flex', width: '100%', alignItems: 'center',}}>
+                <InputTitle width={'calc(100% - 50px)'} title={'Bio Hint: Pasting Image Links Will Display The Image'} />
                 <TogglePreviewButton active={previewBio} action={() => {togglePreviewBio(!previewBio)}} padding={5} width={20} height={20} description={'Toggle Preview'} desc_height={15} />
             </div>
             {previewBio ?

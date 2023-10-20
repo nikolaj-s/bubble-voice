@@ -48,7 +48,7 @@ export const BuildSystemNotification = (data) => {
               ${data?.content?.text ?
               `<p style="margin: 0px; color: ${data.textColor};">${data?.content?.text}</p> `
               : ""}
-              ${(data?.content?.link && !data?.content?.image) ?
+              ${(data?.content?.link && !data?.content?.image && !data?.content?.video) ?
                 `<p style="margin: 0px; color: ${data.textColor};">${data?.content?.link}</p> `
                 : ""}
               ${data?.content?.image ?
@@ -56,6 +56,11 @@ export const BuildSystemNotification = (data) => {
                   <image style="width: 100%; height: 100%; object-fit: cover;"src=${data.content.image} />
                 </div>` : ""
               } 
+              ${data?.content?.video ?
+                ` <div style='width: calc(100% - 10px); height: 100%; max-height: 300px; overflow: hidden; border-radius: 5px; min-height: 60px;' class="image-container">
+                <video controls="false" autoplay style="width: 100%; height: 100%; object-fit: cover;"src=${data.content.video} />
+              </div>`
+              : ""}
           </div>
         </div>
       </div>

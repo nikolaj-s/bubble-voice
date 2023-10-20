@@ -25,7 +25,7 @@ export const ScreenShot = ({channelId, username}) => {
 
         let spam_stopper = false;
 
-        let options = {maxSizeMB: 0.6, maxIteration: 30, maxWidthOrHeight: 1920}
+        let options = {maxSizeMB: 0.6, maxIteration: 30}
 
         try {
 
@@ -51,7 +51,7 @@ export const ScreenShot = ({channelId, username}) => {
 
                     let compressed = await imageCompression(blob, options);
 
-                    const file = Object.assign(compressed, {name: 'screenshot.png', lastModified: Date.now()})
+                    const file = Object.assign(compressed, {name: 'screenshot.jpg', lastModified: Date.now()})
                    
                     let local_id = ((Math.random(5 * Math.random(55)) + 1) * 5) + username;
                     

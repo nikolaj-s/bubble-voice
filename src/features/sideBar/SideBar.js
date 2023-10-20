@@ -15,7 +15,6 @@ import { AppSettingsMenu } from '../settings/appSettings/AppSettingsMenu';
 
 // style
 import "./SideBar.css";
-import { selectCurrentChannelId } from '../server/ServerSlice';
 
 export const SideBar = () => {
 
@@ -26,8 +25,6 @@ export const SideBar = () => {
     const glass = useSelector(selectGlassState);
 
     const glassColor = useSelector(selectGlassColor);
-
-    const channel = useSelector(selectCurrentChannelId);
 
     React.useEffect(() => {
         dispatch(fetchUsersServerList());

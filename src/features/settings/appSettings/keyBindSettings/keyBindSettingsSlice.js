@@ -34,8 +34,9 @@ const keyBindSettingsSlice = createSlice({
             keyCode: ""
         },
         screen_shot: {
-            key: "",
-            keyCode: ""
+            key: "F12",
+            code: "F12",
+            keyCode: 123
         }
     },
     reducers: {

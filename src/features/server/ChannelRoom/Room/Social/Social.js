@@ -28,6 +28,7 @@ import { saveSocialData, SOCIAL_DATA } from '../../../../../util/LocalData';
 import { MessagePlaceHolderLoader } from '../../../../../components/MessagePlaceHolderLoader/MessagePlaceHolderLoader';
 import { clearCache } from '../../../../../util/ClearCaches';
 import { UploadVideo } from '../../../../../util/UploadVideo';
+import { CannotViewSocial } from '../../../../../components/CannotViewSocial/CannotViewSocial';
 
 export const Social = ({currentChannel, channelId, socialRoute = false, bulletin = false, direct_message, direct_message_user, status}) => {
 
@@ -87,6 +88,8 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
     }, [channelId, allMessages])
 
     React.useEffect(() => {
+
+        if (!permission?.user_can_view_channel_content) return;
 
         setTimeout(() => {
             toggleInitialMount(false);
@@ -317,6 +320,8 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
         style={{backgroundColor: glassState ? glassColor : secondaryColor}}
         className='social-outer-container'
         >
+        {permission?.user_can_view_channel_content ?
+            <>
             {loadingMore || mounting ?
             <motion.div initial={{opacity: 0, top: '-120px'}} exit={{opacity: 0, top: '-120px'}} animate={{opacity: 1, top: 0}} style={{backgroundColor: glassColor}} className='social-loading-container'>
                 <Loading loading={loadingMore || mounting} />
@@ -343,6 +348,10 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
                 </div>
             </div>
             <Loading loading={pinning || altLoading} />
+            </>
+        :
+        <CannotViewSocial />
+        }
         </div>
     )
 }

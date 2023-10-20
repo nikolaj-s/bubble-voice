@@ -789,16 +789,65 @@ ipcMain.on('set-window-id', (event, data) => {
 
 ipcMain.on('push notification', (event, data) => {
 
-  let none = '<div style="display: none;"></div>'
-  
-  let alert = data;
+  try {
+    if (notification) {
 
-  notification.loadURL(`data:text/html;charset=utf-8,${alert.message}`)
+      let none = '<div style="display: none;"></div>'
+      
+      let alert = data;
 
-  if (!win.isFocused() && alert.type === 'direct_message') win.flashFrame(true);
+      notification.loadURL(`data:text/html;charset=utf-8,${alert.message}`)
 
-  setTimeout(() => {
-    notification.loadURL(`data:text/html;charset=utf-8,${none}`);
-  }, 3100)
+      if (!win.isFocused() && alert.type === 'direct_message') win.flashFrame(true);
+
+      setTimeout(() => {
+        notification.loadURL(`data:text/html;charset=utf-8,${none}`);
+      }, 3100)
+
+    } else {
+
+      const mainScreen = screen.getPrimaryDisplay();
+
+      notification = new BrowserWindow({
+        width: mainScreen.size.width,
+        height: mainScreen.size.height,
+        transparent: true,
+        frame: false,
+        alwaysOnTop: true,
+        x: mainScreen.bounds.x,
+        y: mainScreen.bounds.y,
+        icon: __dirname + '/logo.png',
+      })
+
+      notification.setIgnoreMouseEvents(true);
+
+      notification.setFocusable(false);
+
+      notification.setAlwaysOnTop(true, 'level', 20);
+
+      notification.setVisibleOnAllWorkspaces(true);
+
+      notification.setFullScreenable(false);
+
+      notification.maximize();
+
+      notification.show();
+
+      let none = '<div style="display: none;"></div>'
+      
+      let alert = data;
+
+      notification.loadURL(`data:text/html;charset=utf-8,${alert.message}`)
+
+      if (!win.isFocused() && alert.type === 'direct_message') win.flashFrame(true);
+
+      setTimeout(() => {
+        notification.loadURL(`data:text/html;charset=utf-8,${none}`);
+      }, 3100)
+    }
+    
+  } catch (err) {
+    return;
+  }
 
 })

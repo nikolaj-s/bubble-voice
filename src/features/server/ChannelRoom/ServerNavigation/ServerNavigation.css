@@ -10,7 +10,7 @@
     position: fixed;
     top: 0;
     max-width: calc(100% - 364px);
-    left: 245px;
+    left: 258px;
 }
 
 .server-navigation-button-wrapper {
@@ -21,7 +21,7 @@
 }
 
 .server-navigation-button {
-    padding: 0 0.6rem;
+    padding: 0 0.3rem;
     display: flex;
     align-items: center;
     height: 25px;

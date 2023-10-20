@@ -8,11 +8,9 @@ import { ServerList } from './serverList/ServerList'
 
 // style's
 import "./ServerSelection.css";
-import { handleLeavingServer, navigateToServer, selectCurrentChannelId, selectServerId, setServerId, setServerName, setTopPos } from '../../server/ServerSlice';
+import { navigateToServer, selectServerId, setServerId, setServerName, setTopPos } from '../../server/ServerSlice';
 import { setHeaderTitle } from '../../contentScreen/contentScreenSlice';
 import { selectLoadingUsersServersState, selectServerList, setSideBarHeader } from '../sideBarSlice';
-import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
-import { clearWidgetOverLay } from '../../server/ChannelRoom/Room/RoomActionOverlay/RoomActionOverlaySlice';
 import { ServerButtons } from './ServerButtons/ServerButtons';
 import { setSelectedMember } from '../../server/ChannelRoom/MemberPanel/MemberPanelSlice';
 

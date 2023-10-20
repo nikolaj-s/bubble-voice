@@ -212,7 +212,7 @@ const voiceVideoSettingsSlice = createSlice({
 })
 
 export const selectAudioInputList = state => {
-    if (state.voiceVideoSettingsSlice.deviceList === []) return []
+    if (state.voiceVideoSettingsSlice.deviceList.length === 0) return []
 
     return state.voiceVideoSettingsSlice.deviceList.filter(device => {
         if (device.type === 'audioinput') {
@@ -224,7 +224,7 @@ export const selectAudioInputList = state => {
 }
 
 export const selectAudioOutputList = state => {
-    if (state.voiceVideoSettingsSlice.deviceList === []) return []
+    if (state.voiceVideoSettingsSlice.deviceList.length === 0) return []
 
     return state.voiceVideoSettingsSlice.deviceList.filter(device => {
         if (device.type === 'audiooutput') {
@@ -236,7 +236,7 @@ export const selectAudioOutputList = state => {
 }
 
 export const selectVideoInputList = state => {
-    if (state.voiceVideoSettingsSlice.deviceList === []) return []
+    if (state.voiceVideoSettingsSlice.deviceList.length === 0) return []
 
     return state.voiceVideoSettingsSlice.deviceList.filter(device => {
         if (device.type === 'videoinput') {

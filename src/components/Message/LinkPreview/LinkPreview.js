@@ -2,16 +2,12 @@ import React from 'react'
 
 import "./LinkPreview.css";
 import { useSelector } from 'react-redux';
-import { selectPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { Image } from '../../Image/Image';
 
 export const LinkPreview = ({data}) => {
 
     const primaryColor = useSelector(selectPrimaryColor);
-
-    const textColor = useSelector(selectTextColor);
-
-    console.log(data)
 
     const handleLink = (e) => {
         e.preventDefault();

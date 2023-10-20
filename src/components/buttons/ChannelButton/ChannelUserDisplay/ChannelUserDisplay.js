@@ -47,12 +47,7 @@ export const ChannelUserDisplay = ({user, channel_id}) => {
     }
 
     const openMemberPanel = (e) => {
-        const target = e.target.localName !== 'div' || e.target.className === "" ? e.target.offsetParent.className === "" ? e.target.offsetParent.offsetParent : e.target.offsetParent : e.target;
-        
-        const scroll_top = target.parentElement.scrollTop;
 
-        const l_top = target.offsetTop === 0 ? 70 : target.offsetTop + 25;
-    
         dispatch(setSelectedMember(user._id));
 
         dispatch(setPanelPosition({y: (e.view.innerHeight - 600) < 0 ? 30 : e.pageY, x: e.pageX, origin: e.view.innerHeight - 600 < 0 ? false : (e.view.innerHeight - e.pageY) < 500 ? true : false, left: 250}))
@@ -69,11 +64,22 @@ export const ChannelUserDisplay = ({user, channel_id}) => {
     }
 
     return (
-        <div onDragStart={onDragStart} onDragEnd={onDragEnd} draggable={true} onClick={openMemberPanel} onMouseEnter={(e) => {hoverEffect(e, true)}} onMouseLeave={(e) => {hoverEffect(e, false)}} id={`${user._id}-channel-user-display-channel-id-${channel_id}`} style={{zIndex: 1, backgroundColor: hover ? primaryColor : null, opacity: currentChannelId === channel_id ? 1 : 0.8}} key={user.username} className='channel-user-placeholder'>
+        <div onDragStart={onDragStart} onDragEnd={onDragEnd} draggable={true} onClick={openMemberPanel} onMouseEnter={(e) => {hoverEffect(e, true)}} onMouseLeave={(e) => {hoverEffect(e, false)}} id={`${user._id}-channel-user-display-channel-id-${channel_id}`} style={{zIndex: 1, backgroundColor: hover ? primaryColor : null,}} key={user.username} className='channel-user-placeholder'>
             <div 
-            style={{border: (user.active && user.microphone && currentChannelId === channel_id) ? `solid 2px ${activityColor}` : `solid 2px ${user?.color || primaryColor}`, borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%', width: 26, height: 26}}
+            style={{position: 'relative', borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%', width: 28, height: 28}}
             className='channel-user-placeholder-user-image'>
                 <Image image_class={'user-image'} cursor='pointer' objectFit='cover' image={user.user_image?.includes('.gif') ? "" : user.user_image} />
+                <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: 'calc(100% - 4px)',
+                    height: 'calc(100% - 4px)',
+                    borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%',
+                    border: (user.active && user.microphone && currentChannelId === channel_id) ? `solid 2px ${activityColor}` : `solid 2px rgba(0,0,0,0)`,
+                }}>
+
+                </div>
             </div>
             <h3 style={{color: textColor, opacity: (user.active && user.microphone) ? 1 : 0.6,}}>{user.display_name}</h3>
             <div 
