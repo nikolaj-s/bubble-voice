@@ -20,6 +20,7 @@ import { selectHideUserStatus } from '../../../settings/appSettings/Miscellaneou
 import { OptionsButton } from '../../../../components/buttons/OptionsButton/OptionsButton';
 import { TextOnlyIcon } from '../../../../components/Icons/TextOnlyIcon/TextOnlyIcon';
 import { setSelectedMember } from '../MemberPanel/MemberPanelSlice';
+import { ActivityIcon } from '../../../../components/Icons/ActivityIcon/ActivityIcon';
 
 export const ServerNavigation = () => {
 
@@ -51,9 +52,7 @@ export const ServerNavigation = () => {
 
     const mediaButtonAnimation = useAnimation();
 
-    const glassColor = useSelector(selectGlassColor);
-
-    const  glassState = useSelector(selectGlassState);
+    const activityButtonAnimation = useAnimation();
 
     const permissions = useSelector(selectUsersPermissions);
 
@@ -70,6 +69,8 @@ export const ServerNavigation = () => {
     const [pinsDesc, togglePinsDesc] = React.useState(false);
 
     const [mediaDesc, toggleMediaDesc] = React.useState(false);
+
+    const [activityDesc, toggleActivityDesc] = React.useState(false);
 
     const handleAction = (p) => {
         dispatch(handleChangePage(p));
@@ -95,6 +96,8 @@ export const ServerNavigation = () => {
             togglePinsDesc(action); 
         } else if (type === 'media') {
             toggleMediaDesc(action);
+        }else if (type === 'activity') {
+            toggleActivityDesc(action)
         } else {
             toggleSocialDesc(action);
         }
@@ -132,6 +135,11 @@ export const ServerNavigation = () => {
                 cursor: 'cursor',
                 
             })
+            activityButtonAnimation.start({
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
+               
+            })
         } else if (page === 'social') {
             socialButtonAnimation.start({
                 backgroundColor: accentColor,
@@ -157,6 +165,11 @@ export const ServerNavigation = () => {
                 backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
                 cursor: 'cursor',
                 
+            })
+            activityButtonAnimation.start({
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
+               
             })
         } else if (page === 'widgets') {
             widgetsButtonAnimation.start({
@@ -184,6 +197,11 @@ export const ServerNavigation = () => {
                 cursor: 'cursor',
                 
             })
+            activityButtonAnimation.start({
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
+               
+            })
         } else if (page === 'pins') {
             pinsButtonAnimation.start({
                 backgroundColor: accentColor,
@@ -209,6 +227,11 @@ export const ServerNavigation = () => {
                 cursor: 'cursor',
                 
             })
+            activityButtonAnimation.start({
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
+               
+            })
         } else if (page === 'media') {
             pinsButtonAnimation.start({
                 backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
@@ -218,6 +241,43 @@ export const ServerNavigation = () => {
             mediaButtonAnimation.start({
                 backgroundColor: accentColor,
                 cursor: 'default',
+                
+            })
+            widgetsButtonAnimation.start({
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
+                
+            })
+            socialButtonAnimation.start({
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
+                
+            })
+            voiceButtonAnimation.start({
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
+                
+            })
+            activityButtonAnimation.start({
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
+               
+            })
+        } else if (page === 'activity') {
+            activityButtonAnimation.start({
+                backgroundColor: accentColor,
+                cursor: 'default',
+                
+            })
+            
+            pinsButtonAnimation.start({
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
+               
+            })
+            mediaButtonAnimation.start({
+                backgroundColor: `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`,
+                cursor: 'cursor',
                 
             })
             widgetsButtonAnimation.start({
@@ -272,7 +332,7 @@ export const ServerNavigation = () => {
         if (inChannel) {
             handleAction('voice');
         } else {
-            handleAction('pins');
+            handleAction('activity');
         }
 
         resize();
@@ -302,7 +362,7 @@ export const ServerNavigation = () => {
                 onMouseUp={() => {handleAnimation(secondaryColor, voiceButtonAnimation, 'voice')}}
                 animate={voiceButtonAnimation} onClick={() => {handleAction('voice')}} className='server-navigation-button stream-server-button'>
                     {videoDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Stream Room</p> : null}
-                    <VideoRoomIcon opacity={page === 'voice' ? 1 : 0.6} color={textColor} />
+                    <VideoRoomIcon opacity={page === 'voice' || videoDesc ? 1 : 0.6} color={textColor} />
                 </motion.div>
                 {permissions?.user_can_view_channel_content ? 
                 <>
@@ -317,7 +377,7 @@ export const ServerNavigation = () => {
                 onMouseUp={() => {handleAnimation(secondaryColor, socialButtonAnimation, 'social')}}
                 animate={socialButtonAnimation} onClick={() => {handleAction('social')}} className='server-navigation-button'>
                     {socialDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Social</p> : null}
-                    <SocialIcon opacity={page === 'social' ? 1 : 0.6} color={textColor} />
+                    <SocialIcon opacity={page === 'social' || socialDesc ? 1 : 0.6} color={textColor} />
                 </motion.div>
                 <motion.div 
                 onMouseEnter={() => {handleDesc('widgets', true)}}
@@ -329,12 +389,24 @@ export const ServerNavigation = () => {
                 onMouseUp={() => {handleAnimation(secondaryColor, widgetsButtonAnimation, 'widgets')}}
                 animate={widgetsButtonAnimation} onClick={() => {handleAction('widgets')}} className='server-navigation-button'>
                     {widgetDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Widgets</p> : null}
-                    <WidgetsIcon opacity={page === 'widgets' ? 1 : 0.6} color={textColor} />
+                    <WidgetsIcon opacity={page === 'widgets' || widgetDesc ? 1 : 0.6} color={textColor} />
                 </motion.div>
                 </>
                 : null}
                 </>
                 : null}
+                <motion.div 
+                onMouseEnter={() => {handleDesc('activity', true)}}
+                onMouseLeave={() => {handleDesc('activity', false)}}
+                transition={{duration: 0.05}}
+                onMouseOver={() => {handleAnimation(secondaryColor, activityButtonAnimation, 'activity')}}
+                onMouseOut={() => {handleAnimation(`rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`, activityButtonAnimation, 'activity')}}
+                onMouseDown={() => {handleAnimation(accentColor, activityButtonAnimation, 'activity')}}
+                onMouseUp={() => {handleAnimation(secondaryColor, activityButtonAnimation, 'activity')}}
+                animate={activityButtonAnimation} onClick={() => {handleAction('activity')}} className='server-navigation-button'>
+                    {activityDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Activity</p> : null}
+                    <ActivityIcon opacity={page === 'activity' || activityDesc ? 1 : 0.6} color={textColor} />
+                </motion.div>
                 <motion.div 
                 onMouseEnter={() => {handleDesc('pins', true)}}
                 onMouseLeave={() => {handleDesc('pins', false)}}
@@ -345,7 +417,7 @@ export const ServerNavigation = () => {
                 onMouseUp={() => {handleAnimation(secondaryColor, pinsButtonAnimation, 'pins')}}
                 animate={pinsButtonAnimation} onClick={() => {handleAction('pins')}} className='server-navigation-button'>
                     {pinsDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Pins</p> : null}
-                    <PinIcon opacity={page === 'pins' ? 1 : 0.6} color={textColor} />
+                    <PinIcon opacity={page === 'pins' || pinsDesc ? 1 : 0.6} color={textColor} />
                 </motion.div>
                 <motion.div 
                 onMouseEnter={() => {handleDesc('media', true)}}
@@ -357,7 +429,7 @@ export const ServerNavigation = () => {
                 onMouseUp={() => {handleAnimation(secondaryColor, mediaButtonAnimation, 'media')}}
                 animate={mediaButtonAnimation} onClick={() => {handleAction('media')}} className='server-navigation-button'>
                     {mediaDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Media</p> : null}
-                    <MediaIcon opacity={page === 'media' ? 1 : 0.6} color={textColor} />
+                    <MediaIcon opacity={page === 'media' || mediaDesc ? 1 : 0.6} color={textColor} />
                 </motion.div>
                
             </div> :

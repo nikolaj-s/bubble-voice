@@ -57,7 +57,15 @@ export const User = ({user}) => {
                 
             </div>
             <Image borderRadius={0} cursor='pointer' id="stream-room-user-banner" image_class={'user-image'} disableErr={true} backgroundColor={secondaryColor}  position='absolute' image={user.user_banner} />
-            <div style={{borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%'}} className='active-user-profile-image-container'>
+            <div style={{borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%', position: user.webcam && !prefs?.disabled_web_cam ? 'absolute' : null,
+            width: user.webcam && !prefs?.disabled_web_cam ?  40 : null,
+            height: user.webcam && !prefs?.disabled_web_cam ?  40 : null,
+            left: user.webcam && !prefs?.disabled_web_cam ? 5 : null,
+            top: user.webcam && !prefs?.disabled_web_cam ? 5 : null,
+            zIndex: user.webcam && !prefs?.disabled_web_cam ? 2 : null,
+            opacity: user.webcam && !prefs?.disabled_web_cam ? 0.7 : null,
+            transition: '0.1s'
+            }} className='active-user-profile-image-container'>
                 <Image cursor='pointer' image_class={'user-image'} objectFit='cover' image={user.user_image} />
             </div>
             <Loading  backgroundColor={user.color || 'black'} zIndex={1} show_success={false} loading={user.webcam && (user.username === username ? user.webcam : !prefs?.disabled_web_cam)} />

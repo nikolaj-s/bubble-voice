@@ -3,18 +3,16 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { useRoutes } from 'react-router'
 import { ServerSettingsRouteWrapper } from '../serverSettings/ServerSettingsRouteWrapper'
-import { closeServerErrorMessage, selectCurrentChannel, selectCurrentChannelId, selectCurrentlyViewChannelSocial, selectHideDefaultNotce, selectServerErrorMessage, selectServerErrorState, selectServerId, selectServerName, selectUsersPermissions } from '../ServerSlice'
-import { CreateChannelMenu } from './CreateChannelMenu/CreateChannelMenu'
+import { selectCurrentChannel, selectCurrentChannelId, selectCurrentlyViewChannelSocial} from '../ServerSlice'
+
 import { Room } from './Room/Room'
-import { Error } from '../../../components/Error/Error';
 import { SocialRoute } from './SocialRoute/SocialRoute'
 import { ServerDashBoard } from './ServerDashBoard/ServerDashBoard'
 import { UserStatusBar } from './UserStatus/UserStatusBar'
-import { selectDefaultServer, selectHideUserStatus } from '../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice'
-import { MemberPanel } from './MemberPanel/MemberPanel'
+import { selectHideUserStatus } from '../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice'
+
 
 import "./ChannelRoom.css";
-import { Music } from './Room/Music/Music'
 import { selectCurrentServerPageState } from './ServerNavigation/ServerNavigationSlice'
 import { RoomActionOverlay } from './Room/RoomActionOverlay/RoomActionOverlay'
 import { handleAddingMedia, selectLoadingMusicState } from './Room/Music/MusicSlice'
@@ -27,18 +25,6 @@ export const RoomWrapper = () => {
     const dispatch = useDispatch();
 
     const [dropState, toggleDropState] = React.useState(false);
-
-    const error = useSelector(selectServerErrorState);
-
-    const errorMessage = useSelector(selectServerErrorMessage);
-
-    const defaultServer = useSelector(selectDefaultServer);
-
-    const serverName = useSelector(selectServerName);
-
-    const serverId = useSelector(selectServerId);
-
-    const hideDefaultNotice = useSelector(selectHideDefaultNotce);
 
     const currentServerPage = useSelector(selectCurrentServerPageState);
 
@@ -54,13 +40,7 @@ export const RoomWrapper = () => {
 
     const channel = useSelector(selectCurrentChannel);
 
-    const permissions = useSelector(selectUsersPermissions);
-
     const username = useSelector(selectUsername);
-
-    const closeErrorMessage = () => {
-        dispatch(closeServerErrorMessage());
-    }
 
     const onDrop = async (e) => {
 

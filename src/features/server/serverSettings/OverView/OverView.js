@@ -14,7 +14,7 @@ import { ApplyCancelButton } from '../../../../components/buttons/ApplyCancelBut
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 
 // state
-import { clearSearchData, selectInactiveChannel, selectInactiveChannels, selectServerBanner, selectServerId, selectServerName, selectUsersPermissions, setServerName, throwServerError, updateInactiveChannel, updateServerBanner } from '../../ServerSlice';
+import { clearSearchData, selectBannedKeywords, selectInactiveChannel, selectInactiveChannels, selectServerBanner, selectServerId, selectServerName, selectServerWelcomeMessage, selectUsersPermissions, setServerName, setWelcomeMessage, throwServerError, updateBannedKeywords, updateInactiveChannel, updateServerBanner } from '../../ServerSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 import { socket } from '../../ServerBar/ServerBar';
 import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
@@ -23,7 +23,7 @@ import { TextButton } from '../../../../components/buttons/textButton/TextButton
 import { DropDownList } from '../../../../components/DropDownList/DropDownList';
 import { updateServer } from '../../../sideBar/sideBarSlice';
 import { selectAccentColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
-
+import { ImageSearchKeywordFilter } from './ImageSearchKeywordFilter/ImageSearchKeyWordFilter'
 
 const Wrapper = () => {
 
@@ -38,6 +38,8 @@ const Wrapper = () => {
 
     const [newServerPassword, setNewServerPassword] = React.useState("");
 
+    const [newServerWelcomeMessage, setNewServerWelcomeMessage] = React.useState("");
+
     const [confirmNewServerPassword, setConfirmNewServerPassword] = React.useState("");
 
     const [inactiveChannel, setInactiveChannel] = React.useState({label: "No Inactive Channel", id: ""});
@@ -45,6 +47,8 @@ const Wrapper = () => {
     const [update, setUpdate] = React.useState(false);
 
     const [loading, toggleLoading] = React.useState(false);
+
+    const [newKeywords, setKeywords] = React.useState([]);
 
     const serverName = useSelector(selectServerName);
 
@@ -59,6 +63,10 @@ const Wrapper = () => {
     const currentInactiveChannel = useSelector(selectInactiveChannel);
 
     const serverId = useSelector(selectServerId);
+
+    const welcomeMessage = useSelector(selectServerWelcomeMessage);
+
+    const bannedKeywords = useSelector(selectBannedKeywords);
 
     // handle local state changes
     const handleBannerChange = (image) => {
@@ -113,7 +121,9 @@ const Wrapper = () => {
                 server_password: serverPassword,
                 new_server_password: newServerPassword,
                 confirm_new_server_password: confirmNewServerPassword,
-                inactive_channel: inactiveChannel
+                inactive_channel: inactiveChannel,
+                welcome_message: newServerWelcomeMessage,
+                banned_keywords: newKeywords
             }
 
             await socket.request('update server', data)
@@ -129,6 +139,14 @@ const Wrapper = () => {
                 
                 if (data.data.server_banner) {
                     dispatch(updateServerBanner(data.data.server_banner));
+                }
+
+                if (data.data.welcome_message) {
+                    dispatch(setWelcomeMessage(data.data.welcome_message))
+                }
+
+                if (data.data.banned_keywords) {
+                    dispatch(updateBannedKeywords(data.data.banned_keywords));
                 }
                 
                 dispatch(updateInactiveChannel(data.data.inactive_channel));
@@ -183,11 +201,15 @@ const Wrapper = () => {
 
         setInactiveChannel(currentInactiveChannel);
 
+        setNewServerWelcomeMessage(welcomeMessage);
+      
+        setKeywords(bannedKeywords);
+
         return () => {
             dispatch(setHeaderTitle("Select Channel"))
         }
     // eslint-disable-next-line
-    }, [])
+    }, [serverName, bannedKeywords, welcomeMessage])
 
     const handleCancel = () => {
         setUpdate(false)
@@ -200,6 +222,29 @@ const Wrapper = () => {
         setUpdate(true);
     }
 
+    const handleUpdateServerWelcomeMessage = (value) => {
+        setUpdate(true);
+
+        if (value.length > 128) return;
+
+        setNewServerWelcomeMessage(value);
+    }
+
+    const handleAddKeyword = (value) => {
+        
+        if (newKeywords.includes(value)) return;
+       
+        setKeywords([value, ...newKeywords]);
+
+        setUpdate(true);
+    }
+
+    const removeKeyWord = value => {
+        setUpdate(true);
+
+        setKeywords(newKeywords.filter(w => w !== value));
+    }
+   
     return (
         <>
         <SettingsHeader title={"Banner"} />
@@ -247,7 +292,10 @@ const Wrapper = () => {
             }
         {permissions?.user_can_edit_server_banner && permissions?.user_can_edit_server_name ?
         <>
+        <InputTitle title={"Edit Server Welcome Message"} />
+        <TextInput inputValue={newServerWelcomeMessage} action={handleUpdateServerWelcomeMessage} />
         <SettingsHeader zIndex={2} title={"Data"} />
+        <ImageSearchKeywordFilter keywords={newKeywords} removeKeyword={removeKeyWord} addKeyword={handleAddKeyword} />
         <InputTitle title={"Clear Image Search Recommendation Data"} />
         <TextButton name={"Clear"} action={clearImageSearchData} />
         <SettingsHeader title={"Set Inactive User Channel"} />

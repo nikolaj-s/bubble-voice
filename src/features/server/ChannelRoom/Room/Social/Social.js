@@ -93,7 +93,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         setTimeout(() => {
             toggleInitialMount(false);
-        }, 400)
+        }, 50)
 
         if (direct_message) return;
         

@@ -18,15 +18,15 @@ import { HeaderTitle } from '../../components/titles/headerTitle/headerTitle';
 // style's
 import "./ContentScreen.css";
 
-import { closeServerErrorMessage, selectCurrentChannelId, selectServerErrorMessage, selectServerErrorState } from '../server/ServerSlice';
+import { closeServerErrorMessage, selectKickedMessage, selectKickedState, selectServerErrorMessage, selectServerErrorState, setKickedState } from '../server/ServerSlice';
 import { selectNewAccountState } from '../settings/appSettings/accountSettings/accountSettingsSlice';
 import { CreateChannelMenu } from '../server/ChannelRoom/CreateChannelMenu/CreateChannelMenu';
 import { Error } from '../../components/Error/Error';
 import { MemberPanel } from '../server/ChannelRoom/MemberPanel/MemberPanel';
+import { KickedMessage } from './KickedMessage/KickedMessage';
 
 export const ContentScreen = () => {
     // content
-    const channelId = useSelector(selectCurrentChannelId);
 
     const dispatch = useDispatch();
 
@@ -36,8 +36,16 @@ export const ContentScreen = () => {
 
     const errorMessage = useSelector(selectServerErrorMessage);
 
+    const kickedState = useSelector(selectKickedState);
+
+    const kickedMessage = useSelector(selectKickedMessage);
+
     const closeError = () => {
         dispatch(closeServerErrorMessage());
+    }
+
+    const closeKickedMessage = () => {
+        dispatch(setKickedState({kicked: false, kickedMessage: ""}))
     }
 
     return (
@@ -54,6 +62,7 @@ export const ContentScreen = () => {
             <ExpandContent />
             <CreateChannelMenu />
             <MemberPanel />
+            {kickedState ? <KickedMessage close={closeKickedMessage} message={kickedMessage} /> : null}
             {error ? <Error action={closeError} errorMessage={errorMessage} position='fixed' /> : null}
             {newAccount ? <NewAccount /> : null}
         </>

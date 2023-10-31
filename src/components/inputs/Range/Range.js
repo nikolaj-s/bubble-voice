@@ -3,16 +3,18 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 
 //state
-import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 //style
 import "./Range.css";
 
-export const Range = ({min = 0, max = 1, action, step = 0.001, value = 0, fill = false, save = () => {}}) => {
+export const Range = ({min = 0, max = 1, action, step = 0.001, value = 0, fill = false, save = () => {}, invert}) => {
 
     const ref = React.createRef();
 
     const primaryColor = useSelector(selectPrimaryColor);
+
+    const secondaryColor = useSelector(selectSecondaryColor);
 
     const accentColor = useSelector(selectAccentColor);
 
@@ -42,7 +44,7 @@ export const Range = ({min = 0, max = 1, action, step = 0.001, value = 0, fill =
         
         document.getElementById("root").style.setProperty('--range-main-background', textColor);
 
-        document.getElementById("root").style.setProperty('--range-main-thumb', accentColor);
+        document.getElementById("root").style.setProperty('--range-main-thumb', invert ? primaryColor : accentColor);
         
         ref.current.style.backgroundSize = (value - min) * 100 / (max - min) + '% 100%'
         

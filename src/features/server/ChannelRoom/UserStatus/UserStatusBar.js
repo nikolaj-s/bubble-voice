@@ -73,6 +73,10 @@ export const UserStatusBar = () => {
                     new_status_name = "Visual Studio Code"
                 } else if (l_windows[0].name.includes('Discord')) { 
                     new_status_name = 'Discord'
+                } else if (l_windows[0].name.includes("Opera")) {
+                    new_status_name = "Opera"
+                } else if (l_windows[0].name.includes("Microsoft Edge")) {
+                    new_status_name = "Microsoft Edge"
                 } else {
                     new_status_name = l_windows[0].name;
                 }

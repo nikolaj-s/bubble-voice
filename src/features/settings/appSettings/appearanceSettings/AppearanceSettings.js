@@ -10,7 +10,7 @@ import { DropDownList } from '../../../../components/DropDownList/DropDownList'
 import { ToggleButton } from '../../../../components/buttons/ToggleButton/ToggleButton';
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { changeTheme, saveTheme, selectAccentColor, selectActivationColor, selectAppearanceChangeMade, selectCurrentTheme, selectGlassState, selectGradient, selectGradients, selectPrimaryColor, selectScaleState, selectSecondaryColor, selectTextColor, selectThemeOptions, selectUseImageBackgroundState, updateColorValue, updateGlassState, updateGradient, updateImageBackgroundState, updateScaleState } from './appearanceSettingsSlice';
+import { changeTheme, saveTheme, selectAccentColor, selectActivationColor, selectAppearanceChangeMade, selectCurrentTheme, selectDisableTransitionAnimations, selectGlassState, selectGradient, selectGradients, selectPrimaryColor, selectScaleState, selectSecondaryColor, selectTextColor, selectThemeOptions, selectUseImageBackgroundState, toggleDisableAnimatedTransitions, updateColorValue, updateGlassState, updateGradient, updateImageBackgroundState, updateScaleState } from './appearanceSettingsSlice';
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 import { ColorInput } from '../../../../components/inputs/ColorInput/ColorInput';
 import { TextButton } from '../../../../components/buttons/textButton/TextButton';
@@ -53,6 +53,8 @@ const Settings = () => {
     const gradient = useSelector(selectGradient);
 
     const glass = useSelector(selectGlassState);
+
+    const disableTransistions = useSelector(selectDisableTransitionAnimations);
 
     const handleInput = (value, type) => {
         dispatch(updateColorValue({value, type}))
@@ -107,6 +109,12 @@ const Settings = () => {
         dispatch(saveTheme());
     }
 
+    const toggleAnimatedTransitions = () => {
+        dispatch(toggleDisableAnimatedTransitions());
+
+        dispatch(saveTheme());
+    }
+
     return (
         <div className='settings-wrapper'>
             <SettingsHeader title={"Presets"} />
@@ -131,6 +139,8 @@ const Settings = () => {
             <ColorInput rgb={textColor} selector='textColor' action={handleInput} />
             <InputTitle title={"Activation Color"} />
             <ColorInput selector="activationColor" action={handleInput} rgb={activationColor} />
+            <InputTitle title={"Disable Animated Transitions *this may improve performance"} />
+            <ToggleButton state={disableTransistions} action={toggleAnimatedTransitions}  />
             <InputTitle title={"Glass UI"} />
             <ToggleButton action={handleGlassUi} state={glass} />
             <InputTitle title={'App Scale'} />

@@ -1,0 +1,51 @@
+
+.image-keyword-filter-input-wrapper {
+    display: flex;
+    position: relative;
+
+}
+
+#add-keyword-filter {
+    position: absolute;
+    right: 15px;
+}
+
+.image-search-keyword-filter-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.filter-word-container {
+    border-radius: 5px;
+    padding: 5px 20px;
+    margin: 0px 5px 5px 0px;
+    position: relative;
+}
+
+.remove-filter-word-button {
+    position: absolute;
+    right: -5px;
+    top: -5px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.remove-filter-word-button:hover {
+    opacity: 0.8;
+}
+
+.remove-filter-word-button svg {
+    width: 10px;
+    height: 10px;
+}
+
+.filter-word-container p {
+    margin: 0;
+    cursor: default;
+}

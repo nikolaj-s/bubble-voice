@@ -1,0 +1,19 @@
+
+.alt-close-corner-button {
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    justify-content: center;
+    top: -5px;
+    right: -5px;
+    width: 20px;
+    height: 20px;
+    padding: 3px;
+    cursor: pointer;
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.422);
+}
+
+.alt-close-corner-button:hover {
+    opacity: 0.6;
+}

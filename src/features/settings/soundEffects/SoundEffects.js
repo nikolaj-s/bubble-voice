@@ -164,7 +164,7 @@ export const SoundEffects = () => {
 
     return (
         <>
-        {(sharingScreen && experimentalAudioCapture) ? null : <audio id="sound-effects-source" onEnded={soundEffectFinished} src={playing} hidden={true} playsInline={true} autoPlay={true} loop={false} />}
+        {(sharingScreen && experimentalAudioCapture) ? null : <audio onError={soundEffectFinished} id="sound-effects-source" onEnded={soundEffectFinished} src={playing} hidden={true} playsInline={true} autoPlay={true} loop={false} />}
         </>
     )
 }

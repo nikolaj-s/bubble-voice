@@ -14,7 +14,7 @@ import { DownIcon } from '../../../../../components/Icons/DownIcon/DownIcon';
 import { WidgetsIcon } from '../../../../../components/Icons/WidgetsIcon/WidgetsIcon'
 // state
 import { setHeaderTitle } from '../../../../contentScreen/contentScreenSlice';
-import { deleteChannel, selectChannelToEdit, selectServerMembers, selectServerOwner, selectUsersPermissions, throwServerError, updateChannel } from '../../../ServerSlice';
+import { addActivityMessage, deleteChannel, selectChannelToEdit, selectServerMembers, selectServerOwner, selectUsersPermissions, throwServerError, updateChannel } from '../../../ServerSlice';
 import { TextButton } from '../../../../../components/buttons/textButton/TextButton';
 import { NotAuthorizedMessage } from '../../../../../components/NotAuthorizedMessage/NotAuthorizedMessage';
 import { WidgetPreview } from '../../../../../components/widgets/WidgetPreview/WidgetPreview';
@@ -211,6 +211,8 @@ const Wrapper = () => {
         .then(response => {
 
             dispatch(updateChannel(response.channel));
+
+            dispatch(addActivityMessage(response.status_msg));
 
             setWidgets(response.channel.widgets);
 

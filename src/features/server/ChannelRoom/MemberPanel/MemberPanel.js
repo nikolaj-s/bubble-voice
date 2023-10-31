@@ -157,6 +157,8 @@ export const MemberPanel = () => {
                         if (user.pinned_message) setMessage(user.pinned_message);
 
                         toggleLoading(false);
+
+                        console.log(user.recent_activity)
                     })
                 }, 600)
 

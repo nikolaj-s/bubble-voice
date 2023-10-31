@@ -1,0 +1,45 @@
+.kicked-message-outer-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.kicked-message-inner-container {
+    position: relative;
+    width: 500px;
+    height: 300px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.515);
+}
+
+.kicked-message-inner-container h1,
+.kicked-message-inner-container p {
+    text-align: center;
+}
+
+.close-kicked-container-button {
+    position: absolute;
+    right: -15px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    top: -15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.close-kicked-container-button:hover {
+    opacity: 0.7;
+}

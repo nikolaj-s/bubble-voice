@@ -18,6 +18,9 @@
     text-overflow: ellipsis;
     width: 100%;
     cursor: pointer;
+    word-break: keep-all;
+    word-wrap: normal;
+    white-space: nowrap;
 }
 
 .channel-user-placeholder-user-image {

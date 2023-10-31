@@ -6,7 +6,7 @@ import { io } from "socket.io-client";
 import { useNavigate, useRoutes } from 'react-router';
 
 // state
-import {clearSearchData, addNewChannel, assignNewServerGroup, clearServerState, deleteChannel, fetchPersistedMusicVolume, fetchServerDetails, handleLeavingServer, leaveChannel, newMessage, removeSongFromWidget, reOrderChannels, saveSongToWidget, selectCurrentChannel, selectCurrentChannelId, selectInactiveChannel, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, setServerName, throwServerError, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateInactiveChannel, updateMemberActiveStatus, updateMemberStatus, updateServerBanner, updateServerGroups, userBanned, userJoinsChannel, userJoinsServer, userLeavesChannel, userLeavesServer, updateMemberFile, toggleConnectionLostState, updateChannelStatus } from '../ServerSlice';
+import {clearSearchData, addNewChannel, assignNewServerGroup, clearServerState, deleteChannel, fetchPersistedMusicVolume, fetchServerDetails, handleLeavingServer, leaveChannel, newMessage, removeSongFromWidget, reOrderChannels, saveSongToWidget, selectCurrentChannel, selectCurrentChannelId, selectInactiveChannel, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, setServerName, throwServerError, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateInactiveChannel, updateMemberActiveStatus, updateMemberStatus, updateServerBanner, updateServerGroups, userBanned, userJoinsChannel, userJoinsServer, userLeavesChannel, userLeavesServer, updateMemberFile, toggleConnectionLostState, updateChannelStatus, setKickedState, addActivityMessage, setWelcomeMessage, updateBannedKeywords } from '../ServerSlice';
 import { selectUsername } from '../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { getToken, url } from '../../../util/Validation';
 import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
@@ -182,6 +182,10 @@ const Bar = () => {
 
             dispatch(receiveMessage(data));
 
+            if (data.screen_shot) {
+                dispatch(addActivityMessage(data));
+            }
+
             if (window.location.hash.includes(data.channel_id)) {
 
                 dispatch(playSoundEffect({default: "newMessage"}))
@@ -199,6 +203,12 @@ const Bar = () => {
             if (data.data.server_name) {
                 dispatch(setServerName(data.data.server_name));
             }
+            if (data.data.welcome_message) {
+                dispatch(setWelcomeMessage(data.data.welcome_message));
+            }
+            if (data.data.banned_keywords) {
+                dispatch(updateBannedKeywords(data.data.banned_keywords));
+            }
 
             dispatch(updateInactiveChannel(data.data.inactive_channel));
             
@@ -211,6 +221,8 @@ const Bar = () => {
 
         socket.on('channel update', (data) => {
             dispatch(updateChannel(data.channel));
+
+            dispatch(addActivityMessage(data.status_msg));
 
             if (data.cleared_social) {
                 dispatch(clearSocialById(data.channel._id));
@@ -286,6 +298,9 @@ const Bar = () => {
         })
 
         socket.on('kick', (data) => {
+
+            dispatch(setKickedState({kicked: true, kickedMessage: `${data?.kicked_by} has kicked you from the server!`}))
+
             leaveServer(true)
         })
 
@@ -362,6 +377,9 @@ const Bar = () => {
         })
 
         socket.on('user status update', (data) => {
+
+            dispatch(addActivityMessage(data.status_msg))
+
             dispatch(updateMemberActiveStatus(data));
             
             dispatch(pushSytemNotification({username: data.username, content: {text: `Is Now ${data.status}`}, type: 'status'}))

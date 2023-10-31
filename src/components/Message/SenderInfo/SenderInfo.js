@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 import { selectProfilePinnedMessage, selectUsername } from '../../../features/settings/appSettings/accountSettings/accountSettingsSlice'
 import { PinToProfileButton } from '../../buttons/PinToProfileButton/PinToProfileButton'
 
-export const SenderInfo = ({timeStamp, direct_message, pin_to_profile, link, id, current_message, primaryColor, previous_message, message, pinMessage, pinned, overlay, hover, textColor, index, perm, accentColor, persist, action, display_name, user_image}) => {
+export const SenderInfo = ({activity = false, timeStamp, direct_message, pin_to_profile, link, id, current_message, primaryColor, previous_message, message, pinMessage, pinned, overlay, hover, textColor, index, perm, accentColor, persist, action, display_name, user_image}) => {
 
     const userName = useSelector(selectUsername);
 
@@ -52,7 +52,7 @@ export const SenderInfo = ({timeStamp, direct_message, pin_to_profile, link, id,
                     >{message?.date?.split("T")[0]} - {timeStamp}</p> : null}
                 </div>
                 : null}
-                {message.loading ? 
+                {message.loading || activity ? 
                 null
                 : hover ?
                 <div style={{top: index === 0 ? 5 : -20, backgroundColor: primaryColor, boxShadow: '5px 5px 20px rgba(0, 0, 0, 0.6)'}} className='date-submenu-message-wrapper'>

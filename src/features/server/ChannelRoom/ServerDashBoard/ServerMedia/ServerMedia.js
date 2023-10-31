@@ -3,7 +3,7 @@ import React from 'react'
 import "./ServerMedia.css";
 
 import { useDispatch, useSelector } from 'react-redux';
-import { selectAccentColor, selectGlassColor, selectSecondaryColor, selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectDisableTransitionAnimations, selectGlassColor, selectSecondaryColor, selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { Reccomendations } from './Recommendations/Reccomendations';
 import { ViewSubReddit } from './ViewSubReddits/ViewSubReddit';
 import { GetPostsFromSubReddit, addMoreMedia, selectCurrentSubReddit, selectLoadingNewMedia, selectLoadingSubReddit, selectMedia, selectMediaQuery, selectNextPostPage, selectScrollServerMediaScrollPosition, selectServerMediaPage, selectSubRedditSortState, setMediaQuery, setNewMedia, setScrollPosition, setServerMediaPage, toggleLoadingNewMedia } from './ServerMediaSlice';
@@ -13,7 +13,6 @@ import { ImageSearch } from '../../../../../util/ImageSearch';
 import { selectServerId, throwServerError } from '../../../ServerSlice';
 import {motion} from 'framer-motion';
 import { clearCache } from '../../../../../util/ClearCaches';
-import { ScreenShots } from './ScreenShots/ScreenShots';
 
 export const ServerMedia = ({media, expand}) => {
     
@@ -48,6 +47,8 @@ export const ServerMedia = ({media, expand}) => {
     const mediaQuery = useSelector(selectMediaQuery);
 
     const glassColor = useSelector(selectGlassColor);
+
+    const disableTransition = useSelector(selectDisableTransitionAnimations);
 
     const handleLoadMore = (e) => {
         
@@ -139,11 +140,12 @@ export const ServerMedia = ({media, expand}) => {
     }, [page])
     
     return (
-        <motion.div className='server-media-wrappers' initial={{translateX: '100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}}>
+        <motion.div 
+        transition={disableTransition ? {duration: 0} : null}
+        className='server-media-wrappers' initial={{translateX: '100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}}>
             <div style={{backgroundColor: secondaryColor}} className='server-media-navigation-container'>
                     
                     <h3 onClick={() => {setPage('recommendations')}} style={{color: textColor, opacity: page === 'recommendations' ? 1 : 0.5, cursor: page === 'recommendations' ? 'default' : 'pointer', backgroundColor: page === 'recommendations' ? accentColor : null}}>Recommendations</h3>
-                    <h3 onClick={() => {setPage('screenShots')}} style={{color: textColor, opacity: page === 'screenShots' ? 1 : 0.5, cursor: page === 'screenShots' ? 'default' : 'pointer', backgroundColor: page === 'screenShots' ? accentColor : null}} >Screen Shots</h3>
                     <h3 onClick={() => {setPage('subreddit')}} style={{color: textColor, opacity: page === 'subreddit' ? 1 : 0.5, cursor: page === 'subreddit' ? 'default' : 'pointer', backgroundColor: page === 'subreddit' ? accentColor : null}}>Subreddits</h3>
             </div>
             {page === 'recommendations' ?
@@ -155,7 +157,7 @@ export const ServerMedia = ({media, expand}) => {
                 
                 {page === 'recommendations' ? <Reccomendations count={count} expand={expand} media={newMedia.length > 0 ? newMedia : media} /> : null}
                 {page === 'subreddit' ? <ViewSubReddit expand={expand} /> : null}
-                {page === 'screenShots' ? <ScreenShots /> : null}
+                
             </div>
             
             <Loading backgroundColor={glassColor} loading={loadingNewMedia} />

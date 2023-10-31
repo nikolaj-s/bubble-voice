@@ -626,9 +626,9 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
       keyDown = false;
     })
 
-    uIOhook.on('mousemove', () => {
-      handle_inactivity();
-    })
+    // uIOhook.on('mousemove', () => {
+    //   handle_inactivity();
+    // })
     
     uIOhook.start();
   } catch (error) {

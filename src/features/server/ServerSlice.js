@@ -105,7 +105,6 @@ export const fetchServerDetails = createAsyncThunk(
             console.log(error)
             return rejectWithValue({error: true, errorMessage: error});
         })
-        console.log(server)
         return server;
     }
 )
@@ -199,7 +198,11 @@ const serverSlice = createSlice({
         serverGroups: [],
         server: {},
         members: [],
+        imageOfTheDay: {},
+        activityFeed: [],
         serverBannerAmbiance: '',
+        welcomeMessage: "",
+        bannedKeywords: [],
         // creating channel state
         channelCreationLoading: false,
         channelCreationError: false,
@@ -239,10 +242,30 @@ const serverSlice = createSlice({
         popular_searches: [],
         create_channel_menu_open: false,
         connection_lost: false,
-        roomColor: ""
+        roomColor: "",
+        kicked: false,
+        kickedMessage: ""
 
     },
     reducers: {
+        setWelcomeMessage: (state, action) => {
+
+            if (action.payload.length > 128) return;
+
+            state.welcomeMessage = action.payload;
+        },
+        updateBannedKeywords: (state, action) => {
+            state.bannedKeywords = action.payload;
+        },
+        addActivityMessage: (state, action) => {
+            if (state.activityFeed.length >= 30) state.activityFeed.pop();
+
+            state.activityFeed.unshift(action.payload);
+        },
+        setKickedState: (state, action) => {
+            state.kicked = action.payload.kicked;
+            state.kickedMessage = action.payload.kickedMessage;
+        },
         triggerRoomRescale: (state, action) => {
             state.triggerRoomRescale = !state.triggerRoomRescale;
         },
@@ -320,6 +343,9 @@ const serverSlice = createSlice({
             state.editing_channel_id = null;
             state.joiningChannel = false;
             state.selectedChannelSocial = "";
+            state.activityFeed = [];
+            state.imageOfTheDay = {};
+
         },
         setUserImages: (state, action) => {
             const userIndex = state.members.findIndex(member => member.user_name === action.payload.username)
@@ -350,6 +376,17 @@ const serverSlice = createSlice({
             const channelIndex = state.channels.findIndex(channel => channel._id === action.payload.channel._id);
 
             // prevent duplicating ---> check if user exists in channel
+
+            for (let i = 0; i < state.channels.length - 1; i++) {
+                let u_index = state.channels[i].users.findIndex(u => u.username === action.payload.username);
+                
+                if (u_index !== -1) {
+
+                    state.channels[i].users = state.channels[i].users.filter(user => user.username !== action.payload.username)
+            
+
+                }
+            }
 
             const existing = state.channels[channelIndex].users.findIndex(user => user.username === action.payload.username);
 
@@ -455,6 +492,13 @@ const serverSlice = createSlice({
             state.members[userIndex].status = 'offline';
 
             state.members[userIndex].last_online = action.payload.last_online;
+
+            for (let i = 0; i < state.channels.length - 1; i++) {
+
+                state.channels[i].users = state.channels[i].users.filter(user => user._id !== action.payload.member_id)
+            
+
+            }
         },
         updateMember: (state, action) => {
             const memberIndex = state.members.findIndex(member => member.username === action.payload.username);
@@ -713,6 +757,8 @@ const serverSlice = createSlice({
         },
         [fetchServerDetails.pending]: (state, action) => {
             state.loading = true;
+            state.activityFeed = [];
+            state.imageOfTheDay = {}
         },
         [fetchServerDetails.fulfilled]: (state, action) => {
 
@@ -720,13 +766,16 @@ const serverSlice = createSlice({
             state.serverName = action.payload.server_name;
             state.serverBanner = action.payload.server_banner;
             state.members = action.payload.members;
-            console.log(action.payload.members)
             state.serverGroups = action.payload.server_groups;
             state.serverOwner = action.payload.server_owner;
             state.banList = action.payload.ban_list;
             state.user = action.payload.user;
             state.popular_searches = action.payload.recent_searches;
             state.connection_lost = false;
+            state.imageOfTheDay = action.payload.image_of_the_day;
+            state.welcomeMessage = action.payload.welcome_message;
+            state.activityFeed = action.payload.activity_feed;
+            state.bannedKeywords = action.payload.banned_keywords;
             const memberIndex = state.members.findIndex(member => member.username === action.payload.username);
 
             if (memberIndex !== -1) {
@@ -945,8 +994,21 @@ export const selectConnectionLost = state => state.serverSlice.connection_lost;
 export const selectRoomColor = state => state.serverSlice.roomColor;
 
 export const selectTriggerRoomRescale = state => state.serverSlice.triggerRoomRescale;
+
+export const selectKickedState = state => state.serverSlice.kicked;
+
+export const selectKickedMessage = state => state.serverSlice.kickedMessage;
+
+export const selectImageOfTheDay = state => state.serverSlice.imageOfTheDay;
+
+export const selectActivityFeed = state => state.serverSlice.activityFeed; 
+
+export const selectServerWelcomeMessage = state => state.serverSlice.welcomeMessage;
+
+export const selectBannedKeywords = state => state.serverSlice.bannedKeywords;
+
 // actions
 
-export const {updateChannelStatus, triggerRoomRescale, setRoomColor, toggleConnectionLostState, setServerbannerAmbiance, updateMemberFile, clearSearchData, updateInactiveChannel, removeSongFromWidget, saveSongToWidget, userBanned, toggleCreateChannelMenu, toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
+export const {updateBannedKeywords, setWelcomeMessage, addActivityMessage, setKickedState, updateChannelStatus, triggerRoomRescale, setRoomColor, toggleConnectionLostState, setServerbannerAmbiance, updateMemberFile, clearSearchData, updateInactiveChannel, removeSongFromWidget, saveSongToWidget, userBanned, toggleCreateChannelMenu, toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
 
 export default serverSlice.reducer;

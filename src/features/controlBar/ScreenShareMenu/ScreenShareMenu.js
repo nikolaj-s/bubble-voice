@@ -38,7 +38,12 @@ export const ScreenShareMenu = ({selectingScreens}) => {
 
     React.useEffect(() => {
 
+        document.body.addEventListener('click', closeScreenShare);
+
         return () => {
+
+            document.body.removeEventListener('click', closeScreenShare);
+
             for (const screen of screens) {
                 URL.revokeObjectURL(screen.thumbnail);
                 URL.revokeObjectURL(screen.icon);

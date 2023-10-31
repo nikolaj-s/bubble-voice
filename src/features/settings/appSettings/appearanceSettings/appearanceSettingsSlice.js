@@ -34,6 +34,7 @@ const appearanceSettingsSlice = createSlice({
         changeMade: false,
         disableServerAmbiance: false,
         useImageBackground: false,
+        disableAnimatedTransitions: false,
         gradient: {type: 'none', gradient: false},
         scale: {name: 'default', scale: 0},
         gradients: [
@@ -210,7 +211,8 @@ const appearanceSettingsSlice = createSlice({
                 glass: state.glass,
                 disableServerAmbiance: state.disableServerAmbiance,
                 scale: state.scale,
-                useImageBackground: state.useImageBackground
+                useImageBackground: state.useImageBackground,
+                disableAnimatedTransitions: state.disableAnimatedTransitions
             }
 
             state.color_themes = {...state.color_themes, custom: new_theme_object.themes.custom};
@@ -224,6 +226,9 @@ const appearanceSettingsSlice = createSlice({
         },
         toggleDisableServerAmbiance: (state, action) => {
             state.disableServerAmbiance = !state.disableServerAmbiance;
+        },
+        toggleDisableAnimatedTransitions: (state, action) => {
+            state.disableAnimatedTransitions = !state.disableAnimatedTransitions;
         }
 
     },
@@ -267,6 +272,8 @@ const appearanceSettingsSlice = createSlice({
 
                 if (action.payload.useImageBackground) state.useImageBackground = true;
 
+                if (action.payload.disableAnimatedTransitions) state.disableAnimatedTransitions = true;
+
                 state.glassColor = `rgba(${state.secondaryColor.split('rgb(')[1].split(')')[0]}, 0.8)`
 
                 if (action.payload.scale) {
@@ -293,7 +300,7 @@ const appearanceSettingsSlice = createSlice({
 })
 
 // actions
-export const {updateImageBackgroundState, updateScaleState, toggleDisableServerAmbiance, updateGlassState, updateGradient, updateColorValue, changeTheme, saveTheme, toggleRgbBackGround } = appearanceSettingsSlice.actions;
+export const {toggleDisableAnimatedTransitions, updateImageBackgroundState, updateScaleState, toggleDisableServerAmbiance, updateGlassState, updateGradient, updateColorValue, changeTheme, saveTheme, toggleRgbBackGround } = appearanceSettingsSlice.actions;
 
 // color selectors
 export const selectTransparentPrimaryColor = state => state.appearanceSettingsSlice.transparentPrimary;
@@ -335,6 +342,8 @@ export const selectUseImageBackgroundState = state => state.appearanceSettingsSl
 export const selectGlassPrimaryColor = state => {
     return `rgba(${state.appearanceSettingsSlice.primaryColor.split('rgb(')[1].split(')')[0]}, 0.4)`
 }
+
+export const selectDisableTransitionAnimations = state => state.appearanceSettingsSlice.disableAnimatedTransitions;
 
 // export appearance settings reducer
 export default appearanceSettingsSlice.reducer;

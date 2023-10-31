@@ -9,7 +9,7 @@ import { AltSearchButton } from '../../../buttons/AltSearchButton/AltSearchButto
 
 // state
 import { selectAccentColor, selectGlassColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
-import { selectPopularSearches, throwServerError } from '../../../../features/server/ServerSlice';
+import { selectBannedKeywords, selectPopularSearches, throwServerError } from '../../../../features/server/ServerSlice';
 
 // util
 import { ImageSearch } from '../../../../util/ImageSearch';
@@ -58,6 +58,8 @@ export const ImageSearchPanel = ({hideOptions = false,direct_message, searchingF
 
     const images = useSelector(selectMedia);
 
+    const bannedKeywords = useSelector(selectBannedKeywords);
+
     const [videos, setVideos] = React.useState([]);
 
     const [query, setQuery] = React.useState("");
@@ -71,6 +73,18 @@ export const ImageSearchPanel = ({hideOptions = false,direct_message, searchingF
     const search = async () => {
 
         if (query.length === 0) return;
+
+        let blocked = false;
+
+        for (const word of bannedKeywords) {
+            if (query.toLowerCase().includes(bannedKeywords)) {
+                dispatch(throwServerError({error: true, errorMessage: `Your Search Has Been Blocked As It Includes A Banned Keyword`}));
+                blocked = true;
+                break;
+            }
+        }
+
+        if (blocked) return;
 
         toggleLoading(true);
 

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AnimatePresence, motion } from 'framer-motion';
 
 // state
-import { selectGlassColor, selectGlassState, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectDisableTransitionAnimations, selectGlassColor, selectGlassState, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectChannelSocialId, selectCurrentChannelId, selectCurrentlyViewChannelSocial, setChannelSocialId } from '../../ServerSlice'
 
 // component's
@@ -35,6 +35,8 @@ export const SocialRoute = () => {
 
     const glassColor = useSelector(selectGlassColor);
 
+    const disableTransition = useSelector(selectDisableTransitionAnimations);
+
     React.useEffect(() => {
 
         if (channelId === current_channel_id) return document.getElementById('channel-social-tab-button')?.click();
@@ -47,6 +49,7 @@ export const SocialRoute = () => {
         <AnimatePresence>
             {currentSocial ?
             <motion.div 
+            transition={disableTransition ? {duration: 0} : null}
             key={`social-route-${channelId}`}
             initial={{translateX: '-100%'}}
             animate={{translateX: '0%'}}

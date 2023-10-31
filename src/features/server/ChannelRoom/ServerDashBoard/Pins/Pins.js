@@ -2,10 +2,17 @@ import React from 'react'
 import { Message } from '../../../../../components/Message/Message'
 import { motion } from 'framer-motion';
 import { NoMedia } from '../../../../../components/NoMedia/NoMedia'
+import { useSelector } from 'react-redux';
+import { selectDisableTransitionAnimations } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 export const Pins = ({permission, pins, handlePin, initLoading}) => {
+
+  const disableTransition = useSelector(selectDisableTransitionAnimations);
+
   return (
-    <motion.div style={{padding: 0, width: '100%', height: '100%'}} className='server-media-wrappers' initial={{translateX: '100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}}>
+    <motion.div
+    transition={disableTransition ? {duration: 0} : null}
+    style={{padding: 0, width: '100%', height: '100%'}} className='server-media-wrappers' initial={{translateX: '100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}}>
       {initLoading ? null : pins?.length <= 1 ?
       <NoMedia message={"Currently No Pinned Messages"} />
       : pins?.map((p, key) => {

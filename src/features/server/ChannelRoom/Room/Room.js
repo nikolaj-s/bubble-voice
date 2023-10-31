@@ -26,7 +26,7 @@ import { Widgets } from './Widgets/Widgets';
 import { RoomUserWrapper } from './RoomUserWrapper/RoomUserWrapper';
 import { ChannelBackground } from './ChannelBackground/ChannelBackground';
 import { selectMiscSettingsHideChannelBackground, selectPopOutUserStreams } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
-import { selectGlassColor, selectGlassState, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectDisableTransitionAnimations, selectGlassColor, selectGlassState, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { AudioInit, audioCtx } from '../../../AudioInit/AudioInit';
 import { selectCurrentServerPageState } from '../ServerNavigation/ServerNavigationSlice';
 import { AnimatePresence, motion, useAnimation } from 'framer-motion';
@@ -89,9 +89,7 @@ const Component = () => {
 
     const hideChannelBackgrounds = useSelector(selectMiscSettingsHideChannelBackground);
 
-    const popOutUserStreams = useSelector(selectPopOutUserStreams);
-    
-    const musicExpanded = useSelector(selectMusicExpanded);
+    const disableTransition = useSelector(selectDisableTransitionAnimations);
 
     // audio pref state
     const echoCancellation = useSelector(selectEchoCancellatio);
@@ -762,7 +760,9 @@ const Component = () => {
     
     return (
         <>
-        <motion.div initial={{translateX: '-100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}} className='room-wrapper-outer'>
+        <motion.div 
+        transition={disableTransition ? {duration: 0} : null}
+        initial={{translateX: '-100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}} className='room-wrapper-outer'>
             <div
             style={
                 ((hideChannelBackgrounds || channel.channel_background === undefined) || page === 'social' || page === 'media' || page === 'pins') ? {backgroundColor: glass ? glassColor : secondaryColor} : null
@@ -774,12 +774,16 @@ const Component = () => {
                 <RoomUserWrapper page={page} users={channel.users} loaded={loaded} />
                 <AnimatePresence>       
                     {page === "social" ? 
-                    <motion.div style={{height: '100%', width: '100%', top: '0px', left: '0px', position: 'absolute', zIndex: 2}} key={'social-page-wrapper'} initial={{translateX: '100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}} >
+                    <motion.div 
+                    transition={disableTransition ? {duration: 0} : null}
+                    style={{height: '100%', width: '100%', top: '0px', left: '0px', position: 'absolute', zIndex: 2}} key={'social-page-wrapper'} initial={{translateX: '100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}} >
                         <Social currentChannel={channel} channelId={current_channel_id} /> 
                     </motion.div>
                     : null}
                     {page === "widgets" ? 
-                    <motion.div key={'room-widgets-preview'} style={{height: '100%', width: '100%', top: '0px', left: '0px', position: 'absolute', zIndex: 4, backgroundColor: secondaryColor}} initial={{translateX: '100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}} >
+                    <motion.div 
+                    transition={disableTransition ? {duration: 0} : null}
+                    key={'room-widgets-preview'} style={{height: '100%', width: '100%', top: '0px', left: '0px', position: 'absolute', zIndex: 4, backgroundColor: secondaryColor}} initial={{translateX: '100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}} >
                         <Widgets key={'widgets'} /> 
                     </motion.div>
                     : null}

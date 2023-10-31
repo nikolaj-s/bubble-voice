@@ -15,7 +15,7 @@ export const LoadingChannelsPlaceHolder = () => {
                 <div
                 key={i}
                     style={{
-                        width: 'calc(100% - 5px)',
+                        width: 'calc(100% - 10px)',
                         height: '34px',
                         borderRadius: '4px',
                         overflow: 'hidden',

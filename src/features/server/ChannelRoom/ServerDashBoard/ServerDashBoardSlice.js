@@ -57,9 +57,17 @@ const ServerDashBoardSlice = createSlice({
         loadingPins: true,
         loadingScreenShots: true,
         error: false,
-        errorMessage: ""
+        errorMessage: "",
+        hideImageOfTheDay: false,
+        hideActivityFeed: false
     },
     reducers: {
+        toggleHideImageOfTheDay: (state, action) => {
+            state.hideImageOfTheDay = !state.hideImageOfTheDay;
+        },
+        toggleHideActivityFeed: (state, action) => {
+            state.hideActivityFeed = !state.hideActivityFeed;
+        },
         removePinnedMessage: (state, action) => {
            
             state.pins = state.pins.filter(p => p._id !== action.payload.message._id);
@@ -116,6 +124,10 @@ export const selectScreenShots = state => state.ServerDashBoardSlice.screenShots
 
 export const selectLoadingScreenShots = state => state.ServerDashBoardSlice.loadingScreenShots;
 
-export const { setPinnedMessages, removePinnedMessage, addPinnedMessage  } = ServerDashBoardSlice.actions;
+export const selectHideImageOfTheDay = state => state.ServerDashBoardSlice.hideImageOfTheDay;
+
+export const selectHideActivityFeed = state => state.ServerDashBoardSlice.hideActivityFeed;
+
+export const {toggleHideActivityFeed, toggleHideImageOfTheDay, setPinnedMessages, removePinnedMessage, addPinnedMessage  } = ServerDashBoardSlice.actions;
 
 export default ServerDashBoardSlice.reducer;

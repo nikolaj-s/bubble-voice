@@ -28,7 +28,7 @@ import { ProcessingIndicator } from './ProcessingIndicator/ProcessingIndicator';
 import { UploadedFileShare } from './UploadedFileShare/UploadeFileShare';
 import { LinkPreview } from './LinkPreview/LinkPreview';
 
-export const Message = ({dashboard = false, direct_message, message, overlay = false, id, channel_id, perm, pinMessage, pinned, index, previous_message, current_message, persist, pin_to_profile}) => {
+export const Message = ({activity_feed = false,dashboard = false, direct_message, message, overlay = false, id, channel_id, perm, pinMessage, pinned, index, previous_message, current_message, persist, pin_to_profile}) => {
 
     const dispatch = useDispatch();
 
@@ -98,7 +98,7 @@ export const Message = ({dashboard = false, direct_message, message, overlay = f
                 <ProfileImage previous_message={previous_message} color={user?.color} current_message={current_message} profile_picture_shape={user?.profile_picture_shape} primaryColor={primaryColor} user_image={user?.user_image} action={openUserPanel} />
                 <div className='message-inner-container'>
                     <div id={`${id}-ctx-message-overlay`} className={'ctx-message-overlay'} />
-                    <SenderInfo timeStamp={timeStamp} direct_message={direct_message} pin_to_profile={pin_to_profile} link={message.link} color={user?.color} profile_picture_shape={user?.profile_picture_shape} primaryColor={primaryColor} display_name={user?.display_name} user_image={user?.user_image} action={openUserPanel} persist={persist} id={id} accentColor={accentColor} hover={hoverState} textColor={textColor} perm={perm} index={index}  message={message} current_message={current_message} previous_message={previous_message} pinMessage={pinMessage} pinned={pinned} overlay={overlay} />
+                    <SenderInfo activity={activity_feed} timeStamp={timeStamp} direct_message={direct_message} pin_to_profile={pin_to_profile} link={message.link} color={user?.color} profile_picture_shape={user?.profile_picture_shape} primaryColor={primaryColor} display_name={user?.display_name} user_image={user?.user_image} action={openUserPanel} persist={persist} id={id} accentColor={accentColor} hover={hoverState} textColor={textColor} perm={perm} index={index}  message={message} current_message={current_message} previous_message={previous_message} pinMessage={pinMessage} pinned={pinned} overlay={overlay} />
                     <MessageText loading={message.loading} color={textColor} text={message.text} />
                     {hideLinksOnMedia && (message.image || message.video || message.iFrame) || message.gallery ? null : message.link_preview ?
                     <LinkPreview data={message.link_preview} />
@@ -113,9 +113,10 @@ export const Message = ({dashboard = false, direct_message, message, overlay = f
                     :
                     message.image && !message.gallery ? 
                     <div 
-                    style={{maxHeight: maximizeMediaSize ? '100%' : 350}}
+                    style={{maxHeight: activity_feed && !current_message.screen_shot ? 80 : maximizeMediaSize ? '100%' : 350}}
                     className='message-image-container'>
-                        <Image minLoadHeight={'300px'} altHeight={maximizeMediaSize ? '100%' : 350}  expandContent={expandContent} imgHeight='auto' cursor='pointer' width={null} altWidth={'100%'} loadingState='eager' objectFit='contain' image={message.image} />
+                        <Image minLoadHeight={'300px'} altHeight={activity_feed && !current_message.screen_shot ? 80 :
+                            maximizeMediaSize ? '100%' : 350}  expandContent={expandContent} imgHeight='auto' cursor='pointer' width={null} altWidth={'100%'} loadingState='eager' objectFit='contain' image={message.image} />
                     </div>
                     : null}
                     {message.video ? 

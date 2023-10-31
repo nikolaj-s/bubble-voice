@@ -1,0 +1,32 @@
+
+.divider-button-container {
+    width: calc(100%  - 20px);
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    height: 35px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.divider-button-container svg {
+    margin-left: 5px;
+    flex-shrink: 0;
+}
+
+.divider-line {
+    width: 100%;
+    flex-grow: 4;
+    height: 2px;
+    border-radius: 3px;
+}
+
+.divider-button-container h3 {
+    flex-shrink: 0;
+    margin-right: 5px;
+    font-weight: 300;
+    font-size: .9rem;
+    padding: 0;
+}

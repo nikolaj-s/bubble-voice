@@ -11,7 +11,7 @@ import { CtxMenuTitle } from '../../components/titles/ctxMenuTitle/CtxMenuTitle'
 
 // state
 import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleStreamState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCopyLinkState, selectCopyState, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteMesssageState, selectDeleteWidget, selectDisableStream, selectDisableWebCam, selectEditChannelCtxState, selectFlipWebCamState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSeeSimilar, selectSelectedMessage, selectSelectedUserCtxState, selectStopStreamingState, selectStreamVolumeState, selectViewSocialState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
-import { assignNewServerGroup, markWidgetForDeletion, moveUser, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerId, selectServerMembers, selectUsersPermissions, sendDeleteMessageRequest, setChannelSocialId, setEditingChannelId, throwServerError, toggleMembersWebCamState, triggerRoomRescale, userBanned } from '../server/ServerSlice';
+import { addActivityMessage, assignNewServerGroup, markWidgetForDeletion, moveUser, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerId, selectServerMembers, selectUsersPermissions, sendDeleteMessageRequest, setChannelSocialId, setEditingChannelId, throwServerError, toggleMembersWebCamState, triggerRoomRescale, userBanned } from '../server/ServerSlice';
 
 // style
 import "./ContextMenu.css";
@@ -906,6 +906,9 @@ export const ContextMenu = () => {
             if (selected_user && channel_id) {
 
                 await socket.request('kick', {channel_id: channel_id, username: selected_user})
+                .then(data => {
+                    dispatch(addActivityMessage(data))
+                })
                 .catch(error => {
                     dispatch(throwServerError({errorMessage: error}));
                 })

@@ -275,7 +275,7 @@ export const MusicWidget = ({editing = false, widget, controls = true}) => {
                         <Range min={0} value={volume} action={handleMusicVolume} max={100} step={0.05} />
                     </div> : null}
                     {queue[0]?.title && editing === false ? 
-                    <Song added_by={queue[0]?.added_by} liked={queue[0]?.liked} action={() => {handleSavingSong(queue[0])}} id={queue[0]._id} key={queue[0]._id} name={queue[0].title} duration={queue[0].duration} image={queue[0].thumbnail} />
+                    <Song width={'calc(100% - 120px)'} added_by={queue[0]?.added_by} liked={queue[0]?.liked} action={() => {handleSavingSong(queue[0])}} id={queue[0]._id} key={queue[0]._id} name={queue[0].title} duration={queue[0].duration} image={queue[0].thumbnail} />
                     :
                     <p
                     style={{

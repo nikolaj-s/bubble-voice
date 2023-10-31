@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { socket } from "./ServerBar/ServerBar";
 import { removePinnedMessage, addPinnedMessage } from "./ChannelRoom/ServerDashBoard/ServerDashBoardSlice";
-import { newMessage, throwServerError } from "./ServerSlice";
+import { addActivityMessage, newMessage, throwServerError } from "./ServerSlice";
 import { UploadVideo } from "../../util/UploadVideo";
 
 export const togglePinMessage = createAsyncThunk(
@@ -90,7 +90,7 @@ export const sendMessage = createAsyncThunk(
                 screen_shot: screen_shot,
                 file: null
             }
-            console.log(file)
+          
             if (file?.type?.includes('video')) {
 
                 let data = await UploadVideo(file);
@@ -116,6 +116,10 @@ export const sendMessage = createAsyncThunk(
             })
            
             dispatch(newMessage(data));
+
+            if (data.screen_shot) {
+                dispatch(addActivityMessage(data));
+            }
 
             return data;
 

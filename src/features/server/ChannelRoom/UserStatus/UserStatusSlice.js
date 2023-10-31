@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetchSavedLocalData, saveLocalData } from "../../../../util/LocalData";
 import { socket } from "../../ServerBar/ServerBar";
-import { updateMemberActiveStatus } from "../../ServerSlice";
+import { addActivityMessage, updateMemberActiveStatus } from "../../ServerSlice";
 
 export const updateUserStatus = createAsyncThunk(
     'UserStatusSlice/updateUserStatus',
@@ -18,6 +18,8 @@ export const updateUserStatus = createAsyncThunk(
                 })
 
                 dispatch(updateMemberActiveStatus({...data}));
+
+                dispatch(addActivityMessage(data.status_msg));
 
                 return status;
 

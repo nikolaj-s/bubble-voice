@@ -11,12 +11,11 @@ import { selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../..
 // style
 import "./MessageInput.css";
 import { SendButton } from './SendButton/SendButton';
-import { ProcessingImageIndicator } from './ProcessingImageIndicator/ProcessingImageIndicator';
 import { ImageDropListener } from './ImageDropListener/ImageDropListener';
 import { ImageSearchPanel } from './ImageSearchPanel/ImageSearchPanel';
 import { selectHideUserStatus } from '../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { selectServerId, throwServerError } from '../../../features/server/ServerSlice';
-import { EmojiButton } from '../../buttons/EmojiButton/EmojiButton';
+
 import { EmojiMenu } from '../../EmojiPicker/EmojiMenu';
 import { AddMediaButton } from '../../buttons/AddMediaButton/AddMediaButton';
 import { ImagePreview } from './ImagePreview/ImagePreview';

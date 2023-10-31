@@ -41,7 +41,8 @@ export const ImageInput = ({
     disableIcon = false,
     imageProcessingFontSize,
     getColor = () => {},
-    centerButtons = false
+    centerButtons = false,
+    position = 'absolute'
 }) => {
     const dispatch = useDispatch();
     // state
@@ -209,14 +210,14 @@ export const ImageInput = ({
         style={{
             width: `calc(${width} - 4px)`,
             height: `calc(${height} - 4px)`,
-            position: "absolute",
+            position: position,
             overflow: 'hidden',
             cursor: 'pointer',
             borderRadius: borderRadius,
             zIndex: zIndex,
-            left: "50%" ,
-            top: "50%",
-            transform: "translate(-50%, -50%)",
+            left: position !== 'absolute' ? null : "50%" ,
+            top: position !== 'absolute' ? null :  "50%",
+            transform: position !== 'absolute' ? null :  "translate(-50%, -50%)",
             backgroundColor: backgroundColor,
             border: `2px dashed rgba(${textColor.split('rgb(')[1].split(')')[0]}, 0.5)`
         }}

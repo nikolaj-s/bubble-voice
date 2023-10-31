@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const ServerNavigationSlice = createSlice({
     name: "ServerNavigationSlice",
     initialState: {
-        page: "pins"
+        page: "activity"
     },
     reducers: {
         handleChangePage: (state, action) => {

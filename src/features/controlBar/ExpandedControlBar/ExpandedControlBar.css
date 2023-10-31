@@ -1,0 +1,35 @@
+
+.expanded-control-bar-container {
+    position: fixed;
+    left: 55px;
+    padding: 10px 5px;
+    bottom: 55px;
+    width: 190px;
+    border-radius: 8px;
+    z-index: 10;
+    box-shadow: -5px -5px 20px rgba(0, 0, 0, 0.582);
+}
+
+.web-cam-preview-container {
+    height: 113px;
+    width: 100%;
+    border-radius: 5px;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 3px;
+    position: relative;
+    overflow: hidden;
+}
+
+#web-cam-mini-preview {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    z-index: 3;
+    height: 100%;
+    border-radius: 3px;
+    background-color: black;
+}
