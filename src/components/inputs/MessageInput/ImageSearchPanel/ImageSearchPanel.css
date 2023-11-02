@@ -25,8 +25,8 @@
 }
 
 .inner-message-image-search-container {
-    width: calc(100% - 50px);
-    padding-left: 50px;
+    width: calc(100% - 32px);
+    padding-left: 32px;
     height: calc(100% );
     display: flex;
     
@@ -97,7 +97,7 @@
     align-items: center;
     position: absolute;
     left: 0;
-    width: 55px;
+    width: 40px;
     justify-content: space-between;
 }
 
@@ -121,8 +121,8 @@
 }
 
 .add-media-nav-button {
-    width: 42px;
-    height: 42px;
+    width: 30px;
+    height: 30px;
     display: flex;
     justify-content: center;
     align-items: center;

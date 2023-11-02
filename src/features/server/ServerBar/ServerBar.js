@@ -378,8 +378,6 @@ const Bar = () => {
 
         socket.on('user status update', (data) => {
 
-            dispatch(addActivityMessage(data.status_msg))
-
             dispatch(updateMemberActiveStatus(data));
             
             dispatch(pushSytemNotification({username: data.username, content: {text: `Is Now ${data.status}`}, type: 'status'}))

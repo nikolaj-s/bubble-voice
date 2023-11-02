@@ -791,7 +791,11 @@ const Component = () => {
                     {page === 'voice' ? <MediaControls key={'media-controls'} hover={hover} /> : null}
                 </AnimatePresence>
             </div>
-            <ChannelBackground channel_background={hideChannelBackgrounds ? null : channel.channel_background} blur={channel.background_blur} />
+            <ChannelBackground 
+            glass={glass}
+            glassColor={glassColor}
+            secondaryColor={secondaryColor}
+            channel_background={hideChannelBackgrounds ? null : channel.channel_background} blur={channel.background_blur} />
             <audio hidden={true} id={'microphone-input-source'} />
             
         </motion.div>

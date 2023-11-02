@@ -8,7 +8,7 @@ import { selectServerAmbiance } from '../../../../settings/appSettings/appearanc
 import { setRoomColor, setServerbannerAmbiance } from '../../../ServerSlice';
 import { GetImageColorData } from '../../../../../util/GetImageColorData';
 
-export const ChannelBackground = ({channel_background, blur = 1}) => {
+export const ChannelBackground = ({channel_background, blur = 1, glass, glassColor, secondaryColor}) => {
 
     const hideUserStatus = useSelector(selectHideUserStatus);
     
@@ -33,7 +33,8 @@ export const ChannelBackground = ({channel_background, blur = 1}) => {
     return (
         <>
         {channel_background ?
-        <div 
+        <div
+        style={{backgroundColor: glass ? glassColor : secondaryColor}} 
         className='channel-background-container'>
             
             <div 
