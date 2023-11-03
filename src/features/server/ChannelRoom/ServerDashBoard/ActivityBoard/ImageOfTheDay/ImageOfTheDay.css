@@ -8,6 +8,8 @@
     max-width: 600px;
     position: relative;
     min-height: 90px;
+    border-radius: 5px;
+    overflow: hidden;
 }
 
 .image-info-wrapper {

@@ -19,8 +19,6 @@ export const updateUserStatus = createAsyncThunk(
 
                 dispatch(updateMemberActiveStatus({...data}));
 
-                dispatch(addActivityMessage(data.status_msg));
-
                 return status;
 
             } else {

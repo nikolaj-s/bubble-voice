@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { selectHideProfileImagesOnMessages } from '../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice'
 import { Image } from '../../Image/Image';
 
-export const ProfileImage = ({previous_message, current_message, user_image, primaryColor, color, profile_picture_shape, action}) => {
+export const ProfileImage = ({activity, previous_message, current_message, user_image, primaryColor, color, profile_picture_shape, action}) => {
     
     const hideProfileImagesOnMessages = useSelector(selectHideProfileImagesOnMessages);
 

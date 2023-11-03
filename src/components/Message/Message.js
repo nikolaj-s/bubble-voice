@@ -95,7 +95,7 @@ export const Message = ({activity_feed = false,dashboard = false, direct_message
             id={`${id}/${channel_id}`}
             className={`message-container ${direct_message ? 'direct-message-container' : null}`}>
                
-                <ProfileImage previous_message={previous_message} color={user?.color} current_message={current_message} profile_picture_shape={user?.profile_picture_shape} primaryColor={primaryColor} user_image={user?.user_image} action={openUserPanel} />
+                <ProfileImage activity={activity_feed} previous_message={previous_message} color={user?.color} current_message={current_message} profile_picture_shape={user?.profile_picture_shape} primaryColor={primaryColor} user_image={user?.user_image} action={openUserPanel} />
                 <div className='message-inner-container'>
                     <div id={`${id}-ctx-message-overlay`} className={'ctx-message-overlay'} />
                     <SenderInfo activity={activity_feed} timeStamp={timeStamp} direct_message={direct_message} pin_to_profile={pin_to_profile} link={message.link} color={user?.color} profile_picture_shape={user?.profile_picture_shape} primaryColor={primaryColor} display_name={user?.display_name} user_image={user?.user_image} action={openUserPanel} persist={persist} id={id} accentColor={accentColor} hover={hoverState} textColor={textColor} perm={perm} index={index}  message={message} current_message={current_message} previous_message={previous_message} pinMessage={pinMessage} pinned={pinned} overlay={overlay} />
