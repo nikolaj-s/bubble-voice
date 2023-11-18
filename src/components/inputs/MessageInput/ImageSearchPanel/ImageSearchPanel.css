@@ -14,14 +14,15 @@
     max-height: calc(90% - 70px);
     height: 500px;
     max-width: 550px;
-    position: absolute;
+    position: fixed;
     z-index: 5;
     padding: 4px;
     bottom: 65px;
+    right: 0px;
     box-shadow: -5px 5px 30px rgba(0, 0, 0, 0.6);
     overflow: hidden;
     transition: 0.1s;
-    border-radius: var(--border-radius);
+    border-radius: 10px;
 }
 
 .inner-message-image-search-container {
@@ -39,23 +40,22 @@
     align-items: center;
     justify-content: center;
     width: calc(100%);
-    height: 30px;
-    padding: 8px 0px 3px 0px;
-    margin-bottom: 4px;
+    height: 40px;
+    margin: 5px 0px 10px 0px;
     position: relative;
 }
 .message-image-search-button {
     position: absolute;
+    top: 50%;
     right: 5px;
-    opacity: 0.5;
-    top: 7px;
+    transform: translateY(-50%);
 }
 
 .message-image-search-input-wrapper input {
     width: 100%;
     margin: 0px 5px;
     padding-left: 5px;
-    border-radius: 5px;
+    border-radius: 10px;
     height: 100%;
     background-color: transparent;
     border: none;
@@ -73,6 +73,7 @@
 .message-image-search-results-container {
     height: 500px;
     overflow-y: auto;
+    position: relative;
     width: calc(100% - 15px);
     padding: 0 5px;
     margin-right: 5px;

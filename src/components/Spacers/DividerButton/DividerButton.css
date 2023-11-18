@@ -1,14 +1,15 @@
 
 .divider-button-container {
-    width: calc(100%  - 20px);
+    width: calc(100%  - 30px);
     padding: 5px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
     height: 35px;
-    border-radius: 5px;
+    border-radius: 10px;
     margin-bottom: 5px;
+    z-index: 2;
 }
 
 .divider-button-container svg {

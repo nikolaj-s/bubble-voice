@@ -19,11 +19,12 @@ import { HeaderTitle } from '../../components/titles/headerTitle/headerTitle';
 import "./ContentScreen.css";
 
 import { closeServerErrorMessage, selectKickedMessage, selectKickedState, selectServerErrorMessage, selectServerErrorState, setKickedState } from '../server/ServerSlice';
-import { selectNewAccountState } from '../settings/appSettings/accountSettings/accountSettingsSlice';
+import { selectAccountVerified, selectNewAccountState } from '../settings/appSettings/accountSettings/accountSettingsSlice';
 import { CreateChannelMenu } from '../server/ChannelRoom/CreateChannelMenu/CreateChannelMenu';
 import { Error } from '../../components/Error/Error';
 import { MemberPanel } from '../server/ChannelRoom/MemberPanel/MemberPanel';
 import { KickedMessage } from './KickedMessage/KickedMessage';
+import { VerifyAccount } from '../VerifyAccount/VerifyAccount';
 
 export const ContentScreen = () => {
     // content
@@ -40,6 +41,8 @@ export const ContentScreen = () => {
 
     const kickedMessage = useSelector(selectKickedMessage);
 
+    const verified = useSelector(selectAccountVerified);
+
     const closeError = () => {
         dispatch(closeServerErrorMessage());
     }
@@ -47,7 +50,7 @@ export const ContentScreen = () => {
     const closeKickedMessage = () => {
         dispatch(setKickedState({kicked: false, kickedMessage: ""}))
     }
-
+    console.log(verified)
     return (
         <>
             <motion.div className='content-screen-container' >

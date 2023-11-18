@@ -4,7 +4,7 @@ import { SettingsHeader } from '../../../../components/titles/SettingsHeader/Set
 import { useRoutes } from 'react-router';
 import { InputTitle } from '../../../../components/titles/inputTitle/InputTitle';
 import { useDispatch, useSelector } from 'react-redux';
-import { miscSettingsChannelSpecificStateChange, selectAutoPlayNativeVideos, selectHideLinksOnMedia, selectHideProfileImagesOnMessages, selectMaximizeMedia, selectMiscSettingsDisableMessagePopUp, selectMuteSocialVideos } from '../MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { miscSettingsChannelSpecificStateChange, selectAutoPlayNativeVideos, selectDisableNsfwBlur, selectDisableNsfwWarning, selectHideLinksOnMedia, selectHideProfileImagesOnMessages, selectMaximizeMedia, selectMiscSettingsDisableMessagePopUp, selectMuteSocialVideos } from '../MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { ToggleButton } from '../../../../components/buttons/ToggleButton/ToggleButton';
 
 import "./socialSettings.css";
@@ -25,6 +25,10 @@ const Settings = () => {
     const maximizeMediaSize = useSelector(selectMaximizeMedia);
 
     const hideProfileImagesOnMessages = useSelector(selectHideProfileImagesOnMessages);
+
+    const disableNsfwWarning = useSelector(selectDisableNsfwWarning);
+
+    const disableNsfwBlur = useSelector(selectDisableNsfwBlur);
 
     const update = (state) => {
         dispatch(miscSettingsChannelSpecificStateChange(state));
@@ -51,6 +55,11 @@ const Settings = () => {
                     <div style={{backgroundColor: accentColor, width: '100%', maxWidth: maximizeMediaSize ? '100%' : 500, height: maximizeMediaSize ? 600 : 400}} className='media-message-place-holder'></div>
                 </div>
             </div>
+            <SettingsHeader title={'Content Filtering'} />
+            <InputTitle title={"Remove Blur On Nsfw Content"} />
+            <ToggleButton state={disableNsfwBlur} action={() => {update("disableNsfwBlur")}} />
+            <InputTitle title={"Disable Explicit Content Detected Warning"} />
+            <ToggleButton state={disableNsfwWarning} action={() => {update('disableNsfwWarning')}} />
             <SettingsHeader title={"Notifications"} />
             <InputTitle title={"Disable Message Pop Up's"} />
             <ToggleButton action={() => {update("disableMessagePopUp")}} state={disableMessagePopUp} />
@@ -59,6 +68,7 @@ const Settings = () => {
             <ToggleButton action={() => {update('autoPlayNativeVideos')}} state={autoPlaySocialVideos}  />
             <InputTitle title={"Mute Videos By Default Within Social"} />
             <ToggleButton action={() => {update("muteSocialVideos")}} state={muteSocialVideos}  /> 
+            <div style={{height: 100, flexShrink: 0}} />
         </div>
     )
 }

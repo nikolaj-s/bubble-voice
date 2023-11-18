@@ -39,6 +39,10 @@ const Settings = () => {
 
     const [previewBio, togglePreviewBio] = React.useState(false);
 
+    const [newBio, setNewBio] = React.useState("");
+
+    const [newDisplayName, setNewDisplayName] = React.useState("");
+
     // account slice state
     const displayName = useSelector(selectDisplayName);
 
@@ -81,19 +85,51 @@ const Settings = () => {
 
         setColor(profileColor || primaryColor);
 
+        setNewDisplayName(displayName);
+
+        setNewBio(profileBio);
+
+        return () => {
+            
+            URL.revokeObjectURL(newUserBanner.preview);
+
+            URL.revokeObjectURL(newUserImage.preview);
+
+            setNewUserBanner({});
+            setNewUserImage({});
+        }
+
     // eslint-disable-next-line
     }, [])
 
     // handle actions
     const handleCancel = () => {
-        navigate(window.location.hash.split('#')[1].split('/appsettings')[0])
+       
+        
+        setNewShape(profilePictureShape);
+
+        setColor(profileColor || primaryColor);
+
+        URL.revokeObjectURL(newUserBanner.preview);
+
+        URL.revokeObjectURL(newUserImage.preview);
+
+        setNewUserBanner({});
+
+        setNewUserImage({});
+
+        setNewDisplayName(displayName);
+
+        setNewBio(profileBio);
+
+        dispatch(updateAccountInputState({state: 'change', value: false}));
+        
     }
+
+    console.log(newUserBanner)
     
     const handleApply = () => {
-        console.log(newUserImage, newUserBanner)
-        dispatch(updateAccount({userImage: newUserImage, userBanner: newUserBanner, newShape: newShape, color: color}));
-        setNewUserBanner({});
-        setNewUserImage({});
+        dispatch(updateAccount({userImage: newUserImage, userBanner: newUserBanner, newShape: newShape, color: color, bio: newBio, displayName: newDisplayName}));
     }
 
     const getNewUserImage = (image) => {
@@ -127,12 +163,19 @@ const Settings = () => {
 
     const changeProfileBio = (value) => {
         if (value.length > 1024) return;
-
-        dispatch(handleUpdateBio(value));
+        dispatch(updateAccountInputState({state: 'change', value: true}))
+        setNewBio(value);
     }
 
     const handleToggleShowScreenShots = () => {
         dispatch(toggleShowCaseScreenShots());
+    }
+
+    const handleNewDisplayName = (value) => {
+        if (value.length > 15) return;
+        dispatch(updateAccountInputState({state: 'change', value: true}))
+        setNewDisplayName(value);
+
     }
 
     return (
@@ -140,7 +183,7 @@ const Settings = () => {
             <div className='settings-wrapper'>
                 <SettingsHeader title={"Account Settings"} />
                 <InputTitle title={"Edit User Panel"} />
-                <EditMemberPanel screenShots={screenShots} toggleShowCaseScreenShots={handleToggleShowScreenShots} showCaseScreenShots={showCaseScreenShots} color={color || secondaryColor} updateColor={updateColor} newShape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} changeProfileShape={changeProfileShape} handleInput={handleInput} displayName={displayName} previewBio={previewBio} togglePreviewBio={togglePreviewBio} profileBio={profileBio} changeProfileBio={changeProfileBio} />
+                <EditMemberPanel newBanner={newUserBanner} newImage={newUserImage} handleNewDisplayName={handleNewDisplayName} screenShots={screenShots} toggleShowCaseScreenShots={handleToggleShowScreenShots} showCaseScreenShots={showCaseScreenShots} color={color || secondaryColor} updateColor={updateColor} newShape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} changeProfileShape={changeProfileShape} handleInput={handleInput} displayName={newDisplayName} previewBio={previewBio} togglePreviewBio={togglePreviewBio} profileBio={newBio} changeProfileBio={changeProfileBio} />
                 <SettingsHeader title={"Security"} />
                 <InputTitle title={"Change Password"} />
                 <TextInput stateSelector='password' action={handleInput}  marginBottom='2%' type='password' placeholder={"Current Password"} inputValue={password} />

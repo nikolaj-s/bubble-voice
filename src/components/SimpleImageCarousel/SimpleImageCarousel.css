@@ -11,7 +11,8 @@
     left: 0;
     width: 30px;
     height: 100%;
-    opacity: 0.2;
+    opacity: 1;
+    cursor: pointer;
 }
 
 .incr-control {
@@ -20,7 +21,8 @@
     right: 0;
     width: 30px;
     height: 100%;
-    opacity: 0.2;
+    opacity: 1;
+    cursor: pointer;
 }
 
 .incr-control:hover,
@@ -30,8 +32,11 @@
 
 .position-indicator-wrapper {
     position: absolute;
-    bottom: 0;
-    width: 100%;
+    bottom: 5px;
+    padding: 4px;
+    border-radius: 10px;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     height: 10px;
     justify-content: center;

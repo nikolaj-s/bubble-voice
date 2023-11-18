@@ -5,12 +5,12 @@ import { ButtonAnimationWrapper } from '../ButtonAnimationWrapper/ButtonAnimatio
 
 import "./MusicOverlayButton.css";
 
-export const MusicOverlayButton = ({width, height, action, description, playing = false}) => {
+export const MusicOverlayButton = ({width, height, action, description, playing = false, borderRadius}) => {
 
     const color = useSelector(selectTextColor);
 
     return (
-        <ButtonAnimationWrapper description={description} width={width} height={height} action={action} >
+        <ButtonAnimationWrapper desc_width={120} borderRadius={borderRadius} description={description} width={width} height={height} action={action} >
             <div className={`music-overlay-button-wrapper ${playing ? 'music-playing-class' : null}`}>
                 <span style={{backgroundColor: color}} />
                 <span style={{backgroundColor: color}} />

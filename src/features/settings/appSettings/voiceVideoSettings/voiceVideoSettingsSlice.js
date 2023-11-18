@@ -54,7 +54,7 @@ const voiceVideoSettingsSlice = createSlice({
         mirroredWebCam: false,
         noiseSuppression: false,
         echoCancellation: false,
-        micInputVolume: 1,
+        micInputVolume: 2,
         autoGainControl: false,
         voiceActivationSensitivity: 60,
         voiceDeactivationDelay: 50,
@@ -169,7 +169,7 @@ const voiceVideoSettingsSlice = createSlice({
             }
 
             if (saved_data.micInputVolume) {
-                state.micInputVolume = saved_data.micInputVolume;
+                state.micInputVolume = saved_data.micInputVolume < 2 ? 2 : saved_data.micInputVolume > 5 ? 5 : saved_data.micInputVolume;
             }
 
             if (saved_data.autoGainControl) {

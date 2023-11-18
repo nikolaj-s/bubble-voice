@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectLoadingMusicState, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, selectMuteState, toggleBehind,  toggleMusicExpanded, } from './MusicSlice';
+import { selectLoadingMusicState, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, selectMuteState, selectTime, setTime, toggleBehind,  toggleMusicExpanded, } from './MusicSlice';
 import YouTube from 'react-youtube'
 import { selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
@@ -25,6 +25,7 @@ export const Music = () => {
 
     const [currentlyPlaying, setCurrentlyPlaying] = React.useState("");
 
+    const time = useSelector(selectTime);
 
     const loading = useSelector(selectLoadingMusicState);
 
@@ -39,7 +40,6 @@ export const Music = () => {
     const volume = useSelector(selectMusicVolume);
 
     const soundEffectsVolume = useSelector(selectSoundEffectVolume)
-
 
     const dynamicVoiceAlerts = useSelector(selectDynamicVoiceAlerts);
 
@@ -57,8 +57,6 @@ export const Music = () => {
 
     React.useEffect(() => {
         try {
-
-
 
             if (player) {
                 
@@ -110,12 +108,15 @@ export const Music = () => {
                 alert.rate = voiceRate;
 
                 window.speechSynthesis.speak(alert);
+
+                
             }
            
-
+            dispatch(setTime(0));
         }    
 
         if (musicQueue.length === 0) {
+            dispatch(setTime(0));
             dispatch(toggleMusicExpanded(false));
             dispatch(toggleBehind(false))
         }
@@ -128,6 +129,26 @@ export const Music = () => {
 
     }
 
+    // handle time
+    React.useEffect(() => {
+
+        if (musicQueue.length === 0 && time !== 0) dispatch(setTime(0));
+        
+        if (musicQueue.length === 0) return;
+
+        if (!musicPlaying) return;
+        console.log(musicQueue[0])
+        let interval = setInterval(() => {
+
+            dispatch(setTime((time === 0 && musicQueue[0]?.current ? musicQueue[0]?.current : time + 1)));
+
+        }, 1000)
+
+        return () => {
+            clearInterval(interval);
+        }
+    }, [time, currentlyPlaying, musicQueue, musicPlaying])
+
     return (
         <>
         
@@ -135,12 +156,11 @@ export const Music = () => {
         style={{
             display: disableMediaWidget ? 'none' : (currentlyPlaying) ? 'flex' : 'none',
            
-            backgroundColor: 'black'
 
         }}
         id={'room-media-player-component'}
         className='active-user-container'>
-            
+            <img className='media-player-corner-thumbnail' src={musicQueue[0]?.thumbnail} />
             <div
             
             
@@ -164,7 +184,7 @@ export const Music = () => {
                     }}} style={{
                         width: '100%',
                         height: '100%',
-                        borderRadius: 8
+                        borderRadius: 10
                     }} />
                     <div className='youtube-disable-clicking'>
                         <div className='song-title-container'>

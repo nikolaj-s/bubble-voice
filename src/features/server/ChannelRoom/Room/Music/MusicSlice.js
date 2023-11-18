@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { setMusicWidgetVolume } from "../../../../../util/LocalData";
+import { fetchSavedLocalData, saveLocalData, setMusicWidgetVolume } from "../../../../../util/LocalData";
 import { throwServerError } from "../../../ServerSlice";
 import { socket } from "../../../ServerBar/ServerBar";
 
@@ -28,6 +28,24 @@ export const handleAddingMedia = createAsyncThunk(
     }
 )
 
+export const handleFetchPersistedMusicSettings = createAsyncThunk(
+    'MusicSlice/handleFetchPersistedMusicSettings',
+    async () => {
+        try {
+
+            const data = await fetchSavedLocalData("MEDIA", "WIDGET")
+            .then(res => res);
+
+            if (!data || data.error) return {};
+            console.log(data);
+            return data;
+
+        } catch (e) {
+
+        }
+    }
+)
+
 const MusicSlice = createSlice({
     name: 'MusicSlice',
     initialState: {
@@ -40,11 +58,20 @@ const MusicSlice = createSlice({
         loading: false,
         behind: false,
         mute: false,
-        color: ""
+        color: "",
+        time: 0
     },
     reducers: {
         toggleMuted: (state, action) => {
             state.mute = !state.mute;
+
+            saveLocalData("MEDIA", "WIDGET", {
+                mute: state.mute,
+                volume: state.volume
+            })
+        },
+        setTime: (state, action) => {
+            state.time = action.payload;
         },
         toggleBehind: (state, action) => {
             state.behind = action.payload;
@@ -94,6 +121,11 @@ const MusicSlice = createSlice({
             state.volume = action.payload;
 
             setMusicWidgetVolume(action.payload);
+
+            saveLocalData("MEDIA", "WIDGET", {
+                mute: state.mute,
+                volume: state.volume
+            })
         },
         removeSongFromQueue: (state, action) => {
 
@@ -122,6 +154,11 @@ const MusicSlice = createSlice({
         },
         [handleAddingMedia.rejected]: (state, action) => {
             state.loading = false;
+        },
+        [handleFetchPersistedMusicSettings.fulfilled]: (state, action) => {
+            if (action.payload.mute) state.mute = true;
+
+            if (action.payload.volume) state.volume = action.payload.volume;
         }
     }
 })
@@ -147,7 +184,9 @@ export const selectMuteState = state => state.MusicSlice.mute;
 
 export const selectMediaColor = state => state.MusicSlice.color;
 
+export const selectTime = state => state.MusicSlice.time;
+
 // actions
-export const {setMediaColor, toggleMuted, toggleBehind, toggleLoadingMusic,toggleMusicExpanded, removeSongFromQueue, un_like_song, like_song, toggleMusicPlaying, addSongToQueue, skipSong, updateMusicState, throwMusicError, updateMusicVolume} = MusicSlice.actions;
+export const {setTime, setMediaColor, toggleMuted, toggleBehind, toggleLoadingMusic,toggleMusicExpanded, removeSongFromQueue, un_like_song, like_song, toggleMusicPlaying, addSongToQueue, skipSong, updateMusicState, throwMusicError, updateMusicVolume} = MusicSlice.actions;
 
 export default MusicSlice.reducer;

@@ -20,6 +20,16 @@
     border-bottom-right-radius: var(--border-radius);
 }
 
+.channel-background-contain-blur-effect {
+    z-index: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    filter: blur(10px);
+}
+
 .channel-background-image-wrapper {
     width: 100%;
     height: 100%;

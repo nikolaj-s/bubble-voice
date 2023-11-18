@@ -6,22 +6,22 @@ import { TextButton } from '../textButton/TextButton';
 
 import "./ApplyCancelButton.css";
 import { useSelector } from 'react-redux';
-import { selectSecondaryColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, selectSecondaryColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
-export const ApplyCancelButton = ({apply, cancel, active, name = "Apply", toggled = null, cancelName = "Cancel", position = 'relative', bottom = 0, right = 0, width = '250px'}) => {
+export const ApplyCancelButton = ({apply, cancel, active, name = "Apply", toggled = null, cancelName = "Cancel", position = 'fixed', flip}) => {
 
     const secondaryColor = useSelector(selectSecondaryColor);
+
+    const primaryColor = useSelector(selectPrimaryColor);
 
     return (
         <motion.div 
         style={{
+            backgroundColor: secondaryColor,
             position: position,
-            bottom: bottom,
-            right: right,
-            width: width,
-            borderTopLeftRadius: 5,
-            backgroundColor: position === 'fixed' ? secondaryColor : null,
-            paddingRight: position === 'fixed' ? 10 : null
+            justifyContent: flip ? 'flex-start' : 'flex-end',
+            zIndex: position === 'relative' ? 0 : null,
+            borderTop: position === 'relative' ? null : `solid 3px ${primaryColor}`
         }}
         key={"apply-cancel-button"} initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} 
         

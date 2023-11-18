@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 import { selectProfilePinnedMessage, selectUsername } from '../../../features/settings/appSettings/accountSettings/accountSettingsSlice'
 import { PinToProfileButton } from '../../buttons/PinToProfileButton/PinToProfileButton'
 
-export const SenderInfo = ({activity = false, timeStamp, direct_message, pin_to_profile, link, id, current_message, primaryColor, previous_message, message, pinMessage, pinned, overlay, hover, textColor, index, perm, accentColor, persist, action, display_name, user_image}) => {
+export const SenderInfo = ({submenuId, activity = false, timeStamp, direct_message, pin_to_profile, link, id, current_message, primaryColor, previous_message, message, pinMessage, pinned, overlay, hover, textColor, index, perm, accentColor, persist, action, display_name, user_image}) => {
 
     const userName = useSelector(selectUsername);
 
@@ -32,7 +32,7 @@ export const SenderInfo = ({activity = false, timeStamp, direct_message, pin_to_
         
         style={{
             height: (previous_message?.username !== current_message?.username) || (previous_message?.content?.date?.split("T")[0] !== current_message?.content?.date?.split("T")[0]) ? 15 : 0,
-            padding: (previous_message?.username !== current_message?.username) || (previous_message?.content?.date?.split("T")[0] !== current_message?.content?.date?.split("T")[0]) ? '0px 0 8px 0' : 0,
+            padding: (previous_message?.username !== current_message?.username) || (previous_message?.content?.date?.split("T")[0] !== current_message?.content?.date?.split("T")[0]) ? '0px 0 4px 0' : 0,
         }}
         className='sender-info-container'>
                 
@@ -47,21 +47,24 @@ export const SenderInfo = ({activity = false, timeStamp, direct_message, pin_to_
                     style={{color: textColor}}
                     >{display_name || current_message.username}</h2>
                     {!message.loading ?
-                    <p
+                    <p className='message-date-stamp'
                         style={{color: textColor, marginRight: 10}}
-                    >{message?.date?.split("T")[0]} - {timeStamp}</p> : null}
+                    >{message?.date?.split("T")[0]}</p> : null}
                 </div>
                 : null}
-                {message.loading || activity ? 
-                null
-                : hover ?
-                <div style={{top: index === 0 ? 5 : -20, backgroundColor: primaryColor, boxShadow: '5px 5px 20px rgba(0, 0, 0, 0.6)'}} className='date-submenu-message-wrapper'>
+                {message.loading  ? 
+                null :
+                <div id={submenuId} style={{top: index === 0 ? 5 : -20, backgroundColor: primaryColor, boxShadow: '5px 5px 20px rgba(0, 0, 0, 0.4)'}} className='date-submenu-message-wrapper'>
+                    <p className='message-exact-time-stamp' style={{color: textColor, fontSize: '0.7rem', paddingRight: activity ? 5 : 0, paddingLeft: 5, paddingRight: 5}}>{timeStamp}</p>
+                    {activity ? null :
+                    <>
                     {(userName === current_message.username && !direct_message) ? <PinToProfileButton pinned={profilePin?._id === current_message?._id} action={() => {pin_to_profile(current_message?._id)}} width={18} padding={5} height={18} /> : null}
                     {(perm && persist) ? <PinButton borderRadius={5} flip_description={index === 0} desc_width={40} description={pinned ? 'Unpin' : 'Pin'} padding={5} action={pinMessage} width={18} desc_space={12}  height={18} pinned={pinned} /> : null}
                     {link ? <CopyButton action={handleCopy} padding={5} flip_description={index === 0} altInvert={true} width={18} height={18} description={"Copy Link"} desc_width={60} desc_space={12} /> : null}
                     {perm ? <SubMenuButton altInvert={true} invert={false} target={`${id}-ctx-message-overlay`} flip_description={index === 0} desc_width={40} zIndex={2} description={"Extra"} desc_space={12} padding={5} width={18} height={18} borderRadius={5} /> : null}
-                </div> 
-                : null}
+                    </>
+                    }                   
+                </div> }
             </div>
         </>
     )

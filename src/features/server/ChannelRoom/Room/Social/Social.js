@@ -23,12 +23,14 @@ import { PersistedDataNotice } from '../../../../../components/PersistedDataNoti
 
 import { sendDirectMessage, updateDirectmessage } from '../../../../Messages/MessagesSlice';
 import { selectGlassColor, selectGlassState, selectSecondaryColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
-import { fetchMessages, messageCleanUp, selectAllMessages, selectAltSocialLoading, selectLoadingMessages, sendMessage, togglePinMessage, toggleSocialAltLoading } from '../../../SocialSlice';
+import { fetchMessages, messageCleanUp, selectAllMessages, selectAltSocialLoading, selectLoadingMessages, selectNsfwNoticeState, sendMessage, togglePinMessage, toggleSocialAltLoading } from '../../../SocialSlice';
 import { saveSocialData, SOCIAL_DATA } from '../../../../../util/LocalData';
 import { MessagePlaceHolderLoader } from '../../../../../components/MessagePlaceHolderLoader/MessagePlaceHolderLoader';
 import { clearCache } from '../../../../../util/ClearCaches';
 import { UploadVideo } from '../../../../../util/UploadVideo';
 import { CannotViewSocial } from '../../../../../components/CannotViewSocial/CannotViewSocial';
+import { ExplicitContentWarning } from './ExplicitContentWarning/ExplicitContentWarning';
+import { selectDisableNsfwWarning } from '../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 export const Social = ({currentChannel, channelId, socialRoute = false, bulletin = false, direct_message, direct_message_user, status}) => {
 
@@ -46,6 +48,10 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
     const [initialMount, toggleInitialMount] = React.useState(true);
 
+    const [emoji, setEmoji] = React.useState();
+
+    const [nsfw, toggleNsfw] = React.useState(false);
+
     const loadingMore = useSelector(selectLoadingMessages);
 
     const altLoading = useSelector(selectAltSocialLoading);
@@ -53,6 +59,8 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
     const username = useSelector(selectUsername);
 
     const permission = useSelector(selectUsersPermissions);
+
+    const disableNsfwWarning = useSelector(selectDisableNsfwWarning);
 
     const displayName = useSelector(selectDisplayName);
 
@@ -67,6 +75,8 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
     const social = useSelector(selectAllMessages);
 
     const userImage = useSelector(selectUserImage);
+
+    const nsfwNotice = useSelector(selectNsfwNoticeState)
 
     let allMessages = direct_message ? currentChannel.social : social[channelId];
 
@@ -93,7 +103,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         setTimeout(() => {
             toggleInitialMount(false);
-        }, 50)
+        }, 120)
 
         if (direct_message) return;
         
@@ -102,19 +112,16 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
             if (social[channelId][social[channelId]?.length - 1]?.no_more_messages) {
                 return;
             } else if (social[channelId].length < 15) {
-
+                console.log('fetching')
                 dispatch(fetchMessages({channel_id: channelId}));
             
             }
 
-        } else {
+        } else if (channelId) {
             
             dispatch(fetchMessages({channel_id: channelId}));
         
         }
-
-        
-    
 
         return () => {
             dispatch(messageCleanUp(channelId));
@@ -155,13 +162,13 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
         setText(value);
     }
    
-    const send = async () => {
+    const send = async (textStyle) => {
 
         if (!permission.user_can_post_channel_social) return;
         
-        if (text.replace(/\s/g, '').length < 1 && !image.size) return;
+        if (text.replace(/\s/g, '').length < 1 && !image.size && !emoji) return;
 
-        if (text.length === 0 && !image.size) return;
+        if (text.length === 0 && !image.size && !emoji) return;
         
         if (text.length > 1024) return dispatch(throwServerError({errorMessage: "Message cannot be longer than 1024 characters"}));
 
@@ -169,7 +176,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         let video = false;
 
-        console.log(image)
+        console.log(emoji)
 
         let data = {
             send_to: direct_message_user,
@@ -182,10 +189,14 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
                 link: false,
                 local_id: local_id,
                 loading: true,
-                display_name: displayName
+                display_name: displayName,
+                emoji: emoji,
+                textStyle: textStyle
             },
-            valid: true
+            valid: true,
+            nsfw: nsfw
         }
+        console.log(text)
 
         if (direct_message) {
             
@@ -194,12 +205,14 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
         }
 
         data = {...data, file: image?.size && !image?.type?.includes('video') ? image : null}
-        console.log(data)
+        
         messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
         
         setText("");
 
         setImage(false);
+
+        setEmoji(null);
 
         if (direct_message) {
 
@@ -214,7 +227,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         } else {
             
-            dispatch(sendMessage({username: username, file: image, channel_id: channelId, local_id: local_id, text: text, image_preview: image.preview ? true : false}))
+            dispatch(sendMessage({username: username, file: image, channel_id: channelId, local_id: local_id, text: text, image_preview: image.preview ? true : false, emoji: emoji, nsfw: nsfw, textStyle: textStyle}))
         }
 
         setTimeout(() => {
@@ -227,9 +240,9 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
         
     }
 
-    const listenToEnter = (keycode) => {
+    const listenToEnter = (keycode, style) => {
         if (keycode === 13) {
-            send();
+            send(style);
         }
     }
 
@@ -295,11 +308,15 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
         if (document.getElementsByClassName('social-outer-container').length > 1) return;
         
         try {
-            document.getElementById('social-input-selector').focus();
+            document.getElementById(`social-input-selector-${channelId}`).focus();
         } catch(e){
             return;
         }
 
+    }
+
+    const handleToggleNsfw = (value) => {
+        toggleNsfw(value);
     }
 
     React.useEffect(() => {
@@ -327,12 +344,15 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
                 <Loading loading={loadingMore || mounting} />
             </motion.div>
             : null}
+            
             <div className='social-wrapper-container'>
                 <div  className='social-inner-container'>
                     
                     <div onScroll={handleLoadMoreOnScroll} ref={messagesRef} className='social-messages-wrapper'>
                         {initialMount ? 
-                        <MessagePlaceHolderLoader />
+                        <MessagePlaceHolderLoader /> :
+                        nsfwNotice && !disableNsfwWarning ?
+                        <ExplicitContentWarning />
                         :
                         allMessages?.map((message, key) => {
                             return message.no_more_messages ? null :
@@ -341,9 +361,9 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
                         {direct_message ? null : <PersistedDataNotice channelName={currentChannel.channel_name} persisted={!currentChannel.persist_social} />}
                         
                     </div>
-                    {(direct_message && status) ? <MessageInput cancel_image={handleCancelImageSend} direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : 
+                    {(direct_message && status) ? <MessageInput nsfw={nsfw} handleNsfw={handleToggleNsfw} setEmoji={setEmoji} cancel_image={handleCancelImageSend} direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : 
                     permission?.user_can_post_channel_social && !direct_message ?
-                    <MessageInput channel_name={currentChannel?.channel_name} direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} />
+                    <MessageInput channelId={channelId} nsfw={nsfw} handleNsfw={handleToggleNsfw} setEmoji={setEmoji} channel_name={currentChannel?.channel_name} direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} />
                      : null}
                 </div>
             </div>

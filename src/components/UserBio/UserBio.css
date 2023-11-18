@@ -1,13 +1,15 @@
 
 .user-bio-preview-container {
-    width: calc(100% - 10px);
+    width: calc(100% - 16px);
     height: auto;
-    padding: 5px;
-    border-radius: var(--border-radius);
+    padding: 8px;
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     position: relative;
+    min-height: 24px;
+    flex-shrink: 0;
 }
 
 .user-bio-preview-container h2 {

@@ -4,7 +4,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { setExpandedContent, setVideoStartTime } from '../../features/ExpandContent/ExpandContentSlice';
 import { selectAccentColor, selectGlassColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
-import { selectAutoPlayNativeVideos, selectMuteSocialVideos, selectVideoVolume, setVideoVolume } from '../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { miscSettingsChannelSpecificStateChange, selectAutoPlayNativeVideos, selectMuteSocialVideos, selectVideoVolume, setVideoVolume } from '../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { ExpandButton } from '../buttons/ExpandButton/ExpandButton';
 import { AudioToggleButton } from '../buttons/mediaButtons/audioToggleButton/AudioToggleButton';
 import { PauseButton } from '../buttons/PauseButton/PauseButton';
@@ -72,15 +72,17 @@ export const Video = ({maxHeight = '100%', video, id, looping = false, objectFit
 
     const handleMuteState = (e) => {
         e.stopPropagation();
-        if (muted) {
-            document.getElementById(video + id).muted = true;
-            document.getElementById(video + 'audio').muted = true;
-        } else {
-            document.getElementById(video + id).muted = false;
-            document.getElementById(video + 'audio').muted = false;
-        }
 
-        toggleMuted(!muted)
+        dispatch(miscSettingsChannelSpecificStateChange('muteSocialVideos'))
+        // if (muted) {
+        //     document.getElementById(video + id).muted = true;
+        //     document.getElementById(video + 'audio').muted = true;
+        // } else {
+        //     document.getElementById(video + id).muted = false;
+        //     document.getElementById(video + 'audio').muted = false;
+        // }
+
+        // toggleMuted(!muted)
     }
 
     const onVideoEnd = () => {
@@ -172,7 +174,7 @@ export const Video = ({maxHeight = '100%', video, id, looping = false, objectFit
         if (social_mute) {
             document.getElementById(video + id).muted = true;
             document.getElementById(video + 'audio').muted = true;
-            toggleMuted(false);
+        //    toggleMuted(false);
         }
 
     }, [social_mute])
@@ -215,7 +217,7 @@ export const Video = ({maxHeight = '100%', video, id, looping = false, objectFit
             loading="lazy"
             onError={handleAltVideoLoad}
             style={{objectFit: objectFit, maxHeight: maxHeight}}
-            muted={mutedToggled ? true : false}
+            muted={social_mute}
             onEnded={onVideoEnd} autoPlay={forceAutoPlay ? true : looping ? true : false} id={video + id} controls={false} loop={true} 
             src={video}
             />
@@ -229,23 +231,23 @@ export const Video = ({maxHeight = '100%', video, id, looping = false, objectFit
             className='message-video-controls-container'>
                 <div className='inner-video-controls-container'>
                     {playing ?
-                    <PauseButton background={glassColor} width={15} height={15} action={handlePlayState} />
+                    <PauseButton borderRadius={10} background={glassColor} width={15} height={15} action={handlePlayState} />
                     :
-                    <PlayButton background={glassColor} width={15} height={15} action={handlePlayState} />
+                    <PlayButton borderRadius={10} background={glassColor} width={15} height={15} action={handlePlayState} />
                     }
-                    <AudioToggleButton background={glassColor} o_mouseEnter={() => {toggleShowVolume(true)}} o_mouseLeave={() => {toggleShowVolume(false)}}  width={15} height={15} action={handleMuteState} state={muted} />
+                    <AudioToggleButton borderRadius={10} background={glassColor} o_mouseEnter={() => {toggleShowVolume(true)}} o_mouseLeave={() => {toggleShowVolume(false)}}  width={15} height={15} action={handleMuteState} state={!social_mute} />
                     {showVolume ? <div onMouseEnter={() => {toggleShowVolume(true)}} onMouseLeave={() => {toggleShowVolume(false)}}  className='video-volume-slider'>
-                        <Range action={handleVolumeChange} value={videoVolume} min={0} max={1} step={0.01} />
+                        <Range disableBackground={true} action={handleVolumeChange} value={videoVolume} min={0} max={1} step={0.01} />
                     </div> : null}
                 </div>
-                <ExpandButton width={15} height={15} description={"max"} action={expand} />
+                <ExpandButton borderRadius={10} width={15} height={15} description={"max"} action={expand} />
                 
             </motion.div>}
             {interacted ? 
             <div 
             onClick={scrub}
              className='video-progress-bar-container'>
-                <div style={{height: '100%', width: `${progress}%`, backgroundColor: accentColor, transition: '0.1s'}} ></div>
+                <div style={{height: '100%', width: `${progress}%`, backgroundColor: color, transition: '0.1s'}} ></div>
             </div>
             : null}
         </div>

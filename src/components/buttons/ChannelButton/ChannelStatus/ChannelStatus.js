@@ -3,22 +3,17 @@ import React from 'react'
 import "./ChannelStatus.css";
 import { useSelector } from 'react-redux';
 import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAppFocusedState } from '../../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 export const ChannelStatus = ({status, active}) => {
 
-    const [hover, toggleHover] = React.useState(false);
-
     const textColor = useSelector(selectTextColor);
 
-    const primaryColor = useSelector(selectPrimaryColor);
-
-    const accentColor = useSelector(selectAccentColor);
+    const focused = useSelector(selectAppFocusedState)
 
     return (
         <div 
-        onMouseEnter={() => {toggleHover(true)}}
-        onMouseLeave={() => {toggleHover(false)}}
-        className={`channel-status-wrapper ${hover ? 'channel-status-wrapper-animation' : ''}`}>
+        className={`channel-status-wrapper ${focused ? 'channel-status-wrapper-animation' : ''}`}>
             <p
             style={{color: textColor, opacity: 0.7}}
             >{status}</p>

@@ -39,13 +39,22 @@
     overflow: hidden;
     display: flex;
     align-self: center;
-    border-radius: 8px;
+    border-radius: 15px;
     margin: 2px;
     cursor: pointer;
     background-color: black;
     max-width: 960px;
     max-height: 540px;
     box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.7);
+}
+
+.user-stream-window-profile-image {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 40px;
+    height: 40px;
+    opacity: 0.7;
 }
 
 .stream-title-container {
@@ -74,8 +83,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    
-    background-color: rgba(0, 0, 0, 0.588);
 }
 
 #live-chat-wrapper .streaming-video-player {

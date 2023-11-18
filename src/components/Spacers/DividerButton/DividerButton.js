@@ -1,7 +1,7 @@
 import React from 'react'
 import { AltDownIcon } from '../../Icons/AltDownIcon/AltDownIcon'
 import { useSelector } from 'react-redux'
-import { selectPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
+import { selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 
 import "./DividerButton.css";
 
@@ -13,12 +13,14 @@ export const DividerButton = ({action, state, name, extra}) => {
 
     const primaryColor = useSelector(selectPrimaryColor);
 
+    const secondaryColor = useSelector(selectSecondaryColor);
+
     return (
         <div 
         onClick={action}
         onMouseEnter={() => {toggleHover(true)}}
         onMouseLeave={() => {toggleHover(false)}}
-        style={{backgroundColor: hover ? primaryColor : 'rgba(0,0,0,0)'}}
+        style={{backgroundColor: hover ? primaryColor : secondaryColor}}
         className='divider-button-container'>
             <h3 style={{color: textColor}}>{name}</h3>
             {extra ?

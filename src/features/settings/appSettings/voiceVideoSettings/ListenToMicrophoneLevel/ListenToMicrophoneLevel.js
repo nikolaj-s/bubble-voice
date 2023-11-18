@@ -87,7 +87,7 @@ export const ListenToMicrophoneLevel = () => {
                 }) }
             </div>
             <AltError error={error} errorMessage={errorMessage} />
-            <ApplyCancelButton toggled={open} cancel={stopMic} name={"Start"} apply={testAudio} />
+            <ApplyCancelButton flip={true} position='relative' toggled={open} cancel={stopMic} name={"Start"} apply={testAudio} />
         </div>
     )
 }

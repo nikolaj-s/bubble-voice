@@ -20,7 +20,11 @@ export const Song = ({id, image, name, duration, action, liked, saved, addToQueu
 
     const primaryColor = useSelector(selectPrimaryColor);
 
-    const time = (duration / 60).toFixed(2).toString().split('.').join(':')
+    const minutes = Math.floor(duration / 60);
+
+    const seconds = duration % 60;
+
+    const time = `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`
     
     return (
         <div 
@@ -48,9 +52,9 @@ export const Song = ({id, image, name, duration, action, liked, saved, addToQueu
                 : null}
             </div>
                 
-            <LikeButton desc_space={10} padding={4} toggled={liked} action={action}  width={20} height={20} />
-            {(saved && liked) ? <AddButton desc_width={50} transparent={true} desc_space={10} padding={4} action={addToQueue} margin={"0 0 0 5px"} width={20} height={20} description={"Add To Queue"} /> : null}
-            {inQueue ? <RemoveButton desc_width={60} transparent={true} desc_space={10} padding={4} action={removeFromQueue} margin={"0 0 0 5px"} width={20} height={20} description={"Remove"} /> : null}
+            <LikeButton borderRadius={'50%'} desc_space={16} padding={6} toggled={liked} action={action}  width={20} height={20} />
+            {(saved && liked) ? <AddButton borderRadius={'50%'} desc_width={50} transparent={true} desc_space={16} padding={6} action={addToQueue}  width={20} height={20} description={"Add To Queue"} /> : null}
+            {inQueue ? <RemoveButton borderRadius={'50%'} desc_width={60} transparent={true} desc_space={16} padding={6} action={removeFromQueue} margin={"0 0 0 5px"} width={20} height={20} description={"Remove"} /> : null}
             <p style={{
                 color: textColor
             }}>{time}</p>

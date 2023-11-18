@@ -6,20 +6,33 @@
     position: relative;
     border-radius: 3px;
     padding-bottom: 4px;
+    padding-right: 5px;
 }
 
 
 .message-inner-container {
-    width: 100%;
+    width: calc(100% - 59px);
     padding-bottom: 5px;
+    padding-right: 5px;
+    position: relative;
+   
+    display: flex;
+    flex-direction: column;
+}
+
+.message-content-wrapper {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    max-width: 600px;
 }
 
 .message-container p {
     width: auto;
-    max-width: 800px;
     overflow-wrap: anywhere;
     margin: 0px 0px 0px 0px;
     font-size: 15px;
+    opacity: 0.85;
 }
 
 .message-container a {
@@ -27,8 +40,13 @@
     cursor: pointer;
     margin: -4px 0px 0px 0px;
     word-break: break-all;
+    width: calc(100% - 80px);
     flex-shrink: 0;
     font-size: 15px;
+}
+
+.message-date-stamp {
+    max-width: calc(100% - 100px);
 }
 
 .message-container a:hover {
@@ -50,6 +68,7 @@
     width: 100%;
     margin-top: 4px;
     overflow: hidden;
+    align-items: center;
     justify-content: flex-start;
 }
 
@@ -58,12 +77,13 @@
     align-items: center;
     overflow: hidden;
     height: 20px;
+    width: 100%;
 }
 
 .sender-info-container h2 {
     margin: 0 .5rem 0 0;
     padding: 0;
-    font-size: 1rem;
+    font-size: 1.1rem;
     letter-spacing: var(--font-spacing);
     cursor: pointer;
     text-overflow: ellipsis;
@@ -104,35 +124,39 @@
 
 .message-image-container {
     max-height: 400px;
-    overflow: hidden;
     object-fit: contain;
-    margin: 0 5px 0 0px;
+    border-radius: 20px;
+    margin: 0 5px 4px 0px;
 }
 
 .message-image-container img {
-    border-radius: 5px;
+    border-radius: 10px;
 }
 
 .message-outer-video-container {
     max-width: 800px;
-    border-radius: 5px;
+    border-radius: 10px;
     overflow: hidden;
     display: flex;
     justify-content: flex-start;
     margin-left: 0px;
     margin-right: 5px;
+    margin-top: 5px;
 }
 
 .date-submenu-message-wrapper {
     position: absolute;
     top: -20px;
     right: 10px;
+    height: 28px;
+    padding: 0px;
     display: flex;
     align-items: center;
     margin-left: auto;
     border-radius: var(--border-radius);
     z-index: 5;
-    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.259);
+    opacity: 0;
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.137);
 }
 
 .message-profile-picture {
@@ -145,13 +169,15 @@
 }
 
 .message-gallery-wrapper {
-    display: flex;
-    flex-wrap: wrap;
+    height: 400px;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .message-gallery-image-container {
     max-height: 500px;
-    border-radius: 5px;
+    border-radius: 10px;
+    margin: 4px 0px;
     cursor: pointer;
     overflow: hidden;
     margin-right: 2px;
@@ -162,3 +188,16 @@
     animation: fade-in-out 2s ease-in-out infinite;
 }
 
+.message-exact-time-stamp  {
+    font-size: 0.5rem;
+    font-weight: 300;
+    opacity: 0.8;
+    margin-left: 5px;
+}
+
+.emoji-reaction-mesage {
+    margin: 0;
+    font-size: 5rem;
+    margin-top: -10px;
+    cursor: default;
+}

@@ -12,7 +12,7 @@ import { ActivityFeed } from './ActivityFeed/ActivityFeed';
 import { selectImageOfTheDay } from '../../../ServerSlice';
 import { selectDisableTransitionAnimations } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
-export const ActivityBoard = () => {
+export const ActivityBoard = ({loading}) => {
 
     const [time, setTime] = React.useState(0);
 
@@ -26,6 +26,7 @@ export const ActivityBoard = () => {
 
     const disableTransition = useSelector(selectDisableTransitionAnimations);
 
+
     React.useEffect(() => {
         try {
             const t = Math.floor(Math.floor(((Date.now() - imageOfTheDay.date) / 1000) / 60) / 60);
@@ -38,6 +39,8 @@ export const ActivityBoard = () => {
     }, [imageOfTheDay])
 
     return (
+        <>
+        {loading ? null :
         <motion.div 
         transition={disableTransition ? {duration: 0} : null}
         style={{padding: 0, width: '100%', height: '100%',
@@ -54,5 +57,7 @@ export const ActivityBoard = () => {
                 {hideActivityFeed ? null : <ActivityFeed />}
             </div>
         </motion.div>
+        }
+        </>
     )
 }

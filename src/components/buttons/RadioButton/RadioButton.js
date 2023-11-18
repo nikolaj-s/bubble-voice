@@ -7,7 +7,7 @@ import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectText
 // style
 import "./RadioButton.css"
 
-export const RadioButton = ({name, state, action, margin, invert}) => {
+export const RadioButton = ({name, state, action, margin, invert, width = 'calc(100% - 10px)'}) => {
 
     const animation = useAnimation();
 
@@ -25,7 +25,8 @@ export const RadioButton = ({name, state, action, margin, invert}) => {
         })
     }
 
-    const handleAction = () => {
+    const handleAction = (e) => {
+        e?.stopPropagation();
         action();
     }
 
@@ -36,7 +37,7 @@ export const RadioButton = ({name, state, action, margin, invert}) => {
         onMouseEnter={() => {handleAnimation(invert ? secondaryColor : accentColor)}}
         onMouseLeave={() => {handleAnimation(invert ? accentColor : secondaryColor)}}
         transition={{duration: 0.1}}
-        style={{backgroundColor: invert ? accentColor : secondaryColor, margin: margin}}
+        style={{backgroundColor: invert ? accentColor : secondaryColor, margin: margin, width: width}}
         className='radio-button-container'>
             <div style={{
                 width: 15,

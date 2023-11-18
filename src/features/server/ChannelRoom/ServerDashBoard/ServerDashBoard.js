@@ -78,7 +78,7 @@ export const ServerDashBoard = () => {
                 }} className='server-dashboard-inner-container'>
                 {loadingPins || serverLoading ? <MessagePlaceHolderLoader /> : null}
                 <AnimatePresence>
-                    {page === 'activity' && !socialOpen ? <ActivityBoard key={'server-activity'} /> : null}
+                    {page === 'activity' && !socialOpen ? <ActivityBoard loading={serverLoading} key={'server-activity'} /> : null}
                     {page === 'pins' && !socialOpen ? <Pins initLoading={loadingPins || serverLoading} key={'server-pins'} handlePin={handlePin} pins={pins} permission={permission} /> : null}
                     {page === 'media' && !socialOpen ? <ServerMedia key={'server-media'} media={media} expand={expand} /> : null}
                 </AnimatePresence>

@@ -38,7 +38,7 @@ export const TextArea = ({action = () => {}, placeHolder, inputValue = "", margi
         <motion.div
         animate={animation}
         className='text-area-container'
-        style={{border: `3px solid ${color}`, height: height}}
+        style={{border: `3px solid ${color}`, height: height,backgroundColor: color}}
         onBlur={() => {handleAnimation(color)}}
         onFocus={() => {handleAnimation(textColor)}}
         onMouseOver={(e) => {
@@ -59,9 +59,9 @@ export const TextArea = ({action = () => {}, placeHolder, inputValue = "", margi
             <div className='emoji-button-textarea-container'>
                 <EmojiButton  action={() => {toggleEmojiOpen(!emojiOpen)}} description={'Emojis'} width={20} height={20} />
             </div>
-            
+            {emojiOpen ? <EmojiMenu textArea={true} action={(emoji) => {action(inputValue + " " + emoji.emoji)}} close={() => {toggleEmojiOpen(false)}} /> : null}
         </motion.div>
-        {emojiOpen ? <EmojiMenu textArea={true} action={(emoji) => {action(inputValue + " " + emoji.emoji)}} close={() => {toggleEmojiOpen(false)}} /> : null}
+        
         </>
     )
 }

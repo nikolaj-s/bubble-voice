@@ -1,7 +1,7 @@
 .text-input-container {
     height: calc(40px - 6px);
     width: calc(100% - 16px);
-    border-radius: var(--border-radius);
+    border-radius: 10px;
     padding: 0px 5px;
     display: flex;
     align-items: center;

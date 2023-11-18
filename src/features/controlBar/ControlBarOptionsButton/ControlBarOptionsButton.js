@@ -12,7 +12,6 @@ export const ControlBarOptionsButton = ({action, state}) => {
 
     return (
         <div 
-        style={{backgroundColor: accentColor}}
         onClick={action}
         className='control-bar-options-button'>
             <AltDownIcon flip={state} />

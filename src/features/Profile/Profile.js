@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { selectCreatePostMenuOpen, selectProfileTabOpen, toggleCreatePostMenu, toggleProfileTab } from './ProfileSlice'
 
 import "./Profile.css";
-import { selectPrimaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, selectSecondaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { Image } from '../../components/Image/Image';
 import { selectProfileBio, selectProfileColor, selectProfilePinnedMessage, selectUserBanner, selectUserImage, selectUsersScreenShots } from '../settings/appSettings/accountSettings/accountSettingsSlice';
 
@@ -22,7 +22,7 @@ export const Profile = () => {
 
     const profileColor = useSelector(selectProfileColor);
 
-    const primaryColor = useSelector(selectPrimaryColor);
+    const secondaryColor = useSelector(selectSecondaryColor);
 
     const pinnedMessage = useSelector(selectProfilePinnedMessage);
 
@@ -49,7 +49,7 @@ export const Profile = () => {
                 initial={{opacity: 0, marginLeft: '-600px'}}
                 animate={{opacity: 1, marginLeft: 0}}
                 exit={{opacity: 0, marginLeft: '-600px'}}
-                style={{backgroundColor: profileColor}}
+                style={{backgroundColor: (profileColor || secondaryColor)}}
                 className='profile-tab-container'>
                     <div style={{marginBottom: serverId ? null : 5}} className='profile-tab-picture-wrappper'>
                         <Image position='absolute' width='100%' image={userBanner} />
@@ -62,8 +62,8 @@ export const Profile = () => {
                     <UserStatusMenu/>
                     : null}
                     <UserBio margin={'5px 0px 5px 0px'} bio={bio} />
-                    <ScreenShotShowCase screenShots={usersScreenShots} />
-                    <PinnedProfileMessage margin={'5px 0px'} message={pinnedMessage} />
+                    <ScreenShotShowCase marginTop={0} screenShots={usersScreenShots} />
+                    <PinnedProfileMessage margin={'0px 0px'} message={pinnedMessage} />
                 </motion.div>
             </div>
             : null}

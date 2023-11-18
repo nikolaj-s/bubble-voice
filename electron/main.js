@@ -27,6 +27,12 @@ let initial_app_loading;
 
 let scraping_window;
 
+let inactive = false;
+
+let update_available = false;
+
+let no_update = false;
+
 let loading_template = `
 
 <head>
@@ -379,6 +385,11 @@ ipcMain.handle('SCREEN_SHOT', async () => {
 })
 
 ipcMain.handle("DYNAMIC_STATUS", async () => {
+
+  if (inactive) {
+    return [{id: "away-status", name: "Away"}]
+  }
+
   const captures = await desktopCapturer.getSources({ types: ['window'], thumbnailSize: {width: 0, height: 0}})
   .then(async sources => {
       const screens = [];
@@ -434,9 +445,16 @@ ipcMain.handle('GET_SOURCES', async () => {
 
 let timeout;
 
+
 ipcMain.on('RESET_INAC_TIMEOUT', (event, data) => {
 
   clearTimeout(timeout);
+
+  if (inactive) {
+    event.sender.send('now active');
+  }
+
+  inactive = false;
 
   timeout = setTimeout(() => {
 
@@ -444,7 +462,7 @@ ipcMain.on('RESET_INAC_TIMEOUT', (event, data) => {
 
     console.log('user has gone inactive');
 
-  }, 900000)
+  }, 1200000)
 
 
 })
@@ -452,7 +470,7 @@ ipcMain.on('RESET_INAC_TIMEOUT', (event, data) => {
 ipcMain.on("REG_KEYBINDS", (event, data) => {
 
   const keyCodes = data;
-  console.log(data)
+  
   try {
     // clean up listeners on new init of reg keybinds to prevent duplicate calls or outadated key bind listening
     
@@ -464,15 +482,23 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
 
     const handle_inactivity = () => {
 
+      if (inactive) {
+        event.sender.send('now active');
+      }
+
+      inactive = false;
+
       clearTimeout(timeout);
 
       timeout = setTimeout(() => {
 
         event.sender.send('inactive');
 
+        inactive = true;
+
         console.log('user has gone inactive');
 
-      }, 1800000)
+      }, 1200000)
       
     }
 
@@ -740,7 +766,9 @@ ipcMain.on('check-for-updates', async (event, data) => {
 
   console.log('checking for update');
 
-  autoUpdater.checkForUpdatesAndNotify();
+  autoUpdater.checkForUpdatesAndNotify().catch(err => {
+    console.log(err)
+  })
 
   autoUpdater.on('update-downloaded', () => {
     
@@ -749,7 +777,10 @@ ipcMain.on('check-for-updates', async (event, data) => {
   })
 
   autoUpdater.on('update-not-available', () => {
-    console.log('no update')
+    console.log('no update');
+
+    no_update = true;
+
     event.sender.send('no-update');
   })
 
@@ -760,10 +791,12 @@ ipcMain.on('restart-to-update', (event, data) => {
 })
 
 autoUpdater.on('error', (err) => {
+  console.log('update not available to download')
   win.webContents.send("error updating", {error: err})
 })
 
 autoUpdater.on('update-not-available', () => {
+  console.log('no update')
   win.webContents.send("update not available");
 })
 

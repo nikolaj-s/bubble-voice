@@ -6,7 +6,7 @@ import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../..
 // style
 import "./CtxButton.css";
 
-export const CtxButton = ({name, action, borderRadius, icon}) => {
+export const CtxButton = ({name, action, borderRadius, icon, width}) => {
 
     const [hover, toggleHover] = React.useState(false);
 
@@ -23,8 +23,9 @@ export const CtxButton = ({name, action, borderRadius, icon}) => {
         onClick={action}
         className='ctx-button-container'
         style={{
-            borderRadius: borderRadius,
-            backgroundColor: hover ? accentColor : null
+            borderRadius: 8,
+            backgroundColor: hover ? accentColor : null,
+            width: width
         }}>
             <p
             style={{

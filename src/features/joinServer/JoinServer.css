@@ -21,6 +21,7 @@
     border-radius: var(--border-radius);
     overflow: hidden;
     margin-top: 2.5%;
+    flex-shrink: 0;
     position: relative;
 }
 .join-server-banner-container h1 {
@@ -29,5 +30,7 @@
     width: 100%;
     text-align: center;
     margin: 0;
-    padding: 1rem 0;
+    padding: .5rem 0;
+    font-size: 1.4rem;
+    font-weight: 400;
 }

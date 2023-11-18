@@ -7,7 +7,7 @@ import { selectAccentColor } from '../../../features/settings/appSettings/appear
 import "./ColorInput.css";
 import { EditIcon } from '../../Icons/EditIcon/EditIcon';
 
-export const ColorInput = ({rgb, action, selector}) => {
+export const ColorInput = ({rgb, action, selector, width, height, border, hideIcon}) => {
 
     const [hex, setHex] = React.useState("#");
 
@@ -57,12 +57,16 @@ export const ColorInput = ({rgb, action, selector}) => {
         <div 
         style={{
             border: `solid ${accentColor} 3px`,
-            backgroundColor: rgb
+            backgroundColor: rgb,
+            width: width,
+            height: height
         }}
         className='color-picker-input-container'>
+            {hideIcon ?
+            null :
             <div className='edit-pencil-color-icon'>
                 <EditIcon />
-            </div>
+            </div>}
             <input 
             className='color-picker-input' onChange={handleChange} type="color" value={hex}  />
         </div>

@@ -2,26 +2,23 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { ScreenButton } from '../../../components/buttons/ScreenButton/ScreenButton'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 
 // state
-import {  selectPrimaryColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
-import { selectScreens, setCurrentScreen, toggleControlState } from '../ControlBarSlice';
-import { BoolButton } from '../../../components/buttons/BoolButton/BoolButton'
+import { closeScreenShareMenu, selectScreens, setCurrentScreen, } from '../ControlBarSlice';
 import {CloseIcon} from '../../../components/Icons/CloseIcon/CloseIcon'
 
 // style's
 import "./ScreenShareMenu.css";
 import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
 import { handleSaveVoiceVideoSettings, selectExperimentalAudioCapture, toggleSelectedVoiceVideoState } from '../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
+import { RadioButton } from '../../../components/buttons/RadioButton/RadioButton';
 
-export const ScreenShareMenu = ({selectingScreens}) => {
+export const ScreenShareMenu = () => {
 
     const dispatch = useDispatch();
 
     const screens = useSelector(selectScreens);
-
-    const primaryColor = useSelector(selectPrimaryColor);
 
     const enableAudio = useSelector(selectExperimentalAudioCapture);
 
@@ -33,7 +30,7 @@ export const ScreenShareMenu = ({selectingScreens}) => {
     }
 
     const closeScreenShare = () => {
-        dispatch(toggleControlState('screenShareState'))
+        dispatch(closeScreenShareMenu())
     }
 
     React.useEffect(() => {
@@ -79,6 +76,7 @@ export const ScreenShareMenu = ({selectingScreens}) => {
             maxHeight: 10,
             opacity: 0
         }}
+        onClick={(e) => {e.stopPropagation()}}
         key={"screen-share-menu"}
         className='screen-share-menu'>
             <div onClick={closeScreenShare} className='close-share-menu-container'>
@@ -91,7 +89,7 @@ export const ScreenShareMenu = ({selectingScreens}) => {
             </div> 
             
         </motion.div>
-        <BoolButton action={handleAudioToggle} name={"Capture Audio"} state={enableAudio} />
+        <RadioButton margin={'0px 0px 5px 5px'} width='calc(100% - 20px)' invert={true} action={handleAudioToggle} name={"Capture Audio"} state={enableAudio} />
         </>
     )
 }

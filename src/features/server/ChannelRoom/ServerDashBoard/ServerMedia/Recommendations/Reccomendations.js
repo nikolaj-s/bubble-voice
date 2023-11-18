@@ -21,7 +21,7 @@ export const Reccomendations = ({media, count, expand}) => {
                         return (
                            <>
                             {img.type === 'image' ?
-                            <ImagePreview image={showFullResPreviews ? img.image : img.preview} action={() => {expand(img.image ? img.image : img.preview)}} tags={img.tags} />
+                            <ImagePreview nsfw={img.nsfw} image={showFullResPreviews ? img.image : img.preview} action={() => {expand(img.image ? img.image : img.preview)}} tags={img.tags} />
                             :
                             <VideoPreview action={() => {expand(img.link)}} video={img} />}
                             </>

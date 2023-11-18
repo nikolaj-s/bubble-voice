@@ -13,7 +13,9 @@
     width: 400px;
     height: calc(100% - 32px - 20px);
     padding: 5px 5px 10px 5px;
-    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     border-radius: 8px;
     overflow: hidden;
     overflow-y: auto;
@@ -22,14 +24,14 @@
 
 .profile-tab-picture-wrappper {
     position: relative;
-    width: calc(100% + 10px);
-    margin-left: -5px;
-    margin-top: -5px;
+    width: calc(100%);
     height: 250px;
+    border-radius: 10px;
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-shrink: 0;
 }
 
 .profile-picture-tab-container {

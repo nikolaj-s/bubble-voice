@@ -2,7 +2,7 @@ import React from 'react';
 
 import "./ServerWelcomeMessage.css";
 import { useSelector } from 'react-redux';
-import { selectGlassPrimaryColor, selectTextColor, selectTransparentPrimaryColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectSecondaryColor, selectTextColor, selectTransparentPrimaryColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectServerBanner, selectServerName, selectServerWelcomeMessage } from '../../../../ServerSlice';
 import { Image } from '../../../../../../components/Image/Image';
 
@@ -14,18 +14,21 @@ export const ServerWelcomeMessage = () => {
 
     const serverName = useSelector(selectServerName);
     
-    const glassPrimary = useSelector(selectGlassPrimaryColor)
+    const glassPrimary = useSelector(selectSecondaryColor)
 
     const welcomeMessage = useSelector(selectServerWelcomeMessage);
 
     return (
+        <>
         <div className='server-welcome-message-container'>
             {serverBanner ? <Image hideOnError={true} image={serverBanner} /> : null}
-            <div
-            style={{backgroundColor: glassPrimary, color: textColor}}
-            className='server-welcome-message-wrapper'>
-                <h3>{welcomeMessage}</h3>
-            </div>
+            
         </div>
+        <div
+            style={{ color: textColor, backgroundColor: glassPrimary}}
+            className='server-welcome-message-wrapper'>
+                <h3>{welcomeMessage?.length === 0 || !welcomeMessage ? `Welcome To ${serverName}` : welcomeMessage}</h3>
+        </div>
+        </>
     )
 }

@@ -14,7 +14,7 @@ import { ApplyCancelButton } from '../../../../components/buttons/ApplyCancelBut
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 
 // state
-import { clearSearchData, selectBannedKeywords, selectInactiveChannel, selectInactiveChannels, selectServerBanner, selectServerId, selectServerName, selectServerWelcomeMessage, selectUsersPermissions, setServerName, setWelcomeMessage, throwServerError, updateBannedKeywords, updateInactiveChannel, updateServerBanner } from '../../ServerSlice';
+import { clearSearchData, selectBannedKeywords, selectInactiveChannel, selectInactiveChannels, selectServerBanner, selectServerId, selectServerName, selectServerWelcomeMessage, selectUsersPermissions, setActivityFeed, setServerName, setWelcomeMessage, throwServerError, updateBannedKeywords, updateInactiveChannel, updateServerBanner } from '../../ServerSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 import { socket } from '../../ServerBar/ServerBar';
 import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
@@ -30,7 +30,7 @@ const Wrapper = () => {
     const dispatch = useDispatch();
 
     // local state
-    const [newBanner, setNewBanner] = React.useState();
+    const [newBanner, setNewBanner] = React.useState({});
 
     const [newServerName, setNewServerName] = React.useState("");
 
@@ -49,6 +49,8 @@ const Wrapper = () => {
     const [loading, toggleLoading] = React.useState(false);
 
     const [newKeywords, setKeywords] = React.useState([]);
+
+    const [clearActivity, toggleClearActivity] = React.useState(false);
 
     const serverName = useSelector(selectServerName);
 
@@ -103,7 +105,7 @@ const Wrapper = () => {
 
             let image;
 
-            if (newBanner) {
+            if (newBanner?.preview) {
 
                 const upload_stat = await uploadImage(newBanner);
 
@@ -123,7 +125,8 @@ const Wrapper = () => {
                 confirm_new_server_password: confirmNewServerPassword,
                 inactive_channel: inactiveChannel,
                 welcome_message: newServerWelcomeMessage,
-                banned_keywords: newKeywords
+                banned_keywords: newKeywords,
+                clearActivity: clearActivity
             }
 
             await socket.request('update server', data)
@@ -149,6 +152,8 @@ const Wrapper = () => {
                     dispatch(updateBannedKeywords(data.data.banned_keywords));
                 }
                 
+                dispatch(setActivityFeed(data.data.activity_feed));
+
                 dispatch(updateInactiveChannel(data.data.inactive_channel));
                 
                 dispatch(updateServer({server_id: serverId, server_banner: data.data.server_banner, server_name: data.data.server_name}))
@@ -158,6 +163,8 @@ const Wrapper = () => {
                 setNewServerPassword("");
 
                 setConfirmNewServerPassword("");
+
+                toggleClearActivity(false);
                 
             })
             .catch(error => {
@@ -166,8 +173,9 @@ const Wrapper = () => {
             })
 
         } catch (error) {
+            console.log(error)
             toggleLoading(false);
-            dispatch(throwServerError({errorMessage: "Unexpected error has occurred while updating the server"}))
+            dispatch(throwServerError({errorMessage: error.message}))
         }
     }
 
@@ -193,6 +201,12 @@ const Wrapper = () => {
         }
     }
 
+    const handleClearActivityFeed = async () => {
+        toggleClearActivity(true);
+
+        setUpdate(true);
+    }
+
     React.useEffect(() => {
 
         dispatch(setHeaderTitle("Overview"))
@@ -214,7 +228,11 @@ const Wrapper = () => {
     const handleCancel = () => {
         setUpdate(false)
         setNewServerName(serverName)
-        setNewBanner(null);
+        setNewBanner({});
+        setInactiveChannel(currentInactiveChannel);
+        setNewServerWelcomeMessage(welcomeMessage);
+        setKeywords(bannedKeywords);
+        toggleClearActivity(false);
     }
     
     const changeInactiveChannel = (_, channel) => {
@@ -244,6 +262,8 @@ const Wrapper = () => {
 
         setKeywords(newKeywords.filter(w => w !== value));
     }
+
+    
    
     return (
         <>
@@ -269,7 +289,7 @@ const Wrapper = () => {
                 minHeight: 300,
                 maxWidth: 500
             }}>
-                <ImageInput getFile={handleBannerChange} backgroundColor={accentColor} initalImage={serverBanner} />
+                <ImageInput listenToClears={true} imageCleared={newBanner} getFile={handleBannerChange} backgroundColor={accentColor} initalImage={serverBanner} />
             </div>
             </>
             : 
@@ -277,12 +297,12 @@ const Wrapper = () => {
             <InputTitle title={"Server Banner"} />
             <div
             style={{
-                width: '100%',
-                height: '500px',
+                width: '300px',
+                height: '150px',
                 maxHeight: '500px',
                 borderRadius: '15px',
                 overflow: 'hidden',
-                minHeight: 500,
+                minHeight: 150,
                 flexShrink: 0
             }}
             >
@@ -298,6 +318,8 @@ const Wrapper = () => {
         <ImageSearchKeywordFilter keywords={newKeywords} removeKeyword={removeKeyWord} addKeyword={handleAddKeyword} />
         <InputTitle title={"Clear Image Search Recommendation Data"} />
         <TextButton name={"Clear"} action={clearImageSearchData} />
+        <InputTitle title={"Clear Activity Feed"} />
+        <TextButton action={handleClearActivityFeed} name={clearActivity ? "Hit Apply To Save Changes" : "Clear"} toggled={clearActivity} />
         <SettingsHeader title={"Set Inactive User Channel"} />
         <InputTitle title={"Users who go inactive will automatically be moved to this channel"} />
         <DropDownList action={changeInactiveChannel} selectedItem={inactiveChannel.label} list={inactiveChannels}  />

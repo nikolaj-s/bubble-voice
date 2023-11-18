@@ -6,6 +6,7 @@ import { setPanelPosition, setSelectedMember } from '../../MemberPanel/MemberPan
 
 import "./UserStatus.css";
 import { GetTimeDifference } from '../../../../../util/GetTimeDifference';
+import { AwayIcon } from '../../../../../components/Icons/AwayIcon/AwayIcon';
 
 export const UserStatus = ({user}) => {
 
@@ -57,7 +58,9 @@ export const UserStatus = ({user}) => {
                 width: 3,
                 height: '100%',
                 flexShrink: 0,
-                backgroundColor: (user.color || primaryColor)
+                backgroundColor: (user.color || primaryColor),
+                borderTopRightRadius: 5,
+                borderBottomRightRadius: 5
             }}></div>
             <div
             style={{
@@ -68,7 +71,12 @@ export const UserStatus = ({user}) => {
             className='user-status-image-container'>
                 <Image hideOnError={true} image_class={"user-image"} cursor='pointer' image={user.user_image?.includes('gif') ? "" : user.user_image} />
             </div>
-            {user.status_icon && user?.status?.length > 1 ?
+            {user.status === 'Away' || user.status === 'away' ?
+            <div className='away-status-overlay'>
+                <AwayIcon />
+            </div>
+            :
+            user.status_icon && user?.status?.length > 1 ?
             <div 
             style={{backgroundColor: secondaryColor}}
             className='user-status-icon-container'>

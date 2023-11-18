@@ -24,7 +24,7 @@ import { selectUsername } from '../settings/appSettings/accountSettings/accountS
 // USER PREFS
 import { saveUserPrefs, USER_PREFS } from '../../util/LocalData';
 import { BoolButton } from '../../components/buttons/BoolButton/BoolButton';
-import { miscSettingsChannelSpecificStateChange, selectDisableMediaWidget, selectHideUserStatus, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectPopOutUserStreams } from '../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { miscSettingsChannelSpecificStateChange, selectDisableChannelIcons, selectDisableMediaWidget, selectHideUserStatus, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectPopOutUserStreams } from '../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { MoveUser } from '../../components/buttons/MoveUser/MoveUser';
 import { selectGlassState, selectPrimaryColor, selectTextColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectSocialSoundEffect, updateSoundEffectsState } from '../settings/soundEffects/soundEffectsSlice';
@@ -80,6 +80,8 @@ export const ContextMenu = () => {
     const [unSave, toggleUnSave] = React.useState(false);
 
     const [mediaWidgetState, setMediaWidgetState] = React.useState(false);
+
+    const [hidingChannelIcons, toggleHidingChannelIcons] = React.useState(false);
 
     const disableMediaWidget = useSelector(selectDisableMediaWidget);
 
@@ -138,6 +140,8 @@ export const ContextMenu = () => {
     const serverId = useSelector(selectServerId);
 
     const popOutUserStreams = useSelector(selectPopOutUserStreams);
+
+    const hideCustomChannelIcons = useSelector(selectDisableChannelIcons);
 
     // stream management
     const changeStreamVolumeState = useSelector(selectStreamVolumeState);
@@ -243,6 +247,13 @@ export const ContextMenu = () => {
                 setMediaWidgetState(true);
             }
 
+            if (p.className === 'server-bar-container') {
+
+                toggleContextMenu(true);
+
+                toggleHidingChannelIcons(true);
+            }
+
             if (p.localName === 'img' && p.className !== 'user-image') {
 
                 dispatch(toggleContextMenu(true));
@@ -332,7 +343,7 @@ export const ContextMenu = () => {
             
             if (p.className === 'streaming-video-player-container') {
                 try {
-                    const id = p.children[1].classList[1];
+                    const id = p.children[2].classList[1];
                     console.log(p.children)
                     if (id) {
                         if (id !== `${username}-streaming-player`) {
@@ -400,14 +411,34 @@ export const ContextMenu = () => {
                     isOwner: isOwner !== -1
                 }))
             }
-            if (p?.className?.includes('message-container')) {
+            if (p?.className?.includes('message-container') && !p?.className.includes('server') || (p?.className?.includes('message--inner-container') && !p?.className.includes('server'))) {
                 dispatch(toggleContextMenu(true));
                 
                 if (!p.className.includes('direct-message-container'))  dispatch(setContextMenuOptions({state: "deleteMessage", value: permissions.user_can_manage_channels}));
 
                 dispatch(setContextMenuOptions({state: 'selectedMessage', value: p.id}));
                 
-                for (const l_child of p.children) {
+                for (const l_child of p.children[1].className === 'message-inner-container' ? p.children[1].children : p.children) {
+                    
+                    if (l_child.className === 'message-content-wrapper') {
+                        for (const s_child of l_child.children) {
+                            if (s_child.className === 'message-image-container') {
+                        
+                                dispatch(setContextMenuOptions({state: "saveImage", value: true}))
+                        
+                                setSelectedImage(l_child.children[0].children[0])
+                            }
+        
+                            if (s_child.className === 'message-outer-video-container') {
+                                
+                                dispatch(setContextMenuOptions({state: 'saveVideo', value: true}))
+        
+                                setSelectedVideo(l_child.children[0].children[0]);
+                            
+                            }
+                        }
+                    }
+                    
                     if (l_child.className === 'message-image-container') {
                         
                         dispatch(setContextMenuOptions({state: "saveImage", value: true}))
@@ -558,6 +589,7 @@ export const ContextMenu = () => {
         dispatch(clearCtxState());
         setSelectedImage({});
         setSelectedVideo({});
+        toggleHidingChannelIcons(false);
     }
 
     React.useEffect(() => {
@@ -1115,13 +1147,13 @@ export const ContextMenu = () => {
             <>
             <div style={{display: 'flex', alignItems: 'center'}}>
                 <CtxMenuTitle title={"Change User Volume"} />
-                <p style={{color: textColor, fontSize: '0.8rem', marginRight: 5}} >{Math.floor(userVolumeLevel * 100)}%</p>
+                <p style={{color: textColor, fontSize: '0.8rem', marginRight: 5}} >{Math.floor(userVolumeLevel * 200)}%</p>
             </div>
-            <Range save={handleUserVolumeChange} action={(value) => setUserVolumeLevel(value)} step={0.01} value={userVolumeLevel} fill={false} max={1} min={0} /> 
+            <Range invert={true} save={handleUserVolumeChange} action={(value) => setUserVolumeLevel(value)} step={0.005} value={userVolumeLevel} fill={false} max={1} min={0} /> 
             </>
             : null}
             {changeStreamVolumeState ? <CtxMenuTitle title={"Change Stream Volume"} /> : null}
-            {changeStreamVolumeState ? <Range value={streamAudioLevel} action={handleStreamVolumeChange} fill={false} max={1} min={0} step={0.01} /> : null}
+            {changeStreamVolumeState ? <Range invert={true} value={streamAudioLevel} action={handleStreamVolumeChange} fill={false} max={1} min={0} step={0.01} /> : null}
             {flipWebCamState ? <BoolButton name={"Flip Web Cam"} state={flippedWebCamState} action={handleFlipWebCamPref} /> : null}
             {disableWebCameState ? <BoolButton name={"Disable Webcam"} state={disabledWebCamLocalState} action={handleDisableWebCam} /> : null}
             {disableStreamState ? <BoolButton name={"Disable Stream"} state={disableStreamLocalState} action={handleDisableStream} /> : null}
@@ -1139,6 +1171,7 @@ export const ContextMenu = () => {
            
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideUserStatus")}} state={hideUserStatus} name={"Hide User Status"} /> : null}
             {channelSpecificSettingsState || mediaWidgetState ? <BoolButton action={() => {handleChannelSpecificStateChange('disableMediaWidget')}} state={disableMediaWidget} name={"Hide Media Widget"} /> : null}
+            {hidingChannelIcons ? <BoolButton state={hideCustomChannelIcons} action={() => {handleChannelSpecificStateChange('disableChannelIcons')}} name="Hide Channel Icons" /> : null}
             {addToMusicWidget ? <CtxButton action={handlePlayOnMusicWidget} name="Play On Music Widget" icon={<PlayOnWidgetIcon />}/> : null}
             {stopStreamingState ? <CtxButton action={handleStopStreaming} name={"Stop Streaming"} /> : null}
             {deleteMessageState ? <CtxButton action={handleDeleteMessage} name={"Delete Message"} icon={<DeleteIcon />} /> : null}

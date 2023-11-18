@@ -15,7 +15,7 @@ import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/Se
 
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { miscSettingsChannelSpecificStateChange, miscSettingsClearError, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, selectActivityStatus, selectAutoPlayNativeVideos, selectDefaultServer, selectDisableChannelIcons, selectDisableMediaWidget, selectDisableTransparancyEffects, selectHardwareAcceleration, selectHideUserStatus, selectMiscSettingsDisableGifProfiles, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsError, selectMiscSettingsErrorMessage, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectMiscSettingsLoading, selectMuteSocialVideos, selectPopOutUserStreams, selectRestartNotice, selectShowFullResPreviews, selectSystemNotifcations, setDefaultServer } from './MiscellaneousSettingsSlice';
+import { miscSettingsChannelSpecificStateChange, miscSettingsClearError, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, selectActivityStatus, selectAutoPlayNativeVideos, selectDefaultServer, selectDisableChannelIcons, selectDisableMediaWidget, selectDisableTransparancyEffects, selectHardwareAcceleration, selectHideCustomChannelIcons, selectHideUserStatus, selectMiscSettingsDisableGifProfiles, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsError, selectMiscSettingsErrorMessage, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectMiscSettingsLoading, selectMuteSocialVideos, selectPopOutUserStreams, selectRestartNotice, selectShowFullResPreviews, selectSystemNotifcations, setDefaultServer } from './MiscellaneousSettingsSlice';
 import { selectServerList } from '../../../sideBar/sideBarSlice';
 import { clearSaves } from '../../../SavedMedia/SavedMediaSlice';
 
@@ -34,8 +34,6 @@ const Settings = () => {
     const errorMessage = useSelector(selectMiscSettingsErrorMessage);
 
     const restartNotice = useSelector(selectRestartNotice);
-
-    const disableGifProfiles = useSelector(selectMiscSettingsDisableGifProfiles);
     
     const hideChannelBackground = useSelector(selectMiscSettingsHideChannelBackground);
 
@@ -106,11 +104,8 @@ const Settings = () => {
             <ToggleButton action={() => {handleChannelSpecificStateChange("hideNonVideoParticapents")}} state={hideNonVideoParticapents} />
             <InputTitle title={"Hide User Status Bar When In A Channel"} />
             <ToggleButton action={() => {handleChannelSpecificStateChange('hideUserStatus')}} state={hideUserStatusBar} />
-            <InputTitle title={'Disable Channel Icons'} />
+            <InputTitle title={'Hide Custom Channel Icons'} />
             <ToggleButton action={() => {handleChannelSpecificStateChange('disableChannelIcons')}} state={disableChannelIcons} />
-            <InputTitle title={"Disable Gif Profile Pictures / Banners"} />
-            <ToggleButton action={() => {handleChannelSpecificStateChange("disableGifProfiles")}} state={disableGifProfiles} />
-            
             <SettingsHeader title={"App Specific"} />
             <InputTitle title={"Disable Transparency Effects"} />
             <ToggleButton state={disableTransparancyEffects} action={() => {handleChannelSpecificStateChange('disableTransparancyEffects')}} />

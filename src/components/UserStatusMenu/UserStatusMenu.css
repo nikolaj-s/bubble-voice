@@ -11,8 +11,9 @@
     justify-content: center;
     overflow: hidden;
     z-index: 1;
-    border-radius: 5px;
+    border-radius: 10px;
     margin-top: 5px;
+    flex-shrink: 0;
 }
 
 .user-status-menu-container h2 {

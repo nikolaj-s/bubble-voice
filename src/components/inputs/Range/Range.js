@@ -8,9 +8,11 @@ import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectText
 //style
 import "./Range.css";
 
-export const Range = ({min = 0, max = 1, action, step = 0.001, value = 0, fill = false, save = () => {}, invert}) => {
+export const Range = ({min = 0, max = 1, action, step = 0.001, value = 0, fill = false, save = () => {}, invert, disableBackground}) => {
 
     const ref = React.createRef();
+
+    const [hover, toggleHover] = React.useState(false);
 
     const primaryColor = useSelector(selectPrimaryColor);
 
@@ -44,7 +46,7 @@ export const Range = ({min = 0, max = 1, action, step = 0.001, value = 0, fill =
         
         document.getElementById("root").style.setProperty('--range-main-background', textColor);
 
-        document.getElementById("root").style.setProperty('--range-main-thumb', invert ? primaryColor : accentColor);
+        document.getElementById("root").style.setProperty('--range-main-thumb', invert ? secondaryColor : accentColor);
         
         ref.current.style.backgroundSize = (value - min) * 100 / (max - min) + '% 100%'
         
@@ -57,7 +59,9 @@ export const Range = ({min = 0, max = 1, action, step = 0.001, value = 0, fill =
 
     return (
         <div 
-        style={{backgroundColor: fill ? primaryColor : null}}
+        onMouseEnter={() => {toggleHover(true)}}
+        onMouseLeave={() => {toggleHover(false)}}
+        style={{backgroundColor: disableBackground ? null : hover ? invert ? accentColor : secondaryColor : fill ? primaryColor : null}}
         className='range-container'>
             <input onMouseMove={onMouseMove} ref={ref} onMouseUp={save} id="range-input"
             onChange={handleAction} onClick={(e) => {e.stopPropagation()}}  type={"range"} min={min} max={max} step={step} value={value} />

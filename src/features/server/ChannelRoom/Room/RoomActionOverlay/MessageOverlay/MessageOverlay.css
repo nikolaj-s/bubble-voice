@@ -4,6 +4,11 @@
     right: 0px;
     width: calc(100% - 2rem);
     max-height: 90%;
-    padding: 1rem;
+    max-width: 350px;
+    right: 5px;
+    padding: 5px;
+    overflow: hidden;
+    border-radius: 10px;
     z-index: 5;
+    box-shadow: 10px 10px 20px rgb(0, 0, 0);
 }

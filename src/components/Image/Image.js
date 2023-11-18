@@ -5,9 +5,11 @@ import { useSelector } from 'react-redux';
 
 // state
 import { selectPrimaryColor, selectSecondaryColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
-import {AltImageIcon } from '../Icons/AltImageIcon/AltImageIcon'
+
 import { ImageErrorIcon } from '../Icons/ImageErrorIcon/ImageErrorIcon';
-export const Image = ({draggable = false,image_class, img_id, image, objectFit = 'cover', position = 'relative', zIndex = 0, loadingState = 'lazy', opacity = 1, width = '100%', cursor = 'default', altWidth = '100%', imgHeight = '100%', expandContent = () => {}, disableErr = false, hideOnError = false, id, imageError = "https://res.cloudinary.com/drlkgoter/image/upload/v1674339889/no-picture_m4dmai.jpg", onLoad = () => {}, backgroundColor = null, altHeight = '100%', minLoadHeight = null, borderRadius, errorIconDimension = 50}) => {
+import { NsfwImageOverlay } from './NsfwImageOverlay/NsfwImageOverlay';
+import { selectDisableNsfwBlur } from '../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+export const Image = ({draggable = false,image_class, img_id, image, objectFit = 'cover', position = 'relative', zIndex = 0, loadingState = 'lazy', opacity = 1, width = '100%', cursor = 'default', altWidth = '100%', imgHeight = '100%', expandContent = () => {}, disableErr = false, hideOnError = false, id, imageError = "https://res.cloudinary.com/drlkgoter/image/upload/v1674339889/no-picture_m4dmai.jpg", onLoad = () => {}, backgroundColor = null, altHeight = '100%', minLoadHeight = null, borderRadius, errorIconDimension = 50, nsfw = false}) => {
 
     const [loading, toggleLoading] = React.useState(true);
 
@@ -18,6 +20,8 @@ export const Image = ({draggable = false,image_class, img_id, image, objectFit =
     const primaryColor = useSelector(selectPrimaryColor);
 
     const secondaryColor = useSelector(selectSecondaryColor);
+
+    const disableNsfwBlur = useSelector(selectDisableNsfwBlur);
 
     const imageAnimation = useAnimation();
 
@@ -40,7 +44,7 @@ export const Image = ({draggable = false,image_class, img_id, image, objectFit =
     }
 
     return (
-        <div id={id} style={{zIndex: zIndex, position: position, objectFit: objectFit, width: width, minHeight: loading && !error ? minLoadHeight : null, height: '100%', opacity: opacity, display: (error && hideOnError) ? 'none' : null, backgroundColor: backgroundColor}}>
+        <div id={id} style={{borderRadius: borderRadius, overflow: 'hidden',zIndex: zIndex, position: position, objectFit: objectFit, width: width, minHeight: loading && !error ? minLoadHeight : null, height: '100%', opacity: opacity, display: (error && hideOnError) ? 'none' : null, backgroundColor: backgroundColor, display: 'inline-block'}}>
             {loading && image !== "" && image !== undefined && disableErr === false && error === false ?
             <motion.div 
             style={{
@@ -53,12 +57,15 @@ export const Image = ({draggable = false,image_class, img_id, image, objectFit =
                 backgroundSize: '600% 600%',
                 minHeight: minLoadHeight,
                 flexShrink: minLoadHeight ? '0' : null,
-                borderRadius: borderRadius
+                borderRadius: borderRadius,
+                overflow: 'hidden'
             }}
             initial={{backgroundPosition: '0% 50%'}}
             animate={{backgroundPosition: ['0% 50%', '300% 50%']}}
             transition={{ease: 'linear', duration: 3, repeat: Infinity}}
             ></motion.div>         
+            : nsfw && !disableNsfwBlur && !error ? 
+            <NsfwImageOverlay borderRadius={borderRadius} />
             : null}
             
             {error ?

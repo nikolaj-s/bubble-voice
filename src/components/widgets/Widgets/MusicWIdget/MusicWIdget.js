@@ -30,7 +30,7 @@ import { MediaSettings } from './MediaSettings/MediaSettings';
 import { selectUsername } from '../../../../features/settings/appSettings/accountSettings/accountSettingsSlice';
 import { LockedChannelIcon } from '../../../Icons/LockedChannelIcon/LockedChannelIcon';
 
-export const MusicWidget = ({editing = false, widget, controls = true}) => {
+export const MusicWidget = ({roomOverlay, editing = false, widget, controls = true}) => {
 
     const dispatch = useDispatch();
 
@@ -213,7 +213,7 @@ export const MusicWidget = ({editing = false, widget, controls = true}) => {
 
     return (
         <div 
-        style={{backgroundColor: disableTransparancyEffects ? secondaryColor : `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0.8)`}}
+        style={{backgroundColor: secondaryColor}}
         className='music-widget-outer-container' >
             <div className='inner-music-widget-container'>
                 <div className='music-top-title-container'>
@@ -226,7 +226,6 @@ export const MusicWidget = ({editing = false, widget, controls = true}) => {
                 <>
                 <div className='music-widget-nav-container'>
                     <TextInput id={'music-widget-input'} keyCode={handleEnter} inputValue={query} action={handleInput} placeholder={"Add Song To Queue"} marginTop='0' />
-                    <AddButton opacity={query.length === 0 ? 0.5 : 1} invert={true} active={query.length === 0} action={handleAddSongToQueue} margin={"0 0 0 2%"} height={"21px"} width={"21px"} />
                 </div> 
                 <div className='music-queue-title-container'>
                     <h3 style={{color: textColor}}>Saves</h3>
@@ -275,7 +274,7 @@ export const MusicWidget = ({editing = false, widget, controls = true}) => {
                         <Range min={0} value={volume} action={handleMusicVolume} max={100} step={0.05} />
                     </div> : null}
                     {queue[0]?.title && editing === false ? 
-                    <Song width={'calc(100% - 120px)'} added_by={queue[0]?.added_by} liked={queue[0]?.liked} action={() => {handleSavingSong(queue[0])}} id={queue[0]._id} key={queue[0]._id} name={queue[0].title} duration={queue[0].duration} image={queue[0].thumbnail} />
+                    <Song width={roomOverlay ? '100%' : 'calc(100% - 120px)'} added_by={queue[0]?.added_by} liked={queue[0]?.liked} action={() => {handleSavingSong(queue[0])}} id={queue[0]._id} key={queue[0]._id} name={queue[0].title} duration={queue[0].duration} image={queue[0].thumbnail} />
                     :
                     <p
                     style={{
@@ -291,7 +290,7 @@ export const MusicWidget = ({editing = false, widget, controls = true}) => {
                 
                 <div style={{width: '100%', height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
                     <LockedChannelIcon width={'40%'} height={'40%'} />
-                    <p style={{color: textColor, textAlign: 'center'}}>Whoops Looks Like Your Not Allowed To Interact With The Media Player In This Channel</p>
+                    <p style={{color: textColor, textAlign: 'center', maxWidth: '90%'}}>Whoops Looks Like Your Not Allowed To Interact With The Media Player In This Channel</p>
                 </div>
                 }
                 {error ? <Error action={closeError} position='absolute' errorMessage={errorMessage} /> : null}

@@ -26,6 +26,7 @@ import { VoiceDeactivationDelay } from './VoiceDeactivationDelay/VoiceDeactivati
 import { selectActivateCameraKey, selectDisconnectKey, selectMuteAudioKey, selectMuteMicKey, selectPushToMuteKey, selectPushToTalkKey, selectShareScreenKey, updateKeyCodeState } from '../keyBindSettings/keyBindSettingsSlice';
 import { selectCurrentChannelId } from '../../../server/ServerSlice';
 import { MicMutedIndicator } from './MicMutedIndicator/MicMutedIndicator';
+import { AltCloseCornerButton } from '../../../../components/buttons/AltCloseCornerButton/AltCloseCornerButton';
 const Settings = () => {
 
     const dispatch = useDispatch();
@@ -198,7 +199,7 @@ const Settings = () => {
         
         dispatch(updateKeyCodeState(obj));
     }
-
+    
     return (
         <div className='settings-wrapper'>
             <SettingsHeader title={"Devices"} />
@@ -214,16 +215,20 @@ const Settings = () => {
             <InputTitle title={"Test Mic Input"} />
             <ListenToMicrophoneLevel />
             <InputTitle title={"Input Volume"} />
-            <Range save={saveMicInputVolume} value={localMicInputVolume} action={handleMicInputVolume} min={1} max={8} step={0.001} /> 
+            <Range save={saveMicInputVolume} value={localMicInputVolume} action={handleMicInputVolume} min={2} max={5} step={0.001} /> 
             <InputTitle title={"Input Mode"} />
             <RadioButton name={"Enable Push To Talk"} state={pushToTalk} action={handleToggleVoiceState} />
             <RadioButton name={"Enable Voice Activation Detection"} state={voiceActivity} action={handleToggleVoiceState} />
             {pushToTalk ?
             <>
+            <AltError error={true} errorMessage={"Run Bubble in admin mode if you experience push to talk not working while using certain applications."} />
             <InputTitle title={"Push To Talk Release Delay"} />
             <VoiceDeactivationDelay value={voiceDeactivationDelay} action={handleVoiceDeactivaitonDelay} save={saveVoiceVideoSettings} />
             <InputTitle title={"Push To Talk Key Bind"} />
-            <TextInput keyCode={handleKeyCodeUpdate} stateSelector='push_to_talk' inputValue={pushToTalkkey.key} />
+            <div className='key-bind-input-wrapper'>
+                <TextInput keyCode={handleKeyCodeUpdate} stateSelector='push_to_talk' inputValue={pushToTalkkey.key} />
+                <AltCloseCornerButton action={() => {handleKeyCodeUpdate({}, "push_to_talk", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} />
+            </div>
             </>
             : 
             <>
@@ -250,13 +255,14 @@ const Settings = () => {
             <SettingsHeader title={'Stream Settings'} />
             <InputTitle title={"Enable Experimental Audio Capture"} />
             <ToggleButton state={experimentalAudioCapture} action={() => {handleToggleSelectedVoiceVideoState('experimentalAudioCapture')}} />
+            <AltError error={true} errorMessage={"Applications like soundpad can block audio capture from bubble."} />
             <SettingsHeader title={"Video Settings"} />
             <InputTitle title={"Mirror Web Cam"} />
             <ToggleButton state={mirroredWebCam} action={() => {handleToggleSelectedVoiceVideoState("mirroredWebCam")}} />
             <AltError marginTop={'2%'} error={true} errorMessage={"Must reconnect to channel for this setting to take effect server side"} />
             <InputTitle title={"Preview Webcam"} />
             <PreviewWebCam preview={previewingWebCam} deviceId={selectedVideoInput._id} mirrored={mirroredWebCam} />
-            <ApplyCancelButton apply={() => {handleTogglePreviewWebCam(true)}} cancel={() => {handleTogglePreviewWebCam(false)}} toggled={previewingWebCam} cancelName='Stop' name='Start' />
+            <ApplyCancelButton position='relative' apply={() => {handleTogglePreviewWebCam(true)}} cancel={() => {handleTogglePreviewWebCam(false)}} toggled={previewingWebCam} cancelName='Stop' name='Start' />
             <SettingsSpacer />
             {channelId ? <MicMutedIndicator /> : null}
         </div>

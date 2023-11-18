@@ -46,7 +46,7 @@ export const pushSytemNotification = createAsyncThunk(
         try {
             if (data.type === 'status' && data?.content?.text.includes('offline')) return;
 
-            const {disableSystemNotifications} = getState().MiscellaneousSettingsSlice;
+            const {disableSystemNotifications, disableNsfwBlur} = getState().MiscellaneousSettingsSlice;
 
             if (disableSystemNotifications) return;
 
@@ -54,19 +54,19 @@ export const pushSytemNotification = createAsyncThunk(
 
             if (data.channel_id && (data.channel_id === current_channel_id || data.channel_id === selectedChannelSocial)) return;
 
-            const {textColor, secondaryColor} = getState().appearanceSettingsSlice;
+            const {textColor, secondaryColor, glassColor} = getState().appearanceSettingsSlice;
 
             const ipcRenderer = window.require('electron').ipcRenderer;
             
             const member = members.find(u => u.username === data.username);
 
             const channel = channels.find(c => c._id === data.channel_id);
-            console.log(data)
+            
             if (channel?.auth === false && data.channel_id) return;
 
             if (member) {
 
-                let msg = {...data, display_name: member.display_name, user_image: member.user_image, textColor: textColor, secondaryColor: secondaryColor, shape: member.profile_picture_shape, channel_name: channel?.channel_name, user_color: member.color}
+                let msg = {...data, display_name: member.display_name, user_image: member.user_image, textColor: textColor, secondaryColor: secondaryColor, shape: member.profile_picture_shape, channel_name: channel?.channel_name, user_color: member.color, glassColor: glassColor, disableNsfwBlur: disableNsfwBlur}
                 
                 let notif = BuildSystemNotification(msg);
 
@@ -109,7 +109,12 @@ const MiscellaneousSettingsSlice = createSlice({
         disableSystemNotifications: false,
         hideLinksOnMedia: false,
         hideProfileImagesOnMessages: false,
-        maximizeMediaSize: false
+        maximizeMediaSize: false,
+        focused: true,
+        hideCustomChannelIcons: false,
+        webVersion: false,
+        disableNsfwWarning: false,
+        disableNsfwBlur: false
     },
     reducers: {
         pushPokeNotification: (state, action) => {
@@ -172,6 +177,12 @@ const MiscellaneousSettingsSlice = createSlice({
         },
         changeRoomScale: (state, action) => {
             state.roomScale = action.payload;
+        },
+        toggleAppFocus: (state, action) => {
+            state.focused = action.payload;
+        },
+        toggleWebVersion: (state, action) => {
+            state.webVersion = action.payload;
         }
     },
     extraReducers: {
@@ -217,6 +228,8 @@ const MiscellaneousSettingsSlice = createSlice({
 
             if (saved_data.showFullResPreviews) state.showFullResPreviews = true;
 
+            if (saved_data.hideCustomChannelIcons) state.hideCustomChannelIcons = true;
+
             if (saved_data.disableChannelIcons) state.disableChannelIcons = true;
 
             if (saved_data.disableSystemNotifications) state.disableSystemNotifications = true;
@@ -228,6 +241,10 @@ const MiscellaneousSettingsSlice = createSlice({
             if (saved_data.maximizeMediaSize) state.maximizeMediaSize = true;
 
             if (saved_data.hideLinksOnMedia) state.hideLinksOnMedia = true;
+
+            if (saved_data.disableNsfwWarning) state.disableNsfwWarning = true;
+
+            if (saved_data.disableNsfwBlur) state.disableNsfwBlur = true;
         }
     }
 })
@@ -282,7 +299,16 @@ export const selectMaximizeMedia = state => state.MiscellaneousSettingsSlice.max
 
 export const selectHideProfileImagesOnMessages = state => state.MiscellaneousSettingsSlice.hideProfileImagesOnMessages;
 
-export const {setVideoVolume, pushPokeNotification, setDefaultServer, changeRoomScale, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, miscSettingsClearError, miscSettingsChannelSpecificStateChange } = MiscellaneousSettingsSlice.actions;
+export const selectAppFocusedState = state => state.MiscellaneousSettingsSlice.focused;
 
+export const selectHideCustomChannelIcons = state => state.MiscellaneousSettingsSlice.hideCustomChannelIcons;
+
+export const selectWebVersion = state => state.MiscellaneousSettingsSlice.webVersion;
+
+export const selectDisableNsfwWarning = state => state.MiscellaneousSettingsSlice.disableNsfwWarning;
+
+export const selectDisableNsfwBlur = state => state.MiscellaneousSettingsSlice.disableNsfwBlur;
+
+export const { toggleWebVersion,toggleAppFocus, setVideoVolume, pushPokeNotification, setDefaultServer, changeRoomScale, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, miscSettingsClearError, miscSettingsChannelSpecificStateChange } = MiscellaneousSettingsSlice.actions;
 
 export default MiscellaneousSettingsSlice.reducer;

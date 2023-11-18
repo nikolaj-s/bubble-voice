@@ -29,7 +29,7 @@ export const EmojiButton = (props) => {
                exit={{scale: 0.5}}
                key={index}
                 style={{
-                    fontSize: 22,
+                    fontSize: props.fontSize ? props.fontSize : 22,
                     lineHeight: 0,
                     pointerEvents: 'none'
                 }}

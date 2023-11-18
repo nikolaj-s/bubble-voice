@@ -12,7 +12,6 @@ import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../..
 import { Image as ImageComp } from "../../Image/Image";
 import { ImageIcon } from '../../Icons/ImageIcon/ImageIcon';
 import {GetImageColorData} from '../../../util/GetImageColorData'
-import { SearchIcon } from '../../Icons/SearchIcon/SearchIcon';
 
 
 // style
@@ -42,7 +41,10 @@ export const ImageInput = ({
     imageProcessingFontSize,
     getColor = () => {},
     centerButtons = false,
-    position = 'absolute'
+    position = 'absolute',
+    contain = false,
+    imageCleared,
+    listenToClears = false
 }) => {
     const dispatch = useDispatch();
     // state
@@ -63,6 +65,22 @@ export const ImageInput = ({
     const accentColor = useSelector(selectAccentColor);
 
     const textColor = useSelector(selectTextColor);
+
+    React.useEffect(() => {
+        try {
+            if (listenToClears) {
+                if (!imageCleared.preview) {
+                    
+                    URL.revokeObjectURL(files[0]?.preview);
+    
+                    setFiles([{preview: initalImage}])
+                }
+            }
+        } catch (err) {
+            return;
+        }
+        
+    }, [imageCleared, listenToClears])
 
     const handlePercent = (value) => {
         setPercent(value);
@@ -223,8 +241,10 @@ export const ImageInput = ({
         }}
         {...getRootProps({className: 'dropzone'})} className='image-drop-input-container'>
             <input {...getInputProps()} />
-            <ImageComp onLoad={onLoad} opacity={blur_amount} disableErr={true} cursor='pointer' image={files[0]?.preview} />
-            
+            <ImageComp zIndex={2} objectFit={contain ? 'contain' : 'cover'} onLoad={onLoad} opacity={blur_amount} disableErr={true} cursor='pointer' image={files[0]?.preview} />
+            {contain ?
+            <img className='image-input-contain-blur-effect' src={files[0]?.preview} />
+            : null}
             {disableIcon ? null :
             <div 
             style={centerButtons ? 

@@ -1,11 +1,11 @@
 
 .wheel-spin-overlay-container {
     position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 600px;
-    height: 750px;
+    top: 5;
+    right: 5px;
+    border-radius: 10px;
+    width: 410px;
+    height: 550px;
     border-bottom-left-radius: var(--border-radius);
     border-bottom-right-radius: var(--border-radius);
     display: flex;
@@ -14,6 +14,7 @@
     flex-direction: column;
     backdrop-filter: blur(8px);
     z-index: 5;
+    box-shadow: -5px -5px 30px rgba(0, 0, 0, 0.714);
 }
 
 .wheel-spin-overlay-container .wheel-widget-wrapper {
@@ -36,7 +37,8 @@
     margin: 0;
     padding: 1rem 0;
     text-align: center;
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 400;
     letter-spacing: var(--font-spacing);
 }
+

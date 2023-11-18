@@ -1,4 +1,14 @@
 
 .activity-feed-container {
-    width: 100%;
+    width: calc(100% - 20px);
+    padding-top: 20px;
+    margin-top: -20px;
+    z-index: 1;
+    border-radius: 10px;
+    padding-bottom: 5px;
+}
+
+.activity-feed-inner-container {
+    margin-left: 20px;
+    width: calc(100% - 20px);
 }

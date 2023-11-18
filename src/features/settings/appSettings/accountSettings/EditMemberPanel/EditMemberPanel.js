@@ -20,6 +20,8 @@ export const EditMemberPanel = ({
     userBanner, 
     changeProfileShape, 
     handleInput, 
+    newBanner,
+    newImage,
     displayName, 
     previewBio, 
     togglePreviewBio, 
@@ -27,14 +29,16 @@ export const EditMemberPanel = ({
     changeProfileBio,
     showCaseScreenShots,
     toggleShowCaseScreenShots,
-screenShots}) => {
+screenShots,
+handleNewDisplayName
+}) => {
     
     return (
-        <div style={{flexShrink: 0,backgroundColor: color, padding: '5px', borderRadius: '8px', maxWidth: 500, position: 'relative', width: '100%', overflow: 'hidden', boxShadow: '5px 5px 20px black', minHeight: 800}} className='edit-member-panel-container'>
-            <ProfileImage color={updateColor} shape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} />
+        <div style={{flexShrink: 0,padding: '5px', borderRadius: '8px', maxWidth: 500, position: 'relative', width: '100%', overflow: 'hidden', minHeight: 800}} className='edit-member-panel-container'>
+            <ProfileImage newBanner={newBanner} newImage={newImage} color={updateColor} shape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} />
             <ProfilePictureShape action={changeProfileShape} shape={newShape} />
             <InputTitle title={'Change Display Name'} />
-            <TextInput stateSelector='display_name' action={handleInput} inputValue={displayName} placeholder={""} />
+            <TextInput stateSelector='display_name' action={handleNewDisplayName} inputValue={displayName} placeholder={""} />
             
             <div style={{display: 'flex', width: '100%', alignItems: 'center',}}>
                 <InputTitle width={'calc(100% - 50px)'} title={'Bio Hint: Pasting Image Links Will Display The Image'} />

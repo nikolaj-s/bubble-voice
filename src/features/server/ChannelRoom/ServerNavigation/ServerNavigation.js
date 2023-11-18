@@ -16,7 +16,7 @@ import { WidgetsIcon } from '../../../../components/Icons/WidgetsIcon/WidgetsIco
 import { PinIcon } from '../../../../components/Icons/PinIcon/PinIcon';
 import { MediaIcon } from '../../../../components/Icons/MediaIcon/MediaIcon';
 import { AltCloseButton } from '../../../../components/buttons/AltCloseButton/AltCloseButton'
-import { selectHideUserStatus } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { selectHideUserStatus, selectWebVersion } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { OptionsButton } from '../../../../components/buttons/OptionsButton/OptionsButton';
 import { TextOnlyIcon } from '../../../../components/Icons/TextOnlyIcon/TextOnlyIcon';
 import { setSelectedMember } from '../MemberPanel/MemberPanelSlice';
@@ -28,7 +28,7 @@ export const ServerNavigation = () => {
 
     const [width, setWidth] = React.useState(0)
 
-    const primaryColor = useSelector(selectPrimaryColor);
+    const usingWebVersion = useSelector(selectWebVersion);
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
@@ -317,18 +317,6 @@ export const ServerNavigation = () => {
 
     React.useEffect(() => {
 
-        resize();
-
-        window.addEventListener('resize', resize);
-
-        return () => {
-            window.removeEventListener('resize', resize);
-        }
-
-    }, [])
-
-    React.useEffect(() => {
-
         if (inChannel) {
             handleAction('voice');
         } else {
@@ -339,25 +327,22 @@ export const ServerNavigation = () => {
 
     }, [inChannel])
 
-    React.useEffect(() => {
-        resize();
-    }, [hideUsers])
-
     return (
         <motion.div
-
-        style={{width: width}}
+        style={{
+            maxWidth: usingWebVersion ? 'calc(100% - 264px)' : null
+        }}
         className='server-navigation-container'>
             {!socialId ?
-            <div className='server-navigation-button-wrapper'>
+            <div
+            
+            className='server-navigation-button-wrapper'>
                 {inChannel ?
                 <>
                 <motion.div 
                 transition={{duration: 0.05}}
-                onMouseEnter={() => {handleDesc('video', true)}}
-                onMouseOver={() => {handleAnimation(secondaryColor, voiceButtonAnimation, 'voice')}}
-                onMouseOut={() => {handleAnimation(`rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`, voiceButtonAnimation, 'voice')}}
-                onMouseLeave={() => {handleDesc('video', false)}}
+                onMouseEnter={() => {handleDesc('video', true); handleAnimation(secondaryColor, voiceButtonAnimation, 'voice')}}
+                onMouseLeave={() => {handleDesc('video', false); handleAnimation(`rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`, voiceButtonAnimation, 'voice')}}
                 onMouseDown={() => {handleAnimation(accentColor, voiceButtonAnimation, 'voice')}}
                 onMouseUp={() => {handleAnimation(secondaryColor, voiceButtonAnimation, 'voice')}}
                 animate={voiceButtonAnimation} onClick={() => {handleAction('voice')}} className='server-navigation-button stream-server-button'>
@@ -369,10 +354,8 @@ export const ServerNavigation = () => {
                 <motion.div 
                 id={'channel-social-tab-button'}
                 transition={{duration: 0.05}}
-                onMouseEnter={() => {handleDesc('social', true)}}
-                onMouseOver={() => {handleAnimation(secondaryColor, socialButtonAnimation, 'social')}}
-                onMouseOut={() => {handleAnimation(`rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`, socialButtonAnimation, 'social')}}
-                onMouseLeave={() => {handleDesc('social', false)}}
+                onMouseEnter={() => {handleDesc('social', true); handleAnimation(secondaryColor, socialButtonAnimation, 'social')}}
+                onMouseLeave={() => {handleDesc('social', false); handleAnimation(`rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`, socialButtonAnimation, 'social')}}
                 onMouseDown={() => {handleAnimation(accentColor, socialButtonAnimation, 'social')}}
                 onMouseUp={() => {handleAnimation(secondaryColor, socialButtonAnimation, 'social')}}
                 animate={socialButtonAnimation} onClick={() => {handleAction('social')}} className='server-navigation-button'>
@@ -380,11 +363,9 @@ export const ServerNavigation = () => {
                     <SocialIcon opacity={page === 'social' || socialDesc ? 1 : 0.6} color={textColor} />
                 </motion.div>
                 <motion.div 
-                onMouseEnter={() => {handleDesc('widgets', true)}}
-                onMouseLeave={() => {handleDesc('widgets', false)}}
+                onMouseEnter={() => {handleDesc('widgets', true); handleAnimation(secondaryColor, widgetsButtonAnimation, 'widgets')}}
+                onMouseLeave={() => {handleDesc('widgets', false);handleAnimation(`rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`, widgetsButtonAnimation, 'widgets')}}
                 transition={{duration: 0.05}}
-                onMouseOver={() => {handleAnimation(secondaryColor, widgetsButtonAnimation, 'widgets')}}
-                onMouseOut={() => {handleAnimation(`rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`, widgetsButtonAnimation, 'widgets')}}
                 onMouseDown={() => {handleAnimation(accentColor, widgetsButtonAnimation, 'widgets')}}
                 onMouseUp={() => {handleAnimation(secondaryColor, widgetsButtonAnimation, 'widgets')}}
                 animate={widgetsButtonAnimation} onClick={() => {handleAction('widgets')}} className='server-navigation-button'>
@@ -396,11 +377,9 @@ export const ServerNavigation = () => {
                 </>
                 : null}
                 <motion.div 
-                onMouseEnter={() => {handleDesc('activity', true)}}
-                onMouseLeave={() => {handleDesc('activity', false)}}
+                onMouseEnter={() => {handleDesc('activity', true);handleAnimation(secondaryColor, activityButtonAnimation, 'activity')}}
+                onMouseLeave={() => {handleDesc('activity', false);handleAnimation(`rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`, activityButtonAnimation, 'activity')}}
                 transition={{duration: 0.05}}
-                onMouseOver={() => {handleAnimation(secondaryColor, activityButtonAnimation, 'activity')}}
-                onMouseOut={() => {handleAnimation(`rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`, activityButtonAnimation, 'activity')}}
                 onMouseDown={() => {handleAnimation(accentColor, activityButtonAnimation, 'activity')}}
                 onMouseUp={() => {handleAnimation(secondaryColor, activityButtonAnimation, 'activity')}}
                 animate={activityButtonAnimation} onClick={() => {handleAction('activity')}} className='server-navigation-button'>
@@ -408,11 +387,9 @@ export const ServerNavigation = () => {
                     <ActivityIcon opacity={page === 'activity' || activityDesc ? 1 : 0.6} color={textColor} />
                 </motion.div>
                 <motion.div 
-                onMouseEnter={() => {handleDesc('pins', true)}}
-                onMouseLeave={() => {handleDesc('pins', false)}}
+                onMouseEnter={() => {handleDesc('pins', true); handleAnimation(secondaryColor, pinsButtonAnimation, 'pins')}}
+                onMouseLeave={() => {handleDesc('pins', false); handleAnimation(`rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`, pinsButtonAnimation, 'pins')}}
                 transition={{duration: 0.05}}
-                onMouseOver={() => {handleAnimation(secondaryColor, pinsButtonAnimation, 'pins')}}
-                onMouseOut={() => {handleAnimation(`rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`, pinsButtonAnimation, 'pins')}}
                 onMouseDown={() => {handleAnimation(accentColor, pinsButtonAnimation, 'pins')}}
                 onMouseUp={() => {handleAnimation(secondaryColor, pinsButtonAnimation, 'pins')}}
                 animate={pinsButtonAnimation} onClick={() => {handleAction('pins')}} className='server-navigation-button'>
@@ -420,11 +397,9 @@ export const ServerNavigation = () => {
                     <PinIcon opacity={page === 'pins' || pinsDesc ? 1 : 0.6} color={textColor} />
                 </motion.div>
                 <motion.div 
-                onMouseEnter={() => {handleDesc('media', true)}}
-                onMouseLeave={() => {handleDesc('media', false)}}
+                onMouseEnter={() => {handleDesc('media', true); handleAnimation(secondaryColor, mediaButtonAnimation, 'media')}}
+                onMouseLeave={() => {handleDesc('media', false); handleAnimation(`rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`, mediaButtonAnimation, 'media')}}
                 transition={{duration: 0.05}}
-                onMouseOver={() => {handleAnimation(secondaryColor, mediaButtonAnimation, 'media')}}
-                onMouseOut={() => {handleAnimation(`rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`, mediaButtonAnimation, 'media')}}
                 onMouseDown={() => {handleAnimation(accentColor, mediaButtonAnimation, 'media')}}
                 onMouseUp={() => {handleAnimation(secondaryColor, mediaButtonAnimation, 'media')}}
                 animate={mediaButtonAnimation} onClick={() => {handleAction('media')}} className='server-navigation-button'>
@@ -438,13 +413,13 @@ export const ServerNavigation = () => {
                     <TextOnlyIcon />
                     <h3 style={{color: textColor}}>{socialChannel.channel_name}</h3>
                 </div>
-                <div className='close-social-route-button'>
-                    <AltCloseButton action={closeSocialRoute} margin="0px 0px 0px 5px" width={25} borderRadius={3} height={16} padding={5} />
+                <div style={{marginRight: usingWebVersion ? 204 : usingWebVersion && inChannel ? 168 : usingWebVersion && (inChannel && !hideUsers) ? 1 : (inChannel && !hideUsers) ? 68 : inChannel ? 0 : 104}} className='close-social-route-button'>
+                    <AltCloseButton action={closeSocialRoute} margin={`0px ${inChannel ? 0 : 40} 0px 5px`} width={25} borderRadius={8} height={16} padding={5} />
                 </div>
             </div>
             }
             {!socialId ? <div className='server-navigation-filler'></div> : null}
-            {inChannel ? <OptionsButton desc_width={100} transparent={true} description={"Room Options"} right_orientation_desc={true}  target={'live-chat-wrapper'} borderRadius={3} zIndex={3} top={0} height={7} left={null} width={15} /> : null}
+            {inChannel ? <OptionsButton desc_width={100} transparent={true} description={"Room Options"} right_orientation_desc={true}  target={'live-chat-wrapper'} borderRadius={8} zIndex={3} top={0} height={7} left={null} width={15} /> : null}
         </motion.div>
     )
 }

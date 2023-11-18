@@ -20,6 +20,9 @@
     word-break: break-all;
     cursor: default;
     white-space: nowrap;
-    animation: text-auto-scroll linear 15s infinite;
     
+}
+
+.channel-status-wrapper-animation p { 
+    animation: text-auto-scroll linear 15s infinite;
 }

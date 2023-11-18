@@ -1,0 +1,47 @@
+
+.input-editor-container {
+    width: calc(100% - 10px);
+    padding: 5px;
+    flex-shrink: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    z-index: 2;
+    position: relative;
+}
+
+.font-size-display {
+    margin: 0px 5px;
+    height: 35px;
+    line-height: 30%;
+}
+
+.font-size-display input {
+    height: 31px;
+    width: 31px;
+    border: none;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.font-size-display input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+.alt-input-editor-emoji-menu {
+    max-height: 200px;
+    overflow-y: auto;
+    width: calc(100% - 10px);
+    padding: 5px;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    flex-shrink: 0;
+}
+
+.font-size-wrapper {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}

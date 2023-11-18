@@ -20,6 +20,7 @@
     position: relative;
     height: 700px;
     width: 500px;
+    min-height: 400px;
     max-height: calc(100% - 56px);
     height: auto;
     max-width: calc(100% - 30px);

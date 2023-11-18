@@ -71,6 +71,10 @@ const controlBarSlice = createSlice({
         },
         toggleConnectionError: (state, action) => {
             state.connectionError = action.payload;
+        },
+        closeScreenShareMenu: (state, action) => {
+            state.selectingScreens = false;
+            state.screenShareState = true;
         }
     }
 })
@@ -104,6 +108,6 @@ export const selectCurrentScreenName = state => state.controlBarSlice.currentScr
 export const selectWebCamPreview = state => state.controlBarSlice.webcamPreview;
 // actions
 
-export const {toggleWebCamPreview, toggleConnectionLoading, toggleConnectionError, toggleLoadingScreenShare, toggleLoadingWebCam, setCurrentScreen, setSelectingScreensState, resetControlState, toggleControlState, setScreens, setSelectedScreen } = controlBarSlice.actions;
+export const {closeScreenShareMenu, toggleWebCamPreview, toggleConnectionLoading, toggleConnectionError, toggleLoadingScreenShare, toggleLoadingWebCam, setCurrentScreen, setSelectingScreensState, resetControlState, toggleControlState, setScreens, setSelectedScreen } = controlBarSlice.actions;
 
 export default controlBarSlice.reducer;

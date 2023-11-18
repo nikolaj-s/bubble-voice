@@ -159,7 +159,7 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
     }
 
     const onDrop = (event) => {
-
+        try {
         document.getElementById(`channel-wrapper-button-${channel._id}`).style.backgroundColor = 'rgba(0, 0, 0, 0)';
 
         if (channel.text_only) return;
@@ -168,9 +168,12 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
         
         if (!id) return;
 
-        const selected_username = id.split(' ')[1];
+        const split_id = id.split(' ');
 
-        const channel_id = id.split(' ')[0];
+        console.log(id)
+        const selected_username = split_id.length > 2 ? `${split_id[1]} ${split_id[2]}` : split_id[1];
+
+        const channel_id = split_id[0];
         
         if (channel_id === channel._id) return;
 
@@ -179,6 +182,10 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
         } else if (selected_username && channel_id) {
             
             dispatch(moveUser({username: selected_username, channel_id: channel_id, arg: channel._id}))
+        }
+
+        } catch (err) {
+            dispatch(throwServerError({errorMessage: "An Error Was Thrown When Moving This User"}))
         }
     }
     
@@ -211,8 +218,6 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
                 backgroundColor: active ? accentColor : transparentPrimaryColor,
                 cursor: active ? "default" : "pointer",
                 marginBottom: users.length > 0 && channel.auth && !channel.status ? '5px' : null,
-                borderBottomLeftRadius: users.length > 0 && channel.auth ? 0 : null,
-                borderBottomRightRadius: users.length > 0 && channel.auth ? 0 : null,
             }}
             className='channel-button-container'>
                 <div style={{backgroundColor: unReadMessage && channel.auth ? textColor : null}} className='unread-message-indicator'></div>   
@@ -229,10 +234,10 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
                     <VoiceEnabledIcon />
                     }
                 </div>
-                <h3 style={{color: textColor, opacity: (active || mouseEnter || unReadMessage) && channel.auth ? 1 : 0.7, fontWeight: unReadMessage ? 500 : null}}>{channel.channel_name}</h3>
+                <h3 style={{color: textColor, opacity: (active || mouseEnter || unReadMessage) && channel.auth ? 1 : 0.7, fontWeight: unReadMessage ? 600 : null}}>{channel.channel_name}</h3>
                 {mouseEnter ? <div className='channel-button-extra-context-wrapper'>
-                    {!channel.text_only ? <SocialButton o_mouseLeave={() => {handleAnimation(transparentPrimaryColor, false)}} desc_o_mouse_leave={() => {handleAnimation(transparentPrimaryColor, false)}} flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} action={openSocial} borderRadius={4} width={16} height={16} padding={4} desc_space={12} /> : null}
-                    <SubMenuButton invert={false} altInvert={true} o_mouseLeave={() => {handleAnimation(transparentPrimaryColor, false)}} desc_o_mouse_leave={() => {handleAnimation(transparentPrimaryColor, false)}} flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} description={"More"} target={`channel-button-${channel._id}`} padding={4} width={16} height={16} borderRadius={4} desc_space={12} />
+                    {!channel.text_only ? <SocialButton o_mouseLeave={() => {handleAnimation(transparentPrimaryColor, false)}} desc_o_mouse_leave={() => {handleAnimation(transparentPrimaryColor, false)}} flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} action={openSocial} borderRadius={8} width={16} height={16} padding={6} desc_space={15} /> : null}
+                    <SubMenuButton invert={false} altInvert={true} o_mouseLeave={() => {handleAnimation(transparentPrimaryColor, false)}} desc_o_mouse_leave={() => {handleAnimation(transparentPrimaryColor, false)}} flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} description={"More"} target={`channel-button-${channel._id}`} padding={6} width={16} height={16} borderRadius={8} desc_space={15} />
                 </div> : null}
             </motion.div>
             {channel?.status ?

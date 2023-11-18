@@ -5,7 +5,7 @@ import "./ChannelBackgroundInput.css";
 import { useSelector } from 'react-redux';
 import { selectAccentColor, selectPrimaryColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
-export const ChannelBackgroundInput = ({initialImage, getFile, blur}) => {
+export const ChannelBackgroundInput = ({initialImage, getFile, blur, contain}) => {
 
 
     const accentColor = useSelector(selectAccentColor);
@@ -21,7 +21,7 @@ export const ChannelBackgroundInput = ({initialImage, getFile, blur}) => {
                     return <div key={i} style={{backgroundColor: primaryColor}} className='block-display'></div>
                 })}
             </div>
-            <ImageInput position='relative' width='calc(100% - 320px)' backgroundColor={accentColor} maxSize={0.7} showShadow={false} size={950000} blur={true} blur_amount={blur} initalImage={initialImage} getFile={getFile} />
+            <ImageInput contain={contain} position='relative' width='calc(100% - 320px)' backgroundColor={accentColor} maxSize={0.7} showShadow={false} size={950000} blur={true} blur_amount={blur} initalImage={initialImage} getFile={getFile} />
             <div 
             style={{backgroundColor: accentColor, marginLeft: 5}}
             className='channel-background-side-ctx-prev'>

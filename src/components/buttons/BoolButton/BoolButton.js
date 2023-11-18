@@ -6,7 +6,7 @@ import { selectAccentColor, selectSecondaryColor, selectTextColor } from '../../
 // style
 import "./BoolButton.css";
 
-export const BoolButton = ({state, name, action}) => {
+export const BoolButton = ({state, name, action, width, fontFamily = 'Inter'}) => {
 
     const [hover, toggleHover] = React.useState(false);
 
@@ -18,11 +18,12 @@ export const BoolButton = ({state, name, action}) => {
 
     return (
         <div 
-        onClick={action}
+        onClick={(e) => {action()}}
         onMouseEnter={() => {toggleHover(true)}}
         onMouseLeave={() => {toggleHover(false)}}
         style={{
-            backgroundColor: hover ? accentColor : null
+            backgroundColor: hover ? accentColor : null,
+            width: width
         }}
         className='bool-button-container'>
             <div 
@@ -41,7 +42,7 @@ export const BoolButton = ({state, name, action}) => {
                 : null}
             </div>
             <p
-            style={{color: textColor}}
+            style={{color: textColor, fontFamily: fontFamily}}
             >{name}</p>
         </div>
     )

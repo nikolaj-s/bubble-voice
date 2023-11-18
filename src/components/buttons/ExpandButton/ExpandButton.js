@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { selectGlassColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 import { ButtonAnimationWrapper } from '../ButtonAnimationWrapper/ButtonAnimationWrapper'
 
-export const ExpandButton = ({action, description, width = 25, height = 25}) => {
+export const ExpandButton = (props) => {
 
     const textColor = useSelector(selectTextColor);
 
@@ -11,10 +11,7 @@ export const ExpandButton = ({action, description, width = 25, height = 25}) => 
 
     return (
         <ButtonAnimationWrapper
-        width={width}
-        height={height}
-        action={action}
-        description={description}
+        {...props}
         background={primaryColor}
         >
             <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">

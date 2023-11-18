@@ -3,7 +3,7 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    border-radius: 5px;
+    border-radius: 10px;
     overflow: hidden;
     cursor: pointer;
     max-width: 400px;

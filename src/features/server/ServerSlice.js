@@ -254,6 +254,9 @@ const serverSlice = createSlice({
 
             state.welcomeMessage = action.payload;
         },
+        setActivityFeed: (state, action) => {
+            state.activityFeed = action.payload;
+        },
         updateBannedKeywords: (state, action) => {
             state.bannedKeywords = action.payload;
         },
@@ -377,15 +380,8 @@ const serverSlice = createSlice({
 
             // prevent duplicating ---> check if user exists in channel
 
-            for (let i = 0; i < state.channels.length - 1; i++) {
-                let u_index = state.channels[i].users.findIndex(u => u.username === action.payload.username);
-                
-                if (u_index !== -1) {
-
-                    state.channels[i].users = state.channels[i].users.filter(user => user.username !== action.payload.username)
-            
-
-                }
+            for (let i = 0; i < state.channels.length; i++) {
+                state.channels[i].users = state.channels[i].users.filter(user => user.username !== action.payload.username);
             }
 
             const existing = state.channels[channelIndex].users.findIndex(user => user.username === action.payload.username);
@@ -411,15 +407,13 @@ const serverSlice = createSlice({
             
             const channelIndex = state.channels.findIndex(channel => channel._id === action.payload.channel._id);
 
-            if (state.current_channel_id) {
-
-                const currentChannelIndex = state.channels.findIndex(channel => channel._id === state.current_channel_id);
-
-                state.channels[currentChannelIndex].users = state.channels[currentChannelIndex].users.filter(user => user.username !== action.payload.username);
+            // clear all channels
+            for (let i = 0; i < state.channels.length; i++) {
+                state.channels[i].users = state.channels[i].users.filter(user => user.username !== action.payload.username);
                 
-                state.channels[currentChannelIndex].active = false;
-            
+                state.channels[i].active = false;
             }
+
 
             state.channels[channelIndex].users.push(state.members[userIndex]);
 
@@ -458,7 +452,7 @@ const serverSlice = createSlice({
 
             const userIndex = state.members.findIndex(user => user.username === action.payload.username);
 
-            const user = {...action.payload, status: 'online'}
+            const user = {...action.payload}
 
             if (userIndex === -1) {
                 state.members.push(user)
@@ -1009,6 +1003,6 @@ export const selectBannedKeywords = state => state.serverSlice.bannedKeywords;
 
 // actions
 
-export const {updateBannedKeywords, setWelcomeMessage, addActivityMessage, setKickedState, updateChannelStatus, triggerRoomRescale, setRoomColor, toggleConnectionLostState, setServerbannerAmbiance, updateMemberFile, clearSearchData, updateInactiveChannel, removeSongFromWidget, saveSongToWidget, userBanned, toggleCreateChannelMenu, toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
+export const {setActivityFeed, updateBannedKeywords, setWelcomeMessage, addActivityMessage, setKickedState, updateChannelStatus, triggerRoomRescale, setRoomColor, toggleConnectionLostState, setServerbannerAmbiance, updateMemberFile, clearSearchData, updateInactiveChannel, removeSongFromWidget, saveSongToWidget, userBanned, toggleCreateChannelMenu, toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
 
 export default serverSlice.reducer;

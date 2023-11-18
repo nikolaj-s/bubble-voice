@@ -46,18 +46,27 @@ export const BuildSystemNotification = (data) => {
           </div >
           <div style="margin-left: 50px; margin-top: -25px; font-family: sans-serif; color: white; font-size: 12px; overflow: hidden; padding: 0px 5px 10px 0px;">
               ${data?.content?.text ?
-              `<p style="margin: 0px; color: ${data.textColor};">${data?.content?.text}</p> `
+              `<p style="margin: 0px; color: ${(data?.content?.textStyle?.color || data.textColor)}; font-size: ${data?.content?.textStyle?.fontSize}; text-decoration: ${data?.content?.textStyle?.textDecoration ? 'underline' : null}; font-weight: ${data?.content?.textStyle?.bold ? 600 : null};">${data?.content?.text}</p> `
+              : ""}
+              ${data?.content?.emoji ?
+              `<h2 style="margin: 0px; font-size: 3rem;">
+                ${data?.content?.emoji}
+              </h2>`
               : ""}
               ${(data?.content?.link && !data?.content?.image && !data?.content?.video) ?
-                `<p style="margin: 0px; color: ${data.textColor};">${data?.content?.link}</p> `
+                `<p style="margin: -15px 0px 0px 0px; color: ${data.textColor};">${data?.content?.link}</p> `
                 : ""}
               ${data?.content?.image ?
-              ` <div style='width: calc(100% - 10px); height: 100%; max-height: 300px; overflow: hidden; border-radius: 5px; min-height: 60px;' class="image-container">
-                  <image style="width: 100%; height: 100%; object-fit: cover;"src=${data.content.image} />
+              ` <div style='position: relative; display: inline-block; width: calc(100% - 10px); height: 100%; max-height: 300px; overflow: hidden; border-radius: 10px; min-height: 60px;' class="image-container">
+                  ${data?.nsfw && !data?.disableNsfwBlur ? 
+                  `<div style='position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 2; background-color: ${data?.glassColor}; backdrop-filter: blur(20px); display: flex; justify-content: center; align-items: center; overflow: hidden; border-radius: 10px;'>
+                    <h3 style='color: ${data?.textColor};'>NSFW</h3>
+                  </div>` : ""}
+                  <image style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;"src=${data.content.image} />
                 </div>` : ""
               } 
               ${data?.content?.video ?
-                ` <div style='width: calc(100% - 10px); height: 100%; max-height: 300px; overflow: hidden; border-radius: 5px; min-height: 60px;' class="image-container">
+                ` <div style='width: calc(100% - 10px); height: 100%; max-height: 300px; overflow: hidden; border-radius: 10px; min-height: 60px;' class="image-container">
                 <video controls="false" autoplay style="width: 100%; height: 100%; object-fit: cover;"src=${data.content.video} />
               </div>`
               : ""}

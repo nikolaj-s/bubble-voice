@@ -1,0 +1,12 @@
+
+.home-content-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.home-content-wrapper h1,
+.home-content-wrapper h3 {
+    text-align: center;
+    max-width: calc(100% - 20px);
+}

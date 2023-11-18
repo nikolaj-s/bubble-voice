@@ -24,7 +24,7 @@ import { socket } from '../../../ServerBar/ServerBar';
 import { Loading } from '../../../../../components/LoadingComponents/Loading/Loading';
 import { playSoundEffect } from '../../../../settings/soundEffects/soundEffectsSlice';
 import { ChannelBackgroundInput } from './ChannelBackgroundInput/ChannelBackgroundInput';
-import { DropDownList } from '../../../../../components/DropDownList/DropDownList';
+
 import { InputPlaceHolder } from '../../../../../components/titles/InputPlaceHolder/InputPlaceHolder';
 import { selectUsername } from '../../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { ChannelIcon } from './ChannelIcon/ChannelIcon';
@@ -76,6 +76,8 @@ const Wrapper = () => {
 
     const [assigningChannelOwner, toggleAssigningChannelOwner] = React.useState(false);
 
+    const [containBackground, toggleContainBackGround] = React.useState(false);
+
     const channel = useSelector(selectChannelToEdit);
 
     const members = useSelector(selectServerMembers);
@@ -124,6 +126,10 @@ const Wrapper = () => {
 
             if (channelToEdit.media_auth) {
                 setAuthMediaUsers(channelToEdit.media_auth)
+            }
+
+            if (channelToEdit.contain_background) {
+                toggleContainBackGround(true);
             }
 
             for (const w of channel.widgets) {
@@ -207,7 +213,7 @@ const Wrapper = () => {
         document.getElementsByClassName('server-settings-route-wrapper')[0].scrollTop = 0;
 
         await socket.request('update channel', 
-        {...channelToEdit, widgets: widgets, persist_social: persistChannelSocial, channel_name: channelName, file: channelBackground, background_blur: backgroundBlur, clear_social: clearedSocial, disable_streams: disableStreams, auth_users: authUsers, locked_channel: lockedChannel, icon_file: icon, channel_owner: channelOwner, lock_media_player: lockedMediaPlayer, authMediaUsers: authMediaUsers})
+        {...channelToEdit, widgets: widgets, persist_social: persistChannelSocial, channel_name: channelName, file: channelBackground, background_blur: backgroundBlur, clear_social: clearedSocial, disable_streams: disableStreams, auth_users: authUsers, locked_channel: lockedChannel, icon_file: icon, channel_owner: channelOwner, lock_media_player: lockedMediaPlayer, authMediaUsers: authMediaUsers, contain_background: containBackground})
         .then(response => {
 
             dispatch(updateChannel(response.channel));
@@ -352,6 +358,12 @@ const Wrapper = () => {
         setAuthMediaUsers(current_auth_media);
     }
 
+    const toggleContainBackgroundState = () => {
+        toggleEdited(true);
+
+        toggleContainBackGround(!containBackground);
+    }
+
     return (
         <>
         {(permission?.user_can_manage_channels && (channelToEdit.locked_channel ? channelToEdit.auth : true)) ?
@@ -367,8 +379,10 @@ const Wrapper = () => {
             <>
             <SettingsHeader title={"Channel Background"} />
             <InputTitle zIndex={2} title={"Image"} />
-            <ChannelBackgroundInput blur={backgroundBlur} initialImage={channelToEdit.channel_background} getFile={handleSettingChannelBackground} />
-            
+            <ChannelBackgroundInput contain={containBackground} blur={backgroundBlur} initialImage={channelToEdit.channel_background} getFile={handleSettingChannelBackground} />
+            <InputTitle title={"Contain or Cover The Channel Background"} />
+            <RadioButton action={toggleContainBackgroundState} state={containBackground === false} name={'Cover Background'} />
+            <RadioButton action={toggleContainBackgroundState} state={containBackground} name={'Contain Background'} />
             <SettingsHeader title={"Widgets"} />
             <TextButton action={openWidgetMenu} name={"Add Widget"} icon={<WidgetsIcon color={textColor} />} />
             <InputTitle title={`Widgets ${channelToEdit.widgets ? channelToEdit.widgets.length : 0} / 15`} />
@@ -434,7 +448,8 @@ const Wrapper = () => {
             </>
             : null}
             <InputTitle title={"Delete Channel"} />
-            <TextButton action={handleDeleteChannel} name={"Delete Channel"} icon={<DeleteIcon />} />
+            <TextButton marginBottom={'100px'} action={handleDeleteChannel} name={"Delete Channel"} icon={<DeleteIcon />} />
+            <div style={{flexShrink: 0, height: 100, width: '100%'}} />
             <ApplyCancelButton position={edited === false ? null : 'fixed'} right={20} toggled={edited === false ? true : null} apply={handleUpdateChannel} cancel={handleCancel} />
             <Loading backgroundColor={glassColor}  loading={loading} />
             </>

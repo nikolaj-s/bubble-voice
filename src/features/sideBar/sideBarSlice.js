@@ -24,6 +24,24 @@ export const fetchUsersServerList = createAsyncThunk(
     }
 )
 
+export const reOrderServers = createAsyncThunk(
+    'sideBarSlice/reOrderServer',
+    async ({newOrder}) => {
+        const token = await getToken();
+
+        const result = await Axios({
+            method: "POST",
+            url: `${url}/re-order-servers`,
+            headers: {TOKEN: token},
+            data: {new_server_order: newOrder}
+        }).then(res => {
+            return res.data;
+        })
+        console.log(result)
+        return result;
+    }
+)
+
 export const searchForServers = createAsyncThunk(
     'sideBarSlice/searchForServers',
     async ({value}, { rejectWithValue }) => {
@@ -101,6 +119,14 @@ const sideBarSlice = createSlice({
         },
         [searchForServers.rejected]: (state, action) => {
             state.loadingServerResults = false;
+        },
+        [reOrderServers.fulfilled]: (state, action) => {
+
+            const sortOrder = action.payload.new_server_order;
+
+            state.serverList.sort((a, b) => {
+                return sortOrder.indexOf(a._id) - sortOrder.indexOf(b._id);
+            })
         }
     }
 })

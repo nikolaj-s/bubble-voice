@@ -2,7 +2,7 @@
     height: 100%;
     position: relative;
     overflow: hidden;
-    border-radius: var(--border-radius);
+    border-radius: 20px;
     cursor: pointer;
     display: flex;
     background-color: black;
@@ -41,7 +41,7 @@
     display: flex;
     align-items: center;
     position: absolute;
-    bottom: 69px;
+    bottom: 49px;
     left: 17px;
     rotate: -90deg;
     padding: 10px;
@@ -55,4 +55,5 @@
     bottom: 0;
     left: 0;
     transition: 0.1s;
+    opacity: 0.7;
 }

@@ -13,12 +13,14 @@
    display: flex;
    width: 100%;
    flex-direction: column;
-   left: 20px;
-   border-top-right-radius: var(--border-radius);
-   border-bottom-right-radius: var(--border-radius);
+   left: 10px;
+   margin-left: -5px;
+   padding: 4px;
+   border-radius: 8px;
    overflow: hidden;
    max-height: 280px;
    overflow-y: auto;
+   border: solid 5px rgba(0, 0, 0, 0);
 }
 
 .move-to-channel-container p {
@@ -30,6 +32,7 @@
     margin: 0;
     padding: 10px 0;
     padding-left: 5px;
+    border-radius: 8px;
 }
 
 .move-to-channel-container p:hover {

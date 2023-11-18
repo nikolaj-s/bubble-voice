@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectAccentColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice'
+import { selectAccentColor, selectSecondaryColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 
 import "./ExpandedControlBar.css";
 import { InputTitle } from '../../../components/titles/inputTitle/InputTitle';
@@ -20,7 +20,7 @@ export const ExpandedControlBar = ({close}) => {
 
     const dispatch = useDispatch();
 
-    const accentColor = useSelector(selectAccentColor);
+    const accentColor = useSelector(selectSecondaryColor);
 
     const pushToTalk = useSelector(selectPushToTalkState);
 
@@ -38,48 +38,51 @@ export const ExpandedControlBar = ({close}) => {
 
         let el;
 
-        try {
+        setTimeout(() => {
+            try {
 
-            document.body.addEventListener('click', close);
+                document.body.addEventListener('click', close);
 
-            if (webCamPreview) {
-                toggleLoading(true);
-                navigator.mediaDevices.getUserMedia({
-                    audio: false,
-                    video: {frameRate: 30, width: 961, height: 541}
-                }).then(stream => {
+                if (webCamPreview) {
+                    toggleLoading(true);
+                    navigator.mediaDevices.getUserMedia({
+                        audio: false,
+                        video: {frameRate: 30, width: 961, height: 541}
+                    }).then(stream => {
 
-                    el = document.createElement('video');
+                        el = document.createElement('video');
 
-                    el.srcObject = stream;
+                        el.srcObject = stream;
 
-                    el.autoplay = true;
+                        el.autoplay = true;
 
-                    el.controls = false;
+                        el.controls = false;
 
-                    el.id = 'web-cam-mini-preview';
+                        el.id = 'web-cam-mini-preview';
 
-                    document.getElementsByClassName('web-cam-preview-container')[0].appendChild(el);
+                        document.getElementsByClassName('web-cam-preview-container')[0].appendChild(el);
 
-                    toggleLoading(false);
-                })
+                        toggleLoading(false);
+                    })
 
-            } else {
-                document.getElementById('web-cam-mini-preview')?.srcObject?.getTracks()?.forEach(track => {
-                    track.stop();
-                })
+                } else {
+                    document.getElementById('web-cam-mini-preview')?.srcObject?.getTracks()?.forEach(track => {
+                        track.stop();
+                    })
 
-                document.getElementById('web-cam-mini-preview')?.remove();
+                    document.getElementById('web-cam-mini-preview')?.remove();
+                }
+            
+            } catch (e) {
+                dispatch(throwServerError({error: true, errorMessage: "Unable To Preview Webcam"}))
+                toggleLoading(false);
             }
-        
-    } catch (e) {
-        dispatch(throwServerError({error: true, errorMessage: "Unable To Preview Webcam"}))
-        toggleLoading(false);
-    }
+        }, 50)
+            
 
     return () => {
 
-        document.body.addEventListener('click', close)
+        document.body.removeEventListener('click', close)
 
         el?.srcObject.getTracks().forEach(track => {
             track.stop();
@@ -109,16 +112,16 @@ export const ExpandedControlBar = ({close}) => {
         className='expanded-control-bar-container'
         >
             <InputTitle fontSize='0.7rem' marginTop={6} marginBottom={6} title={"Input Type"} />
-            <RadioButton action={handleToggleVoiceState} state={pushToTalk} invert={true} name={"Push To Talk"} />
-            <RadioButton action={handleToggleVoiceState}  state={voiceActivity} invert={true} name={"Voice Activation"} />
+            <RadioButton action={handleToggleVoiceState} state={pushToTalk} name={"Push To Talk"} />
+            <RadioButton action={handleToggleVoiceState}  state={voiceActivity} name={"Voice Activation"} />
             <InputTitle fontSize='0.7rem' marginBottom={6} marginTop={6} title={"Preview Webcam"} />
             <div className='web-cam-preview-container'>
                 <Loading  loading={loading} />
                 <WebCam />
             </div>
-            <TextButton action={handleToggleWebCamPreview} textAlign='center' invert={true} name={webCamPreview ? "Stop" : "Preview"} />
+            <TextButton marginBottom={10} action={handleToggleWebCamPreview} textAlign='center' name={webCamPreview ? "Stop" : "Preview"} />
             <InputTitle fontSize='0.7rem' marginBottom={6} marginTop={6} title={"Sound Effects Volume"} />
-            <Range invert={true} max={1} min={0} value={soundEffectsVolume} action={handleSoundEffectsVolume} />
+            <Range max={1} min={0} value={soundEffectsVolume} action={handleSoundEffectsVolume} />
         </div>
     )
 }

@@ -23,11 +23,11 @@ export const ScreenShotShowCase = ({screenShots, marginTop = 5}) => {
         <>
         {screenShots && screenShots?.length > 0 ?
         <>
-            <div style={{backgroundColor: primaryColor}} className='screenshot-title-container'>
-                <h3 style={{color: textColor, fontSize: '1.2rem', fontWeight: 300}}>Screenshot Showcase</h3>
-            </div>
+            
             <div style={{backgroundColor: primaryColor, marginTop: marginTop}} className='screen-shot-showcase-container'>
-               
+                <div style={{backgroundColor: primaryColor}} className='screenshot-title-container'>
+                    <h3 style={{color: textColor,fontWeight: 400}}>Screenshot Showcase</h3>
+                </div>
                 <div className='screen-shot-wrapper-display'>
                     <div className='most-recent-screenshot-container'>
                         <Image expandContent={expand} cursor='pointer' objectFit='contain' image={screenShots[0].content.image} />

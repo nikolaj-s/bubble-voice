@@ -25,7 +25,7 @@ export const Iframe = ({link, marginLeft, maxWidth = 800, marginRight}) => {
         {link ?
             <div 
             className='iframe-outer-container'
-            style={{maxWidth: maxWidth, marginLeft: marginLeft, minHeight: link?.includes('steampowered') ? '200px' : 400, maxHeight: link?.includes('steampowered') ? '200px' : 400, borderRadius: 5, position: 'relative', display: 'flex', overflow: 'hidden', marginRight: marginRight}}>
+            style={{maxWidth: maxWidth, marginLeft: marginLeft, minHeight: link?.includes('steampowered') ? '200px' : 400, maxHeight: link?.includes('steampowered') ? '200px' : 400, borderRadius: 10, position: 'relative', display: 'flex', overflow: 'hidden', marginRight: marginRight}}>
                 
                 <iframe 
                 onLoad={loaded}

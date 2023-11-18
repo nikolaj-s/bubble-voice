@@ -75,7 +75,9 @@ export const UserBio = ({bio = "", margin, loading}) => {
                 <p style={{color: textColor}}>
                 {text}
                 </p>
-                <div className='bio-images-wrapper'>
+                {images.length === 0 ?
+                null
+                : <div className='bio-images-wrapper'>
                     {images.map(i => {
                     return (
                     <div onClick={() => {expand(i)}} className='mini-bio-image'>
@@ -84,7 +86,7 @@ export const UserBio = ({bio = "", margin, loading}) => {
                     )
                     })
                     }
-                </div>
+                </div>}
                 
             </div>
             : 

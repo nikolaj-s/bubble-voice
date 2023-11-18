@@ -302,13 +302,21 @@ export class RoomClient {
                         par.className = `streaming-video-player-container`
 
                         el = document.createElement('video');
-
+                        console.log(user)
                         let stream_title_container = document.createElement('div');
                         let stream_title = document.createElement('p');
                         stream_title_container.className = 'stream-title-container';
-                        stream_title.innerHTML = appData?.name;
+                        stream_title.innerHTML = `${user.display_name} is streaming: ${appData?.name}`;
                         stream_title_container.append(stream_title);
                         
+                        let users_profile_image = document.createElement('img');
+
+                        users_profile_image.className = 'user-stream-window-profile-image';
+
+                        users_profile_image.src = user.user_image;
+
+                        users_profile_image.style.borderRadius = user.profile_picture_shape === 'circle' ? '50%' : '4px';
+
                         par.id = consumer.id + 'container';
 
                         par.style.display = 'flex';
@@ -330,6 +338,8 @@ export class RoomClient {
                         el.srcObject = stream;
 
                         par.appendChild(stream_title_container);
+
+                        par.appendChild(users_profile_image);
 
                         par.appendChild(el);
 

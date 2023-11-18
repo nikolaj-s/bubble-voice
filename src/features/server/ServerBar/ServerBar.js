@@ -6,14 +6,14 @@ import { io } from "socket.io-client";
 import { useNavigate, useRoutes } from 'react-router';
 
 // state
-import {clearSearchData, addNewChannel, assignNewServerGroup, clearServerState, deleteChannel, fetchPersistedMusicVolume, fetchServerDetails, handleLeavingServer, leaveChannel, newMessage, removeSongFromWidget, reOrderChannels, saveSongToWidget, selectCurrentChannel, selectCurrentChannelId, selectInactiveChannel, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, setServerName, throwServerError, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateInactiveChannel, updateMemberActiveStatus, updateMemberStatus, updateServerBanner, updateServerGroups, userBanned, userJoinsChannel, userJoinsServer, userLeavesChannel, userLeavesServer, updateMemberFile, toggleConnectionLostState, updateChannelStatus, setKickedState, addActivityMessage, setWelcomeMessage, updateBannedKeywords } from '../ServerSlice';
+import {clearSearchData, addNewChannel, assignNewServerGroup, clearServerState, deleteChannel, fetchPersistedMusicVolume, fetchServerDetails, handleLeavingServer, leaveChannel, newMessage, removeSongFromWidget, reOrderChannels, saveSongToWidget, selectCurrentChannel, selectCurrentChannelId, selectInactiveChannel, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, setServerName, throwServerError, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateInactiveChannel, updateMemberActiveStatus, updateMemberStatus, updateServerBanner, updateServerGroups, userBanned, userJoinsChannel, userJoinsServer, userLeavesChannel, userLeavesServer, updateMemberFile, toggleConnectionLostState, updateChannelStatus, setKickedState, addActivityMessage, setWelcomeMessage, updateBannedKeywords, setActivityFeed } from '../ServerSlice';
 import { selectUsername } from '../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { getToken, url } from '../../../util/Validation';
 import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
 import { selectActivateCameraKey, selectDisconnectKey, selectMuteAudioKey, selectMuteMicKey, selectPushToMuteKey, selectPushToTalkKey, selectShareScreenKey } from '../../settings/appSettings/keyBindSettings/keyBindSettingsSlice';
 import { selectAudioOutput, selectVoiceDeactivationDelayState } from '../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 import { addNewWidgetOverlayToQueue, clearWidgetOverLay } from '../ChannelRoom/Room/RoomActionOverlay/RoomActionOverlaySlice';
-import {  pushSytemNotification } from '../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import {  pushSytemNotification, toggleWebVersion } from '../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { addSongToQueue, like_song, removeSongFromQueue, skipSong, toggleMusicPlaying, un_like_song } from '../ChannelRoom/Room/Music/MusicSlice';
 import { selectCurrentScreen, setCurrentScreen, toggleControlState } from '../../controlBar/ControlBarSlice';
 
@@ -33,6 +33,7 @@ import { clearDirectMessages, sendDirectMessage } from '../../Messages/MessagesS
 
 import { clearMedia } from '../ChannelRoom/ServerDashBoard/ServerMedia/ServerMediaSlice';
 import { clearMessages, clearSocialById, deleteMessage, receiveMessage } from '../SocialSlice';
+import { updateUserStatus } from '../ChannelRoom/UserStatus/UserStatusSlice';
 
 export let socket = null;
 
@@ -154,7 +155,7 @@ const Bar = () => {
             }
         })
         socket.on('user leaves channel', (data) => {
-            console.log(data)
+            console.log(data.reason)
             dispatch(userLeavesChannel(data));
             if (window.location.hash.includes(data.id)) {
                 dispatch(playSoundEffect({default: "userDisconnected", user: data.username}))
@@ -209,6 +210,8 @@ const Bar = () => {
             if (data.data.banned_keywords) {
                 dispatch(updateBannedKeywords(data.data.banned_keywords));
             }
+
+            dispatch(setActivityFeed(data.data.activity_feed));
 
             dispatch(updateInactiveChannel(data.data.inactive_channel));
             
@@ -298,10 +301,18 @@ const Bar = () => {
         })
 
         socket.on('kick', (data) => {
-
+            console.log(data)
             dispatch(setKickedState({kicked: true, kickedMessage: `${data?.kicked_by} has kicked you from the server!`}))
 
             leaveServer(true)
+        })
+
+        socket.on('disconnect due to new instance', (data) => {
+
+            dispatch(setKickedState({kicked: true, kickedMessage: `You were disconnected from the server due to a connection from a new instance.`}))
+
+
+            leaveServer();
         })
 
         socket.on('banned', (data) => {
@@ -380,6 +391,8 @@ const Bar = () => {
 
             dispatch(updateMemberActiveStatus(data));
             
+            if (data.status === 'offline' || data.status === 'away' || data.status === 'Away') return;
+
             dispatch(pushSytemNotification({username: data.username, content: {text: `Is Now ${data.status}`}, type: 'status'}))
         })
 
@@ -595,7 +608,7 @@ const Bar = () => {
 
                 if (!current_channel_id) return;
 
-                dispatch(playSoundEffect('controlSoundEffect'))
+               
 
                 dispatch(toggleControlState('screenShareState'));
 
@@ -683,10 +696,8 @@ const Bar = () => {
                         ipcRenderer.invoke("GET_SOURCES").then(res => {
 
                             let l_windows = res.filter(w => !w.id.includes('screen'));
-                            console.log(l_windows[0])
-                            dispatch(setCurrentScreen({id: l_windows[0].id, name: l_windows[0].name}));
                             
-                            dispatch(playSoundEffect('controlSoundEffect'));
+                            dispatch(setCurrentScreen({id: l_windows[0].id, name: l_windows[0].name}));
 
                             dispatch(toggleControlState('screenShareState'));
 
@@ -701,8 +712,12 @@ const Bar = () => {
             })
 
             ipcRenderer.on('inactive', () => {
+                console.log('user has gone inactive');
+
+                dispatch(updateUserStatus({value: `Away`, icon: ""}));
+
                 if (current_channel_id && inactiveChannel.id !== "") {
-                    console.log('user has gone inactive')
+                    
                     try {
                         document.getElementById(`channel-button-${inactiveChannel.id}`).click();
                     } catch (error) {
@@ -711,8 +726,15 @@ const Bar = () => {
                 }
             })
 
+            ipcRenderer.on('now active', () => {
+                console.log('now active');
+
+                dispatch(updateUserStatus({value: `Online`, icon: ""}));
+            })
+
         } catch (error) {
             console.log("you are using the web version of this app")
+            dispatch(toggleWebVersion(true));
         }
 
         return () => {
@@ -807,6 +829,7 @@ const Bar = () => {
         
     // eslint-disable-next-line
     }, [])
+
     
     
     const handleLeave = () => {

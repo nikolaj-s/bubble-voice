@@ -290,6 +290,8 @@ const Component = () => {
     React.useEffect(() => {
         console.log(experimentalAudioCapture)
         try {
+            if (channel?.users?.length === 1) return;
+            console.log('this should not be called')
             if (currentScreen !== null) {
                 
                 dispatch(setScreens([]));
@@ -303,6 +305,8 @@ const Component = () => {
                     client?.produce('screenType', currentScreen, currentScreenName, experimentalAudioCapture, profileColor);
                     dispatch(updateMemberStatus({username: user.username, action: {screenshare: true}}))
                     socket?.emit('user status', {username: user.username, action: {screenshare: true}})
+                
+                    dispatch(playSoundEffect('controlSoundEffect'))
                 }, 200)
                     
             
@@ -758,11 +762,25 @@ const Component = () => {
     }, [pushToTalk, voiceActivityDetection, loaded, current_channel_id, microphoneState, pushToTalkActive, reconnecting, advancedVoiceActivationDetection])
     
     
+    React.useEffect(() => {
+
+        if (channel?.users?.length === 1) {
+
+            if (webcamState === false) {
+                dispatch(toggleControlState('webCamState'))
+            }
+
+            if (screenShareState === false) {
+                dispatch(toggleControlState('screenShareState'));
+            }
+        }
+
+    }, [channel.users, webcamState, screenShareState])
+
+
     return (
         <>
-        <motion.div 
-        transition={disableTransition ? {duration: 0} : null}
-        initial={{translateX: '-100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}} className='room-wrapper-outer'>
+        <motion.div  className='room-wrapper-outer'>
             <div
             style={
                 ((hideChannelBackgrounds || channel.channel_background === undefined) || page === 'social' || page === 'media' || page === 'pins') ? {backgroundColor: glass ? glassColor : secondaryColor} : null
@@ -795,6 +813,7 @@ const Component = () => {
             glass={glass}
             glassColor={glassColor}
             secondaryColor={secondaryColor}
+            contain={channel.contain_background}
             channel_background={hideChannelBackgrounds ? null : channel.channel_background} blur={channel.background_blur} />
             <audio hidden={true} id={'microphone-input-source'} />
             

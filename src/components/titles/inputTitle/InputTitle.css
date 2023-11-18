@@ -10,5 +10,6 @@
     text-overflow: ellipsis;
     width: 100%;
     flex-shrink: 0;
+    cursor: default;
 }
 

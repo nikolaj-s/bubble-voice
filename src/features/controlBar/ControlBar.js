@@ -57,7 +57,7 @@ export const ControlBar = () => {
     const selectingScreen = useSelector(selectingScreensState);
 
     const accentColor = useSelector(selectAccentColor);
-
+   
     const toggleFunction = (state) => {
 
         if (channel.disable_streams) return;
@@ -65,6 +65,10 @@ export const ControlBar = () => {
         if (window.location.hash.includes("/appsettings/voice-video")) return;
 
         if (current_channel_id === null) return;
+
+        if ((current_channel_id === null || channel.disable_streams || channel?.users?.length === 1) && state === 'webCamState') return;
+        
+        if ((current_channel_id === null || channel.disable_streams || channel?.users?.length === 1) && state === 'screenShareState') return;
 
         if (state === 'webCamState' && loadingWebCam) return;
 
@@ -145,7 +149,7 @@ export const ControlBar = () => {
                     padding={8}
                     action={() => {toggleFunction('webCamState')}} 
                     state={webCamState} 
-                    active={current_channel_id === null || channel.disable_streams}
+                    active={current_channel_id === null || channel.disable_streams || channel?.users?.length === 1}
                     id={'web-cam-toggle-button'}
                     loading={loadingWebCam}
                     />
@@ -157,7 +161,7 @@ export const ControlBar = () => {
                     loading={loadingScreenShare}
                     action={() => {toggleFunction('screenShareState')}} 
                     state={screenShareState} 
-                    active={current_channel_id === null || channel.disable_streams}
+                    active={current_channel_id === null || channel.disable_streams || channel?.users?.length === 1}
                     id={"screen-share-toggle-button"}
                     sharing_screen={currentScreen}
                     />

@@ -1,9 +1,11 @@
 
 .range-container {
-    width: 100%;
-    height: 22px;
+    width: calc(100% - 10px);
+    height: 23px;
     display: flex;
+    padding: 6px;
     align-items: center;
+    border-radius: 8px;
 }
 
 .range-container input {

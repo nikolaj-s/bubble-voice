@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { Image } from '../../Image/Image';
-import { selectUserImage } from '../../../features/settings/appSettings/accountSettings/accountSettingsSlice';
+import { selectProfileColor, selectUserImage } from '../../../features/settings/appSettings/accountSettings/accountSettingsSlice';
 
 import "./ProfileButton.css";
 import { selectProfileTabOpen, toggleProfileTab } from '../../../features/Profile/ProfileSlice';
@@ -27,6 +27,8 @@ export const ProfileButton = () => {
     const accentColor = useSelector(selectAccentColor);
 
     const profilePicture = useSelector(selectUserImage);
+
+    const userColor = useSelector(selectProfileColor);
 
     const handleHover = (bool, e) => {
         toggleHover(bool);
@@ -53,7 +55,7 @@ export const ProfileButton = () => {
             onMouseLeave={() => {handleHover(false)}}
             className='profile-button-container'>
                 <div style={{
-                backgroundColor: accentColor,
+                backgroundColor: userColor || accentColor,
                 borderRadius: visible ? 10 : null,
                 
             }} className='profile-button-picture-wrapper'>

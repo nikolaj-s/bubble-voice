@@ -6,7 +6,7 @@ import { useDropzone } from 'react-dropzone';
 import imageCompression from 'browser-image-compression';
 
 // state
-import { selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./MessageInput.css";
@@ -16,11 +16,11 @@ import { ImageSearchPanel } from './ImageSearchPanel/ImageSearchPanel';
 import { selectHideUserStatus } from '../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { selectServerId, throwServerError } from '../../../features/server/ServerSlice';
 
-import { EmojiMenu } from '../../EmojiPicker/EmojiMenu';
 import { AddMediaButton } from '../../buttons/AddMediaButton/AddMediaButton';
 import { ImagePreview } from './ImagePreview/ImagePreview';
+import { InputEditor } from './InputEditor/InputEditor';
 
-export const MessageInput = ({cancel_image, send, text, keyCode, image, value, persist, updateInputHeight, socialRoute, direct_message, channel_name}) => {
+export const MessageInput = ({channelId, nsfw, handleNsfw, cancel_image, send, text, keyCode, image, value, persist, updateInputHeight, socialRoute, direct_message, channel_name, setEmoji}) => {
 
     const [files, setFiles] = React.useState([{}])
 
@@ -32,17 +32,25 @@ export const MessageInput = ({cancel_image, send, text, keyCode, image, value, p
 
     const [searchingForImage, toggleSearchingForImage] = React.useState(false);
 
-    const [emojiMenu, toggleEmojiMenu] = React.useState(false);
-
     const [localError, setLocalError] = React.useState(false);
+
+    const [emoji, setLocalEmoji] = React.useState();
+
+    const [focused, toggleFocused] = React.useState(false);
+
+    const [textStyle, setTextStyle] = React.useState({
+        fontSize: 15,
+        color: null,
+        textDecoration: false,
+        bold: false,
+        fontFamily: 'Inter'
+    })
 
     const dispatch = useDispatch();
 
     const primaryColor = useSelector(selectPrimaryColor);
     
     const textColor = useSelector(selectTextColor);
-
-    const secondaryColor = useSelector(selectSecondaryColor);
 
     const animation = useAnimation();
 
@@ -104,7 +112,7 @@ export const MessageInput = ({cancel_image, send, text, keyCode, image, value, p
                 toggleProcessingImage(false);
     
                 try {
-                    document.getElementById('social-input-selector').focus();
+                    document.getElementById(`social-input-selector-${channelId}`).focus();
                 } catch (e) {
                     return;
                 }
@@ -147,6 +155,13 @@ export const MessageInput = ({cancel_image, send, text, keyCode, image, value, p
     
     }
 
+    const handleEmojiText = (emoji) => {
+        if (value.length > 1024) return handleError("Your Message Is Too Long");
+        
+        text(value + emoji.emoji);
+
+    }
+
     const handleKeyCode = (e) => {
         if (keyCode === false || processingImage) {
             return
@@ -158,10 +173,20 @@ export const MessageInput = ({cancel_image, send, text, keyCode, image, value, p
             updateInputHeight(42);
 
             handleCancel();
+
+            toggleFocused(false);
+
+            setTextStyle({
+                fontSize: 15,
+                color: null,
+                textDecoration: false,
+                bold: false,
+                fontFamily: 'Inter'
+            })
             
         }
         
-        keyCode(e.keyCode)
+        keyCode(e.keyCode, textStyle);
     }
 
     const handleSend = () => {
@@ -172,9 +197,23 @@ export const MessageInput = ({cancel_image, send, text, keyCode, image, value, p
 
         updateInputHeight(42)
 
-        send();
+        setLocalEmoji(null);
+
+        URL.revokeObjectURL(files?.preview);
+
+        send(textStyle);
 
         handleCancel();
+
+        toggleFocused(false);
+
+        setTextStyle({
+            fontSize: 15,
+            color: null,
+            textDecoration: false,
+            bold: false,
+            fontFamily: 'Inter'
+        })
     }
 
     const handleImageButton = () => {
@@ -197,14 +236,28 @@ export const MessageInput = ({cancel_image, send, text, keyCode, image, value, p
         text((frame ? i.link : i.image) || i.preview);
 
         image({preview: i.image});
+        console.log(i)
+        if (i.nsfw) {
+            handleNsfw(true);
+        }
 
         setTimeout(() => {
             document.getElementById('social-send-button')?.click();
         }, 100)
+    
     }
 
-    const handleEmoji = (emoji) => {
-        text(value + " " + emoji.emoji)
+    const handleEmoji = (e) => {
+
+        toggleSearchingForImage(false);
+
+        setLocalEmoji(e);
+
+        setEmoji(e);
+
+        setTimeout(() => {
+            document.getElementById('social-send-button')?.click();
+        }, 100)
     }
 
     const handleCancel = () => {
@@ -225,19 +278,29 @@ export const MessageInput = ({cancel_image, send, text, keyCode, image, value, p
         return () => files.forEach(file => URL.revokeObjectURL(file.preview));
     }, [])
     
+    const updateStyleState = (obj) => {
+        setTextStyle(obj);
+
+    //    document.getElementById(`social-input-selector-${channelId}`)?.focus();
+    }
+
     return (
         <> 
+        <ImageSearchPanel channelId={channelId} postEmoji={handleEmoji} persist={persist} upload_image={handleImageButton} direct_message={direct_message} close={toggleSearchingForImage} inputHeight={inputHeight} key="message-image-search-container" serverId={serverId} selectImage={selectImage} searchingForImage={searchingForImage} />
         {localError ? <p className='local-error-alert-social' style={{color: textColor, bottom: inputHeight + 5}}>{localError}</p> : null}
         <AnimatePresence>
             {persist ? <ImageDropListener key={"image-drop-listener"} root={getRootProps({className: 'dropzone'})} /> : null}
-            <ImageSearchPanel persist={persist} upload_image={handleImageButton} direct_message={direct_message} close={toggleSearchingForImage} inputHeight={inputHeight} key="message-image-search-container" serverId={serverId} selectImage={selectImage} searchingForImage={searchingForImage} />
-            {emojiMenu ? <EmojiMenu direct_message={direct_message} action={handleEmoji} close={() => {toggleEmojiMenu(false)}} /> : null}
-            <div
+            
+            <motion.div
             style={{
-                borderBottomRightRadius: socialRoute ? 0 : hideUserStatus ? 10 : 0,
+                backgroundColor: primaryColor,
+                borderRadius: 10
             }}
             className='message-input-wrapper'>
                 <ImagePreview processingImage={processingImage} percent={percent} type={files[0]?.type} fileName={files[0]?.name} cancel={handleCancel} preview={files[0]?.preview} />
+                {value.length > 0 || files[0]?.type !== undefined ?
+                <InputEditor handleEmoji={handleEmojiText} updateState={updateStyleState} handleNsfw={handleNsfw} state={textStyle} nsfw={nsfw} />
+                : null}
                 <motion.div 
                 key={"message-text-input"}
                 animate={animation}
@@ -250,13 +313,17 @@ export const MessageInput = ({cancel_image, send, text, keyCode, image, value, p
                     <textarea 
                     className='text-input'
                     style={{
-                        color: textColor,
+                        color: (textStyle.color ||textColor ),
+                        textDecoration: textStyle.textDecoration ? 'underline' : null,
+                        fontWeight: textStyle.bold ? '600' : null,
+                        fontSize: textStyle.fontSize,
                         width: '100%',
                         resize: 'none',
                         border: 'none',
+                        fontFamily: textStyle.fontFamily
                     }}
-                    onFocus={handleText}
-                    id='social-input-selector' onKeyUp={handleKeyCode} onChange={handleText} value={value}  placeholder={channel_name ? `Post In #${channel_name}` : 'Message'} type="text" />
+                    onFocus={(e) => {handleText(e); toggleFocused(true)}}
+                    id={`social-input-selector-${channelId}`} onKeyUp={handleKeyCode} onChange={handleText} value={value}  placeholder={channel_name ? `Post In #${channel_name}` : 'Message'} type="text" />
                     <div className='message-input-button-wrapper'>
                         <div className='message-input-inner-button-wrapper'>
                             
@@ -264,16 +331,16 @@ export const MessageInput = ({cancel_image, send, text, keyCode, image, value, p
                             
                             width={22}
                             height={22}
-                            borderRadius={5}
+                            borderRadius={8}
                             description={"Add Media"}
                             zIndex={3}
                             desc_space={18}
                             padding={6} />
-                            {value.length > 1 || files[0]?.size ? <SendButton color={textColor} action={handleSend} /> : null}
+                            {value.length > 1 || files[0]?.size || emoji ? <SendButton color={textColor} action={handleSend} /> : null}
                         </div>   
                     </div>
                 </motion.div>
-            </div>
+            </motion.div>
         </AnimatePresence>
         </>
     )

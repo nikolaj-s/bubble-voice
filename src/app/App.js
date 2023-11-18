@@ -25,7 +25,7 @@ import { fetchKeyBinds, fetchSavedUserPrefs, fetchSocialData, initKeyBinds } fro
 import { setSavedKeyCodes } from '../features/settings/appSettings/keyBindSettings/keyBindSettingsSlice';
 import { handleUpdateAvailable, toggleInitApp, toggleMobileState, updateCurrentAppVersion } from './appSlice';
 import { fetchSavedAppAudioSettings } from '../features/settings/soundEffects/soundEffectsSlice';
-import { fetchMiscellaneousSettings, fetchSavedHardwareAcceleration } from '../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { fetchMiscellaneousSettings, fetchSavedHardwareAcceleration, toggleAppFocus, toggleWebVersion } from '../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { fetchSavedCustomStatus } from '../features/server/ChannelRoom/UserStatus/UserStatusSlice';
 
 // style
@@ -34,6 +34,7 @@ import './App.css';
 import "./Mobile.css";
 
 import "./Animations.css";
+import { handleFetchPersistedMusicSettings } from '../features/server/ChannelRoom/Room/Music/MusicSlice';
 
 function App() {
 
@@ -50,6 +51,8 @@ function App() {
   const retryState = useSelector(selectRetryState);
 
   const gradient = useSelector(selectGradient);
+
+  
 
   const preventMouseDefaults = (e) => {
     if (e.button === 3 || e.button === 4) {
@@ -77,6 +80,8 @@ function App() {
     dispatch(fetchSavedHardwareAcceleration());
 
     dispatch(fetchSavedCustomStatus());
+
+    dispatch(handleFetchPersistedMusicSettings());
     
     await fetchSavedUserPrefs();
 
@@ -184,6 +189,7 @@ function App() {
 
       } catch (error) {
         clearInterval(update_interval);
+        dispatch(toggleWebVersion(true));
         console.log(error);
         console.log("using web version");
       }
@@ -214,6 +220,14 @@ function App() {
   React.useEffect(() => {
 
     window.addEventListener('resize', onResize);
+
+    window.onfocus = () => {
+      dispatch(toggleAppFocus(true))
+    }
+
+    window.onblur = () => {
+      dispatch(toggleAppFocus(false))
+    }
 
     if (window.innerWidth < 601 && (window.innerHeight / window.innerWidth) > 1) {
 

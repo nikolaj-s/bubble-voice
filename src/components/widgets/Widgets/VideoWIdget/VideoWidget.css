@@ -7,7 +7,7 @@
     object-fit: contain;
     display: flex;
     justify-content: center;
-    border-radius: var(--border-radius);
+    border-radius:10px;
 }
 
 .video-widget-container div {

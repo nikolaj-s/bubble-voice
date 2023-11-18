@@ -30,7 +30,7 @@ export const LinkPreview = ({data}) => {
         onClick={handleLink}
         className='link-preview-container'>
             <div className='image-link-preview-wrapper'>
-                <Image borderRadius={'5px'} objectFit='contain' cursor='pointer' image={data?.images[0]} />
+                <Image borderRadius={'10px'} objectFit='contain' cursor='pointer' image={data?.images[0]} />
             </div>
             <div className='link-info-preview-wrapper'>
                 <h3 >{data?.title}</h3>

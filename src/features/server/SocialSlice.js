@@ -71,7 +71,7 @@ export const fetchMessages = createAsyncThunk(
 
 export const sendMessage = createAsyncThunk(
     'SocialSlice/sendMessage',
-    async ({username, file, channel_id, local_id, text, image_preview, screen_shot = false}, {rejectWithValue, getState, dispatch}) => {
+    async ({username, file, channel_id, local_id, text, image_preview, screen_shot = false, emoji, nsfw, textStyle}, {rejectWithValue, getState, dispatch}) => {
         try {
 
             const message = {
@@ -85,10 +85,13 @@ export const sendMessage = createAsyncThunk(
                     link: false,
                     local_id: local_id,
                     loading: true,
+                    emoji: emoji,
+                    textStyle: textStyle
                 },
                 valid: true,
                 screen_shot: screen_shot,
-                file: null
+                file: null,
+                nsfw: nsfw
             }
           
             if (file?.type?.includes('video')) {
@@ -168,9 +171,14 @@ const SocialSlice = createSlice({
         current_social: "",
         current_channel: "",
         image_preview: "",
-        text: ""
+        text: "",
+        showingNsfwNotice: false
     },
     reducers: {
+        toggleNsfwNotice: (state, action) => {
+            console.log(action.payload)
+            state.showingNsfwNotice = action.payload;
+        },
         setCurrentChannel: (state, action) => {
             state.current_channel = action.payload;
         },
@@ -279,8 +287,13 @@ const SocialSlice = createSlice({
             
             state.loading = false;
 
+            if (action.payload.messages.length < 16) {
+                state.showingNsfwNotice = action.payload.nsfw_notice;
+            }
+
             state.messages[action.payload.channel_id] = action.payload.messages;
-            
+
+            console.log(state.messages, action.payload.channel_id)
                 
         },
         [RequestDeleteMessage.pending]: (state, action) => {
@@ -321,6 +334,8 @@ export const selectLoadingMessages = state => state.SocialSlice.loading;
 
 export const selectAltSocialLoading = state => state.SocialSlice.altLoading;
 
-export const { toggleSocialAltLoading, receiveMessage, deleteMessage, clearSocialById, clearMessages, messageCleanUp } = SocialSlice.actions;
+export const selectNsfwNoticeState = state => state.SocialSlice.showingNsfwNotice;
+
+export const {toggleNsfwNotice, toggleSocialAltLoading, receiveMessage, deleteMessage, clearSocialById, clearMessages, messageCleanUp } = SocialSlice.actions;
 
 export default SocialSlice.reducer;

@@ -21,16 +21,18 @@ import { VideoSearch } from '../../../../util/VideoSearch';
 import { VideoPreview } from '../../../VideoPreview/VideoPreview';
 import { ImagePreview } from '../../../ImagePreview/ImagePreview';
 import { selectSavedMedia } from '../../../../features/SavedMedia/SavedMediaSlice';
-import { selectShowFullResPreviews } from '../../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { selectDisableTransparancyEffects, selectShowFullResPreviews } from '../../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { ViewSubReddit } from '../../../../features/server/ChannelRoom/ServerDashBoard/ServerMedia/ViewSubReddits/ViewSubReddit';
 import { selectLoadingNewMedia, selectMedia, setNewMedia } from '../../../../features/server/ChannelRoom/ServerDashBoard/ServerMedia/ServerMediaSlice';
 import { NoSavesIcon } from '../../../Icons/NoSavesIcon/NoSavesIcon';
 import { ImageButton } from '../ImageButton/ImageButton';
 import { AltImageIcon } from '../../../Icons/AltImageIcon/AltImageIcon';
-import { AltVideoIcon } from '../../../Icons/AltVideoIcon/AltVideoIcon';
+import { EmojiIcon } from '../../../Icons/EmojiIcon/EmojiIcon';
+
 import { RedditIcon } from '../../../Icons/RedditIcon/RedditIcon'
 import { SavesIcon } from '../../../Icons/SavesIcon/SavesIcon'
-export const ImageSearchPanel = ({hideOptions = false,direct_message, searchingForImage, selectImage, serverId, inputHeight, close, upload_image, persist}) => {
+import { EmojiMenu } from '../../../EmojiPicker/EmojiMenu';
+export const ImageSearchPanel = ({channelId,hideOptions = false,direct_message, searchingForImage, selectImage, serverId, inputHeight, close, upload_image, persist, postEmoji}) => {
 
     const primaryColor = useSelector(selectPrimaryColor);
 
@@ -60,6 +62,8 @@ export const ImageSearchPanel = ({hideOptions = false,direct_message, searchingF
 
     const bannedKeywords = useSelector(selectBannedKeywords);
 
+    const disableTransparancy = useSelector(selectDisableTransparancyEffects);
+
     const [videos, setVideos] = React.useState([]);
 
     const [query, setQuery] = React.useState("");
@@ -68,6 +72,10 @@ export const ImageSearchPanel = ({hideOptions = false,direct_message, searchingF
 
         setQuery(e.target.value);
 
+    }
+
+    const handleEmoji = (emoji) => {
+        postEmoji(emoji.emoji)
     }
 
     const search = async () => {
@@ -119,7 +127,7 @@ export const ImageSearchPanel = ({hideOptions = false,direct_message, searchingF
     }
 
     const handleSelectImage = (image) => {
-        console.log(image)
+        
         selectImage(image)
     }
 
@@ -134,7 +142,7 @@ export const ImageSearchPanel = ({hideOptions = false,direct_message, searchingF
             if (searchingForImage) {
                 document.getElementById('message-image-search-input').focus();
             } else {
-                document.getElementById('social-input-selector').focus();
+                document.getElementById(`social-input-selector-${channelId}`).focus();
             }
 
         } catch (error) {
@@ -159,13 +167,13 @@ export const ImageSearchPanel = ({hideOptions = false,direct_message, searchingF
             {searchingForImage ?
             <div onClick={() => {close(false)}} className='image-search-outer-wrapper'>
                 <motion.div 
-                style={{left: direct_message ? '100px' : null, right: direct_message ? null : '20px', backgroundColor: secondaryColor}}
+                style={{left: direct_message ? '100px' : null, right: direct_message ? null : '20px', backgroundColor: disableTransparancy ? secondaryColor : glassColor}}
                 onClick={(e) => {e.stopPropagation()}}
                 key="message-image-search-container"
                 className='message-image-search-container'>
                     <div 
                     style={{
-                        backgroundColor: secondaryColor,
+                        backgroundColor: disableTransparancy ? secondaryColor : glassColor,
                         bottom: inputHeight + 10,
                         paddingLeft: hideOptions ? 0 : null,
                         width: hideOptions ? '100%' : null
@@ -178,7 +186,7 @@ export const ImageSearchPanel = ({hideOptions = false,direct_message, searchingF
                                     <AltImageIcon />
                                 </div>
                                 <div className='add-media-nav-button' onClick={() => {handleMediaType("Videos")}} style={{color: textColor, backgroundColor: mediaType === 'Videos' ? accentColor : primaryColor, opacity: mediaType === 'Videos' ? 1 : null, borderRadius: mediaType === "Videos" ? 8 : null}}>
-                                    <AltVideoIcon />
+                                    <EmojiIcon />
                                 </div>
                                 <div className='add-media-nav-button' onClick={() => {handleMediaType("Reddit")}} style={{color: textColor, backgroundColor: mediaType === 'Reddit' ? accentColor : primaryColor, opacity: mediaType === 'Reddit' ? 1 : null, borderRadius: mediaType === "Reddit" ? 8 : null}}>
                                     <RedditIcon />
@@ -194,7 +202,7 @@ export const ImageSearchPanel = ({hideOptions = false,direct_message, searchingF
                             : null}
                         </div>
                             }
-                        {mediaType === 'Saves' || mediaType === 'Reddit' ? null :
+                        {mediaType === 'Saves' || mediaType === 'Reddit' || mediaType === "Videos" ? null :
                         <div 
                         className='message-image-search-input-wrapper'>
                             <input 
@@ -207,23 +215,22 @@ export const ImageSearchPanel = ({hideOptions = false,direct_message, searchingF
                         </div>}
                         <AnimatePresence exitBeforeEnter>
                         <motion.div transition={{duration: 0.1}} key={mediaType} initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} className='message-image-search-results-container'>
-                            {mediaType === 'Reddit' ?
+                            {mediaType === 'Videos' ?
+                                    <EmojiMenu action={handleEmoji} social={true} width={'100%'} height={'100%'} />
+                                    : 
+                            mediaType === 'Reddit' ?
                             <ViewSubReddit expand={(i) => {handleSelectImage({preview: i, image: i})}} />
                             :
                             <ResponsiveMasonry style={{height: 'auto'}} columnsCountBreakPoints={{700: 2}}>
                                 <Masonry gutter='5px'>   
-                                    {mediaType === 'Videos' ?
-                                    (videos?.length > 0 ? videos : loading ? [] : recommendations.filter(v => v.type === 'video').slice(0, 15)).map(video => {
-                                        return <VideoPreview video={video} action={handleSelectImage} />
-                                    })
-                                    : mediaType === 'Saves' ?
+                                    {mediaType === 'Saves' ?
                                     savedMedia.length === 0 ?
                                     <NoSavesIcon className={'image-search-panel-no-saves'} />
                                     :
                                     savedMedia.map(media => {
                                         return (
                                             media.type === 'image' ?
-                                            <ImagePreview action={() => {handleSelectImage({preview: media.media, type: 'image', image: media.media})}} image={media.media} />
+                                            <ImagePreview  action={() => {handleSelectImage({preview: media.media, type: 'image', image: media.media})}} image={media.media} />
                                             :
                                             <VideoPreview action={() => {handleSelectImage({preview: media.media, type: 'video', image: media.media})}} video={{preview: media.media}} />
                                         )
@@ -231,7 +238,7 @@ export const ImageSearchPanel = ({hideOptions = false,direct_message, searchingF
                                     
                                     : (images?.length > 0 ? images : loading ? [] : recommendations.filter(v => v.type === 'image').slice(0, 40)).map((image, key) => {
                                         return (
-                                            <ImagePreview tag_action={handleTag} tags={image.tags} image={showFullResPreviews ? image.image : image.preview} action={(e) => {handleSelectImage({...image, preview: image.image})}} />
+                                            <ImagePreview tag_action={handleTag} tags={image.tags} image={showFullResPreviews ? image.image : image.preview} nsfw={image.nsfw} action={(e) => {handleSelectImage({...image, preview: image.image})}} />
                                         )
                                     })}
                                 </Masonry>

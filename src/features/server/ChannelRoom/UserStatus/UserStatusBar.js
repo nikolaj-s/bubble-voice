@@ -81,9 +81,9 @@ export const UserStatusBar = () => {
                     new_status_name = l_windows[0].name;
                 }
 
-                dispatch(updateUserStatus({value: `${new_status_name}`, icon: ""}));
-
                 if (currentStatus === `${new_status_name}`) return;
+                
+                dispatch(updateUserStatus({value: `${new_status_name}`, icon: ""}));
 
                 for (const w of l_windows) {
                     URL.revokeObjectURL(w?.icon);

@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { handleUpdateBio, selectAccountSettingsLoading, selectDisplayName, selectNewAccountState, selectProfileBio, selectUserBanner, selectUserImage, updateAccount, updateAccountInputState } from '../../features/settings/appSettings/accountSettings/accountSettingsSlice';
-import { selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { handleUpdateBio, selectAccountSettingsLoading, selectDisplayName, selectNewAccountState, selectProfileBio, selectProfileColor, selectUserBanner, selectUserImage, updateAccount, updateAccountInputState } from '../../features/settings/appSettings/accountSettings/accountSettingsSlice';
+import { selectGlassColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { Loading } from '../LoadingComponents/Loading/Loading';
 import { SettingsHeader } from '../titles/SettingsHeader/SettingsHeader';
 
@@ -19,9 +19,13 @@ export const NewAccount = ({mobile = false}) => {
 
     const [color, updateColor] = React.useState("");
 
+    const [newDisplayName, setDisplayName] = React.useState("");
+
     const [newShape, setNewShape] = React.useState("circle");
 
     const [previewBio, togglePreviewBio] = React.useState(false);
+
+    const [newBio, setNewBio] = React.useState("");
 
     const primaryColor = useSelector(selectPrimaryColor);
 
@@ -33,14 +37,28 @@ export const NewAccount = ({mobile = false}) => {
 
     const displayName = useSelector(selectDisplayName);
 
-    const profileBio = useSelector(selectProfileBio);
-
     const userImage = useSelector(selectUserImage);
 
     const userBanner = useSelector(selectUserBanner);
 
+    const userColor = useSelector(selectProfileColor);
+
+    const glassColor = useSelector(selectGlassColor);
+
     const changeProfileShape = (shape) => {
         setNewShape(shape);
+    }
+
+    React.useEffect(() => {
+
+        setDisplayName(displayName);
+
+        updateColor(userColor || secondaryColor);
+
+    }, [])
+
+    const handleDisplayName = (value) => {
+        setDisplayName(value);
     }
 
     const handleInput = (value, state) => {
@@ -48,13 +66,13 @@ export const NewAccount = ({mobile = false}) => {
     }
     
     const handleAdvance = (skip = false) => {
-        dispatch(updateAccount({userImage: newUserImage, userBanner: newUserBanner, newShape: newShape, color: color}))
+        dispatch(updateAccount({userImage: newUserImage, userBanner: newUserBanner, newShape: newShape, color: color, bio: newBio, displayName: newDisplayName}))
     }
 
     const changeProfileBio = (value) => {
         if (value.length > 1024) return;
 
-        dispatch(handleUpdateBio(value));
+        setNewBio(value);
     }
 
     return (
@@ -66,15 +84,35 @@ export const NewAccount = ({mobile = false}) => {
             <div 
             style={{backgroundColor: secondaryColor, border: `solid 8px ${secondaryColor}`}}
             className='inner-new-account-state-container'>
-                <SettingsHeader title={"Welcome, Finsh Account Set Up"} />
-                <EditMemberPanel color={color} updateColor={updateColor} newShape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} changeProfileShape={changeProfileShape} handleInput={handleInput} displayName={displayName} previewBio={previewBio} togglePreviewBio={togglePreviewBio} profileBio={profileBio} changeProfileBio={changeProfileBio}/>
+                <div 
+                style={{backgroundColor: primaryColor}}
+                className='new-account-welcome-message-box'>
+                    <h2
+                    style={{color: textColor}}
+                    >Welcome To Bubble</h2>
+                    <h3 style={{color: textColor}}>Finish Setting Up Your Bubble Profile</h3>
+                </div>
+                <EditMemberPanel  handleNewDisplayName={handleDisplayName} color={color} updateColor={updateColor} newShape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} changeProfileShape={changeProfileShape} handleInput={handleInput} displayName={newDisplayName} previewBio={previewBio} togglePreviewBio={togglePreviewBio} profileBio={newBio} changeProfileBio={changeProfileBio}/>
                 <div className='new-account-nav-container'>
                     
                     <div onClick={() => {handleAdvance(false)}} style={{backgroundColor: primaryColor}} className='new-next-button-container'>
                         <h3 style={{color: textColor}}>Finish</h3>
                     </div>
                 </div>
-                <Loading loading={loading} />
+                
+                {loading ?
+                <div 
+                style={{backgroundColor: glassColor}}
+                className='outer-finish-loading-new-account'>
+                    <div 
+                    style={{backgroundColor: primaryColor}}
+                    className='loading-finish-setting-up-account'>
+                        <Loading loading={loading} />
+                        <h3 style={{color: textColor}}>Getting Things Ready</h3>
+                    </div>
+                </div>
+                : null}
+                <div style={{height: 100, width: '100%', flexShrink: 0}} />
             </div>
         </div>
     )

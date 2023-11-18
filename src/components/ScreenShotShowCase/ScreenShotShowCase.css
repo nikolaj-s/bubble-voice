@@ -1,9 +1,8 @@
 
 .screenshot-title-container {
-    border-radius: 5px;
-    margin: 0px 0px 5px 0px;
-    padding: 5px;
-    width: calc(100% - 10px);
+    border-radius: 10px;
+    flex-shrink: 0;
+    width: calc(100% - 16px);
 }
 
 .screenshot-title-container h3 {
@@ -14,7 +13,8 @@
     font-size: 0.8rem;
     z-index: 2;
     opacity: 1;
-    font-weight: 300;
+    margin-left: 3px;
+    opacity: 0.8;
 }
 
 .screen-shot-showcase-container {
@@ -24,15 +24,16 @@
     height: 350px;
     width: calc(100% - 10px);
     padding: 5px;
-    border-radius: 5px;
+    border-radius: 10px;
     justify-content: space-between;
     margin-bottom: 5px;
+    flex-shrink: 0;
 }
 
 .screen-shot-wrapper-display {
     display: flex;
     width: 100%;
-    height: calc(100%);
+    height: calc(100% - 20px);
     justify-content: space-between;
 }
 

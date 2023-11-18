@@ -90,6 +90,7 @@ export const ServerBanner = ({serverName, serverImage, handleLeave}) => {
         onMouseEnter={() => {toggleHover(true)}}
         onMouseLeave={() => {toggleHover(false)}}
         onClick={() => {toggleOpen(!open)}}
+        onContextMenu={(e) => {e?.stopPropagation(); e?.preventDefault(); toggleOpen(!open)}}
         style={{
             borderBottomLeftRadius: open ? 0 : null,
             borderBottomRightRadius: open ? 0 : null,

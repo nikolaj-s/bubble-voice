@@ -2,7 +2,7 @@
 .key-bind-input-wrapper {
     display: flex;
     justify-content: flex-start;
-    width: 100px;
+    width: 80px;
     align-items: center;
     position: relative;
     
@@ -10,11 +10,16 @@
 
 .key-bind-input-wrapper .text-button {
     flex-grow: 0;
-    width: 35%;
+    width: 50px;
 }
 
 .key-bind-input-wrapper .text-input-container {
     flex-grow: 4;
     margin-right: 5px;
     max-width: 150px;
+}
+
+.key-bind-input-wrapper .text-input-container input {
+    text-align: center;
+    font-size: 1.4rem;
 }

@@ -1,26 +1,34 @@
 .server-welcome-message-container {
     width: calc(100% - 10px);
-    margin-top: 5px;
-    margin-bottom: 5px;
-    height: 80px;
-    border-radius: 5px;
-    position: relative;
+    z-index: 0;
+    height: 100%;
+    border-radius: 10px;
+    position: absolute;
     overflow: hidden;
+    
+}
+
+.server-welcome-message-container img {
+    filter: blur(8px);
 }
 
 .server-welcome-message-wrapper {
-    position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: calc(100% - 20px);
+    margin-top: 5px;
+    height: auto;
+    border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 5px;
+    z-index: 1;
 }
 
 .server-welcome-message-wrapper h3 {
     font-weight: 400;
-    font-size: 1.4rem;
+    font-size: 1rem;
     text-align: center;
+    cursor: default;
 }

@@ -18,7 +18,8 @@ export const fetchAccount = createAsyncThunk(
             const account = await Axios({
                 method: 'GET',
                 url: `${url}/fetch-account`,
-                headers: {"TOKEN": token}
+                headers: {"TOKEN": token},
+                
             }).then(response => {
                 
                 if (response.data.error) return rejectWithValue({error: true})
@@ -29,7 +30,9 @@ export const fetchAccount = createAsyncThunk(
             }).catch(error => {
                 dispatch(throwInitializationError("Connection Error"))
             })
+
             console.log(account)
+
             if (account.account.last_server) {
 
                 dispatch(setServerId(account.account.last_server));
@@ -47,16 +50,45 @@ export const fetchAccount = createAsyncThunk(
     }
 )
 
+export const verifyAccount = createAsyncThunk(
+    'accountSettingsSlice/verifyAccount',
+    async ({access_key}, {rejectWithValue}) => {
+        try {
+
+            const token = await getToken();
+
+            const result = await Axios({
+                method: 'POST',
+                url: `${url}/verify-account`,
+                headers: {"TOKEN": token},
+                data: {access_key: access_key}
+            }).then(res => {
+                return res.data;
+            }).catch(err => {
+                return rejectWithValue({error: true, errorMessage: err.message});
+            })
+
+            if (result.error) return rejectWithValue({error: true, errorMessage: result.errorMessage});
+
+            return result;
+
+        } catch (err) {
+            console.log(err);
+            return rejectWithValue({error: true, errorMessage: 'Fatal Error Verifying Account'})
+        }
+    }
+)
+
 export const updateAccount = createAsyncThunk(
     'accountSettingsSlice/updateAccount',
-    async ({userImage, userBanner, newShape, color}, {rejectWithValue, getState, dispatch}) => {
+    async ({userImage, userBanner, newShape, color, bio, displayName}, {rejectWithValue, getState, dispatch}) => {
         const token = await getToken();
 
-        const {password, newPassword, confirmNewPassword, display_name, bio, showCaseScreenShots} = getState().accountSettingsSlice;
+        const {password, newPassword, confirmNewPassword, showCaseScreenShots} = getState().accountSettingsSlice;
 
         const data = new FormData();
 
-        data.append("displayName", display_name);
+        data.append("displayName", displayName);
 
         data.append("userImage", userImage?.from_search ? userImage.url : userImage);
 
@@ -175,7 +207,9 @@ const accountSettingsSlice = createSlice({
         color: "",
         steamLink: "",
         showCaseScreenShots: false,
-        screenShots: []
+        screenShots: [],
+        verified: true,
+        email: "",
     },
     reducers: {
         handleUpdateSteamLink: (state, action) => {
@@ -189,7 +223,7 @@ const accountSettingsSlice = createSlice({
         },
         updateAccountInputState: (state, action) => {
             state[action.payload.state] = action.payload.value;
-            state.change = true;
+           
         },
         accountSettingsCloseError: (state, action) => {
             state.error = false;
@@ -227,6 +261,8 @@ const accountSettingsSlice = createSlice({
                 state.showCaseScreenShots = action.payload.account.showCaseScreenShots
                 state.pinned_message = action.payload.account.pinned_message;
                 state.screenShots = action.payload.account.screen_shots;
+                state.verified = action.payload.account.verified;
+                state.email = action.payload.account.email;
             } 
 
             state.change = false;
@@ -283,6 +319,19 @@ const accountSettingsSlice = createSlice({
         },
         [handlePinMessageToProfile.rejected]: (state, action) => {
 
+        },
+        [verifyAccount.pending]: (state, action) => {
+            state.loading = true;
+        },
+        [verifyAccount.fulfilled]: (state, action) => {
+            state.verified = true;
+            state.loading = false;
+            state.error = false;
+        },
+        [verifyAccount.rejected]: (state, action) => {
+            state.loading = false;
+            state.error = true;
+            state.errorMessage = action.payload.errorMessage;
         }
     }
 })
@@ -327,6 +376,10 @@ export const selectSteamLink = state => state.accountSettingsSlice.steamLink;
 export const selectUsersScreenShots = state => state.accountSettingsSlice.screenShots;
 
 export const selectShowCaseScreenShotsState = state => state.accountSettingsSlice.showCaseScreenShots;
+
+export const selectAccountVerified = state => state.accountSettingsSlice.verified;
+
+export const selectEmail = state => state.accountSettingsSlice.email;
 
 // actions
 export const {toggleShowCaseScreenShots, handleUpdateSteamLink, handleUpdateBio, updateNewAccountState, handleSignOut, updateAccountInputState, accountSettingsCloseError } = accountSettingsSlice.actions;

@@ -7,7 +7,7 @@ import {RadioButton} from '../buttons/RadioButton/RadioButton';
 import "./DropDownList.css";
 import { DownIcon } from '../Icons/DownIcon/DownIcon';
 
-export const DropDownList = ({selectedItem, list = ["No Options"], action, stateType}) => {
+export const DropDownList = ({selectedItem, list = ["No Options"], action, stateType, width, height}) => {
 
     const primaryColor = useSelector(selectSecondaryColor);
 
@@ -31,8 +31,10 @@ export const DropDownList = ({selectedItem, list = ["No Options"], action, state
     return (
         <>
             <div 
+            style={{width: width,
+                height: height}}
             className='drop-down-container'>
-                <TextButton textAlign='start' action={toggleDropDown} name={selectedItem} />
+                <TextButton invert={true} textAlign='start' action={toggleDropDown} name={selectedItem} />
                 <div style={{rotate: open ? '-180deg' : null}} className='drop-down-icon-wrapper'>
                     <DownIcon />
                 </div>
@@ -42,7 +44,8 @@ export const DropDownList = ({selectedItem, list = ["No Options"], action, state
                 <div 
                 onClick={() => {toggleDropDown()}}
                 style={{
-                    backgroundColor: glassColor
+                    backgroundColor: glassColor,
+                    
                     }}
                 className='drop-down-content'>
                     <div onClick={(e) => {e.stopPropagation()}} style={{backgroundColor: primaryColor}} className='inner-drop-down-container'>

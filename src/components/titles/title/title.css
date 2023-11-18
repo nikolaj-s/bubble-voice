@@ -1,6 +1,11 @@
 
-h1 {
+#application-title {
     font-weight: 400;
     letter-spacing: var(--font-spacing);
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    position: fixed;
+    left: 5px;
+    top: 5px;
+    pointer-events: none;
+    margin: 0;
 }

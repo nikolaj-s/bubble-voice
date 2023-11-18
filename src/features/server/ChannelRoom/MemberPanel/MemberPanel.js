@@ -200,16 +200,20 @@ export const MemberPanel = () => {
             <motion.div 
             key={'member-panel-' + member.username}
             onClick={(e) => {e.stopPropagation()}}
-            style={{backgroundPosition: 'center',background: secondaryColor, 
+            style={{backgroundPosition: 'center',background: (member.color || secondaryColor), 
             backgroundRepeat: 'no-repeat', 
             backgroundSize: 'cover', top: posY, left: posX,
-            translateY: origin ? '-100%' : (posY - 500) < 0 ? '0%' : '-50%',}} className='outer-member-panel-container'>
+            translateY: origin ? '-50%' : (posY - 525) < 0 ? `-5%` : '-50%',
+            border: `solid 4px ${member.color || secondaryColor}`
+            }} className='outer-member-panel-container'>
                 
                 <div 
-                className='member-panel-container'>
+                style={{backgroundColor: (member.color || secondaryColor)}}
+                className='member-panel-container'
+                >
                     <div className='member-panel-image-container'>
                         <div className='member-panel-banner-container'>
-                            <Image image={member.user_banner} />
+                            <Image borderRadius={'10px'} image={member.user_banner} />
                         </div>
                         <div style={{borderRadius: member.profile_picture_shape === 'square' ? '5px' : '50%'}} className='member-panel-profile-picture'>
                             <Image image={member.user_image} />
@@ -227,8 +231,8 @@ export const MemberPanel = () => {
                         {member.username !== username && member.status !== 'offline' ? 
                         <div className='member-panel-button-wrapper'>
                             <TextInput action={setCustomPokeMessage} inputValue={pokeMessage} />
-                            <PokeButton active_background={accentColor} description={poking ? 'On Timeout' : null} active={poking} action={poke} width={30} height={30} padding={5} margin={"0px 5px"} background={primaryColor} />
-                            <MessageButton width={30} height={30} padding={5} background={primaryColor} action={handleOpenDirectMessage} />
+                            <PokeButton borderRadius={10} active_background={accentColor} description={poking ? 'On Timeout' : null} active={poking} action={poke} width={30} height={30} padding={5} margin={"0px 5px"} background={primaryColor} />
+                            <MessageButton borderRadius={10} width={30} height={30} padding={5} background={primaryColor} action={handleOpenDirectMessage} />
                         </div>
                         : null}
                         <div style={{backgroundColor: primaryColor}} className='server-user-details-wrapper-container'>

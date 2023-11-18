@@ -1,20 +1,20 @@
 .text-area-container {
     width: calc(100% - 6px);
-    height: 100%;
+    height: calc(100% - 6px);
     display: flex;
-    overflow: hidden;
     position: relative;    
-    border-radius: var(--border-radius);
+    border-radius: 10px;
 }
 
 .text-area-container textarea {
     resize: none;
     border: none;
     width: calc(100% - 4px);
-    height: 100%;
+    height: calc(100% - 4px);
     font-size: .8rem;
     font-family: var(--font-family);
     padding: 2px;
+    border-radius: 8px;
     letter-spacing: var(--font-spacing);
 }
 
@@ -27,6 +27,7 @@
     right: 5px;
     padding: 0px;
     margin: 0px;
+    opacity: 0.6;
 }
 
 .emoji-button-textarea-container {

@@ -1,19 +1,19 @@
 
 .expanded-control-bar-container {
     position: fixed;
-    left: 55px;
+    left: 5px;
     padding: 10px 5px;
     bottom: 55px;
-    width: 190px;
-    border-radius: 8px;
+    width: 290px;
+    border-radius: 10px;
     z-index: 10;
-    box-shadow: -5px -5px 20px rgba(0, 0, 0, 0.582);
+    box-shadow: 5px -5px 20px rgba(0, 0, 0, 0.582);
 }
 
 .web-cam-preview-container {
-    height: 113px;
+    height: 163px;
     width: 100%;
-    border-radius: 5px;
+    border-radius: 10px;
     background-color: black;
     display: flex;
     justify-content: center;
@@ -30,6 +30,6 @@
     width: 100%;
     z-index: 3;
     height: 100%;
-    border-radius: 3px;
+    border-radius: 10px;
     background-color: black;
 }

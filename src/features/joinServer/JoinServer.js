@@ -12,7 +12,7 @@ import { Image } from '../../components/Image/Image';
 // style
 import "./JoinServer.css";
 import { setHeaderTitle } from '../contentScreen/contentScreenSlice';
-import { selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { InputTitle } from '../../components/titles/inputTitle/InputTitle';
 import { TextInput } from '../../components/inputs/TextInput/TextInput';
 import { ApplyCancelButton } from '../../components/buttons/ApplyCancelButton/ApplyCancelButton';
@@ -26,6 +26,8 @@ export const JoinServer = () => {
     const server = useSelector(selectServerToJoin);
 
     const primaryColor = useSelector(selectPrimaryColor);
+
+    const glassColor = useSelector(selectGlassColor);
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
@@ -75,17 +77,19 @@ export const JoinServer = () => {
         <motion.div 
         style={{backgroundColor: secondaryColor}}
         className='join-server-container'>
+            
             <div className='join-server-inner-container'>
+            <InputTitle marginBottom={3} title={"Selected Bubble To Join"} />
                 <div className='join-server-banner-container'>
                     <Image image={server?.server_banner} />
                     <h1 style={{
                         color: textColor,
-                        backgroundColor: primaryColor,
+                        backgroundColor: glassColor,
                     }}>{server?.server_name}</h1>
                 </div>
                 <InputTitle title={"Enter Password"} />
                 <TextInput type='password' stateSelector='password' action={handleInput} inputValue={password} placeholder={"Password"} />
-                <ApplyCancelButton apply={join} cancel={handleCancel} name='Join' />
+                <ApplyCancelButton position='absolute' apply={join} cancel={handleCancel} name='Join' />
             </div>
             <LoadingErrorComponent action={closeError}  loading={loading} errorMessage={errorMessage}
             error={error}  />

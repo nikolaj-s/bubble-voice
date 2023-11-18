@@ -5,7 +5,7 @@
     display: flex;
     align-self: center;
     box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.7);
-    border-radius: 8px;
+    border-radius: 15px;
     overflow: hidden;
     justify-content: center;
     align-items: center;
@@ -23,7 +23,7 @@
     left: 0;
     width: calc(100% - 8px);
     height: calc(100% - 8px);
-    border-radius: 8px;
+    border-radius: 15px;
 }
 
 

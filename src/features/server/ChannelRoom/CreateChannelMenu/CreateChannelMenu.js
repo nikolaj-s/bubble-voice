@@ -139,7 +139,7 @@ export const CreateChannelMenu = () => {
                     </>
                     : null}
                     <div className='create-channel-apply-cancel-wrapper'>
-                        <ApplyCancelButton toggled={channelName.length < 3 ? true : null} apply={create} cancel={handleCancel} name='Create' />
+                        <ApplyCancelButton position='relative' toggled={channelName.length < 3 ? true : null} apply={create} cancel={handleCancel} name='Create' />
                     </div>   
                 </motion.div>
             </motion.div> : null}
