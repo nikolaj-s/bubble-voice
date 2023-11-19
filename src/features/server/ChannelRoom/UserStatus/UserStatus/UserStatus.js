@@ -69,10 +69,12 @@ export const UserStatus = ({user}) => {
                 backgroundColor: (user?.color || primaryColor),
             }}
             className='user-status-image-container'>
-                <Image hideOnError={true} image_class={"user-image"} cursor='pointer' image={user.user_image?.includes('gif') ? "" : user.user_image} />
+                <Image disableErr={true} hideOnError={true} image_class={"user-image"} cursor='pointer' image={user.user_image?.includes('gif') ? "" : user.user_image} />
             </div>
             {user.status === 'Away' || user.status === 'away' ?
-            <div className='away-status-overlay'>
+            <div 
+            style={{backgroundColor: secondaryColor}}
+            className='away-status-overlay'>
                 <AwayIcon />
             </div>
             :
@@ -80,7 +82,7 @@ export const UserStatus = ({user}) => {
             <div 
             style={{backgroundColor: secondaryColor}}
             className='user-status-icon-container'>
-                <Image hideOnError={true} image={user.status_icon} />
+                <Image disableErr={true} hideOnError={true} image={user.status_icon} />
             </div>
             : null}
             <div 

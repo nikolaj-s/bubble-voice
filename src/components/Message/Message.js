@@ -132,11 +132,14 @@ export const Message = ({activity_feed = false,dashboard = false, direct_message
                             :
                             message.image && !message.gallery ? 
                             <div 
-                            style={{maxHeight: activity_feed && !current_message.screen_shot ? 80 : maximizeMediaSize ? '100%' : 350,
-                            marginTop: message.link ? 4 : null
+                            style={{maxHeight: (activity_feed && message?.text?.includes('channel')) ? 40 :  activity_feed && !current_message.screen_shot ? 80 : maximizeMediaSize ? '100%' : 350,
+                            marginTop: message.link ? 4 : null,
+                            width: (activity_feed && message?.text?.includes('channel')) ? 40 : null,
+                            height: (activity_feed && message?.text?.includes('channel')) ? 40 : null,
+                            borderRadius: (activity_feed && message?.text?.includes('channel')) ? '50%' : null 
                             }}
                             className='message-image-container'>
-                                <Image nsfw={current_message.nsfw} borderRadius={20} minLoadHeight={'300px'} altHeight={activity_feed && !current_message.screen_shot ? 80 :
+                                <Image nsfw={current_message.nsfw} borderRadius={(activity_feed && message?.text?.includes('channel')) ? '50%' : 20} minLoadHeight={'300px'} altHeight={activity_feed && !current_message.screen_shot ? 80 :
                                     maximizeMediaSize ? '100%' : 350}  expandContent={expandContent} imgHeight='auto' cursor='pointer' width={null} altWidth={'100%'} loadingState='eager' objectFit='contain' image={message.image} />
                             </div>
                             : null}

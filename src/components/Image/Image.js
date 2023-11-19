@@ -68,7 +68,7 @@ export const Image = ({draggable = false,image_class, img_id, image, objectFit =
             <NsfwImageOverlay borderRadius={borderRadius} />
             : null}
             
-            {error ?
+            {error && !disableErr ?
             <ImageErrorIcon width={errorIconDimension} height={errorIconDimension} />
             : <motion.img 
             drag={draggable}

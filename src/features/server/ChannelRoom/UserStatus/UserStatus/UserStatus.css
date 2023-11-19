@@ -73,7 +73,8 @@
     display: none;
 }
 
-.user-status-icon-container {
+.user-status-icon-container,
+.away-status-overlay {
     position: absolute;
     bottom: -6px;
     left: 28px;
@@ -83,18 +84,6 @@
     border-radius: 4px;
     padding: 2px;
     overflow: hidden;
-}
-
-.away-status-overlay {
-    position: absolute;
-    top: -5px;
-    left: 28px;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: start;
-    z-index: 2;
 }
 
 .away-status-overlay svg {
