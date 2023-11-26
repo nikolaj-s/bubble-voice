@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 // state
 import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor, selectTransparentPrimaryColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 
-export const ButtonAnimationWrapper = ({active_background, desc_width = '100%', background, onMouseDown = () => {},display = 'flex', action = () => {}, position = 'relative', zIndex = 0, top = 0, left = 0, className, width = 50, height = 50, borderRadius = '5px', justifyContent = 'center', invert = false, pointerOptions = null, children, active = false, opacity = 1, id = "", margin, right, description, flip_description = false, padding = 10, altInvert = false, right_orientation_desc = false, o_mouseEnter = () => {}, o_mouseLeave = () => {}, desc_o_mouse_leave = () => {}, desc_space = 25, transparent, desc_font_size = '0.7rem'}) => {
+export const ButtonAnimationWrapper = ({align_desc_right, active_background, desc_width = '100%', background, onMouseDown = () => {},display = 'flex', action = () => {}, position = 'relative', zIndex = 0, top = 0, left = 0, className, width = 50, height = 50, borderRadius = '5px', justifyContent = 'center', invert = false, pointerOptions = null, children, active = false, opacity = 1, id = "", margin, right, description, flip_description = false, padding = 10, altInvert = false, right_orientation_desc = false, o_mouseEnter = () => {}, o_mouseLeave = () => {}, desc_o_mouse_leave = () => {}, desc_space = 25, transparent, desc_font_size = '0.7rem'}) => {
 
     const animation = useAnimation();
 
@@ -87,13 +87,12 @@ export const ButtonAnimationWrapper = ({active_background, desc_width = '100%', 
     {desc ? 
             <motion.div 
             onMouseLeave={desc_o_mouse_leave}
-            animate={null}
             style={{
                 width: desc_width,
                 minWidth: '100%',
                 top: right_orientation_desc ? '1px' : null,
-                right: right_orientation_desc ? '-15px' : null,
-                left: right_orientation_desc ? null : '50%',
+                right: align_desc_right ? -40 : right_orientation_desc ? '-15px' : null,
+                left: align_desc_right ? null : right_orientation_desc ? null : '50%',
                 bottom: right_orientation_desc ? null : flip_description ? '-120%' : height + desc_space,
                 minWidth: right_orientation_desc ? null : desc_width,
                 position: 'absolute',

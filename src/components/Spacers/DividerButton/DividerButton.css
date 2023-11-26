@@ -30,4 +30,10 @@
     font-weight: 300;
     font-size: .9rem;
     padding: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 40px);
+    word-break: keep-all;
+    word-wrap: normal;
+    white-space: nowrap;
 }

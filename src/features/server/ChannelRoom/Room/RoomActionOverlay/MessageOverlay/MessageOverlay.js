@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import "./MessageOverlay.css";
 import { Message } from '../../../../../../components/Message/Message';
 import { useSelector } from 'react-redux';
-import { selectPrimaryColor, selectSecondaryColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectSecondaryColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectMiscSettingsDisableMessagePopUp } from '../../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 export const MessageOverlay = ({data, onEnd, page}) => {
@@ -14,8 +14,6 @@ export const MessageOverlay = ({data, onEnd, page}) => {
     const secondaryColor = useSelector(selectSecondaryColor);
 
     const messageOverlayDisabled = useSelector(selectMiscSettingsDisableMessagePopUp);
-
-    const accentColor = useSelector(selectPrimaryColor)
 
     React.useEffect(() => {
         if (messageOverlayDisabled) {

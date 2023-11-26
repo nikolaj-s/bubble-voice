@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { WheelSpinWidget } from '../../../../../../components/widgets/Widgets/WheelSpinWidget/WheelSpinWidget'
 
 // state
-import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectSecondaryColor, selectTextColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./WheelSpinOverlay.css";
@@ -16,10 +16,6 @@ import { TextButton } from '../../../../../../components/buttons/textButton/Text
 export const WheelSpinOverlay = ({data, onEnd, page}) => {
 
     const textColor = useSelector(selectTextColor);
-
-    const primaryColor = useSelector(selectPrimaryColor);
-
-    const accentColor = useSelector(selectAccentColor);
 
     const secondaryColor = useSelector(selectSecondaryColor)
 

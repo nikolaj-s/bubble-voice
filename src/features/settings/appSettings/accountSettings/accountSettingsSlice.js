@@ -4,7 +4,7 @@ import { throwInitializationError } from "../../../initializingAppScreen/initial
 
 import Axios from 'axios';
 import { getToken, url } from "../../../../util/Validation";
-import { setServerId, setServerName, throwServerError, updateMemberFile } from "../../../server/ServerSlice";
+import { setServerId, throwServerError, updateMemberFile } from "../../../server/ServerSlice";
 import { socket } from "../../../server/ServerBar/ServerBar";
 import { toggleSocialAltLoading } from "../../../server/SocialSlice";
 

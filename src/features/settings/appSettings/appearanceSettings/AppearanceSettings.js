@@ -10,7 +10,7 @@ import { DropDownList } from '../../../../components/DropDownList/DropDownList'
 import { ToggleButton } from '../../../../components/buttons/ToggleButton/ToggleButton';
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { changeTheme, saveTheme, selectAccentColor, selectActivationColor, selectAppearanceChangeMade, selectCurrentTheme, selectDisableTransitionAnimations, selectGlassState, selectGradient, selectGradients, selectPrimaryColor, selectScaleState, selectSecondaryColor, selectTextColor, selectThemeOptions, selectUseImageBackgroundState, toggleDisableAnimatedTransitions, updateColorValue, updateGlassState, updateGradient, updateImageBackgroundState, updateScaleState } from './appearanceSettingsSlice';
+import { changeTheme, saveTheme, selectAccentColor, selectActivationColor, selectAppearanceChangeMade, selectCurrentTheme, selectDisableTransitionAnimations, selectGlassState, selectGradient, selectGradients, selectPrimaryColor, selectScaleState, selectSecondaryColor, selectTextColor, selectThemeOptions, toggleDisableAnimatedTransitions, updateColorValue, updateGlassState, updateGradient, updateScaleState } from './appearanceSettingsSlice';
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 import { ColorInput } from '../../../../components/inputs/ColorInput/ColorInput';
 import { TextButton } from '../../../../components/buttons/textButton/TextButton';
@@ -27,8 +27,6 @@ const Settings = () => {
     
         // eslint-disable-next-line
     }, [])
-
-    const useImageBackground = useSelector(selectUseImageBackgroundState);
 
     const scale = useSelector(selectScaleState);
 
@@ -101,12 +99,6 @@ const Settings = () => {
             console.log(err)
         }
 
-    }
-
-    const handleToggleImageBackground = () => {
-        dispatch(updateImageBackgroundState());
-
-        dispatch(saveTheme());
     }
 
     const toggleAnimatedTransitions = () => {

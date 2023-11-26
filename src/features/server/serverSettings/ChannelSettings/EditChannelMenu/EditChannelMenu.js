@@ -287,14 +287,6 @@ const Wrapper = () => {
     
     }
 
-    const handleBlurChange = (value) => {
-
-        setBackgroundBlur(value);
-
-        toggleEdited(true);
-    
-    }
-
     const handleClearSocial = () => {
         toggleEdited(true);
 

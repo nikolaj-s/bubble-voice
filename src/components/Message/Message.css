@@ -6,7 +6,9 @@
     position: relative;
     border-radius: 3px;
     padding-bottom: 4px;
+    padding-top: 5px;
     padding-right: 5px;
+    transition: 0.05s;
 }
 
 
@@ -15,7 +17,7 @@
     padding-bottom: 5px;
     padding-right: 5px;
     position: relative;
-   
+    padding-top: 3px;
     display: flex;
     flex-direction: column;
 }
@@ -40,7 +42,6 @@
     cursor: pointer;
     margin: -4px 0px 0px 0px;
     word-break: break-all;
-    width: calc(100% - 80px);
     flex-shrink: 0;
     font-size: 15px;
 }

@@ -59,7 +59,7 @@ export const navigateToServer = createAsyncThunk(
             }
 
             if (server_id) {
-                let res = await socket.request("left server")
+                await socket.request("left server")
                 .then(res => {
                     return res;
                 })
@@ -301,8 +301,7 @@ const serverSlice = createSlice({
         reOrderChannels: (state, action) => {
 
             const sortOrder = action.payload;
-
-            state.channels.sort((a, b) => {
+            state.channels = state.channels.sort((a, b) => {
                 return sortOrder.indexOf(a._id) - sortOrder.indexOf(b._id);
             })
 

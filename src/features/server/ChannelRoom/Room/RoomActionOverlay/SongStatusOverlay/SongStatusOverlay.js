@@ -1,7 +1,7 @@
 // library's
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import {  selectSecondaryColor, selectTextColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { motion } from 'framer-motion'
 
 // components
@@ -19,8 +19,6 @@ export const SongStatusOverlay = ({data, onEnd}) => {
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
-    const accentColor = useSelector(selectPrimaryColor);
-
     const textColor = useSelector(selectTextColor);
 
     React.useEffect(() => {
@@ -32,7 +30,7 @@ export const SongStatusOverlay = ({data, onEnd}) => {
             onEnd();
 
         }, 3000)
-
+// eslint-disable-next-line
     }, [data])
 
     return (

@@ -1,9 +1,9 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
 import { selectDisableMediaWidget, selectHideUserStatus, selectMiscSettingsHideNonVideoParticapents } from '../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
-import { selectBehindState, selectMusicExpanded } from '../Music/MusicSlice';
+
 import { User } from '../User/User'
-import { selectTriggerRoomRescale, triggerRoomRescale } from '../../../ServerSlice';
+import { selectTriggerRoomRescale } from '../../../ServerSlice';
 import { Music } from '../Music/Music';
 
 export const RoomUserWrapper = ({users, page, loaded}) => {
@@ -13,10 +13,6 @@ export const RoomUserWrapper = ({users, page, loaded}) => {
     const hidingNonVideoMembers = useSelector(selectMiscSettingsHideNonVideoParticapents);
 
     const hidingUserStatus = useSelector(selectHideUserStatus);
-
-    const musicExpanded = useSelector(selectMusicExpanded);
-
-    const behindState = useSelector(selectBehindState);
 
     const roomRescale = useSelector(selectTriggerRoomRescale);
 
@@ -105,7 +101,7 @@ export const RoomUserWrapper = ({users, page, loaded}) => {
         setTimeout(() => {
             handleScaling(true);
         }, 50)
-        
+    // eslint-disable-next-line   
     }, [hideMediaVideo])
     
     
@@ -113,19 +109,20 @@ export const RoomUserWrapper = ({users, page, loaded}) => {
         setTimeout(() => {
             handleScaling();
         }, 300)
+    // eslint-disable-next-line
     }, [page])
 
 
     React.useEffect(() => {
         
         handleScaling();
-       
+    // eslint-disable-next-line   
     }, [roomRescale])
 
     React.useEffect(() => {
         
         handleScaling();
-
+    // eslint-disable-next-line
     }, [hidingUserStatus])
 
     React.useEffect(() => {
@@ -134,8 +131,6 @@ export const RoomUserWrapper = ({users, page, loaded}) => {
 
         try {
             handleScaling()
-
-            let timeout;
 
             window.onresize = function() {
 

@@ -11,7 +11,7 @@ import { VoiceVideoSettings } from '../appSettings/voiceVideoSettings/VoiceVideo
 import { setHeaderTitle } from '../../contentScreen/contentScreenSlice'
 
 // state
-import { selectSecondaryColor, selectAccentColor } from '../appSettings/appearanceSettings/appearanceSettingsSlice'
+import { selectSecondaryColor } from '../appSettings/appearanceSettings/appearanceSettingsSlice'
 
 // style's
 import "./SettingsRoutesWrapper.css";
@@ -27,8 +27,6 @@ const Wrapper = () => {
     const dispatch = useDispatch();
 
     const secondaryColor = useSelector(selectSecondaryColor);
-
-    const textColor = useSelector(selectAccentColor);
 
     const [open, toggleOpen] = React.useState(false);
 

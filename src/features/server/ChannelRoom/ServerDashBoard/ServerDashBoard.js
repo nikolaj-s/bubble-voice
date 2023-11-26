@@ -3,7 +3,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 
 import { selectGlassColor, selectGlassState, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
-import { selectChannelSocialId, selectCurrentChannelId, selectLoadingServerDetailsState, selectPinningMessage, selectPopularSearches, selectUsersPermissions } from '../../ServerSlice';
+import { selectChannelSocialId, selectLoadingServerDetailsState, selectPinningMessage, selectPopularSearches, selectUsersPermissions } from '../../ServerSlice';
 import { FetchPins, selectLoadingPins, selectPinnedMessages } from './ServerDashBoardSlice';
 
 // style
@@ -42,8 +42,6 @@ export const ServerDashBoard = () => {
 
     const altLoading = useSelector(selectAltSocialLoading);
 
-    const inChannel = useSelector(selectCurrentChannelId);
-
     const loadingPins = useSelector(selectLoadingPins);
 
     const serverLoading = useSelector(selectLoadingServerDetailsState);
@@ -56,6 +54,7 @@ export const ServerDashBoard = () => {
                 
             }
         }
+    // eslint-disable-next-line
     }, [serverLoading])
     
     const handlePin = (data) => {

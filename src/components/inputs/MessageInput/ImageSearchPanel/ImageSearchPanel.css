@@ -23,6 +23,7 @@
     overflow: hidden;
     transition: 0.1s;
     border-radius: 10px;
+    
 }
 
 .inner-message-image-search-container {
@@ -30,7 +31,6 @@
     padding-left: 32px;
     height: calc(100% );
     display: flex;
-    
     flex-direction: column;
     border-radius: var(--border-radius);
 }

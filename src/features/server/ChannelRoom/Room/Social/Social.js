@@ -27,7 +27,6 @@ import { fetchMessages, messageCleanUp, selectAllMessages, selectAltSocialLoadin
 import { saveSocialData, SOCIAL_DATA } from '../../../../../util/LocalData';
 import { MessagePlaceHolderLoader } from '../../../../../components/MessagePlaceHolderLoader/MessagePlaceHolderLoader';
 import { clearCache } from '../../../../../util/ClearCaches';
-import { UploadVideo } from '../../../../../util/UploadVideo';
 import { CannotViewSocial } from '../../../../../components/CannotViewSocial/CannotViewSocial';
 import { ExplicitContentWarning } from './ExplicitContentWarning/ExplicitContentWarning';
 import { selectDisableNsfwWarning } from '../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
@@ -42,6 +41,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
     const [image, setImage] = React.useState(false);
 
+    // eslint-disable-next-line
     const [inputHeight, setInputHeight] = React.useState(80);
 
     const [mounting, toggleMounting] = React.useState(false);
@@ -94,7 +94,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
             saveSocialData();
 
         }
-
+        // eslint-disable-next-line
     }, [channelId, allMessages])
 
     React.useEffect(() => {
@@ -128,7 +128,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
             
             clearCache();
         }
-
+// eslint-disable-next-line
     }, [channelId])
 
     React.useEffect(() => {
@@ -261,7 +261,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         
 
-        if ((messagesRef.current.scrollTop + messagesRef.current.scrollHeight) < (e.target.clientHeight + 10)) {
+        if ((messagesRef.current.scrollTop + messagesRef.current.scrollHeight) < (e.target.clientHeight + 200)) {
 
             if (!social[channelId]) return; 
 
@@ -328,7 +328,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
         return () => {
             window.removeEventListener('keypress', focusTextInput);
         }
-
+    // eslint-disable-next-line
     }, [])
 
     return (

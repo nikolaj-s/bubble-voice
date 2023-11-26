@@ -19,7 +19,6 @@ import { selectCurrentScreen, setCurrentScreen, toggleControlState } from '../..
 
 // component's
 import { ServerBanner } from '../../../components/serverBanner/ServerBanner';
-import { Loading } from '../../../components/LoadingComponents/Loading/Loading';
 import { setHeaderTitle } from '../../contentScreen/contentScreenSlice';
 import { removeServer, setSideBarHeader, updateServer } from '../../sideBar/sideBarSlice';
 import { ChannelList } from './ChannelList/ChannelList';
@@ -88,8 +87,6 @@ const Bar = () => {
         
         if (window.location.hash.includes('disconnected')) return;
         
-        const new_redirect = `/dashboard/server/${serverName ? serverName : "placeholder"}/disconnected`;
-
         const channel = window.location.hash.split('/channel/')[1];
 
         if (window.location.hash.includes('/channel/')) {
@@ -492,18 +489,6 @@ const Bar = () => {
             dispatch(throwServerError("Fatal Connection Error"));
                 
         }
-    }
-
-    const disconnect = () => {
-        
-        dispatch(leaveChannel({username: username}));
-        
-        dispatch(playSoundEffect({default: 'disconnected'}));
-        
-        dispatch(clearWidgetOverLay());
-
-        navigate(window.location.hash.split('#')[1].split('/channel')[0])
-    
     }
 
     const leaveServer = (kicked) => {

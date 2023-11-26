@@ -37,8 +37,9 @@
 }
 
 .video-widget-preview-container {
-    height: 600px;
-    width: 100%;
+    height: 400px;
+    width: 600px;
+    max-width: 100%;
     object-fit: contain;
 
 }

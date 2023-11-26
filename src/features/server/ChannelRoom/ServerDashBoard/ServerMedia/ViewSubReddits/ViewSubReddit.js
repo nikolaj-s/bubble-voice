@@ -8,13 +8,16 @@ import "./ViewSubReddit.css";
 
 import { SubRedditButton } from '../../../../../../components/buttons/SubRedditButton/SubRedditButton'
 
-import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 
 import { RedditPost } from '../../../../../../components/RedditPost/RedditPost'
 import { useDispatch, useSelector } from 'react-redux'
-import { GetPostsFromSubReddit, SubRedditSearch, selectCurrentSubReddit, selectLoadingSubReddit, selectSubRedditPosts, selectSubRedditQuery, selectSubRedditSortState, selectSubReddits, setSubReddit, setSubRedditQuery, toggleSortSubPosts } from '../ServerMediaSlice'
+import { GetPostsFromSubReddit, SubRedditSearch, selectCurrentRedditIndex, selectCurrentSubReddit, selectFullModeState, selectLoadingSubReddit, selectNextPostPage, selectSubRedditPosts, selectSubRedditQuery, selectSubRedditSortState, selectSubReddits, setRedditIndex, setSubReddit, setSubRedditQuery, toggleFullMode, toggleSortSubPosts } from '../ServerMediaSlice'
+import { ExpandButton } from '../../../../../../components/buttons/ExpandButton/ExpandButton'
+import { AnimatePresence, motion } from 'framer-motion'
+import { selectSecondaryColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice'
+import { CloseIcon } from '../../../../../../components/Icons/CloseIcon/CloseIcon'
 
-export const ViewSubReddit = ({expand, explore}) => {
+export const ViewSubReddit = ({expand, explore, disableFullMode}) => {
 
     const dispatch = useDispatch();
 
@@ -28,8 +31,17 @@ export const ViewSubReddit = ({expand, explore}) => {
     
     const sortState = useSelector(selectSubRedditSortState);
 
+    const secondaryColor = useSelector(selectSecondaryColor);
+
+    const nextPostPage = useSelector(selectNextPostPage);
+
     const posts = useSelector(selectSubRedditPosts);
 
+    const index = useSelector(selectCurrentRedditIndex);
+
+    const fullMode = useSelector(selectFullModeState);
+
+    const [reverse, toggleReverse] = React.useState(false);
 
     const handleSearchSubreddit = async () => {
 
@@ -39,6 +51,7 @@ export const ViewSubReddit = ({expand, explore}) => {
 
         dispatch(SubRedditSearch({query: query}));
        
+        dispatch(setRedditIndex(0))
     }
 
 
@@ -52,6 +65,8 @@ export const ViewSubReddit = ({expand, explore}) => {
         dispatch(setSubReddit(obj));
 
         dispatch(GetPostsFromSubReddit({subreddit: obj.url, sort: sortState}))
+
+        dispatch(setRedditIndex(0))
     }
 
     const setSortState = (str) => {
@@ -63,10 +78,68 @@ export const ViewSubReddit = ({expand, explore}) => {
         
         dispatch(GetPostsFromSubReddit({subreddit: selectedSubReddit.url, sort: str}))
 
+        dispatch(setRedditIndex(0))
+
     }
 
+    const handleIndex = (e) => {
+
+        if (loading) return;
+
+        if (e.deltaY === 100) {
+            if (posts.length - 1 === index) {
+                return dispatch(GetPostsFromSubReddit({subreddit: selectedSubReddit.url, sort: sortState, after: nextPostPage}))
+            }
+            toggleReverse(false);
+            dispatch(setRedditIndex(index + 1));
+        } else {
+            if (index === 0) return;
+            toggleReverse(true)
+            dispatch(setRedditIndex(index - 1));
+        }
+    }
+
+    React.useEffect(() => {
+
+        const el = document.getElementsByClassName('server-media-wrappers')[0];
+
+        if (!el) return;
+
+        if (fullMode) {
+            el.style.overflowY = 'hidden';
+        } else {
+            el.style.overflowY = 'auto'
+        }
+
+        return () => {
+            el.style.overflowY = 'auto'
+        }
+    }, [fullMode])
+    
     return (
         <>
+        {fullMode ?
+        <AnimatePresence>
+        <motion.div 
+        initial={{translateY: reverse ? '-100%' : '100%'}}
+        animate={{translateY: '0%'}}
+        exit={{translateY: reverse ? '100%' : '-100%'}}
+        key={posts[index]?.id}
+        onWheel={(e) => {handleIndex(e)}}
+        style={{backgroundColor: secondaryColor}}
+        className='subreddit-full-mode'>
+            <div onClick={() => {dispatch(toggleFullMode())}} className='exit-full-mode-container'>
+                <CloseIcon />
+            </div>
+            <RedditPost disableMax={true} action={expand} data={posts[index]} />
+        </motion.div>
+        </AnimatePresence> :
+        null}
+        {fullMode ?
+        <div className='full-mode-navigation'>
+
+        </div>
+        : null}
         <Loading  loading={loading} />
         <div className='implement-sub-reddit-container'>
             
@@ -88,20 +161,16 @@ export const ViewSubReddit = ({expand, explore}) => {
                     <TextButton altInvert={true} action={() => {setSortState('new')}} toggled={sortState === 'new'} name={'New'} />
                     <TextButton altInvert={true} action={() => {setSortState('hot')}} toggled={sortState === 'hot'} name={'Hot'} />
                     <TextButton altInvert={true} action={() => {setSortState('top')}} toggled={sortState === 'top'} name={'Top'} />
-                    
+                   {disableFullMode ? null : <ExpandButton action={() => {dispatch(toggleFullMode())}} description="Expand" invert={true} width={20} borderRadius={10} height={20} />}
                 </div>
                 
                 </>
                 : null}
             </div>
             {posts.length > 0 ? 
-            <ResponsiveMasonry style={{width: 'calc(100% - 10px)', margin: '10px 5px 0px 5px'}} columnsCountBreakPoints={explore ? {400: 1} : {800: 1, 1200: 2, 1400: 3}}>
-                <Masonry gutter='5px'>
-                    {posts.map(post => {
-                        return <RedditPost action={expand} data={post} />
-                    })}
-                </Masonry>
-            </ResponsiveMasonry>
+                posts.map(post => {
+                    return <RedditPost action={expand} data={post} />
+                })
             : null}
         </div>
         </>

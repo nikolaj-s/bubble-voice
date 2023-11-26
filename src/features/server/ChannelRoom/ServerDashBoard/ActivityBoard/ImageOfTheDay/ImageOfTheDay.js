@@ -29,8 +29,8 @@ export const ImageOfTheDay = ({imageOfTheDay}) => {
             <>
             <div 
             className='image-of-the-day-wrapper'>
-                <Image nsfw={imageOfTheDay.nsfw} zIndex={2} objectFit='contain' minLoadHeight={150} expandContent={handleExpand} cursor='pointer' borderRadius={'10px'} image={imageOfTheDay.preview} />
-                <img className='back-drop-blur-image-of-the-day' src={imageOfTheDay.preview} />
+                <Image nsfw={imageOfTheDay.nsfw} zIndex={2} objectFit='contain' minLoadHeight={150} expandContent={handleExpand} cursor='pointer' borderRadius={'10px'} image={imageOfTheDay.image} alt_image={imageOfTheDay.preview} />
+                <img alt="BLUR" className='back-drop-blur-image-of-the-day' src={imageOfTheDay.preview} />
 
                 
             </div>

@@ -4,10 +4,10 @@ import { ButtonAnimationWrapper } from '../ButtonAnimationWrapper/ButtonAnimatio
 import { SavesIcon } from '../../Icons/SavesIcon/SavesIcon'
 import { SavedIcon } from '../../Icons/SavedIcon/SavedIcon'
 
-export const SaveButton = ({width, height, action, description}) => {
+export const SaveButton = (props) => {
     return (
-        <ButtonAnimationWrapper width={width} height={height} action={action} description={description}>
-            {description === 'Save' ?
+        <ButtonAnimationWrapper {...props}>
+            {props.description === 'Save' ?
             <SavesIcon />
             : 
             <SavedIcon />

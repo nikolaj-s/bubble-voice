@@ -5,7 +5,8 @@
     border-radius: 10px;
     position: absolute;
     overflow: hidden;
-    
+    object-fit: cover;
+    opacity: 0.6;
 }
 
 .server-welcome-message-container img {

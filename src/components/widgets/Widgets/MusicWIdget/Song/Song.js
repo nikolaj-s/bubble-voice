@@ -52,9 +52,9 @@ export const Song = ({id, image, name, duration, action, liked, saved, addToQueu
                 : null}
             </div>
                 
-            <LikeButton borderRadius={'50%'} desc_space={16} padding={6} toggled={liked} action={action}  width={20} height={20} />
-            {(saved && liked) ? <AddButton borderRadius={'50%'} desc_width={50} transparent={true} desc_space={16} padding={6} action={addToQueue}  width={20} height={20} description={"Add To Queue"} /> : null}
-            {inQueue ? <RemoveButton borderRadius={'50%'} desc_width={60} transparent={true} desc_space={16} padding={6} action={removeFromQueue} margin={"0 0 0 5px"} width={20} height={20} description={"Remove"} /> : null}
+            <LikeButton borderRadius={10} desc_space={16} padding={6} toggled={liked} action={action}  width={20} height={20} />
+            {(saved && liked) ? <AddButton borderRadius={10} desc_width={50} transparent={true} desc_space={16} padding={6} action={addToQueue}  width={20} height={20} description={"Add To Queue"} /> : null}
+            {inQueue ? <RemoveButton borderRadius={10} desc_width={60} transparent={true} desc_space={16} padding={6} action={removeFromQueue} margin={"0 0 0 5px"} width={20} height={20} description={"Remove"} /> : null}
             <p style={{
                 color: textColor
             }}>{time}</p>

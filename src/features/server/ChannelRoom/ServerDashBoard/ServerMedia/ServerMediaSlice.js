@@ -62,7 +62,9 @@ const ServerMediaSlice = createSlice({
         scrollPosition: 0,
         media: [],
         mediaQuery: "",
-        loadingNewMedia: false
+        loadingNewMedia: false,
+        fullMode: false,
+        index: 0
     },
     reducers: {
         toggleLoadingRedditMedia: (state, action) => {
@@ -106,6 +108,12 @@ const ServerMediaSlice = createSlice({
             state.redditPosts = [];
 
             state.scrollPosition = 0;
+        },
+        setRedditIndex: (state, action) => {
+            state.index = action.payload;
+        },
+        toggleFullMode: (state, action) => {
+            state.fullMode = !state.fullMode;
         }
     },
     extraReducers: {
@@ -116,6 +124,10 @@ const ServerMediaSlice = createSlice({
             state.redditPosts = [...state.redditPosts, ...action.payload.posts];
             state.after = action.payload.after;
             state.loading = false;
+
+            if (state.fullMode && state.index > 0) {
+                state.index = state.index + 1;
+            }
         },
         [GetPostsFromSubReddit.rejected]: (state, action) => {
             state.loading = false;
@@ -157,6 +169,10 @@ export const selectMedia = state => state.ServerMediaSlice.media;
 
 export const selectLoadingNewMedia = state => state.ServerMediaSlice.loadingNewMedia;
 
-export const {clearMedia, toggleLoadingNewMedia, addMoreMedia, setNewMedia, setMediaQuery, setScrollPosition, setSubRedditQuery, toggleSortSubPosts, setSubReddit, toggleLoadingRedditMedia, setServerMediaPage} = ServerMediaSlice.actions;
+export const selectCurrentRedditIndex = state => state.ServerMediaSlice.index;
+
+export const selectFullModeState = state => state.ServerMediaSlice.fullMode;
+
+export const {setRedditIndex, toggleFullMode, clearMedia, toggleLoadingNewMedia, addMoreMedia, setNewMedia, setMediaQuery, setScrollPosition, setSubRedditQuery, toggleSortSubPosts, setSubReddit, toggleLoadingRedditMedia, setServerMediaPage} = ServerMediaSlice.actions;
 
 export default ServerMediaSlice.reducer;

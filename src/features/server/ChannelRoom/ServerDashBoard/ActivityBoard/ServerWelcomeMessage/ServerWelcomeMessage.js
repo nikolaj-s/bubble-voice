@@ -2,7 +2,7 @@ import React from 'react';
 
 import "./ServerWelcomeMessage.css";
 import { useSelector } from 'react-redux';
-import { selectSecondaryColor, selectTextColor, selectTransparentPrimaryColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectSecondaryColor, selectTextColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectServerBanner, selectServerName, selectServerWelcomeMessage } from '../../../../ServerSlice';
 import { Image } from '../../../../../../components/Image/Image';
 

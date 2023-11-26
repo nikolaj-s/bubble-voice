@@ -1,11 +1,11 @@
 // library's
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { AnimatePresence, motion } from 'framer-motion';
 
 // state
-import { selectDisableTransitionAnimations, selectGlassColor, selectGlassState, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
-import { selectChannelSocialId, selectCurrentChannelId, selectCurrentlyViewChannelSocial, setChannelSocialId } from '../../ServerSlice'
+import { selectDisableTransitionAnimations, selectGlassColor, selectGlassState, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectChannelSocialId, selectCurrentChannelId, selectCurrentlyViewChannelSocial } from '../../ServerSlice'
 
 // component's
 import { Social } from '../Room/Social/Social'
@@ -15,15 +15,11 @@ import "./SocialRoute.css";
 
 export const SocialRoute = () => {
 
-    const dispatch = useDispatch();
-
     const [currentSocial, setCurrentSocial] = React.useState("") 
 
     const channelId = useSelector(selectChannelSocialId);
 
     const channel = useSelector(selectCurrentlyViewChannelSocial);
-
-    const textColor = useSelector(selectTextColor);
 
     const current_channel_id = useSelector(selectCurrentChannelId);
 
@@ -42,7 +38,7 @@ export const SocialRoute = () => {
         if (channelId === current_channel_id) return document.getElementById('channel-social-tab-button')?.click();
     
         if (currentSocial !== channelId) setCurrentSocial(channelId);
-
+    // eslint-disable-next-line
     }, [channelId, current_channel_id])
 
     return (

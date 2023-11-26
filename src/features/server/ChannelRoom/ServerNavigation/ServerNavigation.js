@@ -6,7 +6,7 @@ import { useAnimation, motion } from 'framer-motion';
 // state
 import { selectCurrentServerPageState, handleChangePage } from './ServerNavigationSlice';
 import { selectChannelSocialId, selectCurrentChannelId, selectCurrentlyViewChannelSocial, selectUsersPermissions, setChannelSocialId } from '../../ServerSlice';
-import { selectAccentColor, selectGlassColor, selectGlassState, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./ServerNavigation.css";
@@ -25,8 +25,6 @@ import { ActivityIcon } from '../../../../components/Icons/ActivityIcon/Activity
 export const ServerNavigation = () => {
 
     const dispatch = useDispatch();
-
-    const [width, setWidth] = React.useState(0)
 
     const usingWebVersion = useSelector(selectWebVersion);
 
@@ -299,22 +297,6 @@ export const ServerNavigation = () => {
     // eslint-disable-next-line
     }, [page, socialChannel])
 
-    const resize = () => {
-        const el = document.getElementsByClassName('outer-server-page-wrapper')[0];
-
-        if (el) {
-            setWidth(el.getBoundingClientRect().width)
-        }
-
-        setTimeout(() => {
-            const el = document.getElementsByClassName('outer-server-page-wrapper')[0];
-
-            if (el) {
-                setWidth(el.getBoundingClientRect().width)
-            }
-        }, 100)
-    }
-
     React.useEffect(() => {
 
         if (inChannel) {
@@ -322,9 +304,7 @@ export const ServerNavigation = () => {
         } else {
             handleAction('activity');
         }
-
-        resize();
-
+    // eslint-disable-next-line
     }, [inChannel])
 
     return (

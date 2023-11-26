@@ -24,7 +24,7 @@ export const RoomActionOverlay = ({page}) => {
 
     return (
         <>
-        <AnimatePresence exitBeforeEnter={true} >
+        <AnimatePresence mode='wait' >
             {overlayQueue[0]?.action === 'song-status' ? <SongStatusOverlay data={overlayQueue[0]} key={'song-status-overlay'} onEnd={handleOnEnd} /> : null}
             {overlayQueue[0]?.action === 'wheel-spin' ? <WheelSpinOverlay page={page} key={"wheel-spin-overlay"} data={overlayQueue[0]} onEnd={handleOnEnd} /> : null}
             {overlayQueue[0]?.action === 'new-message' ? <MessageOverlay page={page} key={'message-overlay'} data={overlayQueue[0]} onEnd={handleOnEnd} />  : null}

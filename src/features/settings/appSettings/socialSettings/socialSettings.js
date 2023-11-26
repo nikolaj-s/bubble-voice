@@ -51,7 +51,7 @@ const Settings = () => {
                 {hideProfileImagesOnMessages ? null : <div style={{backgroundColor: accentColor}} className='user-image-message-placeholder'></div>}
                 <div className='message-content-place-holder'>
                     <div style={{backgroundColor: accentColor}} className='user-info-message-placeholder'></div>
-                    {hideLinksOnMedia ? null : <div className='message-link-placeholder'><a>https://link-placeholder</a></div>}
+                    {hideLinksOnMedia ? null : <div className='message-link-placeholder'><p>https://link-placeholder</p></div>}
                     <div style={{backgroundColor: accentColor, width: '100%', maxWidth: maximizeMediaSize ? '100%' : 500, height: maximizeMediaSize ? 600 : 400}} className='media-message-place-holder'></div>
                 </div>
             </div>

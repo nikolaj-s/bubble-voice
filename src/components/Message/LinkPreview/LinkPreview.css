@@ -11,11 +11,13 @@
 }
 .link-preview-container:hover {
     filter: brightness(110%);
+    text-decoration: underline;
 }
 
 .image-link-preview-wrapper {
     width: 100%;
     flex-shrink: 0;
+    max-height: 300px;
     border-radius: 5px;
     overflow: hidden;
 }

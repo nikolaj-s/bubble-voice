@@ -672,8 +672,6 @@ export class RoomClient {
             this.producers.set(producer.id, producer);
         
             let el;
-
-            let par;
             
             if (!audio && !screen) {
 

@@ -64,7 +64,7 @@ export const ChannelUserDisplay = ({user, channel_id}) => {
     }
 
     return (
-        <div onDragStart={onDragStart} onDragEnd={onDragEnd} draggable={true} onClick={openMemberPanel} onMouseEnter={(e) => {hoverEffect(e, true)}} onMouseLeave={(e) => {hoverEffect(e, false)}} id={`${user._id}-channel-user-display-channel-id-${channel_id}`} style={{zIndex: 1, backgroundColor: hover ? primaryColor : null,}} key={user.username} className='channel-user-placeholder'>
+        <div onDragStart={onDragStart} onDragEnd={onDragEnd} draggable='true' onClick={openMemberPanel} onMouseEnter={(e) => {hoverEffect(e, true)}} onMouseLeave={(e) => {hoverEffect(e, false)}} id={`${user._id}-channel-user-display-channel-id-${channel_id}`} style={{zIndex: 1, backgroundColor: hover ? primaryColor : null,}} key={user.username} className='channel-user-placeholder'>
             <div 
             style={{position: 'relative', borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%', width: 28, height: 28}}
             className='channel-user-placeholder-user-image'>

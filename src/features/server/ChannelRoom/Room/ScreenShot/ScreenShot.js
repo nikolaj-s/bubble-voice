@@ -21,8 +21,6 @@ export const ScreenShot = ({channelId, username}) => {
         
         let ipcRenderer;
 
-        let timeOut;
-
         let spam_stopper = false;
 
         let options = {maxSizeMB: 0.6, maxIteration: 30}
@@ -94,7 +92,7 @@ export const ScreenShot = ({channelId, username}) => {
             console.log(err)
             return;
         }
-
+    // eslint-disable-next-line
     }, [])
 
     return (

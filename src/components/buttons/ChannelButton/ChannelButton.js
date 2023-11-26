@@ -27,7 +27,7 @@ import { setSelectedMember } from '../../../features/server/ChannelRoom/MemberPa
 import { ChannelStatus } from './ChannelStatus/ChannelStatus';
 
 
-export const ChannelButton = ({channel, action = () => {}, users, index}) => {
+export const ChannelButton = ({collapse, channel, action = () => {}, users, index}) => {
 
     const dispatch = useDispatch();
 
@@ -195,6 +195,7 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
         onDragOver={(event) => {onDragOver(event)}}
             onDragLeave={() => {onDragLeave()}}
             onDrop={onDrop}
+            style={{display: (!active && collapse && channel?.users?.length === 0 && !unReadMessage || (!channel.auth && collapse)) ? 'none' : null}} 
         >
             <div 
             style={{
@@ -204,6 +205,7 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
             }}
             className='channel-button-surround-wrapper'>
             <motion.div 
+            npm run electron-dev
             
             id={`channel-button-${channel._id}`}
             animate={animation} 
@@ -216,8 +218,9 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
             transition={{duration: 0}}
             style={{
                 backgroundColor: active ? accentColor : transparentPrimaryColor,
+                boxShadow: (users.length > 0 && channel.auth) ? '0 5px 10px -2px rgba(0,0,0,0.6)' : null,
                 cursor: active ? "default" : "pointer",
-                marginBottom: users.length > 0 && channel.auth && !channel.status ? '5px' : null,
+                marginBottom: users.length > 0 && channel.auth && !channel.status ? '8px' : null,
             }}
             className='channel-button-container'>
                 <div style={{backgroundColor: unReadMessage && channel.auth ? textColor : null}} className='unread-message-indicator'></div>   
@@ -240,7 +243,7 @@ export const ChannelButton = ({channel, action = () => {}, users, index}) => {
                     <SubMenuButton invert={false} altInvert={true} o_mouseLeave={() => {handleAnimation(transparentPrimaryColor, false)}} desc_o_mouse_leave={() => {handleAnimation(transparentPrimaryColor, false)}} flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} description={"More"} target={`channel-button-${channel._id}`} padding={6} width={16} height={16} borderRadius={8} desc_space={15} />
                 </div> : null}
             </motion.div>
-            {channel?.status ?
+            {channel?.status && channel?.auth ?
             <ChannelStatus status={channel.status} active={active} />
             : null}
             {channel.auth ?

@@ -16,7 +16,6 @@ import { selectActivateCameraKey, selectDisconnectKey, selectMuteAudioKey, selec
 
 // style
 import "./KeyBindSettings.css";
-import { ClearButton } from '../../../../components/buttons/ClearButton/ClearButton';
 import { AltCloseCornerButton } from '../../../../components/buttons/AltCloseCornerButton/AltCloseCornerButton';
 
 const Settings = () => {

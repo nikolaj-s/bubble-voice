@@ -15,15 +15,13 @@ import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/Se
 
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { miscSettingsChannelSpecificStateChange, miscSettingsClearError, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, selectActivityStatus, selectAutoPlayNativeVideos, selectDefaultServer, selectDisableChannelIcons, selectDisableMediaWidget, selectDisableTransparancyEffects, selectHardwareAcceleration, selectHideCustomChannelIcons, selectHideUserStatus, selectMiscSettingsDisableGifProfiles, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsError, selectMiscSettingsErrorMessage, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectMiscSettingsLoading, selectMuteSocialVideos, selectPopOutUserStreams, selectRestartNotice, selectShowFullResPreviews, selectSystemNotifcations, setDefaultServer } from './MiscellaneousSettingsSlice';
-import { selectServerList } from '../../../sideBar/sideBarSlice';
+import { miscSettingsChannelSpecificStateChange, miscSettingsClearError, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, selectActivityStatus, selectDisableChannelIcons, selectDisableMediaWidget, selectDisableTransparancyEffects, selectHardwareAcceleration,selectHideUserStatus, selectMiscSettingsError, selectMiscSettingsErrorMessage, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectMiscSettingsLoading, selectRestartNotice, selectShowFullResPreviews, selectSystemNotifcations } from './MiscellaneousSettingsSlice';
+
 import { clearSaves } from '../../../SavedMedia/SavedMediaSlice';
 
 const Settings = () => {
 
     const dispatch = useDispatch();
-
-    const [serversToSelectFrom, setServersToSelectFrom] = React.useState([])
 
     const loading = useSelector(selectMiscSettingsLoading);
 
@@ -41,8 +39,6 @@ const Settings = () => {
 
     const hideUserStatusBar = useSelector(selectHideUserStatus);
 
-    const servers = useSelector(selectServerList);
-
     const systemNotifcations = useSelector(selectSystemNotifcations);
 
     const activityStatus = useSelector(selectActivityStatus);
@@ -59,8 +55,6 @@ const Settings = () => {
 
         dispatch(setHeaderTitle("Miscellaneous Settings"));
 
-        setServersToSelectFrom([{label: 'Default', id: ""}, ...servers.map(s => ({label: s.server_name, id: s.server_id}))])
-        
     // eslint-disable-next-line
     }, [])
 

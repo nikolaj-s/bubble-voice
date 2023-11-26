@@ -17,7 +17,7 @@ import "./Video.css";
 import { VideoPlayOverlayAnimation } from './VideoPlayOverlayAnimation/VideoPlayOverlayAnimation';
 import Axios from 'axios';
 
-export const Video = ({maxHeight = '100%', video, id, looping = false, objectFit = 'contain', height = "100%", mutedToggled, marginLeft, forceAutoPlay = false, currentTime = 0}) => {
+export const Video = ({backgroundColor = 'black', maxHeight = '100%', video, id, looping = false, objectFit = 'contain', height = "100%", mutedToggled, marginLeft, forceAutoPlay = false, currentTime = 0}) => {
 
     const ref = React.useRef();
 
@@ -205,15 +205,18 @@ export const Video = ({maxHeight = '100%', video, id, looping = false, objectFit
         style={{
             height: height,
             objectFit: objectFit,
-            marginLeft: marginLeft
+            marginLeft: marginLeft,
+            backgroundColor: backgroundColor
         }}
+        onMouseMove={() => {showControls(true)}}
+        onMouseLeave={() => {showControls(false)}}
         onClick={handlePlayState}
         className='message-video-container'>
             <video 
             onTimeUpdate={handleProgress}
-            onMouseMove={() => {showControls(true)}}
+            
             ref={ref}
-            onMouseLeave={() => {showControls(false)}}
+            
             loading="lazy"
             onError={handleAltVideoLoad}
             style={{objectFit: objectFit, maxHeight: maxHeight}}
@@ -221,7 +224,7 @@ export const Video = ({maxHeight = '100%', video, id, looping = false, objectFit
             onEnded={onVideoEnd} autoPlay={forceAutoPlay ? true : looping ? true : false} id={video + id} controls={false} loop={true} 
             src={video}
             />
-            <audio hidden={true} muted={mutedToggled ? true : false} loop={true} src={video?.includes('v.redd') ? video?.split('_')[0] + '_audio.mp4' : null} autoPlay={looping ? true : false} id={video + 'audio'} />
+            <audio hidden={true} muted={mutedToggled ? true : false} loop={true} src={video?.includes('v.redd') ? video?.split('_')[0] + '_AUDIO_64.mp4' : null} autoPlay={looping ? true : false} id={video + 'audio'} />
             <VideoPlayOverlayAnimation interacted={interacted} color={color} playing={playing} />
             {(looping || !interacted) ? null :
             <motion.div 

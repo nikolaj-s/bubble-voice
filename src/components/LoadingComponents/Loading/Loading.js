@@ -89,7 +89,7 @@ export const Loading = ({backgroundColor, loading = false, error = false, overfl
 
     return (
         <>
-        <AnimatePresence exitBeforeEnter={true} >
+        <AnimatePresence mode='await' >
         {localLoading === false && success === false && localError === false ?
         null :
         <motion.div 

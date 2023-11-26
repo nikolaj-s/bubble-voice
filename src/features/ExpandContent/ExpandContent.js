@@ -129,14 +129,14 @@ export const ExpandContent = () => {
                 <Iframe maxWidth={"90%"} link={iframe} />
                 :
                 expandedContent?.includes('mp4') ?
-                <Video forceAutoPlay={true} video={expandedContent} currentTime={videoStartTime} /> 
+                <Video height='auto' forceAutoPlay={true} video={expandedContent} currentTime={videoStartTime} /> 
                 :        
                 <Image objectFit='contain' image={expandedContent} />}
             </div>
             <div onClick={(e) => {e.stopPropagation()}} style={{backgroundColor: primaryColor}} className='expanded-content-navigation-container'>                
-                <CopyButton action={handleCopy} description={'Copy Link'} width={20} height={20} />
-                <DownloadButton action={handleDownload} margin={"5px 0"} width={20} height={20} />
-                <SaveButton width={20} height={20} action={handleSave} description={saved ? "Unsave" : "Save"} />
+                <CopyButton borderRadius={10} action={handleCopy} description={'Copy Link'} width={18} height={18} />
+                <DownloadButton desc_width={60} align_desc_right={true} borderRadius={10} description={"Download"} action={handleDownload} margin={"5px 0"} width={18} height={18} />
+                <SaveButton borderRadius={10} width={18} height={18} action={handleSave} description={saved ? "Unsave" : "Save"} />
             </div>
         </div>
         : null}

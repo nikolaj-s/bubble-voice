@@ -22,7 +22,7 @@ export const EmojiButton = (props) => {
 
     return (
         <ButtonAnimationWrapper onMouseDown={handleIndexChange} o_mouseEnter={handleIndexChange} {...props} >
-            <AnimatePresence exitBeforeEnter>
+            <AnimatePresence mode='wait'>
                <motion.p 
                initial={{scale: 0.5}}
                animate={{scale: 1}}

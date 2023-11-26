@@ -3,9 +3,9 @@ import { ButtonAnimationWrapper } from '../ButtonAnimationWrapper/ButtonAnimatio
 
 import { SaveIcon } from '../../Icons/SaveIcon/SaveIcon';
 
-export const DownloadButton = ({width, height, action, margin}) => {
+export const DownloadButton = (props) => {
   return (
-        <ButtonAnimationWrapper margin={margin} description={'Download'} width={width} height={height} action={action}>
+        <ButtonAnimationWrapper {...props}>
             <SaveIcon />
         </ButtonAnimationWrapper>
   )

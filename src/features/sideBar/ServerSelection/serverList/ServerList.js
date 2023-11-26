@@ -63,7 +63,7 @@ export const ServerList = ({selectServer, serverList = [], loading = false, anim
             {localServerList.map(servers => {
                 return (
                 <Reorder.Item 
-                style={{flexShrink: 0}}
+                style={{flexShrink: 0, minWidth: 45}}
                 onDragEnd={confirmOrder} as='div' dragMomentum={false} transition={{duration: 0.2}} value={servers} key={servers._id} >
                 <ServerButton action={selectServer} key={servers._id} {...servers} />
                 </Reorder.Item>

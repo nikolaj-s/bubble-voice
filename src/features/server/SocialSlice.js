@@ -292,8 +292,6 @@ const SocialSlice = createSlice({
             }
 
             state.messages[action.payload.channel_id] = action.payload.messages;
-
-            console.log(state.messages, action.payload.channel_id)
                 
         },
         [RequestDeleteMessage.pending]: (state, action) => {

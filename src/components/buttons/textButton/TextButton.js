@@ -62,9 +62,7 @@ export const TextButton = ({name, action, textAlign = 'center', toggled = false,
             width: width,
             marginTop: marginTop}}>
            <p style={{maxWidth: icon ? 'calc(100% - 30px)' : null}}>{name}</p>
-           {textAlign === 'center' ? null :
-            icon
-           }
+           {icon}
         </motion.button>
     )
 }

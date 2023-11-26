@@ -267,11 +267,14 @@ export const ImplementWidgetMenu = ({active = false, type, name, close}) => {
                         )
                     })
                     : null}
+                    <div style={{height: 100, flexShrink: 0, width: '100%'}} />
                     <ApplyCancelButton apply={addWidget} cancel={close} name='Add'  />
                 </div>
                 <Loading overflow={false} loading={loading} error={error} />
                 {error ? <Error action={closeError} errorMessage={errorMessage} /> : null}
+                
             </motion.div> 
+            
             : null}
         </AnimatePresence>
         </>

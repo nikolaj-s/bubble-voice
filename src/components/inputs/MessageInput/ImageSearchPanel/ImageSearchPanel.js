@@ -163,7 +163,7 @@ export const ImageSearchPanel = ({channelId,hideOptions = false,direct_message, 
     }
 
     return (
-        <AnimatePresence exitBeforeEnter>
+        <AnimatePresence>
             {searchingForImage ?
             <div onClick={() => {close(false)}} className='image-search-outer-wrapper'>
                 <motion.div 
@@ -213,13 +213,13 @@ export const ImageSearchPanel = ({channelId,hideOptions = false,direct_message, 
                                 <AltSearchButton padding={5} active={query.length === 0} action={search} margin={'0 0 0 10px'} width={30} height={18} invert={true}  borderRadius={0} />
                             </div>
                         </div>}
-                        <AnimatePresence exitBeforeEnter>
+                        <AnimatePresence>
                         <motion.div transition={{duration: 0.1}} key={mediaType} initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} className='message-image-search-results-container'>
                             {mediaType === 'Videos' ?
                                     <EmojiMenu action={handleEmoji} social={true} width={'100%'} height={'100%'} />
                                     : 
                             mediaType === 'Reddit' ?
-                            <ViewSubReddit expand={(i) => {handleSelectImage({preview: i, image: i})}} />
+                            <ViewSubReddit disableFullMode={true} expand={(i) => {handleSelectImage({preview: i, image: i})}} />
                             :
                             <ResponsiveMasonry style={{height: 'auto'}} columnsCountBreakPoints={{700: 2}}>
                                 <Masonry gutter='5px'>   

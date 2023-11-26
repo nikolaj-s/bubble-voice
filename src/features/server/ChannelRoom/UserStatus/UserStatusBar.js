@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectAccentColor, selectGlassColor, selectGlassState, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import {selectGlassColor, selectGlassState, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectActivityStatus, selectHideUserStatus } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { selectCurrentChannelId, selectServerGroups, selectServerMembers } from '../../ServerSlice'
 import { UserStatus } from './UserStatus/UserStatus';
@@ -36,12 +36,10 @@ export const UserStatusBar = () => {
 
     const textColor = useSelector(selectTextColor);
 
-    const accentColor = useSelector(selectAccentColor)
-
     React.useEffect(() => {
 
         dispatch(setUsers(users));
-        
+    // eslint-disable-next-line    
     }, [users])
 
     const handleDynamicStatus = () => {
@@ -57,7 +55,7 @@ export const UserStatusBar = () => {
 
                 let new_status_name;
 
-                let l_windows = res.filter(w => !w.id.includes('screen') && !w.name.includes('Bubble') && !w.name.includes('D3DProxyWindow') && !w.name.includes("Input Occlusion Window") && !w.name.includes('Overlay') && !w.name.includes('.mp4') && !w.name.includes('.jpg') && !w.name.includes('.png') && !w.name.includes('.jpeg'));
+                let l_windows = res.filter(w => !w.id.includes('screen') && !w.name.includes('Bubble') && !w.name.includes('D3DProxyWindow') && !w.name.includes("Input Occlusion Window") && !w.name.includes('Overlay') && !w.name.includes('.mp4') && !w.name.includes('.jpg') && !w.name.includes('.png') && !w.name.includes('.jpeg') && !w.name.includes('.webp') && !w.name.includes('.webm') && !w.name.toLowerCase().includes('notification'));
                 
                 // avoid uneccessary server calls
                 
@@ -117,7 +115,7 @@ export const UserStatusBar = () => {
         return () => {
             clearInterval(interval);
         }
-
+    // eslint-disable-next-line
     }, [activityStatus, currentStatus])
 
     return (
@@ -136,6 +134,8 @@ export const UserStatusBar = () => {
                         {onlineUsers.map(u => {
                             if (u.server_group === server_group._id) {
                                 return <UserStatus user={u} key={u._id} />
+                            } else {
+                                return null
                             }
                         })}
                     </div>
@@ -149,13 +149,17 @@ export const UserStatusBar = () => {
                             {onlineUsers.map(u => {
                                 if (u.server_group === server_group._id) {
                                     return <UserStatus user={u} key={u._id} />
+                                } else {
+                                    return null
                                 }
                             })}
                         </div>
                     )
+                } else {
+                    return null;
                 }
             })}
-            {offlineUsers.length !== 0 ? <h4 key="offline-title-header" style={{color: textColor}}>Offline</h4> : null}
+            {offlineUsers.length !== 0 ? <h4 key="offline-title-header" style={{color: textColor}}>Offline - {offlineUsers.length}</h4> : null}
             {offlineUsers.map((u) => {
                 return <UserStatus user={u} key={u._id} />
             })}

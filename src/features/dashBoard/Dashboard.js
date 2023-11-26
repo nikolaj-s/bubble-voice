@@ -30,13 +30,17 @@ export const Dashboard = () => {
     const addServer = useSelector(selectAddServerMenuVisible);
 
     React.useEffect(() => {
-        // disable app title on dashboard mount
-        document.getElementById('application-title').style.opacity = 0;
-        
-        dispatch(setHeaderTitle('Select Server'))
-        
-        return () => {
-            document.getElementById('application-title').style.opacity = 1;
+        try {
+            // disable app title on dashboard mount
+            document.getElementById('application-title').style.opacity = 0;
+            
+            dispatch(setHeaderTitle('Select Server'))
+            
+            return () => {
+                document.getElementById('application-title').style.opacity = 1;
+            }
+        } catch (e) {
+            return;
         }
     // eslint-disable-next-line
     }, [])

@@ -11,7 +11,7 @@ export const VideoPlayOverlayAnimation = ({interacted, playing, color}) => {
     const glassColor = useSelector(selectGlassColor);
 
     return (
-    <AnimatePresence exitBeforeEnter>
+    <AnimatePresence mode='wait'>
         <div style={{pointerEvents: interacted ? 'none' : 'all', }} className='video-component-play-overlay'>
             <div 
             style={{backgroundColor: interacted ? null : glassColor}}

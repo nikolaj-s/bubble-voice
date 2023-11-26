@@ -118,7 +118,7 @@
 
 .message-input-container textarea {
     width: calc(100%);
-    height: calc(100% - 5px - 4px);
+    height: auto;
     object-fit: contain;
     background-color: transparent;
     font-size: 15px;

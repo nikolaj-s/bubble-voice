@@ -1,19 +1,22 @@
 .message-video-container {
     height: 100%;
+    width: 100%;
     position: relative;
     overflow: hidden;
     border-radius: 20px;
     cursor: pointer;
     display: flex;
-    background-color: black;
     flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .message-video-container video {
     top: 0;
     left: 0;
+    max-height: 100%;
     width: 100%;
-    height: 100%;
     object-fit: contain;
 }
 

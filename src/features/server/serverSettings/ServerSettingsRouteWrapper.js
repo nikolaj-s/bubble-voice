@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { useRoutes } from 'react-router'
 import { WidgetMenu } from './ChannelSettings/WidgetMenu/WidgetMenu'
-import { selectSecondaryColor, selectAccentColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice'
+import { selectSecondaryColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 import { BanList } from './BanList/BanList'
 import { ChannelSettings } from './ChannelSettings/ChannelSettings'
 import { EditChannelMenu } from './ChannelSettings/EditChannelMenu/EditChannelMenu'
@@ -16,8 +16,6 @@ import { motion } from 'framer-motion'
 const Wrapper = () => {
 
     const secondaryColor = useSelector(selectSecondaryColor);
-
-    const accentColor = useSelector(selectAccentColor);
 
     return (
         <motion.div 

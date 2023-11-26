@@ -6,7 +6,7 @@ import { AltWarningIcon } from '../../../../../../components/Icons/AltWarningIco
 
 
 import "./ExplicitContentWarning.css";
-import { selectChannelSocialId, selectCurrentChannelId, selectCurrentlyViewChannelSocial, setChannelSocialId } from '../../../../ServerSlice';
+import { selectChannelSocialId, selectCurrentChannelId, setChannelSocialId } from '../../../../ServerSlice';
 import { miscSettingsChannelSpecificStateChange, selectDisableNsfwWarning } from '../../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 export const ExplicitContentWarning = () => {

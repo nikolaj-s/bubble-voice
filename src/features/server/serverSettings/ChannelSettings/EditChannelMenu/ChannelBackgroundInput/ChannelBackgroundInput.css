@@ -8,6 +8,11 @@
     z-index: 0;
 }
 
+.channel-background-input-container .image-drop-input-container {
+    background-color: black;
+    opacity: 0.8;
+}
+
 .channel-background-side-ctx-prev {
     width: 150px;
     height: 100%;

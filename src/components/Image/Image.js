@@ -9,13 +9,11 @@ import { selectPrimaryColor, selectSecondaryColor } from '../../features/setting
 import { ImageErrorIcon } from '../Icons/ImageErrorIcon/ImageErrorIcon';
 import { NsfwImageOverlay } from './NsfwImageOverlay/NsfwImageOverlay';
 import { selectDisableNsfwBlur } from '../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
-export const Image = ({draggable = false,image_class, img_id, image, objectFit = 'cover', position = 'relative', zIndex = 0, loadingState = 'lazy', opacity = 1, width = '100%', cursor = 'default', altWidth = '100%', imgHeight = '100%', expandContent = () => {}, disableErr = false, hideOnError = false, id, imageError = "https://res.cloudinary.com/drlkgoter/image/upload/v1674339889/no-picture_m4dmai.jpg", onLoad = () => {}, backgroundColor = null, altHeight = '100%', minLoadHeight = null, borderRadius, errorIconDimension = 50, nsfw = false}) => {
+export const Image = ({alt_image, draggable = false,image_class, img_id, image, objectFit = 'cover', position = 'relative', zIndex = 0, loadingState = 'lazy', opacity = 1, width = '100%', cursor = 'default', altWidth = '100%', imgHeight = '100%', expandContent = () => {}, disableErr = false, hideOnError = false, id, imageError = "https://res.cloudinary.com/drlkgoter/image/upload/v1674339889/no-picture_m4dmai.jpg", onLoad = () => {}, backgroundColor = null, altHeight = '100%', minLoadHeight = null, borderRadius, errorIconDimension = 50, nsfw = false, height = '100%'}) => {
 
     const [loading, toggleLoading] = React.useState(true);
 
     const [error, toggleError] = React.useState(false);
-
-    const [size, setSize] = React.useState({});
 
     const primaryColor = useSelector(selectPrimaryColor);
 
@@ -38,13 +36,15 @@ export const Image = ({draggable = false,image_class, img_id, image, objectFit =
     const handleError = (e) => {
 
         if (disableErr) return toggleLoading(false);
+        
+        if (alt_image) return e.target.src = alt_image;
 
         toggleError(true);
     
     }
 
     return (
-        <div id={id} style={{borderRadius: borderRadius, overflow: 'hidden',zIndex: zIndex, position: position, objectFit: objectFit, width: width, minHeight: loading && !error ? minLoadHeight : null, height: '100%', opacity: opacity, display: (error && hideOnError) ? 'none' : null, backgroundColor: backgroundColor, display: 'inline-block'}}>
+        <div id={id} style={{borderRadius: borderRadius, overflow: 'hidden',zIndex: zIndex, position: position, objectFit: objectFit, width: width, minHeight: loading && !error ? minLoadHeight : null, height: height, opacity: opacity, display: (error && hideOnError) ? 'none' : null, backgroundColor: backgroundColor, display: 'inline-block'}}>
             {loading && image !== "" && image !== undefined && disableErr === false && error === false ?
             <motion.div 
             style={{
@@ -68,14 +68,14 @@ export const Image = ({draggable = false,image_class, img_id, image, objectFit =
             <NsfwImageOverlay borderRadius={borderRadius} />
             : null}
             
-            {error && !disableErr ?
+            {error && disableErr ? null : error ?
             <ImageErrorIcon width={errorIconDimension} height={errorIconDimension} />
-            : <motion.img 
+            : <img 
             drag={draggable}
             className={image_class}
             id={img_id}
             onClick={() => {expandContent(image)}}
-            onError={handleError} loading={loadingState} draggable={false} style={{maxHeight: altHeight, width: width, maxWidth: altWidth, height: imgHeight, objectFit: objectFit, cursor: cursor, opacity: (!image || image === "") ? 0 : 1, transition: '0.1s', borderRadius: borderRadius}} transition={{duration: 0.05}} initial={{opacity: 0}} animate={imageAnimation} onLoad={handleImageLoad} src={image} />}
+            onError={handleError} loading={loadingState} draggable={false} style={{maxHeight: altHeight, width: width, maxWidth: altWidth, height: imgHeight, objectFit: objectFit, cursor: cursor, opacity: opacity, transition: '0.1s', borderRadius: borderRadius}} onLoad={handleImageLoad} src={image} />}
         </div>
     )
 }

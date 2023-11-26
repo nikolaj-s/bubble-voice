@@ -1,7 +1,7 @@
 import Axios from "axios";
 import { getToken, url } from "./Validation";
 
-export const FetchMemberDetails = async (username) => {
+export const FetchMemberDetails = async (username, server_id) => {
     try {
 
         const token = await getToken();
@@ -9,7 +9,7 @@ export const FetchMemberDetails = async (username) => {
         const member = await Axios({
             method: "GET",
             url: `${url}/fetch-member-details`,
-            headers: {TOKEN: token, username: username},
+            headers: {TOKEN: token, username: username, server_id: server_id},
         }).then(response => {
             return response.data;
         })

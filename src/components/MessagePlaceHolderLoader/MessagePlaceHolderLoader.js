@@ -13,12 +13,14 @@ export const MessagePlaceHolderLoader = () => {
         <>
         <div
         style={{
-            width: '100%',
+            width: 'calc(100% - 10px)',
             height: '500px',
             borderRadius: '8px',
             overflow: 'hidden',
             position: 'relative',
-            marginBottom: 5
+            marginBottom: 5,
+            flexShrink: 0,
+            marginLeft: 5
         }}
         >
             <motion.div 
@@ -38,12 +40,15 @@ export const MessagePlaceHolderLoader = () => {
         </div>
         <div
         style={{
-            width: '100%',
+            width: 'calc(100% - 10px)',
             height: '150px',
             borderRadius: '8px',
             overflow: 'hidden',
             position: 'relative',
-            marginBottom: 5
+            marginBottom: 5,
+            flexShrink: 0,
+            marginLeft: 5
+            
         }}>
             <motion.div 
             style={{
@@ -62,12 +67,14 @@ export const MessagePlaceHolderLoader = () => {
         </div>
         <div
         style={{
-            width: '100%',
+            width: 'calc(100% - 10px)',
             height: '300px',
             borderRadius: '8px',
             overflow: 'hidden',
             position: 'relative',
-            marginBottom: 5
+            marginBottom: 5,
+            flexShrink: 0,
+            marginLeft: 5
         }}>
             <motion.div 
             style={{
@@ -86,12 +93,14 @@ export const MessagePlaceHolderLoader = () => {
         </div>
         <div
         style={{
-            width: '100%',
+            width: 'calc(100% - 10px)',
             height: '150px',
             borderRadius: '8px',
             overflow: 'hidden',
             position: 'relative',
-            marginBottom: 5
+            marginBottom: 5,
+            flexShrink: 0,
+            marginLeft: 5
         }}>
             <motion.div 
             style={{
@@ -110,12 +119,14 @@ export const MessagePlaceHolderLoader = () => {
         </div>
         <div
         style={{
-            width: '100%',
+            width: 'calc(100% - 10px)',
             height: '600px',
             borderRadius: '8px',
             overflow: 'hidden',
             position: 'relative',
-            marginBottom: 5
+            marginBottom: 5,
+            flexShrink: 0,
+            marginLeft: 5
         }}>
             <motion.div 
             style={{

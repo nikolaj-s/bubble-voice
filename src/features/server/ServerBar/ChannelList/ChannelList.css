@@ -12,6 +12,33 @@
     margin-top: 4px;
 }
 
+.channel-list-collapse-button {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: calc(100% - 3px);
+    height: 15px;
+    opacity: 0.5;
+    cursor: pointer;
+    padding: 10px 0px 4px 3px;
+    transition: 0.05s;
+}
+
+.channel-list-collapse-button svg {
+    width: 15px;
+    height: 20px;
+}
+
+.channel-list-collapse-button:hover {
+    opacity: 1;
+}
+
+.channel-list-collapse-button p {
+    font-size: 0.8rem;
+    font-weight: 300;
+    margin-left: 5px;
+}
+
 .channel-list-button-wrapper {
     width: calc(100%);
     display: flex;

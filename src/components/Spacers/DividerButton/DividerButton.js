@@ -22,13 +22,12 @@ export const DividerButton = ({action, state, name, extra}) => {
         onMouseLeave={() => {toggleHover(false)}}
         style={{backgroundColor: hover ? primaryColor : secondaryColor}}
         className='divider-button-container'>
-            <h3 style={{color: textColor}}>{name}</h3>
+            <h3 style={{color: textColor}}>{name}
             {extra ?
-            <>
-            <div style={{width: 5, height: 5, borderRadius: '50%', backgroundColor: textColor, margin: '0px 5px 0px 0px', flexShrink: 0}} />
-            <h3 style={{color: textColor}}>{extra}</h3>
-            </>
+            ` - ${extra}`
             : null}
+            </h3>
+            
             <div style={{backgroundColor: textColor}} className='divider-line' />
             <AltDownIcon flip={state} />
         </div>

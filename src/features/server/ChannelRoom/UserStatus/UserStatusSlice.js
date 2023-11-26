@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetchSavedLocalData, saveLocalData } from "../../../../util/LocalData";
 import { socket } from "../../ServerBar/ServerBar";
-import { addActivityMessage, updateMemberActiveStatus } from "../../ServerSlice";
+import {updateMemberActiveStatus } from "../../ServerSlice";
 
 export const updateUserStatus = createAsyncThunk(
     'UserStatusSlice/updateUserStatus',

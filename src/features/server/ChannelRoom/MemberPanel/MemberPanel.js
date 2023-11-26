@@ -6,7 +6,7 @@ import { selectCurrentMemberPanel, selectPanelOrigin, selectPanelPositionX, sele
 import "./MemberPanel.css";
 import { selectAccentColor, selectGlassColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { Image } from '../../../../components/Image/Image';
-import { selectServerGroups, selectServerMembers, throwServerError } from '../../ServerSlice';
+import { selectServerGroups, selectServerId, selectServerMembers, throwServerError } from '../../ServerSlice';
 import { TextButton } from '../../../../components/buttons/textButton/TextButton';
 import { selectProfileBio, selectProfileColor, selectProfilePinnedMessage, selectShowCaseScreenShotsState, selectUsername, selectUsersScreenShots } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
@@ -47,6 +47,8 @@ export const MemberPanel = () => {
 
     const [screenShots, setScreenShots] = React.useState([]);
 
+    const [serverScore, setServerScore] = React.useState(0);
+
     const userColor = useSelector(selectProfileColor);
 
     const selectedMember = useSelector(selectCurrentMemberPanel);
@@ -82,6 +84,8 @@ export const MemberPanel = () => {
     const pinned_message = useSelector(selectProfilePinnedMessage);
 
     const accentColor = useSelector(selectAccentColor);
+
+    const server_id = useSelector(selectServerId);
 
     const closePanel = (e) => {
 
@@ -128,41 +132,31 @@ export const MemberPanel = () => {
 
             setMember(members[u_index]);
 
-            if (members[u_index].username === username) {
-                setBio(userbio);
+            if (members[u_index]?.color) setColor(members[u_index]?.color);
 
-                toggleLoading(false);
+            setTimeStamp(GetTimeDifference(members[u_index]?.last_online))
 
-                setColor(userColor);
+            timeout = setTimeout(() => {
+                FetchMemberDetails(members[u_index]?.username, server_id)
+                .then(user => {
+                    console.log(user)
+                    if (user.error) return dispatch(throwServerError({error: true, errorMessage: user.errorMessage}))
+                    
+                    if (user.bio) setBio(user.bio);
 
-                setMessage(pinned_message);
+                    setScreenShots(user.screenShots)
+                    
+                    if (user.pinned_message) setMessage(user.pinned_message);
 
-               setScreenShots(local_screenShots);
-                
-            } else if (members[u_index]?.username) {
+                    if (user.server_score) setServerScore(user.server_score);
 
-                if (members[u_index]?.color) setColor(members[u_index]?.color);
+                    toggleLoading(false);
 
-                setTimeStamp(GetTimeDifference(members[u_index]?.last_online))
+                    console.log(user.recent_activity)
+                })
+            }, 300)
 
-                timeout = setTimeout(() => {
-                    FetchMemberDetails(members[u_index]?.username)
-                    .then(user => {
-                        if (user.error) return dispatch(throwServerError({error: true, errorMessage: "Fatal Error Fetching Member Details"}))
-                        
-                        if (user.bio) setBio(user.bio);
-
-                        setScreenShots(user.screenShots)
-                        
-                        if (user.pinned_message) setMessage(user.pinned_message);
-
-                        toggleLoading(false);
-
-                        console.log(user.recent_activity)
-                    })
-                }, 600)
-
-            }
+            
         }
 
        
@@ -225,7 +219,7 @@ export const MemberPanel = () => {
                             <h4 style={{color: textColor, opacity: 0.8}}>#{member.username}</h4>
                             <div className='member-score-container'>
                                 <ScoreButton description={"Server Score"} padding={3} width={15} height={15}  />
-                                <p style={{color: textColor}}>{member.server_score}</p>
+                                <p style={{color: textColor}}>{serverScore}</p>
                             </div>
                         </div>
                         {member.username !== username && member.status !== 'offline' ? 

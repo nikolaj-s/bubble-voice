@@ -137,7 +137,6 @@ export const Music = () => {
         if (musicQueue.length === 0) return;
 
         if (!musicPlaying) return;
-        console.log(musicQueue[0])
         let interval = setInterval(() => {
 
             dispatch(setTime((time === 0 && musicQueue[0]?.current ? musicQueue[0]?.current : time + 1)));
@@ -155,7 +154,7 @@ export const Music = () => {
         <div 
         style={{
             display: disableMediaWidget ? 'none' : (currentlyPlaying) ? 'flex' : 'none',
-           
+            backgroundColor: 'black'
 
         }}
         id={'room-media-player-component'}

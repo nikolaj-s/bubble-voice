@@ -12,7 +12,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <Provider store={store}>
-    <AnimatePresence exitBeforeEnter >
+    <AnimatePresence>
       <HashRouter window={window}>
         <App />
       </HashRouter>
