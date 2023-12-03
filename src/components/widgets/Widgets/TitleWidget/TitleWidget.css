@@ -10,4 +10,5 @@
 .title-widget-container h2 {
     font-weight: 400;
     letter-spacing: var(--font-spacing);
+    text-align: center;
 }

@@ -5,27 +5,26 @@
     left: 0;
 }
 .screen-share-menu {
-    border-radius: 8px;
-    
-    width: 500px;
-    height: 500px;
-    max-height: calc(100% - 150px);
-    left: 55px;
-    display: flex;
-    flex-wrap: wrap;
-    overflow: hidden;
-    justify-content: space-around;
-    padding: 5px 5px 5px 5px;
+    position: fixed;
+    left: 5px;
+    padding: 5px;
+    bottom: 55px;
+    width: 300px;
+    height: 400px;
+    border-radius: 10px;
+    z-index: 10;
+    box-shadow: 5px -5px 20px rgba(0, 0, 0, 0.582);
 }
 
 .inner-screen-button-wrapper {
     width: calc(100%);
-    height: calc(100% - 5px);
+    height: calc(100% - 38px);
     justify-content: center;
     margin-top: 5px;
     overflow-y: auto;
     display: flex;
     flex-wrap: wrap;
+    margin-bottom: 3px;
 }
 
 .screen-share-menu h3 {

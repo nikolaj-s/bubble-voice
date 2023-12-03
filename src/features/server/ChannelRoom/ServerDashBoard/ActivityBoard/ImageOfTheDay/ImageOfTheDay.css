@@ -1,6 +1,6 @@
 
 .image-of-the-day-container {
-    width: calc(100% - 20px);
+    width: calc(100% - 10px);
     min-height: 90px;
     border-radius: 10px;
     overflow: hidden;

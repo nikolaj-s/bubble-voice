@@ -24,6 +24,8 @@ export const Video = ({backgroundColor = 'black', maxHeight = '100%', video, id,
     const visible = useIntersection(ref, '-400px');
 
     const [muted, toggleMuted] = React.useState(true);
+
+    const [altAudioAttempted, toggleAltAudioAttempted] = React.useState(false);
     
     const [playing, togglePlaying] = React.useState(false);
 
@@ -200,6 +202,17 @@ export const Video = ({backgroundColor = 'black', maxHeight = '100%', video, id,
 
     }
 
+    const handleAltAudio = (e) => {
+
+        if (e.target.src === null || altAudioAttempted) return;
+
+        e.target.src = video?.includes('v.redd') ? video?.split('_')[0] + '_audio.mp4' : null;
+
+        e.target.currentTime = currentTime;
+
+        toggleAltAudioAttempted(true);
+    }
+
     return (
         <div 
         style={{
@@ -224,7 +237,7 @@ export const Video = ({backgroundColor = 'black', maxHeight = '100%', video, id,
             onEnded={onVideoEnd} autoPlay={forceAutoPlay ? true : looping ? true : false} id={video + id} controls={false} loop={true} 
             src={video}
             />
-            <audio hidden={true} muted={mutedToggled ? true : false} loop={true} src={video?.includes('v.redd') ? video?.split('_')[0] + '_AUDIO_64.mp4' : null} autoPlay={looping ? true : false} id={video + 'audio'} />
+            <audio onError={handleAltAudio} hidden={true} muted={mutedToggled ? true : false} loop={true} src={video?.includes('v.redd') ? video?.split('_')[0] + '_AUDIO_64.mp4' : null} autoPlay={looping ? true : false} id={video + 'audio'} />
             <VideoPlayOverlayAnimation interacted={interacted} color={color} playing={playing} />
             {(looping || !interacted) ? null :
             <motion.div 
@@ -234,11 +247,11 @@ export const Video = ({backgroundColor = 'black', maxHeight = '100%', video, id,
             className='message-video-controls-container'>
                 <div className='inner-video-controls-container'>
                     {playing ?
-                    <PauseButton borderRadius={10} background={glassColor} width={15} height={15} action={handlePlayState} />
+                    <PauseButton desc_width={60} borderRadius={10} background={glassColor} width={15} height={15} action={handlePlayState} />
                     :
-                    <PlayButton borderRadius={10} background={glassColor} width={15} height={15} action={handlePlayState} />
+                    <PlayButton desc_width={60} borderRadius={10} background={glassColor} width={15} height={15} action={handlePlayState} />
                     }
-                    <AudioToggleButton borderRadius={10} background={glassColor} o_mouseEnter={() => {toggleShowVolume(true)}} o_mouseLeave={() => {toggleShowVolume(false)}}  width={15} height={15} action={handleMuteState} state={!social_mute} />
+                    <AudioToggleButton  borderRadius={10} background={glassColor} o_mouseEnter={() => {toggleShowVolume(true)}} o_mouseLeave={() => {toggleShowVolume(false)}}  width={15} height={15} action={handleMuteState} state={!social_mute} />
                     {showVolume ? <div onMouseEnter={() => {toggleShowVolume(true)}} onMouseLeave={() => {toggleShowVolume(false)}}  className='video-volume-slider'>
                         <Range disableBackground={true} action={handleVolumeChange} value={videoVolume} min={0} max={1} step={0.01} />
                     </div> : null}

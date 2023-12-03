@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 // state
 import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor, selectTransparentPrimaryColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 
-export const ButtonAnimationWrapper = ({align_desc_right, active_background, desc_width = '100%', background, onMouseDown = () => {},display = 'flex', action = () => {}, position = 'relative', zIndex = 0, top = 0, left = 0, className, width = 50, height = 50, borderRadius = '5px', justifyContent = 'center', invert = false, pointerOptions = null, children, active = false, opacity = 1, id = "", margin, right, description, flip_description = false, padding = 10, altInvert = false, right_orientation_desc = false, o_mouseEnter = () => {}, o_mouseLeave = () => {}, desc_o_mouse_leave = () => {}, desc_space = 25, transparent, desc_font_size = '0.7rem'}) => {
+export const ButtonAnimationWrapper = ({align_desc_right, active_background, desc_width = '100%', background, onMouseDown = () => {},display = 'flex', action = () => {}, position = 'relative', zIndex = 0, top = 0, left = 0, className, width = 50, height = 50, borderRadius = '5px', justifyContent = 'center', invert = false, pointerOptions = null, children, active = false, opacity = 1, id = "", margin, right, description, flip_description = false, padding = 10, altInvert = false, right_orientation_desc = false, o_mouseEnter = () => {}, o_mouseLeave = () => {}, desc_o_mouse_leave = () => {}, desc_space = 25, transparent, desc_font_size = '0.8rem'}) => {
 
     const animation = useAnimation();
 
@@ -113,7 +113,7 @@ export const ButtonAnimationWrapper = ({align_desc_right, active_background, des
                 boxShadow: '4px 4px 20px rgba(0, 0, 0, 0.4)',
                 animation: 'pop-in forwards linear 0.1s',
                 }}>
-            <p style={{color: textColor, padding: '0px', margin: 0, textAlign: 'center', fontSize: desc_font_size}}>{description}</p>
+            <p style={{color: textColor, padding: '0px 3px', margin: 0, textAlign: 'center', fontSize: desc_font_size}}>{description}</p>
             </motion.div>: null}
         <motion.div
         id={id}

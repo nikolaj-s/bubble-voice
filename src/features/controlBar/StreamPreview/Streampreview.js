@@ -16,7 +16,7 @@ export const Streampreview = () => {
     return (
         <motion.div
         initial={{height: 0, opacity: 0}}
-        animate={{height: 150, opacity: 1}}
+        animate={{height: 152, opacity: 1}}
         exit={{opacity: 0, height: 0}}
         className='stream-preview-wrapper'
         key={'user-streaming-preview-container'}

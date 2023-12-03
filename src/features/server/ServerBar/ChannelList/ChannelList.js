@@ -128,7 +128,7 @@ export const ChannelList = ({loading}) => {
     return (
         <>
         <motion.div 
-        style={{backgroundColor: glass ? glassColor : secondaryColor, maxHeight: currentScreen ? 'calc(100% - 275px)' : 'calc(100%)'}}
+        style={{backgroundColor: secondaryColor, maxHeight: currentScreen ? 'calc(100% - 270px)' : 'calc(100%)'}}
         className='channel-list-outer-container'>
                 <div 
                 onClick={() => {toggleCollapse(!collapse)}}

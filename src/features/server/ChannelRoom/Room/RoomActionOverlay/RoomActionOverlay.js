@@ -10,6 +10,8 @@ import { removeWidgetActionFromQueue, selectOverlayQueue } from './RoomActionOve
 import { SongStatusOverlay } from './SongStatusOverlay/SongStatusOverlay';
 import { WheelSpinOverlay } from './WheelSpinOverlay/WheelSpinOverlay';
 
+import "./RoomActionOverlay.css";
+
 export const RoomActionOverlay = ({page}) => {
 
     const dispatch = useDispatch();
@@ -25,10 +27,16 @@ export const RoomActionOverlay = ({page}) => {
     return (
         <>
         <AnimatePresence mode='wait' >
-            {overlayQueue[0]?.action === 'song-status' ? <SongStatusOverlay data={overlayQueue[0]} key={'song-status-overlay'} onEnd={handleOnEnd} /> : null}
-            {overlayQueue[0]?.action === 'wheel-spin' ? <WheelSpinOverlay page={page} key={"wheel-spin-overlay"} data={overlayQueue[0]} onEnd={handleOnEnd} /> : null}
-            {overlayQueue[0]?.action === 'new-message' ? <MessageOverlay page={page} key={'message-overlay'} data={overlayQueue[0]} onEnd={handleOnEnd} />  : null}
-            {overlayQueue[0]?.action === 'now-playing' ? <NowPlayingOverlay page={page} data={overlayQueue[0]} onEnd={handleOnEnd} /> : null}
+            <div className='room-action-overlay-wrapper'>
+                {overlayQueue.slice(0, 4).map((data, key) => {
+                    return (
+                    overlayQueue[key]?.action === 'song-status' ? <SongStatusOverlay data={overlayQueue[key]} key={'song-status-overlay'} onEnd={handleOnEnd} /> :
+                    overlayQueue[key]?.action === 'wheel-spin' ? <WheelSpinOverlay page={page} key={"wheel-spin-overlay"} data={overlayQueue[key]} onEnd={handleOnEnd} /> : 
+                    overlayQueue[key]?.action === 'new-message' ? <MessageOverlay page={page} key={'message-overlay'} data={overlayQueue[key]} onEnd={handleOnEnd} />  : 
+                    overlayQueue[key]?.action === 'now-playing' ? <NowPlayingOverlay page={page} data={overlayQueue[key]} onEnd={handleOnEnd} /> : null
+                    )
+                })}
+            </div>
         </AnimatePresence>
         </>
     )

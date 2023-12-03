@@ -13,6 +13,7 @@ import "./ScreenShareMenu.css";
 import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
 import { handleSaveVoiceVideoSettings, selectExperimentalAudioCapture, toggleSelectedVoiceVideoState } from '../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 import { RadioButton } from '../../../components/buttons/RadioButton/RadioButton';
+import { selectSecondaryColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 export const ScreenShareMenu = () => {
 
@@ -21,6 +22,8 @@ export const ScreenShareMenu = () => {
     const screens = useSelector(selectScreens);
 
     const enableAudio = useSelector(selectExperimentalAudioCapture);
+
+    const secondaryColor = useSelector(selectSecondaryColor);
 
     const selectScreen = (id, name) => {
         
@@ -58,24 +61,7 @@ export const ScreenShareMenu = () => {
     return (
         <>
         <motion.div
-        initial={{
-            height: 20,
-            width:190,
-            bottom: 5,
-            opacity: 0
-        }}
-        animate={{
-            height: 345,
-            width: 345,
-            bottom: 6,
-            opacity: 1
-        }}
-        exit={{
-            width: 190,
-            height:10,
-            maxHeight: 10,
-            opacity: 0
-        }}
+        style={{backgroundColor: secondaryColor}}
         onClick={(e) => {e.stopPropagation()}}
         key={"screen-share-menu"}
         className='screen-share-menu'>
@@ -87,9 +73,9 @@ export const ScreenShareMenu = () => {
                     return <ScreenButton action={selectScreen} id={screen.id} name={screen.name} key={screen.id} thumbnail={screen.thumbnail} icon={screen.icon} />
                 })}
             </div> 
-            
+            <RadioButton margin={'0px 0px 5px 0px'} width='calc(100% - 10px)' invert={true} action={handleAudioToggle} name={"Capture Audio"} state={enableAudio} />
         </motion.div>
-        <RadioButton margin={'0px 0px 5px 5px'} width='calc(100% - 20px)' invert={true} action={handleAudioToggle} name={"Capture Audio"} state={enableAudio} />
+       
         </>
     )
 }

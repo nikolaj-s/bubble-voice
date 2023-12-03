@@ -9,7 +9,7 @@ import { selectPrimaryColor, selectSecondaryColor } from '../../features/setting
 import { ImageErrorIcon } from '../Icons/ImageErrorIcon/ImageErrorIcon';
 import { NsfwImageOverlay } from './NsfwImageOverlay/NsfwImageOverlay';
 import { selectDisableNsfwBlur } from '../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
-export const Image = ({alt_image, draggable = false,image_class, img_id, image, objectFit = 'cover', position = 'relative', zIndex = 0, loadingState = 'lazy', opacity = 1, width = '100%', cursor = 'default', altWidth = '100%', imgHeight = '100%', expandContent = () => {}, disableErr = false, hideOnError = false, id, imageError = "https://res.cloudinary.com/drlkgoter/image/upload/v1674339889/no-picture_m4dmai.jpg", onLoad = () => {}, backgroundColor = null, altHeight = '100%', minLoadHeight = null, borderRadius, errorIconDimension = 50, nsfw = false, height = '100%'}) => {
+export const Image = ({aspect_ratio,alt_image = null, draggable = false,image_class, img_id, image, objectFit = 'cover', position = 'relative', zIndex = 0, loadingState = 'lazy', opacity = 1, width = '100%', cursor = 'default', altWidth = '100%', imgHeight = '100%', expandContent = () => {}, disableErr = false, hideOnError = false, id, imageError = "https://res.cloudinary.com/drlkgoter/image/upload/v1674339889/no-picture_m4dmai.jpg", onLoad = () => {}, backgroundColor = null, altHeight = '100%', minLoadHeight = null, borderRadius, errorIconDimension = 50, nsfw = false, height = '100%'}) => {
 
     const [loading, toggleLoading] = React.useState(true);
 
@@ -35,12 +35,12 @@ export const Image = ({alt_image, draggable = false,image_class, img_id, image, 
 
     const handleError = (e) => {
 
-        if (disableErr) return toggleLoading(false);
+        toggleLoading(false);
         
         if (alt_image) return e.target.src = alt_image;
 
         toggleError(true);
-    
+    console.log('error loading img')
     }
 
     return (
@@ -75,7 +75,7 @@ export const Image = ({alt_image, draggable = false,image_class, img_id, image, 
             className={image_class}
             id={img_id}
             onClick={() => {expandContent(image)}}
-            onError={handleError} loading={loadingState} draggable={false} style={{maxHeight: altHeight, width: width, maxWidth: altWidth, height: imgHeight, objectFit: objectFit, cursor: cursor, opacity: opacity, transition: '0.1s', borderRadius: borderRadius}} onLoad={handleImageLoad} src={image} />}
+            onError={handleError} loading={loadingState} draggable={false} style={{maxHeight: altHeight, width: width, maxWidth: altWidth, height: imgHeight, objectFit: objectFit, cursor: cursor, opacity: loading ? 0 : opacity, transition: '0.1s', borderRadius: borderRadius, aspectRatio: aspect_ratio}} onLoad={handleImageLoad} src={image} />}
         </div>
     )
 }

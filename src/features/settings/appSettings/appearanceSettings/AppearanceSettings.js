@@ -133,8 +133,6 @@ const Settings = () => {
             <ColorInput selector="activationColor" action={handleInput} rgb={activationColor} />
             <InputTitle title={"Disable Animated Transitions *this may improve performance"} />
             <ToggleButton state={disableTransistions} action={toggleAnimatedTransitions}  />
-            <InputTitle title={"Glass UI"} />
-            <ToggleButton action={handleGlassUi} state={glass} />
             <InputTitle title={'App Scale'} />
             <RadioButton name={'Default'} state={scale.name === 'default'} action={() => {handleUpdateScale({name: 'default', scale: 0})}} />
             <RadioButton  name={'Small'} state={scale.name === 'small'} action={() => {handleUpdateScale({name: 'small', scale: -0.8})}}  />

@@ -1,14 +1,11 @@
 
 .message-overlay-container {
-    position: absolute;
-    right: 0px;
-    width: calc(100% - 2rem);
+    max-width: calc(100% - 10px);
     max-height: 90%;
-    max-width: 350px;
-    right: 5px;
     padding: 5px;
     overflow: hidden;
     border-radius: 10px;
+    margin-top: 4px;
     z-index: 5;
-    box-shadow: 10px 10px 20px rgb(0, 0, 0);
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.557);
 }

@@ -22,13 +22,16 @@ export const WebCamButton = ({action, state, active, id, loading = true, width =
     altInvert={true}
     position={'relative'}
     background={!state ? activationColor : null}
-    description={active ? null : `Turn ${state ? 'On' : 'Off'} Webcam`}
+    description={active ? null : `Turn ${state ? 'on' : 'off'} Webcam`}
     zIndex={5}
     borderRadius={5}
+    desc_width='100px'
     >
         <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M31 15.25C31 13.5924 30.3415 12.0027 29.1694 10.8306C27.9973 9.65848 26.4076 9 24.75 9H10.25C8.5924 9 7.00268 9.65848 5.83058 10.8306C4.65848 12.0027 4 13.5924 4 15.25V32.75C4 34.4076 4.65848 35.9973 5.83058 37.1694C7.00268 38.3415 8.5924 39 10.25 39H24.75C26.4076 39 27.9973 38.3415 29.1694 37.1694C30.3415 35.9973 31 34.4076 31 32.75V15.25ZM33 29.532L39.961 34.968C41.603 36.25 44 35.08 44 32.998V15.003C44 12.92 41.603 11.751 39.961 13.033L33 18.468V29.532Z" fill={color}/>
-        </svg>
+<path d="M32.4 12.9167C32.4 10.817 31.6098 8.8034 30.2033 7.31874C28.7968 5.83408 26.8891 5 24.9 5H7.5C5.51088 5 3.60322 5.83408 2.1967 7.31874C0.790176 8.8034 0 10.817 0 12.9167V35.0833C0 37.183 0.790176 39.1966 2.1967 40.6813C3.60322 42.1659 5.51088 43 7.5 43H24.9C26.8891 43 28.7968 42.1659 30.2033 40.6813C31.6098 39.1966 32.4 37.183 32.4 35.0833V12.9167ZM34.8 31.0072L43.1532 37.8928C45.1236 39.5167 48 38.0347 48 35.3975V12.6038C48 9.96533 45.1236 8.4846 43.1532 10.1085L34.8 16.9928V31.0072Z" fill={color}/>
+</svg>
+
+
         <Loading success_size={{width: 30, height: 30}} loading={loading} />
     </ButtonAnimationWrapper>
   )

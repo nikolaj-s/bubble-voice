@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 // state
 import { handlePinMessageToProfile, selectDisplayName, selectUserImage, selectUsername } from '../../../../settings/appSettings/accountSettings/accountSettingsSlice';
-import { selectPinningMessage, selectUsersPermissions, throwServerError } from '../../../ServerSlice';
+import { selectCurrentChannel, selectCurrentChannelId, selectPinningMessage, selectUsersPermissions, throwServerError } from '../../../ServerSlice';
 
 // components
 import { MessageInput } from '../../../../../components/inputs/MessageInput/MessageInput';
@@ -22,7 +22,7 @@ import { Loading } from '../../../../../components/LoadingComponents/Loading/Loa
 import { PersistedDataNotice } from '../../../../../components/PersistedDataNotice/PersistedDataNotice';
 
 import { sendDirectMessage, updateDirectmessage } from '../../../../Messages/MessagesSlice';
-import { selectGlassColor, selectGlassState, selectSecondaryColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassColor, selectGlassState, selectPrimaryColor, selectSecondaryColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { fetchMessages, messageCleanUp, selectAllMessages, selectAltSocialLoading, selectLoadingMessages, selectNsfwNoticeState, sendMessage, togglePinMessage, toggleSocialAltLoading } from '../../../SocialSlice';
 import { saveSocialData, SOCIAL_DATA } from '../../../../../util/LocalData';
 import { MessagePlaceHolderLoader } from '../../../../../components/MessagePlaceHolderLoader/MessagePlaceHolderLoader';
@@ -68,15 +68,15 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
     const glassColor = useSelector(selectGlassColor);
 
-    const secondaryColor = useSelector(selectSecondaryColor);
-
-    const glassState = useSelector(selectGlassState);
+    const inChannel = useSelector(selectCurrentChannelId);
 
     const social = useSelector(selectAllMessages);
 
     const userImage = useSelector(selectUserImage);
 
-    const nsfwNotice = useSelector(selectNsfwNoticeState)
+    const nsfwNotice = useSelector(selectNsfwNoticeState);
+
+    const primaryColor = useSelector(selectPrimaryColor);
 
     let allMessages = direct_message ? currentChannel.social : social[channelId];
 
@@ -334,8 +334,8 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
     return (
         <div 
         onKeyUp={focusTextInput}
-        style={{backgroundColor: glassState ? glassColor : secondaryColor}}
         className='social-outer-container'
+        style={{backgroundColor: inChannel ? primaryColor : null}}
         >
         {permission?.user_can_view_channel_content ?
             <>
@@ -345,7 +345,9 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
             </motion.div>
             : null}
             
-            <div className='social-wrapper-container'>
+            <div 
+            style={{backgroundColor: glassColor}}
+            className='social-wrapper-container'>
                 <div  className='social-inner-container'>
                     
                     <div onScroll={handleLoadMoreOnScroll} ref={messagesRef} className='social-messages-wrapper'>

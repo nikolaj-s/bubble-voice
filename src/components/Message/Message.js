@@ -7,7 +7,7 @@ import { Image } from '../Image/Image'
 import { Video } from '../Video/Video'
 
 // state
-import {  selectAccentColor, selectGlassPrimaryColor, selectPrimaryColor, selectSecondaryColor, selectTextColor, selectTransparentPrimaryColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import {  selectAccentColor, selectGlassPrimaryColor, selectGlassState, selectPrimaryColor, selectSecondaryColor, selectTextColor, selectTransparentPrimaryColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./Message.css";
@@ -55,7 +55,7 @@ export const Message = ({activity_feed = false,dashboard = false, direct_message
 
     const hideLinksOnMedia = useSelector(selectHideLinksOnMedia);
 
-    const glassPrimary = useSelector(selectGlassPrimaryColor);
+    const glassPrimary = useSelector(selectSecondaryColor);
 
     React.useEffect(() => {
         setUser(members.find(member => member.username === current_message.username))
@@ -118,9 +118,11 @@ export const Message = ({activity_feed = false,dashboard = false, direct_message
                     <h2 className='emoji-reaction-mesage'>{message.emoji}</h2>
                     : null}
                     <MessageText loading={message.loading} style={message.textStyle} color={textColor} text={message.text} />
-                    {hideLinksOnMedia && (message.image || message.video || message.iFrame) || message.gallery ? null : message.link_preview ?
+                    {hideLinksOnMedia && (message.image || message.video || message.iFrame) || message.gallery ? null : <MessageLink link={message.link} />
+                    }
+                    {message.link_preview ?
                     <LinkPreview data={message.link_preview} />
-                    : <MessageLink link={message.link} />}
+                    : null}
                     <div className='message-content-wrapper'>
                             <Iframe marginRight={5}  link={message.iFrame} />
                             <MessageGallery gallery={message.gallery} expand={expandContent} />

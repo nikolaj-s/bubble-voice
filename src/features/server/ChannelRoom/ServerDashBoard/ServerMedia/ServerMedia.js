@@ -142,7 +142,7 @@ export const ServerMedia = ({media, expand}) => {
     
     return (
         <motion.div 
-        transition={disableTransition ? {duration: 0} : null}
+        transition={disableTransition ? {duration: 0} : {duration: 0.2}}
         className='server-media-wrappers' initial={{translateX: '100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}}>
             <div style={{backgroundColor: secondaryColor}} className='server-media-navigation-container'>
                     

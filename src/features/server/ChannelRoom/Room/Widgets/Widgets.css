@@ -4,9 +4,8 @@
     z-index: 3;
     top: 0;
     left: 0;
-    width: calc(100% - 10px);
-    height: calc(100% - 10px);
-    margin: 5px;
+    width: calc(100%);
+    height: calc(100%);
     display: flex;
     justify-content: center;
     overflow-y: auto;

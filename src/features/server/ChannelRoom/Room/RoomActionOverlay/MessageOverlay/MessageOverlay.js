@@ -35,8 +35,9 @@ export const MessageOverlay = ({data, onEnd, page}) => {
             display: messageOverlayDisabled || (page === 'social' || page === "widgets") ? 'none' : 'flex',
             backgroundColor: secondaryColor,
         }}
-        transition={{duration: 0.3}}
-        initial={{top: -400}} animate={{top: 5}} exit={{top: -400}} className='message-overlay-container'>
+        initial={{scale: 0}} 
+        animate={{scale: 1}} 
+        exit={{scale: 0}} className='message-overlay-container'>
             <Message dashboard={true} overlay={true} message={data.content} current_message={data} />
         </motion.div>
     )

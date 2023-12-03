@@ -4,13 +4,15 @@ import { CtxButton } from '../../buttons/ctxButton/CtxButton';
 
 import "./ServerManageMenu.css";
 import { useSelector } from 'react-redux';
-import { selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 export const ServerManageMenu = ({leaveServer, openAddChannel, permissions, open, openServerSettings}) => {
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
     const color = useSelector(selectTextColor);
+
+    const glassPrimary = useSelector(selectGlassPrimaryColor)
 
     return (
         <>
@@ -46,6 +48,7 @@ export const ServerManageMenu = ({leaveServer, openAddChannel, permissions, open
             <path d="M8.75 23.75H25M40 41.25H17.5M40 6.25H17.5M17.5 41.25V31.25M17.5 16.25V6.25M40 41.25V6.25" stroke={color} strokeWidth="3" strokeLinecap="round"/>
             </svg>}
             />
+            <div style={{height: 2, width: '90%', flexShrink: 0, backgroundColor: glassPrimary, marginTop: 4, alignSelf: 'center'}} />
         </div>
         : null}
         </>

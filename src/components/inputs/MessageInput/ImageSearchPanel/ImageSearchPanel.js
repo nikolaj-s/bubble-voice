@@ -167,7 +167,7 @@ export const ImageSearchPanel = ({channelId,hideOptions = false,direct_message, 
             {searchingForImage ?
             <div onClick={() => {close(false)}} className='image-search-outer-wrapper'>
                 <motion.div 
-                style={{left: direct_message ? '100px' : null, right: direct_message ? null : '20px', backgroundColor: disableTransparancy ? secondaryColor : glassColor}}
+                style={{left: direct_message ? '100px' : null, right: direct_message ? null : '20px', backgroundColor: secondaryColor}}
                 onClick={(e) => {e.stopPropagation()}}
                 key="message-image-search-container"
                 className='message-image-search-container'>

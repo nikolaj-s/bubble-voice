@@ -1,6 +1,6 @@
 
 .divider-button-container {
-    width: calc(100%  - 30px);
+    width: calc(100%  - 20px);
     padding: 5px;
     display: flex;
     justify-content: space-between;

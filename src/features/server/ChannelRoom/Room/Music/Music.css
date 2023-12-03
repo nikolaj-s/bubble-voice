@@ -40,7 +40,7 @@
     position: relative;
     padding-bottom: 10px;
     flex-shrink: 0;
-    box-shadow: 5px 5px 30px black;
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.443);
 }
 
 .media-widget-room-wrapper {

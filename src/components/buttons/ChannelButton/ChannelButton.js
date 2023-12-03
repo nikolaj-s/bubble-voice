@@ -218,7 +218,7 @@ export const ChannelButton = ({collapse, channel, action = () => {}, users, inde
             transition={{duration: 0}}
             style={{
                 backgroundColor: active ? accentColor : transparentPrimaryColor,
-                boxShadow: (users.length > 0 && channel.auth) ? '0 5px 10px -2px rgba(0,0,0,0.6)' : null,
+                boxShadow: (users.length > 0 && channel.auth) ? '0 5px 10px -2px rgba(0,0,0,0.3)' : null,
                 cursor: active ? "default" : "pointer",
                 marginBottom: users.length > 0 && channel.auth && !channel.status ? '8px' : null,
             }}

@@ -47,20 +47,6 @@ export const ServerBanner = ({serverName, serverImage, handleLeave}) => {
         }
     }, [])
 
-    const bannerLoaded = (e) => {
-        try {
-
-            if (disableServerAmbiance) return;
-
-           const color = GetImageColorData(e);
-        
-            dispatch(setServerbannerAmbiance(color));
-            
-        } catch (err) {
-            console.log(err)
-        }
-    }
-
     const openCreateChannelMenu = () => {
         
         dispatch(toggleCreateChannelMenu(!createChannelMenuOpen))
@@ -83,7 +69,7 @@ export const ServerBanner = ({serverName, serverImage, handleLeave}) => {
         }
     }
 
-
+console.log(serverImage)
     return (
         <>
         <motion.div 
@@ -105,7 +91,7 @@ export const ServerBanner = ({serverName, serverImage, handleLeave}) => {
 
         transition={{duration: 0.3}}
         className='server-banner-container' >
-            <Image cursor='pointer' backgroundColor={secondaryColor} disableErr={true} onLoad={bannerLoaded} id={"server-banner-image"} position='absolute' objectFit='cover' image={serverImage} />
+            {serverImage ? <Image cursor='pointer' backgroundColor={secondaryColor} id={"server-banner-image"} position='absolute' objectFit='cover' image={serverImage} /> : null}
             <motion.div 
             style={{
                 opacity: hover ? 1 : 0.8

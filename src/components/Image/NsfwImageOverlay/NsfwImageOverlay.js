@@ -1,12 +1,12 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { selectGlassPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
+import { selectPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 
 export const NsfwImageOverlay = ({borderRadius = '10px', height = '100%'}) => {
 
     const textColor = useSelector(selectTextColor);
 
-    const glassColor = useSelector(selectGlassPrimaryColor);
+    const glassColor = useSelector(selectPrimaryColor);
 
     return (
         <div 
@@ -22,7 +22,6 @@ export const NsfwImageOverlay = ({borderRadius = '10px', height = '100%'}) => {
             justifyContent: 'center',
             alignItems: 'center',
             backgroundColor: glassColor,
-            backdropFilter: 'blur(30px)',
             objectFit: 'contain',
             borderRadius: borderRadius,
             overflow: 'hidden',

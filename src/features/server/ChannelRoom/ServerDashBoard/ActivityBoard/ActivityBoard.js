@@ -42,7 +42,7 @@ export const ActivityBoard = ({loading}) => {
         <>
         {loading ? null :
         <motion.div 
-        transition={disableTransition ? {duration: 0} : null}
+        transition={disableTransition ? {duration: 0} : {duration: 0.2}}
         style={{padding: 0, width: '100%', height: '100%',
         }} 
         className='server-media-wrappers' 

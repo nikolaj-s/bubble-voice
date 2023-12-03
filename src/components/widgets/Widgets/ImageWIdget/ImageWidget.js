@@ -25,7 +25,8 @@ export const ImageWidget = ({widget, editing}) => {
 
     return (
         <div style={{backgroundColor: disableTransparancyEffects ? secondaryColor : `rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0.8)`}} onClick={expand} className='image-widget-container' >
-            <Image image={widget.content.text} objectFit='cover' />
+            <Image zIndex={1} image={widget.content.text} objectFit='contain' />
+            <img className='img-widget-blur' src={widget.content.text} />
         </div>
     )
 }

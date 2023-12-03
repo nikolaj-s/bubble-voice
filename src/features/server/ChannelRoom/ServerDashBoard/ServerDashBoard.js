@@ -69,11 +69,8 @@ export const ServerDashBoard = () => {
         <>
         {(page !== 'pins' && page  !== 'media' && page !== 'activity') ? null :
         <div 
-        style={{borderTop: `solid 4px ${glass ? glassColor : secondaryColor}`,
-        borderRight: `solid 4px ${glass ? glassColor : secondaryColor}`,
-        borderBottom: `solid 4px ${glass ? glassColor : secondaryColor}`}}
         className='server-dashboard-container'>
-            <div style={{backgroundColor: glass ? glassColor : secondaryColor, 
+            <div style={{backgroundColor: glassColor, 
                 }} className='server-dashboard-inner-container'>
                 {loadingPins || serverLoading ? <MessagePlaceHolderLoader /> : null}
                 <AnimatePresence>

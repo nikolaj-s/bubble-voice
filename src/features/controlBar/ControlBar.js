@@ -110,17 +110,17 @@ export const ControlBar = () => {
             {expandedOpen ?
             <ExpandedControlBar close={() => {toggleExpanded(false)}} />
             : null}
+            {selectingScreen ? <ScreenShareMenu key={'screeen-share-menu'} selectingScreens={selectingScreen} /> : null}
             <div onContextMenu={() => {toggleExpanded(!expandedOpen)}} className='control-bar-container' 
-            style={{backgroundColor: accentColor, boxShadow: selectingScreen ? '5px 5px 20px rgba(0, 0, 0, 1)' : null,}}
+            style={{backgroundColor: accentColor,}}
             >   
-                <AnimatePresence>
-                    {selectingScreen ? <ScreenShareMenu key={'screeen-share-menu'} selectingScreens={selectingScreen} /> : null}
+                <AnimatePresence> 
                     {currentScreen ? <Streampreview key={'stream-preview-container'} /> : null}
                 </AnimatePresence>
                 <ControlBarOptionsButton action={() => {toggleExpanded(!expandedOpen)}} state={!expandedOpen} />
                 <div style={{backgroundColor: accentColor}} className='controls-wrapper'>  
                     <MicToggleButton 
-                    width={25}
+                    width={20}
                     height={20}
                     padding={8}
                     desc_space={23}
@@ -131,10 +131,11 @@ export const ControlBar = () => {
                     id={"toggle-microphone-button"}
                     />
                     <AudioToggleButton 
-                    width={25}
+                    width={20}
                     height={20}
                     padding={8}
                     desc_space={23}
+                    desc_width={80}
                     opacity={0.5}
                     altInvert={true}
                     action={() => {toggleFunction('audioState')}} 
@@ -144,7 +145,7 @@ export const ControlBar = () => {
                     description={(current_channel_id === null  || channel.disable_streams) ? null : `${audioState ? 'Deafen' : 'Un-Deafen'}`}
                     />
                     <WebCamButton 
-                    width={25}
+                    width={20}
                     height={20}
                     padding={8}
                     action={() => {toggleFunction('webCamState')}} 
@@ -154,7 +155,7 @@ export const ControlBar = () => {
                     loading={loadingWebCam}
                     />
                     <ShareScreenButton 
-                    width={25}
+                    width={20}
                     height={20}
                     padding={8}
                     desc_space={23}

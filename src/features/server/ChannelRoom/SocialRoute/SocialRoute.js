@@ -45,11 +45,12 @@ export const SocialRoute = () => {
         <AnimatePresence>
             {currentSocial ?
             <motion.div 
-            transition={disableTransition ? {duration: 0} : null}
+            transition={disableTransition ? {duration: 0} : {duration: 0.2}}
             key={`social-route-${channelId}`}
             initial={{translateX: '-100%'}}
             animate={{translateX: '0%'}}
             exit={{translateX: '-100%'}}
+            
             style={{
                 position: 'absolute',
                 zIndex: 8,
@@ -67,7 +68,6 @@ export const SocialRoute = () => {
                     marginTop: 0,
                     width: '100%',
                     zIndex: 5,
-                    backgroundColor: glass && !inChannel ? glassColor : secondaryColor
                 }}
                 >
                     <Social channelName={channel.name} socialRoute={true} channelId={channelId} currentChannel={channel} />

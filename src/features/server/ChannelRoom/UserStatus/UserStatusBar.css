@@ -13,8 +13,6 @@
     overflow-x: clip;
     z-index: 1;
     align-items: center;
-    margin-left: 4px;
-    border-radius: 8px;
 }
 
 .user-status-bar::-webkit-scrollbar {

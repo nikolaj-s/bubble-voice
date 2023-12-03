@@ -157,8 +157,8 @@ const appearanceSettingsSlice = createSlice({
                 state.transparentPrimary = `rgba(${state.primaryColor.split('rgb(')[1].split(')')[0]}, 0)`
             }
 
-            if (action.payload.type === 'primaryColor') {
-                state.glassColor = `rgba(${state.secondaryColor.split('rgb(')[1].split(')')[0]}, 0.9)`
+            if (action.payload.type === 'secondaryColor') {
+                state.glassColor = `rgba(${state.secondaryColor.split('rgb(')[1].split(')')[0]}, 0.4)`
             }
         },
         changeTheme: (state, action) => {
@@ -171,7 +171,7 @@ const appearanceSettingsSlice = createSlice({
             state.textColor = state.color_themes[action.payload.state].textColor;
             state.activationColor = state.color_themes[action.payload.state].activationColor;
 
-            state.glassColor = `rgba(${state.secondaryColor.split('rgb(')[1].split(')')[0]}, 0.9)`
+            state.glassColor = `rgba(${state.secondaryColor.split('rgb(')[1].split(')')[0]}, 0.4)`
 
             state.transparentPrimary = `rgba(${state.primaryColor.split('rgb(')[1].split(')')[0]}, 0)`
 
@@ -274,7 +274,7 @@ const appearanceSettingsSlice = createSlice({
 
                 if (action.payload.disableAnimatedTransitions) state.disableAnimatedTransitions = true;
 
-                state.glassColor = `rgba(${state.secondaryColor.split('rgb(')[1].split(')')[0]}, 0.8)`
+                state.glassColor = `rgba(${state.secondaryColor.split('rgb(')[1].split(')')[0]}, 0.4)`
 
                 if (action.payload.scale) {
                     state.scale = action.payload.scale;

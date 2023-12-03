@@ -9,7 +9,7 @@ export const SocialButton = ({action, width, padding, height, borderRadius, marg
     const color = useSelector(selectTextColor)
 
     return (
-        <ButtonAnimationWrapper altInvert={true} desc_space={desc_space} o_mouseLeave={o_mouseLeave} desc_o_mouse_leave={desc_o_mouse_leave} flip_description={flip_description} zIndex={zIndex} padding={padding} description={description} margin={margin} width={width} height={height} action={action} borderRadius={borderRadius}>
+        <ButtonAnimationWrapper desc_width='50px' altInvert={true} desc_space={desc_space} o_mouseLeave={o_mouseLeave} desc_o_mouse_leave={desc_o_mouse_leave} flip_description={flip_description} zIndex={zIndex} padding={padding} description={description} margin={margin} width={width} height={height} action={action} borderRadius={borderRadius}>
             <SocialIcon color={color} />
         </ButtonAnimationWrapper>
     )

@@ -34,7 +34,6 @@ export const ChannelBackground = ({channel_background, blur = 1, glass, glassCol
         <>
         {channel_background ?
         <div
-        style={{backgroundColor: glass ? glassColor : secondaryColor}} 
         className='channel-background-container'>
             
             <div 
