@@ -425,15 +425,15 @@ export const ContextMenu = () => {
                             if (s_child.className === 'message-image-container') {
                         
                                 dispatch(setContextMenuOptions({state: "saveImage", value: true}))
-                        
-                                setSelectedImage(l_child.children[0].children[0])
+                                
+                                setSelectedImage(l_child.children[0].children[0].children[0])
                             }
         
                             if (s_child.className === 'message-outer-video-container') {
                                 
                                 dispatch(setContextMenuOptions({state: 'saveVideo', value: true}))
-        
-                                setSelectedVideo(l_child.children[0].children[0]);
+                                
+                                setSelectedVideo(l_child.children[0].children[0].children[0]);
                             
                             }
                         }
@@ -609,7 +609,7 @@ export const ContextMenu = () => {
     const handleSave = (image) => {
 
         const src = image ? selectedImage.src : selectedVideo.src;
-
+        console.log(src)
         try {
             const ipcRenderer = window.require('electron').ipcRenderer;
 

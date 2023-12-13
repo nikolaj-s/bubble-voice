@@ -393,7 +393,7 @@ export const ServerNavigation = () => {
                     <TextOnlyIcon />
                     <h3 style={{color: textColor}}>{socialChannel.channel_name}</h3>
                 </div>
-                <div style={{marginRight: usingWebVersion ? 190 : usingWebVersion && inChannel ? 168 : usingWebVersion && (inChannel && !hideUsers) ? 1 : (inChannel && !hideUsers) ? 68 : inChannel ? 0 : 104}} className='close-social-route-button'>
+                <div style={{marginRight: usingWebVersion ? 190 : usingWebVersion && inChannel ? 168 : usingWebVersion && (inChannel && !hideUsers) ? 1 : (inChannel && !hideUsers) ? 58 : inChannel ? 0 : 95}} className='close-social-route-button'>
                     <AltCloseButton action={closeSocialRoute} margin={`0px ${inChannel ? 0 : 40} 0px 5px`} width={25} borderRadius={8} height={16} padding={5} />
                 </div>
             </div>
