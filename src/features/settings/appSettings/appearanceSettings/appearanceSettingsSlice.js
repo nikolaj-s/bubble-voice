@@ -27,7 +27,7 @@ const appearanceSettingsSlice = createSlice({
         accentColor: "rgb(24, 24, 24)",
         textColor: "rgb(255, 255, 255)",
         activationColor: "rgb(58, 235, 52)",
-        glassColor: "rgba(44, 44, 44, 0.8)",
+        glassColor: "rgba(44, 44, 44, 0.4)",
         transparentPrimary: "rgba(65, 65, 65, 0)",
         darkModeEnabled: true,
         rgbBackground: false,

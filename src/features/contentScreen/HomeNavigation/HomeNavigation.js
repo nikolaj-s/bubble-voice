@@ -70,7 +70,6 @@ export const HomeNavigation = ({navigate, page}) => {
 
     return (
         <div 
-        style={{marginBottom: 1}}
         className='home-navigation-container'>
             <motion.div
             animate={HomeBtnAnimation}
@@ -99,7 +98,7 @@ export const HomeNavigation = ({navigate, page}) => {
                 }}
                 >Release Notes</h3>
             </motion.div>
-            <div style={{}} className='home-navigation-filler'></div>
+            <div style={{backgroundColor: secondaryColor}} className='home-navigation-filler'></div>
         </div>
     )
 }

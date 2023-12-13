@@ -5,7 +5,6 @@
     width: 100%;
     align-items: center;
     overflow: hidden;
-    border-top-left-radius: 8px;
 }
 
 .home-navigation-button-wrapper {
@@ -34,5 +33,4 @@
 .home-navigation-filler {
     width: 100%;
     height: 100%;
-    margin-left: 1px;
 }

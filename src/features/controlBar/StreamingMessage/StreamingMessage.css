@@ -1,0 +1,43 @@
+
+.streaming-time-cost-message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.streaming-time-innner-wrapper {
+    max-width: 600px;
+    width: 100%;
+    padding: 10px;
+    position: relative;
+    border-radius: 15px;
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.486);
+}
+
+.streaming-time-innner-wrapper h3 {
+    width: 100%;
+    text-align: center;
+}
+
+.close-streaming-message {
+    position: absolute;
+    right: -15px;
+    top: -15px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.close-streaming-message:hover {
+    opacity: 0.6;
+}

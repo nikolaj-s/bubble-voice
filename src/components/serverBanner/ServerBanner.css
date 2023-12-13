@@ -54,5 +54,14 @@
     bottom: 0;
     height: 91px !important;
     border-top-left-radius: 15px;
+    background-color: black;
 }
 
+.server-banner-placeholder {
+    height: 91px;
+    width: 100%;
+    background-color: black;
+    bottom: 0;
+    border-top-left-radius: 15px;
+    position: absolute;
+}

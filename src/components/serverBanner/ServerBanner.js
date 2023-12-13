@@ -80,7 +80,8 @@ console.log(serverImage)
         style={{
             borderBottomLeftRadius: open ? 0 : null,
             borderBottomRightRadius: open ? 0 : null,
-            filter: hover ? 'brightness(110%)' : null
+            filter: hover ? 'brightness(110%)' : null,
+           
         }}
         initial={{
             opacity: 0
@@ -91,7 +92,11 @@ console.log(serverImage)
 
         transition={{duration: 0.3}}
         className='server-banner-container' >
-            {serverImage ? <Image cursor='pointer' backgroundColor={secondaryColor} id={"server-banner-image"} position='absolute' objectFit='cover' image={serverImage} /> : null}
+            {serverImage ?
+            <Image disableErr={true} cursor='pointer' backgroundColor={secondaryColor} id={"server-banner-image"} position='absolute' objectFit='cover' image={serverImage} />
+            :
+            <div className='server-banner-placeholder' />
+            }
             <motion.div 
             style={{
                 opacity: hover ? 1 : 0.8

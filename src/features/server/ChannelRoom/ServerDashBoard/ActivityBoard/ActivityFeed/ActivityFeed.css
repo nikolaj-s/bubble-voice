@@ -11,5 +11,17 @@
 
 .activity-feed-inner-container {
     margin-left: 20px;
+    min-height: 300px;
     width: calc(100% - 20px);
+    position: relative;
+}
+
+.activity-feed-container .no-status-messages {
+    width: 100%;
+    text-align: center;
+    top: 30%;
+    transform: translateY(-50%);
+    position: absolute;
+    opacity: 0.6;
+    font-size: 2rem;
 }

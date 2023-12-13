@@ -26,6 +26,26 @@ export const FetchPins = createAsyncThunk(
     }
 )
 
+export const FetchActivityFeed = createAsyncThunk(
+    'FetchActivityFeed/ServerDashboardSlice',
+    async (_, {rejectWithValue}) => {
+        try {
+
+            const data = await socket.request('fetch activity feed').then(res =>{
+                return res;
+            })
+            .catch(err => {
+                return rejectWithValue({error: true, errorMessage: err.message});
+            })
+
+            return data.activity_feed;
+
+        } catch (err) {
+            return rejectWithValue({error: true, errorMessage: err.message});
+        }
+    }
+)
+
 export const FetchScreenShots = createAsyncThunk(
     'FetchScreenShots/ServerDashBoardSlice',
     async (_, {rejectWithValue, dispatch}) => {
@@ -54,12 +74,14 @@ const ServerDashBoardSlice = createSlice({
     initialState: {
         pins: [],
         screenShots: [],
+        activityFeed: [],
         loadingPins: true,
         loadingScreenShots: true,
         error: false,
         errorMessage: "",
+        loadingActivityFeed: true,
         hideImageOfTheDay: false,
-        hideActivityFeed: false
+        hideActivityFeed: true
     },
     reducers: {
         toggleHideImageOfTheDay: (state, action) => {
@@ -80,6 +102,17 @@ const ServerDashBoardSlice = createSlice({
             state.pins.unshift(action.payload.message);
         
         },
+        addActivityMessage: (state, action) => {
+            if (state.loadingActivityFeed) return;
+
+            state.activityFeed.unshift(action.payload);
+        },
+        setActivityFeed: (state, action) => {
+
+            if (state.loadingActivityFeed) return;
+
+            state.activityFeed = action.payload;
+        }
     },
     extraReducers: {
         [FetchPins.pending]: (state, action) => {
@@ -111,6 +144,20 @@ const ServerDashBoardSlice = createSlice({
             state.error = true;
 
             state.errorMessage = 'Error Fetching Screen Shots';
+        },
+        [FetchActivityFeed.pending]: (state, action) => {
+            state.loadingActivityFeed = true;
+            state.error = false;
+            state.errorMessage = "";
+        },
+        [FetchActivityFeed.fulfilled]: (state, action) => {
+            state.loadingActivityFeed = false;
+            state.activityFeed = action.payload;
+            state.error = false;
+        },
+        [FetchActivityFeed.rejected]: (state, action) => {
+            state.error = true;
+            state.errorMessage = action.payload.errorMessage;
         }
     }
 })
@@ -128,6 +175,10 @@ export const selectHideImageOfTheDay = state => state.ServerDashBoardSlice.hideI
 
 export const selectHideActivityFeed = state => state.ServerDashBoardSlice.hideActivityFeed;
 
-export const {toggleHideActivityFeed, toggleHideImageOfTheDay, setPinnedMessages, removePinnedMessage, addPinnedMessage  } = ServerDashBoardSlice.actions;
+export const selectActivityFeed = state => state.ServerDashBoardSlice.activityFeed;
+
+export const selectLoadingActivityFeed = state => state.ServerDashBoardSlice.loadingActivityFeed;
+
+export const {setActivityFeed, addActivityMessage, toggleHideActivityFeed, toggleHideImageOfTheDay, setPinnedMessages, removePinnedMessage, addPinnedMessage  } = ServerDashBoardSlice.actions;
 
 export default ServerDashBoardSlice.reducer;

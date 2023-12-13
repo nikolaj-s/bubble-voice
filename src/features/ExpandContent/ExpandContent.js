@@ -131,7 +131,7 @@ export const ExpandContent = () => {
                 expandedContent?.includes('mp4') ?
                 <Video height='auto' forceAutoPlay={true} video={expandedContent} currentTime={videoStartTime} /> 
                 :        
-                <Image objectFit='contain' image={expandedContent} />}
+                <Image altHeight='100vh' objectFit='contain' image={expandedContent} />}
             </div>
             <div onClick={(e) => {e.stopPropagation()}} style={{backgroundColor: primaryColor}} className='expanded-content-navigation-container'>                
                 <CopyButton borderRadius={10} action={handleCopy} description={'Copy Link'} width={18} height={18} />

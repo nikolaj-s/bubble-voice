@@ -27,7 +27,8 @@
 .side-bar-dashboard-placeholder {
     position: absolute;
     z-index: 0;
-    height: calc(100% - 31px);
-    top: 31px;
+    height: calc(100%);
+    top: 28px;
     width: 100%;
+    border-top-left-radius: 15px;
 }

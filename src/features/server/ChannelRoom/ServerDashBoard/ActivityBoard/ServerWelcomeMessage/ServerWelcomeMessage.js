@@ -4,11 +4,8 @@ import "./ServerWelcomeMessage.css";
 import { useSelector } from 'react-redux';
 import { selectSecondaryColor, selectTextColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectServerBanner, selectServerName, selectServerWelcomeMessage } from '../../../../ServerSlice';
-import { Image } from '../../../../../../components/Image/Image';
 
 export const ServerWelcomeMessage = () => {
-
-    const serverBanner = useSelector(selectServerBanner);
 
     const textColor = useSelector(selectTextColor);
 
@@ -20,10 +17,6 @@ export const ServerWelcomeMessage = () => {
 
     return (
         <>
-        <div className='server-welcome-message-container'>
-            {serverBanner ? <Image hideOnError={true} image={serverBanner} /> : null}
-            
-        </div>
         <div
             style={{ color: textColor, backgroundColor: glassPrimary}}
             className='server-welcome-message-wrapper'>

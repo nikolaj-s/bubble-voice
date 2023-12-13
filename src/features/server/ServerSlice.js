@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import { fetchMusicWidgetVolume } from "../../util/LocalData";
 
 import { socket } from "./ServerBar/ServerBar";
+import { addActivityMessage } from "./ChannelRoom/ServerDashBoard/ServerDashBoardSlice";
 
 export const unBanMember = createAsyncThunk(
     'serverSlice/unBanMember',
@@ -111,7 +112,7 @@ export const fetchServerDetails = createAsyncThunk(
 
 export const createChannel = createAsyncThunk(
     'serverSlice/createChannel',
-    async ({channel_name, persist_social, locked_channel, auth_users, text_only}, {rejectWithValue, getState}) => {
+    async ({channel_name, persist_social, locked_channel, auth_users, text_only}, {rejectWithValue, getState, dispatch}) => {
         const { server_id } = getState().serverSlice;
 
         if (!channel_name || channel_name.length < 3) return rejectWithValue({error: true, errorMessage: "Invalid Channel Name"});
@@ -128,7 +129,10 @@ export const createChannel = createAsyncThunk(
         }
 
         const channel = await socket.request('create channel', data).then(response => {
-            return {success: true, channel: {...response, users: [], active: false}}
+            if (response.status_msg) {
+                dispatch(addActivityMessage(response.status_msg))
+            }
+            return {success: true, channel: {...response.channel, users: [], active: false}}
         })
         .catch(error => {
             return rejectWithValue({error: true, errorMessage: error});
@@ -254,16 +258,8 @@ const serverSlice = createSlice({
 
             state.welcomeMessage = action.payload;
         },
-        setActivityFeed: (state, action) => {
-            state.activityFeed = action.payload;
-        },
         updateBannedKeywords: (state, action) => {
             state.bannedKeywords = action.payload;
-        },
-        addActivityMessage: (state, action) => {
-            if (state.activityFeed.length >= 30) state.activityFeed.pop();
-
-            state.activityFeed.unshift(action.payload);
         },
         setKickedState: (state, action) => {
             state.kicked = action.payload.kicked;
@@ -1002,6 +998,6 @@ export const selectBannedKeywords = state => state.serverSlice.bannedKeywords;
 
 // actions
 
-export const {setActivityFeed, updateBannedKeywords, setWelcomeMessage, addActivityMessage, setKickedState, updateChannelStatus, triggerRoomRescale, setRoomColor, toggleConnectionLostState, setServerbannerAmbiance, updateMemberFile, clearSearchData, updateInactiveChannel, removeSongFromWidget, saveSongToWidget, userBanned, toggleCreateChannelMenu, toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
+export const { updateBannedKeywords, setWelcomeMessage, setKickedState, updateChannelStatus, triggerRoomRescale, setRoomColor, toggleConnectionLostState, setServerbannerAmbiance, updateMemberFile, clearSearchData, updateInactiveChannel, removeSongFromWidget, saveSongToWidget, userBanned, toggleCreateChannelMenu, toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
 
 export default serverSlice.reducer;

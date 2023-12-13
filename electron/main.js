@@ -761,6 +761,10 @@ ipcMain.on('write-hardware-change', (event, args) => {
 })
 
 
+ipcMain.on('refresh app', () => {
+  win.reload();
+})
+
 // handle updates
 ipcMain.on('check-for-updates', async (event, data) => {
 

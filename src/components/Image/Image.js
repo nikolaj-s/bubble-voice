@@ -44,7 +44,7 @@ export const Image = ({aspect_ratio,alt_image = null, draggable = false,image_cl
     }
 
     return (
-        <div id={id} style={{borderRadius: borderRadius, overflow: 'hidden',zIndex: zIndex, position: position, objectFit: objectFit, width: width, minHeight: loading && !error ? minLoadHeight : null, height: height, opacity: opacity, display: (error && hideOnError) ? 'none' : null, backgroundColor: backgroundColor, display: 'inline-block'}}>
+        <div id={id} style={{borderRadius: borderRadius,zIndex: zIndex, position: position, objectFit: objectFit, width: width, minHeight: loading && !error ? minLoadHeight : null, height: height, opacity: opacity, display: (error && hideOnError) ? 'none' : null, backgroundColor: backgroundColor, display: 'inline-block'}}>
             {loading && image !== "" && image !== undefined && disableErr === false && error === false ?
             <motion.div 
             style={{
@@ -56,7 +56,8 @@ export const Image = ({aspect_ratio,alt_image = null, draggable = false,image_cl
                 height: '100%',
                 backgroundSize: '600% 600%',
                 minHeight: minLoadHeight,
-                flexShrink: minLoadHeight ? '0' : null,
+                minWidth: '200px',
+                flexShrink: 0,
                 borderRadius: borderRadius,
                 overflow: 'hidden'
             }}

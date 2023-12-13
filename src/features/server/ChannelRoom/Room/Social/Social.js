@@ -335,7 +335,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
         <div 
         onKeyUp={focusTextInput}
         className='social-outer-container'
-        style={{backgroundColor: inChannel ? primaryColor : null}}
+        style={{backgroundColor: primaryColor}}
         >
         {permission?.user_can_view_channel_content ?
             <>

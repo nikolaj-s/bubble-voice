@@ -8,6 +8,8 @@ import { motion } from "framer-motion";
 // style
 import "./Disconnected.css";
 import { selectConnectionLost } from '../../features/server/ServerSlice';
+import { TextButton } from '../buttons/textButton/TextButton';
+import { RestartIcon } from '../Icons/RestartIcon/RestartIcon';
 
 export const Disconnected = () => {
 
@@ -16,6 +18,39 @@ export const Disconnected = () => {
     const color = useSelector(selectTextColor);
 
     const connectionLostState = useSelector(selectConnectionLost);
+
+    const [showManualRetry, toggleShowManualRetry] = React.useState(false);
+
+    React.useEffect(() => {
+
+        let timeout;
+        
+        if (connectionLostState) {
+            timeout = setTimeout(() => {
+
+                toggleShowManualRetry(true);
+    
+            }, 30000)
+        }
+        
+        return () => {
+            clearTimeout(timeout);
+        }
+
+    }, [connectionLostState])
+
+    const handleManualRefresh = () => {
+        try {
+
+            const ipcRenderer = window.require('electron').ipcRenderer;
+
+            ipcRenderer.send('refresh app');
+
+        } catch (err) {
+            window.location.reload();
+        }
+       
+    }
 
     return (
         <>
@@ -54,6 +89,9 @@ export const Disconnected = () => {
                         <path d="M41.6667 25.0001H45.8333C45.8333 22.2642 45.2945 19.5551 44.2475 17.0275C43.2005 14.4999 41.6659 12.2032 39.7314 10.2687C37.7968 8.33414 35.5002 6.79956 32.9726 5.75259C30.445 4.70562 27.7359 4.16675 25 4.16675V8.33341C29.4203 8.33341 33.6595 10.0894 36.7851 13.215C39.9107 16.3406 41.6667 20.5798 41.6667 25.0001Z" fill={color} />
                         </svg>
                     </motion.div>
+                    {showManualRetry ?
+                    <TextButton action={handleManualRefresh} marginTop={40} name={'Manually Try Reconnecting'} icon={<RestartIcon />}/>
+                    : null}
                 </div>
             </div>
         </div> : null}

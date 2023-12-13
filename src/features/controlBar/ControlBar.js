@@ -11,7 +11,7 @@ import { AudioToggleButton } from '../../components/buttons/mediaButtons/audioTo
 import { ShareScreenButton } from '../../components/buttons/mediaButtons/shareScreenButton/ShareScreenButton';
 
 // state
-import { resetControlState, selectAudioState, selectCurrentScreen, selectLoadingScreenShare, selectLoadingWebCam, selectMicrophoneState, selectScreenShareState, selectWebCamState, selectingScreensState, toggleControlState, toggleLoadingWebCam } from './ControlBarSlice';
+import { resetControlState, selectAudioState, selectCurrentScreen, selectLoadingScreenShare, selectLoadingWebCam, selectMicrophoneState, selectScreenShareState, selectSeenStreamingMessage, selectWebCamState, selectingScreensState, toggleControlState, toggleLoadingWebCam, toggleStreamingMessage } from './ControlBarSlice';
 import { selectCurrentChannel, selectCurrentChannelId } from '../server/ServerSlice';
 import { playSoundEffect } from '../settings/soundEffects/soundEffectsSlice';
 import { selectAccentColor, selectPrimaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
@@ -23,6 +23,7 @@ import { AnimatePresence } from 'framer-motion';
 import { Streampreview } from './StreamPreview/Streampreview';
 import { ControlBarOptionsButton } from './ControlBarOptionsButton/ControlBarOptionsButton';
 import { ExpandedControlBar } from './ExpandedControlBar/ExpandedControlBar';
+import { StreamingMessage } from './StreamingMessage/StreamingMessage';
 
 
 
@@ -31,6 +32,9 @@ export const ControlBar = () => {
     const dispatch = useDispatch();
 
     const [expandedOpen, toggleExpanded] = React.useState(false);
+
+    let [streamingInterval, incrementStreamingInterval] = React.useState(0);
+
     // state
     const webCamState = useSelector(selectWebCamState);
 
@@ -57,7 +61,33 @@ export const ControlBar = () => {
     const selectingScreen = useSelector(selectingScreensState);
 
     const accentColor = useSelector(selectAccentColor);
-   
+
+    const seenStreamingMessageThisSession = useSelector(selectSeenStreamingMessage);
+    
+    React.useEffect(() => {
+
+        let interval;
+
+        if (seenStreamingMessageThisSession) return;
+
+        if (streamingInterval === 1200) dispatch(toggleStreamingMessage(true))
+
+        if (currentScreen) {
+            
+            interval = setInterval(() => {
+
+                incrementStreamingInterval(streamingInterval += 1);
+
+            }, 1000)
+
+        }
+
+        return () => {
+            clearInterval(interval);
+        }
+
+    }, [currentScreen, streamingInterval])
+
     const toggleFunction = (state) => {
 
         if (channel.disable_streams) return;
@@ -107,6 +137,7 @@ export const ControlBar = () => {
 
     return (
         <>
+            <StreamingMessage />
             {expandedOpen ?
             <ExpandedControlBar close={() => {toggleExpanded(false)}} />
             : null}

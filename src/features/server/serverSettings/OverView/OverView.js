@@ -14,7 +14,7 @@ import { ApplyCancelButton } from '../../../../components/buttons/ApplyCancelBut
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 
 // state
-import { clearSearchData, selectBannedKeywords, selectInactiveChannel, selectInactiveChannels, selectServerBanner, selectServerId, selectServerName, selectServerWelcomeMessage, selectUsersPermissions, setActivityFeed, setServerName, setWelcomeMessage, throwServerError, updateBannedKeywords, updateInactiveChannel, updateServerBanner } from '../../ServerSlice';
+import { clearSearchData, selectBannedKeywords, selectInactiveChannel, selectInactiveChannels, selectServerBanner, selectServerId, selectServerName, selectServerWelcomeMessage, selectUsersPermissions, setServerName, setWelcomeMessage, throwServerError, updateBannedKeywords, updateInactiveChannel, updateServerBanner } from '../../ServerSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 import { socket } from '../../ServerBar/ServerBar';
 import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
@@ -24,6 +24,7 @@ import { DropDownList } from '../../../../components/DropDownList/DropDownList';
 import { updateServer } from '../../../sideBar/sideBarSlice';
 import { selectAccentColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { ImageSearchKeywordFilter } from './ImageSearchKeywordFilter/ImageSearchKeyWordFilter'
+import { setActivityFeed } from '../../ChannelRoom/ServerDashBoard/ServerDashBoardSlice';
 
 const Wrapper = () => {
 

@@ -2,7 +2,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 
-import { selectGlassColor, selectGlassState, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassColor, selectPrimaryColor, } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectChannelSocialId, selectLoadingServerDetailsState, selectPinningMessage, selectPopularSearches, selectUsersPermissions } from '../../ServerSlice';
 import { FetchPins, selectLoadingPins, selectPinnedMessages } from './ServerDashBoardSlice';
 
@@ -26,13 +26,11 @@ export const ServerDashBoard = () => {
 
     const socialOpen = useSelector(selectChannelSocialId)
 
-    const glass = useSelector(selectGlassState);
-
     const page = useSelector(selectCurrentServerPageState);
 
     const glassColor = useSelector(selectGlassColor);
 
-    const secondaryColor = useSelector(selectSecondaryColor);
+    const primaryColor = useSelector(selectPrimaryColor);
 
     const pins = useSelector(selectPinnedMessages);
 
@@ -69,6 +67,7 @@ export const ServerDashBoard = () => {
         <>
         {(page !== 'pins' && page  !== 'media' && page !== 'activity') ? null :
         <div 
+        style={{backgroundColor: primaryColor}}
         className='server-dashboard-container'>
             <div style={{backgroundColor: glassColor, 
                 }} className='server-dashboard-inner-container'>

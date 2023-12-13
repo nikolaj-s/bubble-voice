@@ -14,11 +14,13 @@ import { DownIcon } from '../../../../../components/Icons/DownIcon/DownIcon';
 import { WidgetsIcon } from '../../../../../components/Icons/WidgetsIcon/WidgetsIcon'
 // state
 import { setHeaderTitle } from '../../../../contentScreen/contentScreenSlice';
-import { addActivityMessage, deleteChannel, selectChannelToEdit, selectServerMembers, selectServerOwner, selectUsersPermissions, throwServerError, updateChannel } from '../../../ServerSlice';
+import { deleteChannel, selectChannelToEdit, selectServerMembers, selectServerOwner, selectUsersPermissions, throwServerError, updateChannel } from '../../../ServerSlice';
 import { TextButton } from '../../../../../components/buttons/textButton/TextButton';
 import { NotAuthorizedMessage } from '../../../../../components/NotAuthorizedMessage/NotAuthorizedMessage';
 import { WidgetPreview } from '../../../../../components/widgets/WidgetPreview/WidgetPreview';
 import { DeleteIcon } from '../../../../../components/Icons/DeleteIcon/DeleteIcon'
+import { addActivityMessage } from '../../../ChannelRoom/ServerDashBoard/ServerDashBoardSlice';
+
 // socket
 import { socket } from '../../../ServerBar/ServerBar';
 import { Loading } from '../../../../../components/LoadingComponents/Loading/Loading';

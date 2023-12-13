@@ -9,11 +9,11 @@
 .message-image-search-container {
     display: flex;
     flex-direction: column;
-    width: calc(100% - 40px);
+    width: 600px;
     height: auto;
-    max-height: calc(90% - 70px);
-    height: 500px;
-    max-width: 550px;
+    max-height: calc(100% - 80px);
+    height: 600px;
+    max-width: calc(100% - 40px);
     position: fixed;
     z-index: 5;
     padding: 4px;
@@ -40,9 +40,10 @@
     align-items: center;
     justify-content: center;
     width: calc(100%);
-    height: 40px;
+    height: 35px;
     margin: 5px 0px 10px 0px;
     position: relative;
+    flex-shrink: 0;
 }
 .message-image-search-button {
     position: absolute;
@@ -71,7 +72,6 @@
 }
 
 .message-image-search-results-container {
-    height: 500px;
     overflow-y: auto;
     position: relative;
     width: calc(100% - 15px);

@@ -215,7 +215,7 @@ const Settings = () => {
             <InputTitle title={"Test Mic Input"} />
             <ListenToMicrophoneLevel />
             <InputTitle title={"Input Volume"} />
-            <Range save={saveMicInputVolume} value={localMicInputVolume} action={handleMicInputVolume} min={2} max={5} step={0.001} /> 
+            <Range save={saveMicInputVolume} value={localMicInputVolume} action={handleMicInputVolume} min={2} max={8} step={0.001} /> 
             <InputTitle title={"Input Mode"} />
             <RadioButton name={"Enable Push To Talk"} state={pushToTalk} action={handleToggleVoiceState} />
             <RadioButton name={"Enable Voice Activation Detection"} state={voiceActivity} action={handleToggleVoiceState} />

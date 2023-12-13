@@ -15,7 +15,6 @@ import {Range} from '../inputs/Range/Range';
 // style's
 import "./Video.css";
 import { VideoPlayOverlayAnimation } from './VideoPlayOverlayAnimation/VideoPlayOverlayAnimation';
-import Axios from 'axios';
 
 export const Video = ({backgroundColor = 'black', maxHeight = '100%', video, id, looping = false, objectFit = 'contain', height = "100%", mutedToggled, marginLeft, forceAutoPlay = false, currentTime = 0}) => {
 

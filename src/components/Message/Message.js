@@ -142,7 +142,7 @@ export const Message = ({activity_feed = false,dashboard = false, direct_message
                             }}
                             className='message-image-container'>
                                 <Image nsfw={current_message.nsfw} borderRadius={(activity_feed && message?.text?.includes('channel')) ? '50%' : 20} minLoadHeight={'300px'} altHeight={activity_feed && !current_message.screen_shot ? 80 :
-                                    maximizeMediaSize ? '100%' : 350}  expandContent={expandContent} imgHeight='auto' cursor='pointer' width={null} altWidth={'100%'} loadingState='eager' objectFit='contain' image={message.image} />
+                                    maximizeMediaSize ? '100%' : 350}  expandContent={expandContent} imgHeight={!activity_feed && !maximizeMediaSize ? 350 : 'auto'} cursor='pointer' width={null} altWidth={'100%'} loadingState='lazy' objectFit='contain' image={message.image} />
                             </div>
                             : null}
                             {message.video ? 

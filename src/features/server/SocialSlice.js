@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { socket } from "./ServerBar/ServerBar";
 import { removePinnedMessage, addPinnedMessage } from "./ChannelRoom/ServerDashBoard/ServerDashBoardSlice";
-import { addActivityMessage, newMessage, throwServerError } from "./ServerSlice";
+import { newMessage, throwServerError } from "./ServerSlice";
+import { addActivityMessage } from "./ChannelRoom/ServerDashBoard/ServerDashBoardSlice";
 import { UploadVideo } from "../../util/UploadVideo";
 
 export const togglePinMessage = createAsyncThunk(
