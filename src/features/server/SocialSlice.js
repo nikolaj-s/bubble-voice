@@ -314,9 +314,9 @@ const SocialSlice = createSlice({
 
             state.altLoading = false;
 
-            const m_index = state.messages[action.payload.channel_id].findIndex(m => m._id === action.payload._id);
+            const m_index = state.messages[action.payload.channel_id]?.findIndex(m => m._id === action.payload._id);
 
-            if (m_index === -1) return;
+            if (m_index === -1 || !m_index) return;
 
             state.messages[action.payload.channel_id][m_index].pinned = action.payload.pinned;
 
