@@ -462,7 +462,7 @@ ipcMain.on('RESET_INAC_TIMEOUT', (event, data) => {
 
     console.log('user has gone inactive');
 
-  }, 1200000)
+  }, 2100000)
 
 
 })
@@ -498,7 +498,7 @@ ipcMain.on("REG_KEYBINDS", (event, data) => {
 
         console.log('user has gone inactive');
 
-      }, 1200000)
+      }, 2100000)
       
     }
 
