@@ -183,7 +183,6 @@ export const Music = () => {
                     }}} style={{
                         width: '100%',
                         height: '100%',
-                        borderRadius: 10
                     }} />
                     <div className='youtube-disable-clicking'>
                         <div className='song-title-container'>

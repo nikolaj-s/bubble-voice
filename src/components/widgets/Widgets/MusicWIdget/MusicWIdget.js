@@ -81,13 +81,24 @@ export const MusicWidget = ({roomOverlay, editing = false, widget, controls = tr
     }, [])
 
     const handleAddSongToQueue = async () => {
+
+        let data = "";
+
         if (query.length === 0 || editing === true) return;
 
         if (queue.length >= 11) return dispatch(throwMusicError({error: true, errorMessage: "Song Queue Limit Has Been Reached"}));
 
         if (loading) return;
 
-        dispatch(handleAddingMedia(query));
+        if (query.includes('&')) {
+            data = query.split('&')[0]
+        } else {
+            data = query;
+        }
+        
+        data = data.replace(/\s/g, '');
+
+        dispatch(handleAddingMedia(data));
 
         setQuery("");
     }

@@ -1,5 +1,4 @@
 #room-music-player {
-    border-radius: 10px;
     z-index: 2;
 }
 
@@ -63,7 +62,6 @@
     display: flex;
     overflow: hidden;
     vertical-align: center;
-    border-radius: 5px;
 }
 
 

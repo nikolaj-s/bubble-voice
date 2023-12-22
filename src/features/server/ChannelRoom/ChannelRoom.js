@@ -59,7 +59,7 @@ export const RoomWrapper = () => {
                 if (musicLoading) return;
 
                 const music = currentChannel.widgets.findIndex(w => w.type === 'music');
-
+                console.log(data)
                 if (music !== -1) {
                     dispatch(handleAddingMedia(data));
                 }

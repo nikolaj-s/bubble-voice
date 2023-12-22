@@ -107,6 +107,7 @@ export const ServerNavigation = () => {
     }
 
     React.useEffect(() => {
+
         if (page === 'voice') {
             voiceButtonAnimation.start({
                 backgroundColor: accentColor,
@@ -295,7 +296,7 @@ export const ServerNavigation = () => {
             })
         }
     // eslint-disable-next-line
-    }, [page, socialChannel])
+    }, [page, socialId])
 
     React.useEffect(() => {
 

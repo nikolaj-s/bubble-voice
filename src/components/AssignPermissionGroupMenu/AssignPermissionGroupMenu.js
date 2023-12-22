@@ -17,7 +17,7 @@ export const AssignPermissionGroupMenu = ({permission_groups, current_permission
     const primaryColor = useSelector(selectPrimaryColor);
 
     const assignNewGroup = (e, id) => {
-        e.stopPropagation();
+        console.log(e)
         
         action(id, current_permission_group.split('-')[0])
     }
