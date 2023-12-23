@@ -5,6 +5,8 @@ import { USER_PREFS } from '../../util/LocalData';
 
 export let audioCtx;
 
+export let audioDest;
+
 export const AudioInit = () => {
 
     const amplifyLevel = useSelector(selectAmplifyLevel);
@@ -15,37 +17,11 @@ export const AudioInit = () => {
 
         audioCtx = new AudioContext();
 
+        audioDest = audioCtx.createMediaStreamDestination();
+
     }, []);
 
-    const handleAmplifyLevel = (e) => {
-
-        let id = e.target.className.split('user-')[1];
-        
-        const prefs = USER_PREFS.get(id);
-
-        if (e.target.nodeName === 'AUDIO' && prefs?.volume > 1) {
-            
-            function amplifyMedia(mediaElem, multiplier) {
-            var context = new (window.AudioContext || window.webkitAudioContext),
-                result = {
-                    context: context,
-                    source: context.createMediaStreamSource(mediaElem.srcObject),
-                    gain: context.createGain(),
-                    media: mediaElem,
-                    amplify: function(multiplier) { result.gain.gain.value = multiplier; },
-                    getAmpLevel: function() { return result.gain.gain.value; }
-                };
-                result.source.connect(result.gain);
-                result.gain.connect(context.destination);
-                result.amplify(multiplier);
-
-                return result;
-            }
-
-            amplifyMedia(e.target, prefs.volume);
-
-        }
-    }
+    
 
     React.useEffect(() => {
 
@@ -62,6 +38,8 @@ export const AudioInit = () => {
     }, [audioCtx])
 
     return (
-        <></>
+        <>
+        <audio id='room-audio-source' /> 
+        </>
     )
 }

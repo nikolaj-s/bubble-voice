@@ -1,7 +1,7 @@
 // library's
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { m, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 // components
 import { CtxButton } from '../../components/buttons/ctxButton/CtxButton';
@@ -47,6 +47,7 @@ import { ImageSearch } from '../../util/ImageSearch';
 import { SearchIcon } from '../../components/Icons/SearchIcon/SearchIcon';
 import { RequestDeleteMessage } from '../server/SocialSlice';
 import { openDirectMessage } from '../Messages/MessagesSlice';
+import { handleAmplifyLevel } from '../../util/AudioAmplifier';
 
 export const ContextMenu = () => {
 
@@ -710,6 +711,10 @@ export const ContextMenu = () => {
             
             el.volume = value > 1 ? 1 : value;
 
+            el.muted = !el.muted;
+
+            el.muted = !el.muted;
+
         } catch (error) {
             console.log(error)
         }
@@ -735,7 +740,15 @@ export const ContextMenu = () => {
             saveUserPrefs();
 
             try {
-                document.getElementsByClassName(`${memberId}-stream-audio`)[0].volume = value;
+
+                let el = document.getElementsByClassName(`${memberId}-stream-audio`)[0];
+
+                el.volume = value > 1 ? 1 : value;
+
+                el.muted = !el.muted;
+
+                el.muted = !el.muted;
+
             } catch (error) {
                 console.log(error)
             }
@@ -1147,13 +1160,13 @@ export const ContextMenu = () => {
             <>
             <div style={{display: 'flex', alignItems: 'center'}}>
                 <CtxMenuTitle title={"Change User Volume"} />
-                <p style={{color: textColor, fontSize: '0.8rem', marginRight: 5}} >{Math.floor(userVolumeLevel * 200)}%</p>
+                <p style={{color: textColor, fontSize: '0.8rem', marginRight: 5}} >{Math.floor(userVolumeLevel * 100)}%</p>
             </div>
-            <Range invert={true} save={handleUserVolumeChange} action={(value) => setUserVolumeLevel(value)} step={0.005} value={userVolumeLevel} fill={false} max={1} min={0} /> 
+            <Range invert={true} save={handleUserVolumeChange} action={(value) => setUserVolumeLevel(value)} step={0.01} value={userVolumeLevel} fill={false} max={2.5} min={0} /> 
             </>
             : null}
             {changeStreamVolumeState ? <CtxMenuTitle title={"Change Stream Volume"} /> : null}
-            {changeStreamVolumeState ? <Range invert={true} value={streamAudioLevel} action={handleStreamVolumeChange} fill={false} max={1} min={0} step={0.01} /> : null}
+            {changeStreamVolumeState ? <Range invert={true} value={streamAudioLevel} action={handleStreamVolumeChange} fill={false} max={2.5} min={0} step={0.01} /> : null}
             {flipWebCamState ? <BoolButton name={"Flip Web Cam"} state={flippedWebCamState} action={handleFlipWebCamPref} /> : null}
             {disableWebCameState ? <BoolButton name={"Disable Webcam"} state={disabledWebCamLocalState} action={handleDisableWebCam} /> : null}
             {disableStreamState ? <BoolButton name={"Disable Stream"} state={disableStreamLocalState} action={handleDisableStream} /> : null}

@@ -1,5 +1,7 @@
 import { USER_PREFS } from "../../../../util/LocalData";
-import { audioCtx } from "../../../AudioInit/AudioInit";
+import { audioCtx, audioDest } from "../../../AudioInit/AudioInit";
+
+import { handleAmplifyLevel } from '../../../../util/AudioAmplifier'
 
 const mediaType = {
     audio: 'audioType',
@@ -325,15 +327,13 @@ export class RoomClient {
 
                         el.autoplay = true;
 
-                        par.style.backgroundColor = appData.color;
+                        par.style.backgroundColor = 'black';
 
                         el.className = `streaming-video-player ${user._id} ${user._id}-screen-share-stream`
 
                         el.playsInline = true;
 
                         el.muted = true;
-                        
-                        el.volume = prefs?.stream_volume ? prefs?.stream_volume : 1;
 
                         el.srcObject = stream;
 
@@ -376,15 +376,19 @@ export class RoomClient {
                         }
 
                         el.className = `${user._id}-stream-audio`;
-                        console.log(prefs?.stream_volume)
-                        el.volume = 1;
+                        console.log()
+                        el.volume = prefs?.stream_volume ? prefs.stream_volume > 1 ? 1 : prefs.stream_volume : 1;
 
                         el.srcObject = stream;
-                        
+
                         audioCtx.resume();
 
+                        el.addEventListener('volumechange', handleAmplifyLevel)
+
+                        el.addEventListener('loadeddata', handleAmplifyLevel);
+
                         document.getElementById('live-chat-wrapper').appendChild(el);
-                    
+
                     } else {
                         
                         const user_pref_volume = USER_PREFS.get(user._id);
@@ -393,20 +397,10 @@ export class RoomClient {
 
                         el.volume = user_pref_volume?.volume ? user_pref_volume.volume > 1 ? 1 : user_pref_volume.volume : 1;
 
-                        // const source = audioCtx.createMediaStreamSource(stream);
-                        
-                        // const dst = audioCtx.createMediaStreamDestination();
+                        el.addEventListener('volumechange', handleAmplifyLevel)
 
-                        // const gainNode = audioCtx.createGain();
-                        
-                        // source.connect(gainNode);
+                        el.addEventListener('loadeddata', handleAmplifyLevel);
 
-                        // gainNode.connect(dst)
-
-                        // source.connect(dst)
-
-                        // gainNode.gain.value = 3;
-                        
                         audioCtx.resume();
 
                         el.srcObject = stream;
