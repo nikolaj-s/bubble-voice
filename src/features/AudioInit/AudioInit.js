@@ -1,7 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
-import { selectAmplifyLevel } from './AudioInitSlice';
-import { USER_PREFS } from '../../util/LocalData';
+import { selectAudioOutput } from '../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 
 export let audioCtx;
 
@@ -9,7 +8,7 @@ export let audioDest;
 
 export const AudioInit = () => {
 
-    const amplifyLevel = useSelector(selectAmplifyLevel);
+    const audioOutputDevice = useSelector(selectAudioOutput);
 
     React.useEffect(() => {
 
@@ -19,13 +18,22 @@ export const AudioInit = () => {
 
     }, []);
 
-    
-
     React.useEffect(() => {
+        try {
+            let id = "";
 
-        
+            if (audioOutputDevice?._id !== 'default') {
+                id = audioOutputDevice?._id
+            }
 
-    }, [amplifyLevel])
+            if (audioCtx) {
+                audioCtx.setSinkId(id)
+            }
+        } catch (e) {
+            return;
+        }
+    }, [audioOutputDevice])
+
 
     React.useEffect(() => {
 

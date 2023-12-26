@@ -58,6 +58,7 @@ export const TextInput = ({action = () => {}, placeholder, inputValue, keyCode =
                 handleAnimation(false, accentColor)
             }  
         }}
+        transition={{duration: 0.1}}
         onMouseOut={(e) => {
             if (e.currentTarget.children[0] !== document.activeElement) {
                 handleAnimation(false, invert ? secondaryColor :  color)

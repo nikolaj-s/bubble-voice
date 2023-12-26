@@ -35,6 +35,7 @@ export const ToggleButton = ({state = false, action}) => {
             backgroundColor: primaryColor,
             border: `solid 3px ${primaryColor}`,
         }}
+        transition={{duration: 0.1}}
         onMouseOver={() => {handleAnimation(accentColor)}}
         onMouseLeave={() => {handleAnimation(primaryColor)}}
         onMouseDown={() => {handleAnimation(textColor)}}

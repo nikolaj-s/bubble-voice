@@ -69,7 +69,6 @@ export const ServerBanner = ({serverName, serverImage, handleLeave}) => {
         }
     }
 
-console.log(serverImage)
     return (
         <>
         <motion.div 
