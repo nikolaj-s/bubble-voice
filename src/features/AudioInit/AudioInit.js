@@ -17,8 +17,6 @@ export const AudioInit = () => {
 
         audioCtx = new AudioContext();
 
-        audioDest = audioCtx.createMediaStreamDestination();
-
     }, []);
 
     
