@@ -197,7 +197,7 @@ export const RoomUserWrapper = ({users, page, loaded}) => {
                 w = 0;
                 h = h + (increment * ratio) + (margin * 2);
             }
-            w = w + increment + (margin * 2);
+            w = w + increment + (margin);
             i++;
         }
         if (h > hD || increment > wD) return false;
@@ -215,9 +215,9 @@ export const RoomUserWrapper = ({users, page, loaded}) => {
             
             const c_count = Array.from(children).filter(child => ((child.attributes[2] ? child.attributes[2]["value"].includes('flex') : null && child.className === 'active-user-container') || (child.className === 'streaming-video-player-container' && child.attributes[2]["value"].includes('flex'))));
             
-            let wDimension = parent.offsetWidth - 10;
+            let wDimension = parent.offsetWidth;
 
-            let hDimension = parent.offsetHeight - 20;
+            let hDimension = parent.offsetHeight;
             
             let max = 0;
             let i = 1;

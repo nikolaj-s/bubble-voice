@@ -1,7 +1,6 @@
 // library's
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { AnimatePresence, motion } from 'framer-motion';
 
 // state
 import { selectDisableTransitionAnimations, selectGlassColor, selectGlassState, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
@@ -42,38 +41,34 @@ export const SocialRoute = () => {
     }, [channelId, current_channel_id])
 
     return (
-        <AnimatePresence>
-            {currentSocial ?
-            <motion.div 
-            transition={disableTransition ? {duration: 0} : {duration: 0.2}}
-            key={`social-route-${channelId}`}
-            initial={{translateX: '-100%'}}
-            animate={{translateX: '0%'}}
-            exit={{translateX: '-100%'}}
+        <>
+        {currentSocial ?
+        <div 
+        key={`social-route-${channelId}`}
+        
+        style={{
+            position: 'absolute',
+            zIndex: 8,
+            width: 'calc(100%)',
+            left: 0,
+            height: '100%',
             
+        }}
+        
+        className='social-route-wrapper-container'>
+            
+            <div
             style={{
-                position: 'absolute',
-                zIndex: 8,
-                width: 'calc(100%)',
-                left: 0,
-                height: '100%',
-               
+                minHeight: 'calc(100%)',
+                marginTop: 0,
+                width: '100%',
+                zIndex: 5,
             }}
-            
-            className='social-route-wrapper-container'>
-               
-                <div
-                style={{
-                    minHeight: 'calc(100%)',
-                    marginTop: 0,
-                    width: '100%',
-                    zIndex: 5,
-                }}
-                >
-                    <Social channelName={channel.name} socialRoute={true} channelId={channelId} currentChannel={channel} />
-                </div>
-                    
-            </motion.div> : null}
-        </AnimatePresence>
+            >
+                <Social channelName={channel.name} socialRoute={true} channelId={channelId} currentChannel={channel} />
+            </div>
+                
+        </div> : null}
+        </>
     )
 }

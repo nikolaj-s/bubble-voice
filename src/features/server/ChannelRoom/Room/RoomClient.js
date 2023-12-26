@@ -1,7 +1,7 @@
 import { USER_PREFS } from "../../../../util/LocalData";
 import { audioCtx, audioDest } from "../../../AudioInit/AudioInit";
 
-import { handleAmplifyLevel } from '../../../../util/AudioAmplifier'
+import { audioMap, handleAmplifyLevel } from '../../../../util/AudioAmplifier'
 
 const mediaType = {
     audio: 'audioType',
@@ -453,6 +453,8 @@ export class RoomClient {
         if (par) {
             par.remove();
         }
+
+        audioMap.delete(consumer_id);
         
         this.consumers.delete(consumer_id);
     }    

@@ -238,7 +238,7 @@ export const ImageSearchPanel = ({channelId,hideOptions = false,direct_message, 
                                     
                                     : (images?.length > 0 ? images : loading ? [] : recommendations.filter(v => v.type === 'image').slice(0, 40)).map((image, key) => {
                                         return (
-                                            <ImagePreview tag_action={handleTag} tags={image.tags} image={showFullResPreviews ? image.image : image.preview} nsfw={image.nsfw} action={(e) => {handleSelectImage({...image, preview: image.image})}} />
+                                            <ImagePreview altImage={image.preview} tag_action={handleTag} tags={image.tags} image={showFullResPreviews ? image.image : image.image.includes('gif') ? image.image : image.preview} nsfw={image.nsfw} action={(e) => {handleSelectImage({...image, preview: image.image, fallback_image: image.preview})}} />
                                         )
                                     })}
                                 </Masonry>

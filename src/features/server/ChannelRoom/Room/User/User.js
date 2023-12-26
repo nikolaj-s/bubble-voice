@@ -40,7 +40,7 @@ export const User = ({user}) => {
             
             backgroundColor: user.active ? activeColor : user.color ? user.color : accentColor,
             display: (hideNonVideoParticapents === true && user.webcam === false) || (hideNonVideoParticapents === true && prefs?.disabled_web_cam === true) ? 'none' : 'flex',
-            boxShadow: `5px 5px 20px rgba(0, 0, 0, 0.7)`
+            
         }}
         id={user._id} className='active-user-container'>
             <div 

@@ -20,7 +20,7 @@ import { AddMediaButton } from '../../buttons/AddMediaButton/AddMediaButton';
 import { ImagePreview } from './ImagePreview/ImagePreview';
 import { InputEditor } from './InputEditor/InputEditor';
 
-export const MessageInput = ({channelId, nsfw, handleNsfw, cancel_image, send, text, keyCode, image, value, persist, updateInputHeight, socialRoute, direct_message, channel_name, setEmoji}) => {
+export const MessageInput = ({setFallbackImage, channelId, nsfw, handleNsfw, cancel_image, send, text, keyCode, image, value, persist, updateInputHeight, socialRoute, direct_message, channel_name, setEmoji}) => {
 
     const [files, setFiles] = React.useState([{}])
 
@@ -234,6 +234,8 @@ export const MessageInput = ({channelId, nsfw, handleNsfw, cancel_image, send, t
         if (i.link) frame = iFrames.some(f => i.link.includes(f));
 
         text((frame ? i.link : i.image) || i.preview);
+
+        setFallbackImage(i.fallback_image);
 
         image({preview: i.image});
         console.log(i)

@@ -72,7 +72,7 @@ export const fetchMessages = createAsyncThunk(
 
 export const sendMessage = createAsyncThunk(
     'SocialSlice/sendMessage',
-    async ({username, file, channel_id, local_id, text, image_preview, screen_shot = false, emoji, nsfw, textStyle}, {rejectWithValue, getState, dispatch}) => {
+    async ({username, file, channel_id, local_id, text, image_preview, screen_shot = false, emoji, nsfw, textStyle, fall_back_image}, {rejectWithValue, getState, dispatch}) => {
         try {
 
             const message = {
@@ -87,7 +87,8 @@ export const sendMessage = createAsyncThunk(
                     local_id: local_id,
                     loading: true,
                     emoji: emoji,
-                    textStyle: textStyle
+                    textStyle: textStyle,
+                    fall_back_image: fall_back_image
                 },
                 valid: true,
                 screen_shot: screen_shot,

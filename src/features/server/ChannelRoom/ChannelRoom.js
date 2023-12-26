@@ -85,7 +85,7 @@ export const RoomWrapper = () => {
         <>
         
         <ServerSettingsRouteWrapper />
-        <div style={{backgroundColor: primaryColor, width: (channelId && !userStatusHidden) ? 'calc(100% - 188px)' : null, maxWidth: (channelId && !userStatusHidden) ? 'calc(100% - 184px)' : null}} className='outer-server-page-wrapper'>
+        <div style={{backgroundColor: primaryColor, width: (channelId && !userStatusHidden) ? 'calc(100% - 200px)' : null, maxWidth: (channelId && !userStatusHidden) ? 'calc(100% - 200px)' : null}} className='outer-server-page-wrapper'>
             <div onDragOver={onDragOver} onDrop={onDrop} className='server-page-wrapper'>
                 <SocialRoute key='social-route' />
                 

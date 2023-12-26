@@ -4,7 +4,6 @@
     vertical-align: middle;
     display: flex;
     align-self: center;
-    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.7);
     border-radius: 15px;
     overflow: hidden;
     justify-content: center;
@@ -13,7 +12,6 @@
     cursor: pointer;
     max-width: 960px;
     max-height: 540px;
-    transition: 0.05s;
 }
 
 .user-stream-overlay-wrapper {
@@ -55,6 +53,7 @@
     height: 100%;
     object-fit: cover;
     background-color: black;
+    border-radius: 15px;
 }
 
 .active-user-profile-image-container {

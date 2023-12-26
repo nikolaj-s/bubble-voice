@@ -18,7 +18,7 @@
     height: 15px;
     opacity: 0.5;
     cursor: pointer;
-    padding: 10px 0px 4px 3px;
+    padding: 10px 0px 0px 3px;
     transition: 0.05s;
 }
 
@@ -34,7 +34,7 @@
 .channel-list-collapse-button p {
     font-size: 0.8rem;
     font-weight: 300;
-    margin-left: 5px;
+    margin: 0 0 0 5px;
 }
 
 .channel-list-button-wrapper {

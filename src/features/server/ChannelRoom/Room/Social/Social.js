@@ -52,6 +52,8 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
     const [nsfw, toggleNsfw] = React.useState(false);
 
+    const [fallBackImage, setFallbackImage] = React.useState("");
+
     const loadingMore = useSelector(selectLoadingMessages);
 
     const altLoading = useSelector(selectAltSocialLoading);
@@ -191,7 +193,8 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
                 loading: true,
                 display_name: displayName,
                 emoji: emoji,
-                textStyle: textStyle
+                textStyle: textStyle,
+                fall_back_image: fallBackImage
             },
             valid: true,
             nsfw: nsfw
@@ -227,7 +230,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         } else {
             
-            dispatch(sendMessage({username: username, file: image, channel_id: channelId, local_id: local_id, text: text, image_preview: image.preview ? true : false, emoji: emoji, nsfw: nsfw, textStyle: textStyle}))
+            dispatch(sendMessage({username: username, file: image, channel_id: channelId, local_id: local_id, text: text, image_preview: image.preview ? true : false, emoji: emoji, nsfw: nsfw, textStyle: textStyle, fall_back_image: fallBackImage}))
         }
 
         setTimeout(() => {
@@ -237,6 +240,8 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
         }, 200)
 
         URL.revokeObjectURL(image?.preview);
+
+        setFallbackImage("");
         
     }
 
@@ -363,9 +368,9 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
                         {direct_message ? null : <PersistedDataNotice channelName={currentChannel.channel_name} persisted={!currentChannel.persist_social} />}
                         
                     </div>
-                    {(direct_message && status) ? <MessageInput nsfw={nsfw} handleNsfw={handleToggleNsfw} setEmoji={setEmoji} cancel_image={handleCancelImageSend} direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : 
+                    {(direct_message && status) ? <MessageInput setFallbackImage={setFallbackImage} nsfw={nsfw} handleNsfw={handleToggleNsfw} setEmoji={setEmoji} cancel_image={handleCancelImageSend} direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : 
                     permission?.user_can_post_channel_social && !direct_message ?
-                    <MessageInput channelId={channelId} nsfw={nsfw} handleNsfw={handleToggleNsfw} setEmoji={setEmoji} channel_name={currentChannel?.channel_name} direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} />
+                    <MessageInput setFallbackImage={setFallbackImage} channelId={channelId} nsfw={nsfw} handleNsfw={handleToggleNsfw} setEmoji={setEmoji} channel_name={currentChannel?.channel_name} direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} />
                      : null}
                 </div>
             </div>

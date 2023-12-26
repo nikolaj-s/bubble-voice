@@ -2,7 +2,7 @@ import { USER_PREFS } from "./LocalData";
 
 import { audioCtx } from "../features/AudioInit/AudioInit";
 
-const audioMap = new Map();
+export const audioMap = new Map();
 
 export const handleAmplifyLevel = (e) => {
     

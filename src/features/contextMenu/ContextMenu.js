@@ -11,7 +11,7 @@ import { CtxMenuTitle } from '../../components/titles/ctxMenuTitle/CtxMenuTitle'
 
 // state
 import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleStreamState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCopyLinkState, selectCopyState, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteMesssageState, selectDeleteWidget, selectDisableStream, selectDisableWebCam, selectEditChannelCtxState, selectFlipWebCamState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSeeSimilar, selectSelectedMessage, selectSelectedUserCtxState, selectStopStreamingState, selectStreamVolumeState, selectViewSocialState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
-import { assignNewServerGroup, markWidgetForDeletion, moveUser, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerId, selectServerMembers, selectUsersPermissions, sendDeleteMessageRequest, setChannelSocialId, setEditingChannelId, throwServerError, toggleMembersWebCamState, triggerRoomRescale, userBanned } from '../server/ServerSlice';
+import { assignNewServerGroup, markWidgetForDeletion, moveUser, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerId, selectServerMembers, selectUsersPermissions, sendDeleteMessageRequest, setChannelSocialId, setEditingChannelId, throwServerError, toggleCreateChannelMenu, toggleMembersWebCamState, triggerRoomRescale, userBanned } from '../server/ServerSlice';
 import { addActivityMessage } from '../server/ChannelRoom/ServerDashBoard/ServerDashBoardSlice';
 // style
 import "./ContextMenu.css";
@@ -83,6 +83,8 @@ export const ContextMenu = () => {
     const [mediaWidgetState, setMediaWidgetState] = React.useState(false);
 
     const [hidingChannelIcons, toggleHidingChannelIcons] = React.useState(false);
+
+    const [handleCreateChannelState, toggleHandleCreateChannelState] = React.useState(false);
 
     const disableMediaWidget = useSelector(selectDisableMediaWidget);
 
@@ -247,12 +249,18 @@ export const ContextMenu = () => {
 
                 setMediaWidgetState(true);
             }
-
-            if (p.className === 'server-bar-container') {
+            if (p.className === 'channel-list-button-wrapper') {
 
                 toggleContextMenu(true);
 
                 toggleHidingChannelIcons(true);
+
+                if (permissions?.user_can_manage_channels) {
+
+                    toggleHandleCreateChannelState(true);
+                
+                }
+
             }
 
             if (p.localName === 'img' && p.className !== 'user-image') {
@@ -590,6 +598,7 @@ export const ContextMenu = () => {
         dispatch(clearCtxState());
         setSelectedImage({});
         setSelectedVideo({});
+        toggleHandleCreateChannelState(false);
         toggleHidingChannelIcons(false);
     }
 
@@ -1126,6 +1135,10 @@ export const ContextMenu = () => {
 
     }
 
+    const openCreateChannelMenu = () => {
+        dispatch(toggleCreateChannelMenu(true));
+    }
+
     return (
         <>
         {ctxActive ? 
@@ -1184,6 +1197,7 @@ export const ContextMenu = () => {
            
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideUserStatus")}} state={hideUserStatus} name={"Hide User Status"} /> : null}
             {channelSpecificSettingsState || mediaWidgetState ? <BoolButton action={() => {handleChannelSpecificStateChange('disableMediaWidget')}} state={disableMediaWidget} name={"Hide Media Widget"} /> : null}
+            {handleCreateChannelState ? <CtxButton name="Create Channel" action={openCreateChannelMenu} /> : null}
             {hidingChannelIcons ? <BoolButton state={hideCustomChannelIcons} action={() => {handleChannelSpecificStateChange('disableChannelIcons')}} name="Hide Channel Icons" /> : null}
             {addToMusicWidget ? <CtxButton action={handlePlayOnMusicWidget} name="Play On Music Widget" icon={<PlayOnWidgetIcon />}/> : null}
             {stopStreamingState ? <CtxButton action={handleStopStreaming} name={"Stop Streaming"} /> : null}

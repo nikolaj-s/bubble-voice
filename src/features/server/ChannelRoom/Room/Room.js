@@ -488,8 +488,6 @@ const Component = () => {
                         video: false
                     }).then((audio) => {
 
-                        
-
                         if (advancedVoiceActivationDetection) { 
                             analyser = audioCtx.createAnalyser();
 
@@ -786,7 +784,7 @@ const Component = () => {
         <motion.div  className='room-wrapper-outer'>
             <div
             style={
-                ((hideChannelBackgrounds || channel.channel_background === undefined) || page === 'social' || page === 'media' || page === 'pins') ? {backgroundColor: glassColor} : null
+                ((hideChannelBackgrounds || channel.channel_background === undefined) || page === 'social' || page === 'media' || page === 'pins') ? {backgroundColor: 'black'} : null
                 
             }
             onMouseEnter={() => {toggleHover(true)}}

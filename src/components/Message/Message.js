@@ -141,7 +141,7 @@ export const Message = ({activity_feed = false,dashboard = false, direct_message
                             borderRadius: (activity_feed && message?.text?.includes('channel')) ? '50%' : null 
                             }}
                             className='message-image-container'>
-                                <Image nsfw={current_message.nsfw} borderRadius={(activity_feed && message?.text?.includes('channel')) ? '50%' : 20} minLoadHeight={'300px'} altHeight={activity_feed && !current_message.screen_shot ? 80 :
+                                <Image alt_image={message?.fall_back_image} loadingState='eager' nsfw={current_message.nsfw} borderRadius={(activity_feed && message?.text?.includes('channel')) ? '50%' : 20} minLoadHeight={'300px'} altHeight={activity_feed && !current_message.screen_shot ? 80 :
                                     maximizeMediaSize ? '100%' : 350}  expandContent={expandContent} imgHeight={!activity_feed && !maximizeMediaSize ? 350 : 'auto'} cursor='pointer' width={null} altWidth={'100%'} objectFit='contain' image={message.image} />
                             </div>
                             : null}

@@ -41,7 +41,8 @@
 }
 
 .no-image-of-the-day {
-    width: 100%;
+    width: calc(100% - 10px);
+    margin-left: 5px;
     height: 200px;
     display: flex;
     flex-direction: column;
