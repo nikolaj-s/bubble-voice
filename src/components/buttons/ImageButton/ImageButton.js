@@ -6,7 +6,7 @@ export const ImageButton = (props) => {
     return (
         <ButtonAnimationWrapper {...props}>
             <div style={{width: '100%', height: '100%', borderRadius: props.borderRadius, overflow: 'hidden'}}>
-                <Image cursor='pointer' image={props.image} objectFit='cover' />
+                <Image disableErr={true} cursor='pointer' image={props.image} objectFit='cover' />
             </div>
         </ButtonAnimationWrapper>
     )

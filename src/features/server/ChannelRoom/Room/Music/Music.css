@@ -11,7 +11,7 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-width: 100%;
+    max-width: calc(100%);
     z-index: 2;
     transition: 0.1s;
     max-height: calc(100% - 5px);

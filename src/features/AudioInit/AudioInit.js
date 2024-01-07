@@ -13,7 +13,7 @@ export const AudioInit = () => {
     React.useEffect(() => {
 
         if (audioCtx) return;
-
+        console.log('Initializing Audio')
         audioCtx = new AudioContext();
 
     }, []);

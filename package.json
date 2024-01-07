@@ -1,6 +1,6 @@
 {
   "name": "bubble",
-  "version": "0.9.58",
+  "version": "0.9.60",
   "private": false,
   "dependencies": {
     "@popmotion/popcorn": "^0.4.4",
@@ -87,7 +87,7 @@
     ]
   },
   "devDependencies": {
-    "electron": "^25.2.0",
+    "electron": "^28.1.0",
     "electron-builder": "^23.1.0"
   },
   "repository": {

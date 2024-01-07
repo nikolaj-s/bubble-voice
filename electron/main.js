@@ -250,7 +250,7 @@ function createWindow () {
 
   win.hide();
 
-  win.webContents.on('did-finish-load', () => {
+  win.webContents.on('dom-ready', () => {
 
       setTimeout(() => {
         initial_app_loading?.hide();
@@ -261,7 +261,7 @@ function createWindow () {
             win.show();
         }
 
-      }, 2000)
+      }, 500)
   })
 
   win.once('focus', () => win.flashFrame(false));
@@ -707,8 +707,8 @@ app.whenReady().then(() => {
   session.defaultSession.setDisplayMediaRequestHandler((request, callback) => {
     desktopCapturer.getSources({types: ['window', 'screen', 'audio']}).then((sources) => {
       const index = sources.findIndex(s => s.id === window_id);
-      
-      callback({video: sources[index], audio: 'loopback'});
+      console.log(request.frame)
+      callback({video: sources[index], audio: 'loopback', enableLocalEcho: true});
     })
   })
 
@@ -723,7 +723,7 @@ app.on('before-quit', () => {
 
   win.close();
   transparent.close();
-  notification.clse();
+  notification.close();
   initial_app_loading?.close();
 
 })

@@ -27,7 +27,7 @@ import { RoomUserWrapper } from './RoomUserWrapper/RoomUserWrapper';
 import { ChannelBackground } from './ChannelBackground/ChannelBackground';
 import { selectMiscSettingsHideChannelBackground } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { selectDisableTransitionAnimations, selectGlassColor, selectGlassState, selectPrimaryColor, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
-import { AudioInit, audioCtx } from '../../../AudioInit/AudioInit';
+import { audioCtx } from '../../../AudioInit/AudioInit';
 import { selectCurrentServerPageState } from '../ServerNavigation/ServerNavigationSlice';
 import { AnimatePresence, motion} from 'framer-motion';
 import { ScreenShot } from './ScreenShot/ScreenShot';
@@ -113,6 +113,8 @@ const Component = () => {
     const profileColor = useSelector(selectProfileColor);
 
     const primaryColor = useSelector(selectPrimaryColor)
+    
+    const media = channel?.widgets?.filter(w => w.type === 'music');
 
     React.useEffect(() => {
         
@@ -807,7 +809,7 @@ const Component = () => {
                     </motion.div>
                     : null}
                     {page === ''}
-                    {page === 'voice' ? <MediaControls key={'media-controls'} hover={hover} /> : null}
+                    {page === 'voice' && media.length > 0 ? <MediaControls key={'media-controls'} hover={hover} /> : null}
                 </AnimatePresence>
             </div>
             <ChannelBackground 
@@ -819,7 +821,7 @@ const Component = () => {
             <audio hidden={true} id={'microphone-input-source'} />
             
         </motion.div>
-        <AudioInit />
+
         <ScreenShot channelId={current_channel_id} username={username} />
         </>
     )

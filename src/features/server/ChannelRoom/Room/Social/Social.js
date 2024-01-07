@@ -101,11 +101,9 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
     React.useEffect(() => {
 
+        toggleInitialMount(false);
+        
         if (!permission?.user_can_view_channel_content) return;
-
-        setTimeout(() => {
-            toggleInitialMount(false);
-        }, 120)
 
         if (direct_message) return;
         
@@ -124,11 +122,11 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
             dispatch(fetchMessages({channel_id: channelId}));
         
         }
-
+        
         return () => {
             dispatch(messageCleanUp(channelId));
             
-            clearCache();
+        //    clearCache();
         }
 // eslint-disable-next-line
     }, [channelId])

@@ -20,6 +20,7 @@ import { DropOverlay } from '../../../components/DropOverlay/DropOverlay'
 import { selectUsername } from '../../settings/appSettings/accountSettings/accountSettingsSlice'
 import { sendMessage } from '../SocialSlice'
 import { selectPrimaryColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice'
+import { AudioInit } from '../../AudioInit/AudioInit'
 
 export const RoomWrapper = () => {
 
@@ -97,7 +98,7 @@ export const RoomWrapper = () => {
            </div>
         </div>
         <UserStatusBar key='user-status-bar' />
-        
+        <AudioInit />
         </>
     )
 }

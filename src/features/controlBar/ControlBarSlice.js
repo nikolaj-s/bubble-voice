@@ -76,6 +76,12 @@ const controlBarSlice = createSlice({
 
             
         },
+        manuallySetMicrophoneState: (state, action) => {
+
+            if (!state.audioState) return;
+
+            state.microphoneState = action.payload;
+        },
         toggleConnectionLoading: (state, action) => {
             state.connectionLoading = action.payload;
         },
@@ -122,6 +128,6 @@ export const selectStreamingMessage = state => state.controlBarSlice.showStreami
 export const selectSeenStreamingMessage = state => state.controlBarSlice.seenStreamingMessageThisSession;
 // actions
 
-export const {toggleStreamingMessage,closeScreenShareMenu, toggleWebCamPreview, toggleConnectionLoading, toggleConnectionError, toggleLoadingScreenShare, toggleLoadingWebCam, setCurrentScreen, setSelectingScreensState, resetControlState, toggleControlState, setScreens, setSelectedScreen } = controlBarSlice.actions;
+export const {manuallySetMicrophoneState, toggleStreamingMessage,closeScreenShareMenu, toggleWebCamPreview, toggleConnectionLoading, toggleConnectionError, toggleLoadingScreenShare, toggleLoadingWebCam, setCurrentScreen, setSelectingScreensState, resetControlState, toggleControlState, setScreens, setSelectedScreen } = controlBarSlice.actions;
 
 export default controlBarSlice.reducer;

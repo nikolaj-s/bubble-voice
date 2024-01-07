@@ -35,6 +35,7 @@ import "./Mobile.css";
 
 import "./Animations.css";
 import { handleFetchPersistedMusicSettings } from '../features/server/ChannelRoom/Room/Music/MusicSlice';
+import { clearCache } from '../util/ClearCaches';
 
 function App() {
 
@@ -243,6 +244,23 @@ function App() {
       window.removeEventListener('resize', onResize);
     }
 
+  }, [])
+
+  let cacheInterval;
+
+  React.useEffect(() => {
+
+    clearInterval(cacheInterval);
+
+    cacheInterval = setInterval(() => {
+
+      clearCache();
+
+    }, 900000)
+    
+    return () => {
+      clearInterval(cacheInterval);
+    }
   }, [])
   
   return (

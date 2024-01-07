@@ -2,6 +2,7 @@ import { USER_PREFS } from "../../../../util/LocalData";
 import { audioCtx, audioDest } from "../../../AudioInit/AudioInit";
 
 import { audioMap, handleAmplifyLevel } from '../../../../util/AudioAmplifier'
+import { AudioCleanUp } from "../../../../util/AudioCleanUp";
 
 const mediaType = {
     audio: 'audioType',
@@ -376,14 +377,16 @@ export class RoomClient {
                         }
 
                         el.className = `${user._id}-stream-audio`;
-                        console.log()
+                        
                         el.volume = prefs?.stream_volume ? prefs.stream_volume > 1 ? 1 : prefs.stream_volume : 1;
 
                         el.srcObject = stream;
 
                         audioCtx.resume();
 
-                        el.addEventListener('volumechange', handleAmplifyLevel)
+                        el.addEventListener('volumechange', handleAmplifyLevel);
+
+                        el.addEventListener('close', AudioCleanUp);
 
                         el.addEventListener('loadeddata', handleAmplifyLevel);
 
@@ -397,9 +400,11 @@ export class RoomClient {
 
                         el.volume = user_pref_volume?.volume ? user_pref_volume.volume > 1 ? 1 : user_pref_volume.volume : 1;
 
-                        el.addEventListener('volumechange', handleAmplifyLevel)
+                        el.addEventListener('volumechange', handleAmplifyLevel);
 
                         el.addEventListener('loadeddata', handleAmplifyLevel);
+
+                        el.addEventListener('close', AudioCleanUp);
 
                         audioCtx.resume();
 

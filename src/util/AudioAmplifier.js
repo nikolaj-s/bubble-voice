@@ -45,7 +45,6 @@ export const handleAmplifyLevel = (e) => {
                 result = {
                     context: context,
                     source: context.createMediaStreamSource(mediaElem.srcObject),
-                    compressor: context.createDynamicsCompressor(),
                     gain: context.createGain(),
                     media: mediaElem,
                     amplify: function(multiplier) { result.gain.gain.value = multiplier < 1 ? 0 : multiplier; },

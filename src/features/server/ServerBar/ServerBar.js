@@ -15,7 +15,7 @@ import { selectAudioOutput, selectVoiceDeactivationDelayState } from '../../sett
 import { addNewWidgetOverlayToQueue, clearWidgetOverLay } from '../ChannelRoom/Room/RoomActionOverlay/RoomActionOverlaySlice';
 import {  pushSytemNotification, toggleWebVersion } from '../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { addSongToQueue, like_song, removeSongFromQueue, skipSong, toggleMusicPlaying, un_like_song } from '../ChannelRoom/Room/Music/MusicSlice';
-import { selectCurrentScreen, setCurrentScreen, toggleControlState } from '../../controlBar/ControlBarSlice';
+import { manuallySetMicrophoneState, selectCurrentScreen, setCurrentScreen, toggleControlState } from '../../controlBar/ControlBarSlice';
 import { addActivityMessage, setActivityFeed } from '../ChannelRoom/ServerDashBoard/ServerDashBoardSlice';
 
 // component's
@@ -539,7 +539,7 @@ const Bar = () => {
 
             if (e.key === pushToMuteKey.key || e.keyCode === pushToMuteKey.keyCode || e.which === pushToMuteKey.keyCode) {
                 active = true;
-                document.getElementById('toggle-microphone-button').click();
+                dispatch(manuallySetMicrophoneState(false))
             }
             
         }
@@ -560,7 +560,7 @@ const Bar = () => {
 
             if (e.key === pushToMuteKey.key || e.keyCode === pushToMuteKey.keyCode || e.which === pushToMuteKey.keyCode) {
                 active = false;
-                document.getElementById('toggle-microphone-button').click();
+                dispatch(manuallySetMicrophoneState(true))
             }
             
             pressed = false;
@@ -629,9 +629,9 @@ const Bar = () => {
 
             ipcRenderer = window.require('electron').ipcRenderer;
             
-            ipcRenderer.on('push to mute', () => {
+            ipcRenderer.on('push to mute', (event, data) => {
                 if (document.hasFocus()) return;
-                document.getElementById('toggle-microphone-button').click();
+                dispatch(manuallySetMicrophoneState(!data.active));
             })
 
             ipcRenderer.on('push to talk', (event, data) => {

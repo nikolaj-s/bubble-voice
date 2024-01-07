@@ -1179,7 +1179,7 @@ export const ContextMenu = () => {
             </>
             : null}
             {changeStreamVolumeState ? <CtxMenuTitle title={"Change Stream Volume"} /> : null}
-            {changeStreamVolumeState ? <Range invert={true} value={streamAudioLevel} action={handleStreamVolumeChange} fill={false} max={2.5} min={0} step={0.01} /> : null}
+            {changeStreamVolumeState ? <Range invert={true} value={streamAudioLevel} action={handleStreamVolumeChange} fill={false} max={3.4} min={0} step={0.01} /> : null}
             {flipWebCamState ? <BoolButton name={"Flip Web Cam"} state={flippedWebCamState} action={handleFlipWebCamPref} /> : null}
             {disableWebCameState ? <BoolButton name={"Disable Webcam"} state={disabledWebCamLocalState} action={handleDisableWebCam} /> : null}
             {disableStreamState ? <BoolButton name={"Disable Stream"} state={disableStreamLocalState} action={handleDisableStream} /> : null}
