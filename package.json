@@ -61,7 +61,10 @@
     },
     "win": {
       "icon": "build/logo512.ico",
-      "target": "nsis",
+      "target": [{
+        "target": "nsis",
+        "arch": ["x64"]
+      }],
       "publish": "github"
     },
     "mac": {
