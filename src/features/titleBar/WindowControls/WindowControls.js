@@ -13,28 +13,40 @@ export const WindowControls = () => {
 
     const onMac = useSelector(selectOnMacOs);
 
-    let ipcRenderer;
+    const [browser, toggleBrowser] = React.useState(false);
 
     React.useEffect(() => {
+
         try {
-            ipcRenderer  = window.require('electron').ipcRenderer;
-    
-        } catch (error) {
-            ipcRenderer = null;
+            let ipcRenderer = window.require('electron').ipcRenderer;
+        } catch (e) {
+            toggleBrowser(true);
         }
+
     }, [])
 
     // takes argument to send to main to handle custom window buttons
     // ipcMain is only listening to the following events
     // max, min, and close
     const handleWindowControl = (arg) => {
-        if (ipcRenderer === null) return;
-        ipcRenderer.send(arg);
+        let ipcRenderer;
+        
+        try {
+            ipcRenderer  = window.require('electron').ipcRenderer;
+
+            if (ipcRenderer === null) return;
+
+            ipcRenderer.send(arg);
+
+        } catch (error) {
+            ipcRenderer = null;
+        }
+        
     }
     
     return (
         <div className='window-controls-container'>
-            {ipcRenderer === null || onMac ? null :
+            {browser || onMac ? null :
             (
             <>
             <MinimizeWindow action={handleWindowControl} />

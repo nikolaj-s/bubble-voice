@@ -69,7 +69,10 @@
     },
     "mac": {
       "icon": "build/logo512.png",
-      "target": "default",
+      "target": [{
+        "target": "default",
+        "arch": ["arm64"]
+      }],
       "publish": "github"
     },
     "nsis": {
