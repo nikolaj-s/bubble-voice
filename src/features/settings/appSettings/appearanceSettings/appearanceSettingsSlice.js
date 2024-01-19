@@ -37,6 +37,7 @@ const appearanceSettingsSlice = createSlice({
         disableAnimatedTransitions: false,
         gradient: {type: 'none', gradient: false},
         scale: {name: 'default', scale: 0},
+        onMacOs: false,
         gradients: [
             {type: 'none', gradient: false},
             {type: "Witching Hour", gradient: 'linear-gradient(to top, #c31432, #240b36)'},
@@ -160,6 +161,9 @@ const appearanceSettingsSlice = createSlice({
             if (action.payload.type === 'secondaryColor') {
                 state.glassColor = `rgba(${state.secondaryColor.split('rgb(')[1].split(')')[0]}, 0.4)`
             }
+        },
+        toggleOnMacOs: (state, action) => {
+            state.onMacOs = action.payload;
         },
         changeTheme: (state, action) => {
 
@@ -300,7 +304,7 @@ const appearanceSettingsSlice = createSlice({
 })
 
 // actions
-export const {toggleDisableAnimatedTransitions, updateImageBackgroundState, updateScaleState, toggleDisableServerAmbiance, updateGlassState, updateGradient, updateColorValue, changeTheme, saveTheme, toggleRgbBackGround } = appearanceSettingsSlice.actions;
+export const {toggleOnMacOs, toggleDisableAnimatedTransitions, updateImageBackgroundState, updateScaleState, toggleDisableServerAmbiance, updateGlassState, updateGradient, updateColorValue, changeTheme, saveTheme, toggleRgbBackGround } = appearanceSettingsSlice.actions;
 
 // color selectors
 export const selectTransparentPrimaryColor = state => state.appearanceSettingsSlice.transparentPrimary;
@@ -342,6 +346,8 @@ export const selectUseImageBackgroundState = state => state.appearanceSettingsSl
 export const selectGlassPrimaryColor = state => {
     return `rgba(${state.appearanceSettingsSlice.primaryColor.split('rgb(')[1].split(')')[0]}, 0.4)`
 }
+
+export const selectOnMacOs = state => state.appearanceSettingsSlice.onMacOs;
 
 export const selectDisableTransitionAnimations = state => state.appearanceSettingsSlice.disableAnimatedTransitions;
 

@@ -1,6 +1,6 @@
 {
   "name": "bubble",
-  "version": "0.9.60",
+  "version": "0.9.61",
   "private": false,
   "dependencies": {
     "@popmotion/popcorn": "^0.4.4",
@@ -43,8 +43,10 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "electron-dev": "set ELECTRON_START_URL=http://localhost:3000 && electron .",
+    "mac-electron-dev": "export ELECTRON_START_URL=http://localhost:3000 && electron .",
     "build-electron": "robocopy electron build/electron /S",
-    "package": "electron-builder build --win -c.extraMetadata.main=build/electron/main.js --publish always"
+    "package": "electron-builder build --mw -c.extraMetadata.main=build/electron/main.js --publish always",
+    "mac-package": "electron-builder build --mac -c.extraMetadata.main=build/electron/main.js --publish always"
   },
   "build": {
     "appId": "com.bubble.voice",
@@ -53,13 +55,18 @@
       "build/**/*",
       "node_modules/**/*"
     ],
-    "icon": "build/logo512.ico",
+    "icon": "build/logo512.png",
     "publish": {
       "provider": "github"
     },
     "win": {
       "icon": "build/logo512.ico",
       "target": "nsis",
+      "publish": "github"
+    },
+    "mac": {
+      "icon": "build/logo512.png",
+      "target": "default",
       "publish": "github"
     },
     "nsis": {

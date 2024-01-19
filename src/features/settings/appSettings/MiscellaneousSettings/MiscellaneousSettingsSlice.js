@@ -9,7 +9,7 @@ export const fetchMiscellaneousSettings = createAsyncThunk(
 
             const data = await fetchSavedLocalData("MISC", "MISCSETTINGS");
 
-            if (data.error) {
+            if (data?.error || !data) {
                 return rejectWithValue({error: true});
             }
 
@@ -29,7 +29,7 @@ export const fetchSavedHardwareAcceleration = createAsyncThunk(
 
             const data = await fetchHardWareAcceleration();
 
-            if (data.error) return rejectWithValue({error: true});
+            if (data?.error || !data) return rejectWithValue({error: true});
 
             return data;
 

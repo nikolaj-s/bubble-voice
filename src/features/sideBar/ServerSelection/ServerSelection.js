@@ -13,6 +13,7 @@ import { setHeaderTitle } from '../../contentScreen/contentScreenSlice';
 import { selectLoadingUsersServersState, selectServerList, setSideBarHeader } from '../sideBarSlice';
 import { ServerButtons } from './ServerButtons/ServerButtons';
 import { setSelectedMember } from '../../server/ChannelRoom/MemberPanel/MemberPanelSlice';
+import { selectOnMacOs } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 export const ServerSelection = () => {
   
@@ -26,6 +27,8 @@ export const ServerSelection = () => {
     const currentServer = useSelector(selectServerId);
 
     const loadingUserServerListState= useSelector(selectLoadingUsersServersState);
+
+    const onMacOs = useSelector(selectOnMacOs);
 
     const selectServer = (_id, name, top_pos) => {
         
@@ -62,7 +65,10 @@ export const ServerSelection = () => {
     }, [])
 
     return (
-        <div id="side-server-list-wrapper" className='side-bar-inner-container'>        
+        <div id="side-server-list-wrapper" style={{
+            height: onMacOs ? "calc(100% - 25px)" : null,
+            top: onMacOs ? 25 : null
+        }} className='side-bar-inner-container'>        
             <ServerList selectServer={selectServer} serverList={serverList} loading={loadingUserServerListState} />
             <ServerButtons />
         </div>

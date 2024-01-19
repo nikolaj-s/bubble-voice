@@ -124,7 +124,7 @@ const voiceVideoSettingsSlice = createSlice({
         [getMediaDevices.fulfilled]: (state, action) => {
 
             const saved_data = action.payload.saved_data;
-            
+            console.log(saved_data)
             state.deviceList = action.payload.device_list;
 
             state.audioinput = saved_data.audioinput ? saved_data.audioinput : {...action.payload.device_list.find(device => {

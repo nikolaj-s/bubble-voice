@@ -378,7 +378,7 @@ export class RoomClient {
 
                         el.className = `${user._id}-stream-audio`;
                         
-                        el.volume = prefs?.stream_volume ? prefs.stream_volume > 1 ? 1 : prefs.stream_volume : 1;
+                      //  el.volume = prefs?.stream_volume ? prefs.stream_volume > 1 ? 1 : prefs.stream_volume : 1;
 
                         el.srcObject = stream;
 
@@ -398,7 +398,7 @@ export class RoomClient {
 
                         el.className = `audio-source-for-user-${user._id}`;
 
-                        el.volume = user_pref_volume?.volume ? user_pref_volume.volume > 1 ? 1 : user_pref_volume.volume : 1;
+                      //  el.volume = user_pref_volume?.volume ? user_pref_volume.volume > 1 ? 1 : user_pref_volume.volume : 1;
 
                         el.addEventListener('volumechange', handleAmplifyLevel);
 

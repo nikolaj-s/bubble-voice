@@ -5,18 +5,25 @@ import { ExpandWindow } from '../../../components/buttons/windowButtons/expandWi
 import { MinimizeWindow } from '../../../components/buttons/windowButtons/minimizeWindow/minimizeWindow';
 
 import "./WindowControls.css";
+import { useSelector } from 'react-redux';
+import { selectOnMacOs } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 
 export const WindowControls = () => {
 
+    const onMac = useSelector(selectOnMacOs);
+
     let ipcRenderer;
 
-    try {
-        ipcRenderer  = window.require('electron').ipcRenderer;
+    React.useEffect(() => {
+        try {
+            ipcRenderer  = window.require('electron').ipcRenderer;
+    
+        } catch (error) {
+            ipcRenderer = null;
+        }
+    }, [])
 
-    } catch (error) {
-        ipcRenderer = null;
-    }
     // takes argument to send to main to handle custom window buttons
     // ipcMain is only listening to the following events
     // max, min, and close
@@ -27,7 +34,7 @@ export const WindowControls = () => {
     
     return (
         <div className='window-controls-container'>
-            {ipcRenderer === null ? null :
+            {ipcRenderer === null || onMac ? null :
             (
             <>
             <MinimizeWindow action={handleWindowControl} />

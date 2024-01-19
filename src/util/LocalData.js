@@ -6,19 +6,37 @@ export let SOCIAL_DATA = new Map();
 // key bind management
 export const fetchKeyBinds = async () => {
     try {
-        const keytar = window.require('keytar');
 
-        const keyBinds = await keytar.getPassword("KEY", "BINDS")
+        const os = window.require('os');
 
-        if (!keyBinds) {
-            return [
+        const isMac = os.platform() === "darwin";
 
-            ]
+        if (isMac) {
+            const keybinds = localStorage.getItem("KEYBINDS");
+            console.log(keybinds)
+            if (!keybinds) {
+                return [];
+            }
+            
+            return JSON.parse(keybinds);
+
+        } else {
+            const keytar = window.require('keytar');
+
+            const keyBinds = await keytar.getPassword("KEY", "BINDS")
+    
+            if (!keyBinds) {
+                return [
+    
+                ]
+            }
+    
+            return JSON.parse(keyBinds);
         }
 
-        return JSON.parse(keyBinds);
+        
     } catch (error) {
-
+        console.log(error);
         const keybinds = localStorage.getItem("KEYBINDS");
 
         if (!keybinds) {
@@ -31,14 +49,32 @@ export const fetchKeyBinds = async () => {
 
 export const setKeyBinds = async (keys) => {
     try {
-        const keytar = window.require('keytar');
 
-        await keytar.setPassword("KEY", "BINDS", JSON.stringify(keys))
+        const os = window.require('os');
 
-        return true;
+        const isMac = os.platform() === "darwin";
+      
+        if (isMac) {
+
+            localStorage.setItem("KEYBINDS", JSON.stringify(keys));
+
+            return true;
+
+        } else {
+
+            const keytar = window.require('keytar');
+
+            await keytar.setPassword("KEY", "BINDS", JSON.stringify(keys))
+    
+            return true;
+        }
+
+       
     } catch (error) {
 
-        localStorage.setItem("KEYBINDS", JSON.parse(keys));
+        localStorage.setItem("KEYBINDS", JSON.stringify(keys));
+
+        return true;
 
     }
 }
@@ -114,10 +150,17 @@ export const fetchSocialData = async () => {
 
 export const saveUserPrefs = async () => {
     try {
+        const os = window.require('os');
 
-        const keytar = window.require('keytar');
+        const isMac = os.platform() === "darwin";
 
-        await keytar.setPassword("USER", "PREFS", JSON.stringify(Array.from(USER_PREFS.entries())))
+        if (isMac) {
+            localStorage.setItem("USERPREFS", JSON.stringify(Array.from(USER_PREFS.entries())));
+        } else {
+            const keytar = window.require('keytar');
+
+            await keytar.setPassword("USER", "PREFS", JSON.stringify(Array.from(USER_PREFS.entries())))
+        }
 
     } catch (error) {
         
@@ -129,13 +172,27 @@ export const saveUserPrefs = async () => {
 export const fetchSavedUserPrefs = async () => {
     try {
 
-        const keytar = window.require('keytar');
+        const os = window.require('os');
 
-        const data = await keytar.getPassword("USER", "PREFS");
- 
-        USER_PREFS = new Map(JSON.parse(data));
+        const isMac = os.platform() === "darwin";
+        console.log(isMac)
+        if (isMac) {
+            const data = localStorage.getItem("USERPREFS");
 
-        return;
+            USER_PREFS = new Map(JSON.parse(data));
+    
+            return;
+        } else {
+            const keytar = window.require('keytar');
+
+            const data = await keytar.getPassword("USER", "PREFS");
+     
+            USER_PREFS = new Map(JSON.parse(data));
+    
+            return;
+        }
+
+       
     } catch (error) {
         
         const data = localStorage.getItem("USERPREFS");
@@ -150,6 +207,12 @@ export const fetchSavedUserPrefs = async () => {
 // handle hardware acceleration toggle
 export const saveHardwareAcceleration = async (bool) => {
     try {
+
+        const os = window.require('os');
+
+        const isMac = os.platform() === "darwin";
+
+        if (isMac) return;
 
         const keytar = window.require('keytar');
 
@@ -166,6 +229,12 @@ export const saveHardwareAcceleration = async (bool) => {
 
 export const fetchHardWareAcceleration = async () => {
     try {
+
+        const os = window.require('os');
+
+        const isMac = os.platform() === "darwin";
+
+        if (isMac) return;
 
         const keytar = window.require('keytar');
 
@@ -192,13 +261,27 @@ export const saveLocalData = async (param_1, param_2, arg) => {
     try {
         if (!param_1 || !param_2 || !arg) return;
 
-        const keytar = window.require('keytar');
+        const os = window.require('os');
 
-        await keytar.setPassword(param_1, param_2, JSON.stringify(arg))
+        const isMac = os.platform() === "darwin";
 
-        return true;
-    } catch (error) {
+        if (isMac) {
+  
+            localStorage.setItem([param_1, param_2].join(''), JSON.stringify(arg));
+
+            return true;
+        } else {
+
+            const keytar = window.require('keytar');
+
+            await keytar.setPassword(param_1, param_2, JSON.stringify(arg))
+    
+            return true;
+        }
+
         
+    } catch (error) {
+        console.log(error);
         localStorage.setItem([param_1, param_2].join(''), JSON.stringify(arg));
 
     }
@@ -207,27 +290,40 @@ export const saveLocalData = async (param_1, param_2, arg) => {
 export const fetchSavedLocalData = async (param_1, param_2) => {
     try {
 
-        const keytar = window.require('keytar');
 
-        const data = await keytar.getPassword(param_1, param_2);
+        const os = window.require('os');
 
-        const parsed = JSON.parse(data);
+        const isMac = os.platform() === "darwin";
 
-        if (parsed === null) {
-
-            return {error: true}
+        if (isMac) {
+            const d = JSON.parse(localStorage.getItem([param_1, param_2].join('')));
         
+            if (d === null) return {error: true};
+            console.log(d)
+            return d;
         } else {
+            const keytar = window.require('keytar');
 
-            return parsed;
-        
+            const data = await keytar.getPassword(param_1, param_2);
+    
+            const parsed = JSON.parse(data);
+    
+            if (parsed === null) {
+    
+                return {error: true}
+            
+            } else {
+    
+                return parsed;
+            
+            }
         }
 
     } catch (error) {
 
         const d = JSON.parse(localStorage.getItem([param_1, param_2].join('')));
         
-        if (d === null) return;
+        if (d === null) return {error: true};
        
         return d;
     }

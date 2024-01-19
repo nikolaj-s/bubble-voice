@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 
 // state
-import { selectSecondaryColor, selectServerAmbiance, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectOnMacOs, selectSecondaryColor, selectServerAmbiance, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // components
 import { Image } from '../Image/Image';
@@ -28,7 +28,7 @@ export const ServerBanner = ({serverName, serverImage, handleLeave}) => {
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
-    const disableServerAmbiance = useSelector(selectServerAmbiance);
+    const onMacOs = useSelector(selectOnMacOs);
 
     const createChannelMenuOpen = useSelector(selectCreateChannelMenuState);
 
@@ -103,7 +103,7 @@ export const ServerBanner = ({serverName, serverImage, handleLeave}) => {
             transition={{duration: 0.3}}
             className='server-title-overlay'>
                 <h2
-                style={{color: color}}
+                style={{color: color, marginLeft: onMacOs ? 15 : null, width: onMacOs ? 'calc(100% - 15px)' : null}}
                 >{serverName}</h2>
                 <AltDownIcon flip={open}  />
             </motion.div>

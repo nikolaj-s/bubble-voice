@@ -15,7 +15,7 @@ import { Verification } from '../features/LoggingIn/verification/Verification';
 // state
 import { incrementLoadingPercentage, selectRetryState } from '../features/initializingAppScreen/initializingAppScreenSlice';
 import { getMediaDevices } from '../features/settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
-import { selectGradient, selectPrimaryColor, selectScaleState, updatePersistedAppTheme } from '../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGradient, selectPrimaryColor, selectScaleState, toggleOnMacOs, updatePersistedAppTheme } from '../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { fetchAccount } from '../features/settings/appSettings/accountSettings/accountSettingsSlice';
 import { selectLoggedIn } from '../features/LoggingIn/signIn/signInSlice';
 import { selectSignedUp } from '../features/LoggingIn/signUp/signUpSlice';
@@ -53,7 +53,19 @@ function App() {
 
   const gradient = useSelector(selectGradient);
 
-  
+  const handleOs = () => {
+    try {
+
+        const os = window.require('os');
+
+        const isMac = os.platform() === "darwin";
+
+        if (isMac) dispatch(toggleOnMacOs(true));
+
+    } catch (err) {
+      return;
+    }
+  }
 
   const preventMouseDefaults = (e) => {
     if (e.button === 3 || e.button === 4) {
@@ -69,6 +81,8 @@ function App() {
     navigator.mediaSession.setActionHandler('seekforward', function() { /* Code excerpted. */ });
     navigator.mediaSession.setActionHandler('previoustrack', function() { /* Code excerpted. */ });
     navigator.mediaSession.setActionHandler('nexttrack', function() { /* Code excerpted. */ });
+
+    handleOs();
 
     dispatch(incrementLoadingPercentage({percent: 10, state: "Fetching Media Devices"}));
 

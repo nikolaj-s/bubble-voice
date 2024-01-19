@@ -568,35 +568,33 @@ const Bar = () => {
 
         const press = (e) => {
             if (!current_channel_id) return;
-          
-            if (e.key === muteMicKey.key) {
+            
+            if (e.key === muteMicKey.key || e.key === muteMicKey.key.toLowerCase()) {
                 if (pressed) return;
                 document.getElementById('toggle-microphone-button').click();
                 pressed = true;
             }
 
-            if (e.key === muteAudioKey.key) {
+            if (e.key === muteAudioKey.key || e.key === muteAudioKey.key.toLowerCase()) {
                 if (pressed) return;
                 document.getElementById('mute-audio-toggle-button').click();
                 pressed = true;
             }
 
-            if (e.key === webCamKey.key) {
+            if (e.key === webCamKey.key || e.key === webCamKey.key.toLowerCase()) {
                 if (pressed) return;
                 document.getElementById('web-cam-toggle-button').click();
             }
 
-            if (e.key === disconnectKey.key) {
+            if (e.key === disconnectKey.key || e.key === disconnectKey.key.toLowerCase()) {
                 if (pressed) return;
                 document.getElementById('disconnect-from-channel-button').click();
             }
 
-            if (e.key === shareScreenKey.key) {
+            if (e.key === shareScreenKey.key || e.key === shareScreenKey.key.toLowerCase()) {
                 if (pressed) return;
 
                 if (!current_channel_id) return;
-
-               
 
                 dispatch(toggleControlState('screenShareState'));
 

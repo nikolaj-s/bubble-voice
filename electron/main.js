@@ -19,8 +19,6 @@ let win;
 
 let hardwareAccelToggled;
 
-let transparent;
-
 let notification;
 
 let initial_app_loading;
@@ -154,7 +152,6 @@ try {
 
   console.log(error)
   
-  return;
 
 }
 
@@ -314,17 +311,21 @@ function createWindow () {
   })
   
   win.on('close', () => {
-
-    let window_data = {
-      toggled: hardwareAccelToggled !== data?.toggled ? hardwareAccelToggled : data?.toggled,
-      bounds: win.getBounds()
+    console.log('closing app')
+    try {
+      let window_data = {
+        toggled: hardwareAccelToggled !== data?.toggled ? hardwareAccelToggled : data?.toggled,
+        bounds: win.getBounds()
+      }
+      
+      fs.writeFileSync(initPath, JSON.stringify(window_data))
+  
+      notification?.close();
+  
+      initial_app_loading?.close();
+    } catch (err) {
+      return;
     }
-    
-    fs.writeFileSync(initPath, JSON.stringify(window_data))
-
-    notification.close();
-
-    initial_app_loading?.close();
   
   })
 
@@ -720,11 +721,13 @@ app.whenReady().then(() => {
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('before-quit', () => {
-
-  win.close();
-  transparent.close();
-  notification.close();
-  initial_app_loading?.close();
+  try {
+    win?.close();
+    notification?.close();
+    initial_app_loading?.close();
+  } catch (err) {
+    return;
+  }
 
 })
 
