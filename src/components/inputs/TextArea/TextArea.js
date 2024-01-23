@@ -51,6 +51,7 @@ export const TextArea = ({action = () => {}, placeHolder, inputValue = "", margi
                 handleAnimation(color)
             }
         }}
+        transition={{duration: 0.1}}
         >
             <textarea 
             onBlur={returnInputValue}

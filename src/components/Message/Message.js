@@ -28,6 +28,7 @@ import { ProcessingIndicator } from './ProcessingIndicator/ProcessingIndicator';
 import { UploadedFileShare } from './UploadedFileShare/UploadeFileShare';
 import { LinkPreview } from './LinkPreview/LinkPreview';
 import { NsfwImageOverlay } from '../Image/NsfwImageOverlay/NsfwImageOverlay';
+import { ConvertTime } from '../../util/ConvertTime';
 
 export const Message = ({activity_feed = false,dashboard = false, direct_message, message, overlay = false, id, channel_id, perm, pinMessage, pinned, index, previous_message, current_message, persist, pin_to_profile}) => {
 
@@ -38,6 +39,10 @@ export const Message = ({activity_feed = false,dashboard = false, direct_message
     const [user, setUser] = React.useState({});
 
     const [timeStamp, setTimeStamp] = React.useState("");
+
+    const [date, setDate] = React.useState(new Date());
+
+    const [prevDate, setPrevDate] = React.useState(new Date());
 
     const textColor = useSelector(selectTextColor);
 
@@ -58,9 +63,18 @@ export const Message = ({activity_feed = false,dashboard = false, direct_message
     const glassPrimary = useSelector(selectSecondaryColor);
 
     React.useEffect(() => {
-        setUser(members.find(member => member.username === current_message.username))
+        setUser(members.find(member => member.username === current_message.username));
 
-        setTimeStamp(GetTimeDifference(current_message?.content?.time))
+        const local_date = new Date(current_message?.content?.date);
+
+        const prev_local_date = new Date(previous_message?.content?.date);
+
+        setTimeStamp(ConvertTime(local_date));
+        
+        setDate(local_date);
+
+        setPrevDate(prev_local_date);
+
     }, [])
 
     const expandContent = (source) => {
@@ -72,6 +86,8 @@ export const Message = ({activity_feed = false,dashboard = false, direct_message
         const el = document.getElementById(`${id}/${channel_id}`);
 
         const subMenu = document.getElementById(`${id}/${channel_id}-sub-menu`)
+
+        const alt_time_stamp = document.getElementById(`alt-time-stamp-${id}`)
 
         if (el) {
 
@@ -87,6 +103,14 @@ export const Message = ({activity_feed = false,dashboard = false, direct_message
                 subMenu.style.opacity = 1;
             } else {
                 subMenu.style.opacity = 0;
+            }
+        }
+
+        if (alt_time_stamp) {
+            if (bool) {
+                alt_time_stamp.style.opacity = 0.5;
+            } else {
+                alt_time_stamp.style.opacity = 0;
             }
         }
 
@@ -110,10 +134,10 @@ export const Message = ({activity_feed = false,dashboard = false, direct_message
             id={`${id}/${channel_id}`}
             className={`message-container ${direct_message ? 'direct-message-container' : null}`}>
                
-                <ProfileImage activity={activity_feed} previous_message={previous_message} color={user?.color} current_message={current_message} profile_picture_shape={user?.profile_picture_shape} primaryColor={primaryColor} user_image={user?.user_image} action={openUserPanel} />
+                <ProfileImage timeStamp={timeStamp} prevDate={prevDate} date={date} activity={activity_feed} previous_message={previous_message} color={user?.color} current_message={current_message} profile_picture_shape={user?.profile_picture_shape} primaryColor={primaryColor} user_image={user?.user_image} action={openUserPanel} />
                 <div className='message-inner-container'>
                     <div id={`${id}-ctx-message-overlay`} className={'ctx-message-overlay'} />
-                    <SenderInfo submenuId={`${id}/${channel_id}-sub-menu`} activity={activity_feed} timeStamp={timeStamp} direct_message={direct_message} pin_to_profile={pin_to_profile} link={message?.link} color={user?.color} profile_picture_shape={user?.profile_picture_shape} primaryColor={primaryColor} display_name={user?.display_name} user_image={user?.user_image} action={openUserPanel} persist={persist} id={id} accentColor={accentColor} hover={hoverState} textColor={textColor} perm={perm} index={index}  message={message} current_message={current_message} previous_message={previous_message} pinMessage={pinMessage} pinned={pinned} overlay={overlay} />
+                    <SenderInfo date={date} submenuId={`${id}/${channel_id}-sub-menu`} activity={activity_feed} timeStamp={timeStamp} direct_message={direct_message} pin_to_profile={pin_to_profile} link={message?.link} color={user?.color} profile_picture_shape={user?.profile_picture_shape} primaryColor={primaryColor} display_name={user?.display_name} user_image={user?.user_image} action={openUserPanel} persist={persist} id={id} accentColor={accentColor} hover={hoverState} textColor={textColor} perm={perm} index={index}  message={message} current_message={current_message} previous_message={previous_message} pinMessage={pinMessage} pinned={pinned} overlay={overlay} />
                     {message?.emoji ?
                     <h2 className='emoji-reaction-mesage'>{message.emoji}</h2>
                     : null}
@@ -158,8 +182,8 @@ export const Message = ({activity_feed = false,dashboard = false, direct_message
                     </div>
                 </div> 
             </div>
-            {(previous_message?.content?.date?.split("T")[0] !== current_message?.content?.date?.split("T")[0]) && dashboard === false && current_message?.content?.date?.split("T")[0] ?
-            <DateSpacer d={current_message?.content?.date?.split("T")[0]} />
+            {(prevDate?.getDate() !== date?.getDate()) && dashboard === false && current_message?.content?.date?.split("T")[0] ?
+            <DateSpacer d={date} />
             : null}
         </>
     )

@@ -45,7 +45,7 @@
     "electron-dev": "set ELECTRON_START_URL=http://localhost:3000 && electron .",
     "mac-electron-dev": "export ELECTRON_START_URL=http://localhost:3000 && electron .",
     "build-electron": "robocopy electron build/electron /S",
-    "package": "electron-builder build -m -w -c.extraMetadata.main=build/electron/main.js --publish always",
+    "package": "electron-builder build -w -c.extraMetadata.main=build/electron/main.js --publish always",
     "mac-package": "electron-builder build --mac -c.extraMetadata.main=build/electron/main.js --publish always"
   },
   "build": {

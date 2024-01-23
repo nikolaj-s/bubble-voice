@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 import { selectProfilePinnedMessage, selectUsername } from '../../../features/settings/appSettings/accountSettings/accountSettingsSlice'
 import { PinToProfileButton } from '../../buttons/PinToProfileButton/PinToProfileButton'
 
-export const SenderInfo = ({submenuId, activity = false, timeStamp, direct_message, pin_to_profile, link, id, current_message, primaryColor, previous_message, message, pinMessage, pinned, overlay, hover, textColor, index, perm, accentColor, persist, action, display_name, user_image}) => {
+export const SenderInfo = ({date, submenuId, activity = false, timeStamp, direct_message, pin_to_profile, link, id, current_message, primaryColor, previous_message, message, pinMessage, pinned, overlay, hover, textColor, index, perm, accentColor, persist, action, display_name, user_image}) => {
 
     const userName = useSelector(selectUsername);
 
@@ -57,13 +57,12 @@ export const SenderInfo = ({submenuId, activity = false, timeStamp, direct_messa
                     {!message.loading ?
                     <p className='message-date-stamp'
                         style={{color: textColor, marginRight: 10}}
-                    >{message?.date?.split("T")[0]}</p> : null}
+                    >{`${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${timeStamp}`}</p> : null}
                 </div>
                 : null}
                 {message.loading  ? 
                 null :
                 <div id={submenuId} style={{top: index === 0 ? 5 : -20, backgroundColor: primaryColor, boxShadow: '5px 5px 20px rgba(0, 0, 0, 0.4)'}} className='date-submenu-message-wrapper'>
-                    <p className='message-exact-time-stamp' style={{color: textColor, fontSize: '0.7rem', paddingRight: activity ? 5 : 0, paddingLeft: 5, paddingRight: 5}}>{timeStamp}</p>
                     {activity ? null :
                     <>
                     {(userName === current_message.username && !direct_message) ? <PinToProfileButton pinned={profilePin?._id === current_message?._id} action={() => {pin_to_profile(current_message?._id)}} width={18} padding={5} height={18} /> : null}

@@ -154,7 +154,7 @@
     display: flex;
     align-items: center;
     margin-left: auto;
-    border-radius: var(--border-radius);
+    border-radius: 5px;
     z-index: 5;
     opacity: 0;
     box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.137);

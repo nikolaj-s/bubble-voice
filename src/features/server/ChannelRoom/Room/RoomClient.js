@@ -459,7 +459,7 @@ export class RoomClient {
             par.remove();
         }
 
-        audioMap.delete(consumer_id);
+        AudioCleanUp(consumer_id);
         
         this.consumers.delete(consumer_id);
     }    

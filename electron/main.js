@@ -698,6 +698,11 @@ app.whenReady().then(() => {
       label: 'Quit App', click: () => {
         app.quit();
       }
+    },
+    {
+      label: "Reset Window", click: () => {
+        win.setPosition(0, 0);
+      }
     }
   ])
 

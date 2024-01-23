@@ -29,10 +29,10 @@ export const handleAmplifyLevel = (e) => {
     if (e.target.muted) volume = 0;
 
     if (volume >= 1) e.target.volume = 0;
-    console.log(volume);
+   
 
     if (e.target.nodeName === 'AUDIO') {
-        console.log(amplified)
+        
         if (amplified) {
 
             amplified.amplify(Number(volume).toFixed(2));
