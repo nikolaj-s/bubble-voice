@@ -8,7 +8,7 @@
 	flex-shrink: 0;
     align-items: center;
     justify-content: center;
-	border-radius: var(--border-radius);
+	border-radius: 20px;
 	overflow: hidden;
 }
 

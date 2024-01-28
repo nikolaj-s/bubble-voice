@@ -51,7 +51,7 @@ export const fetchMessages = createAsyncThunk(
 
             if (!socket) return [];
 
-            const count = messages[channel_id] ? messages[channel_id].length + 15 : 15;
+            const count = messages[channel_id] ? messages[channel_id].length + 25 : 25;
 
             const data = await socket.request('fetch messages', {channel_id: channel_id, count: count})
             .then(res => res)
@@ -174,9 +174,13 @@ const SocialSlice = createSlice({
         current_channel: "",
         image_preview: "",
         text: "",
+        scrollPositions: {},
         showingNsfwNotice: false
     },
     reducers: {
+        setScrollPosition: (state, action) => {
+            state.scrollPositions[action.payload.channel_id] = action.payload.position;
+        },
         toggleNsfwNotice: (state, action) => {
             console.log(action.payload)
             state.showingNsfwNotice = action.payload;
@@ -235,7 +239,8 @@ const SocialSlice = createSlice({
         messageCleanUp: (state, action) => {
             if (state.messages[action.payload]) {
 
-                state.messages[action.payload] = state.messages[action.payload].slice(0, 15);
+                state.messages[action.payload] = state.messages[action.payload].slice(0, 40);
+            
             }
         },
         toggleSocialAltLoading: (state, action) => {
@@ -336,6 +341,8 @@ export const selectAltSocialLoading = state => state.SocialSlice.altLoading;
 
 export const selectNsfwNoticeState = state => state.SocialSlice.showingNsfwNotice;
 
-export const {toggleNsfwNotice, toggleSocialAltLoading, receiveMessage, deleteMessage, clearSocialById, clearMessages, messageCleanUp } = SocialSlice.actions;
+export const selectScrollPosition = state => state.SocialSlice.scrollPositions;
+
+export const {setScrollPosition, toggleNsfwNotice, toggleSocialAltLoading, receiveMessage, deleteMessage, clearSocialById, clearMessages, messageCleanUp } = SocialSlice.actions;
 
 export default SocialSlice.reducer;

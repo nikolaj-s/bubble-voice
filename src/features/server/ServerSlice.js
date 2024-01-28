@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import { fetchMusicWidgetVolume } from "../../util/LocalData";
 
 import { socket } from "./ServerBar/ServerBar";
-import { addActivityMessage } from "./ChannelRoom/ServerDashBoard/ServerDashBoardSlice";
+import { addActivityMessage, setActivityFeed } from "./ChannelRoom/ServerDashBoard/ServerDashBoardSlice";
 
 export const unBanMember = createAsyncThunk(
     'serverSlice/unBanMember',
@@ -85,6 +85,8 @@ export const fetchServerDetails = createAsyncThunk(
         const { server_id } = getState().serverSlice;
         
         if (!server_id) return;
+
+        dispatch(setActivityFeed([]));
 
         const { currentStatus } = getState().UserStatusSlice;
         

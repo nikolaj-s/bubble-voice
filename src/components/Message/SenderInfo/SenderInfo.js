@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 import { selectProfilePinnedMessage, selectUsername } from '../../../features/settings/appSettings/accountSettings/accountSettingsSlice'
 import { PinToProfileButton } from '../../buttons/PinToProfileButton/PinToProfileButton'
 
-export const SenderInfo = ({date, submenuId, activity = false, timeStamp, direct_message, pin_to_profile, link, id, current_message, primaryColor, previous_message, message, pinMessage, pinned, overlay, hover, textColor, index, perm, accentColor, persist, action, display_name, user_image}) => {
+export const SenderInfo = ({prevDate, date, submenuId, activity = false, timeStamp, direct_message, pin_to_profile, link, id, current_message, primaryColor, previous_message, message, pinMessage, pinned, overlay, hover, textColor, index, perm, accentColor, persist, action, display_name, user_image}) => {
 
     const userName = useSelector(selectUsername);
 
@@ -39,14 +39,14 @@ export const SenderInfo = ({date, submenuId, activity = false, timeStamp, direct
         <div 
         
         style={{
-            height: (previous_message?.username !== current_message?.username) || (previous_message?.content?.date?.split("T")[0] !== current_message?.content?.date?.split("T")[0]) ? 15 : 0,
-            padding: (previous_message?.username !== current_message?.username) || (previous_message?.content?.date?.split("T")[0] !== current_message?.content?.date?.split("T")[0]) ? '0px 0 4px 0' : 0,
+            height: (previous_message?.username !== current_message?.username) || (prevDate.getDate() !== date.getDate()) ? 15 : 0,
+            padding: (previous_message?.username !== current_message?.username) || (prevDate.getDate() !== date.getDate()) ? '0px 0 4px 0' : 0,
         }}
         className='sender-info-container'>
                 
                 {(previous_message?.username !== current_message?.username)
                 ||
-                (previous_message?.content?.date?.split("T")[0] !== current_message?.content?.date?.split("T")[0])
+                (prevDate.getDate() !== date.getDate())
                 ?
                 <div className='sender-info-inner-container'>
                     

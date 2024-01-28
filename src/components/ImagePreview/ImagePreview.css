@@ -1,7 +1,7 @@
 
 .image-preview-result-container {
     position: relative;
-    border-radius: 10px;
+    border-radius: 20px;
     overflow: hidden;
     object-fit: cover;
     min-height: 70px;

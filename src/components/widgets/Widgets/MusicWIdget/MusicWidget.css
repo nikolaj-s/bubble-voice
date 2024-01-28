@@ -8,7 +8,7 @@
     transition: 0.3s;
     overflow: hidden;
     flex-shrink: 0;
-    border-radius: 10px;
+    border-radius: 20px;
 }
 
 .inner-music-widget-container {

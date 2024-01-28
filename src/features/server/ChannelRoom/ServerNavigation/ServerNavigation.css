@@ -20,8 +20,19 @@
     -webkit-app-region: no-drag;
 }
 
+.server-nav-social-unread-indicator {
+    position: fixed;
+    top: 2px;
+    padding: 3px;
+    margin: 0 0 0 12px;
+    font-size: 9px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    z-index: 10;
+}
+
 .server-navigation-button {
-    padding: 0 8px;
+    padding: 0 11px;
     display: flex;
     align-items: center;
     height: 100%;

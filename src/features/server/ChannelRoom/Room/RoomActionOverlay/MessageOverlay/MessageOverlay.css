@@ -1,6 +1,6 @@
 
 .message-overlay-container {
-    max-width: calc(100% - 10px);
+    max-width: calc(400px);
     max-height: 90%;
     padding: 5px;
     overflow: hidden;

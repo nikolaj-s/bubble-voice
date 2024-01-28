@@ -11,7 +11,7 @@
 
 .bool-button-container p {
     margin: 0;
-    padding: 0;
+    padding: 0 5px 0 0;
     font-weight: 400;
     font-size: 0.7rem;
     letter-spacing: var(--font-spacing);

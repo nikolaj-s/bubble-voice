@@ -24,7 +24,7 @@ export const handleAmplifyLevel = (e) => {
         } else {
             volume = prefs.volume;
         }
-    }
+    } 
 
     if (e.target.muted) volume = 0;
 
@@ -54,7 +54,7 @@ export const handleAmplifyLevel = (e) => {
                 result.source.connect(result.gain);
 
                 result.gain.connect(result.context.destination);
-
+                
                 result.amplify(multiplier);
     
                 return result;

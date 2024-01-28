@@ -5,7 +5,7 @@ import { useAnimation, motion } from 'framer-motion';
 
 // state
 import { selectCurrentServerPageState, handleChangePage } from './ServerNavigationSlice';
-import { selectChannelSocialId, selectCurrentChannelId, selectCurrentlyViewChannelSocial, selectUsersPermissions, setChannelSocialId } from '../../ServerSlice';
+import { selectChannelSocialId, selectCurrentChannel, selectCurrentChannelId, selectCurrentlyViewChannelSocial, selectUsersPermissions, setChannelSocialId } from '../../ServerSlice';
 import { selectAccentColor, selectOnMacOs, selectSecondaryColor, selectTextColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
@@ -21,6 +21,7 @@ import { OptionsButton } from '../../../../components/buttons/OptionsButton/Opti
 import { TextOnlyIcon } from '../../../../components/Icons/TextOnlyIcon/TextOnlyIcon';
 import { setSelectedMember } from '../MemberPanel/MemberPanelSlice';
 import { ActivityIcon } from '../../../../components/Icons/ActivityIcon/ActivityIcon';
+import { SOCIAL_DATA } from '../../../../util/LocalData';
 
 export const ServerNavigation = () => {
 
@@ -59,6 +60,8 @@ export const ServerNavigation = () => {
     const socialId = useSelector(selectChannelSocialId);
 
     const socialChannel = useSelector(selectCurrentlyViewChannelSocial);
+
+    const channel = useSelector(selectCurrentChannel);
     
     const [videoDesc, toggleVideoDesc] = React.useState(false);
 
@@ -71,6 +74,29 @@ export const ServerNavigation = () => {
     const [mediaDesc, toggleMediaDesc] = React.useState(false);
 
     const [activityDesc, toggleActivityDesc] = React.useState(false);
+
+    const [unReadMessage, toggleUnreadMessage] = React.useState(false);
+
+    React.useEffect(() => {
+
+        if (page === 'social') {
+            toggleUnreadMessage(false);
+            return;
+        }
+
+        const last_message = SOCIAL_DATA.get(inChannel);
+
+        if (last_message?.message_id !== channel?.last_message_id) {
+
+            toggleUnreadMessage(true);
+
+        }
+
+        return () => {
+            toggleUnreadMessage(false);
+        }
+
+    }, [page, channel, SOCIAL_DATA])
 
     const handleAction = (p) => {
         dispatch(handleChangePage(p));
@@ -343,6 +369,7 @@ export const ServerNavigation = () => {
                 onMouseUp={() => {handleAnimation(secondaryColor, socialButtonAnimation, 'social')}}
                 animate={socialButtonAnimation} onClick={() => {handleAction('social')}} className='server-navigation-button'>
                     {socialDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Social</p> : null}
+                    {unReadMessage ? <h4 style={{backgroundColor: 'red', color: textColor}} className='server-nav-social-unread-indicator'>NEW</h4> : null}
                     <SocialIcon opacity={page === 'social' || socialDesc ? 1 : 0.6} color={textColor} />
                 </motion.div>
                 <motion.div 

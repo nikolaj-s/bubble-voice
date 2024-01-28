@@ -43,6 +43,10 @@ export const Image = ({aspect_ratio,alt_image = null, draggable = false,image_cl
     console.log('error loading img')
     }
 
+    const onLoadStart = (e) => {
+        console.log(e)
+    }
+
     return (
         <div id={id} style={{borderRadius: borderRadius,zIndex: zIndex, position: position, objectFit: objectFit, width: width, minHeight: loading && !error ? minLoadHeight : null, height: height, opacity: opacity, display: (error && hideOnError) ? 'none' : null, backgroundColor: backgroundColor, display: 'inline-block'}}>
             {loading && image !== "" && image !== undefined && disableErr === false && error === false ?
@@ -74,6 +78,7 @@ export const Image = ({aspect_ratio,alt_image = null, draggable = false,image_cl
             : <img 
             drag={draggable}
             className={image_class}
+            onLoadStart={onLoadStart}
             id={img_id}
             onClick={(e) => {expandContent(e.target.src)}}
             onError={handleError} loading={loadingState} draggable={false} style={{maxHeight: altHeight, width: width, maxWidth: altWidth, height: imgHeight, objectFit: objectFit, cursor: cursor, opacity: loading ? 0 : opacity, transition: '0.1s', borderRadius: borderRadius, aspectRatio: aspect_ratio}} onLoad={handleImageLoad} src={image} />}

@@ -137,15 +137,15 @@ export const Message = ({activity_feed = false,dashboard = false, direct_message
                 <ProfileImage timeStamp={timeStamp} prevDate={prevDate} date={date} activity={activity_feed} previous_message={previous_message} color={user?.color} current_message={current_message} profile_picture_shape={user?.profile_picture_shape} primaryColor={primaryColor} user_image={user?.user_image} action={openUserPanel} />
                 <div className='message-inner-container'>
                     <div id={`${id}-ctx-message-overlay`} className={'ctx-message-overlay'} />
-                    <SenderInfo date={date} submenuId={`${id}/${channel_id}-sub-menu`} activity={activity_feed} timeStamp={timeStamp} direct_message={direct_message} pin_to_profile={pin_to_profile} link={message?.link} color={user?.color} profile_picture_shape={user?.profile_picture_shape} primaryColor={primaryColor} display_name={user?.display_name} user_image={user?.user_image} action={openUserPanel} persist={persist} id={id} accentColor={accentColor} hover={hoverState} textColor={textColor} perm={perm} index={index}  message={message} current_message={current_message} previous_message={previous_message} pinMessage={pinMessage} pinned={pinned} overlay={overlay} />
+                    <SenderInfo date={date} prevDate={prevDate} submenuId={`${id}/${channel_id}-sub-menu`} activity={activity_feed} timeStamp={timeStamp} direct_message={direct_message} pin_to_profile={pin_to_profile} link={message?.link} color={user?.color} profile_picture_shape={user?.profile_picture_shape} primaryColor={primaryColor} display_name={user?.display_name} user_image={user?.user_image} action={openUserPanel} persist={persist} id={id} accentColor={accentColor} hover={hoverState} textColor={textColor} perm={perm} index={index}  message={message} current_message={current_message} previous_message={previous_message} pinMessage={pinMessage} pinned={pinned} overlay={overlay} />
                     {message?.emoji ?
                     <h2 className='emoji-reaction-mesage'>{message.emoji}</h2>
                     : null}
                     <MessageText loading={message.loading} style={message.textStyle} color={textColor} text={message.text} />
-                    {hideLinksOnMedia && (message.image || message.video || message.iFrame) || message.gallery ? null : <MessageLink link={message.link} />
+                    {(message.image || message.video || message.iFrame) || message.gallery ? null : <MessageLink link={message.link} />
                     }
                     {message.link_preview ?
-                    <LinkPreview data={message.link_preview} />
+                    <LinkPreview expand={expandContent} data={message.link_preview} />
                     : null}
                     <div className='message-content-wrapper'>
                             <Iframe marginRight={5}  link={message.iFrame} />
@@ -165,8 +165,8 @@ export const Message = ({activity_feed = false,dashboard = false, direct_message
                             borderRadius: (activity_feed && message?.text?.includes('channel')) ? '50%' : null 
                             }}
                             className='message-image-container'>
-                                <Image alt_image={message?.fall_back_image} loadingState='eager' nsfw={current_message.nsfw} borderRadius={(activity_feed && message?.text?.includes('channel')) ? '50%' : 20} minLoadHeight={'300px'} altHeight={activity_feed && !current_message.screen_shot ? 80 :
-                                    maximizeMediaSize ? '100%' : 350}  expandContent={expandContent} imgHeight={!activity_feed && !maximizeMediaSize ? 350 : 'auto'} cursor='pointer' width={null} altWidth={'100%'} objectFit='contain' image={message.image} />
+                                <Image alt_image={message?.fall_back_image} loadingState='eager' nsfw={current_message.nsfw} borderRadius={(activity_feed && message?.text?.includes('channel')) ? '50%' : 20} minLoadHeight={'50px'} altHeight={activity_feed && !current_message.screen_shot ? 80 :
+                                    maximizeMediaSize ? '100%' : 350}  expandContent={expandContent} imgHeight={!activity_feed && !maximizeMediaSize ? 'auto' : 'auto'} cursor='pointer' width={null} altWidth={'100%'} objectFit='contain' image={message.image} />
                             </div>
                             : null}
                             {message.video ? 

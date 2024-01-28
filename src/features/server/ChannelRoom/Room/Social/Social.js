@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 // state
 import { handlePinMessageToProfile, selectDisplayName, selectUserImage, selectUsername } from '../../../../settings/appSettings/accountSettings/accountSettingsSlice';
-import { selectCurrentChannel, selectCurrentChannelId, selectPinningMessage, selectUsersPermissions, throwServerError } from '../../../ServerSlice';
+import { selectCurrentChannelId, selectPinningMessage, selectUsersPermissions, throwServerError } from '../../../ServerSlice';
 
 // components
 import { MessageInput } from '../../../../../components/inputs/MessageInput/MessageInput';
@@ -22,11 +22,11 @@ import { Loading } from '../../../../../components/LoadingComponents/Loading/Loa
 import { PersistedDataNotice } from '../../../../../components/PersistedDataNotice/PersistedDataNotice';
 
 import { sendDirectMessage, updateDirectmessage } from '../../../../Messages/MessagesSlice';
-import { selectGlassColor, selectGlassState, selectPrimaryColor, selectSecondaryColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassColor, selectPrimaryColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { fetchMessages, messageCleanUp, selectAllMessages, selectAltSocialLoading, selectLoadingMessages, selectNsfwNoticeState, sendMessage, togglePinMessage, toggleSocialAltLoading } from '../../../SocialSlice';
 import { saveSocialData, SOCIAL_DATA } from '../../../../../util/LocalData';
 import { MessagePlaceHolderLoader } from '../../../../../components/MessagePlaceHolderLoader/MessagePlaceHolderLoader';
-import { clearCache } from '../../../../../util/ClearCaches';
+
 import { CannotViewSocial } from '../../../../../components/CannotViewSocial/CannotViewSocial';
 import { ExplicitContentWarning } from './ExplicitContentWarning/ExplicitContentWarning';
 import { selectDisableNsfwWarning } from '../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
@@ -96,6 +96,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
             saveSocialData();
 
         }
+       
         // eslint-disable-next-line
     }, [channelId, allMessages])
 
@@ -139,7 +140,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
             setTimeout(() => {
                 messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
 
-            }, 300)
+            }, 100)
         
         if (permission.user_can_post_channel_social) document.getElementById('social-input-selector').focus();
         
@@ -262,8 +263,6 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         if (loadingMore || mounting) return;
 
-        
-
         if ((messagesRef.current.scrollTop + messagesRef.current.scrollHeight) < (e.target.clientHeight + 200)) {
 
             if (!social[channelId]) return; 
@@ -276,7 +275,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
                     dispatch(fetchMessages({channel_id: channelId}));
 
                     toggleMounting(false);
-                }, 1250)
+                }, 600)
                 
             
             }
@@ -354,7 +353,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
                 <div  className='social-inner-container'>
                     
                     <div onScroll={handleLoadMoreOnScroll} ref={messagesRef} className='social-messages-wrapper'>
-                        {initialMount ? 
+                        {initialMount && allMessages?.length === 0 ? 
                         <MessagePlaceHolderLoader /> :
                         nsfwNotice && !disableNsfwWarning ?
                         <ExplicitContentWarning />

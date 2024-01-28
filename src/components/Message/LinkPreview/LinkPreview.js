@@ -2,39 +2,32 @@ import React from 'react'
 
 import "./LinkPreview.css";
 import { useSelector } from 'react-redux';
-import { selectPrimaryColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { Image } from '../../Image/Image';
+import { Video } from '../../Video/Video';
 
-export const LinkPreview = ({data}) => {
+export const LinkPreview = ({data, expand}) => {
 
     const primaryColor = useSelector(selectPrimaryColor);
 
-    const handleLink = (e) => {
-        e.preventDefault();
+    const textColor = useSelector(selectTextColor);
 
-        try {
-
-            const ipcRenderer = window.require('electron').ipcRenderer;
-
-            ipcRenderer.send("open-link", {url: data.url});
-
-        } catch (err) {
-            window.open(data.url)
-        }
-    }
     return (
         <div 
         style={{
             backgroundColor: primaryColor
         }}
-        onClick={handleLink}
         className='link-preview-container'>
             <div className='image-link-preview-wrapper'>
-                <Image imgHeight='200px' borderRadius={'10px'} objectFit='contain' cursor='pointer' image={data?.url.includes('amazon') ? data?.images[14] : data?.images[0]} />
+                {data?.videos?.length > 0 ?
+                <Video objectFit='contain' maxHeight='200px' video={data?.videos[0]}  />
+                :
+                <Image expandContent={expand} borderRadius={'20px'} objectFit='contain' cursor='pointer' image={data?.url.includes('amazon') ? data?.images[14] : data?.images[0]} />
+                }
             </div>
             <div className='link-info-preview-wrapper'>
-                <h3 >{data?.title}</h3>
-                <p>{data?.description}</p>
+                <h3 style={{color: textColor}} >{data?.title}</h3>
+                <p style={{color: textColor}}>{data?.description}</p>
             </div>
         </div>
     )

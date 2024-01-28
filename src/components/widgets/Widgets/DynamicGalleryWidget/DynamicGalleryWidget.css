@@ -4,7 +4,7 @@
     height: 600px;
     overflow: hidden;
     position: relative;
-    border-radius: 10px;
+    border-radius: 20px;
 }
 
 .dynamic-gallery-widget .image-gallery-animation-wrapper {

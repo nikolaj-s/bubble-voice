@@ -1,22 +1,19 @@
 
 .link-preview-container {
-    width: 100%;
+    width: auto;
     display: flex;
     flex-direction: column;
-    border-radius: 10px;
+    align-items: flex-start;
+    border-radius: 20px;
     overflow: hidden;
-    cursor: pointer;
-    max-width: 400px;
-    padding: 3px;
-}
-.link-preview-container:hover {
-    filter: brightness(110%);
+    max-width: 350px;
+    padding: 5px;
 }
 
 .image-link-preview-wrapper {
     width: 100%;
     flex-shrink: 0;
-    max-height: 300px;
+    max-width: 350px;
     border-radius: 5px;
     overflow: hidden;
 }
@@ -29,5 +26,4 @@
 .link-info-preview-wrapper h3,
 .link-info-preview-wrapper p {
     margin: 5px 0px;
-    color: rgb(66, 176, 176);
 }

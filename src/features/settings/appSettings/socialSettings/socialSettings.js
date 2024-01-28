@@ -39,8 +39,6 @@ const Settings = () => {
     return (
         <div className='settings-wrapper'>
             <SettingsHeader title={"Customize"} />
-            <InputTitle title={"Hide Links On Media"} />
-            <ToggleButton state={hideLinksOnMedia} action={() => {update('hideLinksOnMedia')}} />
             <InputTitle title={"Hide Profile Images"} />
             <ToggleButton state={hideProfileImagesOnMessages} action={() => {update('hideProfileImagesOnMessages')}} />
             <InputTitle title={"Maximize Media Size"} />

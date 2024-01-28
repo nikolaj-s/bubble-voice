@@ -124,7 +124,6 @@
 
 .message-image-container {
     max-height: 350px;
-    background-color: black;
     object-fit: contain;
     border-radius: 20px;
     display: inline-block;
