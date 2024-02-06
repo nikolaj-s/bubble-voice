@@ -23,7 +23,7 @@ import { PersistedDataNotice } from '../../../../../components/PersistedDataNoti
 
 import { sendDirectMessage, updateDirectmessage } from '../../../../Messages/MessagesSlice';
 import { selectGlassColor, selectPrimaryColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
-import { fetchMessages, messageCleanUp, selectAllMessages, selectAltSocialLoading, selectLoadingMessages, selectNsfwNoticeState, sendMessage, togglePinMessage, toggleSocialAltLoading } from '../../../SocialSlice';
+import { clearSocialById, fetchMessages, messageCleanUp, selectAllMessages, selectAltSocialLoading, selectLoadingMessages, selectNsfwNoticeState, sendMessage, togglePinMessage, toggleSocialAltLoading } from '../../../SocialSlice';
 import { saveSocialData, SOCIAL_DATA } from '../../../../../util/LocalData';
 import { MessagePlaceHolderLoader } from '../../../../../components/MessagePlaceHolderLoader/MessagePlaceHolderLoader';
 
@@ -114,19 +114,22 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
                 return;
             } else if (social[channelId].length < 15) {
                 console.log('fetching')
-                dispatch(fetchMessages({channel_id: channelId}));
+                dispatch(fetchMessages({channel_id: channelId, type: currentChannel.type}));
             
             }
 
         } else if (channelId) {
             
-            dispatch(fetchMessages({channel_id: channelId}));
+            dispatch(fetchMessages({channel_id: channelId, type: currentChannel.type}));
         
         }
         
         return () => {
             dispatch(messageCleanUp(channelId));
             
+            if (currentChannel?.type === 'mediahistory' || currentChannel?.type === 'screenshots') {
+                dispatch(clearSocialById(channelId));
+            }
         //    clearCache();
         }
 // eslint-disable-next-line
@@ -177,8 +180,6 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         let video = false;
 
-        console.log(emoji)
-
         let data = {
             send_to: direct_message_user,
             username: username,
@@ -198,7 +199,6 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
             valid: true,
             nsfw: nsfw
         }
-        console.log(text)
 
         if (direct_message) {
             
@@ -272,7 +272,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
                 toggleMounting(true);
 
                 setTimeout(() => {
-                    dispatch(fetchMessages({channel_id: channelId}));
+                    dispatch(fetchMessages({channel_id: channelId, type: currentChannel.type}));
 
                     toggleMounting(false);
                 }, 600)
@@ -325,10 +325,11 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
         if (direct_message) return;
 
-        window.addEventListener('keypress', focusTextInput);
+        window.addEventListener('keydown', focusTextInput);
 
         return () => {
-            window.removeEventListener('keypress', focusTextInput);
+
+            window.removeEventListener('keydown', focusTextInput);
         }
     // eslint-disable-next-line
     }, [])
@@ -353,7 +354,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
                 <div  className='social-inner-container'>
                     
                     <div onScroll={handleLoadMoreOnScroll} ref={messagesRef} className='social-messages-wrapper'>
-                        {initialMount && allMessages?.length === 0 ? 
+                        {mounting && allMessages.length === 0 ? 
                         <MessagePlaceHolderLoader /> :
                         nsfwNotice && !disableNsfwWarning ?
                         <ExplicitContentWarning />
@@ -362,10 +363,11 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
                             return message.no_more_messages ? null :
                             <Message pin_to_profile={pinToProfile} dashboard={false} direct_message={direct_message} persist={currentChannel.persist_social} current_message={message} previous_message={key === allMessages?.length - 1 ? null : allMessages[key + 1]} pinned={message?.pinned} pinMessage={() => {pinMessage(message)}} perm={permission?.user_can_post_channel_social} channel_id={message?.channel_id} id={message._id} message={message.content} key={message._id || message.content.local_id} />
                         })}
-                        {direct_message ? null : <PersistedDataNotice channelName={currentChannel.channel_name} persisted={!currentChannel.persist_social} />}
+                        {direct_message ? null : <PersistedDataNotice type={currentChannel.type} channelName={currentChannel.channel_name} persisted={!currentChannel.persist_social} />}
                         
                     </div>
                     {(direct_message && status) ? <MessageInput setFallbackImage={setFallbackImage} nsfw={nsfw} handleNsfw={handleToggleNsfw} setEmoji={setEmoji} cancel_image={handleCancelImageSend} direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : 
+                    currentChannel.type === 'screenshots' || currentChannel.type === 'mediahistory' ? null :
                     permission?.user_can_post_channel_social && !direct_message ?
                     <MessageInput setFallbackImage={setFallbackImage} channelId={channelId} nsfw={nsfw} handleNsfw={handleToggleNsfw} setEmoji={setEmoji} channel_name={currentChannel?.channel_name} direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} />
                      : null}

@@ -11,6 +11,7 @@ import { Social } from '../Room/Social/Social'
 
 // style
 import "./SocialRoute.css";
+import { ViewSubReddit } from '../ServerDashBoard/ServerMedia/ViewSubReddits/ViewSubReddit';
 
 export const SocialRoute = () => {
 
@@ -65,7 +66,10 @@ export const SocialRoute = () => {
                 zIndex: 5,
             }}
             >
-                <Social channelName={channel.name} socialRoute={true} channelId={channelId} currentChannel={channel} />
+               {channel.type === 'subreddit' ?
+               <ViewSubReddit subreddit_name={channel.channel_name} subreddit={channel.media_state} />
+               :
+               <Social channelName={channel.name} socialRoute={true} channelId={channelId} currentChannel={channel} />}
             </div>
                 
         </div> : null}

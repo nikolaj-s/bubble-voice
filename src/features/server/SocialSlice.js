@@ -4,6 +4,7 @@ import { removePinnedMessage, addPinnedMessage } from "./ChannelRoom/ServerDashB
 import { newMessage, throwServerError } from "./ServerSlice";
 import { addActivityMessage } from "./ChannelRoom/ServerDashBoard/ServerDashBoardSlice";
 import { UploadVideo } from "../../util/UploadVideo";
+import Axios from 'axios';
 
 export const togglePinMessage = createAsyncThunk(
     'SocialSlice/togglePinMessage',
@@ -44,7 +45,7 @@ export const togglePinMessage = createAsyncThunk(
 
 export const fetchMessages = createAsyncThunk(
     'SocialSlice/fetchMessages',
-    async ({channel_id}, {rejectWithValue, getState, dispatch}) => {
+    async ({channel_id, type}, {rejectWithValue, getState, dispatch}) => {
 
         try {
             const { messages } = getState().SocialSlice;
@@ -53,12 +54,12 @@ export const fetchMessages = createAsyncThunk(
 
             const count = messages[channel_id] ? messages[channel_id].length + 25 : 25;
 
-            const data = await socket.request('fetch messages', {channel_id: channel_id, count: count})
+            const data = await socket.request('fetch messages', {channel_id: channel_id, count: count, type: type})
             .then(res => res)
             .catch(error => {
                 dispatch(throwServerError({error: true, errorMessage: error.errorMessage}))
             })
-            
+            console.log(data)
             return data;
            
         } catch (error) {
@@ -88,14 +89,42 @@ export const sendMessage = createAsyncThunk(
                     loading: true,
                     emoji: emoji,
                     textStyle: textStyle,
-                    fall_back_image: fall_back_image
+                    fall_back_image: fall_back_image,
+                    reddit: false
                 },
                 valid: true,
                 screen_shot: screen_shot,
                 file: null,
                 nsfw: nsfw
             }
-          
+
+            let redditUrl;
+
+            let redditData = false;
+
+            for (const t of text.split(' ')) {
+                if (t.includes('https') && t.includes('reddit.com')) {
+                    redditUrl = t.split('?')[0];
+                }
+            }
+
+            if (redditUrl) {
+
+                const post = await Axios.get(`${redditUrl}.json`).then(res => {
+                    try {
+                        return res.data[0].data.children[0].data;
+                    } catch (e) {
+                        return false;
+                    } 
+                    
+                }).catch(e => {return false})
+
+                redditData = post;
+
+            }
+
+            message.content.reddit = redditData;
+
             if (file?.type?.includes('video')) {
 
                 let data = await UploadVideo(file);
@@ -307,11 +336,13 @@ const SocialSlice = createSlice({
         [RequestDeleteMessage.fulfilled]: (state, action) => {
             state.altLoading = false;
 
+            if (!state.messages[action.payload.channel_id]) return;
+
             const message_index = state.messages[action.payload.channel_id]?.findIndex(m => m._id === action.payload.message_id);
 
             if (message_index === -1) return;
 
-            state.messages[action.payload.channel_id].splice(message_index, 1);
+            state.messages[action.payload.channel_id]?.splice(message_index, 1);
         },
         [togglePinMessage.pending]: (state, action) => {
             state.altLoading = true;

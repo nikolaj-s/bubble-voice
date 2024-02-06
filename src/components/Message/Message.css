@@ -14,10 +14,8 @@
 
 .message-inner-container {
     width: calc(100% - 59px);
-    padding-bottom: 5px;
     padding-right: 5px;
     position: relative;
-    padding-top: 3px;
     display: flex;
     flex-direction: column;
 }
@@ -39,7 +37,7 @@
 .message-container a {
     color: rgb(66, 176, 176);
     cursor: pointer;
-    margin: -4px 0px 0px 0px;
+    margin: 2px 0px 0px 0px;
     word-break: break-all;
     flex-shrink: 0;
     font-size: 15px;
@@ -127,7 +125,7 @@
     object-fit: contain;
     border-radius: 20px;
     display: inline-block;
-    margin: 0 5px 4px 0px;
+    margin: 0 5px 0px 0px;
 }
 
 .message-image-container img {
@@ -140,8 +138,8 @@
     display: flex;
     justify-content: flex-start;
     margin-left: 0px;
-    margin-right: 5px;
-    margin-top: 5px;
+    margin-top: 3px;
+    margin-bottom: 3px;
 }
 
 .date-submenu-message-wrapper {
@@ -168,11 +166,7 @@
     margin: 4px 6px 0 0px;
 }
 
-.message-gallery-wrapper {
-    height: 400px;
-    border-radius: 10px;
-    overflow: hidden;
-}
+
 
 .message-gallery-image-container {
     max-height: 500px;

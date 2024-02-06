@@ -5,24 +5,66 @@ import { socket } from "../../../ServerBar/ServerBar";
 
 export const handleAddingMedia = createAsyncThunk(
     'MusicSlice/handleAddingMedia',
-    async (query, {rejectWithValue, dispatch}) => {
+    async ({query, song}, {rejectWithValue, dispatch, getState}) => {
         try {
 
-            await socket.request('add song to queue', {query: query})
+            const { queue } = getState().MusicSlice;
+
+            let inQueue = false;
+
+            if (song) {
+                for (const s of queue) {
+                    if (s.id === song.id) {
+                        inQueue = true;
+                        break;
+                    }
+                }
+            }
+            
+            if (inQueue) {
+                dispatch(throwServerError({error: true, errorMessage: "Media Already In Queue"}));
+                return true;
+            }
+
+            await socket.request('add song to queue', {query: query, song: song})
             .then(response => {
                 return true;
             })
             .catch(error => {
                 console.log(error);
                 
-                dispatch(throwServerError({error: true, errorMessage: error}))
+                dispatch(throwServerError({error: true, errorMessage: error.message}))
             
                 return true;
             })
 
             return;
         } catch (error) {
-            dispatch(throwServerError({error: true, errorMessage: error}))
+            dispatch(throwServerError({error: true, errorMessage: error.message}))
+            return rejectWithValue(true);
+        }
+    }
+)
+
+export const searchMedia = createAsyncThunk(
+    'MusicSlice/searchMedia',
+    async (query, {rejectWithValue, dispatch}) => {
+        try {
+
+            const results = await socket.request('search media', {query: query})
+            .then(res => {
+                return res;
+            })
+
+            if (results.error) {
+                dispatch({error: true, errorMessage: results.errorMessage});
+                return rejectWithValue(true);
+            }
+            console.log(results)
+            return results.results;
+
+        } catch (error) {
+            dispatch(throwServerError({error: true, errorMessage: error.message}));
             return rejectWithValue(true);
         }
     }
@@ -46,6 +88,28 @@ export const handleFetchPersistedMusicSettings = createAsyncThunk(
     }
 )
 
+export const fetchRecentSongs = createAsyncThunk(
+    'MusicSlice/fetchRecentSongs',
+    async () => {
+        try {
+
+            const data = await socket.request('fetch recent songs').then(res => {
+                return res;
+            })
+            .catch (err => {
+                return {error: true}
+            })
+
+            if (data.error) return [];
+
+            return data.songs;
+
+        } catch (error) {
+            return [];
+        }
+    }
+)
+
 const MusicSlice = createSlice({
     name: 'MusicSlice',
     initialState: {
@@ -59,9 +123,23 @@ const MusicSlice = createSlice({
         behind: false,
         mute: false,
         color: "",
-        time: 0
+        time: 0,
+        savesVisible: false,
+        resultsVisible: true,
+        results: [],
+        loadingSearchResults: false,
+        recentSongs: [],
+        loadingRecentSongs: false
     },
     reducers: {
+        toggleSavesVisible: (state, action) => {
+            state.savesVisible = !state.savesVisible;
+            state.resultsVisible = !state.savesVisible;
+        },
+        toggleResultsVisible: (state, action) => {
+            state.resultsVisible = !state.resultsVisible;
+            state.savesVisible = !state.resultsVisible;
+        },
         toggleMuted: (state, action) => {
             state.mute = !state.mute;
 
@@ -159,6 +237,25 @@ const MusicSlice = createSlice({
             if (action.payload.mute) state.mute = true;
 
             if (action.payload.volume) state.volume = action.payload.volume;
+        },
+        [searchMedia.pending]: (state, action) => {
+            state.loading = true;
+        },
+        [searchMedia.rejected]: (state, action) => {
+            state.loading = false;
+        },
+        [searchMedia.fulfilled]: (state, action) => {
+            state.loading = false;
+            state.results = action.payload;
+            state.resultsVisible = true;
+            state.savesVisible = false;
+        },
+        [fetchRecentSongs.pending]: (state, action) => {
+            state.loadingRecentSongs = true;
+        },
+        [fetchRecentSongs.fulfilled]: (state, action) => {
+            state.loadingRecentSongs = false;
+            state.recentSongs = action.payload;
         }
     }
 })
@@ -186,7 +283,16 @@ export const selectMediaColor = state => state.MusicSlice.color;
 
 export const selectTime = state => state.MusicSlice.time;
 
+export const selectSavesVisible = state => state.MusicSlice.savesVisible;
+
+export const selectSearchResultsVisible = state => state.MusicSlice.resultsVisible;
+
+export const selectSearchResults = state => state.MusicSlice.results;
+
+export const selectRecentSongs = state => state.MusicSlice.recentSongs;
+
+export const selectLoadingRecentSongs = state => state.MusicSlice.loadingRecentSongs;
 // actions
-export const {setTime, setMediaColor, toggleMuted, toggleBehind, toggleLoadingMusic,toggleMusicExpanded, removeSongFromQueue, un_like_song, like_song, toggleMusicPlaying, addSongToQueue, skipSong, updateMusicState, throwMusicError, updateMusicVolume} = MusicSlice.actions;
+export const {toggleResultsVisible, toggleSavesVisible, setTime, setMediaColor, toggleMuted, toggleBehind, toggleLoadingMusic,toggleMusicExpanded, removeSongFromQueue, un_like_song, like_song, toggleMusicPlaying, addSongToQueue, skipSong, updateMusicState, throwMusicError, updateMusicVolume} = MusicSlice.actions;
 
 export default MusicSlice.reducer;

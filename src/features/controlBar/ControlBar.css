@@ -22,13 +22,13 @@
 }
 
 .controls-wrapper {
-    width: 200px;
+    width: 220px;
     height: 45px;
     flex-shrink: 0;
     z-index: 3;
     align-items: center;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     transition: 0.1s;
 }
 

@@ -34,7 +34,7 @@ export const SideBar = () => {
     return (
         <>
             <motion.div className='side-bar-container'>
-                <div style={{height: 'calc(100% - 43px)',}} className='inner-side-bar-container'>
+                <div style={{height: 'calc(100% - 45px)',}} className='inner-side-bar-container'>
                     <ServerBar />
                     <AppSettingsMenu />
                     {window.location.hash === '#/dashboard' ? <div style={{backgroundColor: glass ? glassColor : secondaryColor}} className='side-bar-dashboard-placeholder'></div> : null}

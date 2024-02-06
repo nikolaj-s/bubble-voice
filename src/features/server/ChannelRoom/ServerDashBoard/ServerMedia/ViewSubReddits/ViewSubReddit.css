@@ -3,11 +3,22 @@
     width: 100%;
     position: relative;
     max-width: 100%;
+    height: 100%;
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow-x: hidden;
+    z-index: 3;
+}
+
+.view-sub-reddit-wrapper {
+    width: 100%;
+    min-height: 100%;
+    
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .reddit-post-title {
@@ -26,8 +37,13 @@
     margin-bottom: 10px;
 }
 
+.subreddit-feed-wrapper {
+    max-width: 800px;
+    width: calc(100% - 10px);
+}
+
 .subreddit-full-mode {
-    position: fixed;
+    position: absolute;
     display: flex;
     flex-direction: column;
     justify-content: center;

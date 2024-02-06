@@ -81,9 +81,17 @@ const ServerDashBoardSlice = createSlice({
         errorMessage: "",
         loadingActivityFeed: true,
         hideImageOfTheDay: false,
-        hideActivityFeed: true
+        hideActivityFeed: true,
+        pinnedSubReddits: [],
+        loadedSubreddits: {}
     },
     reducers: {
+        setLoadedSubReddit: (state, action) => {
+            state.loadedSubreddits[action.payload.subreddit] = action.payload.posts;
+        },
+        setPinnedSubReddits: (state, action) => {
+            state.pinnedSubReddits = action.payload;
+        },
         toggleHideImageOfTheDay: (state, action) => {
             state.hideImageOfTheDay = !state.hideImageOfTheDay;
         },
@@ -100,7 +108,7 @@ const ServerDashBoardSlice = createSlice({
         addPinnedMessage: (state, action) => {
 
             state.pins.unshift(action.payload.message);
-        
+    
         },
         addActivityMessage: (state, action) => {
             if (state.loadingActivityFeed) return;
@@ -179,6 +187,10 @@ export const selectActivityFeed = state => state.ServerDashBoardSlice.activityFe
 
 export const selectLoadingActivityFeed = state => state.ServerDashBoardSlice.loadingActivityFeed;
 
-export const {setActivityFeed, addActivityMessage, toggleHideActivityFeed, toggleHideImageOfTheDay, setPinnedMessages, removePinnedMessage, addPinnedMessage  } = ServerDashBoardSlice.actions;
+export const selectPinnedSubreddits = state => state.ServerDashBoardSlice.pinnedSubReddits;
+
+export const selectLoadedSubreddits = state => state.ServerDashBoardSlice.loadedSubreddits;
+
+export const {setLoadedSubReddit, setPinnedSubReddits, setActivityFeed, addActivityMessage, toggleHideActivityFeed, toggleHideImageOfTheDay, setPinnedMessages, removePinnedMessage, addPinnedMessage  } = ServerDashBoardSlice.actions;
 
 export default ServerDashBoardSlice.reducer;

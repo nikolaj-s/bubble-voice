@@ -6,9 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 // components
 import { SubMenuButton } from '../subMenuButton/SubMenuButton';
 import { ChannelUserDisplay } from './ChannelUserDisplay/ChannelUserDisplay';
-
+import { AltImageIcon } from '../../Icons/AltImageIcon/AltImageIcon';
 // state
-import {  selectAccentColor, selectGlassColor, selectGlassPrimaryColor, selectPrimaryColor, selectTextColor, selectTransparentPrimaryColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import {  selectAccentColor, selectActivationColor, selectGlassColor, selectGlassPrimaryColor, selectPrimaryColor, selectSecondaryColor, selectTextColor, selectTransparentPrimaryColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./ChannelButton.css";
@@ -25,9 +25,11 @@ import { ChannelImageIcon } from '../../ChannelImageIcon/ChannelImageIcon';
 import { selectDisableChannelIcons } from '../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { setSelectedMember } from '../../../features/server/ChannelRoom/MemberPanel/MemberPanelSlice';
 import { ChannelStatus } from './ChannelStatus/ChannelStatus';
+import { RedditIcon } from '../../Icons/RedditIcon/RedditIcon';
+import { HistoryIcon } from '../../Icons/HistoryIcon/HistoryIcon';
 
 
-export const ChannelButton = ({collapse, channel, action = () => {}, users, index}) => {
+export const ChannelButton = ({category_id, collapse, channel, action = () => {}, users, index, move = () => {}, draggingUser, toggleDraggingUser = () => {}, draggingChannel, toggleDraggingChannel}) => {
 
     const dispatch = useDispatch();
 
@@ -35,11 +37,15 @@ export const ChannelButton = ({collapse, channel, action = () => {}, users, inde
 
     const [unReadMessage, toggleUnReadMessage] = React.useState(false);
 
+    const [moveIndicator, toggleMoveIndicator] = React.useState(false);
+
     const animation = useAnimation();
 
     const glassColor = useSelector(selectGlassPrimaryColor);
 
     const primaryColor = useSelector(selectPrimaryColor);
+
+    const secondaryColor = useSelector(selectSecondaryColor);
 
     const accentColor = useSelector(selectAccentColor);
 
@@ -50,6 +56,8 @@ export const ChannelButton = ({collapse, channel, action = () => {}, users, inde
     const currentChannelId = useSelector(selectCurrentChannelId);
 
     const currentSocialId = useSelector(selectChannelSocialId);
+
+    const activationColor = useSelector(selectActivationColor);
 
     const username = useSelector(selectUsername);
 
@@ -108,7 +116,7 @@ export const ChannelButton = ({collapse, channel, action = () => {}, users, inde
 
             if (channel._id === currentChannelId || channel._id === currentSocialId) return toggleUnReadMessage(false);
             
-            if (channel.last_message_id === undefined) return;
+            if (channel.last_message_id === undefined || !channel.last_message_id) return;
             
             if (last_message?.message_id !== channel?.last_message_id) {
                 toggleUnReadMessage(true);
@@ -138,43 +146,41 @@ export const ChannelButton = ({collapse, channel, action = () => {}, users, inde
         
     }
 
-    const onDragOver = (event) => {
+    const onDragOver = (event, dragType) => {
 
-        if (channel.text_only) return;
-
+        if (draggingChannel) return;
+        
         event.preventDefault();
 
         handleAnimation(primaryColor, true);
 
-        document.getElementById(`channel-wrapper-button-${channel._id}`).style.backgroundColor = primaryColor;
+      //  document.getElementById(`channel-wrapper-button-${channel._id}`).style.backgroundColor = primaryColor;
     }
 
     const onDragLeave = () => {
-
-        if (channel.text_only) return;
-
-        document.getElementById(`channel-wrapper-button-${channel._id}`).style.backgroundColor = 'rgba(0, 0, 0, 0)';
+        if (draggingChannel) return;
+    //    document.getElementById(`channel-wrapper-button-${channel._id}`).style.backgroundColor = 'rgba(0, 0, 0, 0)';
     
         handleAnimation(transparentPrimaryColor, false)
     }
 
     const onDrop = (event) => {
         try {
+            
         document.getElementById(`channel-wrapper-button-${channel._id}`).style.backgroundColor = 'rgba(0, 0, 0, 0)';
 
         if (channel.text_only) return;
         
         const id = event.dataTransfer.getData('text');
-        
+     
         if (!id) return;
 
         const split_id = id.split(' ');
 
-        console.log(id)
         const selected_username = split_id.length > 2 ? `${split_id[1]} ${split_id[2]}` : split_id[1];
 
         const channel_id = split_id[0];
-        
+        console.log(selected_username)
         if (channel_id === channel._id) return;
 
         if (selected_username === username) {
@@ -185,28 +191,68 @@ export const ChannelButton = ({collapse, channel, action = () => {}, users, inde
         }
 
         } catch (err) {
+            console.log(err)
             dispatch(throwServerError({errorMessage: "An Error Was Thrown When Moving This User"}))
         }
     }
+
+    const handleNewChannelPosition = (e) => {
+
+        try {
+
+            toggleMoveIndicator(false);
+
+            const id = e.dataTransfer.getData('text');
+
+            if (!id || id.split(' ').length > 1) return;
+
+            move(id, channel._id, category_id);
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
+    const handleDragStart = (e) => {
+
+        e.stopPropagation();
+
+        e.dataTransfer.setData('text/plain', `${channel._id}`);
+
+        toggleDraggingChannel(true);
+
+        console.log('channel drag start')
+    }
+
+    const handleDragEnd = (e) => {
+        toggleDraggingChannel(false);
+    }
+
     
+
     return (
+        <>
         <div
+       
         id={`channel-wrapper-button-${channel._id}`}
         onDragOver={(event) => {onDragOver(event)}}
             onDragLeave={() => {onDragLeave()}}
             onDrop={onDrop}
-            style={{display: (!active && collapse && channel?.users?.length === 0 && !unReadMessage || (!channel.auth && collapse)) ? 'none' : null}} 
+            
+            style={{display: (!active && collapse && channel?.users?.length === 0 && !unReadMessage || (!channel.auth && collapse)) ? 'none' : null,}} 
         >
             <div 
+            
             style={{
                 backgroundColor: users.length > 0 && channel.auth ? glassColor : null,
                 paddingBottom: users.length > 0 && channel.auth ? '5px' : null,
-                marginBottom: users.length > 0 && channel.auth ? '5px' : null
             }}
             className='channel-button-surround-wrapper'>
             <motion.div 
-            npm run electron-dev
-            
+            draggable={true}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
             id={`channel-button-${channel._id}`}
             animate={animation} 
             onMouseEnter={() => {handleAnimation(primaryColor, true)}}
@@ -227,7 +273,17 @@ export const ChannelButton = ({collapse, channel, action = () => {}, users, inde
                 <div style={{opacity: (active || mouseEnter || unReadMessage) && channel.auth ? 1 : 0.85}} className='channel-status-icon-container'>
                     {(channel.icon && disableChannelIcons === false) ?
                     <ChannelImageIcon image={channel.icon} /> : null}
-                    {channel.locked_channel ?
+                    {
+                    channel?.type === 'mediahistory' ?
+                    <HistoryIcon width={20} height={20} />
+                    :
+                    channel?.type === 'subreddit' ?
+                    <RedditIcon />
+                    :
+                    channel?.type === 'screenshots' ?
+                    <AltImageIcon height='20px' width='20px' />
+                    :
+                    channel.locked_channel ?
                     <LockedChannelIcon /> :
                     channel.text_only ?
                     <TextOnlyIcon /> :
@@ -239,8 +295,8 @@ export const ChannelButton = ({collapse, channel, action = () => {}, users, inde
                 </div>
                 <h3 style={{color: textColor, opacity: (active || mouseEnter || unReadMessage) && channel.auth ? 1 : 0.7, fontWeight: unReadMessage ? 600 : null}}>{channel.channel_name}</h3>
                 {mouseEnter ? <div className='channel-button-extra-context-wrapper'>
-                    {!channel.text_only ? <SocialButton o_mouseLeave={() => {handleAnimation(transparentPrimaryColor, false)}} desc_o_mouse_leave={() => {handleAnimation(transparentPrimaryColor, false)}} flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} action={openSocial} borderRadius={8} width={16} height={16} padding={6} desc_space={15} /> : null}
-                    <SubMenuButton invert={false} altInvert={true} o_mouseLeave={() => {handleAnimation(transparentPrimaryColor, false)}} desc_o_mouse_leave={() => {handleAnimation(transparentPrimaryColor, false)}} flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} description={"More"} target={`channel-button-${channel._id}`} padding={6} width={16} height={16} borderRadius={8} desc_space={15} />
+                    {!channel.text_only ? <SocialButton o_mouseLeave={() => {handleAnimation(transparentPrimaryColor, false)}} desc_o_mouse_leave={() => {handleAnimation(transparentPrimaryColor, false)}} flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} action={openSocial} borderRadius={0} width={16} height={20} padding={8} desc_space={15} /> : null}
+                    <SubMenuButton invert={false} altInvert={true} o_mouseLeave={() => {handleAnimation(transparentPrimaryColor, false)}} desc_o_mouse_leave={() => {handleAnimation(transparentPrimaryColor, false)}} flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} description={"More"} target={`channel-button-${channel._id}`} padding={8} width={16} height={20} borderRadius={"0 8px 8px 0px"} desc_space={15} />
                 </div> : null}
             </motion.div>
             {channel?.status && channel?.auth ?
@@ -249,10 +305,13 @@ export const ChannelButton = ({collapse, channel, action = () => {}, users, inde
             {channel.auth ?
             users.map((user) => {
                 return (
-                    <ChannelUserDisplay key={user.username} channel_id={channel._id} user={user} />
+                    <ChannelUserDisplay dragging={toggleDraggingUser} key={user.username} channel_id={channel._id} user={user} />
                 )
             }) : null}
             </div>
+            <div onDragOver={(e) => {e.preventDefault()}} style={{width: '100%', height: collapse ? 0 : 10, flexShrink: 0, backgroundColor: moveIndicator && !draggingUser ? activationColor : null, zIndex: draggingChannel ? 2 : -1, pointerEvents: 'all', position: 'absolute'}} onDrop={handleNewChannelPosition} onDragEnter={() => {toggleMoveIndicator(true)}} onDragLeave={() => {toggleMoveIndicator(false)}} />
         </div>
+
+        </>
     )
 }

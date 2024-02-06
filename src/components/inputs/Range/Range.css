@@ -26,9 +26,9 @@
 
 .range-container input::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
+    width: 8px;
+    height: 25px;
+    border-radius: 5px;
     background-color: var(--range-main-thumb);
 }
 

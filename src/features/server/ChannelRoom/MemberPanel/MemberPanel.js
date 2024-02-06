@@ -196,7 +196,9 @@ export const MemberPanel = () => {
             onClick={(e) => {e.stopPropagation()}}
             style={{backgroundPosition: 'center',background: (member.color || secondaryColor), 
             backgroundRepeat: 'no-repeat', 
-            backgroundSize: 'cover', top: posY, left: posX,
+            backgroundSize: 'cover', 
+            top: (window.innerHeight - posY) < 400 ? window.innerHeight - 400 : posY, 
+            left: posX,
             translateY: origin ? '-50%' : (posY - 525) < 0 ? `-5%` : '-50%',
             border: `solid 4px ${member.color || secondaryColor}`
             }} className='outer-member-panel-container'>

@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 
-export const AltDownIcon = ({flip}) => {
+export const AltDownIcon = ({flip, altFlip}) => {
 
     const textColor = useSelector(selectTextColor);
 
@@ -10,7 +10,7 @@ export const AltDownIcon = ({flip}) => {
         <svg 
         style={{
             transition: '0.1s',
-            rotate: flip ? '180deg' : '0deg'
+            rotate: altFlip ? flip ? '-90deg' : '0deg' : flip ? '180deg' : '0deg'
         }}
         width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_2233_6)">

@@ -24,7 +24,7 @@ export const ShareScreenButton = ({action, state, active, loading, id, width = 2
     description={active ? null : `${state ? 'Share Screen' : 'Stop Sharing'}`}
     zIndex={5}
     background={sharing_screen ? activationColor : null}
-    borderRadius={5}
+    borderRadius={0}
     desc_width='100px'
     >
         <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">

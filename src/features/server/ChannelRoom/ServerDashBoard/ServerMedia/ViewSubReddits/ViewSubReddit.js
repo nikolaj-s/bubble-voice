@@ -14,10 +14,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { GetPostsFromSubReddit, SubRedditSearch, selectCurrentRedditIndex, selectCurrentSubReddit, selectFullModeState, selectLoadingSubReddit, selectNextPostPage, selectSubRedditPosts, selectSubRedditQuery, selectSubRedditSortState, selectSubReddits, setRedditIndex, setSubReddit, setSubRedditQuery, toggleFullMode, toggleSortSubPosts } from '../ServerMediaSlice'
 import { ExpandButton } from '../../../../../../components/buttons/ExpandButton/ExpandButton'
 import { AnimatePresence, motion } from 'framer-motion'
-import { selectSecondaryColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice'
+import { selectGlassColor, selectGlassPrimaryColor, selectSecondaryColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 import { CloseIcon } from '../../../../../../components/Icons/CloseIcon/CloseIcon'
+import { setExpandedContent } from '../../../../../ExpandContent/ExpandContentSlice'
 
-export const ViewSubReddit = ({expand, explore, disableFullMode}) => {
+export const ViewSubReddit = ({expand, explore, disableFullMode, subreddit, subreddit_name}) => {
 
     const dispatch = useDispatch();
 
@@ -40,6 +41,8 @@ export const ViewSubReddit = ({expand, explore, disableFullMode}) => {
     const index = useSelector(selectCurrentRedditIndex);
 
     const fullMode = useSelector(selectFullModeState);
+
+    const glassColor = useSelector(selectGlassPrimaryColor);
 
     const [reverse, toggleReverse] = React.useState(false);
 
@@ -98,7 +101,7 @@ export const ViewSubReddit = ({expand, explore, disableFullMode}) => {
             dispatch(setRedditIndex(index - 1));
         }
     }
-
+    console.log(subreddit)
     React.useEffect(() => {
 
         const el = document.getElementsByClassName('server-media-wrappers')[0];
@@ -115,7 +118,31 @@ export const ViewSubReddit = ({expand, explore, disableFullMode}) => {
             el.style.overflowY = 'auto'
         }
     }, [fullMode])
-    
+
+    React.useEffect(() => {
+        
+        if (subreddit === selectedSubReddit.url) return;
+
+        if (subreddit) {
+            setSelectedSubReddit({url: subreddit, title: subreddit_name});
+        }
+
+    }, [subreddit, selectedSubReddit])
+
+    const handleLoadMore = (e) => {
+        const bottom = e.target.scrollHeight - e.target.scrollTop <= (e.target.clientHeight + 600);
+
+        if (loading) return;
+
+        if (bottom) {
+            dispatch(GetPostsFromSubReddit({subreddit: subreddit, sort: sortState}));
+        }
+    }
+
+    const handleExpand = (value) => {
+        dispatch(setExpandedContent(value))
+    }
+
     return (
         <>
         {fullMode ?
@@ -141,9 +168,11 @@ export const ViewSubReddit = ({expand, explore, disableFullMode}) => {
         </div>
         : null}
         <Loading  loading={loading} />
-        <div className='implement-sub-reddit-container'>
-            
+        <div  style={{backgroundColor: secondaryColor}} className='implement-sub-reddit-container'>
+            <div onScroll={handleLoadMore} className='view-sub-reddit-wrapper' style={{backgroundColor: glassColor}}>
             <div className='sub-reddit-finder-container'>
+                {subreddit ? null :
+                <>
                 <InputTitle title={"Search For Sub Subreddit"} />
                 <TextInput keyCode={(keyCode) => {if (keyCode === 13) handleSearchSubreddit()}} inputValue={query} action={(value) => {setQeury(value)}} placeholder={'Subreddit'} />
                 <TextButton marginTop={5} action={handleSearchSubreddit} name={"Search"} />
@@ -154,24 +183,29 @@ export const ViewSubReddit = ({expand, explore, disableFullMode}) => {
                         return <SubRedditButton selected={selectedSubReddit.title === red.title} action={(v) => {setSelectedSubReddit(v)}} data={red} />
                     })}
                 </div>
-                {selectedSubReddit.title ? 
+                </>
+                }
+                {selectedSubReddit?.title ? 
                 <>
                 <InputTitle title={`Sort ${selectedSubReddit.title} posts by:`} />
                 <div className='sort-by-reddit-container'>
                     <TextButton altInvert={true} action={() => {setSortState('new')}} toggled={sortState === 'new'} name={'New'} />
                     <TextButton altInvert={true} action={() => {setSortState('hot')}} toggled={sortState === 'hot'} name={'Hot'} />
                     <TextButton altInvert={true} action={() => {setSortState('top')}} toggled={sortState === 'top'} name={'Top'} />
-                   {disableFullMode ? null : <ExpandButton action={() => {dispatch(toggleFullMode())}} description="Expand" invert={true} width={20} borderRadius={10} height={20} />}
+                  
                 </div>
                 
                 </>
                 : null}
             </div>
-            {posts.length > 0 ? 
-                posts.map(post => {
-                    return <RedditPost action={expand} data={post} />
-                })
-            : null}
+            <div  className='subreddit-feed-wrapper'>
+                {posts.length > 0 ? 
+                    posts.map(post => {
+                        return <RedditPost action={handleExpand} data={post} />
+                    })
+                : null}
+            </div>
+            </div>
         </div>
         </>
     )

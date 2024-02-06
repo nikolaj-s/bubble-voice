@@ -237,7 +237,7 @@ export const ImplementWidgetMenu = ({active = false, type, name, close}) => {
                     {type === 'plainText' || type === 'list' ? <TextArea inputValue={textValue} action={handleTextValue} placeHolder={"Text"} /> : null}
                     {type === 'image' ? 
                     <div className='adding-widget-image'>
-                        <ImageInput objectFit='contain' backgroundColor={'black'} maxDimensions={1280} getFile={handleSetImage} borderRadius='5px' /> 
+                        <ImageInput  objectFit='contain' backgroundColor={'black'} maxDimensions={1280} getFile={handleSetImage} borderRadius='5px' /> 
                     </div>
                     : null}
                     

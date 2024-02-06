@@ -5,7 +5,7 @@ import { selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../..
 
 import "./DividerButton.css";
 
-export const DividerButton = ({action, state, name, extra}) => {
+export const DividerButton = ({action, state, name, extra, icon, textMargin}) => {
 
     const [hover, toggleHover] = React.useState(false);
 
@@ -22,7 +22,8 @@ export const DividerButton = ({action, state, name, extra}) => {
         onMouseLeave={() => {toggleHover(false)}}
         style={{backgroundColor: hover ? primaryColor : secondaryColor}}
         className='divider-button-container'>
-            <h3 style={{color: textColor}}>{name}
+            {icon}
+            <h3 style={{color: textColor, marginLeft: textMargin}}>{name}
             {extra ?
             ` - ${extra}`
             : null}

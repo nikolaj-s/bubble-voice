@@ -128,7 +128,7 @@ export const ExpandContent = () => {
                 iframe ?
                 <Iframe maxWidth={"90%"} link={iframe} />
                 :
-                expandedContent?.includes('mp4') ?
+                expandedContent?.includes('.mp4') ?
                 <Video height='auto' forceAutoPlay={true} video={expandedContent} currentTime={videoStartTime} /> 
                 :        
                 <Image altHeight='100vh' objectFit='contain' image={expandedContent} />}

@@ -3,8 +3,8 @@
     position: relative;
     display: flex;
     justify-content: space-evenly;
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
 }
 
 .music-overlay-button-wrapper span {
@@ -12,7 +12,7 @@
     height: 100%;
     border-radius: 4px;
     content: '';
-    transform-origin: bottom;
+    transform-origin: center;
     animation: bounce 2.2s ease alternate;
     transform: scaleY(0.3);
 }

@@ -42,6 +42,8 @@ const Wrapper = () => {
 
     const [persistChannelSocial, setPersistChannelSocial] = React.useState(false);
 
+    const [blockNsfwPosting, toggleBlockNsfwPosting] = React.useState(false);
+
     const [edited, toggleEdited] = React.useState(false);
 
     const [widgets, setWidgets] = React.useState([]);
@@ -134,12 +136,18 @@ const Wrapper = () => {
                 toggleContainBackGround(true);
             }
 
+            if (channelToEdit.block_nsfw_posting) {
+                toggleBlockNsfwPosting(true);
+            }
+
             for (const w of channel.widgets) {
                 if (w.delete) {
                     toggleEdited(true);
                     break;
                 }
             }
+
+            console.log(channelToEdit)
 
             setWidgets(channelToEdit.widgets);
         
@@ -215,7 +223,7 @@ const Wrapper = () => {
         document.getElementsByClassName('server-settings-route-wrapper')[0].scrollTop = 0;
 
         await socket.request('update channel', 
-        {...channelToEdit, widgets: widgets, persist_social: persistChannelSocial, channel_name: channelName, file: channelBackground, background_blur: backgroundBlur, clear_social: clearedSocial, disable_streams: disableStreams, auth_users: authUsers, locked_channel: lockedChannel, icon_file: icon, channel_owner: channelOwner, lock_media_player: lockedMediaPlayer, authMediaUsers: authMediaUsers, contain_background: containBackground})
+        {...channelToEdit, widgets: widgets, persist_social: persistChannelSocial, channel_name: channelName, file: channelBackground, background_blur: backgroundBlur, clear_social: clearedSocial, disable_streams: disableStreams, auth_users: authUsers, locked_channel: lockedChannel, icon_file: icon, channel_owner: channelOwner, lock_media_player: lockedMediaPlayer, authMediaUsers: authMediaUsers, contain_background: containBackground, block_nsfw_posting: blockNsfwPosting})
         .then(response => {
 
             dispatch(updateChannel(response.channel));
@@ -358,6 +366,12 @@ const Wrapper = () => {
         toggleContainBackGround(!containBackground);
     }
 
+    const handleBlockNsfwPosting = () => {
+        toggleEdited(true);
+
+        toggleBlockNsfwPosting(!blockNsfwPosting);
+    }
+
     return (
         <>
         {(permission?.user_can_manage_channels && (channelToEdit.locked_channel ? channelToEdit.auth : true)) ?
@@ -366,8 +380,10 @@ const Wrapper = () => {
             <InputTitle title={"Edit Icon / Channel Name"} />
             <div style={{display: 'flex', alignItems: 'center', position: 'relative'}} >
            
-            <ChannelIcon initial={channelToEdit?.icon} locked={lockedChannel} textOnly={channelToEdit?.text_only} getFile={updateChannelIcon}  />
-            <TextInput action={handleUpdateChannelName} inputValue={channelName} />
+            <ChannelIcon type={channelToEdit.type} initial={channelToEdit?.icon} locked={lockedChannel} textOnly={channelToEdit?.text_only} getFile={updateChannelIcon}  />
+            {channelToEdit.type === 'subreddit' || channelToEdit.type === 'screenshots' || channelToEdit.type === 'mediahistory' ?
+            <InputPlaceHolder value={channelName} />
+            : <TextInput action={handleUpdateChannelName} inputValue={channelName} />}
             </div>
             {channelToEdit.text_only ? null :
             <>
@@ -385,7 +401,11 @@ const Wrapper = () => {
             {managingWidgets === false ? null 
             : <WidgetPreview widgets={widgets} editing={true} reorder={updateWidgetOrder} />}
             </>}
+            {channelToEdit.type === 'subreddit' || channelToEdit.type === 'screenshots' || channel.type === 'mediahistory' ? null :
+            <>
             <SettingsHeader title={"Data"} />
+            <InputTitle title={"Block Posting of NSFW Content In This Channel"} />
+            <ToggleButton action={handleBlockNsfwPosting} state={blockNsfwPosting} />
             <InputTitle title={"Clear Social Data"} />
             {clearedSocial === false ?
             <TextButton action={handleClearSocial} name={"Clear Social Data"} icon={<DeleteIcon />} />
@@ -439,6 +459,17 @@ const Wrapper = () => {
             members.map(m => {
                 return <RadioButton action={() => {handleAssignChannelOwner(m.username)}} name={m.display_name} state={m.username === channelOwner} />
             }) : null}
+            </>
+            : null}
+            </>}
+            {channelToEdit.type === 'mediahistory' ?
+            <>
+            <InputTitle title={"Clear Media History"} />
+            {clearedSocial === false ?
+            <TextButton action={handleClearSocial} name={"Clear Media History Data"} icon={<DeleteIcon />} />
+            :
+            <InputPlaceHolder value={"Hit Apply To Save Changes"} />
+            }
             </>
             : null}
             <InputTitle title={"Delete Channel"} />

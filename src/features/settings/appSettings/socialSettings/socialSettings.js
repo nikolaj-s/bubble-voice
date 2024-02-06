@@ -62,7 +62,7 @@ const Settings = () => {
             <InputTitle title={"Disable Message Pop Up's"} />
             <ToggleButton action={() => {update("disableMessagePopUp")}} state={disableMessagePopUp} />
             <SettingsHeader title={"Videos"} />
-            <InputTitle title={"Toggle Auto Play Native Videos"} />
+            <InputTitle title={"Auto Play Native Videos"} />
             <ToggleButton action={() => {update('autoPlayNativeVideos')}} state={autoPlaySocialVideos}  />
             <InputTitle title={"Mute Videos By Default Within Social"} />
             <ToggleButton action={() => {update("muteSocialVideos")}} state={muteSocialVideos}  /> 

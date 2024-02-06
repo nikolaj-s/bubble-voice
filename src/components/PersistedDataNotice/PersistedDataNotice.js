@@ -4,14 +4,20 @@ import { selectTextColor } from '../../features/settings/appSettings/appearanceS
 
 import "./PersistedDataNotice.css";
 
-export const PersistedDataNotice = ({persisted, channelName}) => {
+export const PersistedDataNotice = ({persisted, channelName, type}) => {
 
     const textColor = useSelector(selectTextColor);
 
     return (
         <>
         <div className='persisted-notice-container'>
-            <h3 style={{color: textColor}}>Welcome To {channelName}'s Social Feed</h3>
+            <h1 style={{color: textColor, margin: 0, fontSize: 126, opacity: 0.5}}>#</h1>
+            <h3 style={{color: textColor, marginTop: 0}}>
+                {type === "screenshots" ?
+                "This is the beginning of the screen shots taken within this bubble."
+                :
+                `Welcome To ${channelName}`}
+            </h3>
         </div>
         </>
     )

@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import { fetchMusicWidgetVolume } from "../../util/LocalData";
 
 import { socket } from "./ServerBar/ServerBar";
-import { addActivityMessage, setActivityFeed } from "./ChannelRoom/ServerDashBoard/ServerDashBoardSlice";
+import { addActivityMessage, setActivityFeed, setPinnedSubReddits } from "./ChannelRoom/ServerDashBoard/ServerDashBoardSlice";
 
 export const unBanMember = createAsyncThunk(
     'serverSlice/unBanMember',
@@ -108,13 +108,66 @@ export const fetchServerDetails = createAsyncThunk(
             console.log(error)
             return rejectWithValue({error: true, errorMessage: error});
         })
+
+
+        dispatch(setPinnedSubReddits(server?.pinned_sub_reddits));
+
         return server;
+    }
+)
+
+export const createCategory = createAsyncThunk(
+    'serverSlice/createCategory',
+    async ({category_name}, {rejectWithValue}) => {
+
+        if (category_name.length < 1) return rejectWithValue({errorMessage: "Invalid Category Name"});
+
+        const data = {
+            category_name: category_name
+        }
+
+        const category = await socket.request('create category', data)
+        .then(res => {
+            return res;
+        })
+        .catch(err => {
+            return {error: true, errorMessage: err.message}
+        })
+
+        if (category.error) return rejectWithValue({error: true, errorMessage: category.errorMessage});
+
+        return category;
+
+    }
+)
+
+export const deleteCategory = createAsyncThunk(
+    'serverSlice/deleteCategory',
+    async ({category_id}, {rejectWithValue}) => {
+
+        if (!category_id) return rejectWithValue({error: true, errorMessage: "An Error Has Occured"});
+
+        const data = {
+            category_id: category_id
+        }
+
+        const category = await socket.request('delete category', data)
+        .then(res => {
+            return res;
+        })
+        .catch(err => {
+            return {error: true, errorMessage: err.message}
+        })
+
+        if (category.error) return rejectWithValue({error: true, errorMessage: category.errorMessage});
+
+        return category;
     }
 )
 
 export const createChannel = createAsyncThunk(
     'serverSlice/createChannel',
-    async ({channel_name, persist_social, locked_channel, auth_users, text_only}, {rejectWithValue, getState, dispatch}) => {
+    async ({channel_name, persist_social, locked_channel, auth_users, text_only, type, mediaState}, {rejectWithValue, getState, dispatch}) => {
         const { server_id } = getState().serverSlice;
 
         if (!channel_name || channel_name.length < 3) return rejectWithValue({error: true, errorMessage: "Invalid Channel Name"});
@@ -127,7 +180,9 @@ export const createChannel = createAsyncThunk(
             locked_channel: locked_channel,
             auth_users: auth_users,
             server_id: server_id,
-            text_only: text_only
+            text_only: text_only,
+            type: type,
+            media_state: mediaState
         }
 
         const channel = await socket.request('create channel', data).then(response => {
@@ -209,6 +264,7 @@ const serverSlice = createSlice({
         serverBannerAmbiance: '',
         welcomeMessage: "",
         bannedKeywords: [],
+        mediaChannels: [],
         // creating channel state
         channelCreationLoading: false,
         channelCreationError: false,
@@ -250,7 +306,9 @@ const serverSlice = createSlice({
         connection_lost: false,
         roomColor: "",
         kicked: false,
-        kickedMessage: ""
+        kickedMessage: "",
+        categories: [],
+        deletingCategory: false
 
     },
     reducers: {
@@ -286,9 +344,9 @@ const serverSlice = createSlice({
             state.create_channel_menu_open = action.payload;
         },
         deleteMessage: (state, action) => {
-
+            console.log(action.payload)
             if (!action.payload.message_id && !action.payload.channel_id) return;
-
+            
             const index = state.channels.findIndex(c => c._id === action.payload.channel_id);
 
             if (index === -1) return;
@@ -298,10 +356,17 @@ const serverSlice = createSlice({
         },
         reOrderChannels: (state, action) => {
 
-            const sortOrder = action.payload;
+            const sortOrder = action.payload.new_order;
+
             state.channels = state.channels.sort((a, b) => {
                 return sortOrder.indexOf(a._id) - sortOrder.indexOf(b._id);
             })
+
+            const index = state.channels.findIndex(c => c._id === action.payload.channel_id);
+
+            if (index !== -1) {
+                state.channels[index].category = action.payload.category;
+            }
 
         },
         toggleReconnectingState: (state, action) => {
@@ -724,6 +789,27 @@ const serverSlice = createSlice({
             if (l_index === -1) return;
 
             state.channels[l_index].status = action.payload.status;
+        },
+        addCategory: (state, action) => {
+            state.categories.push(action.payload.category);
+        },
+        removeCategory: (state, action) => {
+            state.categories = state.categories.filter(c => c._id !== action.payload.category_id);
+
+            state.channels = state.channels.map(c => {
+                if (c.category === action.payload.category_id) {
+                    return {...c, category: 'channels'}
+                } else {
+                    return c;
+                }
+            })
+        },
+        reOrderCategories: (state, action) => {
+            const sortOrder = action.payload.new_order;
+
+            state.categories = state.categories.sort((a, b) => {
+                return sortOrder.indexOf(a._id) - sortOrder.indexOf(b._id);
+            })
         }
     },
     extraReducers: {
@@ -767,6 +853,8 @@ const serverSlice = createSlice({
             state.welcomeMessage = action.payload.welcome_message;
             state.activityFeed = action.payload.activity_feed;
             state.bannedKeywords = action.payload.banned_keywords;
+            state.categories = action.payload.categories;
+            
             const memberIndex = state.members.findIndex(member => member.username === action.payload.username);
 
             if (memberIndex !== -1) {
@@ -855,6 +943,39 @@ const serverSlice = createSlice({
             state.ban_loading_state = false;
 
             state.banList = state.banList.filter(ban => ban._id !== action.payload)
+        },
+        [createCategory.pending]: (state, action) => {
+            state.channelCreationLoading = true;
+        },
+        [createCategory.rejected]: (state, action) => {
+            state.channelCreationLoading = false;
+            state.error = true;
+            state.errorMessage = action.payload.errorMessage;
+        },
+        [createCategory.fulfilled]: (state, action) => {
+            state.channelCreationLoading = false;
+            state.categories.push(action.payload.category);
+            state.create_channel_menu_open = false;
+        },
+        [deleteCategory.pending]: (state, action) => {
+            state.deletingCategory = true;
+        },
+        [deleteCategory.fulfilled]: (state, action) => {
+            state.deletingCategory = false;
+            state.categories = state.categories.filter(c => c._id !== action.payload.category_id);
+
+            state.channels = state.channels.map(c => {
+                if (c.category === action.payload.category_id) {
+                    return {...c, category: 'channels'}
+                } else {
+                    return c;
+                }
+            })
+        },
+        [deleteCategory.rejected]: (state, action) => {
+            state.deleteCategory = false;
+            state.error = true;
+            state.errorMessage = action.payload.errorMessage;
         }
     }   
 })
@@ -998,8 +1119,14 @@ export const selectServerWelcomeMessage = state => state.serverSlice.welcomeMess
 
 export const selectBannedKeywords = state => state.serverSlice.bannedKeywords;
 
+export const selectMediaChannels = state => state.serverSlice.mediaChannels;
+
+export const selectCategories = state => state.serverSlice.categories;
+
+export const selectDeletingCategory = state => state.serverSlice.deletingCategory;
+
 // actions
 
-export const { updateBannedKeywords, setWelcomeMessage, setKickedState, updateChannelStatus, triggerRoomRescale, setRoomColor, toggleConnectionLostState, setServerbannerAmbiance, updateMemberFile, clearSearchData, updateInactiveChannel, removeSongFromWidget, saveSongToWidget, userBanned, toggleCreateChannelMenu, toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
+export const {reOrderCategories, removeCategory, addCategory, updateBannedKeywords, setWelcomeMessage, setKickedState, updateChannelStatus, triggerRoomRescale, setRoomColor, toggleConnectionLostState, setServerbannerAmbiance, updateMemberFile, clearSearchData, updateInactiveChannel, removeSongFromWidget, saveSongToWidget, userBanned, toggleCreateChannelMenu, toggleHideDefaultServerNotice, toggleMembersWebCamState, socketToggleMessagePin, updateMemberActiveStatus, clearServerPing, userLeavesServer, deleteMessage, reOrderChannels, toggleReconnectingState, setChannelSocialId, setTopPos, updateJoiningChannelState, clearServerState, updateChannelWidgets, updateMusicVolume, throwMusicError, updateMusicState, skipSong, addSongToQueue, toggleMusicPlaying, deleteChannel, updateChannel, markWidgetForDeletion, addWidgetToChannel, assignNewServerGroup, updateServerGroups, updateServerBanner, closeServerErrorMessage, setEditingChannelId, toggleServerPushToTalkState, newMessage, updateMemberStatus, toggleServerSettingsOpenState, toggleLoadingChannel, setServerName, setServerId, addNewChannel, throwServerError, joinChannel, leaveChannel, userJoinsServer, userLeavesChannel, userJoinsChannel, updateMember } = serverSlice.actions;
 
 export default serverSlice.reducer;

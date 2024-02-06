@@ -7,6 +7,7 @@ import { CtxButton } from '../ctxButton/CtxButton';
 
 // style
 import "./MoveUser.css";
+import { RightArrowIcon } from '../../Icons/RightArrowIcon/RightArrowIcon';
 
 export const MoveUser = ({move = () => {}, top, left}) => {
 
@@ -35,13 +36,12 @@ export const MoveUser = ({move = () => {}, top, left}) => {
             borderRadius: 0
         }}
         className='move-user-button'>
-            <CtxButton borderRadius={0} name={"Move"} />
+            <CtxButton icon={<RightArrowIcon width={20} height={20} />} borderRadius={0} name={"Move"} />
         </div>
         {expanded ? 
             <div 
             style={{
                 position: 'absolute',
-                top: '50%',
                 left: '100%',
                 backgroundColor: primaryColor
             }}

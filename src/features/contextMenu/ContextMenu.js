@@ -11,8 +11,9 @@ import { CtxMenuTitle } from '../../components/titles/ctxMenuTitle/CtxMenuTitle'
 
 // state
 import { clearCtxState, handleChannelCtxState, handleCopyPasteCtxState, handleStreamState, handleUserManagementCtx, selectAssignPermissionsCtxState, selectBanUserCtxState, selectChangingUsersVolumeState, selectChannelSpecificStateSettings, selectContextMenuActive, selectContextMenuCordinates, selectCopyLinkState, selectCopyState, selectCtxAudioState, selectCtxSelectedChannel, selectCtxSelectedChannelName, selectDeleteMesssageState, selectDeleteWidget, selectDisableStream, selectDisableWebCam, selectEditChannelCtxState, selectFlipWebCamState, selectIsOwnerCtxState, selectJoinChannelCtxState, selectKickUser, selectLeaveChannelCtxState, selectMemberId, selectMoveUserState, selectPasteCtxState, selectPokeUser, selectSaveImageState, selectSaveVideoState, selectSeeSimilar, selectSelectedMessage, selectSelectedUserCtxState, selectStopStreamingState, selectStreamVolumeState, selectViewSocialState, setContextMenuOptions, setCtxCordinates, toggleContextMenu } from './contextMenuSlice';
-import { assignNewServerGroup, markWidgetForDeletion, moveUser, selectCurrentChannelId, selectServerChannels, selectServerGroups, selectServerId, selectServerMembers, selectUsersPermissions, sendDeleteMessageRequest, setChannelSocialId, setEditingChannelId, throwServerError, toggleCreateChannelMenu, toggleMembersWebCamState, triggerRoomRescale, userBanned } from '../server/ServerSlice';
+import { assignNewServerGroup, deleteCategory, markWidgetForDeletion, moveUser, selectCurrentChannelId, selectDeletingCategory, selectServerChannels, selectServerGroups, selectServerId, selectServerMembers, selectUsersPermissions, sendDeleteMessageRequest, setChannelSocialId, setEditingChannelId, throwServerError, toggleCreateChannelMenu, toggleMembersWebCamState, triggerRoomRescale, userBanned } from '../server/ServerSlice';
 import { addActivityMessage } from '../server/ChannelRoom/ServerDashBoard/ServerDashBoardSlice';
+
 // style
 import "./ContextMenu.css";
 
@@ -47,7 +48,6 @@ import { ImageSearch } from '../../util/ImageSearch';
 import { SearchIcon } from '../../components/Icons/SearchIcon/SearchIcon';
 import { RequestDeleteMessage } from '../server/SocialSlice';
 import { openDirectMessage } from '../Messages/MessagesSlice';
-import { handleAmplifyLevel } from '../../util/AudioAmplifier';
 
 export const ContextMenu = () => {
 
@@ -85,6 +85,10 @@ export const ContextMenu = () => {
     const [hidingChannelIcons, toggleHidingChannelIcons] = React.useState(false);
 
     const [handleCreateChannelState, toggleHandleCreateChannelState] = React.useState(false);
+
+    const [deleteCategoryState, toggleDeleteCategoryState] = React.useState(false);
+
+    const [selectedCategory, setSelectedCategory] = React.useState(false);
 
     const disableMediaWidget = useSelector(selectDisableMediaWidget);
 
@@ -145,6 +149,8 @@ export const ContextMenu = () => {
     const popOutUserStreams = useSelector(selectPopOutUserStreams);
 
     const hideCustomChannelIcons = useSelector(selectDisableChannelIcons);
+
+    const deletingCategory = useSelector(selectDeletingCategory);
 
     // stream management
     const changeStreamVolumeState = useSelector(selectStreamVolumeState);
@@ -244,6 +250,13 @@ export const ContextMenu = () => {
                 }
             }
 
+            if (p.className === 'channel-list-outer-container') {
+                if (permissions.user_can_manage_channels) {
+                    toggleHandleCreateChannelState(true);
+                    dispatch(toggleContextMenu(true));
+                }
+            }
+
             if (p.className === 'music-widget-outer-container' || p.className === 'music-player-overlay-wrapper') {
                 dispatch(toggleContextMenu(true));
 
@@ -280,6 +293,16 @@ export const ContextMenu = () => {
                     if (p.id.split('&tags')[1].length < 5) return;
 
                     dispatch(setContextMenuOptions({state: 'seeSimilar', value: p.id.split('&tags=')[1]}))
+                }
+            }
+
+            if (p.className?.includes('category')) {
+                
+                if (permissions.user_can_manage_channels) {
+                    dispatch(toggleContextMenu(true));
+                    toggleDeleteCategoryState(true);
+                    setSelectedCategory(p.id);
+                    toggleHandleCreateChannelState(true);
                 }
             }
 
@@ -600,6 +623,8 @@ export const ContextMenu = () => {
         setSelectedVideo({});
         toggleHandleCreateChannelState(false);
         toggleHidingChannelIcons(false);
+        setSelectedCategory("");
+        toggleDeleteCategoryState(false);
     }
 
     React.useEffect(() => {
@@ -1139,6 +1164,17 @@ export const ContextMenu = () => {
         dispatch(toggleCreateChannelMenu(true));
     }
 
+    const handleDeleteCategory = () => {
+
+        if (!selectedCategory) return;
+
+        if (deletingCategory) return;
+
+        dispatch(deleteCategory({category_id: selectedCategory}));
+
+        setSelectedCategory("");
+    }
+
     return (
         <>
         {ctxActive ? 
@@ -1162,7 +1198,7 @@ export const ContextMenu = () => {
             {leaveChannelState ? <CtxButton action={handleLeaveChannel} name={'Leave Channel'} /> : null}
             {editChannelState ? <CtxButton action={handleEditChannel} name={"Edit Channel"} icon={<EditIcon />} /> : null}
             {viewSocial ? <CtxButton action={viewSocialFeed}  name={"Social"} icon={<SocialIcon color={textColor} />} /> : null}
-            {assignPermissions ? <AssignPermissionGroupMenu action={assignNewPermissionGroup} permission_groups={permissionGroups} current_permission_group={selectedUserToManage.split('-channel')[0]}  /> : null}
+            {assignPermissions ? <AssignPermissionGroupMenu rightPos={ctxCordinates.x} action={assignNewPermissionGroup} permission_groups={permissionGroups} current_permission_group={selectedUserToManage.split('-channel')[0]}  /> : null}
             {audio ? 
             <>
             <CtxMenuTitle title={"Change Volume"} />
@@ -1173,7 +1209,7 @@ export const ContextMenu = () => {
             <>
             <div style={{display: 'flex', alignItems: 'center'}}>
                 <CtxMenuTitle title={"Change User Volume"} />
-                <p style={{color: textColor, fontSize: '0.8rem', marginRight: 5}} >{Math.floor(userVolumeLevel * 100)}%</p>
+                <p style={{color: textColor, fontSize: '0.8rem', margin: "0 5px 0 0"}} >{Math.floor(userVolumeLevel * 100)}%</p>
             </div>
             <Range invert={true} save={handleUserVolumeChange} action={(value) => setUserVolumeLevel(value)} step={0.01} value={userVolumeLevel} fill={false} max={2.5} min={0} /> 
             </>
@@ -1197,11 +1233,12 @@ export const ContextMenu = () => {
            
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideUserStatus")}} state={hideUserStatus} name={"Hide User Status"} /> : null}
             {channelSpecificSettingsState || mediaWidgetState ? <BoolButton action={() => {handleChannelSpecificStateChange('disableMediaWidget')}} state={disableMediaWidget} name={"Hide Media Widget"} /> : null}
-            {handleCreateChannelState ? <CtxButton name="Create Channel" action={openCreateChannelMenu} /> : null}
-            {hidingChannelIcons ? <BoolButton state={hideCustomChannelIcons} action={() => {handleChannelSpecificStateChange('disableChannelIcons')}} name="Hide Channel Icons" /> : null}
+            {handleCreateChannelState ? <CtxButton name="Create Channel / Category" action={openCreateChannelMenu} /> : null}
+            {hidingChannelIcons ? <CtxButton action={() => {handleChannelSpecificStateChange('disableChannelIcons')}} name={`${hideCustomChannelIcons ? "Show" : "Hide"} Custom Channel Icons`} /> : null}
             {addToMusicWidget ? <CtxButton action={handlePlayOnMusicWidget} name="Play On Music Widget" icon={<PlayOnWidgetIcon />}/> : null}
             {stopStreamingState ? <CtxButton action={handleStopStreaming} name={"Stop Streaming"} /> : null}
             {deleteMessageState ? <CtxButton action={handleDeleteMessage} name={"Delete Message"} icon={<DeleteIcon />} /> : null}
+            {deleteCategoryState ? <CtxButton action={handleDeleteCategory} icon={<DeleteIcon />} name={"Delete Category"} /> : null}
             <Loading loading={loading} />
         </motion.div>
         : null}

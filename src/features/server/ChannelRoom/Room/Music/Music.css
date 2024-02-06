@@ -43,7 +43,7 @@
 }
 
 .media-widget-room-wrapper {
-    width: 100%;
+    width: calc(100% - 4px);
     height: 100%;
     display: flex;
     flex-grow: 3;
@@ -52,7 +52,7 @@
     max-width: 600px;
     margin-bottom: 5px;
     box-shadow: 5px 5px 30px black;
-    border-radius: 10px;
+    border-radius: 20px;
 }
 
 .youtube-player-wrapper {

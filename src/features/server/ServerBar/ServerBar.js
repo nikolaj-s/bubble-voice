@@ -6,7 +6,7 @@ import { io } from "socket.io-client";
 import { useNavigate, useRoutes } from 'react-router';
 
 // state
-import {clearSearchData, addNewChannel, assignNewServerGroup, clearServerState, deleteChannel, fetchPersistedMusicVolume, fetchServerDetails, handleLeavingServer, leaveChannel, newMessage, removeSongFromWidget, reOrderChannels, saveSongToWidget, selectCurrentChannel, selectCurrentChannelId, selectInactiveChannel, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, setServerName, throwServerError, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateInactiveChannel, updateMemberActiveStatus, updateMemberStatus, updateServerBanner, updateServerGroups, userBanned, userJoinsChannel, userJoinsServer, userLeavesChannel, userLeavesServer, updateMemberFile, toggleConnectionLostState, updateChannelStatus, setKickedState, setWelcomeMessage, updateBannedKeywords} from '../ServerSlice';
+import {clearSearchData, addNewChannel, assignNewServerGroup, clearServerState, deleteChannel, fetchPersistedMusicVolume, fetchServerDetails, handleLeavingServer, leaveChannel, newMessage, removeSongFromWidget, reOrderChannels, saveSongToWidget, selectCurrentChannel, selectCurrentChannelId, selectInactiveChannel, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, setServerName, throwServerError, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateInactiveChannel, updateMemberActiveStatus, updateMemberStatus, updateServerBanner, updateServerGroups, userBanned, userJoinsChannel, userJoinsServer, userLeavesChannel, userLeavesServer, updateMemberFile, toggleConnectionLostState, updateChannelStatus, setKickedState, setWelcomeMessage, updateBannedKeywords, addCategory, removeCategory, reOrderCategories} from '../ServerSlice';
 import { selectUsername } from '../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { getToken, url } from '../../../util/Validation';
 import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
@@ -16,7 +16,7 @@ import { addNewWidgetOverlayToQueue, clearWidgetOverLay } from '../ChannelRoom/R
 import {  pushSytemNotification, toggleWebVersion } from '../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { addSongToQueue, like_song, removeSongFromQueue, skipSong, toggleMusicPlaying, un_like_song } from '../ChannelRoom/Room/Music/MusicSlice';
 import { manuallySetMicrophoneState, selectCurrentScreen, setCurrentScreen, toggleControlState } from '../../controlBar/ControlBarSlice';
-import { addActivityMessage, setActivityFeed } from '../ChannelRoom/ServerDashBoard/ServerDashBoardSlice';
+import { addActivityMessage, setActivityFeed, setPinnedSubReddits } from '../ChannelRoom/ServerDashBoard/ServerDashBoardSlice';
 
 // component's
 import { ServerBanner } from '../../../components/serverBanner/ServerBanner';
@@ -211,6 +211,10 @@ const Bar = () => {
                 dispatch(updateBannedKeywords(data.data.banned_keywords));
             }
 
+            if (data.data.pinned_sub_reddits) {
+                dispatch(setPinnedSubReddits(data.data.pinned_sub_reddits));
+            }
+
             dispatch(setActivityFeed(data.data.activity_feed));
 
             dispatch(updateInactiveChannel(data.data.inactive_channel));
@@ -230,6 +234,18 @@ const Bar = () => {
             if (data.cleared_social) {
                 dispatch(clearSocialById(data.channel._id));
             }
+        })
+
+        socket.on('new category', (data) => {
+            dispatch(addCategory(data));
+        })
+
+        socket.on('delete category', (data) => {
+            dispatch(removeCategory(data));
+        })
+
+        socket.on('new category order', (data) => {
+            dispatch(reOrderCategories(data));
         })
 
         socket.on('delete channel', (data) => {
@@ -358,7 +374,7 @@ const Bar = () => {
 
         socket.on("new channel order", (data) => {
             try {
-                dispatch(reOrderChannels(data.new_order))
+                dispatch(reOrderChannels(data))
             } catch (error) {
                 console.log(error)
             }

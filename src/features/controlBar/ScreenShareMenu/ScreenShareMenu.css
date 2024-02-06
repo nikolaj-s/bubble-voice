@@ -9,7 +9,7 @@
     left: 5px;
     padding: 5px;
     bottom: 55px;
-    width: 300px;
+    width: 320px;
     height: 400px;
     border-radius: 10px;
     z-index: 10;
@@ -30,7 +30,6 @@
 .screen-share-menu h3 {
     font-weight: 400;
     width: 100%;
-    margin: 15px 0px 5px 10px;
     text-align: left;
     letter-spacing: var(--font-spacing);
    

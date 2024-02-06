@@ -66,6 +66,23 @@
     word-wrap: normal;
     white-space: nowrap;
 }
+
+.song-author {
+    margin-right: 5px;
+    text-align: start !important;
+    flex-shrink: 4;
+    margin-left: 0;
+    margin-right: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    max-height: 100%;
+    font-size: 1.2rem;
+    cursor: default;
+    word-break: keep-all;
+    word-wrap: normal;
+    white-space: nowrap;
+}
 .added-by-song-title {
     cursor: default;
     word-break: keep-all;

@@ -8,7 +8,10 @@ import { VoiceEnabledIcon } from '../../../../../../components/Icons/VoiceEnable
 import { useSelector } from 'react-redux';
 import { selectTextColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { AltEditIcon } from '../../../../../../components/Icons/AltEditIcon/AltEditIcon';
-export const ChannelIcon = ({textOnly, locked, initial, getFile}) => {
+import { RedditIcon } from '../../../../../../components/Icons/RedditIcon/RedditIcon';
+import { AltImageIcon } from '../../../../../../components/Icons/AltImageIcon/AltImageIcon';
+import { HistoryIcon } from '../../../../../../components/Icons/HistoryIcon/HistoryIcon';
+export const ChannelIcon = ({textOnly, locked, initial, getFile, type}) => {
 
     const textColor = useSelector(selectTextColor);
 
@@ -18,7 +21,14 @@ export const ChannelIcon = ({textOnly, locked, initial, getFile}) => {
                 <AltEditIcon />
             </div>
             <ImageInput borderRadius='50%' imageProcessingFontSize={'0.5rem'} maxSize={0.4} getFile={getFile} initalImage={initial} disableIcon={true} maxDimensions={50} borderWidth={2} width='100%' height='100%'  />
-            {locked ?
+            {type === 'mediahistory' ?
+            <HistoryIcon width={20} height={20} /> :
+            type === 'subreddit' ?
+            <RedditIcon /> :
+            type === 'screenshots' ?
+            <AltImageIcon />
+            :
+            locked ?
             <LockedChannelIcon />
             :
             textOnly ?

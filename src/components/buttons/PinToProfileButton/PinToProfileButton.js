@@ -3,12 +3,12 @@ import { ButtonAnimationWrapper } from '../ButtonAnimationWrapper/ButtonAnimatio
 import { useSelector } from 'react-redux'
 import { selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 
-export const PinToProfileButton = ({pinned, action, height, width, padding}) => {
+export const PinToProfileButton = ({pinned, action, height, width, padding, borderRadius}) => {
   
     const color = useSelector(selectTextColor);
 
     return (
-        <ButtonAnimationWrapper desc_space={12} desc_width='100px' action={action} padding={padding} width={width} height={height} description={pinned ? "Unpin From Profile" : "Pin To Profile"} >
+        <ButtonAnimationWrapper borderRadius={borderRadius} desc_space={12} desc_width='100px' action={action} padding={padding} width={width} height={height} description={pinned ? "Unpin From Profile" : "Pin To Profile"} >
             {!pinned ?
 
             <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -1,0 +1,43 @@
+.pinned-sub-reddit-wrapper {
+    width: 100%;
+    
+}
+
+.pinned-sub-reddit-container {
+    position: relative;
+    width: 100%;
+    min-height: 200px;
+    height: auto;
+}
+
+.remove-pinned-sub-button {
+    position: absolute;
+    right: -20px;
+    top: -20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.remove-pinned-sub-button:hover {
+    opacity: 0.5;
+}
+
+.pinned-sub-icon-container {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 40px;
+    height: 40px;
+    z-index: 2;
+}
+
+.pinned-sub-icon-container svg {
+    width: 100%;
+    height: 100%;
+}

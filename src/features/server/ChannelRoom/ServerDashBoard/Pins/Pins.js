@@ -3,16 +3,47 @@ import { Message } from '../../../../../components/Message/Message'
 import { motion } from 'framer-motion';
 import { NoMedia } from '../../../../../components/NoMedia/NoMedia'
 import { useSelector } from 'react-redux';
-import { selectDisableTransitionAnimations } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectDisableTransitionAnimations, selectSecondaryColor, selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectPinnedSubreddits } from '../ServerDashBoardSlice';
+import { PinnedSubRedditWrapper } from '../../../../../components/PinnedSubReddit/PinnedSubRedditWrapper';
+import { PinIcon } from '../../../../../components/Icons/PinIcon/PinIcon';
+import { SettingsHeader } from '../../../../../components/titles/SettingsHeader/SettingsHeader';
 
 export const Pins = ({permission, pins, handlePin, initLoading}) => {
 
   const disableTransition = useSelector(selectDisableTransitionAnimations);
 
+  const pinnedSubreddits = useSelector(selectPinnedSubreddits);
+
+  const textColor = useSelector(selectTextColor);
+
+  const secondaryColor = useSelector(selectSecondaryColor);
+
   return (
     <motion.div
     transition={disableTransition ? {duration: 0} : {duration: 0.2}}
     style={{padding: 0, width: '100%', height: '100%'}} className='server-media-wrappers' initial={{translateX: '100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}}>
+      {pinnedSubreddits.length > 0 ?
+      <div
+      style={{backgroundColor: secondaryColor}}
+      className='pins-subtitle-container'>
+      <div className='pins-pin-icon-container'>
+        <PinIcon color={textColor} />
+      </div>
+      <h1 style={{color: textColor}}>Pinned Subreddits</h1>
+      </div>
+      : null}
+      <PinnedSubRedditWrapper subreddits={pinnedSubreddits} />
+      {pins?.length > 1 ?
+        <div 
+        style={{backgroundColor: secondaryColor}}
+        className='pins-subtitle-container'>
+        <div className='pins-pin-icon-container'>
+          <PinIcon color={textColor} />
+        </div>
+        <h1 style={{color: textColor}}>Pinned Messages</h1>
+        </div>
+      : null}  
       {initLoading ? null : pins?.length <= 1 ?
       <NoMedia message={"Currently No Pinned Messages"} />
       : pins?.map((p, key) => {

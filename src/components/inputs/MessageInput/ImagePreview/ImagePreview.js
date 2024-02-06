@@ -26,7 +26,7 @@ export const ImagePreview = ({preview, cancel, inputHeight, fileName, type, proc
             <div 
             style={{backgroundColor: accentColor}}
             className='image-prev-cancel-hover-effect'>
-                <DeleteButton description={"Cancel"} action={cancel} width={20} height={20} desc_space={10} padding={4} />
+                <DeleteButton desc_width={40} description={"Cancel"} action={cancel} width={20} height={20} desc_space={10} padding={4} />
             </div>
             <div className='inner-image-preview-social-wrapper'>
                 {preview?.includes('.mp4') || type?.includes('video') ?

@@ -4,8 +4,12 @@ import Axios from 'axios';
 
 export const GetPostsFromSubReddit = createAsyncThunk(
     'ServerMediaSlice/GetPostsFromSubReddit',
-    async ({subreddit, sort, after}, {rejectWithValue}) => {
+    async ({subreddit, sort}, {rejectWithValue, getState}) => {
+
         try {
+
+            const {after} = getState().ServerMediaSlice;
+
             const data = await Axios.get(`http://www.reddit.com${subreddit}${sort}/.json${after && sort === 'top' ? '?after=' + after + '&t=all' : !after && sort === 'top' ? '?t=all' : after ? '?after=' + after : ''}`)
             .then(data => {
                 
@@ -114,7 +118,7 @@ const ServerMediaSlice = createSlice({
         },
         toggleFullMode: (state, action) => {
             state.fullMode = !state.fullMode;
-        }
+        },
     },
     extraReducers: {
         [GetPostsFromSubReddit.pending]: (state, action) => {
@@ -173,6 +177,6 @@ export const selectCurrentRedditIndex = state => state.ServerMediaSlice.index;
 
 export const selectFullModeState = state => state.ServerMediaSlice.fullMode;
 
-export const {setRedditIndex, toggleFullMode, clearMedia, toggleLoadingNewMedia, addMoreMedia, setNewMedia, setMediaQuery, setScrollPosition, setSubRedditQuery, toggleSortSubPosts, setSubReddit, toggleLoadingRedditMedia, setServerMediaPage} = ServerMediaSlice.actions;
+export const { setRedditIndex, toggleFullMode, clearMedia, toggleLoadingNewMedia, addMoreMedia, setNewMedia, setMediaQuery, setScrollPosition, setSubRedditQuery, toggleSortSubPosts, setSubReddit, toggleLoadingRedditMedia, setServerMediaPage} = ServerMediaSlice.actions;
 
 export default ServerMediaSlice.reducer;

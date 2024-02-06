@@ -1,6 +1,6 @@
 {
   "name": "bubble",
-  "version": "0.9.63",
+  "version": "0.9.64",
   "private": false,
   "dependencies": {
     "@popmotion/popcorn": "^0.4.4",
@@ -61,18 +61,26 @@
     },
     "win": {
       "icon": "build/logo512.ico",
-      "target": [{
-        "target": "nsis",
-        "arch": ["x64"]
-      }],
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
       "publish": "github"
     },
     "mac": {
       "icon": "build/logo512.png",
-      "target": [{
-        "target": "default",
-        "arch": ["arm64"]
-      }],
+      "target": [
+        {
+          "target": "default",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ],
       "publish": "github"
     },
     "nsis": {

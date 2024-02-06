@@ -15,7 +15,7 @@ import { Error } from '../../../Error/Error';
 
 // state
 import { Loading } from '../../../LoadingComponents/Loading/Loading';
-import {  handleAddingMedia, like_song, selectLoadingMusicState, selectMusicError, selectMusicErrorMessage, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, throwMusicError, toggleLoadingMusic, toggleMusicPlaying, un_like_song, updateMusicVolume } from '../../../../features/server/ChannelRoom/Room/Music/MusicSlice';
+import {  fetchRecentSongs, handleAddingMedia, like_song, searchMedia, selectLoadingMusicState, selectLoadingRecentSongs, selectMusicError, selectMusicErrorMessage, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, selectRecentSongs, selectSavesVisible, selectSearchResults, selectSearchResultsVisible, throwMusicError, toggleLoadingMusic, toggleMusicPlaying, toggleResultsVisible, toggleSavesVisible, un_like_song, updateMusicVolume } from '../../../../features/server/ChannelRoom/Room/Music/MusicSlice';
 
 // style
 import "./MusicWidget.css";
@@ -29,6 +29,8 @@ import { SettingsButton } from '../../../buttons/settingsButton/settingsButton';
 import { MediaSettings } from './MediaSettings/MediaSettings';
 import { selectUsername } from '../../../../features/settings/appSettings/accountSettings/accountSettingsSlice';
 import { LockedChannelIcon } from '../../../Icons/LockedChannelIcon/LockedChannelIcon';
+import { AltDownIcon } from '../../../Icons/AltDownIcon/AltDownIcon';
+import { AudioWaveIcon } from '../../../Icons/AudioWaveIcon/AudioWaveIcon';
 
 export const MusicWidget = ({roomOverlay, editing = false, widget, controls = true}) => {
 
@@ -37,6 +39,12 @@ export const MusicWidget = ({roomOverlay, editing = false, widget, controls = tr
     const [query, setQuery] = React.useState("");
 
     const [mediaSettings, toggleMediaSettings] = React.useState(false);
+
+    const savesVisible = useSelector(selectSavesVisible);
+
+    const resultsVisible =  useSelector(selectSearchResultsVisible);
+
+    const results = useSelector(selectSearchResults);
 
     const loading = useSelector(selectLoadingMusicState);
 
@@ -70,6 +78,20 @@ export const MusicWidget = ({roomOverlay, editing = false, widget, controls = tr
 
     const disableTransparancyEffects = useSelector(selectDisableTransparancyEffects);
 
+    const recentSongs = useSelector(selectRecentSongs);
+
+    const loadingRecentSongs = useSelector(selectLoadingRecentSongs);
+
+    React.useEffect(() => {
+
+        if (recentSongs.length > 0) return;
+
+        if (loadingRecentSongs) return;
+
+        dispatch(fetchRecentSongs());
+
+    }, [loadingRecentSongs, recentSongs])
+
     React.useEffect(() => {
 
         const i = document.getElementById('music-widget-input');
@@ -95,10 +117,14 @@ export const MusicWidget = ({roomOverlay, editing = false, widget, controls = tr
         } else {
             data = query;
         }
-        
-        data = data.replace(/\s/g, '');
 
-        dispatch(handleAddingMedia(data));
+        if (data.includes('https:')) {
+            data = data.replace(/\s/g, '');
+
+            dispatch(handleAddingMedia({query: data}));
+        } else {
+            dispatch(searchMedia(data));
+        }
 
         setQuery("");
     }
@@ -113,9 +139,17 @@ export const MusicWidget = ({roomOverlay, editing = false, widget, controls = tr
 
         if (exists !== -1) return dispatch(throwMusicError({error: true, errorMessage: "Song is already in the queue"}));
 
+        let liked = false;
+
+        for (const s of savedMusic) {
+            if (s._id === song._id) {
+                liked = true;
+            }
+        }
+
         dispatch(toggleLoadingMusic(true));
 
-        await socket.request('add song to queue', {song: song})
+        await socket.request('add song to queue', {song: {...song, liked: liked}})
         .then(res => {
             if (queue.length === 0) {
                 dispatch(toggleMusicPlaying(true));
@@ -227,20 +261,43 @@ export const MusicWidget = ({roomOverlay, editing = false, widget, controls = tr
         style={{backgroundColor: secondaryColor}}
         className='music-widget-outer-container' >
             <div className='inner-music-widget-container'>
-                <div className='music-top-title-container'>
-                    <h2 style={{
-                        color: textColor
-                    }}>Media</h2>
-                    <SettingsButton margin="0px 5px" action={toggleSettings} description={false}  flip_desc={true} width={16} height={16} padding={3} invert={true} />
-                </div>
+                
                 {(channel?.locked_media === true && channel?.media_auth?.includes(username)) || channel.channel_owner === username || permission.server_group_name === 'Owner' || !channel.locked_media? 
                 <>
                 <div className='music-widget-nav-container'>
-                    <TextInput id={'music-widget-input'} keyCode={handleEnter} inputValue={query} action={handleInput} placeholder={"Add Song To Queue"} marginTop='0' />
+                    <div className='music-widget-icon-wrapper'>
+                        <AudioWaveIcon />
+                    </div>
+                    
+                    <TextInput id={'music-widget-input'} keyCode={handleEnter} inputValue={query} action={handleInput} placeholder={"Search"} marginTop='0' />
+                </div>
+                <div className='music-queue-title-container saved-media-title'>
+                    <h3 onClick={() => {dispatch(toggleResultsVisible())}} style={{color: textColor, marginRight: 5, opacity: resultsVisible ? 1 : 0.5}}>{results.length === 0 ? "Recents" : "Results"}</h3>
+                    <h2 style={{color: textColor, marginRight: 5}}>/</h2>
+                    <h3 onClick={() => {dispatch(toggleSavesVisible())}} style={{color: textColor, marginRight: 5, opacity: savesVisible ? 1 : 0.5}}>Saves</h3>
+                    <div style={{height: 2, width: '100%', backgroundColor: textColor, marginRight: 5}} />
                 </div> 
-                <div className='music-queue-title-container'>
-                    <h3 style={{color: textColor}}>Saves</h3>
-                </div> 
+                {resultsVisible ?
+                <div className='saved-music-container'>
+                    {results.length === 0 && recentSongs.length === 0 ?
+                    <p 
+                    style={{
+                        color: textColor
+                    }}
+                    >. . .</p>    
+                    :
+                    results.length !== 0 ?
+                    results.map(song => {
+                        return <Song search_result={true} author={song.author} addToQueue={() => {handleAddSavedSongToQueue(song)}} saved={true} liked={song.liked} action={() => {handleSavingSong(song)}} id={song._id} key={song._id} name={song.title} duration={song.duration} image={song.thumbnail} />
+                    })
+                    :
+                    recentSongs.map(song => {
+                        return <Song search_result={true} author={song.author} addToQueue={() => {handleAddSavedSongToQueue(song)}} saved={true} liked={song.liked} action={() => {handleSavingSong(song)}} id={song._id} key={song._id} name={song.title} duration={song.duration} image={song.thumbnail} />
+                    })
+                    }
+                </div>
+                : null}
+                {savesVisible ?
                 <div className='saved-music-container'>
                     {savedMusic.length === 0 ?
                     <p 
@@ -249,9 +306,10 @@ export const MusicWidget = ({roomOverlay, editing = false, widget, controls = tr
                     }}
                     >. . .</p>    
                     : savedMusic.map(song => {
-                        return <Song addToQueue={() => {handleAddSavedSongToQueue(song)}} saved={true} liked={song.liked} action={() => {handleSavingSong(song)}} id={song._id} key={song._id} name={song.title} duration={song.duration} image={song.thumbnail} />
+                        return <Song in_channel={true} author={song.author} addToQueue={() => {handleAddSavedSongToQueue(song)}} saved={true} liked={song.liked} action={() => {handleSavingSong(song)}} id={song._id} key={song._id} name={song.title} duration={song.duration} image={song.thumbnail} />
                     })}
-                </div>
+                </div> 
+                : null}
                 <div className='music-queue-title-container'>
                     <h3 style={{color: textColor}}>Queue</h3>
                     <h3 style={{color: textColor}}>{queue.length === 0 ? 0 : queue.length - 1} / 10</h3>
@@ -267,7 +325,7 @@ export const MusicWidget = ({roomOverlay, editing = false, widget, controls = tr
                     : queue.map((song, i) => {
                         return (
                             i === 0 ? null :
-                            <Song added_by={song.added_by} removeFromQueue={() => {handleRemoveFromQueue(song)}} inQueue={true} liked={song.liked} action={() => {handleSavingSong(song)}} id={song._id} key={song._id} name={song.title} duration={song.duration} image={song.thumbnail} />
+                            <Song author={song.author} added_by={song.added_by} removeFromQueue={() => {handleRemoveFromQueue(song)}} inQueue={true} liked={song.liked} action={() => {handleSavingSong(song)}} id={song._id} key={song._id} name={song.title} duration={song.duration} image={song.thumbnail} />
                         )
                     })}
                 </div>
@@ -285,7 +343,7 @@ export const MusicWidget = ({roomOverlay, editing = false, widget, controls = tr
                         <Range min={0} value={volume} action={handleMusicVolume} max={100} step={0.05} />
                     </div> : null}
                     {queue[0]?.title && editing === false ? 
-                    <Song width={roomOverlay ? '100%' : 'calc(100% - 120px)'} added_by={queue[0]?.added_by} liked={queue[0]?.liked} action={() => {handleSavingSong(queue[0])}} id={queue[0]._id} key={queue[0]._id} name={queue[0].title} duration={queue[0].duration} image={queue[0].thumbnail} />
+                    <Song playing={true} width={roomOverlay ? '100%' : 'calc(100% - 120px)'} added_by={queue[0]?.added_by} liked={queue[0]?.liked} action={() => {handleSavingSong(queue[0])}} id={queue[0]._id} key={queue[0]._id} name={queue[0].title} duration={queue[0].duration} image={queue[0].thumbnail} />
                     :
                     <p
                     style={{

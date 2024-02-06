@@ -19,7 +19,7 @@ export const ProfileImage = ({timeStamp, prevDate, date, activity, previous_mess
         (date.getDate() !== prevDate.getDate())  ?
             <div style={{borderRadius: profile_picture_shape === 'square' ? '5px' : '50%',
             marginLeft: 5,
-            marginTop: 6,
+            marginTop: 3,
             backgroundColor: (color || primaryColor)
             }} onClick={action} className='message-profile-picture'>
                 <Image image_class={'user-image'} cursor='pointer' image={user_image || current_message.user_image} />

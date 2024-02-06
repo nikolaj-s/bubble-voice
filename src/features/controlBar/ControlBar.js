@@ -151,11 +151,11 @@ export const ControlBar = () => {
                 <ControlBarOptionsButton action={() => {toggleExpanded(!expandedOpen)}} state={!expandedOpen} />
                 <div style={{backgroundColor: accentColor}} className='controls-wrapper'>  
                     <MicToggleButton 
-                    width={20}
-                    height={20}
-                    padding={8}
-                    desc_space={23}
-                    
+                    width={23}
+                    height={19}
+                    padding={15}
+                    desc_space={35}
+
                     action={() => {toggleFunction('microphoneState')}} 
                     state={microphoneState} 
                     active={current_channel_id === null || channel.disable_streams}
@@ -163,9 +163,10 @@ export const ControlBar = () => {
                     />
                     <AudioToggleButton 
                     width={20}
-                    height={20}
-                    padding={8}
-                    desc_space={23}
+                    borderRadius={0}
+                    height={16}
+                    padding={"15px 17px"}
+                    desc_space={35}
                     desc_width={80}
                     opacity={0.5}
                     altInvert={true}
@@ -177,8 +178,9 @@ export const ControlBar = () => {
                     />
                     <WebCamButton 
                     width={20}
-                    height={20}
-                    padding={8}
+                    height={16}
+                    padding={"15px 17px"}
+                    desc_space={35}
                     action={() => {toggleFunction('webCamState')}} 
                     state={webCamState} 
                     active={current_channel_id === null || channel.disable_streams || channel?.users?.length === 1}
@@ -187,9 +189,9 @@ export const ControlBar = () => {
                     />
                     <ShareScreenButton 
                     width={20}
-                    height={20}
-                    padding={8}
-                    desc_space={23}
+                    height={16}
+                    padding={"15px 17px"}
+                    desc_space={35}
                     loading={loadingScreenShare}
                     action={() => {toggleFunction('screenShareState')}} 
                     state={screenShareState} 

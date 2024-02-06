@@ -22,7 +22,7 @@ import { DisabledStreamIcon } from '../../../Icons/DisabledStreamIcon/DisabledSt
 import { setPanelPosition, setSelectedMember } from '../../../../features/server/ChannelRoom/MemberPanel/MemberPanelSlice';
 import { selectCurrentChannelId } from '../../../../features/server/ServerSlice';
 
-export const ChannelUserDisplay = ({user, channel_id}) => {
+export const ChannelUserDisplay = ({user, channel_id, dragging = () => {}}) => {
 
     const [hover, toggleHover] = React.useState(false);
 
@@ -54,12 +54,19 @@ export const ChannelUserDisplay = ({user, channel_id}) => {
     }
     
     const onDragStart = (e) => {
+        e.stopPropagation();
+
         e.dataTransfer.setData('text/plain', `${channel_id} ${user.username}`)
 
         e.target.style.cursor = 'move';
+
+        dragging(true);
     }
 
     const onDragEnd = (e) => {
+
+        dragging(false);
+
         e.target.style.cursor = 'default';
     }
 

@@ -5,9 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 // components
 import { Image } from '../Image/Image'
 import { Video } from '../Video/Video'
+import { Song } from '../widgets/Widgets/MusicWIdget/Song/Song';
 
 // state
-import {  selectAccentColor, selectGlassPrimaryColor, selectGlassState, selectPrimaryColor, selectSecondaryColor, selectTextColor, selectTransparentPrimaryColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import {  selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor, selectTransparentPrimaryColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./Message.css";
@@ -17,7 +18,7 @@ import { MessageLink } from './MessageLink/MessageLink';
 import { MessageText } from './MessageText/MessageText';
 import { SenderInfo } from './SenderInfo/SenderInfo';
 import { setPanelPosition, setSelectedMember } from '../../features/server/ChannelRoom/MemberPanel/MemberPanelSlice';
-import { selectServerMembers } from '../../features/server/ServerSlice';
+import { selectCurrentChannelId, selectServerMembers } from '../../features/server/ServerSlice';
 import { DateSpacer } from './DateSpacer/DateSpacer';
 import { GetTimeDifference } from '../../util/GetTimeDifference';
 import { ProfileImage } from './ProfileImage/ProfileImage';
@@ -29,6 +30,8 @@ import { UploadedFileShare } from './UploadedFileShare/UploadeFileShare';
 import { LinkPreview } from './LinkPreview/LinkPreview';
 import { NsfwImageOverlay } from '../Image/NsfwImageOverlay/NsfwImageOverlay';
 import { ConvertTime } from '../../util/ConvertTime';
+import { RedditPost } from '../RedditPost/RedditPost';
+import { handleAddingMedia, selectLoadingMusicState } from '../../features/server/ChannelRoom/Room/Music/MusicSlice';
 
 export const Message = ({activity_feed = false,dashboard = false, direct_message, message, overlay = false, id, channel_id, perm, pinMessage, pinned, index, previous_message, current_message, persist, pin_to_profile}) => {
 
@@ -58,9 +61,11 @@ export const Message = ({activity_feed = false,dashboard = false, direct_message
 
     const maximizeMediaSize = useSelector(selectMaximizeMedia);
 
-    const hideLinksOnMedia = useSelector(selectHideLinksOnMedia);
+    const currentChannelId = useSelector(selectCurrentChannelId);
 
     const glassPrimary = useSelector(selectSecondaryColor);
+
+    const loadingAddingSong = useSelector(selectLoadingMusicState);
 
     React.useEffect(() => {
         setUser(members.find(member => member.username === current_message.username));
@@ -116,6 +121,14 @@ export const Message = ({activity_feed = false,dashboard = false, direct_message
 
     }
 
+    const handleAddToQueue = () => {
+        if (!message.song) return;
+
+        if (loadingAddingSong) return;
+
+        dispatch(handleAddingMedia({query: false, song: message.song}))
+    }
+
     const openUserPanel = (e) => {
     
         dispatch(setSelectedMember(current_message.username));
@@ -123,7 +136,7 @@ export const Message = ({activity_feed = false,dashboard = false, direct_message
         dispatch(setPanelPosition({y: (e.view.innerHeight - 600) < 0 ? 30 : e.pageY, x: e.pageX, origin: e.view.innerHeight - 600 < 0 ? false : (e.view.innerHeight - e.pageY) < 500 ? true : false, left: 330}));
     
     }
-    
+
     return (
         <>
             <div onMouseOut={(e) => {hoverEffect(e, false)}} onMouseOver={(e) => {hoverEffect(e, true)}}
@@ -142,12 +155,18 @@ export const Message = ({activity_feed = false,dashboard = false, direct_message
                     <h2 className='emoji-reaction-mesage'>{message.emoji}</h2>
                     : null}
                     <MessageText loading={message.loading} style={message.textStyle} color={textColor} text={message.text} />
-                    {(message.image || message.video || message.iFrame) || message.gallery ? null : <MessageLink link={message.link} />
+                    {(message.image || message.video || message.iFrame || message.reddit) || message.gallery ? null : <MessageLink link={message.link} />
                     }
                     {message.link_preview ?
                     <LinkPreview expand={expandContent} data={message.link_preview} />
                     : null}
                     <div className='message-content-wrapper'>
+                            {message.song ?
+                            <Song addToQueue={handleAddToQueue} in_channel={currentChannelId} in_social={true} name={message.song.title} duration={message.song.duration} image={message.song.thumbnail} author={message.song.author}  />
+                            : null}
+                            {message.reddit ?
+                            <RedditPost action={expandContent} inSocial={true} data={message.reddit} />
+                            : null}
                             <Iframe marginRight={5}  link={message.iFrame} />
                             <MessageGallery gallery={message.gallery} expand={expandContent} />
                             {message.video_upload ?

@@ -4,6 +4,7 @@
     margin-left: 5px;
     margin-right: 5px;
     border-radius: 8px;
+    flex-shrink: 0;
 }
 
 .channel-button-container {
@@ -36,8 +37,8 @@
     align-items: center;
     justify-content: flex-end;
     bottom: 0;
-    margin-right: 2px;
-    right: 7px;
+    margin-right: -3px;
+    right: 0px;
     height: 100%;
 }
 

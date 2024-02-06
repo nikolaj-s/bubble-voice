@@ -6,12 +6,10 @@
     border-radius: var(--border-radius);
     overflow: hidden;
     text-decoration: none;
-    max-width: 800px;
     cursor: default;
     padding: 5px 10px 10px 10px;
     border-radius: 20px;
     position: relative;
-    max-height: 60vh;
 }
 
 .reddit-media-container {
@@ -19,11 +17,9 @@
     justify-content: center;
     border-radius: 20px;
     width: 100%;
-    max-height: 600px;
+    max-height: 500px;
     overflow: hidden;
     position: relative;
-    min-height: 100px;
-    background-color: black;
 }
 
 .background-blur-red-effect {
@@ -45,7 +41,7 @@
     width: 100%;
 }
 .reddit-post-title {
-    margin-left: 5px;
+    margin-left: 0px;
     margin-bottom: 5px;
 }
 

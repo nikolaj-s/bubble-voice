@@ -6,7 +6,7 @@ import { Reorder } from 'framer-motion';
 // component's
 
 // state
-import { joinChannel, leaveChannel, reOrderChannels, selectCurrentChannelId, selectJoiningChannelState, selectServerChannels, selectServerMembers, selectUsersPermissions, } from '../../ServerSlice';
+import { joinChannel, leaveChannel, reOrderCategories, reOrderChannels, selectCategories, selectCurrentChannelId, selectJoiningChannelState, selectMediaChannels, selectServerChannels, selectServerMembers, selectUsersPermissions, throwServerError, } from '../../ServerSlice';
 import { ChannelButton } from '../../../../components/buttons/ChannelButton/ChannelButton';
 import { selectDisplayName, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 
@@ -18,6 +18,7 @@ import { selectCurrentScreen } from '../../../controlBar/ControlBarSlice';
 import { LoadingChannelsPlaceHolder } from '../../../../components/LoadingChannelsPlaceHolder/LoadingChannelsPlaceHolder';
 import { socket } from '../ServerBar';
 import { AltDownIcon } from '../../../../components/Icons/AltDownIcon/AltDownIcon';
+import { Category } from './Category/Category';
 
 
 export const ChannelList = ({loading}) => {
@@ -26,7 +27,17 @@ export const ChannelList = ({loading}) => {
 
     const [collapse, toggleCollapse] = React.useState(false);
 
+    const [collapseMedia, toggleCollapseMedia] = React.useState(false);
+
     const [localChannels, setLocalChannels] = React.useState([]);
+
+    const [draggingUser, toggleDragginUser] = React.useState(false); 
+
+    const [draggingChannel, toggleDraggingChannel] = React.useState(false);
+
+    const [draggingCategory, toggleDraggingCategory] = React.useState(false);
+
+    const [reordering, toggleReordering] = React.useState(false);
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
@@ -48,9 +59,7 @@ export const ChannelList = ({loading}) => {
 
     const mirroredWebCam = useSelector(selectMirroredWebCamState);
 
-    const glass = useSelector(selectGlassState);
-
-    const glassColor = useSelector(selectGlassColor);
+    const categories = useSelector(selectCategories);
 
     const currentScreen = useSelector(selectCurrentScreen);
 
@@ -100,29 +109,85 @@ export const ChannelList = ({loading}) => {
 
     let timeout;
 
-    const handleReorder = async (value) => {
+    const handleReorder = async (id, moveTo, category) => {
+
+        if (reordering) return;
 
         if (!permissions.user_can_manage_channels) return;
 
-        setLocalChannels(value);
-    }
+        toggleReordering(true);
 
-    const handleSave = async () => {
+        let id_array = localChannels.map(c => c._id)
 
-        if (!permissions.user_can_manage_channels) return;
+        const originatingPos = id_array.findIndex(c => c === id);
 
-        const id_array = localChannels.map(c => c._id);
+        const newPos = id_array.findIndex(c => c === moveTo);
         
-        await socket.request('reorganize channels', {new_order: id_array})
+        const element = id_array[originatingPos];
+
+        let move_to_pos = newPos < originatingPos ? newPos + 1 : newPos;
+
+        id_array.splice(originatingPos, 1);
+
+        id_array.splice(move_to_pos, 0, element);
+        
+     //   dispatch(reOrderChannels({new_order: id_array, category: category, channel_id: id}));
+        
+        await socket.request('reorganize channels', {new_order: id_array, category: category, channel_id: id})
         .then(result => {
-           
-            dispatch(reOrderChannels(result.new_order));
+
+            if (result.error) {
+                return dispatch(throwServerError({error: true, errorMessage: result.errorMessage}));
+            }
+
+            dispatch(reOrderChannels(result));
         })
         .catch(error => {
             console.log(error)
             return;
           //  dispatch(throwServerError({errorMessage: error.message}))
         })
+
+        toggleReordering(false);
+    
+    }
+
+    const handleReOrderCategories = async (category_id, move_to, below) => {
+        if (reordering) return;
+
+        if (!permissions.user_can_manage_channels) return;
+
+        toggleReordering(true);
+
+        let id_array = categories.map(c => c._id);
+
+        const category_pos = id_array.findIndex(c => c === category_id);
+
+        if (category_pos === -1) return;
+
+        const newPos = id_array.findIndex(c => c === move_to);
+
+        const move_to_pos = below && newPos < category_pos ? newPos + 1 : newPos;
+
+        const el = id_array[category_pos];
+
+        id_array.splice(category_pos, 1);
+
+        id_array.splice(move_to_pos, 0, el);
+
+        await socket.request('reorder categories', {new_order: id_array})
+        .then(result => {
+            if (result.error) {
+                return dispatch(throwServerError({error: true, errorMessage: result.errorMessage}));
+            }
+
+            dispatch(reOrderCategories(result));
+        })
+        .catch(err => {
+            return dispatch(throwServerError({error: true, errorMessage: err.message}));
+        })
+
+        toggleReordering(false);
     }
 
     return (
@@ -130,27 +195,10 @@ export const ChannelList = ({loading}) => {
         <motion.div 
         style={{backgroundColor: secondaryColor, maxHeight: currentScreen ? 'calc(100% - 270px)' : 'calc(100%)'}}
         className='channel-list-outer-container'>
-                <div 
-                onClick={() => {toggleCollapse(!collapse)}}
-                className='channel-list-collapse-button'>
-                    <AltDownIcon flip={collapse} />
-                    <p style={{color: textColor}}>Channels</p>
-                </div>
-                <div draggable='false' className='channel-list-button-wrapper'>
-                    
-                        {loading ? <LoadingChannelsPlaceHolder /> : 
-                        <Reorder.Group as='div' axis='y' onReorder={handleReorder} values={channels}>
-                            {localChannels.map((channel, key) => {
-                                return (
-                                    <Reorder.Item transition={{duration: 0.1}} onDragEnd={handleSave} as='div' dragMomentum={true} value={channel} key={`${channel._id}`}>
-                                        <ChannelButton collapse={collapse} index={key} action={handleJoinChannel} channel={channel} users={channel.users} />
-                                    </Reorder.Item>
-                                    
-                                )
-                            })}
-                        </Reorder.Group>
-                        }
-                </div>
+            {categories?.map(category => {
+                return <Category moveCategory={handleReOrderCategories} draggingCategory={draggingCategory} toggleDraggingCategory={toggleDraggingCategory} category_id={category._id} key={category._id} catagoryName={category.category_name} channels={localChannels.filter(c => c.category === category._id)} draggingChannel={draggingChannel} toggleDraggingChannel={toggleDraggingChannel} toggleDragginUser={toggleDragginUser} draggingUser={draggingUser} move={handleReorder} handleJoinChannel={handleJoinChannel} loading={loading} />
+            })}
+            <Category category_id={'channels'} catagoryName={'Channels'} channels={localChannels.filter(c => !c.category || c.category === 'channels')} draggingChannel={draggingChannel} toggleDraggingChannel={toggleDraggingChannel} toggleDragginUser={toggleDragginUser} draggingUser={draggingUser} move={handleReorder} handleJoinChannel={handleJoinChannel} loading={loading} />
         </motion.div>
         </>
             

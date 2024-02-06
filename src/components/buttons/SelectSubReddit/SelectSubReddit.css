@@ -1,0 +1,15 @@
+.select-pinned-sub-reddit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    margin: 0 5px 5px 0;
+    height: 30px;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+}
+
+.select-pinned-sub-reddit:hover {
+    opacity: 0.5;
+}

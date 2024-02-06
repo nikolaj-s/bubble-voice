@@ -1,6 +1,6 @@
 
 export const BuildSystemNotification = (data) => {
-  
+    console.log(data.content.link)
     return {message: ` 
       <head>
         <style>
@@ -54,7 +54,7 @@ export const BuildSystemNotification = (data) => {
               </h2>`
               : ""}
               ${(data?.content?.link && !data?.content?.image && !data?.content?.video) ?
-                `<p style="margin: -15px 0px 0px 0px; color: ${data.textColor};">${data?.content?.link}</p> `
+                `<p style="margin: 0px 0px 0px 0px; color: rgb(66, 176, 176); text-decoration: underline; font-size: 12px; word-break: break-all;">${data?.content?.link}</p> `
                 : ""}
               ${data?.content?.image ?
               ` <div style='position: relative; display: inline-block; width: calc(100% - 10px); height: 100%; max-height: 300px; overflow: hidden; border-radius: 10px; min-height: 60px;' class="image-container">

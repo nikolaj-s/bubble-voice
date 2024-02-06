@@ -24,7 +24,9 @@ import { DropDownList } from '../../../../components/DropDownList/DropDownList';
 import { updateServer } from '../../../sideBar/sideBarSlice';
 import { selectAccentColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { ImageSearchKeywordFilter } from './ImageSearchKeywordFilter/ImageSearchKeyWordFilter'
-import { setActivityFeed } from '../../ChannelRoom/ServerDashBoard/ServerDashBoardSlice';
+import { selectPinnedSubreddits, setActivityFeed, setPinnedSubReddits } from '../../ChannelRoom/ServerDashBoard/ServerDashBoardSlice';
+import { AddSubRedditMenu } from './AddSubRedditMenu/AddSubRedditMenu';
+import { PinnedSubRedditWrapper } from '../../../../components/PinnedSubReddit/PinnedSubRedditWrapper';
 
 const Wrapper = () => {
 
@@ -53,6 +55,8 @@ const Wrapper = () => {
 
     const [clearActivity, toggleClearActivity] = React.useState(false);
 
+    const [pinnedSubReddits, setLocalPinnedSubReddits] = React.useState([]);
+
     const serverName = useSelector(selectServerName);
 
     const serverBanner = useSelector(selectServerBanner);
@@ -70,6 +74,8 @@ const Wrapper = () => {
     const welcomeMessage = useSelector(selectServerWelcomeMessage);
 
     const bannedKeywords = useSelector(selectBannedKeywords);
+
+    const l_pinnedSubreddits = useSelector(selectPinnedSubreddits);
 
     // handle local state changes
     const handleBannerChange = (image) => {
@@ -127,12 +133,13 @@ const Wrapper = () => {
                 inactive_channel: inactiveChannel,
                 welcome_message: newServerWelcomeMessage,
                 banned_keywords: newKeywords,
-                clearActivity: clearActivity
+                clearActivity: clearActivity,
+                pinned_sub_reddits: pinnedSubReddits
             }
 
             await socket.request('update server', data)
             .then(data => {
-               
+                
                 toggleLoading(false);
 
                 setUpdate(false);
@@ -152,6 +159,11 @@ const Wrapper = () => {
                 if (data.data.banned_keywords) {
                     dispatch(updateBannedKeywords(data.data.banned_keywords));
                 }
+
+                if (data.data.pinned_sub_reddits) {
+                    dispatch(setPinnedSubReddits(data.data.pinned_sub_reddits));
+                }
+                console.log(data.data)
                 
                 dispatch(setActivityFeed(data.data.activity_feed));
 
@@ -220,11 +232,13 @@ const Wrapper = () => {
       
         setKeywords(bannedKeywords);
 
+        setLocalPinnedSubReddits(l_pinnedSubreddits);
+
         return () => {
             dispatch(setHeaderTitle("Select Channel"))
         }
     // eslint-disable-next-line
-    }, [serverName, bannedKeywords, welcomeMessage])
+    }, [serverName, bannedKeywords, welcomeMessage, l_pinnedSubreddits])
 
     const handleCancel = () => {
         setUpdate(false)
@@ -264,8 +278,25 @@ const Wrapper = () => {
         setKeywords(newKeywords.filter(w => w !== value));
     }
 
-    
-   
+    const addPinnedSubReddit = (data) => {
+        for (const d of pinnedSubReddits) {
+            if (d.url === data.url) return;
+        }
+
+        setLocalPinnedSubReddits([data, ...pinnedSubReddits]);
+
+        setUpdate(true);
+    }
+
+    const removePinnedSubReddit = (url) => {
+
+        setUpdate(true);
+
+        setLocalPinnedSubReddits(pinnedSubReddits.filter(s => s.url !== url));
+        
+        console.log(pinnedSubReddits)
+    }
+
     return (
         <>
         <SettingsHeader title={"Banner"} />
@@ -313,6 +344,10 @@ const Wrapper = () => {
             }
         {permissions?.user_can_edit_server_banner && permissions?.user_can_edit_server_name ?
         <>
+        <SettingsHeader title="Dashboard" />
+        <InputTitle title={`Pin a Subreddit to show top posts for the day - ${pinnedSubReddits.length} / 6`} />
+        <PinnedSubRedditWrapper handleRemove={removePinnedSubReddit} editing={true} subreddits={pinnedSubReddits} />
+        <AddSubRedditMenu add={addPinnedSubReddit} toggleLoading={toggleLoading} />
         <InputTitle title={"Edit Server Welcome Message"} />
         <TextInput inputValue={newServerWelcomeMessage} action={handleUpdateServerWelcomeMessage} />
         <SettingsHeader zIndex={2} title={"Data"} />

@@ -85,6 +85,8 @@ export const ServerNavigation = () => {
         }
 
         const last_message = SOCIAL_DATA.get(inChannel);
+        
+        if (!last_message?.message_id || !channel?.last_message_id) return;
 
         if (last_message?.message_id !== channel?.last_message_id) {
 
@@ -339,7 +341,7 @@ export const ServerNavigation = () => {
     return (
         <motion.div
         style={{
-            maxWidth: usingWebVersion || onMacOs ? 'calc(100% - 264px)' : null
+            maxWidth: (hideUsers && inChannel) ? 'calc(100% - 378px)' : 'calc(100% - 496px)'
         }}
         className='server-navigation-container'>
             {!socialId ?
@@ -393,7 +395,7 @@ export const ServerNavigation = () => {
                 onMouseDown={() => {handleAnimation(accentColor, activityButtonAnimation, 'activity')}}
                 onMouseUp={() => {handleAnimation(secondaryColor, activityButtonAnimation, 'activity')}}
                 animate={activityButtonAnimation} onClick={() => {handleAction('activity')}} className='server-navigation-button'>
-                    {activityDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Activity</p> : null}
+                    {activityDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Dashboard</p> : null}
                     <ActivityIcon opacity={page === 'activity' || activityDesc ? 1 : 0.6} color={textColor} />
                 </motion.div>
                 <motion.div 
@@ -423,7 +425,7 @@ export const ServerNavigation = () => {
                     <TextOnlyIcon />
                     <h3 style={{color: textColor}}>{socialChannel.channel_name}</h3>
                 </div>
-                <div style={{marginRight: onMacOs ? 0 : usingWebVersion ? 190 : usingWebVersion && inChannel ? 168 : usingWebVersion && (inChannel && !hideUsers) ? 1 : (inChannel && !hideUsers) ? 58 : inChannel ? 0 : 95}} className='close-social-route-button'>
+                <div style={{}} className='close-social-route-button'>
                     <AltCloseButton action={closeSocialRoute} margin={`0px ${inChannel ? 0 : 40} 0px 5px`} width={25} borderRadius={8} height={16} padding={5} />
                 </div>
             </div>

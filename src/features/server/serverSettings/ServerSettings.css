@@ -6,7 +6,7 @@
     
     height: calc(100%);
     display: flex;
-    width: 263px;
+    width: 273px;
     justify-content: center;
 }
 
@@ -23,12 +23,12 @@
     position: fixed;
     top: 0;
     right: 0;
-    width: calc(100% - 262px);
-    max-width: calc(100% - 274px - 8px - 5px);
+    width: calc(100% - 267px);
+    max-width: calc(100% - 274px - 8px - 10px);
     height: calc(100% - 37px);
     overflow-y: auto;
     display: flex;
-    padding-left: 10px;
+    padding-left: 15px;
     z-index: 5;
 }
 

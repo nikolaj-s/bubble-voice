@@ -150,7 +150,7 @@ export const MediaControls = ({hover}) => {
             <div
             style={{backgroundColor: primaryColor}}
             className='media-player-inner-controls-wrapper'>
-                <ImageButton borderRadius={10} description={hideVideo ? "Show Video" : "Hide Video"} desc_space={14} width={32} height={32} image={musicQueue[0]?.thumbnail} action={toggleHideVideo} padding={4} />
+                {musicQueue.length === 0 ? null : <ImageButton borderRadius={10} description={hideVideo ? "Show Video" : "Hide Video"} desc_space={14} width={32} height={32} image={musicQueue[0]?.thumbnail} action={toggleHideVideo} padding={4} />}
                 <MusicOverlayButton borderRadius={10} description={showMediaWidget ? 'Hide Media Widget' : "Show Media Widget"} action={() => {toggleShowMediaWidget(!showMediaWidget)}} playing={(musicPlaying && musicQueue.length > 0)} width={20} height={20} />
 
                 {(channel?.locked_media && channel?.media_auth?.includes(username)) || channel?.channel_owner === username || permissions?.server_group_name === 'Owner' || !channel?.locked_media ? !musicPlaying ? <PlayButton borderRadius={10} action={handleTogglePlaying} width={20} height={20}  /> : <PauseButton borderRadius={10} action={handleTogglePlaying} width={20} height={20} /> : <LockedIcon width={30} height={85} padding={5} i_height={25} i_width={25}  />}

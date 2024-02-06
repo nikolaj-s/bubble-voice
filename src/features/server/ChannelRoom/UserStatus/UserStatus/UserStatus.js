@@ -59,8 +59,6 @@ export const UserStatus = ({user}) => {
                 height: '100%',
                 flexShrink: 0,
                 backgroundColor: (user.color || primaryColor),
-                borderTopRightRadius: 5,
-                borderBottomRightRadius: 5
             }}></div>
             <div
             style={{
