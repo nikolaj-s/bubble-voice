@@ -360,22 +360,12 @@ ipcMain.handle('SCREEN_SHOT', async () => {
   try {
     const capture = await desktopCapturer.getSources({types: ['window'], thumbnailSize: {width: 1920, height: 1080}})
     .then(captures => {
-     
-      const pickCurrent = (sources, index = 0) => {
-        
-        if (sources.length === index) {
-          return {error: 'error capturing screen shot'};
-        }
-
-        if (sources[index].name.toLowerCase().includes('bubble') || sources[index].name.toLowerCase().includes('overlay')) {
-          return pickCurrent(sources, index++);
-        }
-
-        return {data: sources[index].thumbnail.toPNG(), preview: sources[index].thumbnail.toDataURL(), text: sources[index].name}
-      }
-      console.log(captures[0])
-      return pickCurrent(captures, 0);
-    
+      
+      const sources = captures.filter(c => !c.name.includes('D3DProxyWindow') && !c.name.includes('overlay'));
+      
+      console.log(sources[0])
+      
+      return {data: sources[0].thumbnail.toJPEG(), preview: sources[0].thumbnail.toDataURL(), text: sources[0].name}
     })
 
     return capture;

@@ -82,7 +82,12 @@ export const Image = ({aspect_ratio, alt_image = null, draggable = false,image_c
             id={img_id}
             onClick={(e) => {expandContent(e.target.src)}}
             
-            onError={handleError} loading={loadingState} draggable={false} style={{maxHeight: altHeight, width: width, maxWidth: altWidth, height: imgHeight, objectFit: objectFit, cursor: cursor, opacity: loading ? 0 : opacity, transition: '0.1s', borderRadius: borderRadius, aspectRatio: aspect_ratio, display: 'block', verticalAlign: 'bottom'}} onLoad={handleImageLoad} src={image} />}
+            onError={handleError} 
+            loading={loadingState} 
+            draggable={false} 
+            style={{maxHeight: altHeight, width: width, maxWidth: altWidth, height: imgHeight, objectFit: objectFit, cursor: cursor, opacity: loading ? 0 : opacity, transition: '0.1s', borderRadius: borderRadius, aspectRatio: aspect_ratio, display: 'block', verticalAlign: 'bottom'}} 
+            onLoad={handleImageLoad} 
+            src={image?.startsWith('/') ? null : image} />}
         </div>
     )
 }

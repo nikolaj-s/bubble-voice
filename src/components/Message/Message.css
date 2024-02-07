@@ -29,7 +29,7 @@
 .message-container p {
     width: auto;
     overflow-wrap: anywhere;
-    margin: 0px 0px 0px 0px;
+    margin: 0;
     font-size: 15px;
     opacity: 0.85;
 }

@@ -1,6 +1,5 @@
 import React from 'react'
 import { Image } from '../../Image/Image'
-import { SimpleImageCarousel } from '../../SimpleImageCarousel/SimpleImageCarousel'
 
 import "./MessageGallery.css";
 
@@ -24,7 +23,7 @@ export const MessageGallery = ({gallery, expand, nsfw}) => {
         onMouseLeave={() => {toggleHover(false)}}
         style={{display: expanded ? 'flex' : 'inline-block', padding: expanded ? '4px 0px' : null}}
         className='message-gallery-wrapper'>
-            {gallery.slice(0, 3).map((image, key) => {
+            {gallery.slice(0, expanded ? gallery.length : 3).map((image, key) => {
                 return (
                     <div 
                     onClick={() => {toggleExpanded(true)}}

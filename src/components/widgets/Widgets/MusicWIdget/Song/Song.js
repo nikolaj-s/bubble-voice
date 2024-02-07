@@ -66,11 +66,12 @@ export const Song = ({in_channel, in_social, search_result, playing, author, id,
                 : null}
             </div>
                 
-            {(search_result || in_social) ? null : <LikeButton borderRadius={10} desc_space={16} padding={6} toggled={liked} action={action}  width={20} height={20} />}
-            {!in_channel && in_social ? null : (!inQueue && !playing) ? <AddButton borderRadius={10} desc_width={50} transparent={true} desc_space={16} padding={6} action={addToQueue}  width={20} height={20} description={"Add To Queue"} /> : null}
-            {in_social ? null : (inQueue && !playing) ? <RemoveButton borderRadius={10} desc_width={60} transparent={true} desc_space={16} padding={6} action={removeFromQueue} margin={"0 0 0 5px"} width={20} height={20} description={"Remove"} /> : null}
-            <p style={{
-                color: textColor
+            {(search_result || in_social) ? null : <LikeButton borderRadius={5} desc_space={16} padding={6} toggled={liked} action={action}  width={16} height={16} />}
+            {!in_channel && in_social ? null : (!inQueue && !playing) ? <AddButton borderRadius={5} desc_width={50} transparent={true} desc_space={16} padding={6} action={addToQueue}  width={16} height={16} description={"Add To Queue"} /> : null}
+            {in_social ? null : (inQueue && !playing) ? <RemoveButton borderRadius={5} desc_width={60} transparent={true} desc_space={16} padding={6} action={removeFromQueue} margin={"0 0 0 5px"} width={16} height={16} description={"Remove"} /> : null}
+            <p className='song-time-stamp' style={{
+                color: textColor,
+                fontSize: 10
             }}>{time}</p>
         </div>
     )

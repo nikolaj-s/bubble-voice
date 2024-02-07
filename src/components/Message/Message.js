@@ -154,7 +154,9 @@ export const Message = ({activity_feed = false,dashboard = false, direct_message
                     {message?.emoji ?
                     <h2 className='emoji-reaction-mesage'>{message.emoji}</h2>
                     : null}
+                    {(previous_message?.username === current_message?.username) && (previous_message?.song && current_message?.song) && (prevDate?.getDate() === date?.getDate()) ? null :
                     <MessageText loading={message.loading} style={message.textStyle} color={textColor} text={message.text} />
+                    }
                     {(message.image || message.video || message.iFrame || message.reddit) || message.gallery ? null : <MessageLink link={message.link} />
                     }
                     {message.link_preview ?

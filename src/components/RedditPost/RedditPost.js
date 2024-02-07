@@ -79,7 +79,7 @@ export const RedditPost = ({data = {}, action, disableMax, inSocial}) => {
                 <p className='reddit-post-title' style={{color: textColor}} >{data.selftext}</p>
                 : null}
                 <div className='reddit-media-container'>
-                    {data.thumbnail ?
+                    {data?.thumbnail && !data?.thumbnail?.startsWith('/') ?
                     <img className='background-blur-red-effect' src={data.thumbnail} />
                     : null}
                     
