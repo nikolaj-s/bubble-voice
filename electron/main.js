@@ -45,7 +45,7 @@ let loading_template = `
       padding: 10px;
       color: white;
       font-family: 'Quicksand', sans-serif;
-      background-color: rgba(8, 8, 8, 1);
+      background-color: rgb(57, 62, 70);
       margin: 0;
       border-radius: 10px;
   }
@@ -119,7 +119,7 @@ let loading_template = `
 <body>
   <div class="loading-container" >
     <div class='icon-container'>
-      <img src="https://res.cloudinary.com/drlkgoter/image/upload/v1668805881/logo_y9odas.png" />
+      <img src="https://res.cloudinary.com/drlkgoter/image/upload/v1707358325/BUBBLELOGO_ptiafp.png" />
     </div>
     <h1>Loading Bubble</h1>
     <p>This Will Take Just A Second</p>
