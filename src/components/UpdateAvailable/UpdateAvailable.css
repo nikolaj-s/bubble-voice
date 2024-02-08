@@ -24,6 +24,7 @@
 
 .update-available-inner-container p {
     font-weight: 400;
+    text-align: center;
     letter-spacing: var(--font-spacing);
 }
 

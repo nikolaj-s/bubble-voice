@@ -113,11 +113,11 @@ export const RedditPost = ({data = {}, action, disableMax, inSocial}) => {
                     <Iframe link={data?.secure_media_embed?.media_domain_url} />
                     :
                     data.url.includes('.gifv') || data.url.includes('.mp4') || data.url.includes('redgifs') || data.url.includes('gfycat') || data.media?.reddit_video ? 
-                    <Video width={'100%'} height='350px'  backgroundColor={null} objectFit='contain' video={data.url.includes('.gifv') ? data.url.split('.gifv')[0] + '.mp4' : data.preview?.reddit_video_preview?.fallback_url || data.media?.reddit_video?.fallback_url} />
+                    <Video width={'100%'} height={inSocial ? 350 : 500}  backgroundColor={null} objectFit='contain' video={data.url.includes('.gifv') ? data.url.split('.gifv')[0] + '.mp4' : data.preview?.reddit_video_preview?.fallback_url || data.media?.reddit_video?.fallback_url} />
                     : data.gallery_data ?
                     <SimpleImageCarousel expand={action} images={data.gallery_data.items.map(id => `https://i.redd.it/${id.media_id}.jpg`)} />
                     : (data.url.includes('.jpg') || data.url.includes('.png') || data.url.includes('.webp') || data.url.includes('.gif') || data.url.includes('.jpeg')) && data.url.startsWith('https') ?
-                    <Image  height={350} borderRadius={20} expandContent={() => {action(data.url)}} objectFit='contain' cursor='pointer' image={data.url} />
+                    <Image  height={inSocial ? 350 : 500} borderRadius={20} expandContent={() => {action(data.url)}} objectFit='contain' cursor='pointer' image={data.url} />
                     : null}
                     {data.over_18 && !disableBlur ?
                     <NsfwImageOverlay /> : null}

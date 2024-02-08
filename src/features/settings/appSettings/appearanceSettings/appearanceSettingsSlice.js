@@ -22,13 +22,13 @@ const appearanceSettingsSlice = createSlice({
     name: "appearanceSettingsSlice",
     // inital state is default color scheme
     initialState: {
-        primaryColor: "rgb(65, 65, 65)",
-        secondaryColor: "rgb(44, 44, 44)",
-        accentColor: "rgb(24, 24, 24)",
-        textColor: "rgb(255, 255, 255)",
-        activationColor: "rgb(58, 235, 52)",
-        glassColor: "rgba(44, 44, 44, 0.4)",
-        transparentPrimary: "rgba(65, 65, 65, 0)",
+        primaryColor: "rgb(57, 62, 70)",
+        secondaryColor: "rgb(34, 40, 49)",
+        accentColor: "rgb(45, 112, 134)",
+        textColor: "rgb(238, 238, 238)",
+        activationColor: "rgb(40, 255, 95)",
+        glassColor: "rgb(255, 76, 41)",
+        transparentPrimary: "rgba(57, 62, 70,0)",
         darkModeEnabled: true,
         rgbBackground: false,
         changeMade: false,
@@ -57,6 +57,13 @@ const appearanceSettingsSlice = createSlice({
             {type: "Emerald", gradient: 'linear-gradient(45deg, rgba(69,168,66,1) 19%, rgba(0,232,255,1) 52%, rgba(59,163,66,1) 83%)'}
         ],
         color_themes: {
+            default: {
+                primaryColor: "rgb(57, 62, 70)",
+                secondaryColor: "rgb(34, 40, 49)",
+                accentColor: "rgb(45, 112, 134)",
+                textColor: "rgb(238, 238, 238)",
+                activationColor: "rgb(40, 255, 95)"
+            },
             light: {
                 primaryColor: "rgb(255, 255, 255)",
                 secondaryColor: "rgb(236, 236, 236)",
@@ -137,7 +144,7 @@ const appearanceSettingsSlice = createSlice({
         },
         glass: false,
         current_theme: {label: 'Dark', state: 'dark'},
-        theme_options: [{label: 'Dark', state: 'dark'}, {label: 'Light', state: 'light'}, {label: 'Custom', state: 'custom'}, {label: "Fall", state: 'fall'}, {label: "Forest", state: 'forest'}, {label: 'Neon', state: 'neon'}, {label: 'Coffee', state: 'coffee'}, {label: 'Green', state: 'green'}, {label: 'Dusk', state: 'dusk'}, {label: "Vintage", state: 'vintage'}, {label: "Pastel Dark", state: "pastel_dark"}]
+        theme_options: [{label: "Default", state: 'default'}, {label: 'Dark', state: 'dark'}, {label: 'Light', state: 'light'}, {label: 'Custom', state: 'custom'}, {label: "Fall", state: 'fall'}, {label: "Forest", state: 'forest'}, {label: 'Neon', state: 'neon'}, {label: 'Coffee', state: 'coffee'}, {label: 'Green', state: 'green'}, {label: 'Dusk', state: 'dusk'}, {label: "Vintage", state: 'vintage'}, {label: "Pastel Dark", state: "pastel_dark"}]
     },
     reducers: {
         updateColorValue: (state, action) => {

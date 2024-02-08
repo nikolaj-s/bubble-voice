@@ -81,7 +81,7 @@ export const UpdateAvailable = () => {
                         color: textColor
                     }}
                     >A new update is ready to be installed, and is required for continued use of the application.</p>
-                    <TextButton marginBottom={'1rem'} action={restartNow} name={"Restart And Install"} icon={<RestartIcon />} />
+                    <TextButton marginBottom={'1rem'} action={restartNow} name={"Restart And Install"} icon={<RestartIcon width={20} height={20} />} />
                 </div>
             </div>
         : null}

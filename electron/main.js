@@ -119,7 +119,7 @@ let loading_template = `
 <body>
   <div class="loading-container" >
     <div class='icon-container'>
-      <img src="https://res.cloudinary.com/drlkgoter/image/upload/v1707358325/BUBBLELOGO_ptiafp.png" />
+      <img src="https://res.cloudinary.com/drlkgoter/image/upload/v1707433341/logo512_zjz4vu.png" />
     </div>
     <h1>Loading Bubble</h1>
     <p>This Will Take Just A Second</p>
