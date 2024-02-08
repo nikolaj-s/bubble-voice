@@ -80,7 +80,7 @@ export const Message = ({activity_feed = false,dashboard = false, direct_message
 
         setPrevDate(prev_local_date);
 
-    }, [])
+    }, [previous_message, current_message])
 
     const expandContent = (source) => {
         dispatch(setExpandedContent(source))

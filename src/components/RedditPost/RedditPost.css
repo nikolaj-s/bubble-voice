@@ -4,7 +4,7 @@
     flex-direction: column;
     width: calc(100% - 20px);
     border-radius: var(--border-radius);
-    overflow: hidden;
+    
     text-decoration: none;
     cursor: default;
     padding: 5px 10px 10px 10px;
@@ -39,7 +39,16 @@
 .reddit-post-info-container {
     flex-shrink: 0;
     width: 100%;
+    justify-content: space-between;
 }
+
+.reddit-post-info-wrapper {
+    display: flex;
+    align-items: center;
+    
+    width: 100%;
+}
+
 .reddit-post-title {
     margin-left: 0px;
     margin-bottom: 5px;

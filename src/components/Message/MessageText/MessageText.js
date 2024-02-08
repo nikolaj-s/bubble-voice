@@ -1,7 +1,7 @@
 import React from 'react'
 
 export const MessageText = ({text, color, loading, style = {}}) => {
- console.log(text)
+
   return (
     <>
     {text?.length > 0 ?

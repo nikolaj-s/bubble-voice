@@ -7,7 +7,7 @@ import "./RedditPost.css";
 import { useSelector } from 'react-redux';
 import { selectPrimaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { SimpleImageCarousel } from '../SimpleImageCarousel/SimpleImageCarousel';
-
+import { CopyButton } from '../buttons/CopyButton/CopyButton';
 import { NsfwImageOverlay } from '../Image/NsfwImageOverlay/NsfwImageOverlay';
 import { selectDisableNsfwBlur } from '../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { Iframe } from '../Iframe/Iframe';
@@ -15,6 +15,8 @@ import { Iframe } from '../Iframe/Iframe';
 export const RedditPost = ({data = {}, action, disableMax, inSocial}) => {
 
     const [hover, toggleHover] = React.useState(false);
+
+    const [copied, toggleCopied] = React.useState(false);
 
     const textColor = useSelector(selectTextColor);
 
@@ -50,6 +52,27 @@ export const RedditPost = ({data = {}, action, disableMax, inSocial}) => {
         }
     }
     
+    const handleCopy = async () => {
+        try {
+
+            if (copied) return;
+
+            const data_to_copy = "https://www.reddit.com" + data.permalink;
+
+            toggleCopied(true);
+            
+            await navigator.clipboard.writeText(data_to_copy);
+          //  await navigator.clipboard.writeText()
+            setTimeout(() => {
+                toggleCopied(false);
+            }, 1000)
+        } catch (err) {
+            return;
+        }
+
+
+    }
+
     return (
         <div
         onMouseEnter={() => {toggleHover(true)}}
@@ -64,14 +87,17 @@ export const RedditPost = ({data = {}, action, disableMax, inSocial}) => {
         }}
         className='reddit-post-container'>
                 <div className='reddit-post-info-container'>
-                    <h3 
-                    onClick={openOriginal}
-                    style={{color: textColor, marginLeft: 0, fontSize: 16, opacity: 0.8}}>{data?.subreddit_name_prefixed}</h3>
-                    <div 
-                    style={{width: 8, height: 8, borderRadius: '50%',
-                    flexShrink: 0, backgroundColor: textColor, opacity: 0.5, margin: '0 8px 0 5px'}}
-                    />
-                    <p onClick={openAlt} style={{color: textColor}}>{data.domain}</p>
+                    <div className='reddit-post-info-wrapper'>
+                        <h3 
+                        onClick={openOriginal}
+                        style={{color: textColor, marginLeft: 0, fontSize: 16, opacity: 0.8}}>{data?.subreddit_name_prefixed}</h3>
+                        <div 
+                        style={{width: 8, height: 8, borderRadius: '50%',
+                        flexShrink: 0, backgroundColor: textColor, opacity: 0.5, margin: '0 8px 0 5px'}}
+                        />
+                        <p onClick={openAlt} style={{color: textColor}}>{data.domain}</p>
+                    </div>
+                   {inSocial ? null : <CopyButton action={handleCopy} borderRadius={8} zIndex={2} width={16} height={16} description={copied ? "Copied" : "Copy"} />}
                     
                 </div>
                 <p className='reddit-post-title' style={{color: textColor, marginBottom: 4}}>{data.title}</p>
@@ -79,7 +105,7 @@ export const RedditPost = ({data = {}, action, disableMax, inSocial}) => {
                 <p className='reddit-post-title' style={{color: textColor}} >{data.selftext}</p>
                 : null}
                 <div className='reddit-media-container'>
-                    {data?.thumbnail && !data?.thumbnail?.startsWith('/') ?
+                    {data?.thumbnail && data?.thumbnail?.startsWith('https://') ?
                     <img className='background-blur-red-effect' src={data.thumbnail} />
                     : null}
                     
@@ -87,11 +113,11 @@ export const RedditPost = ({data = {}, action, disableMax, inSocial}) => {
                     <Iframe link={data?.secure_media_embed?.media_domain_url} />
                     :
                     data.url.includes('.gifv') || data.url.includes('.mp4') || data.url.includes('redgifs') || data.url.includes('gfycat') || data.media?.reddit_video ? 
-                    <Video width={'100%'} height='500px'  backgroundColor={null} objectFit='contain' video={data.url.includes('.gifv') ? data.url.split('.gifv')[0] + '.mp4' : data.preview?.reddit_video_preview?.fallback_url || data.media?.reddit_video?.fallback_url} />
+                    <Video width={'100%'} height='350px'  backgroundColor={null} objectFit='contain' video={data.url.includes('.gifv') ? data.url.split('.gifv')[0] + '.mp4' : data.preview?.reddit_video_preview?.fallback_url || data.media?.reddit_video?.fallback_url} />
                     : data.gallery_data ?
                     <SimpleImageCarousel expand={action} images={data.gallery_data.items.map(id => `https://i.redd.it/${id.media_id}.jpg`)} />
-                    : data.url.includes('.jpg') || data.url.includes('.png') || data.url.includes('.webp') || data.url.includes('.gif') || data.url.includes('.jpeg') ?
-                    <Image  height={500} borderRadius={20} expandContent={() => {action(data.url)}} objectFit='contain' cursor='pointer' image={data.url} />
+                    : (data.url.includes('.jpg') || data.url.includes('.png') || data.url.includes('.webp') || data.url.includes('.gif') || data.url.includes('.jpeg')) && data.url.startsWith('https') ?
+                    <Image  height={350} borderRadius={20} expandContent={() => {action(data.url)}} objectFit='contain' cursor='pointer' image={data.url} />
                     : null}
                     {data.over_18 && !disableBlur ?
                     <NsfwImageOverlay /> : null}
