@@ -35,13 +35,12 @@ export const ChannelBackground = ({channel_background, blur = 1, glass, glassCol
         {channel_background ?
         <div
         className='channel-background-container'>
-            
             <div 
             className='channel-background-image-wrapper'>
                 <Image zIndex={1} onLoad={onbackgroundLoad} id={'channel-background-source'} objectFit={contain ? 'contain' : 'cover'} image={channel_background} />
-                {contain ? 
+                
                 <img className='channel-background-contain-blur-effect' src={channel_background} /> 
-                : null}
+                
             </div>
         </div>
         : null}

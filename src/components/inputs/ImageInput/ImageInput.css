@@ -14,11 +14,11 @@
 .image-input-nav-options-container h4 {
     margin: 0;
     padding: 0;
-    opacity: 0.5;
+    opacity: 1;
 }
 
 .image-input-nav-options-container svg {
-    opacity: 0.5;
+    opacity: 1;
 }
 
 .image-input-nav-options-container svg:hover {

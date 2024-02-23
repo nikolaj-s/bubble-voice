@@ -97,15 +97,12 @@ export const ServerBanner = ({serverName, serverImage, handleLeave}) => {
             <div className='server-banner-placeholder' />
             }
             <motion.div 
-            style={{
-                opacity: hover ? 1 : 0.8
-            }}
             transition={{duration: 0.3}}
             className='server-title-overlay'>
                 <h2
-                style={{color: color, marginLeft: onMacOs ? 15 : null, width: onMacOs ? 'calc(100% - 15px)' : null}}
+                style={{color: color, marginLeft: onMacOs ? 15 : null, width: onMacOs ? 'calc(100% - 15px)' : null, opacity: 1}}
                 >{serverName}</h2>
-                <AltDownIcon flip={open}  />
+                <AltDownIcon opacity={hover ? 1 : 0.8} flip={open}  />
             </motion.div>
             
         </motion.div>

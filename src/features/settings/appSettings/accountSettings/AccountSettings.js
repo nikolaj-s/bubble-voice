@@ -5,7 +5,7 @@ import { useRoutes } from 'react-router'
 import { AnimatePresence } from 'framer-motion';
 
 // state
-import { selectUserBanner, selectUserImage, selectDisplayName, selectAccountSettingsLoading, selectAccountSettingsErrorState, selectAccountSettingsErrorMessage, updateAccount, updateAccountInputState, selectAccountSettingsPassword, selectAccountSettingsNewPassword, selectAccountSettingsConfirmNewPassword, accountSettingsCloseError, selectAccountSettingsStateChanged, selectProfilePictureShape, selectProfileBio, selectProfileColor, selectShowCaseScreenShotsState, selectUsersScreenShots, toggleShowCaseScreenShots } from './accountSettingsSlice';
+import { selectUserBanner, selectUserImage, selectDisplayName, selectAccountSettingsLoading, selectAccountSettingsErrorState, selectAccountSettingsErrorMessage, updateAccount, updateAccountInputState, selectAccountSettingsPassword, selectAccountSettingsNewPassword, selectAccountSettingsConfirmNewPassword, accountSettingsCloseError, selectAccountSettingsStateChanged, selectProfilePictureShape, selectProfileBio, selectProfileColor, selectShowCaseScreenShotsState, selectUsersScreenShots, toggleShowCaseScreenShots, selectUsername } from './accountSettingsSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 
 // components
@@ -75,6 +75,8 @@ const Settings = () => {
     const showCaseScreenShots = useSelector(selectShowCaseScreenShotsState);;
 
     const screenShots = useSelector(selectUsersScreenShots);
+
+    const username = useSelector(selectUsername);
 
     React.useEffect(() => {
         dispatch(setHeaderTitle("Account Settings"));
@@ -180,8 +182,7 @@ const Settings = () => {
         <>
             <div className='settings-wrapper'>
                 <SettingsHeader title={"Account Settings"} />
-                <InputTitle title={"Edit User Panel"} />
-                <EditMemberPanel newBanner={newUserBanner} newImage={newUserImage} handleNewDisplayName={handleNewDisplayName} screenShots={screenShots} toggleShowCaseScreenShots={handleToggleShowScreenShots} showCaseScreenShots={showCaseScreenShots} color={color || secondaryColor} updateColor={updateColor} newShape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} changeProfileShape={changeProfileShape} handleInput={handleInput} displayName={newDisplayName} previewBio={previewBio} togglePreviewBio={togglePreviewBio} profileBio={newBio} changeProfileBio={changeProfileBio} />
+                <EditMemberPanel username={username} newBanner={newUserBanner} newImage={newUserImage} handleNewDisplayName={handleNewDisplayName} screenShots={screenShots} toggleShowCaseScreenShots={handleToggleShowScreenShots} showCaseScreenShots={showCaseScreenShots} color={color || secondaryColor} updateColor={updateColor} newShape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} changeProfileShape={changeProfileShape} handleInput={handleInput} displayName={newDisplayName} previewBio={previewBio} togglePreviewBio={togglePreviewBio} profileBio={newBio} changeProfileBio={changeProfileBio} />
                 <SettingsHeader title={"Security"} />
                 <InputTitle title={"Change Password"} />
                 <TextInput stateSelector='password' action={handleInput}  marginBottom='2%' type='password' placeholder={"Current Password"} inputValue={password} />

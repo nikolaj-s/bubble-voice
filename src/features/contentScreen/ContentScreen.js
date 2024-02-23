@@ -25,6 +25,7 @@ import { Error } from '../../components/Error/Error';
 import { MemberPanel } from '../server/ChannelRoom/MemberPanel/MemberPanel';
 import { KickedMessage } from './KickedMessage/KickedMessage';
 import { VerifyAccount } from '../VerifyAccount/VerifyAccount';
+import { SocialFilterMenu } from '../../components/SocialFilterMenu/SocialFilterMenu';
 
 export const ContentScreen = () => {
     // content
@@ -65,6 +66,7 @@ export const ContentScreen = () => {
             <ExpandContent />
             <CreateChannelMenu />
             <MemberPanel />
+            <SocialFilterMenu />
             {kickedState ? <KickedMessage close={closeKickedMessage} message={kickedMessage} /> : null}
             {error ? <Error action={closeError} errorMessage={errorMessage} position='fixed' /> : null}
             {newAccount ? <NewAccount /> : null}

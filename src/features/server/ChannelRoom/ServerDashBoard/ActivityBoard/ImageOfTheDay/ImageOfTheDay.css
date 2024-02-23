@@ -11,10 +11,10 @@
 }
 
 .image-of-the-day-wrapper {
-    margin-left: 20px;
+    margin-left: 5px;
     margin-right: 5px;
     height: 500px;
-    width: calc(100% - 25px);
+    width: calc(100% - 10px);
     position: relative;
     min-height: 90px;
     border-radius: 10px;
@@ -23,9 +23,9 @@
 }
 
 .image-info-wrapper {
-    width: calc(100% - 45px);
+    width: calc(100% - 30px);
     padding: 10px;
-    margin-left: 20px;
+    margin-left: 5px;
     margin-right: 5px;
     bottom: 0;
     left: 0;

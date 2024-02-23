@@ -1,9 +1,9 @@
 
 
 .now-playing-overlay-container {
-    width: 100%;
+    width: calc(100% - 10px);
     height: 180px;
-    padding: 1rem;
+    padding: 5px;
     border-top-left-radius: var(--border-radius);
     backdrop-filter: blur(8px);
     display: flex;

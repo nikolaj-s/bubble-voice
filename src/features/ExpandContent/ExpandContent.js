@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Image } from '../../components/Image/Image';
 
 // state
-import { selectExpandedContent, selectIframeExpanded, selectRedditExpanded, selectVideoStartTime, setExpandedContent } from './ExpandContentSlice'
+import { selectExpandedContent, selectIframeExpanded, selectRedditExpanded, selectVideoStartTime, selectYouTubeExpand, setExpandedContent } from './ExpandContentSlice'
 
 // style
 import "./ExpandContent.css";
@@ -19,6 +19,7 @@ import { CopyButton } from '../../components/buttons/CopyButton/CopyButton';
 import { DownloadButton } from '../../components/buttons/DownloadButton/DownloadButton';
 import { SaveButton } from '../../components/buttons/SaveButton/SaveButton';
 import { saveMedia, selectSavedMedia } from '../SavedMedia/SavedMediaSlice';
+import YouTube from 'react-youtube';
 
 export const ExpandContent = () => {
 
@@ -43,6 +44,8 @@ export const ExpandContent = () => {
     const disableTransparancyEffects = useSelector(selectDisableTransparancyEffects);
 
     const videoStartTime = useSelector(selectVideoStartTime);
+
+    const youtube = useSelector(selectYouTubeExpand);
 
     const closeExpanded = () => {
         dispatch(setExpandedContent(false));
@@ -123,7 +126,30 @@ export const ExpandContent = () => {
             >ESC</p>
             </div>
             <div className='content-expanded-inner-container'>
-                {reddit ?
+                {youtube ?
+                <div
+                style={{minWidth: '100vw', height: 900, flexGrow: 4}}
+                >
+                <YouTube 
+                opts={{
+                    
+                    height: '100%',
+                    width: '100%',
+                    playerVars: {
+                        fs: 0,
+                        autoplay: 1,
+                        enablejsapi: 1,
+                        controls: 1,
+                        modestbranding: 1,
+                }}}
+                style={{
+                    width: '100%',
+                    height: 900
+                }}
+                videoId={expandedContent.split(':')[1]} />
+                </div>
+                :
+                reddit ?
                 <RedditPost data={expandedContent} /> :
                 iframe ?
                 <Iframe maxWidth={"90%"} link={iframe} />
@@ -133,11 +159,12 @@ export const ExpandContent = () => {
                 :        
                 <Image altHeight='100vh' objectFit='contain' image={expandedContent} />}
             </div>
+            {youtube ? null :
             <div onClick={(e) => {e.stopPropagation()}} style={{backgroundColor: primaryColor}} className='expanded-content-navigation-container'>                
                 <CopyButton borderRadius={10} action={handleCopy} description={'Copy Link'} width={18} height={18} />
                 <DownloadButton desc_width={60} align_desc_right={true} borderRadius={10} description={"Download"} action={handleDownload} margin={"5px 0"} width={18} height={18} />
                 <SaveButton borderRadius={10} width={18} height={18} action={handleSave} description={saved ? "Unsave" : "Save"} />
-            </div>
+            </div>}
         </div>
         : null}
         </>

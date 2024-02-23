@@ -1,0 +1,83 @@
+.social-filter-outer-container {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+
+.social-filter-container {
+    width: 400px;
+    margin-top: 31px;
+    margin-right: 0px;
+    border-radius: 10px 0px 0px 10px;
+    height: calc(100% - 41px);
+    display: flex;
+    flex-direction: column;
+    padding: 0px 10px 10px 10px;
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.567);
+    position: relative;
+}
+
+.social-filter-header {
+    display: flex;
+    align-items: center;
+}
+
+.social-filter-header h2 {
+    margin: 0 0 0 5px;
+}
+
+.social-filter-confirmation {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.social-filter-confirmation h3 {
+    text-decoration: underline;
+    opacity: 0.8;
+    margin: 0px 15px 0px 0px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.social-filter-confirmation h3:hover {
+    opacity: 1;
+}
+
+.filtered-results-container {
+    width: 100%;
+    height: auto;
+    flex-grow: 2;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.no-filterd-results-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    opacity: 0.6;
+}
+
+.select-filter-state-menu-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    padding: 10px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    z-index: 3;
+    border-radius: 10px 0px 0px 10px;
+}

@@ -7,7 +7,7 @@ import {RadioButton} from '../buttons/RadioButton/RadioButton';
 import "./DropDownList.css";
 import { DownIcon } from '../Icons/DownIcon/DownIcon';
 
-export const DropDownList = ({selectedItem, list = ["No Options"], action, stateType, width, height}) => {
+export const DropDownList = ({selectedItem, list = ["No Options"], action, stateType, width, height,}) => {
 
     const primaryColor = useSelector(selectSecondaryColor);
 

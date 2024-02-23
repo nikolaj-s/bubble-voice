@@ -22,6 +22,8 @@ import { TextOnlyIcon } from '../../../../components/Icons/TextOnlyIcon/TextOnly
 import { setSelectedMember } from '../MemberPanel/MemberPanelSlice';
 import { ActivityIcon } from '../../../../components/Icons/ActivityIcon/ActivityIcon';
 import { SOCIAL_DATA } from '../../../../util/LocalData';
+import { SocialFilterButton } from '../../../../components/buttons/SocialFilterButton/SocialFilterButton';
+import { toggleFilterMenu } from '../../SocialSlice';
 
 export const ServerNavigation = () => {
 
@@ -338,10 +340,14 @@ export const ServerNavigation = () => {
     // eslint-disable-next-line
     }, [inChannel])
 
+    const openSocialFilterMenu = () => {
+        dispatch(toggleFilterMenu(true))
+    }
+
     return (
         <motion.div
         style={{
-            maxWidth: (hideUsers && inChannel) ? 'calc(100% - 378px)' : 'calc(100% - 496px)'
+            maxWidth: (hideUsers && inChannel) ? 'calc(100% - 378px)' : 'calc(100% - 495px)'
         }}
         className='server-navigation-container'>
             {!socialId ?
@@ -425,13 +431,19 @@ export const ServerNavigation = () => {
                     <TextOnlyIcon />
                     <h3 style={{color: textColor}}>{socialChannel.channel_name}</h3>
                 </div>
-                <div style={{}} className='close-social-route-button'>
-                    <AltCloseButton action={closeSocialRoute} margin={`0px ${inChannel ? 0 : 40} 0px 5px`} width={25} borderRadius={8} height={16} padding={5} />
-                </div>
+                
             </div>
             }
+            
             {!socialId ? <div className='server-navigation-filler'></div> : null}
-            {inChannel ? <OptionsButton desc_width={100} transparent={true} description={"Room Options"} right_orientation_desc={true}  target={'live-chat-wrapper'} borderRadius={8} zIndex={3} top={0} height={7} left={null} width={15} /> : null}
+            {socialChannel?.type === 'screenshots' || socialChannel?.type === 'subreddit' ? null :
+            socialId || page === 'social' ?
+            <SocialFilterButton action={openSocialFilterMenu} flip_description={true} description={"Filter"} width={60} borderRadius={0} height={'100%'} />
+            : null}
+            {inChannel ? <OptionsButton desc_width={100} transparent={true} description={"Room Options"} right_orientation_desc={true}  target={'live-chat-wrapper'} borderRadius={0} zIndex={3} top={0} height={'calc(100%)'} left={null} width={15} /> : null}
+            {socialId ?
+            <AltCloseButton action={closeSocialRoute} margin={`0px ${inChannel ? 0 : 40} 0px 5px`} width={15} borderRadius={0} height={'100%'}  />
+            : null}
         </motion.div>
     )
 }

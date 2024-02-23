@@ -42,7 +42,7 @@ export const PinnedProfileMessage = ({message, margin, loading}) => {
              ></motion.div>  
             : null}
            {message?._id ?
-           <Message pin_to_profile={handlePin} message={message.content} current_message={message} previous_message={{content: {date: message.content.date}}}  /> 
+           <Message pinned_to_profile_state={true} pin_to_profile={handlePin} message={message.content} current_message={message} previous_message={{content: {date: message.content.date}}}  /> 
             :
             <div className='no-pinned-message-container'>
                 <p style={{color: textColor}}>No Pinned Message</p>

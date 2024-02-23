@@ -7,15 +7,19 @@ const ExpandContentSlice = createSlice({
         selectedContent: false,
         iframe: false,
         reddit: false,
-        videoStartTime: 0
+        videoStartTime: 0,
+        youtube: false
     },
     reducers: {
         setVideoStartTime: (state, action) => {
             state.videoStartTime = action.payload;
         },
         setExpandedContent: (state, action) => {
-            if (state.selectedContent !== false) {
+            if (action.payload === false) {
                 state.selectedContent = false;
+                state.iframe = false;
+                state.youtube = false;
+                state.reddit = false;
             } else {
                 const expandedContent = action.payload;
 
@@ -60,6 +64,8 @@ const ExpandContentSlice = createSlice({
                         }
 
                     }
+                } else if (expandedContent?.includes('song:')) {
+                    state.youtube = action.payload.split(':')[1]
                 }
             }
         }
@@ -73,6 +79,8 @@ export const selectIframeExpanded = state => state.ExpandContentSlice.iframe;
 export const selectExpandedContent = state => state.ExpandContentSlice.selectedContent;
 
 export const selectVideoStartTime = state => state.ExpandContentSlice.videoStartTime;
+
+export const selectYouTubeExpand = state => state.ExpandContentSlice.youtube;
 
 export const { setExpandedContent, setVideoStartTime } = ExpandContentSlice.actions;
 

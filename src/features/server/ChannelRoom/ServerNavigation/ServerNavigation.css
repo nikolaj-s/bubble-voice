@@ -10,11 +10,11 @@
     position: fixed;
     top: 0;
     max-width: calc(100% - 496px);
-    left: 276px;
+    left: 275px;
 }
 
 .server-navigation-button-wrapper {
-    height: calc(100% - 4px);
+    height: calc(100%);
     display: flex;
     align-items: center;
     -webkit-app-region: no-drag;
@@ -32,11 +32,11 @@
 }
 
 .server-navigation-button {
-    padding: 0 11px;
+    padding: 0 8px;
     display: flex;
     align-items: center;
     height: 100%;
-    border-radius: 8px;
+    border-radius: 0px;
     margin: 0px 0px;
     -webkit-app-region: no-drag;
     
@@ -88,6 +88,7 @@
     align-items: center;
     justify-content: space-between;
     max-width: calc(100% - 50px);
+    margin-left: 5px;
 }
 
 .channel-social-header-wrapper h3 {

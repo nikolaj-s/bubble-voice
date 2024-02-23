@@ -71,6 +71,33 @@ export const fetchMessages = createAsyncThunk(
     }
 )
 
+export const fetchFilteredMessages = createAsyncThunk(
+    'SocialSlice/fetchFilteredMessages',
+    async ({channel_id, filter}, {rejectWithValue}) => {
+        try {
+            if (!channel_id) return [];
+
+            if (!filter) return [];
+
+            const data = await socket.request('fetch filtered messages', {channel_id: channel_id, filter: filter})
+            .then(res => res)
+            .catch(err => {
+                return {error: true, errorMessage: err.errorMessage}
+            })
+
+            if (data.error) return rejectWithValue({errorMessage: data.errorMessage});
+
+            console.log(data)
+
+            return data.messages;
+
+        } catch (error) {
+            console.log(error);
+            return rejectWithValue({errorMessage: "Fatal Error"});
+        }
+    }
+)
+
 export const sendMessage = createAsyncThunk(
     'SocialSlice/sendMessage',
     async ({username, file, channel_id, local_id, text, image_preview, screen_shot = false, emoji, nsfw, textStyle, fall_back_image}, {rejectWithValue, getState, dispatch}) => {
@@ -204,9 +231,19 @@ const SocialSlice = createSlice({
         image_preview: "",
         text: "",
         scrollPositions: {},
-        showingNsfwNotice: false
+        showingNsfwNotice: false,
+        filterState: {},
+        filterMenuOpen: false,
+        loadingFilteredMessages: false,
+        filteredMessageResults: [],
     },
     reducers: {
+        toggleFilterMenu: (state, action) => {
+            state.filterMenuOpen = action.payload;
+        },
+        setFilterState: (state, action) => {
+            state.filterState = action.payload;
+        },
         setScrollPosition: (state, action) => {
             state.scrollPositions[action.payload.channel_id] = action.payload.position;
         },
@@ -257,6 +294,12 @@ const SocialSlice = createSlice({
         },
         deleteMessage: (state, action) => {
 
+            const deletingFromFilterMenu = state.filteredMessageResults.findIndex(m => m._id === action.payload.message_id);
+
+            if (deletingFromFilterMenu !== -1) {
+                state.filteredMessageResults.splice(deletingFromFilterMenu, 1);
+            }
+
             if (!state.messages[action.payload.channel_id]) return;
 
             const message_index = state.messages[action.payload.channel_id]?.findIndex(m => m._id === action.payload.message_id);
@@ -274,6 +317,9 @@ const SocialSlice = createSlice({
         },
         toggleSocialAltLoading: (state, action) => {
             state.altLoading = action.payload;
+        },
+        clearFilteredResults: (state, action) => {
+            state.filteredMessageResults = [];
         }
     },
     extraReducers: {
@@ -332,9 +378,18 @@ const SocialSlice = createSlice({
         },
         [RequestDeleteMessage.pending]: (state, action) => {
             state.altLoading = true;
+            state.loadingFilteredMessages = true;
         },
         [RequestDeleteMessage.fulfilled]: (state, action) => {
             state.altLoading = false;
+
+            state.loadingFilteredMessages = false;
+
+            const deletingFromFilterMenu = state.filteredMessageResults.findIndex(m => m._id === action.payload.message_id);
+
+            if (deletingFromFilterMenu !== -1) {
+                state.filteredMessageResults.splice(deletingFromFilterMenu, 1);
+            }
 
             if (!state.messages[action.payload.channel_id]) return;
 
@@ -343,6 +398,10 @@ const SocialSlice = createSlice({
             if (message_index === -1) return;
 
             state.messages[action.payload.channel_id]?.splice(message_index, 1);
+        },
+        [RequestDeleteMessage.rejected]: (state, action) => {
+            state.altLoading = false;
+            state.loadingFilteredMessages = false;
         },
         [togglePinMessage.pending]: (state, action) => {
             state.altLoading = true;
@@ -360,6 +419,18 @@ const SocialSlice = createSlice({
         },
         [togglePinMessage.rejected]: (state, action) => {
             state.altLoading = false;
+        },
+        [fetchFilteredMessages.pending]: (state, action) => {
+            state.loadingFilteredMessages = true;
+            state.filteredMessageResults = [];
+        },
+        [fetchFilteredMessages.rejected]: (state, action) => {
+            state.loadingFilteredMessages = false;
+            state.filteredMessageResults = [];
+        },
+        [fetchFilteredMessages.fulfilled]: (state, action) => {
+            state.loadingFilteredMessages = false;
+            state.filteredMessageResults = action.payload;
         }
     }
 })
@@ -374,6 +445,14 @@ export const selectNsfwNoticeState = state => state.SocialSlice.showingNsfwNotic
 
 export const selectScrollPosition = state => state.SocialSlice.scrollPositions;
 
-export const {setScrollPosition, toggleNsfwNotice, toggleSocialAltLoading, receiveMessage, deleteMessage, clearSocialById, clearMessages, messageCleanUp } = SocialSlice.actions;
+export const selectFilterState = state => state.SocialSlice.filterState;
+
+export const selectFilterMenuOpen = state => state.SocialSlice.filterMenuOpen;
+
+export const selectLoadingFilteredMessages = state => state.SocialSlice.loadingFilteredMessages;
+
+export const selectFilteredMessageResults = state => state.SocialSlice.filteredMessageResults;
+
+export const {clearFilteredResults, toggleFilterMenu, setScrollPosition, toggleNsfwNotice, toggleSocialAltLoading, receiveMessage, deleteMessage, clearSocialById, clearMessages, messageCleanUp } = SocialSlice.actions;
 
 export default SocialSlice.reducer;

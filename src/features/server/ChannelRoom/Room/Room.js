@@ -790,6 +790,7 @@ const Component = () => {
                 
             }
             onMouseEnter={() => {toggleHover(true)}}
+            
             onMouseLeave={() => {toggleHover(false)}}
             id='live-chat-wrapper'>
                 <RoomUserWrapper page={page} users={channel.users} loaded={loaded} />

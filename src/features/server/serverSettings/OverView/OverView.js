@@ -317,9 +317,9 @@ const Wrapper = () => {
             <InputTitle zIndex={2} title={"Update Bubble Banner"} />
             <div style={{
                 position: 'relative',
-                height: 300,
-                minHeight: 300,
-                maxWidth: 500
+                height: 200,
+                minHeight: 200,
+                maxWidth: 400
             }}>
                 <ImageInput listenToClears={true} imageCleared={newBanner} getFile={handleBannerChange} backgroundColor={accentColor} initalImage={serverBanner} />
             </div>

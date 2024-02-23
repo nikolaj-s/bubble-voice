@@ -146,6 +146,7 @@ export const CreateChannelMenu = () => {
             animate={{opacity: 1}}
             exit={{opacity: 0}}
             onClick={handleCancel}
+            onKeyDown={(e) => {e.stopPropagation()}}
             key="create-channel-menu"
             style={{backgroundColor: glassColor}}
              className='create-channel-menu-container'>

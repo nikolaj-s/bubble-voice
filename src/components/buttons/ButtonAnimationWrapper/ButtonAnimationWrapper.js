@@ -90,7 +90,7 @@ export const ButtonAnimationWrapper = ({align_desc_right, active_background, des
             style={{
                 width: desc_width,
                 minWidth: '100%',
-                top: right_orientation_desc ? '1px' : null,
+                top: right_orientation_desc ? '5px' : null,
                 right: align_desc_right ? -40 : right_orientation_desc ? '-15px' : null,
                 left: align_desc_right ? null : right_orientation_desc ? null : '50%',
                 bottom: right_orientation_desc ? null : flip_description ? '-120%' : height + desc_space,

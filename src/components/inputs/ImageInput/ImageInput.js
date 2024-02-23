@@ -10,16 +10,13 @@ import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../..
 
 // componenents
 import { Image as ImageComp } from "../../Image/Image";
-import { ImageIcon } from '../../Icons/ImageIcon/ImageIcon';
 import {GetImageColorData} from '../../../util/GetImageColorData'
-
 
 // style
 import "./ImageInput.css";
 import { ImageInputProcessingIndicator } from './ImageInputProcessingIndicator/ImageInputProcessingIndicator';
-import { ImageSearchIcon } from '../../Icons/ImageSearchIcon/ImageSearchIcon';
-import { ImageSearchPanel } from '../MessageInput/ImageSearchPanel/ImageSearchPanel';
 import { throwServerError } from '../../../features/server/ServerSlice';
+import { AltEditIcon } from '../../Icons/AltEditIcon/AltEditIcon';
 
 export const ImageInput = ({
     initalImage,
@@ -258,18 +255,11 @@ export const ImageInput = ({
                 left: 10
             }}
             className='image-input-nav-options-container'>
-                <div className='image-input-button-wrapper'>
-                    <ImageIcon cursor={'pointer'} center={center} zIndex={zIndex} animation={iconAnimation} />
-                </div>
-                <h4 style={{color: textColor}}>|</h4>
-                <div onClick={openSearchImageMenu} className='image-input-button-wrapper'>
-                    <ImageSearchIcon />
-                </div>
+                <AltEditIcon />
             </div>
         }
         </motion.div>
         {processingImage ? <ImageInputProcessingIndicator fontSize={imageProcessingFontSize} key={"image-processing-indicator"} value={percent} /> : null}
-        {imageSearchOpen ? <ImageSearchPanel selectImage={handleSelectImage} hideOptions={true} close={() => {toggleImageSearchOpen(false)}} searchingForImage={imageSearchOpen} /> : null}
         </AnimatePresence>
     )
 }

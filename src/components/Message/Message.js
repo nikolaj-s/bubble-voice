@@ -33,11 +33,11 @@ import { ConvertTime } from '../../util/ConvertTime';
 import { RedditPost } from '../RedditPost/RedditPost';
 import { handleAddingMedia, selectLoadingMusicState } from '../../features/server/ChannelRoom/Room/Music/MusicSlice';
 
-export const Message = ({activity_feed = false,dashboard = false, direct_message, message, overlay = false, id, channel_id, perm, pinMessage, pinned, index, previous_message, current_message, persist, pin_to_profile}) => {
+export const Message = ({pinned_to_profile_state, activity_feed = false,dashboard = false, direct_message, message, overlay = false, id, channel_id, perm, pinMessage, pinned, index, previous_message, current_message, persist, pin_to_profile}) => {
 
     const dispatch = useDispatch();
 
-    const [hoverState, setHoverState] = React.useState(false);
+    const [hoverState, toggleHoverState] = React.useState(false);
 
     const [user, setUser] = React.useState({});
 
@@ -88,36 +88,7 @@ export const Message = ({activity_feed = false,dashboard = false, direct_message
 
     const hoverEffect = (e, bool) => {
 
-        const el = document.getElementById(`${id}/${channel_id}`);
-
-        const subMenu = document.getElementById(`${id}/${channel_id}-sub-menu`)
-
-        const alt_time_stamp = document.getElementById(`alt-time-stamp-${id}`)
-
-        if (el) {
-
-            if (bool) {
-                el.style.backgroundColor = glassPrimary;
-            } else {
-                el.style.backgroundColor = transparentColor;
-            }
-        }
-
-        if (subMenu) {
-            if (bool) {
-                subMenu.style.opacity = 1;
-            } else {
-                subMenu.style.opacity = 0;
-            }
-        }
-
-        if (alt_time_stamp) {
-            if (bool) {
-                alt_time_stamp.style.opacity = 0.5;
-            } else {
-                alt_time_stamp.style.opacity = 0;
-            }
-        }
+        toggleHoverState(bool);
 
     }
 
@@ -142,13 +113,13 @@ export const Message = ({activity_feed = false,dashboard = false, direct_message
             <div onMouseOut={(e) => {hoverEffect(e, false)}} onMouseOver={(e) => {hoverEffect(e, true)}}
             style={{
                 padding: overlay ? null : '0px 5px 0px 0px',
-                backgroundColor: transparentColor
+                backgroundColor: hoverState ? glassPrimary : transparentColor
             }}
             id={`${id}/${channel_id}`}
             className={`message-container ${direct_message ? 'direct-message-container' : null}`}>
                
-                <ProfileImage timeStamp={timeStamp} prevDate={prevDate} date={date} activity={activity_feed} previous_message={previous_message} color={user?.color} current_message={current_message} profile_picture_shape={user?.profile_picture_shape} primaryColor={primaryColor} user_image={user?.user_image} action={openUserPanel} />
-                <div className='message-inner-container'>
+                <ProfileImage pinned_to_profile_state={pinned_to_profile_state} hover={hoverState} timeStamp={timeStamp} prevDate={prevDate} date={date} activity={activity_feed} previous_message={previous_message} color={user?.color} current_message={current_message} profile_picture_shape={user?.profile_picture_shape} primaryColor={primaryColor} user_image={user?.user_image} action={openUserPanel} />
+                <div className='message-inner-container' style={{width: pinned_to_profile_state ? '100%' : null}}>
                     <div id={`${id}-ctx-message-overlay`} className={'ctx-message-overlay'} />
                     <SenderInfo date={date} prevDate={prevDate} submenuId={`${id}/${channel_id}-sub-menu`} activity={activity_feed} timeStamp={timeStamp} direct_message={direct_message} pin_to_profile={pin_to_profile} link={message?.link} color={user?.color} profile_picture_shape={user?.profile_picture_shape} primaryColor={primaryColor} display_name={user?.display_name} user_image={user?.user_image} action={openUserPanel} persist={persist} id={id} accentColor={accentColor} hover={hoverState} textColor={textColor} perm={perm} index={index}  message={message} current_message={current_message} previous_message={previous_message} pinMessage={pinMessage} pinned={pinned} overlay={overlay} />
                     {message?.emoji ?
@@ -164,12 +135,12 @@ export const Message = ({activity_feed = false,dashboard = false, direct_message
                     : null}
                     <div className='message-content-wrapper'>
                             {message.song ?
-                            <Song addToQueue={handleAddToQueue} in_channel={currentChannelId} in_social={true} name={message.song.title} duration={message.song.duration} image={message.song.thumbnail} author={message.song.author}  />
+                            <Song url={message?.song?.id} addToQueue={handleAddToQueue} in_channel={currentChannelId} in_social={true} name={message.song.title} duration={message.song.duration} image={message.song.thumbnail} author={message.song.author}  />
                             : null}
                             {message.reddit ?
                             <RedditPost action={expandContent} inSocial={true} data={message.reddit} />
                             : null}
-                            <Iframe marginRight={5}  link={message.iFrame} />
+                            <Iframe maxWidth={550} marginRight={5}  link={message.iFrame} />
                             <MessageGallery gallery={message.gallery} expand={expandContent} />
                             {message.video_upload ?
                             <UploadedFileShare video={message.video_upload} />
@@ -179,14 +150,14 @@ export const Message = ({activity_feed = false,dashboard = false, direct_message
                             :
                             message.image && !message.gallery ? 
                             <div 
-                            style={{maxHeight: (activity_feed && message?.text?.includes('channel')) ? 40 :  activity_feed && !current_message.screen_shot ? 80 : maximizeMediaSize ? '100%' : 350,
+                            style={{maxHeight: maximizeMediaSize ? '100%' : 350,
                             marginTop: message.link ? 4 : null,
                             width: (activity_feed && message?.text?.includes('channel')) ? 40 : null,
                             height: (activity_feed && message?.text?.includes('channel')) ? 40 : null,
                             borderRadius: (activity_feed && message?.text?.includes('channel')) ? '50%' : null 
                             }}
                             className='message-image-container'>
-                                <Image alt_image={message?.fall_back_image} loadingState='eager' nsfw={current_message.nsfw} borderRadius={(activity_feed && message?.text?.includes('channel')) ? '50%' : 20} minLoadHeight={'50px'} altHeight={activity_feed && !current_message.screen_shot ? 80 :
+                                <Image alt_image={message?.fall_back_image} loadingState='eager' nsfw={current_message.nsfw} borderRadius={20} minLoadHeight={'50px'} altHeight={
                                     maximizeMediaSize ? '100%' : 350}  expandContent={expandContent} imgHeight={!activity_feed && !maximizeMediaSize ? 'auto' : 'auto'} cursor='pointer' width={null} altWidth={'100%'} objectFit='contain' image={message.image} />
                             </div>
                             : null}

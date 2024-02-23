@@ -237,8 +237,8 @@ export const MessageInput = ({setFallbackImage, channelId, nsfw, handleNsfw, can
 
         setFallbackImage(i.fallback_image);
 
-        image({preview: i.image});
-        console.log(i)
+        image({preview: i?.image?.includes('https') ? i?.image : i?.preview});
+      
         if (i.nsfw) {
             handleNsfw(true);
         }

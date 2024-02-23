@@ -28,6 +28,10 @@
     -webkit-app-region: no-drag;
 }
 
+.server-title-overlay svg {
+    margin-right: 4px;
+}
+
 .server-title-overlay h2 {
     font-weight: 500;
     font-size: 1.1rem;

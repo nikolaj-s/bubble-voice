@@ -86,7 +86,8 @@ export const UserStatus = ({user}) => {
             <div 
             className={`user-name-status-wrapper ${user._id}-user-name-status-wrapper`}>
                 <h3 style={{color: textColor,}} >{user.display_name}</h3>
-                <p style={{color: textColor}}>{(user.status === 'offline' && timeStamp !== "") ? "Last Online: " + timeStamp : user.status ? user.status : 'offline'}</p>
+                {user.status === 'online' ? null :
+                <p style={{color: textColor}}>{(user.status === 'offline' && timeStamp !== "") ? "Last Online: " + timeStamp : user.status ? user.status : 'offline'}</p>}
             </div>
         </div>
     )
