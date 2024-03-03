@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 // state
 import { handlePinMessageToProfile, selectDisplayName, selectUserImage, selectUsername } from '../../../../settings/appSettings/accountSettings/accountSettingsSlice';
-import { selectCurrentChannelId, selectPinningMessage, selectUsersPermissions, throwServerError } from '../../../ServerSlice';
+import { selectCurrentChannelId, selectPinningMessage, selectUsersPermissions, throwServerError, updateUserChannelStatus } from '../../../ServerSlice';
 
 // components
 import { MessageInput } from '../../../../../components/inputs/MessageInput/MessageInput';
@@ -82,6 +82,34 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
     let allMessages = direct_message ? currentChannel.social : social[channelId];
 
+    const handleSocialStatus = async (channel) => {
+        try {
+
+            const data = await socket.request('update channel status', {channel: channel}).then(res => {
+                return res;
+            }).catch(err => {
+                console.log(err);
+                return;
+            })
+        
+            dispatch(updateUserChannelStatus(data));
+        } catch (error) {
+            console.log(error);
+            return;
+        }
+    }
+
+
+    React.useEffect(() => {
+
+        if (!channelId || channelId.length < 4) {
+            handleSocialStatus(false);
+        } else {
+            handleSocialStatus(channelId);
+        }
+
+    }, [channelId])
+
     React.useEffect(() => {
 
         if (direct_message) return;
@@ -102,25 +130,45 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
 
     React.useEffect(() => {
 
-        toggleInitialMount(false);
+        
         
         if (!permission?.user_can_view_channel_content) return;
 
-        if (direct_message) return;
+        if (direct_message) return toggleInitialMount(false);
         
         if (social[channelId]) {
-            
+
+            toggleInitialMount(false);
+
             if (social[channelId][social[channelId]?.length - 1]?.no_more_messages) {
                 return;
-            } else if (social[channelId].length < 15) {
+            } else if (social[channelId].length <= 25) {
                 console.log('fetching')
                 dispatch(fetchMessages({channel_id: channelId, type: currentChannel.type}));
             
             }
 
         } else if (channelId) {
-            
-            dispatch(fetchMessages({channel_id: channelId, type: currentChannel.type}));
+
+            toggleMounting(true);
+
+            setTimeout(() => {
+                dispatch(fetchMessages({channel_id: channelId, type: currentChannel.type}));
+
+                toggleInitialMount(false);
+
+                setTimeout(() => {
+                    messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+
+                    setTimeout(() => {
+
+                        toggleMounting(false);
+                    
+                    }, 100)
+                
+                }, 100)
+                
+            }, 500)
         
         }
         
@@ -143,7 +191,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
             setTimeout(() => {
                 messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
 
-            }, 100)
+            }, 500)
         
         if (permission.user_can_post_channel_social) document.getElementById('social-input-selector').focus();
         
@@ -342,7 +390,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
         >
         {permission?.user_can_view_channel_content ?
             <>
-            {loadingMore || mounting ?
+            {(loadingMore || mounting) && allMessages?.length > 0 ?
             <motion.div initial={{opacity: 0, top: '-120px'}} exit={{opacity: 0, top: '-120px'}} animate={{opacity: 1, top: 0}} style={{backgroundColor: glassColor}} className='social-loading-container'>
                 <Loading loading={loadingMore || mounting} />
             </motion.div>
@@ -353,9 +401,9 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
             className='social-wrapper-container'>
                 <div  className='social-inner-container'>
                     
-                    <div onScroll={handleLoadMoreOnScroll} ref={messagesRef} className='social-messages-wrapper'>
-                        {mounting && allMessages.length === 0 ? 
-                        <MessagePlaceHolderLoader /> :
+                    <div onScroll={handleLoadMoreOnScroll} style={{overflowY: initialMount ? 'hidden' : 'auto'}} ref={messagesRef} className='social-messages-wrapper'>
+                        {(loadingMore || initialMount) && (!allMessages || allMessages?.length === 0) ? 
+                        <MessagePlaceHolderLoader arr={[200, 300, 150, 90, 300, 200, 100, 400, 90]} /> :
                         nsfwNotice && !disableNsfwWarning ?
                         <ExplicitContentWarning />
                         :
@@ -363,7 +411,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
                             return message.no_more_messages ? null :
                             <Message pin_to_profile={pinToProfile} dashboard={false} direct_message={direct_message} persist={currentChannel.persist_social} current_message={message} previous_message={key === allMessages?.length - 1 ? null : allMessages[key + 1]} pinned={message?.pinned} pinMessage={() => {pinMessage(message)}} perm={permission?.user_can_post_channel_social} channel_id={message?.channel_id} id={message._id} message={message.content} key={message._id || message.content.local_id} />
                         })}
-                        {direct_message ? null : <PersistedDataNotice type={currentChannel.type} channelName={currentChannel.channel_name} persisted={!currentChannel.persist_social} />}
+                        {direct_message ? null : <PersistedDataNotice type={currentChannel.type} channelName={currentChannel.channel_name} persisted={!currentChannel.persist_social} guidelines={currentChannel.guidelines} />}
                         
                     </div>
                     {(direct_message && status) ? <MessageInput setFallbackImage={setFallbackImage} nsfw={nsfw} handleNsfw={handleToggleNsfw} setEmoji={setEmoji} cancel_image={handleCancelImageSend} direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : 

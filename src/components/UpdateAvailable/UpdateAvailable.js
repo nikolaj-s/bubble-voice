@@ -20,6 +20,8 @@ export const UpdateAvailable = () => {
 
     const dispatch = useDispatch();
 
+    const [close, toggleClose] = React.useState(false);
+
     const updateAvailable = useSelector(selectUpdateAvailableState);
 
     const secondaryColor = useSelector(selectSecondaryColor);
@@ -58,7 +60,7 @@ export const UpdateAvailable = () => {
 
     return (
         <>
-        {updateAvailable ?
+        {updateAvailable && !close ?
             <div 
             style={{
                 backgroundColor: glassColor
@@ -80,9 +82,19 @@ export const UpdateAvailable = () => {
                     style={{
                         color: textColor
                     }}
-                    >A new update is ready to be installed, and is required for continued use of the application.</p>
-                    <TextButton marginBottom={'1rem'} action={restartNow} name={"Restart And Install"} icon={<RestartIcon width={20} height={20} />} />
-                </div>
+                    >A new update is ready to be installed, and is recommended for continued use of the application.</p>
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '100%',
+                        marginRight: 10
+                    }}>
+                        <h2 onClick={() => {toggleClose(true)}} className='install-on-exit' style={{color: textColor}}>Install Later</h2>
+                        <TextButton width={220} marginBottom={'5px'} action={restartNow} name={"Restart And Install"} icon={<RestartIcon width={20} height={20} />} />
+                        
+                    </div>
+                   </div>
             </div>
         : null}
         </>

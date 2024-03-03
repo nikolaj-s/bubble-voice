@@ -15,10 +15,10 @@
     margin-top: 31px;
     margin-right: 0px;
     border-radius: 10px 0px 0px 10px;
-    height: calc(100% - 41px);
+    height: calc(100% - 31px);
     display: flex;
     flex-direction: column;
-    padding: 0px 10px 10px 10px;
+    padding: 0px 10px 0px 10px;
     box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.567);
     position: relative;
 }
@@ -53,7 +53,8 @@
 }
 
 .filtered-results-container {
-    width: 100%;
+    width: calc(100% + 20px);
+    margin-left: -10px;
     height: auto;
     flex-grow: 2;
     overflow-y: auto;

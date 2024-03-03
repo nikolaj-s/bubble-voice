@@ -20,7 +20,7 @@ export const MicToggleButton = ({action, state, active, id, width = 25, height =
         altInvert={true}
         description={active ? null : `${state ? 'Mute' : 'Un-Mute'}`}
         zIndex={5}
-        borderRadius={0}
+        borderRadius={5}
         >
             {state ?
             <svg width="100%" height="100%" viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">

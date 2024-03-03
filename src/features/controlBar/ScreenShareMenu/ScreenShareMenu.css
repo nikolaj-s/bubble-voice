@@ -1,25 +1,40 @@
-
+.screen-picker-outer-wrapper {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
 .outer-screen-select-container {
     border-radius: 8px;
     top: 0;
     left: 0;
 }
 .screen-share-menu {
-    position: fixed;
     left: 5px;
     padding: 5px;
     bottom: 55px;
-    width: 320px;
-    height: 400px;
+    width: 500px;
+    height: auto;
+    max-height: 600px;
+    display: flex;
+    flex-direction: column;
+    min-height: 400px;
     border-radius: 10px;
     z-index: 10;
     box-shadow: 5px -5px 20px rgba(0, 0, 0, 0.582);
 }
 
+.screen-share-menu .screen-share-title {
+    margin: 5px 0px;
+}
+
 .inner-screen-button-wrapper {
     width: calc(100%);
-    height: calc(100% - 38px);
-    justify-content: center;
+    max-height: calc(100% - 75px);
+    justify-content: space-evenly;
     margin-top: 5px;
     overflow-y: auto;
     display: flex;

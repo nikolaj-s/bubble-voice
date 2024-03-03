@@ -238,7 +238,13 @@ export const ImageInput = ({
         }}
         {...getRootProps({className: 'dropzone'})} className='image-drop-input-container'>
             <input {...getInputProps()} />
-            <ImageComp zIndex={2} objectFit={contain ? 'contain' : 'cover'} onLoad={onLoad} opacity={blur_amount} disableErr={true} cursor='pointer' image={files[0]?.preview} />
+            <img style={{
+                width: '100%',
+                height: '100%',
+                objectFit: contain ? 'contain' : 'cover',
+                zIndex: 3,
+                position: 'absolute'
+            }} src={files[0]?.preview} /> 
             {contain ?
             <img className='image-input-contain-blur-effect' src={files[0]?.preview} />
             : null}

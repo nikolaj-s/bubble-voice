@@ -16,14 +16,17 @@ import { WidgetsIcon } from '../../../../components/Icons/WidgetsIcon/WidgetsIco
 import { PinIcon } from '../../../../components/Icons/PinIcon/PinIcon';
 import { MediaIcon } from '../../../../components/Icons/MediaIcon/MediaIcon';
 import { AltCloseButton } from '../../../../components/buttons/AltCloseButton/AltCloseButton'
-import { selectHideUserStatus, selectWebVersion } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { miscSettingsChannelSpecificStateChange, selectHideUserStatus, selectWebVersion } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { OptionsButton } from '../../../../components/buttons/OptionsButton/OptionsButton';
 import { TextOnlyIcon } from '../../../../components/Icons/TextOnlyIcon/TextOnlyIcon';
 import { setSelectedMember } from '../MemberPanel/MemberPanelSlice';
 import { ActivityIcon } from '../../../../components/Icons/ActivityIcon/ActivityIcon';
 import { SOCIAL_DATA } from '../../../../util/LocalData';
 import { SocialFilterButton } from '../../../../components/buttons/SocialFilterButton/SocialFilterButton';
-import { toggleFilterMenu } from '../../SocialSlice';
+import { selectFilterMenuOpen, toggleFilterMenu } from '../../SocialSlice';
+import { UserBarToggleButton } from '../../../../components/buttons/UserBarToggleButton/UserBarToggleButton';
+import { selectChannelSpecificStateSettings } from '../../../contextMenu/contextMenuSlice';
+import { setExpandedContent } from '../../../ExpandContent/ExpandContentSlice';
 
 export const ServerNavigation = () => {
 
@@ -64,6 +67,8 @@ export const ServerNavigation = () => {
     const socialChannel = useSelector(selectCurrentlyViewChannelSocial);
 
     const channel = useSelector(selectCurrentChannel);
+
+    const filterMenuOpen = useSelector(selectFilterMenuOpen);
     
     const [videoDesc, toggleVideoDesc] = React.useState(false);
 
@@ -341,13 +346,21 @@ export const ServerNavigation = () => {
     }, [inChannel])
 
     const openSocialFilterMenu = () => {
-        dispatch(toggleFilterMenu(true))
+        dispatch(toggleFilterMenu(!filterMenuOpen))
+    }
+
+    const toggleHideUsers = () => {
+        dispatch(miscSettingsChannelSpecificStateChange("hideUserStatus"));
+    }
+
+    const openChannelInfo = () => {
+        dispatch(setExpandedContent({content_type: 'channel-info', ...socialChannel}));
     }
 
     return (
         <motion.div
         style={{
-            maxWidth: (hideUsers && inChannel) ? 'calc(100% - 378px)' : 'calc(100% - 495px)'
+            maxWidth: (hideUsers) ? 'calc(100% - 378px)' : 'calc(100% - 378px)'
         }}
         className='server-navigation-container'>
             {!socialId ?
@@ -368,18 +381,7 @@ export const ServerNavigation = () => {
                 </motion.div>
                 {permissions?.user_can_view_channel_content ? 
                 <>
-                <motion.div 
-                id={'channel-social-tab-button'}
-                transition={{duration: 0.05}}
-                onMouseEnter={() => {handleDesc('social', true); handleAnimation(secondaryColor, socialButtonAnimation, 'social')}}
-                onMouseLeave={() => {handleDesc('social', false); handleAnimation(`rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`, socialButtonAnimation, 'social')}}
-                onMouseDown={() => {handleAnimation(accentColor, socialButtonAnimation, 'social')}}
-                onMouseUp={() => {handleAnimation(secondaryColor, socialButtonAnimation, 'social')}}
-                animate={socialButtonAnimation} onClick={() => {handleAction('social')}} className='server-navigation-button'>
-                    {socialDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Social</p> : null}
-                    {unReadMessage ? <h4 style={{backgroundColor: 'red', color: textColor}} className='server-nav-social-unread-indicator'>NEW</h4> : null}
-                    <SocialIcon opacity={page === 'social' || socialDesc ? 1 : 0.6} color={textColor} />
-                </motion.div>
+                
                 <motion.div 
                 onMouseEnter={() => {handleDesc('widgets', true); handleAnimation(secondaryColor, widgetsButtonAnimation, 'widgets')}}
                 onMouseLeave={() => {handleDesc('widgets', false);handleAnimation(`rgba(${secondaryColor.split('rgb(')[1].split(')')[0]}, 0)`, widgetsButtonAnimation, 'widgets')}}
@@ -430,20 +432,55 @@ export const ServerNavigation = () => {
                 <div className='channel-social-header-wrapper'>
                     <TextOnlyIcon />
                     <h3 style={{color: textColor}}>{socialChannel.channel_name}</h3>
+                    {socialChannel?.guidelines ?
+                    <>
+                    <div
+                    style={{
+                        height: 20,
+                        width: 2,
+                        margin: '0px 5px',
+                        flexShrink: 0,
+                        backgroundColor: textColor,
+                        opacity: 0.5
+                    }}
+                    />
+                    <p 
+                    onClick={openChannelInfo}
+                    id={'social-channel-guide-lines-notice'}
+                    style={{
+                        color: textColor,
+                        textOverflow: 'ellipsis',
+                        overflow: 'hidden',
+                        wordBreak: 'keep-all',
+                        whiteSpace: 'nowrap',
+                        wordWrap: 'normal',
+                        fontSize: '0.9rem',
+                        maxWidth: '100%',
+                        flexShrink: 4
+                    }}>{socialChannel?.guidelines}</p>
+                    </>
+                    : null}
                 </div>
                 
             </div>
             }
-            
+            <div
+            style={{
+                width: 'auto',
+                height: 30,
+                display: 'flex',
+                alignItems: 'center'
+            }}
+            >
             {!socialId ? <div className='server-navigation-filler'></div> : null}
             {socialChannel?.type === 'screenshots' || socialChannel?.type === 'subreddit' ? null :
             socialId || page === 'social' ?
-            <SocialFilterButton action={openSocialFilterMenu} flip_description={true} description={"Filter"} width={60} borderRadius={0} height={'100%'} />
+            <SocialFilterButton action={openSocialFilterMenu} flip_description={true} description={"Filter"} width={62} borderRadius={0} height={'100%'} />
             : null}
-            {inChannel ? <OptionsButton desc_width={100} transparent={true} description={"Room Options"} right_orientation_desc={true}  target={'live-chat-wrapper'} borderRadius={0} zIndex={3} top={0} height={'calc(100%)'} left={null} width={15} /> : null}
-            {socialId ?
-            <AltCloseButton action={closeSocialRoute} margin={`0px ${inChannel ? 0 : 40} 0px 5px`} width={15} borderRadius={0} height={'100%'}  />
-            : null}
+            {inChannel && !socialId ? <OptionsButton desc_width={100} transparent={true} right_orientation_desc={true}  target={'live-chat-wrapper'} borderRadius={0} zIndex={3} top={0} height={'calc(100%)'} left={null} width={15} /> : null}
+            <UserBarToggleButton action={toggleHideUsers} state={!hideUsers} width={15} borderRadius={0} height={'100%'} />
+            
+            </div>
         </motion.div>
     )
 }

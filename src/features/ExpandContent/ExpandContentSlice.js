@@ -8,7 +8,8 @@ const ExpandContentSlice = createSlice({
         iframe: false,
         reddit: false,
         videoStartTime: 0,
-        youtube: false
+        youtube: false,
+        channelInfo: false
     },
     reducers: {
         setVideoStartTime: (state, action) => {
@@ -20,15 +21,21 @@ const ExpandContentSlice = createSlice({
                 state.iframe = false;
                 state.youtube = false;
                 state.reddit = false;
+                state.channelInfo = false;
             } else {
                 const expandedContent = action.payload;
 
                 state.selectedContent = action.payload;
-
+                console.log(expandedContent)
                 if (expandedContent.type === 'reddit') {
                     
                     state.reddit = true;
 
+                } else if (expandedContent.content_type === 'channel-info') {
+                    state.channelInfo = true;
+
+                    state.selectedContent = expandedContent;
+                
                 } else if (expandedContent?.includes('https')) {
                     for (const text of expandedContent.split(' ')) {
                         if (text.includes('redgif')) {
@@ -81,6 +88,8 @@ export const selectExpandedContent = state => state.ExpandContentSlice.selectedC
 export const selectVideoStartTime = state => state.ExpandContentSlice.videoStartTime;
 
 export const selectYouTubeExpand = state => state.ExpandContentSlice.youtube;
+
+export const selectChannelInfoExpanded = state => state.ExpandContentSlice.channelInfo;
 
 export const { setExpandedContent, setVideoStartTime } = ExpandContentSlice.actions;
 

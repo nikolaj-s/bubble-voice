@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Image } from '../../components/Image/Image';
 
 // state
-import { selectExpandedContent, selectIframeExpanded, selectRedditExpanded, selectVideoStartTime, selectYouTubeExpand, setExpandedContent } from './ExpandContentSlice'
+import { selectChannelInfoExpanded, selectExpandedContent, selectIframeExpanded, selectRedditExpanded, selectVideoStartTime, selectYouTubeExpand, setExpandedContent } from './ExpandContentSlice'
 
 // style
 import "./ExpandContent.css";
@@ -46,6 +46,8 @@ export const ExpandContent = () => {
     const videoStartTime = useSelector(selectVideoStartTime);
 
     const youtube = useSelector(selectYouTubeExpand);
+
+    const channelInfo = useSelector(selectChannelInfoExpanded);
 
     const closeExpanded = () => {
         dispatch(setExpandedContent(false));
@@ -126,7 +128,15 @@ export const ExpandContent = () => {
             >ESC</p>
             </div>
             <div className='content-expanded-inner-container'>
-                {youtube ?
+                {channelInfo ?
+                <div 
+                style={{backgroundColor: primaryColor}}
+                className='channel-info-expanded-container'>
+                    <h1 style={{color: textColor}}>#{expandedContent?.channel_name}</h1>
+                    <p style={{color: textColor}}>{expandedContent?.guidelines}</p>
+                </div>
+                 :
+                youtube ?
                 <div
                 style={{minWidth: '100vw', height: 900, flexGrow: 4}}
                 >
@@ -159,7 +169,7 @@ export const ExpandContent = () => {
                 :        
                 <Image altHeight='100vh' objectFit='contain' image={expandedContent} />}
             </div>
-            {youtube ? null :
+            {youtube || channelInfo ? null :
             <div onClick={(e) => {e.stopPropagation()}} style={{backgroundColor: primaryColor}} className='expanded-content-navigation-container'>                
                 <CopyButton borderRadius={10} action={handleCopy} description={'Copy Link'} width={18} height={18} />
                 <DownloadButton desc_width={60} align_desc_right={true} borderRadius={10} description={"Download"} action={handleDownload} margin={"5px 0"} width={18} height={18} />

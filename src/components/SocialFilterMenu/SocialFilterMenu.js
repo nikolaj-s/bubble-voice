@@ -148,7 +148,22 @@ export const SocialFilterMenu = () => {
                 </>
                 }
                 <InputTitle title={"Posted By:"} />
-                <TextButton action={() => {toggleSelectUserMenu(!selectUserMenu)}} name={user.display_name} icon={<ProfileIcon width={20} height={16} />} />
+                <TextButton action={() => {toggleSelectUserMenu(!selectUserMenu)}} name={user.display_name} icon={user.username !== '*' ? 
+                <div style={{
+                    width: 30,
+                    height: 30,
+                    borderRadius: '50%',
+                    overflow: 'hidden',
+                    marginLeft: 10
+                }}>
+                    <img style={{
+                        objectFit: 'cover',
+                        width: '100%',
+                        height: '100%',
+                       
+                    }} src={user?.user_image} />
+                </div>
+                : <ProfileIcon width={20} height={16} />} />
                 <div className='social-filter-confirmation'>
                     <h3 onClick={clearState} style={{color: textColor}}>Clear</h3>
                     <TextButton action={handleSearch} textAlign='center' width={85} name={'Confirm'} />
@@ -177,7 +192,8 @@ export const SocialFilterMenu = () => {
                 className='select-filter-state-menu-container'>
                     <RadioButton name={'Anyone'} state={user.username === '*'} action={() => {handleSelectUser({display_name: "Anyone", username: "*"})}} />
                     {users.map(u => {
-                        return <RadioButton name={u.display_name} state={u.username === user.username} action={() => {handleSelectUser({display_name: u.display_name, username: u.username})}} />
+                        console.log(u)
+                        return <RadioButton image={u.user_image} name={u.display_name} state={u.username === user.username} action={() => {handleSelectUser(u)}} />
                     })}
                 </div>
                 : null}

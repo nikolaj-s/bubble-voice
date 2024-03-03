@@ -1,0 +1,12 @@
+
+.users-in-chat-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.user-in-chat-wrapper {
+    display: flex;
+    height: 20px;
+    border-radius: 5px;
+}

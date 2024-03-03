@@ -35,7 +35,7 @@ export const SocialRoute = () => {
 
     React.useEffect(() => {
 
-        if (channelId === current_channel_id) return document.getElementById('channel-social-tab-button')?.click();
+      //  if (channelId === current_channel_id) return document.getElementById('channel-social-tab-button')?.click();
     
         if (currentSocial !== channelId) setCurrentSocial(channelId);
     // eslint-disable-next-line
@@ -46,16 +46,6 @@ export const SocialRoute = () => {
         {currentSocial ?
         <div 
         key={`social-route-${channelId}`}
-        
-        style={{
-            position: 'absolute',
-            zIndex: 8,
-            width: 'calc(100%)',
-            left: 0,
-            height: '100%',
-            
-        }}
-        
         className='social-route-wrapper-container'>
             
             <div

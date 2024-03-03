@@ -39,9 +39,9 @@ export const SenderInfo = ({prevDate, date, submenuId, activity = false, timeSta
         <div 
         
         style={{
-            height: (previous_message?.username !== current_message?.username) || (prevDate.getDate() !== date.getDate()) ? 15 : 0,
+            height: (previous_message?.username !== current_message?.username) || (prevDate.getDate() !== date.getDate()) ? 20 : 0,
             padding: (previous_message?.username !== current_message?.username) || (prevDate.getDate() !== date.getDate()) ? '4px 0 2px 0' : 0,
-            margin: (previous_message?.username !== current_message?.username) || (prevDate.getDate() !== date.getDate()) ? null : 0
+            margin: (previous_message?.username !== current_message?.username) || (prevDate.getDate() !== date.getDate()) ? '0 0 0px 0' : 0
         }}
         className='sender-info-container'>
                 

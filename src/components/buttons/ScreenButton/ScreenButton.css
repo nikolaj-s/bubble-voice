@@ -1,23 +1,30 @@
 .screen-button-container {
-    width: 145px;
-    height: 135px;
-    margin: 1px;
+    width: 220px;
+    height: 115px;
+    margin: 5px;
     padding: 5px;
     cursor: pointer;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: flex-end;
+    align-items: center;
     overflow: hidden;
     position: relative;
     border-radius: var(--border-radius);
 }
 
+.screen-button-container img {
+    height: 100px;
+}
+
 .screen-button-container p {
     z-index: 5;
-    margin: 0;
+    margin: 0 0 5px 5px;
+    width: calc(100% - 10px);
     padding: 0;
     overflow: hidden;
+    bottom: 0;
+    left: 0;
     text-overflow: ellipsis;
     word-wrap: break-word;
     text-align: center;

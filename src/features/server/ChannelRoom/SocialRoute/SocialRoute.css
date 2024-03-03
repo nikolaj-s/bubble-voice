@@ -2,7 +2,7 @@
 .social-route-wrapper-container {
     display: flex;
     flex-direction: column;
-    width: calc(100% - 10px);
+    width: calc(100%);
     height: 100%;
     bottom: 0;
     right: 0;

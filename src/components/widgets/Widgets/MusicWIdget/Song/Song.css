@@ -17,6 +17,7 @@
     flex-shrink: 0;
     margin-right: 3px;
     position: relative;
+    overflow: hidden;
 }
 
 .song-container p {

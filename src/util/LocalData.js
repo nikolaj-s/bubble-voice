@@ -1,7 +1,14 @@
+import Axios from "axios";
+
+import { getToken, url } from "./Validation"
 
 export let USER_PREFS = new Map();
 
 export let SOCIAL_DATA = new Map();
+
+export const setSocialData = (data) => {
+    SOCIAL_DATA = data;
+}
 
 // key bind management
 export const fetchKeyBinds = async () => {
@@ -131,7 +138,29 @@ export const setMusicWidgetVolume = async (volume) => {
 // SOCIAL DATA
 export const saveSocialData = async () => {
     
-    localStorage.setItem("SOCIALDATA", JSON.stringify(Array.from(SOCIAL_DATA.entries())));
+    try {
+
+        const data = new FormData();
+
+        data.append("social_data",JSON.stringify(Array.from(SOCIAL_DATA.entries())));
+
+        const token = await getToken();
+
+        await Axios({
+            method: "POST",
+            url: `${url}/save-social-data`,
+            headers: {"TOKEN": token},
+            data
+        }).then(res => {
+            return true;
+        })
+        .catch(err => {
+            console.log(err)
+            return true;
+        })
+    } catch (err) { 
+        console.log(err);
+    }
 
     return;
     
@@ -141,8 +170,8 @@ export const fetchSocialData = async () => {
     
     const w_data = localStorage.getItem("SOCIALDATA");
 
-    SOCIAL_DATA = new Map(JSON.parse(w_data));
-
+    let d  = JSON.parse(w_data);
+    console.log(d)
     return;
 }
 

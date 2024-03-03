@@ -14,16 +14,38 @@
     content: '';
     transform-origin: center;
     animation: bounce 2.2s ease alternate;
-    transform: scaleY(0.3);
+    
 }
 
 .music-playing-class span {
     animation: bounce 2.2s ease infinite alternate;
+    
 }
 
+.ind-1 {
+    transform: scaleY(0.3);
+}
+
+.ind-2 {
+    transform: scaleY(0.6);
+}
+
+.ind-3 {
+    transform: scaleY(0.9);
+}
+
+.ind-4 {
+    transform: scaleY(0.5);
+}
+
+.ind-5 {
+    transform: scaleY(0.8);
+    margin-right: 0px !important;
+}
  
 .music-playing-class span:nth-of-type(2) {
     animation-delay: -2.2s; /* Start at the end of animation */
+    
 }
   
 .music-playing-class span:nth-of-type(3) {
@@ -32,6 +54,10 @@
 
 .music-playing-class span:nth-of-type(4) {
     animation-delay: -4.8s; /* Start mid-way of return of animation */
+}
+
+.music-playing-class span:nth-of-type(5) {
+    animation-delay: -2.8s; /* Start mid-way of return of animation */
 }
 
 @keyframes bounce {

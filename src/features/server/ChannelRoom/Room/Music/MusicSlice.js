@@ -129,9 +129,13 @@ const MusicSlice = createSlice({
         results: [],
         loadingSearchResults: false,
         recentSongs: [],
-        loadingRecentSongs: false
+        loadingRecentSongs: false,
+        openOverlay: false
     },
     reducers: {
+        toggleOverlay: (state, action) => {
+            state.openOverlay = !state.openOverlay;
+        },
         toggleSavesVisible: (state, action) => {
             state.savesVisible = !state.savesVisible;
             state.resultsVisible = !state.savesVisible;
@@ -292,7 +296,10 @@ export const selectSearchResults = state => state.MusicSlice.results;
 export const selectRecentSongs = state => state.MusicSlice.recentSongs;
 
 export const selectLoadingRecentSongs = state => state.MusicSlice.loadingRecentSongs;
+
+export const selectOverlayOpenState = state => state.MusicSlice.openOverlay;
+
 // actions
-export const {toggleResultsVisible, toggleSavesVisible, setTime, setMediaColor, toggleMuted, toggleBehind, toggleLoadingMusic,toggleMusicExpanded, removeSongFromQueue, un_like_song, like_song, toggleMusicPlaying, addSongToQueue, skipSong, updateMusicState, throwMusicError, updateMusicVolume} = MusicSlice.actions;
+export const {toggleOverlay, toggleResultsVisible, toggleSavesVisible, setTime, setMediaColor, toggleMuted, toggleBehind, toggleLoadingMusic,toggleMusicExpanded, removeSongFromQueue, un_like_song, like_song, toggleMusicPlaying, addSongToQueue, skipSong, updateMusicState, throwMusicError, updateMusicVolume} = MusicSlice.actions;
 
 export default MusicSlice.reducer;

@@ -1,10 +1,10 @@
 .channel-user-placeholder {
-    width: calc(100% - 12px);
+    width: calc(100% - 14px);
     margin-left: 5px;
     display: flex;
     height: 32px;
     margin-right: 5px;
-    padding-left: 2px;
+    padding: 0px 2px;
     align-items: center;
     position: relative;
     cursor: pointer;
@@ -13,7 +13,7 @@
 }
 
 .channel-user-placeholder h3 {
-    font-size: .9rem;
+    font-size: .8rem;
     font-weight: 300;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -30,7 +30,7 @@
     border-radius: 50%;
     overflow: hidden;
     margin-right: 5px;
-    margin-left: 0px;
+    margin-left: 2px;
     flex-shrink: 0;
     cursor: pointer;
 }

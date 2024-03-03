@@ -60,7 +60,7 @@
 .screen-shot-showcase-wrapper {
     width: 100%;
     height: 74px;
-    width: 74px;
+    width: calc(25% - 5px);
     flex-shrink: 0;
     overflow: hidden;
     border-radius: 5px;

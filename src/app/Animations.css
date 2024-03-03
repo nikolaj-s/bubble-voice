@@ -11,6 +11,18 @@
     }
 }
 
+@keyframes alt-fade-in-out {
+    0% {
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.5;
+    }
+}
+
 @keyframes fade-in-out {
     0% {
         opacity: 0.2;
@@ -36,3 +48,39 @@
         transform: translateX(0%);
     }
 }
+
+.rotation {
+    transform-origin: center;
+    animation: animate-rotate 2s infinite forwards linear;
+}
+
+.scale-animation {
+    animation: scale-up-and-down 1.5s infinite forwards linear;
+}
+
+@keyframes scale-up-and-down {
+    0% {
+        scale: 1;
+    }
+    50% {
+        scale: 1.4;
+    }
+    100% {
+        scale: 1;
+    }
+}
+
+@keyframes animate-rotate {
+    0% {
+        rotate: 0deg;
+        
+    }
+    50% {
+        rotate: 180deg;
+        
+    }
+    100% {
+        rotate: 360deg;
+        
+    }
+} 

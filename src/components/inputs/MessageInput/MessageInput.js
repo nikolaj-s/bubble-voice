@@ -19,6 +19,7 @@ import { selectServerId, throwServerError } from '../../../features/server/Serve
 import { AddMediaButton } from '../../buttons/AddMediaButton/AddMediaButton';
 import { ImagePreview } from './ImagePreview/ImagePreview';
 import { InputEditor } from './InputEditor/InputEditor';
+import { MembersInChatContainer } from './MembersInChatContainer/MembersInChatContainer';
 
 export const MessageInput = ({setFallbackImage, channelId, nsfw, handleNsfw, cancel_image, send, text, keyCode, image, value, persist, updateInputHeight, socialRoute, direct_message, channel_name, setEmoji}) => {
 
@@ -299,6 +300,7 @@ export const MessageInput = ({setFallbackImage, channelId, nsfw, handleNsfw, can
                 borderRadius: 10
             }}
             className='message-input-wrapper'>
+                {direct_message ? null : <MembersInChatContainer channelId={channelId} />}
                 <ImagePreview processingImage={processingImage} percent={percent} type={files[0]?.type} fileName={files[0]?.name} cancel={handleCancel} preview={files[0]?.preview} />
                 {value.length > 0 || files[0]?.type !== undefined ?
                 <InputEditor handleEmoji={handleEmojiText} updateState={updateStyleState} handleNsfw={handleNsfw} state={textStyle} nsfw={nsfw} />

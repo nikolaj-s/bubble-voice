@@ -1,0 +1,40 @@
+
+.loading-message-placeholder-container {
+    display: flex;
+    margin-bottom: 5px;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+.profile-image-loading-place-holder {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 5px;
+    margin-left: 5px;
+    flex-shrink: 0;
+    animation: fade-in-out 0.8s linear infinite forwards;
+}
+
+.message-content-loading-wrapper {
+    width: calc(100% - 55px);
+    height: 100%;
+
+}
+
+.content-place-holder-loader {
+    width: calc(100%);
+    border-radius: 10px;
+    height: calc(100% - 25px);
+    animation: fade-in-out 0.8s linear infinite forwards;
+}
+
+.sender-info-loading {
+    border-radius: 40px;
+    height: 20px;
+    width: 200px;
+    max-width: 100%;
+    margin-bottom: 5px;
+    animation: fade-in-out 0.8s linear infinite forwards;
+}

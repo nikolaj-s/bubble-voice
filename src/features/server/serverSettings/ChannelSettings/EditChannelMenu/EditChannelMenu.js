@@ -12,6 +12,8 @@ import { ApplyCancelButton } from '../../../../../components/buttons/ApplyCancel
 import { SettingsHeader } from '../../../../../components/titles/SettingsHeader/SettingsHeader'
 import { DownIcon } from '../../../../../components/Icons/DownIcon/DownIcon';
 import { WidgetsIcon } from '../../../../../components/Icons/WidgetsIcon/WidgetsIcon'
+import { TextArea } from '../../../../../components/inputs/TextArea/TextArea'
+
 // state
 import { setHeaderTitle } from '../../../../contentScreen/contentScreenSlice';
 import { deleteChannel, selectChannelToEdit, selectServerMembers, selectServerOwner, selectUsersPermissions, throwServerError, updateChannel } from '../../../ServerSlice';
@@ -39,6 +41,8 @@ const Wrapper = () => {
     const dispatch = useDispatch();
 
     const [channelName, setChannelName] = React.useState("");
+
+    const [channelGuideLines, setChannelGuideLines] = React.useState("");
 
     const [persistChannelSocial, setPersistChannelSocial] = React.useState(false);
 
@@ -140,6 +144,10 @@ const Wrapper = () => {
                 toggleBlockNsfwPosting(true);
             }
 
+            if (channelToEdit.guidelines) {
+                setChannelGuideLines(channelToEdit.guidelines);
+            }
+
             for (const w of channel.widgets) {
                 if (w.delete) {
                     toggleEdited(true);
@@ -150,7 +158,7 @@ const Wrapper = () => {
             console.log(channelToEdit)
 
             setWidgets(channelToEdit.widgets);
-        
+        console.log(channelGuideLines)
         } catch (error) {
             return;
         }
@@ -223,7 +231,7 @@ const Wrapper = () => {
         document.getElementsByClassName('server-settings-route-wrapper')[0].scrollTop = 0;
 
         await socket.request('update channel', 
-        {...channelToEdit, widgets: widgets, persist_social: persistChannelSocial, channel_name: channelName, file: channelBackground, background_blur: backgroundBlur, clear_social: clearedSocial, disable_streams: disableStreams, auth_users: authUsers, locked_channel: lockedChannel, icon_file: icon, channel_owner: channelOwner, lock_media_player: lockedMediaPlayer, authMediaUsers: authMediaUsers, contain_background: containBackground, block_nsfw_posting: blockNsfwPosting})
+        {...channelToEdit, widgets: widgets, persist_social: persistChannelSocial, channel_name: channelName, file: channelBackground, background_blur: backgroundBlur, clear_social: clearedSocial, disable_streams: disableStreams, auth_users: authUsers, locked_channel: lockedChannel, icon_file: icon, channel_owner: channelOwner, lock_media_player: lockedMediaPlayer, authMediaUsers: authMediaUsers, contain_background: containBackground, block_nsfw_posting: blockNsfwPosting, guidelines: channelGuideLines})
         .then(response => {
 
             dispatch(updateChannel(response.channel));
@@ -372,6 +380,13 @@ const Wrapper = () => {
         toggleBlockNsfwPosting(!blockNsfwPosting);
     }
 
+    const handleUpdateGuideLines = (value) => {
+
+        toggleEdited(true);
+
+        setChannelGuideLines(value);
+    }
+
     return (
         <>
         {(permission?.user_can_manage_channels && (channelToEdit.locked_channel ? channelToEdit.auth : true)) ?
@@ -383,8 +398,20 @@ const Wrapper = () => {
             <ChannelIcon type={channelToEdit.type} initial={channelToEdit?.icon} locked={lockedChannel} textOnly={channelToEdit?.text_only} getFile={updateChannelIcon}  />
             {channelToEdit.type === 'subreddit' || channelToEdit.type === 'screenshots' || channelToEdit.type === 'mediahistory' ?
             <InputPlaceHolder value={channelName} />
-            : <TextInput action={handleUpdateChannelName} inputValue={channelName} />}
+            : 
+            <>
+            <TextInput action={handleUpdateChannelName} inputValue={channelName} />
+            </>
+            }
             </div>
+            {channelToEdit.type !== 'subreddit' && channelToEdit.type !== 'screenshots' && channelToEdit.type !== 'mediahistory' ?
+            <>
+            <InputTitle title={"Channel Posting Guidelines"} />
+            <div style={{minHeight: 150}}>
+            <TextArea action={handleUpdateGuideLines} inputValue={channelGuideLines} />
+            </div>
+            </>
+            : null}
             {channelToEdit.text_only ? null :
             <>
             <SettingsHeader title={"Channel Background"} />

@@ -120,7 +120,7 @@ export const UserStatusBar = () => {
 
     return (
         <>
-        {(channelId && hideUserStatusBar) ? null :
+        {(hideUserStatusBar) ? null :
         <div 
         style={{backgroundColor: secondaryColor}}
         className='user-status-bar'>

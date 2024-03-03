@@ -30,12 +30,15 @@ export const TextArea = ({action = () => {}, placeHolder, inputValue = "", margi
     }
 
     const returnInputValue = (e) => {
+        e.stopPropagation();
+
         action(e.target.value);
     }
 
     return (
         <>
         <motion.div
+        onKeyDown={(e) => {e.stopPropagation()}}
         animate={animation}
         className='text-area-container'
         style={{border: `3px solid ${color}`, height: height,backgroundColor: color}}
@@ -54,6 +57,7 @@ export const TextArea = ({action = () => {}, placeHolder, inputValue = "", margi
         transition={{duration: 0.1}}
         >
             <textarea 
+            onKeyUp={(e) => {e.stopPropagation()}}
             onBlur={returnInputValue}
             onChange={returnInputValue} style={{color: textColor, backgroundColor: color}} placeholder={placeHolder} value={inputValue} />
             <p className='text-area-character-counter' style={{color: textColor}}>{inputValue?.length} / {maxLength} </p>

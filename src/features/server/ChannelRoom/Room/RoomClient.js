@@ -568,10 +568,10 @@ export class RoomClient {
                         mandatory: {
                             chromeMediaSource: 'desktop',
                             chromeMediaSourceId: deviceId,
-                            width: 640,
-                            height: 480,
-                            maxFrameRate: 24,
-                            minFrameRate: 24,
+                            width: 960,
+                            height: 540,
+                            maxFrameRate: 30,
+                            minFrameRate: 30,
                         }
                     }
                 };
@@ -599,8 +599,8 @@ export class RoomClient {
         let microphone_stream;
 
         try {
-            stream = (screen && experimental_audio) ? await navigator.mediaDevices.getDisplayMedia({video: {frameRate: 24, echoCancellation: true, deviceId: deviceId, width: 640, height: 480}, audio: {deviceId: deviceId, echoCancellation: true, autoGainControl: false, noiseSuppression: false}, systemAudio: 'exclude'}) : await navigator.mediaDevices.getUserMedia(mediaConstraints);
-
+            stream = (screen && experimental_audio) ? await navigator.mediaDevices.getDisplayMedia({video: {mandatory: {width: 960, height: 540, frameRate: 30, deviceId: deviceId}}, audio: {deviceId: deviceId, echoCancellation: true, autoGainControl: false, noiseSuppression: false}}) : await navigator.mediaDevices.getUserMedia(mediaConstraints);
+            
             if (screen) {
 
                 stream.getVideoTracks()[0].contentHint = 'motion'

@@ -16,11 +16,9 @@ export const ChannelIcon = ({textOnly, locked, initial, getFile, type}) => {
     const textColor = useSelector(selectTextColor);
 
     return (
-        <div style={{border: `solid 2px ${textColor}`, borderRadius: '50%'}} className='channel-icon-container'>
-            <div style={{position: 'absolute', top: '-10px', left: '-10px', zIndex: 5}}>
-                <AltEditIcon />
-            </div>
-            <ImageInput borderRadius='50%' imageProcessingFontSize={'0.5rem'} maxSize={0.4} getFile={getFile} initalImage={initial} disableIcon={true} maxDimensions={50} borderWidth={2} width='100%' height='100%'  />
+        <div style={{borderRadius: '50%'}} className='channel-icon-container'>
+            
+            <ImageInput  borderRadius='50%' imageProcessingFontSize={'0.5rem'} maxSize={0.4} getFile={getFile} initalImage={initial} disableIcon={true} maxDimensions={50} borderWidth={2} width='100%' height='100%'  />
             {type === 'mediahistory' ?
             <HistoryIcon width={20} height={20} /> :
             type === 'subreddit' ?

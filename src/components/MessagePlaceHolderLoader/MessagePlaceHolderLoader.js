@@ -1,9 +1,10 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { selectPrimaryColor, selectSecondaryColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
-import {motion} from 'framer-motion';
 
-export const MessagePlaceHolderLoader = () => {
+import "./MessagePlaceHolderLoader.css";
+
+export const MessagePlaceHolderLoader = ({arr = [300, 100, 60]}) => {
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
@@ -11,138 +12,39 @@ export const MessagePlaceHolderLoader = () => {
 
     return (
         <>
-        <div
-        style={{
-            width: 'calc(100% - 10px)',
-            height: '500px',
-            borderRadius: '8px',
-            overflow: 'hidden',
-            position: 'relative',
-            marginBottom: 5,
-            flexShrink: 0,
-            marginLeft: 5
-        }}
-        >
-            <motion.div 
+        {arr.map(h => {
+            return (
+            <div
+            className='loading-message-placeholder-container'
             style={{
-                background: `linear-gradient(270deg, ${secondaryColor}, ${primaryColor}, ${secondaryColor})`,
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                backgroundSize: '600% 600%',
+                height: h,
             }}
-            initial={{backgroundPosition: '0% 50%'}}
-            animate={{backgroundPosition: ['0% 50%', '300% 50%']}}
-            transition={{ease: 'linear', duration: 3, repeat: Infinity}}
-            ></motion.div>  
-        </div>
-        <div
-        style={{
-            width: 'calc(100% - 10px)',
-            height: '150px',
-            borderRadius: '8px',
-            overflow: 'hidden',
-            position: 'relative',
-            marginBottom: 5,
-            flexShrink: 0,
-            marginLeft: 5
-            
-        }}>
-            <motion.div 
-            style={{
-                background: `linear-gradient(270deg, ${secondaryColor}, ${primaryColor}, ${secondaryColor})`,
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                backgroundSize: '600% 600%',
-            }}
-            initial={{backgroundPosition: '0% 50%'}}
-            animate={{backgroundPosition: ['0% 50%', '300% 50%']}}
-            transition={{ease: 'linear', duration: 3, repeat: Infinity}}
-            ></motion.div>  
-        </div>
-        <div
-        style={{
-            width: 'calc(100% - 10px)',
-            height: '300px',
-            borderRadius: '8px',
-            overflow: 'hidden',
-            position: 'relative',
-            marginBottom: 5,
-            flexShrink: 0,
-            marginLeft: 5
-        }}>
-            <motion.div 
-            style={{
-                background: `linear-gradient(270deg, ${secondaryColor}, ${primaryColor}, ${secondaryColor})`,
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                backgroundSize: '600% 600%',
-            }}
-            initial={{backgroundPosition: '0% 50%'}}
-            animate={{backgroundPosition: ['0% 50%', '300% 50%']}}
-            transition={{ease: 'linear', duration: 3, repeat: Infinity}}
-            ></motion.div>  
-        </div>
-        <div
-        style={{
-            width: 'calc(100% - 10px)',
-            height: '150px',
-            borderRadius: '8px',
-            overflow: 'hidden',
-            position: 'relative',
-            marginBottom: 5,
-            flexShrink: 0,
-            marginLeft: 5
-        }}>
-            <motion.div 
-            style={{
-                background: `linear-gradient(270deg, ${secondaryColor}, ${primaryColor}, ${secondaryColor})`,
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                backgroundSize: '600% 600%',
-            }}
-            initial={{backgroundPosition: '0% 50%'}}
-            animate={{backgroundPosition: ['0% 50%', '300% 50%']}}
-            transition={{ease: 'linear', duration: 3, repeat: Infinity}}
-            ></motion.div>  
-        </div>
-        <div
-        style={{
-            width: 'calc(100% - 10px)',
-            height: '600px',
-            borderRadius: '8px',
-            overflow: 'hidden',
-            position: 'relative',
-            marginBottom: 5,
-            flexShrink: 0,
-            marginLeft: 5
-        }}>
-            <motion.div 
-            style={{
-                background: `linear-gradient(270deg, ${secondaryColor}, ${primaryColor}, ${secondaryColor})`,
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                backgroundSize: '600% 600%',
-            }}
-            initial={{backgroundPosition: '0% 50%'}}
-            animate={{backgroundPosition: ['0% 50%', '300% 50%']}}
-            transition={{ease: 'linear', duration: 3, repeat: Infinity}}
-            ></motion.div>  
-        </div>
+            >   
+                <div 
+                style={{
+                    background: secondaryColor,
+                }}
+                
+                className='profile-image-loading-place-holder'>
+
+                </div>
+                <div className='message-content-loading-wrapper'>
+                    <div style={{
+                    background: secondaryColor,
+                }} className='sender-info-loading'></div>
+                    <div 
+                    className='content-place-holder-loader'
+                    style={{
+                        background: secondaryColor,
+                        top: 0,
+                        left: 0,
+                    }}
+                    ></div>  
+                </div>
+            </div>
+            )
+        })}
+        
         </>
   )
 }

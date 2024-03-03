@@ -31,11 +31,11 @@ export const NsfwImageOverlay = ({borderRadius = '10px', height = '100%'}) => {
             minWidth: 100
         }}
         className='nsfw-image-overlay'>
-            <h3 style={{color: textColor, pointerEvents: 'none', textAlign: 'center'}}>NSFW</h3>
-            <p style={{color: textColor, pointerEvents: 'none', textAlign: 'center'}}>Click to Reveal</p>
+            <h3 style={{color: textColor, pointerEvents: 'none', textAlign: 'center', margin: "0 0 2px 0px", fontSize: '.8rem'}}>NSFW</h3>
+            <p style={{color: textColor, pointerEvents: 'none', textAlign: 'center', margin: 0, fontSize: '0.7rem'}}>Click to Reveal</p>
             <div
             style={{
-                marginTop: 10
+                marginTop: 4
             }}
             >
                 <InfoButton desc_width={200} description={"You can disable the NSFW filter by going to settings/social"} padding={5} width={20} height={20} />

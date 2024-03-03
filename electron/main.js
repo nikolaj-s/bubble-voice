@@ -361,9 +361,7 @@ ipcMain.handle('SCREEN_SHOT', async () => {
     const capture = await desktopCapturer.getSources({types: ['window'], thumbnailSize: {width: 1920, height: 1080}})
     .then(captures => {
       
-      const sources = captures.filter(c => !c.name.includes('D3DProxyWindow') && !c.name.includes('overlay'));
-      
-      console.log(sources[0])
+      const sources = captures.filter(c => !c.name.includes('overlay'));
       
       return {data: sources[0].thumbnail.toJPEG(), preview: sources[0].thumbnail.toDataURL(), text: sources[0].name}
     })

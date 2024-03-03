@@ -59,9 +59,9 @@ export const fetchMessages = createAsyncThunk(
             .catch(error => {
                 dispatch(throwServerError({error: true, errorMessage: error.errorMessage}))
             })
-            console.log(data)
+
             return data;
-           
+             
         } catch (error) {
             console.log(error)
             dispatch(throwServerError({error: true, errorMessage: error.message}))
@@ -367,14 +367,16 @@ const SocialSlice = createSlice({
         },
         [fetchMessages.fulfilled]: (state, action) => {
             
-            state.loading = false;
+            
 
             if (action.payload.messages.length < 16) {
                 state.showingNsfwNotice = action.payload.nsfw_notice;
             }
 
             state.messages[action.payload.channel_id] = action.payload.messages;
-                
+
+            state.loading = false;
+            
         },
         [RequestDeleteMessage.pending]: (state, action) => {
             state.altLoading = true;

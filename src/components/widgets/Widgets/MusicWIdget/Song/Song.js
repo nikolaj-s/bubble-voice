@@ -16,7 +16,7 @@ import "./Song.css";
 import { setExpandedContent } from '../../../../../features/ExpandContent/ExpandContentSlice';
 import { PlayButton } from '../../../../buttons/PlayButton/PlayButton';
 
-export const Song = ({in_channel, in_social, search_result, playing, author, id, image, name, duration, action, liked, saved, addToQueue, inQueue, removeFromQueue, width = null, added_by, url}) => {
+export const Song = ({profile_pin, in_channel, in_social, search_result, playing, author, id, image, name, duration, action, liked, saved, addToQueue, inQueue, removeFromQueue, width = null, added_by, url}) => {
 
     const dispatch = useDispatch();
 
@@ -36,7 +36,7 @@ export const Song = ({in_channel, in_social, search_result, playing, author, id,
 
     return (
         <div 
-        style={{width: width, height: in_social ? "90px" : null, margin: in_social ? '5px 0px' : null}}
+        style={{width: width, height: profile_pin ? null : in_social ? "90px" : null, margin: in_social ? '5px 0px' : null}}
         onMouseLeave={(e) => {
             if (in_social) return;
 
@@ -49,8 +49,8 @@ export const Song = ({in_channel, in_social, search_result, playing, author, id,
         }} className='song-container'>
             <div
             style={{
-                width: in_social ? 90 : null,
-                height: in_social ? 90 : null
+                width: profile_pin ? null : in_social ? 90 : null,
+                height: profile_pin ? null : in_social ? 90 : null
             }}
             className='song-thumbnail-container'>
 

@@ -1,14 +1,22 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
-import { selectAudioOutput } from '../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
+import { selectAudioOutput, selectExperimentalAudioCapture } from '../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
+import { selectScreenShareState } from '../controlBar/ControlBarSlice';
+import { handleAmplifiedAudioOnStream } from '../../util/AudioAmplifier';
 
 export let audioCtx;
 
 export let audioDest;
 
+export let streaming = false;
+
 export const AudioInit = () => {
 
     const audioOutputDevice = useSelector(selectAudioOutput);
+
+    const sharingScreen = useSelector(selectScreenShareState);
+
+    const streamAudio = useSelector(selectExperimentalAudioCapture);
 
     React.useEffect(() => {
 
@@ -17,7 +25,7 @@ export const AudioInit = () => {
         audioCtx = new AudioContext();
 
     }, []);
-
+    
     React.useEffect(() => {
         try {
             let id = "";
@@ -33,6 +41,17 @@ export const AudioInit = () => {
             return;
         }
     }, [audioOutputDevice])
+
+    
+    React.useEffect(() => {
+        console.log(sharingScreen)
+        if (!sharingScreen) {
+            handleAmplifiedAudioOnStream(true);
+        } else {
+            handleAmplifiedAudioOnStream(false);
+        }
+
+    }, [sharingScreen, streamAudio])
 
 
     React.useEffect(() => {

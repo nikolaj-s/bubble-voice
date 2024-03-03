@@ -10,7 +10,7 @@ import { LoadingSpinner } from './Spinner/LoadingSpinner';
 import { LoadingSuccess } from './LoadingSuccess/LoadingSuccess';
 
 // state
-import { selectSecondaryColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassColor, selectSecondaryColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./Loading.css";
@@ -27,6 +27,8 @@ export const Loading = ({backgroundColor, loading = false, error = false, overfl
     const [mounted, toggleMounted] = React.useState(false)
 
     const secondaryColor = useSelector(selectSecondaryColor);
+
+    const glassColor = useSelector(selectGlassColor)
 
     React.useEffect(() => {
 
@@ -97,7 +99,7 @@ export const Loading = ({backgroundColor, loading = false, error = false, overfl
         
         style={{
             zIndex: zIndex,
-            backgroundColor: backgroundColor
+            backgroundColor: backgroundColor || glassColor
         }}
         className='loading-container' >
             

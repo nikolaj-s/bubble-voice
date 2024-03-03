@@ -54,7 +54,7 @@ export const EditMemberPanel = ({
         <div style={{flexShrink: 0,padding: '5px', borderRadius: '8px', maxWidth: 500, position: 'relative', width: '100%', minHeight: 800}} className='edit-member-panel-container'>
             <div style={{display: 'flex', width: '100%', alignItems: 'center',}}>
                 <InputTitle width={'calc(100% - 50px)'} title={"Update Profile Image"} />
-                <TogglePreviewButton action={() => {togglePreview(!preview)}} desc_width={60} description={"Preview"} invert={true} active={previewBio} padding={3} width={30} height={30} desc_height={15} />
+                <TogglePreviewButton action={() => {togglePreview(!preview)}} desc_width={60} invert={true} active={previewBio} padding={"3px 5px"} width={90} height={30} desc_height={15} />
             </div>
             <div
             style={{

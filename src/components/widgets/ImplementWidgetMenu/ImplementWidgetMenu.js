@@ -234,7 +234,7 @@ export const ImplementWidgetMenu = ({active = false, type, name, close}) => {
                     {type === 'music' || type === 'wheel-spin' || type === 'subreddit' ? null : 
                     <InputTitle title={inputTitle} />}
                     {type === 'title' || type === 'dynamicGallery' ? <TextInput inputValue={textValue} action={handleTextValue} placeholder={type === 'dynamicGallery' ? "Image Query" : "Text"} /> : null}
-                    {type === 'plainText' || type === 'list' ? <TextArea inputValue={textValue} action={handleTextValue} placeHolder={"Text"} /> : null}
+                    {type === 'plainText' || type === 'list' ? <TextArea height={300} inputValue={textValue} action={handleTextValue} placeHolder={"Text"} /> : null}
                     {type === 'image' ? 
                     <div className='adding-widget-image'>
                         <ImageInput  objectFit='contain' backgroundColor={'black'} maxDimensions={1280} getFile={handleSetImage} borderRadius='5px' /> 

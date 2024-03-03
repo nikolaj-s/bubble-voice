@@ -82,6 +82,7 @@ const ServerDashBoardSlice = createSlice({
         loadingActivityFeed: true,
         hideImageOfTheDay: false,
         hideActivityFeed: true,
+        hideRecentlyPinnedMessage: false,
         pinnedSubReddits: [],
         loadedSubreddits: {}
     },
@@ -101,6 +102,9 @@ const ServerDashBoardSlice = createSlice({
         removePinnedMessage: (state, action) => {
            
             state.pins = state.pins.filter(p => p._id !== action.payload.message._id);
+        },
+        toggleRecentPinnedMessage: (state, action) => {
+            state.hideRecentlyPinnedMessage = !state.hideRecentlyPinnedMessage;
         },
         setPinnedMessages: (state, action) => {
             state.pins = action.payload;
@@ -191,6 +195,8 @@ export const selectPinnedSubreddits = state => state.ServerDashBoardSlice.pinned
 
 export const selectLoadedSubreddits = state => state.ServerDashBoardSlice.loadedSubreddits;
 
-export const {setLoadedSubReddit, setPinnedSubReddits, setActivityFeed, addActivityMessage, toggleHideActivityFeed, toggleHideImageOfTheDay, setPinnedMessages, removePinnedMessage, addPinnedMessage  } = ServerDashBoardSlice.actions;
+export const selectHideRecentPin = state => state.ServerDashBoardSlice.hideRecentlyPinnedMessage;
+
+export const {toggleRecentPinnedMessage, setLoadedSubReddit, setPinnedSubReddits, setActivityFeed, addActivityMessage, toggleHideActivityFeed, toggleHideImageOfTheDay, setPinnedMessages, removePinnedMessage, addPinnedMessage  } = ServerDashBoardSlice.actions;
 
 export default ServerDashBoardSlice.reducer;

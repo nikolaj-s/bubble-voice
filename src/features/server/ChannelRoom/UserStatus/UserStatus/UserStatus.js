@@ -7,6 +7,7 @@ import { setPanelPosition, setSelectedMember } from '../../MemberPanel/MemberPan
 import "./UserStatus.css";
 import { GetTimeDifference } from '../../../../../util/GetTimeDifference';
 import { AwayIcon } from '../../../../../components/Icons/AwayIcon/AwayIcon';
+import { UserTypingIndicator } from '../../../../../components/UserTypingIndicator/UserTypingIndicator';
 
 export const UserStatus = ({user}) => {
 
@@ -48,7 +49,7 @@ export const UserStatus = ({user}) => {
         dispatch(setPanelPosition({y: (e.view.innerHeight - 600) < 0 ? 30 : e.pageY, x: (e.view.innerWidth - e.pageX) < 350 ? (e.pageX - 350) : e.pageX, origin: e.view.innerHeight - 600 < 0 ? false : (e.view.innerHeight - e.pageY) < 500 ? true : false, left: null}));
     }
     
-    
+
 
     return (
         <div 
@@ -85,8 +86,12 @@ export const UserStatus = ({user}) => {
             : null}
             <div 
             className={`user-name-status-wrapper ${user._id}-user-name-status-wrapper`}>
-                <h3 style={{color: textColor,}} >{user.display_name}</h3>
-                {user.status === 'online' ? null :
+                <div style={{display: 'flex', alignItems: 'center', width: '100%'}}>
+                    <h3 style={{color: textColor,}} >{user.display_name}</h3>
+                    {user.channel_status ? <UserTypingIndicator /> : null}
+                </div>
+                
+                {user.status.toLowerCase() === 'online' ? null :
                 <p style={{color: textColor}}>{(user.status === 'offline' && timeStamp !== "") ? "Last Online: " + timeStamp : user.status ? user.status : 'offline'}</p>}
             </div>
         </div>

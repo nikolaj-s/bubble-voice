@@ -6,7 +6,7 @@ import { io } from "socket.io-client";
 import { useNavigate, useRoutes } from 'react-router';
 
 // state
-import {clearSearchData, addNewChannel, assignNewServerGroup, clearServerState, deleteChannel, fetchPersistedMusicVolume, fetchServerDetails, handleLeavingServer, leaveChannel, newMessage, removeSongFromWidget, reOrderChannels, saveSongToWidget, selectCurrentChannel, selectCurrentChannelId, selectInactiveChannel, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, setServerName, throwServerError, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateInactiveChannel, updateMemberActiveStatus, updateMemberStatus, updateServerBanner, updateServerGroups, userBanned, userJoinsChannel, userJoinsServer, userLeavesChannel, userLeavesServer, updateMemberFile, toggleConnectionLostState, updateChannelStatus, setKickedState, setWelcomeMessage, updateBannedKeywords, addCategory, removeCategory, reOrderCategories} from '../ServerSlice';
+import {clearSearchData, addNewChannel, assignNewServerGroup, clearServerState, deleteChannel, fetchPersistedMusicVolume, fetchServerDetails, handleLeavingServer, leaveChannel, newMessage, removeSongFromWidget, reOrderChannels, saveSongToWidget, selectCurrentChannel, selectCurrentChannelId, selectInactiveChannel, selectLoadingServerDetailsState, selectServerBanner, selectServerId, selectServerName, selectServerSettingsOpenState, setServerName, throwServerError, toggleServerPushToTalkState, updateChannel, updateChannelWidgets, updateInactiveChannel, updateMemberActiveStatus, updateMemberStatus, updateServerBanner, updateServerGroups, userBanned, userJoinsChannel, userJoinsServer, userLeavesChannel, userLeavesServer, updateMemberFile, toggleConnectionLostState, updateChannelStatus, setKickedState, setWelcomeMessage, updateBannedKeywords, addCategory, removeCategory, reOrderCategories, updateUserChannelStatus} from '../ServerSlice';
 import { selectUsername } from '../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { getToken, url } from '../../../util/Validation';
 import { playSoundEffect } from '../../settings/soundEffects/soundEffectsSlice';
@@ -175,6 +175,11 @@ const Bar = () => {
             dispatch(updateMemberStatus(data))
 
         })
+
+        socket.on('update channel status', (data) => {
+            dispatch(updateUserChannelStatus(data));
+        })
+
         socket.on('new message', (data) => {
 
             dispatch(pushSytemNotification(data));
@@ -186,14 +191,8 @@ const Bar = () => {
             if (data.screen_shot) {
                 dispatch(addActivityMessage(data));
             }
-
-            if (window.location.hash.includes(data.channel_id)) {
-
-                dispatch(playSoundEffect({default: "newMessage"}))
-
-                dispatch(addNewWidgetOverlayToQueue({...data, action: 'new-message'}));
             
-            } 
+            dispatch(addNewWidgetOverlayToQueue({...data, action: 'new-message'}));
             
         })
 

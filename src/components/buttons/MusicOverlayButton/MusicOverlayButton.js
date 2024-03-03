@@ -10,12 +10,12 @@ export const MusicOverlayButton = ({width, height, action, description, playing 
     const color = useSelector(selectTextColor);
 
     return (
-        <ButtonAnimationWrapper desc_width={120} borderRadius={borderRadius} description={description} width={width} height={height} action={action} >
+        <ButtonAnimationWrapper desc_width={50} borderRadius={borderRadius} description={description} width={width} height={height} action={action} >
             <div className={`music-overlay-button-wrapper ${playing ? 'music-playing-class' : null}`}>
-                <span style={{backgroundColor: color}} />
-                <span style={{backgroundColor: color}} />
-                <span style={{backgroundColor: color}} />
-                <span style={{backgroundColor: color}} />
+                <span className='ind-1' style={{backgroundColor: color}} />
+                <span className='ind-2' style={{backgroundColor: color}} />
+                <span className='ind-3' style={{backgroundColor: color}} />
+                <span className='ind-4' style={{backgroundColor: color}} />
             </div>
         </ButtonAnimationWrapper>
     )

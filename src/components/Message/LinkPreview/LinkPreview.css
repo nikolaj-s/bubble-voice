@@ -22,10 +22,12 @@
 
 .link-info-preview-wrapper {
     margin-left: 2px;
+    max-width: calc(100% - 4px);
 }
 
 
 .link-info-preview-wrapper h3,
 .link-info-preview-wrapper p {
     margin: 5px 0px;
+    word-break: break-all;
 }

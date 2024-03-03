@@ -4,6 +4,27 @@ import { audioCtx } from "../features/AudioInit/AudioInit";
 
 export const audioMap = new Map();
 
+let streaming = false;
+
+export const handleAmplifiedAudioOnStream = (stream_state) => {
+    console.log(streaming)
+    streaming = stream_state;
+
+    for (const [key, entry] of audioMap.entries()) {
+        if (stream_state) {
+            if (entry.volume >= 1) {
+                entry.media.volume = 0.99;
+                entry.amplify(0);
+            }
+        } else {
+            if (entry.volume >= 1) {
+                entry.media.volume = 0;
+                entry.amplify(entry.volume);
+            }
+        }
+    }
+}
+
 export const handleAmplifyLevel = (e) => {
     
     let stream = e.target.className.includes('stream-audio');
@@ -25,6 +46,10 @@ export const handleAmplifyLevel = (e) => {
             volume = prefs.volume;
         }
     } 
+    console.log(streaming);
+    if (streaming) {
+        volume = volume >= 1 ? 0.99 : volume;
+    }
 
     if (e.target.muted) volume = 0;
 
@@ -35,7 +60,9 @@ export const handleAmplifyLevel = (e) => {
         
         if (amplified) {
 
-            amplified.amplify(Number(volume).toFixed(2));
+            amplified.amplify(Number(Number(volume).toFixed(2)));
+
+            amplified.volume = Number(Number(volume).toFixed(2));
 
         } else {
 
@@ -47,6 +74,7 @@ export const handleAmplifyLevel = (e) => {
                     source: context.createMediaStreamSource(mediaElem.srcObject),
                     gain: context.createGain(),
                     media: mediaElem,
+                    volume: Number(volume),
                     amplify: function(multiplier) { result.gain.gain.value = multiplier < 1 ? 0 : multiplier; },
                     getAmpLevel: function() { return result.gain.gain.value; }
                 };
@@ -63,8 +91,10 @@ export const handleAmplifyLevel = (e) => {
             amplified = amplifyMedia(e.target, Number(volume).toFixed(2));
         
         }
-
+        console.log(amplified)
         audioMap.set(consumer_id, amplified);
 
     }
 }
+
+handleAmplifyLevel.bind(streaming);

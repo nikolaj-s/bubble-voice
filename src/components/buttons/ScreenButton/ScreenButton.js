@@ -6,7 +6,7 @@ import { motion, useAnimation } from 'framer-motion';
 // style
 import "./ScreenButton.css";
 import { useSelector } from 'react-redux';
-import { selectAccentColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 export const ScreenButton = ({thumbnail, id, name, action, icon}) => {
 
@@ -14,7 +14,7 @@ export const ScreenButton = ({thumbnail, id, name, action, icon}) => {
 
     const accentColor = useSelector(selectAccentColor);
 
-    const secondaryColor = useSelector(selectSecondaryColor);
+    const secondaryColor = useSelector(selectPrimaryColor);
 
     const textColor = useSelector(selectTextColor);
 
@@ -29,6 +29,8 @@ export const ScreenButton = ({thumbnail, id, name, action, icon}) => {
         })
     }
 
+    console.log(name)
+
     return (
         <motion.div 
         onClick={handleAction}
@@ -38,13 +40,10 @@ export const ScreenButton = ({thumbnail, id, name, action, icon}) => {
         onMouseOver={() => {handleAnimation(secondaryColor)}}
         onMouseOut={() => {handleAnimation(accentColor)}}
         className='screen-button-container' >
-            <Image zIndex={0} position='absolute' cursor='pointer' image={thumbnail} objectFit="contain" />
+            <img src={thumbnail} />
             <p
             style={{color: textColor}}
             >{name}</p>
-            <div className='screen-app-icon-container'>
-                <Image position='relative' image={icon} />
-            </div>
         </motion.div>
     )
 }

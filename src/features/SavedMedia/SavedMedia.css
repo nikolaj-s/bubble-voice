@@ -2,10 +2,10 @@
 .saved-media-outer-container {
     position: relative;
     width: 400px;
-    height: calc(100% - 32px - 20px);
+    height: calc(100% - 32px - 12px);
     padding: 5px 5px 10px 5px;
     z-index: 6;
-    border-radius: 8px;
+    border-radius: 15px 15px 0px 0px;
     overflow: hidden;
     box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.561);
 }

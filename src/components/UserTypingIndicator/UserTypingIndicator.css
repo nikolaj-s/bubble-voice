@@ -1,0 +1,30 @@
+.user-typing-indicator-container {
+    width: 26px;
+    height: 12px;
+    padding: 1px 3px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px;
+}
+.dot-2 {
+    margin: 0 1px;
+}
+.dot-2-animation {
+    animation: alt-fade-in-out 1s infinite alternate ease;
+    animation-delay: 1.5s;
+}
+.dot-3-animation {
+    animation-delay: 2.5s;
+    animation: alt-fade-in-out 1s infinite alternate ease;
+}
+.dot-1-animation {
+    animation: alt-fade-in-out 1s infinite alternate ease;
+}
+
+.dot {
+    width: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    height: 8px;
+}

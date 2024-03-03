@@ -91,6 +91,7 @@ const Menu = () => {
 
     return (
         <motion.div 
+
         transition={{duration: 0.1}}
         initial={{opacity: 0}}
         animate={{opacity: 1}}

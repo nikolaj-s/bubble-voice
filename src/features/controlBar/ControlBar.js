@@ -151,10 +151,10 @@ export const ControlBar = () => {
                 <ControlBarOptionsButton action={() => {toggleExpanded(!expandedOpen)}} state={!expandedOpen} />
                 <div style={{backgroundColor: accentColor}} className='controls-wrapper'>  
                     <MicToggleButton 
-                    width={23}
-                    height={19}
-                    padding={15}
-                    desc_space={35}
+                    width={32}
+                    height={18}
+                    padding={9}
+                    desc_space={30}
 
                     action={() => {toggleFunction('microphoneState')}} 
                     state={microphoneState} 
@@ -162,11 +162,11 @@ export const ControlBar = () => {
                     id={"toggle-microphone-button"}
                     />
                     <AudioToggleButton 
-                    width={20}
-                    borderRadius={0}
-                    height={16}
-                    padding={"15px 17px"}
-                    desc_space={35}
+                    width={32}
+                    borderRadius={5}
+                    height={18}
+                    padding={9}
+                    desc_space={30}
                     desc_width={80}
                     opacity={0.5}
                     altInvert={true}
@@ -177,10 +177,10 @@ export const ControlBar = () => {
                     description={(current_channel_id === null  || channel.disable_streams) ? null : `${audioState ? 'Deafen' : 'Un-Deafen'}`}
                     />
                     <WebCamButton 
-                    width={20}
-                    height={16}
-                    padding={"15px 17px"}
-                    desc_space={35}
+                    width={32}
+                    height={18}
+                    padding={9}
+                    desc_space={30}
                     action={() => {toggleFunction('webCamState')}} 
                     state={webCamState} 
                     active={current_channel_id === null || channel.disable_streams || channel?.users?.length === 1}
@@ -188,10 +188,10 @@ export const ControlBar = () => {
                     loading={loadingWebCam}
                     />
                     <ShareScreenButton 
-                    width={20}
-                    height={16}
-                    padding={"15px 17px"}
-                    desc_space={35}
+                    width={32}
+                    height={18}
+                    padding={9}
+                    desc_space={30}
                     loading={loadingScreenShare}
                     action={() => {toggleFunction('screenShareState')}} 
                     state={screenShareState} 

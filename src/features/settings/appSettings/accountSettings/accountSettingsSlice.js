@@ -7,45 +7,54 @@ import { getToken, url } from "../../../../util/Validation";
 import { setServerId, throwServerError, updateMemberFile } from "../../../server/ServerSlice";
 import { socket } from "../../../server/ServerBar/ServerBar";
 import { toggleSocialAltLoading } from "../../../server/SocialSlice";
+import { setSocialData } from "../../../../util/LocalData";
 
 export const fetchAccount = createAsyncThunk(
     'accountSettingsSlice/fetchAccount',
     async (_, { rejectWithValue, dispatch, getState }) => {
+        try {
+            const token = await getToken();
 
-        const token = await getToken();
+            if (token) {
+                const account = await Axios({
+                    method: 'GET',
+                    url: `${url}/fetch-account`,
+                    headers: {"TOKEN": token},
+                    
+                }).then(response => {
+                    
+                    if (response.data.error) return rejectWithValue({error: true})
 
-        if (token) {
-            const account = await Axios({
-                method: 'GET',
-                url: `${url}/fetch-account`,
-                headers: {"TOKEN": token},
+                    if (response.data.success) return {success: true, account: response.data.account}
+
+                    return rejectWithValue({error: true});
+                }).catch(error => {
+                    dispatch(throwInitializationError("Connection Error"))
+                })
                 
-            }).then(response => {
+                if (account.account.social_data) {
+                    let parsed = new Map(JSON.parse(account.account.social_data));
+                    
+                    setSocialData(parsed);
+                }
                 
-                if (response.data.error) return rejectWithValue({error: true})
+                if (account.account.last_server) {
 
-                if (response.data.success) return {success: true, account: response.data.account}
+                    dispatch(setServerId(account.account.last_server));
 
-                return rejectWithValue({error: true});
-            }).catch(error => {
-                dispatch(throwInitializationError("Connection Error"))
-            })
+                    window.location.hash = `/dashboard/server/${account.account.last_server}`;
 
-            console.log(account)
+                } else {
+                    window.location.hash = '/dashboard';
+                }
 
-            if (account.account.last_server) {
-
-                dispatch(setServerId(account.account.last_server));
-
-                window.location.hash = `/dashboard/server/${account.account.last_server}`;
-
+                return account;
             } else {
-                window.location.hash = '/dashboard';
+                return rejectWithValue({error: true, errorMessage: "No Valid Token"});
             }
-
-            return account;
-        } else {
-            return rejectWithValue({error: true, errorMessage: "No Valid Token"});
+        } catch (err) {
+            console.log(err);
+            return rejectWithValue({error: true})
         }
     }
 )
@@ -269,7 +278,7 @@ const accountSettingsSlice = createSlice({
         },
         [fetchAccount.rejected]: (state, action) => {
             
-            if (action.payload.error) {
+            if (action?.payload?.error) {
                 window.location.hash = "/signin"
             }
         },

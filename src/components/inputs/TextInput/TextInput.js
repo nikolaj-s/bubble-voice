@@ -51,6 +51,7 @@ export const TextInput = ({action = () => {}, placeholder, inputValue, keyCode =
     return (
         
         <motion.div
+        onKeyDown={(e) => {e.stopPropagation()}}
         onBlur={(e) => {handleAnimation(e, color)}} 
         onFocus={(e) => {handleAnimation(e, focusColor)}}
         onMouseOver={(e) => {

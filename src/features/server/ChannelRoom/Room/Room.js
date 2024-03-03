@@ -455,8 +455,8 @@ const Component = () => {
             smoothingTimeConstant: 0.2,
             minCaptureFreq: 85,
             maxCaptureFreq: 255,
-            noiseCaptureDuration: 1200,
-            minNoiseLevel: 0.45,
+            noiseCaptureDuration: 1000,
+            minNoiseLevel: 0.3,
             maxNoiseLevel: 0.7,
             avgNoiseMultiplier: 1.2
         }

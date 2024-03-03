@@ -1,8 +1,8 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice'
+import { selectAccentColor, selectGlassPrimaryColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 import { MusicOverlayButton } from '../../../../../components/buttons/MusicOverlayButton/MusicOverlayButton';
-import { selectLoadingMusicState, selectMediaColor, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, selectMuteState, selectTime, setMediaColor, toggleLoadingMusic, toggleMuted, updateMusicVolume } from './MusicSlice';
+import { selectLoadingMusicState, selectMediaColor, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, selectMuteState, selectTime, setMediaColor, toggleLoadingMusic, toggleMuted, toggleOverlay, updateMusicVolume } from './MusicSlice';
 import { selectUsername } from '../../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { selectCurrentChannel, selectMusicSavedState, selectUsersPermissions, throwServerError } from '../../../ServerSlice';
 import { SkipButton } from '../../../../../components/buttons/SkipButton/SkipButton';
@@ -133,25 +133,12 @@ export const MediaControls = ({hover}) => {
         transition={{duration: 0.1}}
        
         className='behind-music-player-overlay-controls'>
-            {showMediaWidget ?
-            <motion.div
-            initial={{
-                height: '0px'
-            }}
-            animate={{
-                height: '100%'
-            }}
-
-            className='media-widget-room-wrapper'
-            >
-                <MusicWidget roomOverlay={true} controls={false} />
-            </motion.div>
-            : null}
+            
             <div
             style={{backgroundColor: primaryColor}}
             className='media-player-inner-controls-wrapper'>
                 {musicQueue.length === 0 ? null : <ImageButton borderRadius={10} description={hideVideo ? "Show Video" : "Hide Video"} desc_space={14} width={32} height={32} image={musicQueue[0]?.thumbnail} action={toggleHideVideo} padding={4} />}
-                <MusicOverlayButton borderRadius={10} description={showMediaWidget ? 'Hide Media Widget' : "Show Media Widget"} action={() => {toggleShowMediaWidget(!showMediaWidget)}} playing={(musicPlaying && musicQueue.length > 0)} width={20} height={20} />
+                <MusicOverlayButton borderRadius={10} description={showMediaWidget ? 'Hide Widget' : "Show Widget"} action={() => {dispatch(toggleOverlay())}} playing={(musicPlaying && musicQueue.length > 0)} width={20} height={20} />
 
                 {(channel?.locked_media && channel?.media_auth?.includes(username)) || channel?.channel_owner === username || permissions?.server_group_name === 'Owner' || !channel?.locked_media ? !musicPlaying ? <PlayButton borderRadius={10} action={handleTogglePlaying} width={20} height={20}  /> : <PauseButton borderRadius={10} action={handleTogglePlaying} width={20} height={20} /> : <LockedIcon width={30} height={85} padding={5} i_height={25} i_width={25}  />}
                 {(channel?.locked_media && channel?.media_auth?.includes(username)) || channel?.channel_owner === username || permissions?.server_group_name === 'Owner' || !channel?.locked_media ? <SkipButton borderRadius={10} action={handleSkip} width={20} height={20} /> : null}

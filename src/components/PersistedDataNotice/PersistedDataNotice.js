@@ -4,7 +4,7 @@ import { selectTextColor } from '../../features/settings/appSettings/appearanceS
 
 import "./PersistedDataNotice.css";
 
-export const PersistedDataNotice = ({persisted, channelName, type}) => {
+export const PersistedDataNotice = ({persisted, channelName, type, guidelines}) => {
 
     const textColor = useSelector(selectTextColor);
 
@@ -17,7 +17,13 @@ export const PersistedDataNotice = ({persisted, channelName, type}) => {
                 "This is the beginning of the screen shots taken within this bubble."
                 :
                 `Welcome To ${channelName}`}
+                
             </h3>
+            {guidelines ?
+            <p style={{color: textColor}}>
+            {guidelines}
+            </p>
+            : null}
         </div>
         </>
     )

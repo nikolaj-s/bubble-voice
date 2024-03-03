@@ -125,7 +125,8 @@ export const Message = ({pinned_to_profile_state, activity_feed = false,dashboar
                     {message?.emoji ?
                     <h2 className='emoji-reaction-mesage'>{message.emoji}</h2>
                     : null}
-                    {(previous_message?.username === current_message?.username) && (previous_message?.song && current_message?.song) && (prevDate?.getDate() === date?.getDate()) ? null :
+                    {(current_message?.song && pinned_to_profile_state) ? null :
+                    (previous_message?.username === current_message?.username) && (previous_message?.song && current_message?.song) && (prevDate?.getDate() === date?.getDate()) ? null :
                     <MessageText loading={message.loading} style={message.textStyle} color={textColor} text={message.text} />
                     }
                     {(message.image || message.video || message.iFrame || message.reddit) || message.gallery ? null : <MessageLink link={message.link} />
@@ -135,7 +136,7 @@ export const Message = ({pinned_to_profile_state, activity_feed = false,dashboar
                     : null}
                     <div className='message-content-wrapper'>
                             {message.song ?
-                            <Song url={message?.song?.id} addToQueue={handleAddToQueue} in_channel={currentChannelId} in_social={true} name={message.song.title} duration={message.song.duration} image={message.song.thumbnail} author={message.song.author}  />
+                            <Song profile_pin={pinned_to_profile_state} url={message?.song?.id} addToQueue={handleAddToQueue} in_channel={currentChannelId} in_social={true} name={message.song.title} duration={message.song.duration} image={message.song.thumbnail} author={message.song.author}  />
                             : null}
                             {message.reddit ?
                             <RedditPost action={expandContent} inSocial={true} data={message.reddit} />
@@ -168,9 +169,6 @@ export const Message = ({pinned_to_profile_state, activity_feed = false,dashboar
                                 <Video maxHeight={maximizeMediaSize ? '100%' : 350} id={message.local_id} video={message.video} />
                             </div>
                             : null}
-                            {current_message.nsfw && !disableNsfwBlur && !message.image ?
-                            <NsfwImageOverlay height='calc(100%)' borderRadius={10} /> :
-                            null}
                     </div>
                 </div> 
             </div>

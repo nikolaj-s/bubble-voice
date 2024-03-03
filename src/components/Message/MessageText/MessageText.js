@@ -11,7 +11,7 @@ export const MessageText = ({text, color, loading, style = {}}) => {
       textDecoration: style?.textDecoration ? 'underline' : null,
       fontWeight: style?.bold ? '600' : null,
       fontFamily: style?.fontFamily,
-
+      lineHeight: 1.5
     }}>{text}</p>
     :null}
     </>

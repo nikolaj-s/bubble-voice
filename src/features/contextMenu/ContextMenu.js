@@ -90,6 +90,8 @@ export const ContextMenu = () => {
 
     const [selectedCategory, setSelectedCategory] = React.useState(false);
 
+    const [showHideUserStatus, toggleShowHideUserStatus] = React.useState(false);
+
     const disableMediaWidget = useSelector(selectDisableMediaWidget);
 
     const loadingNewMedia = useSelector(selectLoadingNewMedia);
@@ -227,6 +229,8 @@ export const ContextMenu = () => {
         toggleUnSave(false);
 
         setMediaWidgetState(false);
+
+        toggleShowHideUserStatus(false);
         
         const path = e.path || (e.composedPath && e.composedPath());
         
@@ -255,6 +259,11 @@ export const ContextMenu = () => {
                     toggleHandleCreateChannelState(true);
                     dispatch(toggleContextMenu(true));
                 }
+            }
+
+            if (p.className === 'user-status-bar') {
+                toggleShowHideUserStatus(true);
+                dispatch(toggleContextMenu(true));
             }
 
             if (p.className === 'music-widget-outer-container' || p.className === 'music-player-overlay-wrapper') {
@@ -1002,8 +1011,13 @@ export const ContextMenu = () => {
         dispatch(miscSettingsChannelSpecificStateChange(state));
     }
 
-    const viewSocialFeed = () => {
-        dispatch(setChannelSocialId(selectedChannel));
+    const viewSocialFeed = (channeloverideID) => {
+        if (channeloverideID) {
+            dispatch(setChannelSocialId(channeloverideID));
+        } else {
+            dispatch(setChannelSocialId(selectedChannel));
+        }
+        
     }
 
     const handleToggleSocialSoundEffect = () => {
@@ -1197,7 +1211,7 @@ export const ContextMenu = () => {
             {joinChannelState ? <CtxButton action={handleJoinChannel} name={"Join Channel"} /> : null}
             {leaveChannelState ? <CtxButton action={handleLeaveChannel} name={'Leave Channel'} /> : null}
             {editChannelState ? <CtxButton action={handleEditChannel} name={"Edit Channel"} icon={<EditIcon />} /> : null}
-            {viewSocial ? <CtxButton action={viewSocialFeed}  name={"Social"} icon={<SocialIcon color={textColor} />} /> : null}
+            {viewSocial ? <CtxButton action={() => {viewSocialFeed(null)}}  name={"Open"} icon={<SocialIcon color={textColor} />} /> : null}
             {assignPermissions ? <AssignPermissionGroupMenu rightPos={ctxCordinates.x} action={assignNewPermissionGroup} permission_groups={permissionGroups} current_permission_group={selectedUserToManage.split('-channel')[0]}  /> : null}
             {audio ? 
             <>
@@ -1211,7 +1225,7 @@ export const ContextMenu = () => {
                 <CtxMenuTitle title={"Change User Volume"} />
                 <p style={{color: textColor, fontSize: '0.8rem', margin: "0 5px 0 0"}} >{Math.floor(userVolumeLevel * 100)}%</p>
             </div>
-            <Range invert={true} save={handleUserVolumeChange} action={(value) => setUserVolumeLevel(value)} step={0.01} value={userVolumeLevel} fill={false} max={2.5} min={0} /> 
+            <Range invert={true} save={handleUserVolumeChange} action={(value) => setUserVolumeLevel(value)} step={0.01} value={userVolumeLevel} fill={false} max={2} min={0} /> 
             </>
             : null}
             {changeStreamVolumeState ? <CtxMenuTitle title={"Change Stream Volume"} /> : null}
@@ -1230,9 +1244,19 @@ export const ContextMenu = () => {
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideNonVideoParticapents")}} state={hideNonVideoParticapents} name={"Hide Non Video Participants"} /> : null}
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("disableMessagePopUp")}} state={disableMessagePopup} name={"Disable Message Overlay"} /> : null}
             {channelSpecificSettingsState ? <BoolButton action={handleToggleSocialSoundEffect} state={socialSoundEffect} name="Enable Social Sound Effect" /> : null}
-           
-            {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideUserStatus")}} state={hideUserStatus} name={"Hide User Status"} /> : null}
+            
+            {channelSpecificSettingsState || showHideUserStatus ? <BoolButton action={() => {handleChannelSpecificStateChange("hideUserStatus")}} state={hideUserStatus} name={"Hide User Status"} /> : null}
             {channelSpecificSettingsState || mediaWidgetState ? <BoolButton action={() => {handleChannelSpecificStateChange('disableMediaWidget')}} state={disableMediaWidget} name={"Hide Media Widget"} /> : null}
+            {channelSpecificSettingsState ? <div
+            style={{
+                width: '100%',
+                height: 2,
+                backgroundColor: textColor,
+                margin: "4px 0px",
+                opacity: 0.5
+            }}
+            /> : null}
+            {channelSpecificSettingsState && permissions?.user_can_view_channel_content ? <CtxButton icon={<SocialIcon />} name={"Open Social"} action={() => {viewSocialFeed(currentChannelId)}} /> : null}
             {handleCreateChannelState ? <CtxButton name="Create Channel / Category" action={openCreateChannelMenu} /> : null}
             {hidingChannelIcons ? <CtxButton action={() => {handleChannelSpecificStateChange('disableChannelIcons')}} name={`${hideCustomChannelIcons ? "Show" : "Hide"} Custom Channel Icons`} /> : null}
             {addToMusicWidget ? <CtxButton action={handlePlayOnMusicWidget} name="Play On Music Widget" icon={<PlayOnWidgetIcon />}/> : null}
