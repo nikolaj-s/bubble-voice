@@ -1,8 +1,9 @@
 
 .user-status-menu-container {
     position: relative;
-    width: calc(100%);
+    width: calc(100% - 10px);
     display: flex;
+    padding: 0px 5px;
     top: 0;
     left: 0;
     flex-direction: column;
@@ -37,8 +38,8 @@
 }
 
 .inner-status-menu-container .text-input-container {
-    padding: 0;
+    padding: 5;
     margin: 0 auto;
-    border-radius: 5px;
-    width: calc(100% - 6px);
+    border-radius: 10px;
+    width: calc(100% - 6px - 10px);
 }

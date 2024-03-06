@@ -382,6 +382,20 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
     // eslint-disable-next-line
     }, [])
 
+    React.useEffect(() => {
+
+        if (allMessages?.length > 0 && allMessages?.length <= 25) {
+            const firstMessage = allMessages[0];
+
+            const el = document.getElementById(`${firstMessage._id}/${channelId}`);
+
+            if (el) {
+                el.scrollIntoView();
+            }
+        }
+
+    }, [allMessages])
+
     return (
         <div 
         onKeyUp={focusTextInput}

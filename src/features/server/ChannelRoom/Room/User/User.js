@@ -33,7 +33,7 @@ export const User = ({user}) => {
     const username = useSelector(selectUsername);
 
     const secondaryColor = useSelector(selectSecondaryColor);
-    
+
     return (
         <div 
         style={{

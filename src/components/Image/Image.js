@@ -87,7 +87,20 @@ export const Image = ({aspect_ratio, alt_image = null, draggable = false,image_c
                 onError={handleError} 
                 loading={loadingState} 
                 draggable={false} 
-                style={{maxHeight: altHeight, width: width, maxWidth: altWidth, height: imgHeight, objectFit: objectFit, cursor: cursor, opacity: loading ? 0 : opacity, transition: '0.1s', borderRadius: borderRadius, aspectRatio: aspect_ratio, display: 'block', verticalAlign: 'bottom'}} 
+                style={{maxHeight: altHeight, 
+                    width: width, 
+                    maxWidth: altWidth, 
+                    height: imgHeight, 
+                    objectFit: objectFit, 
+                    cursor: cursor, 
+                    opacity: loading ? 0 : opacity, 
+                    transition: '0.1s', 
+                    borderRadius: borderRadius, 
+                    aspectRatio: aspect_ratio, 
+                    display: 'block', 
+                    verticalAlign: 'bottom',
+                    minHeight: loading ? 40 : null
+                }} 
                 onLoad={handleImageLoad} 
                 src={image?.includes('https:') ? image : alt_image} />}
             </div>

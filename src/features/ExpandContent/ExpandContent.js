@@ -138,7 +138,7 @@ export const ExpandContent = () => {
                  :
                 youtube ?
                 <div
-                style={{minWidth: '100vw', height: 900, flexGrow: 4}}
+                style={{minWidth: 600, height: 900,  maxHeight: 'calc(100% - 100px)'}}
                 >
                 <YouTube 
                 opts={{
@@ -154,7 +154,8 @@ export const ExpandContent = () => {
                 }}}
                 style={{
                     width: '100%',
-                    height: 900
+                    height: 500,
+                    maxHeight: 'calc(100% - 100px)'
                 }}
                 videoId={expandedContent.split(':')[1]} />
                 </div>

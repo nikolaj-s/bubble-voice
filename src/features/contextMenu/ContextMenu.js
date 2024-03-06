@@ -25,7 +25,7 @@ import { selectUsername } from '../settings/appSettings/accountSettings/accountS
 // USER PREFS
 import { saveUserPrefs, USER_PREFS } from '../../util/LocalData';
 import { BoolButton } from '../../components/buttons/BoolButton/BoolButton';
-import { miscSettingsChannelSpecificStateChange, selectDisableChannelIcons, selectDisableMediaWidget, selectHideUserStatus, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectPopOutUserStreams } from '../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { miscSettingsChannelSpecificStateChange, selectDisableChannelIcons, selectDisableMediaWidget, selectHideUserStatus, selectMiscSettingsDisableMessagePopUp, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectMuteSocial, selectPopOutUserStreams } from '../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { MoveUser } from '../../components/buttons/MoveUser/MoveUser';
 import { selectGlassState, selectPrimaryColor, selectTextColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectSocialSoundEffect, updateSoundEffectsState } from '../settings/soundEffects/soundEffectsSlice';
@@ -153,6 +153,8 @@ export const ContextMenu = () => {
     const hideCustomChannelIcons = useSelector(selectDisableChannelIcons);
 
     const deletingCategory = useSelector(selectDeletingCategory);
+
+    const muteSocial = useSelector(selectMuteSocial);
 
     // stream management
     const changeStreamVolumeState = useSelector(selectStreamVolumeState);
@@ -1242,9 +1244,7 @@ export const ContextMenu = () => {
             {channelSpecificSettingsState ? <CtxMenuTitle title={"Room Preferences"} /> : null}
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideChannelBackground")}} state={hideChannelBackground} name={"Hide Channel Background"} /> : null}
             {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("hideNonVideoParticapents")}} state={hideNonVideoParticapents} name={"Hide Non Video Participants"} /> : null}
-            {channelSpecificSettingsState ? <BoolButton action={() => {handleChannelSpecificStateChange("disableMessagePopUp")}} state={disableMessagePopup} name={"Disable Message Overlay"} /> : null}
-            {channelSpecificSettingsState ? <BoolButton action={handleToggleSocialSoundEffect} state={socialSoundEffect} name="Enable Social Sound Effect" /> : null}
-            
+            {channelSpecificSettingsState ? <BoolButton name={"Mute Social"} action={() => {handleChannelSpecificStateChange("muteSocial")}} state={muteSocial} /> : null}
             {channelSpecificSettingsState || showHideUserStatus ? <BoolButton action={() => {handleChannelSpecificStateChange("hideUserStatus")}} state={hideUserStatus} name={"Hide User Status"} /> : null}
             {channelSpecificSettingsState || mediaWidgetState ? <BoolButton action={() => {handleChannelSpecificStateChange('disableMediaWidget')}} state={disableMediaWidget} name={"Hide Media Widget"} /> : null}
             {channelSpecificSettingsState ? <div

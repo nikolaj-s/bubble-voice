@@ -16,7 +16,7 @@ import { WidgetsIcon } from '../../../../components/Icons/WidgetsIcon/WidgetsIco
 import { PinIcon } from '../../../../components/Icons/PinIcon/PinIcon';
 import { MediaIcon } from '../../../../components/Icons/MediaIcon/MediaIcon';
 import { AltCloseButton } from '../../../../components/buttons/AltCloseButton/AltCloseButton'
-import { miscSettingsChannelSpecificStateChange, selectHideUserStatus, selectWebVersion } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { miscSettingsChannelSpecificStateChange, selectHideUserStatus, selectMuteSocial, selectWebVersion } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { OptionsButton } from '../../../../components/buttons/OptionsButton/OptionsButton';
 import { TextOnlyIcon } from '../../../../components/Icons/TextOnlyIcon/TextOnlyIcon';
 import { setSelectedMember } from '../MemberPanel/MemberPanelSlice';
@@ -27,6 +27,7 @@ import { selectFilterMenuOpen, toggleFilterMenu } from '../../SocialSlice';
 import { UserBarToggleButton } from '../../../../components/buttons/UserBarToggleButton/UserBarToggleButton';
 import { selectChannelSpecificStateSettings } from '../../../contextMenu/contextMenuSlice';
 import { setExpandedContent } from '../../../ExpandContent/ExpandContentSlice';
+import { MuteSocialButton } from '../../../../components/buttons/MuteSocialButton/MuteSocialButton';
 
 export const ServerNavigation = () => {
 
@@ -69,6 +70,8 @@ export const ServerNavigation = () => {
     const channel = useSelector(selectCurrentChannel);
 
     const filterMenuOpen = useSelector(selectFilterMenuOpen);
+
+    const muteSocial = useSelector(selectMuteSocial);
     
     const [videoDesc, toggleVideoDesc] = React.useState(false);
 
@@ -473,14 +476,16 @@ export const ServerNavigation = () => {
             }}
             >
             {!socialId ? <div className='server-navigation-filler'></div> : null}
+            {inChannel || socialId ? <MuteSocialButton state={muteSocial} desc_width={100} transparent={true} right_orientation_desc={true} action={() => {dispatch(miscSettingsChannelSpecificStateChange("muteSocial"))}} borderRadius={0} zIndex={3} top={0} height={'calc(100%)'} left={null} width={15} /> : null}
             {socialChannel?.type === 'screenshots' || socialChannel?.type === 'subreddit' ? null :
             socialId || page === 'social' ?
             <SocialFilterButton action={openSocialFilterMenu} flip_description={true} description={"Filter"} width={62} borderRadius={0} height={'100%'} />
             : null}
-            {inChannel && !socialId ? <OptionsButton desc_width={100} transparent={true} right_orientation_desc={true}  target={'live-chat-wrapper'} borderRadius={0} zIndex={3} top={0} height={'calc(100%)'} left={null} width={15} /> : null}
-            <UserBarToggleButton action={toggleHideUsers} state={!hideUsers} width={15} borderRadius={0} height={'100%'} />
             
+            <UserBarToggleButton action={toggleHideUsers} state={!hideUsers} width={15} borderRadius={0} height={'100%'} />
+            {inChannel && !socialId ? <OptionsButton desc_width={100} transparent={true} right_orientation_desc={true}  target={'live-chat-wrapper'} borderRadius={0} zIndex={3} top={0} height={'calc(100%)'} left={null} width={15} /> : null}
             </div>
+           
         </motion.div>
     )
 }

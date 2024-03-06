@@ -60,6 +60,7 @@ export const UserStatus = ({user}) => {
                 height: '100%',
                 flexShrink: 0,
                 backgroundColor: (user.color || primaryColor),
+                borderRadius: '10px 0px 0px 10px'
             }}></div>
             <div
             style={{
@@ -70,30 +71,29 @@ export const UserStatus = ({user}) => {
             className='user-status-image-container'>
                 <Image disableErr={true}  image_class={"user-image"} cursor='pointer' image={user.user_image?.includes('gif') ? "" : user.user_image} />
             </div>
+            <div 
+            className={`user-name-status-wrapper ${user._id}-user-name-status-wrapper`}>
+                <div style={{display: 'flex', alignItems: 'center', width: '100%'}}>
+                    <h3 style={{color: textColor,}} >{user.display_name}</h3>
+                    {user?.channel_status && user?.status?.toLowerCase() !== 'offline' ? <UserTypingIndicator /> : null}
+                </div>
+                
+                {user.status.toLowerCase() === 'online' ? null :
+                <p style={{color: textColor}}>{(user.status === 'offline' && timeStamp !== "") ? "Last Online: " + timeStamp : user.status ? user.status : 'offline'}</p>}
+            </div>
             {user.status === 'Away' || user.status === 'away' ?
             <div 
-            style={{backgroundColor: secondaryColor}}
+            
             className='away-status-overlay'>
                 <AwayIcon />
             </div>
             :
             user.status_icon && user?.status?.length > 1 ?
             <div 
-            style={{backgroundColor: secondaryColor}}
             className='user-status-icon-container'>
-                <Image disableErr={true} hideOnError={true} image={user.status_icon} />
+                <Image height='auto' imgHeight='auto' borderRadius={'5px'} objectFit='contain' disableErr={true} hideOnError={true} image={user.status_icon} />
             </div>
             : null}
-            <div 
-            className={`user-name-status-wrapper ${user._id}-user-name-status-wrapper`}>
-                <div style={{display: 'flex', alignItems: 'center', width: '100%'}}>
-                    <h3 style={{color: textColor,}} >{user.display_name}</h3>
-                    {user.channel_status ? <UserTypingIndicator /> : null}
-                </div>
-                
-                {user.status.toLowerCase() === 'online' ? null :
-                <p style={{color: textColor}}>{(user.status === 'offline' && timeStamp !== "") ? "Last Online: " + timeStamp : user.status ? user.status : 'offline'}</p>}
-            </div>
         </div>
     )
 }

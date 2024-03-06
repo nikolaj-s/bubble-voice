@@ -7,9 +7,9 @@ import "./MessageOverlay.css";
 import { Message } from '../../../../../../components/Message/Message';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectSecondaryColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
-import { selectMiscSettingsDisableMessagePopUp } from '../../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
-import { selectChannelSocialId, selectServerChannels } from '../../../../ServerSlice';
-import { playSoundEffect } from '../../../../../settings/soundEffects/soundEffectsSlice';
+import { selectMiscSettingsDisableMessagePopUp, selectMuteSocial } from '../../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { selectChannelSocialId, selectCurrentChannelId, selectServerChannels } from '../../../../ServerSlice';
+import { playSoundEffect, selectSocialSoundEffect } from '../../../../../settings/soundEffects/soundEffectsSlice';
 
 export const MessageOverlay = ({data, onEnd, page}) => {
 
@@ -19,20 +19,26 @@ export const MessageOverlay = ({data, onEnd, page}) => {
 
     const messageOverlayDisabled = useSelector(selectMiscSettingsDisableMessagePopUp);
 
+    const muteSocial = useSelector(selectMuteSocial);
+
     const socialId = useSelector(selectChannelSocialId);
 
     const channels = useSelector(selectServerChannels);
+
+    const inChannel = useSelector(selectCurrentChannelId);
 
     React.useEffect(() => {
         
         const channel = channels.find(c => c._id === data.channel_id);
 
+        if (!inChannel) return onEnd();
+
         if (!channel.auth) return onEnd();
 
-        if (messageOverlayDisabled || socialId) {
+        if (muteSocial || socialId) {
             onEnd();
         } else {
-            dispatch(playSoundEffect({default: "newMessage"}))
+            dispatch(playSoundEffect({default: "newMessage"}));
 
             setTimeout(() => {
 
@@ -41,7 +47,7 @@ export const MessageOverlay = ({data, onEnd, page}) => {
             }, 2500)
         }
     // eslint-disable-next-line
-    }, [data, socialId, channels])
+    }, [data, socialId, channels, inChannel])
 
     return (
         <motion.div 

@@ -232,14 +232,14 @@ export const MemberPanel = () => {
                         </div>
                         : null}
                         <div style={{backgroundColor: primaryColor}} className='server-user-details-wrapper-container'>
-                            <h4 style={{color: textColor, marginBottom: 10}}>Status</h4>
+                            <h4 style={{color: textColor, marginBottom: 10, marginLeft: 0}}>Status</h4>
                             <div className='member-panel-user-status-wrapper'>
                                 {member?.status_icon ? 
                                 <div className='member-panel-status-icon'>
                                     <Image borderRadius={'5px'} objectFit='contain' image={member?.status_icon} />
                                 </div>
                                 : null}
-                                <p style={{color: textColor, margin: '0 0 0 5px'}}>{member?.status === 'offline' && timeStamp !== "" ? 'Last Online: ' + timeStamp : member.status}</p>
+                                <p style={{color: textColor, margin: '0 0 0 5px', textTransform: 'capitalize'}}>{member?.status === 'offline' && timeStamp !== "" ? 'Last Online: ' + timeStamp : member.status}</p>
                             </div>
                             <h4 style={{color: textColor, margin: '10px 0'}}>Member Since</h4>
                             <p style={{color: textColor, margin: '0 0 0 5px'}}>{member?.join_date?.split('T')[0]}</p>

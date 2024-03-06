@@ -45,7 +45,7 @@ export const AudioInit = () => {
     
     React.useEffect(() => {
         console.log(sharingScreen)
-        if (!sharingScreen) {
+        if (!sharingScreen && streamAudio) {
             handleAmplifiedAudioOnStream(true);
         } else {
             handleAmplifiedAudioOnStream(false);
