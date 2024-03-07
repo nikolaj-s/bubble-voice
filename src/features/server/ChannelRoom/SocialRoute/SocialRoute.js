@@ -1,7 +1,7 @@
 // library's
 import React from 'react'
 import { useSelector } from 'react-redux'
-
+import { motion } from 'framer-motion'
 // state
 import { selectDisableTransitionAnimations, selectGlassColor, selectGlassState, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectChannelSocialId, selectCurrentChannelId, selectCurrentlyViewChannelSocial } from '../../ServerSlice'
@@ -44,7 +44,9 @@ export const SocialRoute = () => {
     return (
         <>
         {currentSocial ?
-        <div 
+        <motion.div 
+        initial={{opacity: 0}} animate={{opacity: 1}} 
+        exit={{opacity: 0}}
         key={`social-route-${channelId}`}
         className='social-route-wrapper-container'>
             
@@ -62,7 +64,7 @@ export const SocialRoute = () => {
                <Social channelName={channel.name} socialRoute={true} channelId={channelId} currentChannel={channel} />}
             </div>
                 
-        </div> : null}
+        </motion.div> : null}
         </>
     )
 }

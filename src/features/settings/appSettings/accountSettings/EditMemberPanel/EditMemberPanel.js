@@ -36,7 +36,8 @@ export const EditMemberPanel = ({
     toggleShowCaseScreenShots,
     screenShots,
     handleNewDisplayName,
-    username
+    username,
+    disablePreview
     }) => {
     
     const accentColor = useSelector(selectTextColor);   
@@ -54,7 +55,7 @@ export const EditMemberPanel = ({
         <div style={{flexShrink: 0,padding: '5px', borderRadius: '8px', maxWidth: 500, position: 'relative', width: '100%', minHeight: 800}} className='edit-member-panel-container'>
             <div style={{display: 'flex', width: '100%', alignItems: 'center',}}>
                 <InputTitle width={'calc(100% - 50px)'} title={"Update Profile Image"} />
-                <TogglePreviewButton action={() => {togglePreview(!preview)}} desc_width={60} invert={true} active={previewBio} padding={"3px 5px"} width={90} height={30} desc_height={15} />
+                {disablePreview ? null : <TogglePreviewButton action={() => {togglePreview(!preview)}} desc_width={60} invert={true} active={previewBio} padding={"3px 5px"} width={90} height={30} desc_height={15} />}
             </div>
             <div
             style={{
@@ -92,8 +93,8 @@ export const EditMemberPanel = ({
                 style={{backgroundColor: color}}
                 className='edit-panel-profile-preview'>
                     <div className='profile-banner-preview-wrapper'>
-                        <img className='profile-baner-source' src={newBanner.preview || userBanner} />
-                        <img style={{borderRadius: newShape === 'square' ? 5 : '50%'}} className='profile-image-source' src={newImage.preview || userImage} />
+                        <img className='profile-baner-source' src={newBanner?.preview || userBanner} />
+                        <img style={{borderRadius: newShape === 'square' ? 5 : '50%'}} className='profile-image-source' src={newImage?.preview || userImage} />
                     </div>
                     <div 
                     style={{backgroundColor: primaryColor}}

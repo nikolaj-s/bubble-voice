@@ -95,7 +95,7 @@ const Bar = () => {
             document.getElementById('disconnect-from-channel-button').click();
 
         }
-        
+        console.log(channel)
         dispatch(leaveChannel({username: username}));
         
         dispatch(playSoundEffect('disconnected'));
@@ -460,7 +460,7 @@ const Bar = () => {
                     "TOKEN": token
                 },
                 reconnectionAttempts: 50,
-                reconnectionDelay: 5000
+                reconnectionDelay: 1000
             })
 
             socket.on('reconnect_failed', () => {
@@ -492,11 +492,13 @@ const Bar = () => {
 
                 }
 
+                sockets();
+
                 dispatch(fetchServerDetails({channel_id: channel}));
 
                 dispatch(fetchPersistedMusicVolume());
 
-                sockets();
+                
             
             })
         

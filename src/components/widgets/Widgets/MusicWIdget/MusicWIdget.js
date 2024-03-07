@@ -262,7 +262,7 @@ export const MusicWidget = ({roomOverlay, editing = false, widget, controls = tr
         className='music-widget-outer-container' >
             <div className='inner-music-widget-container'>
                 
-                {(channel?.locked_media === true && channel?.media_auth?.includes(username)) || channel.channel_owner === username || permission.server_group_name === 'Owner' || !channel.locked_media? 
+                {(channel?.locked_media === true && channel?.media_auth?.includes(username)) || channel?.channel_owner === username || permission?.server_group_name === 'Owner' || !channel.locked_media? 
                 <>
                 <div className='music-widget-nav-container'>
                     <div className='music-widget-icon-wrapper'>

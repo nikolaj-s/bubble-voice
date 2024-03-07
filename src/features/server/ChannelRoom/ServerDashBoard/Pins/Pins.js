@@ -24,7 +24,8 @@ export const Pins = ({permission, pins, handlePin, initLoading}) => {
   return (
     <motion.div
     transition={disableTransition ? {duration: 0} : {duration: 0.2}}
-    style={{padding: 0, width: '100%', height: '100%'}} className='server-media-wrappers' initial={{translateX: '100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}}>
+    style={{padding: 0, width: '100%', height: '100%'}} className='server-media-wrappers' initial={{opacity: 0}} animate={{opacity: 1}} 
+    exit={{opacity: 0}}>
       <div className='pins-sub-nav'>
         <h3 onClick={() => {setPage('messages')}} style={{color: textColor, opacity: page === 'messages' ? 1 : 0.5}}>Messages</h3>
         <h2 style={{color: textColor}}>/</h2>

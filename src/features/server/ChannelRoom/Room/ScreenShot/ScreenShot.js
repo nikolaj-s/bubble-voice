@@ -100,7 +100,7 @@ export const ScreenShot = ({channelId, username}) => {
         <AnimatePresence>
             {image.preview ?
             <motion.div initial={{scale: 0}} animate={{scale: 1}} exit={{scale: 0}} key={'screen-shot-display-preview'} className='screen-shot-display-container'>
-                <Image objectFit='contain' img_id={'screen-shot-selector'} image={image.preview} />
+                <img style={{objectFit: 'contain', width: '100%', height: '100%'}} img_id={'screen-shot-selector'} src={image.preview} />
             </motion.div>
             : null}
         </AnimatePresence>

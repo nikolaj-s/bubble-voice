@@ -167,24 +167,24 @@ if (data?.toggled) {
 } 
 
 // handle preventing multiple instances running
-if (!lock) {
+// if (!lock) {
 
-  app.quit()
+//   app.quit()
 
-} else {
-  app.on('second-instance', (event, commandLine, workingDirectory) => {
+// } else {
+//   app.on('second-instance', (event, commandLine, workingDirectory) => {
 
-    if (win) {
+//     if (win) {
 
-      if (win.isMinimized()) win.restore();
+//       if (win.isMinimized()) win.restore();
 
-      win.show();
+//       win.show();
 
-      win.focus();
-    }
-  })
+//       win.focus();
+//     }
+//   })
 
-}
+// }
 
 if (!process.env.ELECTRON_START_URL && lock) {
 
@@ -361,9 +361,9 @@ ipcMain.handle('SCREEN_SHOT', async () => {
     const capture = await desktopCapturer.getSources({types: ['window'], thumbnailSize: {width: 1920, height: 1080}})
     .then(captures => {
       
-      const sources = captures.filter(c => !c.name.includes('overlay'));
-      
-      return {data: sources[0].thumbnail.toJPEG(), preview: sources[0].thumbnail.toDataURL(), text: sources[0].name}
+      const sources = captures.filter(c => !c.name.includes('overlay') && !c.name.includes('D3DProxyWindow'));
+      console.log(sources)
+      return {data: sources[0].thumbnail.toJPEG(90), preview: sources[0].thumbnail.toDataURL(), text: sources[0].name}
     })
 
     return capture;

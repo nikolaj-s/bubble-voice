@@ -70,6 +70,19 @@ export const UserStatus = ({user}) => {
             }}
             className='user-status-image-container'>
                 <Image disableErr={true}  image_class={"user-image"} cursor='pointer' image={user.user_image?.includes('gif') ? "" : user.user_image} />
+                {user.status === 'Away' || user.status === 'away' ?
+                <div 
+                
+                className='away-status-overlay'>
+                    <AwayIcon />
+                </div>
+                :
+                user.status_icon && user?.status?.length > 1 ?
+                <div 
+                className='user-status-icon-container'>
+                    <Image height='auto' imgHeight='auto' borderRadius={'5px'} objectFit='contain' disableErr={true} hideOnError={true} image={user.status_icon} />
+                </div>
+                : null}
             </div>
             <div 
             className={`user-name-status-wrapper ${user._id}-user-name-status-wrapper`}>
@@ -81,19 +94,7 @@ export const UserStatus = ({user}) => {
                 {user.status.toLowerCase() === 'online' ? null :
                 <p style={{color: textColor}}>{(user.status === 'offline' && timeStamp !== "") ? "Last Online: " + timeStamp : user.status ? user.status : 'offline'}</p>}
             </div>
-            {user.status === 'Away' || user.status === 'away' ?
-            <div 
             
-            className='away-status-overlay'>
-                <AwayIcon />
-            </div>
-            :
-            user.status_icon && user?.status?.length > 1 ?
-            <div 
-            className='user-status-icon-container'>
-                <Image height='auto' imgHeight='auto' borderRadius={'5px'} objectFit='contain' disableErr={true} hideOnError={true} image={user.status_icon} />
-            </div>
-            : null}
         </div>
     )
 }

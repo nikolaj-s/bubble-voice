@@ -898,7 +898,7 @@ export class RoomClient {
         }.bind(this)
 
         if (!offline) {
-            this.socket.request('leaves channel')
+            this?.socket?.request('leaves channel')
             .finally( function () {clean()})
         } else {
             clean();

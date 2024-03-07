@@ -6,7 +6,6 @@ import { motion } from 'framer-motion'
 
 // state
 import { closeScreenShareMenu, selectScreens, setCurrentScreen, } from '../ControlBarSlice';
-import {CloseIcon} from '../../../components/Icons/CloseIcon/CloseIcon'
 
 // style's
 import "./ScreenShareMenu.css";

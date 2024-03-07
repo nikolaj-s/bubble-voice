@@ -72,7 +72,7 @@ export const RedditPost = ({data = {}, action, disableMax, inSocial}) => {
 
 
     }
-
+    console.log(data)
     return (
         <div
         onMouseEnter={() => {toggleHover(true)}}
@@ -126,3 +126,4 @@ export const RedditPost = ({data = {}, action, disableMax, inSocial}) => {
         </div>
     )
 }
+ 

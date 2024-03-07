@@ -55,8 +55,8 @@ export const ActivityBoard = ({loading}) => {
         style={{padding: 0, width: '100%', height: '100%',
         }} 
         className='server-media-wrappers' 
-        initial={{translateX: '100%'}} animate={{translateX: '0%'}} 
-        exit={{translateX: '-100%'}}>
+        initial={{opacity: 0}} animate={{opacity: 1}} 
+        exit={{opacity: 0}}>
 
             <div className='server-activity-wrapper'>
                 <ServerWelcomeMessage />

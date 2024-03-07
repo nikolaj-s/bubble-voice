@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { handleUpdateBio, selectAccountSettingsLoading, selectDisplayName, selectNewAccountState, selectProfileBio, selectProfileColor, selectUserBanner, selectUserImage, updateAccount, updateAccountInputState } from '../../features/settings/appSettings/accountSettings/accountSettingsSlice';
+import { handleUpdateBio, selectAccountSettingsLoading, selectDisplayName, selectNewAccountState, selectProfileBio, selectProfileColor, selectUserBanner, selectUserImage, selectUsername, updateAccount, updateAccountInputState } from '../../features/settings/appSettings/accountSettings/accountSettingsSlice';
 import { selectGlassColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { Loading } from '../LoadingComponents/Loading/Loading';
 import { SettingsHeader } from '../titles/SettingsHeader/SettingsHeader';
@@ -36,6 +36,8 @@ export const NewAccount = ({mobile = false}) => {
     const loading = useSelector(selectAccountSettingsLoading);
 
     const displayName = useSelector(selectDisplayName);
+
+    const username = useSelector(selectUsername);
 
     const userImage = useSelector(selectUserImage);
 
@@ -92,7 +94,7 @@ export const NewAccount = ({mobile = false}) => {
                     >Welcome To Bubble</h2>
                     <h3 style={{color: textColor}}>Finish Setting Up Your Bubble Profile</h3>
                 </div>
-                <EditMemberPanel  handleNewDisplayName={handleDisplayName} color={color} updateColor={updateColor} newShape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} changeProfileShape={changeProfileShape} handleInput={handleInput} displayName={newDisplayName} previewBio={previewBio} togglePreviewBio={togglePreviewBio} profileBio={newBio} changeProfileBio={changeProfileBio}/>
+                <EditMemberPanel disablePreview={true} username={username} handleNewDisplayName={handleDisplayName} color={color} updateColor={updateColor} newShape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} changeProfileShape={changeProfileShape} handleInput={handleInput} displayName={newDisplayName} previewBio={previewBio} togglePreviewBio={togglePreviewBio} profileBio={newBio} changeProfileBio={changeProfileBio}/>
                 <div className='new-account-nav-container'>
                     
                     <div onClick={() => {handleAdvance(false)}} style={{backgroundColor: primaryColor}} className='new-next-button-container'>

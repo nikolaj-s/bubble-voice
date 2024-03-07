@@ -116,6 +116,37 @@ const Component = () => {
     
     const media = channel?.widgets?.filter(w => w.type === 'music');
 
+    // fall back code
+    React.useEffect(() => {
+        if (channel?.error || !channel) {
+           const channel_location_id = window.location.hash.split('channel/')[1];
+            console.log(channel_location_id)
+            const el = document.getElementById(`channel-button-${channel_location_id}`);
+
+            if (el) {
+                el?.click();
+            } else {
+                window.location.hash = "/dashboard/server/" + server_id;
+            }
+
+        } else if (channel?.users) {
+            const exists = channel?.users.findIndex(u => u.username === username);
+
+            if (exists === -1) {
+
+                const disc = document.getElementById('disconnect-from-channel-button');
+
+                if (disc) {
+                    disc?.click();
+                }
+
+                window.location.hash = "/dashboard/server/" + server_id;
+
+            }
+
+        }
+    }, [channel])
+
     React.useEffect(() => {
         
         if (client) {
@@ -783,7 +814,10 @@ const Component = () => {
 
     return (
         <>
-        <motion.div  className='room-wrapper-outer'>
+        <motion.div  className='room-wrapper-outer'
+        initial={{opacity: 0}} animate={{opacity: 1}} 
+        exit={{opacity: 0}}
+        >
             <div
             style={
                 ((hideChannelBackgrounds || channel.channel_background === undefined) || page === 'social' || page === 'media' || page === 'pins') ? {backgroundColor: 'black'} : null
@@ -805,12 +839,13 @@ const Component = () => {
                     {page === "widgets" ? 
                     <motion.div 
                     transition={disableTransition ? {duration: 0} : {duration: 0.2}}
-                    key={'room-widgets-preview'} style={{height: '100%', width: '100%', top: '0px', left: '0px', position: 'absolute', zIndex: 4, backgroundColor: primaryColor}} initial={{translateX: '100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}} >
+                    key={'room-widgets-preview'} style={{height: '100%', width: '100%', top: '0px', left: '0px', position: 'absolute', zIndex: 4, backgroundColor: primaryColor}} initial={{opacity: 0}} animate={{opacity: 1}} 
+                    exit={{opacity: 0}}>
                         <Widgets key={'widgets'} /> 
                     </motion.div>
                     : null}
                     {page === ''}
-                    {page === 'voice' && media.length > 0 ? <MediaControls key={'media-controls'} hover={hover} /> : null}
+                    {page === 'voice' && media?.length > 0 ? <MediaControls key={'media-controls'} hover={hover} /> : null}
                 </AnimatePresence>
             </div>
             <ChannelBackground 

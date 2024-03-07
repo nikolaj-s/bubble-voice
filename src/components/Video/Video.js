@@ -237,7 +237,7 @@ export const Video = ({width, backgroundColor = 'black', maxHeight = '100%', vid
             onEnded={onVideoEnd} autoPlay={forceAutoPlay ? true : looping ? true : false} id={video + id} controls={false} loop={true} 
             src={video?.startsWith('https') ? video : ""}
             />
-            <audio onError={handleAltAudio} hidden={true} muted={mutedToggled ? true : false} loop={true} src={video?.includes('v.redd') ? video?.split('_')[0] + '_AUDIO_64.mp4' : null} autoPlay={looping ? true : false} id={video + 'audio'} />
+            <audio playsInline onError={handleAltAudio} hidden={true} muted={false} loop={true} src={video?.includes('v.redd') ? video?.split('_')[0] + '_AUDIO_64.mp4' : null} id={video + 'audio'} />
             <VideoPlayOverlayAnimation interacted={interacted} color={color} playing={playing} />
             {(looping || !interacted) ? null :
             <motion.div 

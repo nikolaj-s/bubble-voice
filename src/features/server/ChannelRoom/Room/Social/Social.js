@@ -406,7 +406,7 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
             <>
             {(loadingMore || mounting) && allMessages?.length > 0 ?
             <motion.div initial={{opacity: 0, top: '-120px'}} exit={{opacity: 0, top: '-120px'}} animate={{opacity: 1, top: 0}} style={{backgroundColor: glassColor}} className='social-loading-container'>
-                <Loading loading={loadingMore || mounting} />
+                <Loading success_size={{width: 40, height: 40}} loading={loadingMore || mounting} />
             </motion.div>
             : null}
             
