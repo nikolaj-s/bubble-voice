@@ -56,7 +56,7 @@ export const User = ({user}) => {
                     >{user.display_name}</h3>
                 
             </div>
-            <Image borderRadius={0} cursor='pointer' id="stream-room-user-banner" image_class={'user-image'} disableErr={true} backgroundColor={secondaryColor}  position='absolute' image={user.user_banner} />
+            <Image borderRadius={0} cursor='pointer' id="stream-room-user-banner" image_class={'user-image'} disableErr={true} backgroundColor={user.color || secondaryColor}  position='absolute' image={user.user_banner} />
             <div style={{borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%', position: user.webcam && !prefs?.disabled_web_cam ? 'absolute' : null,
             width: user.webcam && !prefs?.disabled_web_cam ?  40 : null,
             height: user.webcam && !prefs?.disabled_web_cam ?  40 : null,

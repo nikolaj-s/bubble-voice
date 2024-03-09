@@ -153,7 +153,6 @@ export const ViewSubReddit = ({expand, explore, disableFullMode, subreddit, subr
         exit={{translateY: reverse ? '100%' : '-100%'}}
         key={posts[index]?.id}
         onWheel={(e) => {handleIndex(e)}}
-        style={{backgroundColor: secondaryColor}}
         className='subreddit-full-mode'>
             <div onClick={() => {dispatch(toggleFullMode())}} className='exit-full-mode-container'>
                 <CloseIcon />
@@ -168,8 +167,8 @@ export const ViewSubReddit = ({expand, explore, disableFullMode, subreddit, subr
         </div>
         : null}
         <Loading  loading={loading} />
-        <div  style={{backgroundColor: secondaryColor}} className='implement-sub-reddit-container'>
-            <div onScroll={handleLoadMore} className='view-sub-reddit-wrapper' style={{backgroundColor: glassColor}}>
+        <div  className='implement-sub-reddit-container'>
+            <div onScroll={handleLoadMore} className='view-sub-reddit-wrapper'>
             <div className='sub-reddit-finder-container'>
                 {subreddit ? null :
                 <>

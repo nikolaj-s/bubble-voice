@@ -46,9 +46,9 @@ export const AltConnectionIndicator = ({active}) => {
         className='saved-media-container'>
             <div style={{backgroundColor: accentColor, borderRadius: hover  ? '10px' : '50%', transition: '0.1s'}} className='extra-button-icon-container'>
             <div style={{display: 'flex', width: 20, height: 20, justifyContent: 'center', alignItems: 'flex-end'}}>
-                <div style={{width: 5, height: 20, backgroundColor: ping <= 40 ? '#07fc03' : textColor, marginRight: 2, borderRadius: 4}} />
-                <div style={{width: 5, height: 15, backgroundColor: ping <= 40 ? '#07fc03' : ping <= 80 ? 'yellow' : textColor, marginRight: 2, borderRadius: 4}} />
-                <div style={{width: 5, height: 10, backgroundColor: ping <= 40 ? '#07fc03' : ping <= 80 ? 'yellow' : ping <= 999 ? 'red' : textColor, borderRadius: 4}} />
+                <div style={{width: 5, height: 20, backgroundColor: ping <= 60 ? '#07fc03' : textColor, marginRight: 2, borderRadius: 4}} />
+                <div style={{width: 5, height: 15, backgroundColor: ping <= 60 ? '#07fc03' : ping <= 110 ? 'yellow' : textColor, marginRight: 2, borderRadius: 4}} />
+                <div style={{width: 5, height: 10, backgroundColor: ping <= 60 ? '#07fc03' : ping <= 110 ? 'yellow' : ping <= 999 ? 'red' : textColor, borderRadius: 4}} />
             </div>
             <Loading success_size={{width: 20, height: 20}} loading={loading} error={error} />
             </div>

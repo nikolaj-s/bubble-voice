@@ -5,7 +5,7 @@ import { selectActivationColor, selectTextColor } from '../../../../settings/app
 import { LoadingChannelsPlaceHolder } from '../../../../../components/LoadingChannelsPlaceHolder/LoadingChannelsPlaceHolder'
 import { ChannelButton } from '../../../../../components/buttons/ChannelButton/ChannelButton'
 
-export const Category = ({category_id, catagoryName, channels, draggingChannel, toggleDraggingChannel, draggingUser, toggleDragginUser, move, handleJoinChannel, loading, draggingCategory, toggleDraggingCategory, moveCategory}) => {
+export const Category = ({category_id, catagoryName, channels, draggingChannel, toggleDraggingChannel, draggingUser, toggleDragginUser, move, handleJoinChannel, loading, draggingCategory, toggleDraggingCategory, moveCategory, marginBottom = null}) => {
 
     const [collapse, toggleCollapse] = React.useState(false);
 
@@ -104,6 +104,7 @@ export const Category = ({category_id, catagoryName, channels, draggingChannel, 
         id={category_id}
         style={{
             backgroundColor: moveIndicator && !draggingUser ? activationColor : null,
+            marginBottom: marginBottom
         }}
         onDragOver={(e) => {e.preventDefault()}}
         onDrop={handleCategoryMove} onDragEnter={() => {toggleMoveIndicator(true)}} onDragLeave={() => {toggleMoveIndicator(false)}}

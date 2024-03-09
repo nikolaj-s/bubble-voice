@@ -72,6 +72,8 @@ export const ScreenShot = ({channelId, username}) => {
                 }).catch(err => {
                     dispatch(throwServerError({errorMessage: "Error Capturing Screen Shot"}));
 
+                    setImage({});
+
                     setTimeout(() => {
                         spam_stopper = false;
                         toggleLoading(false);

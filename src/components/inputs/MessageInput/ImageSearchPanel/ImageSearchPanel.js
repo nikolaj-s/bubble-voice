@@ -161,7 +161,7 @@ export const ImageSearchPanel = ({channelId,hideOptions = false,direct_message, 
             document.getElementsByClassName('message-image-search-button')[0].click();
         }, 50)
     }
-
+console.log(images)
     return (
         <AnimatePresence>
             {searchingForImage ?
@@ -221,7 +221,7 @@ export const ImageSearchPanel = ({channelId,hideOptions = false,direct_message, 
                             mediaType === 'Reddit' ?
                             <ViewSubReddit disableFullMode={true} expand={(i) => {handleSelectImage({preview: i, image: i})}} />
                             :
-                            <ResponsiveMasonry style={{height: 'auto'}} columnsCountBreakPoints={{700: 2}}>
+                            <ResponsiveMasonry style={{height: 'auto'}} columnsCountBreakPoints={{1020: 2, 1100: 3}}>
                                 <Masonry gutter='5px'>   
                                     {mediaType === 'Saves' ?
                                     savedMedia.length === 0 ?
