@@ -476,14 +476,14 @@ export const ServerNavigation = () => {
             }}
             >
             {!socialId ? <div className='server-navigation-filler'></div> : null}
-            {inChannel || socialId ? <MuteSocialButton state={muteSocial} desc_width={100} transparent={true} right_orientation_desc={true} action={() => {dispatch(miscSettingsChannelSpecificStateChange("muteSocial"))}} borderRadius={0} zIndex={3} top={0} height={'calc(100%)'} left={null} width={15} /> : null}
+            {inChannel || socialId ? <MuteSocialButton state={muteSocial} desc_width={100} transparent={true} right_orientation_desc={true} action={() => {dispatch(miscSettingsChannelSpecificStateChange("muteSocial"))}}  borderRadius={5} zIndex={3} top={0} height={10} padding={8} left={null} width={15} /> : null}
             {socialChannel?.type === 'screenshots' || socialChannel?.type === 'subreddit' ? null :
             socialId || page === 'social' ?
-            <SocialFilterButton action={openSocialFilterMenu} flip_description={true} description={"Filter"} width={62} borderRadius={0} height={'100%'} />
+            <SocialFilterButton action={openSocialFilterMenu} flip_description={true} description={"Filter"} width={62} padding={8} borderRadius={5} height={10} />
             : null}
             
-            <UserBarToggleButton action={toggleHideUsers} state={!hideUsers} width={15} borderRadius={0} height={'100%'} />
-            {inChannel && !socialId ? <OptionsButton desc_width={100} transparent={true} right_orientation_desc={true}  target={'live-chat-wrapper'} borderRadius={0} zIndex={3} top={0} height={'calc(100%)'} left={null} width={15} /> : null}
+            <UserBarToggleButton action={toggleHideUsers} state={!hideUsers} padding={8} width={15} borderRadius={5} height={10} />
+            {inChannel && !socialId ? <OptionsButton desc_width={100} transparent={true} target={'live-chat-wrapper'} borderRadius={5} zIndex={3} top={0} height={10} left={null} padding={8} width={15} /> : null}
             </div>
            
         </motion.div>

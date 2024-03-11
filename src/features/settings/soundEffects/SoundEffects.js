@@ -5,8 +5,9 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAudioOutput, selectExperimentalAudioCapture } from '../appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 import { playSoundEffect, removeSoundEffectFromQueue, selectCurrentDynamicVoice, selectCurrentVoiceOver, selectDynamicVoiceAlerts, selectSocialSoundEffect, selectSoundEffect, selectSoundEffectQueue, selectSoundEffectVolume, selectVoicePitch, selectVoiceRate } from './soundEffectsSlice';
-import { selectCurrentChannel, selectServerMembers } from '../../server/ServerSlice';
-import { selectCurrentScreen } from '../../controlBar/ControlBarSlice';
+import { selectCurrentChannel, selectCurrentChannelId, selectPushToTalkActive, selectServerMembers } from '../../server/ServerSlice';
+import { selectCurrentScreen, selectMicrophoneState } from '../../controlBar/ControlBarSlice';
+import { selectPushToTalkSoundEffectState } from '../appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 export const SoundEffects = () => {
 
@@ -15,6 +16,8 @@ export const SoundEffects = () => {
     const soundEffectsVolume = useSelector(selectSoundEffectVolume);
 
     const [playing, setPlaying] = React.useState("");
+
+    const [pushToTalkEffect, setPushToTalkEffect] = React.useState("");
 
     const audioOutput = useSelector(selectAudioOutput);
 
@@ -27,6 +30,8 @@ export const SoundEffects = () => {
     const currentVoiceOver = useSelector(selectCurrentVoiceOver);
 
     const channel = useSelector(selectCurrentChannel);
+
+    const currentChannel = useSelector(selectCurrentChannelId);
 
     const dynamicVoiceAlerts = useSelector(selectDynamicVoiceAlerts);
 
@@ -41,6 +46,12 @@ export const SoundEffects = () => {
     const sharingScreen = useSelector(selectCurrentScreen);
 
     const experimentalAudioCapture = useSelector(selectExperimentalAudioCapture);
+
+    const pushToTalkActive = useSelector(selectPushToTalkActive);
+
+    const pushToTalkSoundEffectEnabled = useSelector(selectPushToTalkSoundEffectState);
+
+    const micMuted = useSelector(selectMicrophoneState);
 
     const soundEffects = {
         'connected': "https://res.cloudinary.com/drlkgoter/video/upload/v1668898545/connected_pnu1hk.wav",
@@ -81,8 +92,27 @@ export const SoundEffects = () => {
     }
 
     React.useEffect(() => {
+
+        if (!micMuted) return;
+
+        if (!pushToTalkSoundEffectEnabled) return;
+
+        if (!currentChannel) return;
+
+        if (sharingScreen && experimentalAudioCapture) return;
+
+        if (pushToTalkActive) {
+            setPushToTalkEffect(soundEffects["deactivate"]);
+        } else {
+            setPushToTalkEffect(soundEffects["controlSoundEffect"]);
+        }
+
+    }, [pushToTalkActive])
+
+    React.useEffect(() => {
         try {
-        document.getElementById('sound-effects-source').volume = soundEffectsVolume;
+            document.getElementById('sound-effects-source').volume = soundEffectsVolume;
+            document.getElementById('push-to-talk-sound-effect').volume = soundEffectsVolume;
         } catch (err) {
             return;
         }
@@ -165,6 +195,7 @@ export const SoundEffects = () => {
     return (
         <>
         {(sharingScreen && experimentalAudioCapture) ? null : <audio onError={soundEffectFinished} id="sound-effects-source" onEnded={soundEffectFinished} src={playing} hidden={true} playsInline={true} autoPlay={true} loop={false} />}
+        {(sharingScreen && experimentalAudioCapture) ? null : <audio id="push-to-talk-sound-effect" onError={() => {setPushToTalkEffect("")}} onEnded={() => {setPushToTalkEffect("")}} src={pushToTalkEffect} hidden={true} playsInline={true} autoPlay={true} loop={false} />}
         </>
     )
 }

@@ -22,7 +22,7 @@ const soundEffectsSlice = createSlice({
     name: "soundEffectsSlice",
     initialState: {
         soundEffect: "",
-        volume: 1,
+        volume: 0.5,
         socialSoundEffect: true,
         muteSoundEffectsWhileMutedState: false,
         soundEffectsQueue: [],

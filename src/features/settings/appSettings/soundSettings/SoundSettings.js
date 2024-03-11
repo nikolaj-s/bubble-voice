@@ -17,6 +17,7 @@ import { AltError } from '../../../../components/AltError/AltError';
 import { DynamicVoices } from './DynamicVoices/DynamicVoices';
 import { TextButton } from '../../../../components/buttons/textButton/TextButton';
 import { TextInput } from '../../../../components/inputs/TextInput/TextInput';
+import { miscSettingsChannelSpecificStateChange, selectPushToTalkSoundEffectState } from '../MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 const Settings = () => {
 
@@ -43,6 +44,8 @@ const Settings = () => {
     const voiceRate = useSelector(selectVoiceRate);
 
     const voicePitch = useSelector(selectVoicePitch);
+
+    const enablePushToTalkSoundEffect = useSelector(selectPushToTalkSoundEffectState);
 
     React.useEffect(() => {
 
@@ -129,6 +132,8 @@ const Settings = () => {
             <SettingsHeader title={"General"} />
             <InputTitle title={"Sound Effects Volume"} />
             <Range action={handleSoundLevelChange} value={soundLevel}  />
+            <InputTitle title={"Enable Activation And Deactivation Sound Effect To Push To Talk"} />
+            <ToggleButton state={enablePushToTalkSoundEffect} action={() => {dispatch(miscSettingsChannelSpecificStateChange("enablePushToTalkSoundEffect"))}} />
             <SettingsHeader title={"Notification Sounds"} />
             <InputTitle title={"Change Notification Announcer Voice"} />
             <DropDownList action={updateVoiceOverPref} selectedItem={currentVoice.label} list={voiceOptions} />

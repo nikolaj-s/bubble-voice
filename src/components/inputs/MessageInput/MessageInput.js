@@ -327,7 +327,7 @@ export const MessageInput = ({setFallbackImage, channelId, nsfw, handleNsfw, can
                         fontFamily: textStyle.fontFamily
                     }}
                     onFocus={(e) => {handleText(e); toggleFocused(true)}}
-                    id={`social-input-selector-${channelId}`} onKeyUp={handleKeyCode} onChange={handleText} value={value}  placeholder={channel_name ? `Post In #${channel_name}` : 'Message'} type="text" />
+                    id={`social-input-selector-${channelId}`} onKeyUp={handleKeyCode} onChange={handleText} value={value}  placeholder={channel_name ? `post in #${channel_name}` : 'message'} type="text" />
                     <div className='message-input-button-wrapper'>
                         <div className='message-input-inner-button-wrapper'>
                             
