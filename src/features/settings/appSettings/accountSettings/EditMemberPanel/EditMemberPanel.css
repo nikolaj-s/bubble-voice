@@ -57,3 +57,15 @@
     font-weight: 400;
     text-align: center;
 }
+
+.edit-member-panel-container {
+    display: flex;
+    justify-content: space-between;
+    overflow-x: auto;
+}
+
+@media  screen and (max-width: 1065px) {
+    .edit-member-panel-container {
+        flex-direction: column;
+    }
+}

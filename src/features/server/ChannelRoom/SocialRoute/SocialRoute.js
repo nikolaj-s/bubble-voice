@@ -12,6 +12,7 @@ import { Social } from '../Room/Social/Social'
 // style
 import "./SocialRoute.css";
 import { ViewSubReddit } from '../ServerDashBoard/ServerMedia/ViewSubReddits/ViewSubReddit';
+import { selectMiscSettingsHideChannelBackground } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 export const SocialRoute = () => {
 
@@ -33,6 +34,8 @@ export const SocialRoute = () => {
 
     const disableTransition = useSelector(selectDisableTransitionAnimations);
 
+    const hideChannelBackgrounds = useSelector(selectMiscSettingsHideChannelBackground)
+
     React.useEffect(() => {
 
       //  if (channelId === current_channel_id) return document.getElementById('channel-social-tab-button')?.click();
@@ -48,8 +51,13 @@ export const SocialRoute = () => {
         initial={{opacity: 0}} animate={{opacity: 1}} 
         exit={{opacity: 0}}
         key={`social-route-${channelId}`}
+        style={{backgroundColor: secondaryColor}}
         className='social-route-wrapper-container'>
-            
+            {channel.channel_background && !hideChannelBackgrounds ?
+            <div className='channel-social-background'>
+                <img src={channel.channel_background} />
+            </div>
+            : null}
             <div
             style={{
                 minHeight: 'calc(100%)',
@@ -61,7 +69,7 @@ export const SocialRoute = () => {
                {channel.type === 'subreddit' ?
                <ViewSubReddit subreddit_name={channel.channel_name} subreddit={channel.media_state} />
                :
-               <Social channelName={channel.name} socialRoute={true} channelId={channelId} currentChannel={channel} />}
+               <Social channelName={channel.name} socialRoute={true} channelId={channelId} currentChannel={channel} hideChannelBackgrounds={hideChannelBackgrounds} />}
             </div>
                 
         </motion.div> : null}

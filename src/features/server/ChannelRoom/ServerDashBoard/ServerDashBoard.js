@@ -2,7 +2,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 
-import { selectGlassColor, selectPrimaryColor, } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectGlassColor, selectGlassState, selectPrimaryColor, } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectChannelSocialId, selectLoadingServerDetailsState, selectPinningMessage, selectPopularSearches, selectUsersPermissions } from '../../ServerSlice';
 import { FetchPins, selectLoadingPins, selectPinnedMessages } from './ServerDashBoardSlice';
 
@@ -44,6 +44,8 @@ export const ServerDashBoard = () => {
 
     const serverLoading = useSelector(selectLoadingServerDetailsState);
 
+    const glassState = useSelector(selectGlassState);
+
     React.useEffect(() => {
         if (serverLoading === false) {
             if (!pins[pins.length - 1]?.no_more_pins) {
@@ -67,7 +69,7 @@ export const ServerDashBoard = () => {
         <>
         {(page !== 'pins' && page  !== 'media' && page !== 'activity') ? null :
         <div 
-        style={{backgroundColor: primaryColor}}
+        style={{backgroundColor: glassState ? `rgba(${primaryColor.split('(')[1].split(')')[0]}, 0.8)` : primaryColor}}
         className='server-dashboard-container'>
             <div style={{backgroundColor: glassColor, 
                 }} className='server-dashboard-inner-container'>

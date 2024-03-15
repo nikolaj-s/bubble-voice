@@ -1,10 +1,10 @@
 .user-status-container {
-    height: 45px;
+    height: 46px;
     width: calc(100% - 6px);
     display: flex;
     align-items: center;
     position: relative;
-    min-height: 45px;
+    min-height: 46px;
     z-index: 4;
     cursor: pointer;
     transition: 0.05s;

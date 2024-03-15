@@ -31,7 +31,7 @@ import { CannotViewSocial } from '../../../../../components/CannotViewSocial/Can
 import { ExplicitContentWarning } from './ExplicitContentWarning/ExplicitContentWarning';
 import { selectDisableNsfwWarning } from '../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
-export const Social = ({currentChannel, channelId, socialRoute = false, bulletin = false, direct_message, direct_message_user, status}) => {
+export const Social = ({hideChannelBackgrounds, currentChannel, channelId, socialRoute = false, bulletin = false, direct_message, direct_message_user, status}) => {
 
     const dispatch = useDispatch();
 
@@ -400,9 +400,9 @@ export const Social = ({currentChannel, channelId, socialRoute = false, bulletin
         <div 
         onKeyUp={focusTextInput}
         className='social-outer-container'
-        style={{backgroundColor: primaryColor}}
+        style={{backgroundColor: !hideChannelBackgrounds && currentChannel.channel_background ? 'rgba(0,0,0,0)' :  primaryColor}}
         >
-        {permission?.user_can_view_channel_content ?
+        {permission?.user_can_view_channel_content && currentChannel?.auth ?
             <>
             {(loadingMore || mounting) && allMessages?.length > 0 ?
             <motion.div initial={{opacity: 0, top: '-120px'}} exit={{opacity: 0, top: '-120px'}} animate={{opacity: 1, top: 0}} style={{backgroundColor: glassColor}} className='social-loading-container'>

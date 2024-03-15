@@ -19,7 +19,7 @@ import { handleAddingMedia, selectLoadingMusicState } from './Room/Music/MusicSl
 import { DropOverlay } from '../../../components/DropOverlay/DropOverlay'
 import { selectUsername } from '../../settings/appSettings/accountSettings/accountSettingsSlice'
 import { sendMessage } from '../SocialSlice'
-import { selectPrimaryColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice'
+import { selectGlassState, selectPrimaryColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 import { AudioInit } from '../../AudioInit/AudioInit'
 
 export const RoomWrapper = () => {
@@ -45,6 +45,8 @@ export const RoomWrapper = () => {
     const username = useSelector(selectUsername);
 
     const primaryColor = useSelector(selectPrimaryColor);
+
+    const glassState = useSelector(selectGlassState);
 
     const onDrop = async (e) => {
 
@@ -86,7 +88,7 @@ export const RoomWrapper = () => {
         <>
         
         <ServerSettingsRouteWrapper />
-        <div style={{backgroundColor: primaryColor, width: (channelId && !userStatusHidden) ? 'calc(100% - 200px)' : null, maxWidth: (channelId && !userStatusHidden) ? 'calc(100% - 200px)' : null}} className='outer-server-page-wrapper'>
+        <div style={{backgroundColor: glassState ? `rgba(0,0,0,0)` : primaryColor, width: (channelId && !userStatusHidden) ? 'calc(100% - 200px)' : null, maxWidth: (channelId && !userStatusHidden) ? 'calc(100% - 200px)' : null}} className='outer-server-page-wrapper'>
             <div onDragOver={onDragOver} onDrop={onDrop} className='server-page-wrapper'>
                 <SocialRoute key='social-route' />
                 

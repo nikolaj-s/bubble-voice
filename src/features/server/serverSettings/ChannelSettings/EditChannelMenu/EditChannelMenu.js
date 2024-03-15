@@ -412,6 +412,12 @@ const Wrapper = () => {
             </div>
             </>
             : null}
+            {channelToEdit.type === 'text' ?
+            <>
+            <InputTitle zIndex={2} title={"Channel Background"} />
+            <ChannelBackgroundInput contain={containBackground} blur={backgroundBlur} initialImage={channelToEdit.channel_background} getFile={handleSettingChannelBackground} />
+            </>
+            : null}
             {channelToEdit.text_only ? null :
             <>
             <SettingsHeader title={"Channel Background"} />

@@ -11,11 +11,9 @@ import { selectAccentColor, selectOnMacOs, selectSecondaryColor, selectTextColor
 // style
 import "./ServerNavigation.css";
 import { VideoRoomIcon } from '../../../../components/Icons/VideoRoomIcon/VideoRoomIcon';
-import { SocialIcon } from '../../../../components/Icons/SocialIcon/SocialIcon';
 import { WidgetsIcon } from '../../../../components/Icons/WidgetsIcon/WidgetsIcon';
 import { PinIcon } from '../../../../components/Icons/PinIcon/PinIcon';
 import { MediaIcon } from '../../../../components/Icons/MediaIcon/MediaIcon';
-import { AltCloseButton } from '../../../../components/buttons/AltCloseButton/AltCloseButton'
 import { miscSettingsChannelSpecificStateChange, selectHideUserStatus, selectMuteSocial, selectWebVersion } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { OptionsButton } from '../../../../components/buttons/OptionsButton/OptionsButton';
 import { TextOnlyIcon } from '../../../../components/Icons/TextOnlyIcon/TextOnlyIcon';
@@ -25,9 +23,11 @@ import { SOCIAL_DATA } from '../../../../util/LocalData';
 import { SocialFilterButton } from '../../../../components/buttons/SocialFilterButton/SocialFilterButton';
 import { selectFilterMenuOpen, toggleFilterMenu } from '../../SocialSlice';
 import { UserBarToggleButton } from '../../../../components/buttons/UserBarToggleButton/UserBarToggleButton';
-import { selectChannelSpecificStateSettings } from '../../../contextMenu/contextMenuSlice';
 import { setExpandedContent } from '../../../ExpandContent/ExpandContentSlice';
 import { MuteSocialButton } from '../../../../components/buttons/MuteSocialButton/MuteSocialButton';
+import { VoiceEnabledIcon } from '../../../../components/Icons/VoiceEnabledIcon/VoiceEnabledIcon';
+import { VoiceDisabledIcon } from '../../../../components/Icons/VoiceDisabledIcon/VoiceDisabledIcon';
+import { RedditIcon } from '../../../../components/Icons/RedditIcon/RedditIcon';
 
 export const ServerNavigation = () => {
 
@@ -380,7 +380,7 @@ export const ServerNavigation = () => {
                 onMouseUp={() => {handleAnimation(secondaryColor, voiceButtonAnimation, 'voice')}}
                 animate={voiceButtonAnimation} onClick={() => {handleAction('voice')}} className='server-navigation-button stream-server-button'>
                     {videoDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Stream Room</p> : null}
-                    <VideoRoomIcon opacity={page === 'voice' || videoDesc ? 1 : 0.6} color={textColor} />
+                    <VideoRoomIcon opacity={1} color={textColor} />
                 </motion.div>
                 {permissions?.user_can_view_channel_content ? 
                 <>
@@ -393,7 +393,7 @@ export const ServerNavigation = () => {
                 onMouseUp={() => {handleAnimation(secondaryColor, widgetsButtonAnimation, 'widgets')}}
                 animate={widgetsButtonAnimation} onClick={() => {handleAction('widgets')}} className='server-navigation-button'>
                     {widgetDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Widgets</p> : null}
-                    <WidgetsIcon opacity={page === 'widgets' || widgetDesc ? 1 : 0.6} color={textColor} />
+                    <WidgetsIcon opacity={1} color={textColor} />
                 </motion.div>
                 </>
                 : null}
@@ -407,7 +407,7 @@ export const ServerNavigation = () => {
                 onMouseUp={() => {handleAnimation(secondaryColor, activityButtonAnimation, 'activity')}}
                 animate={activityButtonAnimation} onClick={() => {handleAction('activity')}} className='server-navigation-button'>
                     {activityDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Dashboard</p> : null}
-                    <ActivityIcon opacity={page === 'activity' || activityDesc ? 1 : 0.6} color={textColor} />
+                    <ActivityIcon opacity={1} color={textColor} />
                 </motion.div>
                 <motion.div 
                 onMouseEnter={() => {handleDesc('pins', true); handleAnimation(secondaryColor, pinsButtonAnimation, 'pins')}}
@@ -417,7 +417,7 @@ export const ServerNavigation = () => {
                 onMouseUp={() => {handleAnimation(secondaryColor, pinsButtonAnimation, 'pins')}}
                 animate={pinsButtonAnimation} onClick={() => {handleAction('pins')}} className='server-navigation-button'>
                     {pinsDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Pins</p> : null}
-                    <PinIcon opacity={page === 'pins' || pinsDesc ? 1 : 0.6} color={textColor} />
+                    <PinIcon opacity={1} color={textColor} />
                 </motion.div>
                 <motion.div 
                 onMouseEnter={() => {handleDesc('media', true); handleAnimation(secondaryColor, mediaButtonAnimation, 'media')}}
@@ -427,24 +427,47 @@ export const ServerNavigation = () => {
                 onMouseUp={() => {handleAnimation(secondaryColor, mediaButtonAnimation, 'media')}}
                 animate={mediaButtonAnimation} onClick={() => {handleAction('media')}} className='server-navigation-button'>
                     {mediaDesc ? <p style={{color: textColor, backgroundColor: secondaryColor}}>Media</p> : null}
-                    <MediaIcon opacity={page === 'media' || mediaDesc ? 1 : 0.6} color={textColor} />
+                    <MediaIcon opacity={1} color={textColor} />
                 </motion.div>
-               
+                <div style={{height: 20, width: 2, backgroundColor: textColor, margin: '0px 4px', flexShrink: 0}} />
+                
+                {channel?.channel_name ?
+                <>
+                <div className='channel-room-icon-wrapper'>
+                {channel?.icon ?
+                <img src={channel?.icon} />
+                : channel?.disable_streams ?
+                <VoiceDisabledIcon />
+                :
+                <VoiceEnabledIcon />}
+                </div>
+                <h3 style={{color: textColor}} className='current-channel-room-name'>{channel?.channel_name}</h3>
+                </>
+                : null}
             </div> :
             <div className='channel-social-header-container'>
                 <div className='channel-social-header-wrapper'>
+                    {socialChannel?.icon ?
+                    <div style={{marginRight: 0}} className='channel-room-icon-wrapper'>
+                        <img src={socialChannel?.icon} />
+                    </div> :
+                    socialChannel?.type === 'subreddit' ?
+                    <RedditIcon />
+                    : 
                     <TextOnlyIcon />
+                    }
                     <h3 style={{color: textColor}}>{socialChannel.channel_name}</h3>
                     {socialChannel?.guidelines ?
                     <>
                     <div
                     style={{
                         height: 20,
-                        width: 2,
+                        width: 3,
                         margin: '0px 5px',
                         flexShrink: 0,
                         backgroundColor: textColor,
-                        opacity: 0.5
+                        opacity: 0.4,
+                        borderRadius: 5
                     }}
                     />
                     <p 
@@ -457,7 +480,7 @@ export const ServerNavigation = () => {
                         wordBreak: 'keep-all',
                         whiteSpace: 'nowrap',
                         wordWrap: 'normal',
-                        fontSize: '0.9rem',
+                        fontSize: '12px',
                         maxWidth: '100%',
                         flexShrink: 4
                     }}>{socialChannel?.guidelines}</p>
@@ -469,10 +492,11 @@ export const ServerNavigation = () => {
             }
             <div
             style={{
-                width: 'auto',
+                width: "auto",
                 height: 30,
                 display: 'flex',
-                alignItems: 'center'
+                alignItems: 'center',
+                flexShrink: 0
             }}
             >
             {!socialId ? <div className='server-navigation-filler'></div> : null}

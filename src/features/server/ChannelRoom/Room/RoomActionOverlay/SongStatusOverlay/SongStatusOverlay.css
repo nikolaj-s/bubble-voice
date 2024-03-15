@@ -1,6 +1,6 @@
 
 .song-skipped-overlay-container {
-    max-width: calc(100% - 10px);
+    max-width: calc(100% - 15px);
     align-self: flex-end;
     padding: 5px;
     border-radius: 10px;

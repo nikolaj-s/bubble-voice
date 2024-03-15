@@ -262,7 +262,7 @@ const Settings = () => {
             <AltError marginTop={'2%'} error={true} errorMessage={"Must reconnect to channel for this setting to take effect server side"} />
             <InputTitle title={"Preview Webcam"} />
             <PreviewWebCam preview={previewingWebCam} deviceId={selectedVideoInput._id} mirrored={mirroredWebCam} />
-            <ApplyCancelButton position='relative' apply={() => {handleTogglePreviewWebCam(true)}} cancel={() => {handleTogglePreviewWebCam(false)}} toggled={previewingWebCam} cancelName='Stop' name='Start' />
+            <ApplyCancelButton flip={true} position='relative' apply={() => {handleTogglePreviewWebCam(true)}} cancel={() => {handleTogglePreviewWebCam(false)}} toggled={previewingWebCam} cancelName='Stop' name='Start' />
             <SettingsSpacer />
             {channelId ? <MicMutedIndicator /> : null}
         </div>

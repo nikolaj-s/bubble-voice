@@ -1,6 +1,6 @@
 .preview-web-cam-settings-container {
-    width: calc(100% - 8px);
-    height: 392px;
+    width: 400px;
+    height: 225px;
     border-radius: var(--border-radius);
     display: flex;
     justify-content: center;

@@ -55,13 +55,6 @@ export const UserStatus = ({user}) => {
         <div 
         style={{backgroundColor: preview ? primaryColor : transparentColor, opacity: preview ? 1 : user?.status === 'offline' || !user?.status ? 0.6 : 1,}}
         onClick={openMemberPanel} onMouseEnter={(e) => {handleMouseEnter(e, true)}} onMouseLeave={(e) => {handleMouseLeave(e, false)}} className={`user-status-container ${user._id}-user-status-card status-${user.status}`}>
-            <div style={{
-                width: 3,
-                height: '100%',
-                flexShrink: 0,
-                backgroundColor: (user.color || primaryColor),
-                borderRadius: '10px 0px 0px 10px'
-            }}></div>
             <div
             style={{
                 borderRadius: (user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%',

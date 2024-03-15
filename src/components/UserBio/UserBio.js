@@ -6,7 +6,7 @@ import "./UserBio.css";
 import { Image } from '../Image/Image';
 import { setExpandedContent } from '../../features/ExpandContent/ExpandContentSlice';
 
-export const UserBio = ({bio = "", margin, loading}) => {
+export const UserBio = ({bio = "", margin, loading, textWidget}) => {
 
     const dispatch = useDispatch();
 
@@ -91,7 +91,7 @@ export const UserBio = ({bio = "", margin, loading}) => {
             </div>
             : 
             <div className='no-bio-container'>
-                <p style={{color: textColor}}>No Bio</p>
+                <p style={{color: textColor}}>{textWidget ? "" : "No Bio"}</p>
             </div>
             }
         </div>

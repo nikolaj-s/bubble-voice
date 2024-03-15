@@ -122,7 +122,7 @@ export const UserStatusBar = () => {
         <>
         {(hideUserStatusBar) ? null :
         <div 
-        style={{backgroundColor: secondaryColor}}
+        style={{backgroundColor: glass ? `rgba(${secondaryColor.split('(')[1].split(')')[0]}, 0.8)` : secondaryColor}}
         className='user-status-bar'>
             {serverGroups.map((server_group) => {
 

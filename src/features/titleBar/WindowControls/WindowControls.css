@@ -6,7 +6,7 @@
     justify-content: space-between;
     align-items: center;
     top: 0px;
-    height: 30px;
+    height: 31px;
 }
 
 .window-controls-container div {
@@ -16,8 +16,4 @@
     opacity: 1;
     width: 20px;
     height: 20px;
-}
-
-.window-controls-container div:hover {
-    opacity: 0.5;
 }

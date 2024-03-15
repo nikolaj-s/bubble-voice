@@ -5,10 +5,13 @@ import {selectTextColor} from '../../../../features/settings/appSettings/appeara
 
 export const CloseWindow = ({ action }) => {
 
+    const [hover, toggleHover] = React.useState(false);
+
     const styles = {
         container: {
             width: 12,
             height: '100%',
+            backgroundColor: hover ? 'red' : 'rgba(0,0,0,0)'
         },
         icon: {
             width: "100%",
@@ -24,7 +27,7 @@ export const CloseWindow = ({ action }) => {
     }
     
     return (
-        <div id="close-window" onClick={handleAction} style={styles.container}>
+        <div onMouseEnter={() => {toggleHover(true)}} onMouseLeave={() => {toggleHover(false)}} id="close-window" onClick={handleAction} style={styles.container}>
             <svg style={styles.icon} width="15" height="15" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M18 1.6625L16.425 0L9 7.8375L1.575 0L0 1.6625L7.425 9.5L0 17.3375L1.575 19L9 11.1625L16.425 19L18 17.3375L10.575 9.5L18 1.6625Z" fill={color}/>
             </svg>

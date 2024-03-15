@@ -31,7 +31,7 @@
     overflow-wrap: anywhere;
     margin: 0;
     font-size: 15px;
-    opacity: 0.85;
+    opacity: 1;
 }
 
 .message-container a {
@@ -97,7 +97,7 @@
 }
 
 .sender-info-inner-container p {
-    opacity: 0.4;
+    opacity: 0.9;
     font-size: 0.7rem;
     margin: 0;
     text-overflow: ellipsis;

@@ -26,7 +26,7 @@ export const ScreenShotShowCase = ({screenShots, marginTop = 5}) => {
             
             <div style={{backgroundColor: primaryColor, marginTop: marginTop}} className='screen-shot-showcase-container'>
                 <div style={{backgroundColor: primaryColor}} className='screenshot-title-container'>
-                    <h3 style={{color: textColor,fontWeight: 400}}>Screenshot Showcase</h3>
+                    <h3 style={{color: textColor, fontSize: '0.8rem', fontWeight: 300}}>Screenshot Showcase</h3>
                 </div>
                 <div className='screen-shot-wrapper-display'>
                     <div className='most-recent-screenshot-container'>

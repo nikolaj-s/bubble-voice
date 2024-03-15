@@ -130,7 +130,8 @@ const MusicSlice = createSlice({
         loadingSearchResults: false,
         recentSongs: [],
         loadingRecentSongs: false,
-        openOverlay: false
+        openOverlay: false,
+        lastInteracted: 0
     },
     reducers: {
         toggleOverlay: (state, action) => {
@@ -233,6 +234,7 @@ const MusicSlice = createSlice({
         },
         [handleAddingMedia.fulfilled]: (state, action) => {
             state.loading = false;
+            state.lastInteracted = new Date.getTime();
         },
         [handleAddingMedia.rejected]: (state, action) => {
             state.loading = false;

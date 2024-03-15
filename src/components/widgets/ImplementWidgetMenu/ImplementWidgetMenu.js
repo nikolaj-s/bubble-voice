@@ -24,6 +24,7 @@ import "./ImplementWidgetMenu.css";
 import { socket } from '../../../features/server/ServerBar/ServerBar';
 import { addWidgetToChannel, selectEditingChannelId } from '../../../features/server/ServerSlice';
 import { MusicWidgetButton } from '../WidgetButtons/MusicWidgetButton/MusicWidgetButton';
+import { UserBio } from '../../UserBio/UserBio';
 
 export const ImplementWidgetMenu = ({active = false, type, name, close}) => {
 
@@ -235,6 +236,12 @@ export const ImplementWidgetMenu = ({active = false, type, name, close}) => {
                     <InputTitle title={inputTitle} />}
                     {type === 'title' || type === 'dynamicGallery' ? <TextInput inputValue={textValue} action={handleTextValue} placeholder={type === 'dynamicGallery' ? "Image Query" : "Text"} /> : null}
                     {type === 'plainText' || type === 'list' ? <TextArea height={300} inputValue={textValue} action={handleTextValue} placeHolder={"Text"} /> : null}
+                    {type === 'plainText' ?
+                    <>
+                    <InputTitle title={"Preview *Links to images will be displayed"} />
+                    <UserBio textWidget={true} bio={textValue} />
+                    </>
+                    : null}
                     {type === 'image' ? 
                     <div className='adding-widget-image'>
                         <ImageInput  objectFit='contain' backgroundColor={'black'} maxDimensions={1280} getFile={handleSetImage} borderRadius='5px' /> 

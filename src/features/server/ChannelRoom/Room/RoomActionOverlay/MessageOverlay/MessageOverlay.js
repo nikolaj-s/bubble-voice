@@ -6,12 +6,14 @@ import { motion } from 'framer-motion';
 import "./MessageOverlay.css";
 import { Message } from '../../../../../../components/Message/Message';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectSecondaryColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectSecondaryColor, selectTextColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectMiscSettingsDisableMessagePopUp, selectMuteSocial } from '../../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { selectChannelSocialId, selectCurrentChannelId, selectServerChannels } from '../../../../ServerSlice';
 import { playSoundEffect, selectSocialSoundEffect } from '../../../../../settings/soundEffects/soundEffectsSlice';
 
 export const MessageOverlay = ({data, onEnd, page}) => {
+
+    const [channelName, setChannelName] = React.useState("");
 
     const dispatch = useDispatch();
 
@@ -24,6 +26,8 @@ export const MessageOverlay = ({data, onEnd, page}) => {
     const socialId = useSelector(selectChannelSocialId);
 
     const channels = useSelector(selectServerChannels);
+
+    const textColor = useSelector(selectTextColor);
 
     const inChannel = useSelector(selectCurrentChannelId);
 
@@ -39,12 +43,14 @@ export const MessageOverlay = ({data, onEnd, page}) => {
             onEnd();
         } else {
             dispatch(playSoundEffect({default: "newMessage"}));
+            console.log(channel)
+            setChannelName(channel.channel_name)
 
             setTimeout(() => {
 
                 onEnd();
     
-            }, 2500)
+            }, 3000)
         }
     // eslint-disable-next-line
     }, [data, socialId, channels, inChannel])
@@ -59,6 +65,7 @@ export const MessageOverlay = ({data, onEnd, page}) => {
         initial={{scale: 0}} 
         animate={{scale: 1}} 
         exit={{scale: 0}} className='message-overlay-container'>
+            <h3 style={{color: textColor}}>Posted in: {channelName}</h3>
             <Message dashboard={true} overlay={true} message={data.content} current_message={data} />
         </motion.div>
     )

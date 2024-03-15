@@ -11,13 +11,16 @@
     top: 0;
     max-width: calc(100% - 496px);
     left: 275px;
+    -webkit-app-region: drag;
+    -webkit-user-select: none;
 }
 
 .server-navigation-button-wrapper {
     height: calc(100%);
+    max-width: calc(100% - 118px);
     display: flex;
     align-items: center;
-    -webkit-app-region: no-drag;
+    -webkit-app-region: drag;
 }
 
 .server-nav-social-unread-indicator {
@@ -110,10 +113,41 @@
 #social-channel-guide-lines-notice {
     -webkit-app-region: no-drag;
     cursor: pointer;
-    opacity: 0.5 !important;
+    opacity: 1 !important;
     transition: 0.1s;
+    font-size: 12px;
+    font-weight: 300;
 }
 
 #social-channel-guide-lines-notice:hover {
-    opacity: 1 !important;
+    opacity: 0.6 !important;
+}
+
+.current-channel-room-name {
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 4;
+    font-size: .9rem;
+    max-width: calc(100% - 200px);
+    font-weight: 400;
+}
+
+.channel-room-icon-wrapper {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.channel-room-icon-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }

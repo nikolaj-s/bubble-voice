@@ -57,8 +57,15 @@ export const fetchMessages = createAsyncThunk(
             const data = await socket.request('fetch messages', {channel_id: channel_id, count: count, type: type})
             .then(res => res)
             .catch(error => {
-                dispatch(throwServerError({error: true, errorMessage: error.errorMessage}))
+                console.log(error)
+                dispatch(throwServerError({error: true, errorMessage: error}));
+
+                return {error: true};
             })
+
+            if (data.error) {
+                return rejectWithValue({error: true, channel_id: channel_id})
+            }
 
             return data;
              
@@ -361,6 +368,13 @@ const SocialSlice = createSlice({
                 state.messages[action.payload.channel_id].splice(message_index, 1);
             }
             
+        },
+        [fetchMessages.rejected]: (state, action) => {
+            state.loading = false;
+
+            state.current_social = "";
+
+            state.messages[action.payload.channel_id] = [];
         },
         [fetchMessages.pending]: (state, action) => {
             state.loading = true;

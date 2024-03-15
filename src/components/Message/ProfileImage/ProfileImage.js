@@ -25,7 +25,7 @@ export const ProfileImage = ({pinned_to_profile_state, hover, timeStamp, prevDat
             }} onClick={action} className='message-profile-picture'>
                 <Image image_class={'user-image'} cursor='pointer' image={user_image || current_message.user_image} />
             </div>
-        : <p id={`alt-time-stamp-${current_message?._id}`} style={{opacity: hover ? 0.6 : 0, color: textColor, fontSize: 9, margin: '5px 0px 0px 0px',textAlign: 'center'}}>{timeStamp}</p>}
+        : <p id={`alt-time-stamp-${current_message?._id}`} style={{opacity: hover ? 0.9 : 0, color: textColor, fontSize: 9, margin: '5px 0px 0px 0px',textAlign: 'center'}}>{timeStamp}</p>}
         </div>
         </>
     )

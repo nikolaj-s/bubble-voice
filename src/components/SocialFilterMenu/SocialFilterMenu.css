@@ -82,3 +82,26 @@
     z-index: 3;
     border-radius: 10px 0px 0px 10px;
 }
+
+.results-title-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 5px;
+    width: calc(100% - 10px);
+    cursor: pointer;
+    transition: 0.1s;
+    
+}
+
+.results-title-container:hover {
+    opacity: 0.6;
+}
+
+.results-title-container h3 {
+    margin: 0;
+    font-weight: 300;
+    font-size: 0.8rem;
+    opacity: 0.9;
+    letter-spacing: var(--font-spacing);
+}

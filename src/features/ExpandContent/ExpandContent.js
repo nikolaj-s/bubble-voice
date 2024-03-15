@@ -137,14 +137,12 @@ export const ExpandContent = () => {
                 </div>
                  :
                 youtube ?
-                <div
-                style={{minWidth: 600, height: 900,  maxHeight: 'calc(100% - 100px)'}}
-                >
+                
                 <YouTube 
                 opts={{
                     
-                    height: '100%',
-                    width: '100%',
+                    height: 450,
+                    width: 800,
                     playerVars: {
                         fs: 0,
                         autoplay: 1,
@@ -153,12 +151,12 @@ export const ExpandContent = () => {
                         modestbranding: 1,
                 }}}
                 style={{
-                    width: '100%',
-                    height: 500,
+                    width: 800,
+                    height: 450,
                     maxHeight: 'calc(100% - 100px)'
                 }}
                 videoId={expandedContent.split(':')[1]} />
-                </div>
+                
                 :
                 reddit ?
                 <RedditPost data={expandedContent} /> :

@@ -7,6 +7,7 @@ import { selectPrimaryColor, selectTextColor } from '../../../../features/settin
 
 // style
 import "./PlainTextWidget.css";
+import { UserBio } from '../../../UserBio/UserBio';
 
 export const PlainTextWidget = ({widget, editing}) => {
 
@@ -16,7 +17,7 @@ export const PlainTextWidget = ({widget, editing}) => {
 
     return (
         <div style={{backgroundColor: color}} className='plain-text-widget-container'>
-            <p style={{color: textColor}} >{widget.content.text}</p>
+            <UserBio textWidget={true} bio={widget.content.text} />
         </div>
     )
 }

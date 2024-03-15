@@ -4,7 +4,7 @@ import { SettingsHeader } from '../../../../components/titles/SettingsHeader/Set
 import { useRoutes } from 'react-router';
 import { InputTitle } from '../../../../components/titles/inputTitle/InputTitle';
 import { useDispatch, useSelector } from 'react-redux';
-import { miscSettingsChannelSpecificStateChange, selectAutoPlayNativeVideos, selectDisableNsfwBlur, selectDisableNsfwWarning, selectHideLinksOnMedia, selectHideProfileImagesOnMessages, selectMaximizeMedia, selectMiscSettingsDisableMessagePopUp, selectMuteSocialVideos } from '../MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { miscSettingsChannelSpecificStateChange, selectAutoPlayNativeVideos, selectDisableNsfwBlur, selectDisableNsfwWarning, selectHideLinksOnMedia, selectHideProfileImagesOnMessages, selectMaximizeMedia, selectMiscSettingsDisableMessagePopUp, selectMuteSocial, selectMuteSocialVideos } from '../MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { ToggleButton } from '../../../../components/buttons/ToggleButton/ToggleButton';
 
 import "./socialSettings.css";
@@ -29,6 +29,8 @@ const Settings = () => {
     const disableNsfwWarning = useSelector(selectDisableNsfwWarning);
 
     const disableNsfwBlur = useSelector(selectDisableNsfwBlur);
+
+    const muteSocial = useSelector(selectMuteSocial);
 
     const update = (state) => {
         dispatch(miscSettingsChannelSpecificStateChange(state));
@@ -59,8 +61,8 @@ const Settings = () => {
             <InputTitle title={"Disable Explicit Content Detected Warning"} />
             <ToggleButton state={disableNsfwWarning} action={() => {update('disableNsfwWarning')}} />
             <SettingsHeader title={"Notifications"} />
-            <InputTitle title={"Disable Message Pop Up's"} />
-            <ToggleButton action={() => {update("disableMessagePopUp")}} state={disableMessagePopUp} />
+            <InputTitle title={"Mute Social Overlay Notifications"} />
+            <ToggleButton action={() => {update("muteSocial")}} state={muteSocial} />
             <SettingsHeader title={"Videos"} />
             <InputTitle title={"Auto Play Native Videos"} />
             <ToggleButton action={() => {update('autoPlayNativeVideos')}} state={autoPlaySocialVideos}  />

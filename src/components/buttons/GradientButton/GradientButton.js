@@ -17,6 +17,7 @@ export const GradientButton = ({action, gradient, active, description}) => {
         margin={"5px"}
         invert={true}
         desc_space={15}
+        desc_width='100px'
         active_background={primaryColor}
         >
             <div

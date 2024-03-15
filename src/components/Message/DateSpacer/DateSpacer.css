@@ -5,9 +5,9 @@
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    opacity: 0.5;
+    opacity: 0.9;
     flex-shrink: 0;
-    margin: 15px 0px;
+    margin: 30px 0px;
 }
 
 .date-spacer-container p {
@@ -15,9 +15,11 @@
     white-space: nowrap;
     margin: 0px 5px;
     cursor: default;
+    font-size: 1.2rem;
 }
 
 .date-spacer-line {
     width: 100%;
-    height: 1px;
+    height: 4px;
+    border-radius: 5px;
 }

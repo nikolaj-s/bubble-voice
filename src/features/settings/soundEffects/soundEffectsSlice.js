@@ -44,7 +44,9 @@ const soundEffectsSlice = createSlice({
         },
 
         playSoundEffect: (state, action) => {
-           
+            console.log(action.payload)
+            if (state.soundEffectsQueue.length >= 1) return;
+
             if (state.soundEffectsQueue[0] === action.payload) return;
 
             if (action.payload?.default && (action.payload?.default === state.soundEffectsQueue[0]?.default)) return;

@@ -14,6 +14,7 @@ import { Loading } from '../LoadingComponents/Loading/Loading';
 import { Message } from '../Message/Message';
 import { ProfileIcon } from '../Icons/ProfileIcon/ProfileIcon';
 import { TextInput } from '../inputs/TextInput/TextInput';
+import { AltDownIcon } from '../Icons/AltDownIcon/AltDownIcon';
 
 export const SocialFilterMenu = () => {
 
@@ -30,6 +31,8 @@ export const SocialFilterMenu = () => {
     const [selectUserMenu, toggleSelectUserMenu] = React.useState(false);
 
     const [query, setQuery] = React.useState("");
+
+    const [showOptions, toggleShowOptions] = React.useState(true);
 
     const glassColor = useSelector(selectGlassColor);
 
@@ -97,6 +100,8 @@ export const SocialFilterMenu = () => {
         }
         
         dispatch(fetchFilteredMessages({channel_id: currentChannel, filter: filterData}));
+
+        toggleShowOptions(false);
     }
 
     const pinMessage = () => {
@@ -131,44 +136,50 @@ export const SocialFilterMenu = () => {
             onClick={(e) => {e?.stopPropagation()}}
             style={{backgroundColor: secondaryColor}}
             className='social-filter-container'>
-                
-                <InputTitle title={'From:'} />
-                <TextButton action={openDatePicker} name={date} icon={<CalenderIcon width={20} height={16} />} />
-                <input value={date === 'Default' ? "" : date}  onChange={newDate} style={{height: 0, width: 0, opacity: 0}} id={'social-filter-date-picker'} type='date' max={new Date().toISOString().split("T")[0]} />
-                <InputTitle title={"Includes Text:"} />
-                <TextInput inputValue={query} action={(v) => {setQuery(v)}} placeholder={"Keywords"} />
-                {socialChannel?.type === 'mediahistory' ? null :
-                <>
-                <InputTitle title={"Media Type:"} />
-                <RadioButton action={() => {setMediaType('all')}} state={mediaType === 'all'} name="All" />
-                <RadioButton action={() => {setMediaType('image')}} state={mediaType === 'image'} name="Image" />
-                <RadioButton action={() => {setMediaType("link")}} state={mediaType === 'link'} name="Link" />
-                <RadioButton action={() => {setMediaType('screenshot')}} state={mediaType === 'screenshot'} name="Screenshot" />
-                <RadioButton action={() => {setMediaType('video')}} state={mediaType === 'video'} name="Video" />
-                </>
-                }
-                <InputTitle title={"Posted By:"} />
-                <TextButton action={() => {toggleSelectUserMenu(!selectUserMenu)}} name={user.display_name} icon={user.username !== '*' ? 
-                <div style={{
-                    width: 30,
-                    height: 30,
-                    borderRadius: '50%',
-                    overflow: 'hidden',
-                    marginLeft: 10
-                }}>
-                    <img style={{
-                        objectFit: 'cover',
-                        width: '100%',
-                        height: '100%',
-                       
-                    }} src={user?.user_image} />
+                    {showOptions ? 
+                    <>
+                    <InputTitle title={'From:'} />
+                    <TextButton action={openDatePicker} name={date} icon={<CalenderIcon width={20} height={16} />} />
+                    <input value={date === 'Default' ? "" : date}  onChange={newDate} style={{height: 0, width: 0, opacity: 0}} id={'social-filter-date-picker'} type='date' max={new Date().toISOString().split("T")[0]} />
+                    <InputTitle title={"Includes Text:"} />
+                    <TextInput inputValue={query} action={(v) => {setQuery(v)}} placeholder={"Keywords"} />
+                    {socialChannel?.type === 'mediahistory' ? null :
+                    <>
+                    <InputTitle title={"Media Type:"} />
+                    <RadioButton action={() => {setMediaType('all')}} state={mediaType === 'all'} name="All" />
+                    <RadioButton action={() => {setMediaType('image')}} state={mediaType === 'image'} name="Image" />
+                    <RadioButton action={() => {setMediaType("link")}} state={mediaType === 'link'} name="Link" />
+                    <RadioButton action={() => {setMediaType('screenshot')}} state={mediaType === 'screenshot'} name="Screenshot" />
+                    <RadioButton action={() => {setMediaType('video')}} state={mediaType === 'video'} name="Video" />
+                    </>
+                    }
+                    <InputTitle title={"Posted By:"} />
+                    <TextButton action={() => {toggleSelectUserMenu(!selectUserMenu)}} name={user.display_name} icon={user.username !== '*' ? 
+                    <div style={{
+                        width: 30,
+                        height: 30,
+                        borderRadius: '50%',
+                        overflow: 'hidden',
+                        marginLeft: 10
+                    }}>
+                        <img style={{
+                            objectFit: 'cover',
+                            width: '100%',
+                            height: '100%',
+                        
+                        }} src={user?.user_image} />
+                    </div>
+                    : <ProfileIcon width={20} height={16} />} />
+                    <div className='social-filter-confirmation'>
+                        <h3 onClick={clearState} style={{color: textColor}}>Clear</h3>
+                        <TextButton action={handleSearch} textAlign='center' width={85} name={'Confirm'} />
+                    </div>
+                    </>
+                : null}
+                <div onClick={() => {toggleShowOptions(!showOptions)}} className='results-title-container'>
+                    <h3 style={{color: textColor}}>Results:</h3>
+                    <AltDownIcon flip={showOptions} />
                 </div>
-                : <ProfileIcon width={20} height={16} />} />
-                <div className='social-filter-confirmation'>
-                    <h3 onClick={clearState} style={{color: textColor}}>Clear</h3>
-                    <TextButton action={handleSearch} textAlign='center' width={85} name={'Confirm'} />
-                </div>
-                <InputTitle title={"Results:"} />
                 <div 
                 style={{backgroundColor: primaryColor}}
                 className='filtered-results-container'>
@@ -177,6 +188,7 @@ export const SocialFilterMenu = () => {
                         <h3
                         style={{color: textColor}}
                         >No Results</h3>
+                        
                     </div>
                     : 
                     results.map((message, key) => {

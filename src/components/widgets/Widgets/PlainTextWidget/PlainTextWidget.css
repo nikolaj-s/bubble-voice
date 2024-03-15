@@ -1,6 +1,6 @@
 .plain-text-widget-container {
     width: 100%;
-    height: 400px;
+    height: auto;
     border-radius: var(--border-radius);
 }
 

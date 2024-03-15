@@ -429,14 +429,14 @@ export const ContextMenu = () => {
                 dispatch(toggleContextMenu(true))
 
                 const channel = channels.find(c => c._id === id);
-                
+                console.log(channel)
                 dispatch(handleChannelCtxState({
                     join: channel.text_only ? false : currentChannelId !== id,
                     leave: channel.text_only ? false : currentChannelId === id,
                     edit: permissions.user_can_manage_channels,
                     channel: id,
                     name: p.outerText,
-                    social: permissions.user_can_post_channel_social
+                    social: channel?.auth === false ? false : permissions.user_can_post_channel_social,
                 }))
 
             }
@@ -1199,8 +1199,8 @@ export const ContextMenu = () => {
             top: ctxCordinates.y,
             left: ctxCordinates.x,
             translateY: origin ? '-100%' : (ctxCordinates.y - 300) < 0 ? '0%' : '-50%',
-            backgroundColor: glassState ? `rgba(${primaryColor.split('rgb(')[1].split(')')[0]}, 0.5)` : primaryColor,
-            backdropFilter: glassState ? 'blur(5px)' : null
+            backgroundColor: primaryColor,
+         
         }}
         className='ctx-menu-container'>
             {saveImage ? <CtxButton action={() => {handleSave(true)}} name={"Download Image"} icon={<SaveIcon />} /> : null}

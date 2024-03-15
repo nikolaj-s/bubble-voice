@@ -120,6 +120,8 @@ const Settings = () => {
             */}
             <InputTitle title={"Gradients"} />
             <Gradients action={handleUpdateGradient} gradients={gradients} current_gradient={gradient} />
+            <InputTitle title={"Enable Glass Effect For Channel List And Member List"} />
+            <ToggleButton state={glass} action={handleGlassUi} />
             <SettingsHeader title={"Custom Color Scheme"} />
             <InputTitle title={"Primary Color"} />
             <ColorInput rgb={primaryColor} selector='primaryColor' action={handleInput} />

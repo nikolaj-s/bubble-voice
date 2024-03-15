@@ -12,6 +12,7 @@ import { playSoundEffect } from '../../../../../settings/soundEffects/soundEffec
 
 // style
 import "./SongStatusOverlay.css";
+import { selectDisableMediaWidgetStatusUpdates } from '../../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 export const SongStatusOverlay = ({data, onEnd}) => {
 
@@ -21,15 +22,23 @@ export const SongStatusOverlay = ({data, onEnd}) => {
 
     const textColor = useSelector(selectTextColor);
 
+    const disableOverlay = useSelector(selectDisableMediaWidgetStatusUpdates);
+
     React.useEffect(() => {
 
-        dispatch(playSoundEffect('altPop'))
-
-        setTimeout(() => {
-
+        if (disableOverlay) {
             onEnd();
+        } else {
+            dispatch(playSoundEffect('altPop'))
 
-        }, 3000)
+            setTimeout(() => {
+    
+                onEnd();
+    
+            }, 3000)
+        }
+
+        
 // eslint-disable-next-line
     }, [data])
 

@@ -21,6 +21,8 @@ import { MiscellaneousSettings } from '../appSettings/MiscellaneousSettings/Misc
 import { MenuButton } from '../../../components/buttons/MenuButton/MenuButton'
 import { motion } from 'framer-motion'
 import { SocialSettings } from '../appSettings/socialSettings/socialSettings'
+import { WindowSettings } from '../appSettings/WindowSettings/WindowSettings'
+import { NotificationSettings } from '../appSettings/NotificationSettings/NotificationSettings'
 
 const Wrapper = () => {
     
@@ -73,6 +75,8 @@ const Wrapper = () => {
             <SoundSettings />
             <VoiceVideoSettings />
             <SocialSettings />
+            <WindowSettings />
+            <NotificationSettings />
             <CloseSettings />
             <MenuButton position={'fixed'} action={openMobileSettingsMenu} top={0} right={60} />
         </motion.div>

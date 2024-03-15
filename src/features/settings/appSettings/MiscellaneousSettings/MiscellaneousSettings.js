@@ -84,9 +84,6 @@ const Settings = () => {
     return (
         <>
         <div className='settings-wrapper'>
-            <SettingsHeader title={"System Notifcations"} />
-            <InputTitle title={"Disable System Notifications"} />
-            <ToggleButton state={systemNotifcations} action={() => {handleChannelSpecificStateChange('disableSystemNotifications')}} />
             <SettingsHeader title={"Activity"} />
             <InputTitle title={"Display Current Activity As Custom Status Message"} />
             <ToggleButton state={activityStatus} action={() => {handleChannelSpecificStateChange('activity')}} />
