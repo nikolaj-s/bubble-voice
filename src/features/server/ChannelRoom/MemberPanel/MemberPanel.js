@@ -24,6 +24,7 @@ import { PokeButton } from '../../../../components/buttons/PokeButton/PokeButton
 import { TextInput } from '../../../../components/inputs/TextInput/TextInput';
 import { ScreenShotShowCase } from '../../../../components/ScreenShotShowCase/ScreenShotShowCase';
 import { MessageButton } from '../../../../components/buttons/MessageButton/MessageButton';
+import { Decoration } from '../../../../components/Decoration/Decoration';
 
 export const MemberPanel = () => {
 
@@ -213,6 +214,7 @@ export const MemberPanel = () => {
                         </div>
                         <div style={{borderRadius: member.profile_picture_shape === 'square' ? '5px' : '50%'}} className='member-panel-profile-picture'>
                             <Image image={member.user_image} />
+                            <Decoration width={130} height={130} decoration={member.decoration} />
                         </div>
                     </div>
                     <div style={{backgroundColor: (color  || secondaryColor)}} className='member-panel-info-container'>

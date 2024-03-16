@@ -161,7 +161,7 @@
     height: 40px;
     border-radius: 50%;
     flex-shrink: 0;
-    overflow: hidden;
+    position: relative;
     margin: 4px 6px 0 0px;
 }
 

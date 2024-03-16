@@ -1,0 +1,8 @@
+.decorations-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: auto;
+    position: relative;
+    min-height: 60px;
+}

@@ -14,6 +14,8 @@ import { useSelector } from 'react-redux'
 import { selectGlassColor, selectPrimaryColor, selectTextColor } from '../../appearanceSettings/appearanceSettingsSlice'
 
 import "./EditMemberPanel.css";
+import { DecorationPicker } from '../DecorationPicker/DecorationPicker'
+import { Decoration } from '../../../../../components/Decoration/Decoration'
 
 export const EditMemberPanel = ({
     color, 
@@ -37,7 +39,9 @@ export const EditMemberPanel = ({
     screenShots,
     handleNewDisplayName,
     username,
-    disablePreview
+    disablePreview,
+    currentDecoration,
+    setDecoration
     }) => {
     
     const accentColor = useSelector(selectTextColor);   
@@ -69,6 +73,7 @@ export const EditMemberPanel = ({
                 <ProfilePictureShape action={changeProfileShape} shape={newShape} />
                 <InputTitle title={"Update Profile Banner"} />
                 <ProfileImage newBanner={newBanner} newImage={newImage} color={updateColor} shape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} />
+                <DecorationPicker currentDecoration={currentDecoration} setDecoration={setDecoration} />
                 <InputTitle title={"Change Accent Color"} />
                 <ColorInput rgb={color} action={updateColor} />
                 <InputTitle title={'Change Display Name'} />
@@ -91,6 +96,7 @@ export const EditMemberPanel = ({
                 style={{backgroundColor: color}}
                 className='edit-panel-profile-preview'>
                     <div className='profile-banner-preview-wrapper'>
+                        <Decoration decoration={currentDecoration} width={130} height={130} />
                         <img className='profile-baner-source' src={newBanner?.preview || userBanner} />
                         <img style={{borderRadius: newShape === 'square' ? 5 : '50%'}} className='profile-image-source' src={newImage?.preview || userImage} />
                     </div>

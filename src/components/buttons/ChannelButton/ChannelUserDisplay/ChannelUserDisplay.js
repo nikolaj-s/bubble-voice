@@ -21,6 +21,7 @@ import { DisabledWebCamIcon } from '../../../Icons/DisabledWebCamIcon/DisabledWe
 import { DisabledStreamIcon } from '../../../Icons/DisabledStreamIcon/DisabledStreamIcon';
 import { setPanelPosition, setSelectedMember } from '../../../../features/server/ChannelRoom/MemberPanel/MemberPanelSlice';
 import { selectCurrentChannelId } from '../../../../features/server/ServerSlice';
+import { Decoration } from '../../../Decoration/Decoration';
 
 export const ChannelUserDisplay = ({user, channel_id, dragging = () => {}}) => {
 
@@ -75,7 +76,8 @@ export const ChannelUserDisplay = ({user, channel_id, dragging = () => {}}) => {
             <div 
             style={{position: 'relative', borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%', width: 28, height: 28}}
             className='channel-user-placeholder-user-image'>
-                <Image image_class={'user-image'} cursor='pointer' objectFit='cover' image={user.user_image?.includes('.gif') ? "" : user.user_image} />
+                <Image borderRadius={(user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%'} image_class={'user-image'} cursor='pointer' objectFit='cover' image={user.user_image?.includes('.gif') ? "" : user.user_image} />
+                <Decoration width={36} height={36} decoration={user.decoration} />
                 <div style={{
                     position: 'absolute',
                     top: 0,

@@ -60,7 +60,6 @@
     height: 120px;
     flex-shrink: 0;
     position: relative;
-    overflow: hidden;
 }
 .user-status-stream-wrapper {
     position: absolute;

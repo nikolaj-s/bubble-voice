@@ -889,20 +889,26 @@ export class RoomClient {
     }
 
     exit(offline = false) {
-        let clean = function() {
-            this.consumerTransport.close();
-            this.producerTransport.close();
-            this.socket.off('disconnect');
-            this.socket.off('newProducers');
-            this.socket.off('consumerClosed');
-        }.bind(this)
-
-        if (!offline) {
-            this?.socket?.request('leaves channel')
-            .finally( function () {clean()})
-        } else {
-            clean();
+        try {
+            let clean = function() {
+                this.consumerTransport.close();
+                this.producerTransport.close();
+                this.socket.off('disconnect');
+                this.socket.off('newProducers');
+                this.socket.off('consumerClosed');
+            }.bind(this)
+    
+            if (!offline) {
+                this?.socket?.request('leaves channel')
+                .finally( function () {clean()})
+            } else {
+                clean();
+            }
+        } catch (err) {
+            console.log(err);
+            return;
         }
+        
     }
 
     async initSockets() {

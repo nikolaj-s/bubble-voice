@@ -5,7 +5,7 @@ import { useRoutes } from 'react-router'
 import { AnimatePresence } from 'framer-motion';
 
 // state
-import { selectUserBanner, selectUserImage, selectDisplayName, selectAccountSettingsLoading, selectAccountSettingsErrorState, selectAccountSettingsErrorMessage, updateAccount, updateAccountInputState, selectAccountSettingsPassword, selectAccountSettingsNewPassword, selectAccountSettingsConfirmNewPassword, accountSettingsCloseError, selectAccountSettingsStateChanged, selectProfilePictureShape, selectProfileBio, selectProfileColor, selectShowCaseScreenShotsState, selectUsersScreenShots, toggleShowCaseScreenShots, selectUsername } from './accountSettingsSlice';
+import { selectUserBanner, selectUserImage, selectDisplayName, selectAccountSettingsLoading, selectAccountSettingsErrorState, selectAccountSettingsErrorMessage, updateAccount, updateAccountInputState, selectAccountSettingsPassword, selectAccountSettingsNewPassword, selectAccountSettingsConfirmNewPassword, accountSettingsCloseError, selectAccountSettingsStateChanged, selectProfilePictureShape, selectProfileBio, selectProfileColor, selectShowCaseScreenShotsState, selectUsersScreenShots, toggleShowCaseScreenShots, selectUsername, selectCurrentDecoration } from './accountSettingsSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 
 // components
@@ -41,6 +41,8 @@ const Settings = () => {
 
     const [newDisplayName, setNewDisplayName] = React.useState("");
 
+    const [newDecoration, setNewDecoration] = React.useState("");
+    
     // account slice state
     const displayName = useSelector(selectDisplayName);
 
@@ -76,6 +78,8 @@ const Settings = () => {
 
     const screenShots = useSelector(selectUsersScreenShots);
 
+    const currentDecoration = useSelector(selectCurrentDecoration);
+
     const username = useSelector(selectUsername);
 
     React.useEffect(() => {
@@ -88,6 +92,8 @@ const Settings = () => {
         setNewDisplayName(displayName);
 
         setNewBio(profileBio);
+
+        setNewDecoration(currentDecoration);
 
         return () => {
             
@@ -122,14 +128,14 @@ const Settings = () => {
 
         setNewBio(profileBio);
 
+        setNewDecoration(currentDecoration);
+
         dispatch(updateAccountInputState({state: 'change', value: false}));
         
     }
-
-    console.log(newUserBanner)
     
     const handleApply = () => {
-        dispatch(updateAccount({userImage: newUserImage, userBanner: newUserBanner, newShape: newShape, color: color, bio: newBio, displayName: newDisplayName}));
+        dispatch(updateAccount({userImage: newUserImage, userBanner: newUserBanner, newShape: newShape, color: color, bio: newBio, displayName: newDisplayName, decoration: newDecoration}));
     }
 
     const getNewUserImage = (image) => {
@@ -178,11 +184,16 @@ const Settings = () => {
 
     }
 
+    const handleChangeDecoration = (value) => {
+        dispatch(updateAccountInputState({state: "change", value: true}));
+        setNewDecoration(value);
+    }
+
     return (
         <>
             <div className='settings-wrapper'>
                 <SettingsHeader title={"Account Settings"} />
-                <EditMemberPanel username={username} newBanner={newUserBanner} newImage={newUserImage} handleNewDisplayName={handleNewDisplayName} screenShots={screenShots} toggleShowCaseScreenShots={handleToggleShowScreenShots} showCaseScreenShots={showCaseScreenShots} color={color || secondaryColor} updateColor={updateColor} newShape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} changeProfileShape={changeProfileShape} handleInput={handleInput} displayName={newDisplayName} previewBio={previewBio} togglePreviewBio={togglePreviewBio} profileBio={newBio} changeProfileBio={changeProfileBio} />
+                <EditMemberPanel setDecoration={handleChangeDecoration} currentDecoration={newDecoration} username={username} newBanner={newUserBanner} newImage={newUserImage} handleNewDisplayName={handleNewDisplayName} screenShots={screenShots} toggleShowCaseScreenShots={handleToggleShowScreenShots} showCaseScreenShots={showCaseScreenShots} color={color || secondaryColor} updateColor={updateColor} newShape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} changeProfileShape={changeProfileShape} handleInput={handleInput} displayName={newDisplayName} previewBio={previewBio} togglePreviewBio={togglePreviewBio} profileBio={newBio} changeProfileBio={changeProfileBio} />
                 <SettingsHeader title={"Security"} />
                 <InputTitle title={"Change Password"} />
                 <div style={{maxWidth: 400}}>

@@ -90,7 +90,7 @@ export const verifyAccount = createAsyncThunk(
 
 export const updateAccount = createAsyncThunk(
     'accountSettingsSlice/updateAccount',
-    async ({userImage, userBanner, newShape, color, bio, displayName}, {rejectWithValue, getState, dispatch}) => {
+    async ({userImage, userBanner, newShape, color, bio, displayName, decoration}, {rejectWithValue, getState, dispatch}) => {
         const token = await getToken();
 
         const {password, newPassword, confirmNewPassword, showCaseScreenShots} = getState().accountSettingsSlice;
@@ -116,6 +116,8 @@ export const updateAccount = createAsyncThunk(
         data.append("color", color);
 
         data.append("showCaseScreenShots", showCaseScreenShots);
+
+        data.append("decoration", decoration);
 
         if (!token) return rejectWithValue({error: true, errorMessage: "validation error"})
 
@@ -195,6 +197,35 @@ export const handlePinMessageToProfile = createAsyncThunk(
     }
 )
 
+export const fetchProfileDecorations = createAsyncThunk(
+    'accountSettingsSlice/fetchProfileDecorations',
+    async (_) => {
+        try {
+
+            const token = await getToken();
+
+            const data = await Axios({
+                method: "GET",
+                headers: {"TOKEN": token},
+                url: `${url}/fetch-profile-decorations`
+            }).then(res => {
+                return res.data;
+            })
+console.log(data)
+            if (data.error) return [];
+
+            if (data.data.length > 0) {
+                return data.data.map(d => d.decoration);
+            }
+
+            return [];
+        } catch (error) {
+            console.log(error);
+            return [];
+        }
+    }
+)
+
 const accountSettingsSlice = createSlice({
     name: "accountSettingsSlice",
     initialState: {
@@ -219,6 +250,9 @@ const accountSettingsSlice = createSlice({
         screenShots: [],
         verified: true,
         email: "",
+        loadingDecorations: true,
+        decoration: "",
+        decorations: [],
     },
     reducers: {
         handleUpdateSteamLink: (state, action) => {
@@ -272,6 +306,7 @@ const accountSettingsSlice = createSlice({
                 state.screenShots = action.payload.account.screen_shots;
                 state.verified = action.payload.account.verified;
                 state.email = action.payload.account.email;
+                state.decoration = action.payload.account.decoration;
             } 
 
             state.change = false;
@@ -314,6 +349,7 @@ const accountSettingsSlice = createSlice({
 
             if (updated_info.profile_picture_shape) state.profilePictureShape = updated_info.profile_picture_shape;
 
+            if (updated_info.decoration) state.decoration = updated_info.decoration;
         },
         [updateAccount.rejected]: (state, action) => {
             state.loading = false;
@@ -341,6 +377,14 @@ const accountSettingsSlice = createSlice({
             state.loading = false;
             state.error = true;
             state.errorMessage = action.payload.errorMessage;
+        },
+        [fetchProfileDecorations.pending]: (state, action) => {
+            state.loadingDecorations = true;
+            
+        },
+        [fetchProfileDecorations.fulfilled]: (state, action) => {
+            state.loadingDecorations = false;
+            state.decorations = action.payload;
         }
     }
 })
@@ -389,6 +433,12 @@ export const selectShowCaseScreenShotsState = state => state.accountSettingsSlic
 export const selectAccountVerified = state => state.accountSettingsSlice.verified;
 
 export const selectEmail = state => state.accountSettingsSlice.email;
+
+export const selectProfileDecorations = state => state.accountSettingsSlice.decorations;
+
+export const selectCurrentDecoration = state => state.accountSettingsSlice.decoration;
+
+export const selectLoadingDecorations = state => state.accountSettingsSlice.loadingDecorations;
 
 // actions
 export const {toggleShowCaseScreenShots, handleUpdateSteamLink, handleUpdateBio, updateNewAccountState, handleSignOut, updateAccountInputState, accountSettingsCloseError } = accountSettingsSlice.actions;

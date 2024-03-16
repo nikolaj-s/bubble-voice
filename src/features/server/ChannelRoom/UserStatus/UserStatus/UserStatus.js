@@ -8,6 +8,7 @@ import "./UserStatus.css";
 import { GetTimeDifference } from '../../../../../util/GetTimeDifference';
 import { AwayIcon } from '../../../../../components/Icons/AwayIcon/AwayIcon';
 import { UserTypingIndicator } from '../../../../../components/UserTypingIndicator/UserTypingIndicator';
+import { Decoration } from '../../../../../components/Decoration/Decoration';
 
 export const UserStatus = ({user}) => {
 
@@ -49,8 +50,6 @@ export const UserStatus = ({user}) => {
         dispatch(setPanelPosition({y: (e.view.innerHeight - 600) < 0 ? 30 : e.pageY, x: (e.view.innerWidth - e.pageX) < 350 ? (e.pageX - 350) : e.pageX, origin: e.view.innerHeight - 600 < 0 ? false : (e.view.innerHeight - e.pageY) < 500 ? true : false, left: null}));
     }
     
-
-
     return (
         <div 
         style={{backgroundColor: preview ? primaryColor : transparentColor, opacity: preview ? 1 : user?.status === 'offline' || !user?.status ? 0.6 : 1,}}
@@ -62,7 +61,8 @@ export const UserStatus = ({user}) => {
                 backgroundColor: (user?.color || primaryColor),
             }}
             className='user-status-image-container'>
-                <Image disableErr={true}  image_class={"user-image"} cursor='pointer' image={user.user_image?.includes('gif') ? "" : user.user_image} />
+                <Image borderRadius={(user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%'} disableErr={true}  image_class={"user-image"} cursor='pointer' image={user.user_image?.includes('gif') ? "" : user.user_image} />
+                <Decoration width={52} height={52} decoration={user.decoration} />
                 {user.status === 'Away' || user.status === 'away' ?
                 <div 
                 

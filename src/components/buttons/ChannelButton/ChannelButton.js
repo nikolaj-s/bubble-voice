@@ -289,8 +289,8 @@ export const ChannelButton = ({category_id, collapse, channel, action = () => {}
                 </div>
                 <h3 style={{color: textColor, opacity: (active || mouseEnter || unReadMessage) && channel.auth ? 1 : 0.7, fontWeight: unReadMessage ? 600 : null}}>{channel.channel_name}</h3>
                 {mouseEnter || active ? <div className='channel-button-extra-context-wrapper'>
-                    {!channel.text_only ? <SocialButton o_mouseLeave={() => {handleAnimation(transparentPrimaryColor, false)}} desc_o_mouse_leave={() => {handleAnimation(transparentPrimaryColor, false)}} flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} action={openSocial} borderRadius={5} width={17} height={17} padding={6} desc_space={20} /> : null}
-                    <SubMenuButton invert={false} altInvert={true} o_mouseLeave={() => {handleAnimation(transparentPrimaryColor, false)}} desc_o_mouse_leave={() => {handleAnimation(transparentPrimaryColor, false)}} flip_description={index === 0 ? true : false} zIndex={index === 0 ? 2 : 1} description={"More"} margin={"0px 3px 0px 0px"} target={`channel-button-${channel._id}`} padding={6} width={17} height={17} borderRadius={"5px"} desc_space={20} />
+                    {!channel.text_only ? <SocialButton o_mouseLeave={() => {handleAnimation(transparentPrimaryColor, false)}} desc_o_mouse_leave={() => {handleAnimation(transparentPrimaryColor, false)}} flip_description={index === 0 ? true : false} zIndex={active ? 0 : 1} action={openSocial} borderRadius={5} width={17} height={17} padding={6} desc_space={20} /> : null}
+                    <SubMenuButton invert={false} altInvert={true} o_mouseLeave={() => {handleAnimation(transparentPrimaryColor, false)}} desc_o_mouse_leave={() => {handleAnimation(transparentPrimaryColor, false)}} flip_description={index === 0 ? true : false} zIndex={active ? 0 : 1} description={"More"} margin={"0px 3px 0px 0px"} target={`channel-button-${channel._id}`} padding={6} width={17} height={17} borderRadius={"5px"} desc_space={20} />
                 </div> : null}
             </motion.div>
             {channel?.status && channel?.auth ?

@@ -31,7 +31,12 @@ export const ImagePreview = ({preview, cancel, inputHeight, fileName, type, proc
             <div className='inner-image-preview-social-wrapper'>
                 {preview?.includes('.mp4') || type?.includes('video') ?
                 <video style={{height: '100%', borderRadius: '5px'}} src={preview} muted={true}  controls={false}/> :
-                <Image borderRadius={'10px'} width='auto' position='relative' objectFit='contain' zIndex={1} image={preview} />
+                <img style={{
+                    width: 'auto',
+                    height: '100%',
+                    objectFit: 'contain',
+                    borderRadius: 5
+                }} zIndex={1} src={preview} />
                 }
             </div> 
             <p className='image-post-preview-file-name' style={{color: textColor}}>{fileName}</p>

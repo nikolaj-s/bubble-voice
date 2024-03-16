@@ -28,7 +28,7 @@
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    overflow: hidden;
+    position: relative;
     margin-right: 5px;
     margin-left: 2px;
     flex-shrink: 0;

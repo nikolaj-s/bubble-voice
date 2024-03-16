@@ -15,6 +15,7 @@ import { DisabledStreamIcon } from '../../../../../components/Icons/DisabledStre
 import { Muted } from '../../../../../components/Icons/Muted/Muted';
 import { MicMuted } from '../../../../../components/Icons/MicMuted/MicMuted';
 import { ScreenShare } from '../../../../../components/Icons/ScreenShare/ScreenShare';
+import { Decoration } from '../../../../../components/Decoration/Decoration';
 
 export const User = ({user}) => {
 
@@ -66,7 +67,8 @@ export const User = ({user}) => {
             opacity: user.webcam && !prefs?.disabled_web_cam ? 0.7 : null,
             transition: '0.1s'
             }} className='active-user-profile-image-container'>
-                <Image cursor='pointer' image_class={'user-image'} objectFit='cover' image={user.user_image} />
+                <Image cursor='pointer' image_class={'user-image'} objectFit='cover' image={user.user_image} borderRadius={(user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%'} />
+                <Decoration width={156} height={156} decoration={user.decoration} />
             </div>
             <Loading  backgroundColor={user.color || 'black'} zIndex={1} show_success={false} loading={user.webcam && (user.username === username ? user.webcam : !prefs?.disabled_web_cam)} />
             <div 
