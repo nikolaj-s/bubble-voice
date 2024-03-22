@@ -158,33 +158,33 @@ try {
 
 // prevent multiple instances from occuring
 
-// const lock = app.requestSingleInstanceLock();
+const lock = app.requestSingleInstanceLock();
 
-// if (data?.toggled) {
-//   console.log('Hardware acceleration disabled')
-//   app.disableHardwareAcceleration();
+if (data?.toggled) {
+  console.log('Hardware acceleration disabled')
+  app.disableHardwareAcceleration();
 
-// } 
+} 
 
-// // handle preventing multiple instances running
-// if (!lock) {
+// handle preventing multiple instances running
+if (!lock) {
 
-//   app.quit()
+  app.quit()
 
-// } else {
-//   app.on('second-instance', (event, commandLine, workingDirectory) => {
+} else {
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
 
-//     if (win) {
+    if (win) {
 
-//       if (win.isMinimized()) win.restore();
+      if (win.isMinimized()) win.restore();
 
-//       win.show();
+      win.show();
 
-//       win.focus();
-//     }
-//   })
+      win.focus();
+    }
+  })
 
-// }
+}
 
 if (!process.env.ELECTRON_START_URL && lock) {
 
