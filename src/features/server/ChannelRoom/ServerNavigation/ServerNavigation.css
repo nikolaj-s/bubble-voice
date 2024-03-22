@@ -17,7 +17,7 @@
 
 .server-navigation-button-wrapper {
     height: calc(100%);
-    max-width: calc(100% - 118px);
+    max-width: calc(100% - 124px);
     display: flex;
     align-items: center;
     -webkit-app-region: drag;

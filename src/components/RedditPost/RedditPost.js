@@ -72,7 +72,7 @@ export const RedditPost = ({data = {}, action, disableMax, inSocial}) => {
 
 
     }
-    console.log(data)
+
     return (
         <div
         onMouseEnter={() => {toggleHover(true)}}
@@ -90,9 +90,9 @@ export const RedditPost = ({data = {}, action, disableMax, inSocial}) => {
                     <div className='reddit-post-info-wrapper'>
                         <h3 
                         onClick={openOriginal}
-                        style={{color: textColor, marginLeft: 0, fontSize: 16, opacity: 0.8}}>{data?.subreddit_name_prefixed}</h3>
+                        style={{color: textColor, margin: 0, fontSize: 15, opacity: 1, fontWeight: 400}}>{data?.subreddit_name_prefixed}</h3>
                         <div 
-                        style={{width: 8, height: 8, borderRadius: '50%',
+                        style={{width: 5, height: 5, borderRadius: '50%',
                         flexShrink: 0, backgroundColor: textColor, opacity: 0.5, margin: '0 8px 0 5px'}}
                         />
                         <p onClick={openAlt} style={{color: textColor}}>{data.domain}</p>

@@ -4,7 +4,7 @@ import { selectTextColor } from '../../../features/settings/appSettings/appearan
 import { ButtonAnimationWrapper } from '../ButtonAnimationWrapper/ButtonAnimationWrapper'
 import { SocialIcon } from '../../Icons/SocialIcon/SocialIcon'
 
-export const SocialButton = ({action, width, padding, height, borderRadius, margin, zIndex, flip_description, desc_o_mouse_leave, o_mouseLeave, desc_space, description = 'Social'}) => {
+export const SocialButton = ({action, width, padding, height, borderRadius, margin, zIndex, flip_description, desc_o_mouse_leave, o_mouseLeave, desc_space, description = 'Social', desc_width = "50px"}) => {
 
     const color = useSelector(selectTextColor)
 

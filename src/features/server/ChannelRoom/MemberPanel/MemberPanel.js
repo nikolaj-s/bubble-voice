@@ -184,7 +184,7 @@ export const MemberPanel = () => {
 
         setPokeMessage(value);
     }
-
+console.log(member.status)
     return (
         <>
         <AnimatePresence>
@@ -226,7 +226,7 @@ export const MemberPanel = () => {
                                 <p style={{color: textColor}}>{serverScore}</p>
                             </div>
                         </div>
-                        {member.username !== username && member.status !== 'offline' ? 
+                        {member.username !== username && member.status !== 'offline' && member.status ? 
                         <div className='member-panel-button-wrapper'>
                             <TextInput action={setCustomPokeMessage} inputValue={pokeMessage} />
                             <PokeButton borderRadius={10} active_background={accentColor} description={poking ? 'On Timeout' : null} active={poking} action={poke} width={30} height={30} padding={5} margin={"0px 5px"} background={primaryColor} />

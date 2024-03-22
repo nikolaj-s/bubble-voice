@@ -64,6 +64,7 @@ export const SocialRoute = () => {
                 marginTop: 0,
                 width: '100%',
                 zIndex: 5,
+                backgroundColor: channel.channel_background && !hideChannelBackgrounds ? glassColor : null
             }}
             >
                {channel.type === 'subreddit' ?

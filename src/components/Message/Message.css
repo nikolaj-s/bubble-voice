@@ -72,7 +72,7 @@
 
 .sender-info-inner-container {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     overflow: hidden;
     height: 20px;
     width: 100%;
@@ -89,6 +89,7 @@
     word-break: keep-all;
     word-wrap: normal;
     white-space: nowrap;
+    line-height: 1;
     overflow: hidden;
 }
 

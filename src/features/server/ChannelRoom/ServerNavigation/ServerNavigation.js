@@ -28,6 +28,7 @@ import { MuteSocialButton } from '../../../../components/buttons/MuteSocialButto
 import { VoiceEnabledIcon } from '../../../../components/Icons/VoiceEnabledIcon/VoiceEnabledIcon';
 import { VoiceDisabledIcon } from '../../../../components/Icons/VoiceDisabledIcon/VoiceDisabledIcon';
 import { RedditIcon } from '../../../../components/Icons/RedditIcon/RedditIcon';
+import { AltSocialButton } from '../../../../components/buttons/AltSocialButton/AltSocialButton';
 
 export const ServerNavigation = () => {
 
@@ -123,6 +124,10 @@ export const ServerNavigation = () => {
             backgroundColor: color,
             cursor: 'pointer',
         })
+    }
+
+    const openSocial = () => {
+        dispatch(setChannelSocialId(inChannel));
     }
 
     const handleDesc = (type, action) => {
@@ -499,6 +504,7 @@ export const ServerNavigation = () => {
                 flexShrink: 0
             }}
             >
+            {inChannel && channel?.auth && permissions?.user_can_view_channel_content && !socialId ? <AltSocialButton action={openSocial} borderRadius={5} zIndex={3} top={0} height={10} padding={8} left={null} width={15} /> : null}
             {!socialId ? <div className='server-navigation-filler'></div> : null}
             {inChannel || socialId ? <MuteSocialButton state={muteSocial} desc_width={100} transparent={true} right_orientation_desc={true} action={() => {dispatch(miscSettingsChannelSpecificStateChange("muteSocial"))}}  borderRadius={5} zIndex={3} top={0} height={10} padding={8} left={null} width={15} /> : null}
             {socialChannel?.type === 'screenshots' || socialChannel?.type === 'subreddit' ? null :
