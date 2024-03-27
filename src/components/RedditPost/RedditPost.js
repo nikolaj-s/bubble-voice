@@ -90,12 +90,12 @@ export const RedditPost = ({data = {}, action, disableMax, inSocial}) => {
                     <div className='reddit-post-info-wrapper'>
                         <h3 
                         onClick={openOriginal}
-                        style={{color: textColor, margin: 0, fontSize: 15, opacity: 1, fontWeight: 400}}>{data?.subreddit_name_prefixed}</h3>
+                        style={{color: textColor, margin: 0, fontSize: 15, opacity: 0.8, fontWeight: 400}}>{data?.subreddit_name_prefixed}</h3>
                         <div 
                         style={{width: 5, height: 5, borderRadius: '50%',
-                        flexShrink: 0, backgroundColor: textColor, opacity: 0.5, margin: '0 8px 0 5px'}}
+                        flexShrink: 0, backgroundColor: textColor, opacity: 0.8, margin: '0 5px'}}
                         />
-                        <p onClick={openAlt} style={{color: textColor}}>{data.domain}</p>
+                        <p onClick={openAlt} style={{color: textColor, margin: 0, opacity: 0.8}}>{data.domain}</p>
                     </div>
                    {inSocial ? null : <CopyButton action={handleCopy} borderRadius={8} zIndex={2} width={16} height={16} description={copied ? "Copied" : "Copy"} />}
                     

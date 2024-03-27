@@ -16,7 +16,7 @@ export const MembersInChatContainer = ({channelId}) => {
 
         <div className='members-in-chat-container'>
             {
-                users.filter(u => u.channel_status === channelId && u.username !== username).map((u, key) => {
+                users.filter(u => u.channel_status === channelId && u.username !== username && u.status?.toLowerCase() !== 'offline').map((u, key) => {
                     return (
                         <div 
 

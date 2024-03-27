@@ -5,6 +5,7 @@ import {motion} from 'framer-motion'
 import "./UserBio.css";
 import { Image } from '../Image/Image';
 import { setExpandedContent } from '../../features/ExpandContent/ExpandContentSlice';
+import { Iframe } from '../Iframe/Iframe';
 
 export const UserBio = ({bio = "", margin, loading, textWidget}) => {
 
@@ -14,19 +15,24 @@ export const UserBio = ({bio = "", margin, loading, textWidget}) => {
 
     const [images, setImages] = React.useState([]);
 
+    const [embeds, setEmbeds] = React.useState([]);
+
     React.useEffect(() => {
 
         let text_arr = bio.split(" ");
 
         let l_images = [];
 
+        let l_embeds = [];
+
         let l_text = "";
 
         for (const i of text_arr) {
-            if (i.includes('jpg') || i.includes('png') || i.includes('jpeg') || i.includes('gif')) {
+            if ((i.includes('jpg') || i.includes('png') || i.includes('jpeg') || i.includes('gif')) && i.includes('https')) {
                 
                 l_images.push(i);
-                
+            } else if (i.includes('embed') && i.includes('https')) {
+                l_embeds.push(i);   
             } else {
                 l_text = l_text + " " + i;
             }
@@ -35,6 +41,8 @@ export const UserBio = ({bio = "", margin, loading, textWidget}) => {
         setText(l_text);
 
         setImages(l_images);
+
+        setEmbeds(l_embeds);
 
     }, [bio])
 
@@ -77,7 +85,8 @@ export const UserBio = ({bio = "", margin, loading, textWidget}) => {
                 </p>
                 {images.length === 0 ?
                 null
-                : <div className='bio-images-wrapper'>
+                : 
+                <div className='bio-images-wrapper'>
                     {images.map(i => {
                     return (
                     <div onClick={() => {expand(i)}} className='mini-bio-image'>
@@ -86,8 +95,18 @@ export const UserBio = ({bio = "", margin, loading, textWidget}) => {
                     )
                     })
                     }
+                    
                 </div>}
-                
+                {embeds.map(e => {
+                return (
+                    <div style={{
+                        width: "100%",
+                        height: 350
+                    }}>
+                        <Iframe link={e} />
+                    </div>
+                )
+                })}
             </div>
             : 
             <div className='no-bio-container'>

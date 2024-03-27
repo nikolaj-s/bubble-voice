@@ -99,17 +99,6 @@ export const Social = ({hideChannelBackgrounds, currentChannel, channelId, socia
         }
     }
 
-
-    React.useEffect(() => {
-
-        if (!channelId || channelId.length < 4) {
-            handleSocialStatus(false);
-        } else {
-            handleSocialStatus(channelId);
-        }
-
-    }, [channelId])
-
     React.useEffect(() => {
 
         if (direct_message) return;
@@ -431,7 +420,7 @@ export const Social = ({hideChannelBackgrounds, currentChannel, channelId, socia
                     {(direct_message && status) ? <MessageInput setFallbackImage={setFallbackImage} nsfw={nsfw} handleNsfw={handleToggleNsfw} setEmoji={setEmoji} cancel_image={handleCancelImageSend} direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : 
                     currentChannel.type === 'screenshots' || currentChannel.type === 'mediahistory' ? null :
                     permission?.user_can_post_channel_social && !direct_message ?
-                    <MessageInput setFallbackImage={setFallbackImage} channelId={channelId} nsfw={nsfw} handleNsfw={handleToggleNsfw} setEmoji={setEmoji} channel_name={currentChannel?.channel_name} direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} />
+                    <MessageInput handleStatus={handleSocialStatus} setFallbackImage={setFallbackImage} channelId={channelId} nsfw={nsfw} handleNsfw={handleToggleNsfw} setEmoji={setEmoji} channel_name={currentChannel?.channel_name} direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} />
                      : null}
                 </div>
             </div>

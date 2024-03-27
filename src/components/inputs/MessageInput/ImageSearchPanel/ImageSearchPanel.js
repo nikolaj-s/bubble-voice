@@ -52,6 +52,8 @@ export const ImageSearchPanel = ({channelId,hideOptions = false,direct_message, 
 
     const [mediaType, setMediaType] = React.useState('Images');
 
+    const [format, setFormat] = React.useState("any");
+
     const dispatch = useDispatch();
 
     const [loading, toggleLoading] = React.useState(false);
@@ -85,7 +87,7 @@ export const ImageSearchPanel = ({channelId,hideOptions = false,direct_message, 
         let blocked = false;
 
         for (const word of bannedKeywords) {
-            if (query.toLowerCase().includes(bannedKeywords)) {
+            if (query.toLowerCase().includes(word)) {
                 dispatch(throwServerError({error: true, errorMessage: `Your Search Has Been Blocked As It Includes A Banned Keyword`}));
                 blocked = true;
                 break;
@@ -161,7 +163,7 @@ export const ImageSearchPanel = ({channelId,hideOptions = false,direct_message, 
             document.getElementsByClassName('message-image-search-button')[0].click();
         }, 50)
     }
-console.log(images)
+
     return (
         <AnimatePresence>
             {searchingForImage ?

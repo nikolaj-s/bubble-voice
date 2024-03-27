@@ -6,7 +6,7 @@ import { useDropzone } from 'react-dropzone';
 import imageCompression from 'browser-image-compression';
 
 // state
-import { selectPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./MessageInput.css";
@@ -21,7 +21,7 @@ import { ImagePreview } from './ImagePreview/ImagePreview';
 import { InputEditor } from './InputEditor/InputEditor';
 import { MembersInChatContainer } from './MembersInChatContainer/MembersInChatContainer';
 
-export const MessageInput = ({setFallbackImage, channelId, nsfw, handleNsfw, cancel_image, send, text, keyCode, image, value, persist, updateInputHeight, socialRoute, direct_message, channel_name, setEmoji}) => {
+export const MessageInput = ({handleStatus = () => {}, setFallbackImage, channelId, nsfw, handleNsfw, cancel_image, send, text, keyCode, image, value, persist, updateInputHeight, socialRoute, direct_message, channel_name, setEmoji}) => {
 
     const [files, setFiles] = React.useState([{}])
 
@@ -40,7 +40,7 @@ export const MessageInput = ({setFallbackImage, channelId, nsfw, handleNsfw, can
     const [focused, toggleFocused] = React.useState(false);
 
     const [textStyle, setTextStyle] = React.useState({
-        fontSize: 15,
+        fontSize: 16,
         color: null,
         textDecoration: false,
         bold: false,
@@ -54,6 +54,8 @@ export const MessageInput = ({setFallbackImage, channelId, nsfw, handleNsfw, can
     const textColor = useSelector(selectTextColor);
 
     const animation = useAnimation();
+
+    const accentColor = useSelector(selectAccentColor);
 
     const hideUserStatus = useSelector(selectHideUserStatus);
 
@@ -287,6 +289,12 @@ export const MessageInput = ({setFallbackImage, channelId, nsfw, handleNsfw, can
     //    document.getElementById(`social-input-selector-${channelId}`)?.focus();
     }
 
+    const handleFocus = (value) => {
+        if (direct_message) return;
+
+        handleStatus(value);
+    }
+
     return (
         <> 
         <ImageSearchPanel channelId={channelId} postEmoji={handleEmoji} persist={persist} upload_image={handleImageButton} direct_message={direct_message} close={toggleSearchingForImage} inputHeight={inputHeight} key="message-image-search-container" serverId={serverId} selectImage={selectImage} searchingForImage={searchingForImage} />
@@ -311,7 +319,7 @@ export const MessageInput = ({setFallbackImage, channelId, nsfw, handleNsfw, can
                 style={{
                     backgroundColor: primaryColor,
                     height: inputHeight,
-                    border: `solid 2px ${localError ? 'red' : primaryColor}`
+                    border: `solid 2px ${focused ? accentColor : localError ? 'red' : primaryColor}`
                 }}
                 className="message-input-container" >
                     <textarea 
@@ -326,7 +334,8 @@ export const MessageInput = ({setFallbackImage, channelId, nsfw, handleNsfw, can
                         border: 'none',
                         fontFamily: textStyle.fontFamily
                     }}
-                    onFocus={(e) => {handleText(e); toggleFocused(true)}}
+                    onFocus={(e) => {handleText(e); toggleFocused(true); handleFocus(channelId)}}
+                    onBlur={() => {handleFocus(null); toggleFocused(false)}}
                     id={`social-input-selector-${channelId}`} onKeyUp={handleKeyCode} onChange={handleText} value={value}  placeholder={channel_name ? `post in #${channel_name}` : 'message'} type="text" />
                     <div className='message-input-button-wrapper'>
                         <div className='message-input-inner-button-wrapper'>

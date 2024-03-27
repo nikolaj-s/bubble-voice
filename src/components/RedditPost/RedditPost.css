@@ -60,6 +60,7 @@
     margin: 5px;
     padding: 0;
     cursor: pointer;
+    opacity: 0.6;
 }
 
 .reddit-post-info-container p {
