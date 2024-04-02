@@ -84,8 +84,8 @@ export const UserStatus = ({user}) => {
                     {user?.channel_status && user?.status?.toLowerCase() !== 'offline' ? <UserTypingIndicator /> : null}
                 </div>
                 
-                {user.status.toLowerCase() === 'online' ? null :
-                <p style={{color: textColor}}>{(user.status === 'offline' && timeStamp !== "") ? "Last Online: " + timeStamp : user.status ? user.status : 'offline'}</p>}
+                {user.status.toLowerCase() === 'online' || user.status.toLowerCase() === 'offline' ? null :
+                <p style={{color: textColor}}>{user.status}</p>}
             </div>
             
         </div>

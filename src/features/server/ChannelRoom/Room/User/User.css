@@ -12,6 +12,7 @@
     cursor: pointer;
     max-width: 960px;
     max-height: 540px;
+    box-shadow: 5px 5px 25px rgba(0, 0, 0, 0.756);
 }
 
 .user-stream-overlay-wrapper {

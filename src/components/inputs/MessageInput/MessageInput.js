@@ -319,7 +319,7 @@ export const MessageInput = ({handleStatus = () => {}, setFallbackImage, channel
                 style={{
                     backgroundColor: primaryColor,
                     height: inputHeight,
-                    border: `solid 2px ${focused ? accentColor : localError ? 'red' : primaryColor}`
+                    border: `solid 2px ${localError ? 'red' : primaryColor}`
                 }}
                 className="message-input-container" >
                     <textarea 

@@ -24,7 +24,7 @@ export const Widgets = () => {
         className='content-outer-container'
        style={{backgroundColor: glassColor}}
         >
-            <div className='widget-preview-wrapper'>
+            <div style={{overflowX: 'hidden'}} className='widget-preview-wrapper'>
                 <WidgetPreview widgets={channel.widgets} />
             </div>
         </div>
