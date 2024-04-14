@@ -23,6 +23,8 @@ export const ButtonAnimationWrapper = ({align_desc_right, active_background, des
 
     const [desc, toggleDesc] = React.useState(false);
 
+    const [mouseDown, toggleMouseDown] = React.useState(false);           
+
     const handleAnimation = (color, e) => {
         if (e) e.stopPropagation();
         
@@ -133,12 +135,13 @@ export const ButtonAnimationWrapper = ({align_desc_right, active_background, des
             pointerEvents: pointerOptions,
             position: position,
             zIndex: zIndex,
+            transform: mouseDown ? "scale(0.9)" : "scale(1)",
         }}
         animate={animation}
         onMouseEnter={(e) => {handleAnimation(invert ? primaryColor : secondaryColor, e); handleOnMouseEnter(e)}}
-        onMouseLeave={(e) => {handleAnimation(background || transparentColor, e); handleOnMouseLeave(e)}}
-        onMouseDown={(e) => {handleAnimation(invert ? secondaryColor : accentColor, e); onMouseDown()}}
-        onMouseUp={(e) => {handleAnimation(invert ? primaryColor: secondaryColor, e)}}
+        onMouseLeave={(e) => {handleAnimation(background || transparentColor, e); handleOnMouseLeave(e); toggleMouseDown(false)}}
+        onMouseDown={(e) => {e.stopPropagation(); toggleMouseDown(true); onMouseDown()}}
+        onMouseUp={(e) => {e.stopPropagation(); toggleMouseDown(false)}}
         transition={{duration: 0.1}}
         >
            

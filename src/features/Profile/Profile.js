@@ -6,13 +6,14 @@ import { selectCreatePostMenuOpen, selectProfileTabOpen, toggleCreatePostMenu, t
 import "./Profile.css";
 import { selectPrimaryColor, selectSecondaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { Image } from '../../components/Image/Image';
-import { selectProfileBio, selectProfileColor, selectProfilePinnedMessage, selectUserBanner, selectUserImage, selectUsersScreenShots } from '../settings/appSettings/accountSettings/accountSettingsSlice';
+import { selectCurrentDecoration, selectProfileBio, selectProfileColor, selectProfilePinnedMessage, selectUserBanner, selectUserImage, selectUsersScreenShots } from '../settings/appSettings/accountSettings/accountSettingsSlice';
 
 import { UserStatusMenu } from '../../components/UserStatusMenu/UserStatusMenu';
 import { UserBio } from '../../components/UserBio/UserBio';
 import { selectServerId } from '../server/ServerSlice';
 import {PinnedProfileMessage } from '../../components/PinnedProfileMessage/PinnedProfileMessage';
 import { ScreenShotShowCase } from '../../components/ScreenShotShowCase/ScreenShotShowCase';
+import { Decoration } from '../../components/Decoration/Decoration';
 
 export const Profile = () => {
 
@@ -36,6 +37,8 @@ export const Profile = () => {
 
     const usersScreenShots = useSelector(selectUsersScreenShots);
 
+    const decoration = useSelector(selectCurrentDecoration);
+
     const close = () => {
         dispatch(toggleProfileTab(false))
     }
@@ -43,18 +46,20 @@ export const Profile = () => {
     return (
         <AnimatePresence>
             {visible ?
-            <div onClick={close} className='side-tab-outer-container'>
+            <div onClick={close} className='profile-tab-outer-container'>
                 <motion.div 
                 onClick={(e) => {e.stopPropagation()}}
-                initial={{opacity: 0, marginLeft: '-600px'}}
-                animate={{opacity: 1, marginLeft: 0}}
-                exit={{opacity: 0, marginLeft: '-600px'}}
+                initial={{opacity: 0,}}
+                animate={{opacity: 1,}}
+                exit={{opacity: 0,}}
+                transition={{duration: 0.1}}
                 style={{backgroundColor: (profileColor || secondaryColor)}}
                 className='profile-tab-container'>
                     <div style={{marginBottom: serverId ? null : 5}} className='profile-tab-picture-wrappper'>
                         <Image position='absolute' width='100%' image={userBanner} />
                         <div className='profile-picture-tab-container'>
                             <Image image={userImage} />
+                            <Decoration decoration={decoration} width={85} height={85} />
                         </div>
                         
                     </div>

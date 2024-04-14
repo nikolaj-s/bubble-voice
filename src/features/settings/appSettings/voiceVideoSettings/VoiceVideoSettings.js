@@ -35,6 +35,8 @@ const Settings = () => {
 
     const [previewingWebCam, togglePreviewingWebCam] = React.useState(false);
 
+    const [micWasMuted, toggleMicWasMuted] = React.useState(false);
+
     React.useEffect(() => {
 
         dispatch(setHeaderTitle("Voice / Video Settings"))
@@ -106,15 +108,19 @@ const Settings = () => {
 
         if (microphoneState === true) {
 
-            dispatch(toggleControlState('microphoneState'))
+            dispatch(toggleControlState('microphoneState'));
+
+            toggleMicWasMuted(true);
 
         }
 
         return () => {
-            return dispatch(toggleControlState('microphoneState'))
+            if (micWasMuted) {
+                dispatch(toggleControlState('microphoneState'))
+            }
         }
     // eslint-disable-next-line
-    }, [])
+    }, [micWasMuted])
 
     const handleToggleVoiceState = () => {
 

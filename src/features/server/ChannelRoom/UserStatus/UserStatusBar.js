@@ -7,10 +7,13 @@ import { UserStatus } from './UserStatus/UserStatus';
 
 import "./UserStatusBar.css";
 import { selectCurrentStatus, selectOfflineUsers, selectOnlineUsers, setUsers, updateUserStatus } from './UserStatusSlice';
+import { AltDownIcon } from '../../../../components/Icons/AltDownIcon/AltDownIcon';
 
 export const UserStatusBar = () => {
 
     const dispatch = useDispatch();
+
+    const [hideOfflineUsers, toggleHideOfflineUsers] = React.useState(false);
 
     const users = useSelector(selectServerMembers);
 
@@ -118,6 +121,26 @@ export const UserStatusBar = () => {
     // eslint-disable-next-line
     }, [activityStatus, currentStatus])
 
+    const handleHideOfflineUsers = () => {
+
+        localStorage.setItem('hide offline users', JSON.stringify(!hideOfflineUsers));
+
+        toggleHideOfflineUsers(!hideOfflineUsers);
+    }
+
+    React.useEffect(() => {
+        try {
+            const hiddenState = localStorage.getItem('hide offline users');
+
+            if (JSON.parse(hiddenState)) {
+                toggleHideOfflineUsers(true);
+            }
+        } catch (error) {
+            return;
+        }
+        
+    }, [])
+
     return (
         <>
         {(hideUserStatusBar) ? null :
@@ -159,8 +182,15 @@ export const UserStatusBar = () => {
                     return null;
                 }
             })}
-            {offlineUsers.length !== 0 ? <h4 key="offline-title-header" style={{color: textColor}}>Offline - {offlineUsers.length}</h4> : null}
-            {offlineUsers.map((u) => {
+            {offlineUsers.length !== 0 ? 
+            <div onClick={handleHideOfflineUsers} className='offline-users-divider'>
+                <h4 key="offline-title-header" style={{color: textColor, opacity: 1}}>Offline - {offlineUsers.length}</h4> 
+                <AltDownIcon flip={hideOfflineUsers} />
+            </div>
+            : null}
+            {hideOfflineUsers ?
+            null :
+            offlineUsers.map((u) => {
                 return <UserStatus user={u} key={u._id} />
             })}
         </div>

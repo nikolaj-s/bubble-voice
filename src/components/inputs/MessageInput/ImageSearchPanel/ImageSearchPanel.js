@@ -32,6 +32,7 @@ import { EmojiIcon } from '../../../Icons/EmojiIcon/EmojiIcon';
 import { RedditIcon } from '../../../Icons/RedditIcon/RedditIcon'
 import { SavesIcon } from '../../../Icons/SavesIcon/SavesIcon'
 import { EmojiMenu } from '../../../EmojiPicker/EmojiMenu';
+import { ImageSearchFilterMenu } from './ImageSearchFilterMenu/ImageSearchFilterMenu';
 export const ImageSearchPanel = ({channelId,hideOptions = false,direct_message, searchingForImage, selectImage, serverId, inputHeight, close, upload_image, persist, postEmoji}) => {
 
     const primaryColor = useSelector(selectPrimaryColor);
@@ -52,7 +53,9 @@ export const ImageSearchPanel = ({channelId,hideOptions = false,direct_message, 
 
     const [mediaType, setMediaType] = React.useState('Images');
 
-    const [format, setFormat] = React.useState("any");
+    const [format, setFormat] = React.useState("images");
+
+    const [mediaLocation, setMediaLocation] = React.useState("");
 
     const dispatch = useDispatch();
 
@@ -98,9 +101,9 @@ export const ImageSearchPanel = ({channelId,hideOptions = false,direct_message, 
 
         toggleLoading(true);
 
-        const result = mediaType === 'Videos' ? await VideoSearch(query, serverId) : await ImageSearch(query, serverId);
+        const result = mediaType === 'Videos' ? await VideoSearch(query, serverId) : await ImageSearch(query, serverId, format, mediaLocation);
         
-        setQuery("");
+      //  setQuery("");
 
         if (result.error) {
 
@@ -163,7 +166,7 @@ export const ImageSearchPanel = ({channelId,hideOptions = false,direct_message, 
             document.getElementsByClassName('message-image-search-button')[0].click();
         }, 50)
     }
-
+console.log(images)
     return (
         <AnimatePresence>
             {searchingForImage ?
@@ -205,6 +208,7 @@ export const ImageSearchPanel = ({channelId,hideOptions = false,direct_message, 
                         </div>
                             }
                         {mediaType === 'Saves' || mediaType === 'Reddit' || mediaType === "Videos" ? null :
+                        <>
                         <div 
                         className='message-image-search-input-wrapper'>
                             <input 
@@ -212,9 +216,12 @@ export const ImageSearchPanel = ({channelId,hideOptions = false,direct_message, 
                             style={{color: textColor, backgroundColor: primaryColor}}
                             maxLength={120} onKeyUp={handleEnter} onChange={handleQuery} value={query} placeholder={`Search For ${mediaType}`} />
                             <div style={{opacity: query.length > 0 ? 1 : 0.5}} className='message-image-search-button'>
-                                <AltSearchButton padding={5} active={query.length === 0} action={search} margin={'0 0 0 10px'} width={30} height={18} invert={true}  borderRadius={0} />
+                                <AltSearchButton padding={5} active={query.length === 0} action={search} margin={'0 5px 0 10px'} width={20} height={18}  borderRadius={5} />
                             </div>
-                        </div>}
+                        </div>
+                        <ImageSearchFilterMenu mediaLocation={mediaLocation} setMediaLocation={(v) => {setMediaLocation(v)}} format={format} updateFormat={(f) => {setFormat(f)}} />
+                        </>
+                        }
                         <AnimatePresence>
                         <motion.div transition={{duration: 0.1}} key={mediaType} initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} className='message-image-search-results-container'>
                             {mediaType === 'Videos' ?

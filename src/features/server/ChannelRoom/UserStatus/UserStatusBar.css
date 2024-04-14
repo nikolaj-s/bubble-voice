@@ -26,7 +26,8 @@
 .user-status-bar h4 {
     width: 100%;
     margin: 10px 0px 10px 8px;
-    font-weight: 300;
+    font-weight: 400;
+    letter-spacing: 1px;
     font-size: 0.7rem;
     opacity: 0.6;
 }
@@ -45,4 +46,21 @@
     text-overflow: ellipsis;
 }
 
+.offline-users-divider {
+    display: flex;
+    width: calc(100% - 10px);
+    align-items: center;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: 0.1s;
+    margin: 10px 0px 10px 0px;
+}
 
+.offline-users-divider:hover {
+    opacity: 1;
+    
+}
+
+.offline-users-divider h4 {
+    margin: 0;
+}

@@ -10,7 +10,7 @@ export const Decoration = ({decoration, width, height}) => {
         {decoration && decoration !== "" ?
 
         <div style={{width: width, height: height}} className='decoration-container'>
-            <Image image={decoration} objectFit='contain' />
+            <Image cursor='pointer' image={decoration} objectFit='contain' />
         </div>
         
         :

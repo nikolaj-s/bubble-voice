@@ -1,0 +1,35 @@
+.control-profile-button-container {
+    height: calc(100% - 18px);
+    width: calc(100% - 105px);
+    display: flex;
+    margin-right: 3px;
+    align-items: center;
+    border-radius: 5px;
+    padding: 3px;
+    cursor: pointer;
+    transition: 0.05s;
+}
+
+.control-profile-button-container h3 {
+    word-break: keep-all;
+    word-wrap: normal;
+    white-space: nowrap;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.9rem;
+    margin-left: 6px;
+    font-weight: 400;
+    opacity: 0.8;
+}
+
+.control-profile-image-container {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+

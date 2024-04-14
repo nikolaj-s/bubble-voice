@@ -17,18 +17,25 @@
    
 }
 
+.room-video-controls-wrapper {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    padding-top: 5px;
+}
+
 .control-bar-container div {
     flex-shrink: 0;
 }
 
 .controls-wrapper {
     width: 220px;
-    height: 45px;
+    height: 55px;
     flex-shrink: 0;
     z-index: 3;
     align-items: center;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: flex-end;
     transition: 0.1s;
 }
 

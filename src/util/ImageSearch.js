@@ -2,7 +2,7 @@
 import Axios from "axios";
 import { getToken, url } from "./Validation";
 
-export const ImageSearch = async (query, serverId) => {
+export const ImageSearch = async (query, serverId, format, source) => {
     try {
 
         const token = await getToken();
@@ -11,7 +11,7 @@ export const ImageSearch = async (query, serverId) => {
             method: "POST",
             url: `${url}/search-for-images`,
             headers: {TOKEN: token},
-            data: {query: query, server_id: serverId}
+            data: {query: query, server_id: serverId, format: format, source: source}
         }).then(response => {
 
             if (response.data.error) return {error: true, errorMessage: response.data.errorMessage};

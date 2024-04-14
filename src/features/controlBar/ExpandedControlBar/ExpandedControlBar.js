@@ -13,6 +13,8 @@ import { Range } from '../../../components/inputs/Range/Range';
 import { throwServerError } from '../../server/ServerSlice';
 import { Loading } from '../../../components/LoadingComponents/Loading/Loading';
 import { selectSoundEffectVolume, setSoundEffectsVolume } from '../../settings/soundEffects/soundEffectsSlice';
+import { ToggleButton } from '../../../components/buttons/ToggleButton/ToggleButton';
+import { miscSettingsChannelSpecificStateChange, selectPushToTalkSoundEffectState } from '../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 export const ExpandedControlBar = ({close}) => {
 
@@ -29,6 +31,8 @@ export const ExpandedControlBar = ({close}) => {
     const webCamPreview = useSelector(selectWebCamPreview);
 
     const soundEffectsVolume = useSelector(selectSoundEffectVolume);
+
+    const pushToTalkSoundEffect = useSelector(selectPushToTalkSoundEffectState);
 
     const handleSoundEffectsVolume = (value) => {
         dispatch(setSoundEffectsVolume(value));
@@ -104,7 +108,7 @@ export const ExpandedControlBar = ({close}) => {
     const handleToggleWebCamPreview = () => {
         dispatch(toggleWebCamPreview());
     }
-
+    
     return (
         <div
         onClick={(e) => {e.stopPropagation()}}
@@ -114,6 +118,8 @@ export const ExpandedControlBar = ({close}) => {
             <InputTitle fontSize='0.7rem' marginTop={6} marginBottom={6} title={"Input Type"} />
             <RadioButton action={handleToggleVoiceState} state={pushToTalk} name={"Push To Talk"} />
             <RadioButton action={handleToggleVoiceState}  state={voiceActivity} name={"Voice Activation"} />
+            <InputTitle title={"Enable Push To Talk Sound Effect"} />
+            <ToggleButton state={pushToTalkSoundEffect} action={() => {dispatch(miscSettingsChannelSpecificStateChange("enablePushToTalkSoundEffect"))}}  />
             <InputTitle fontSize='0.7rem' marginBottom={6} marginTop={6} title={"Preview Webcam"} />
             <div className='web-cam-preview-container'>
                 <Loading  loading={loading} />

@@ -14,7 +14,7 @@ import { ShareScreenButton } from '../../components/buttons/mediaButtons/shareSc
 import { resetControlState, selectAudioState, selectCurrentScreen, selectLoadingScreenShare, selectLoadingWebCam, selectMicrophoneState, selectScreenShareState, selectSeenStreamingMessage, selectWebCamState, selectingScreensState, toggleControlState, toggleLoadingWebCam, toggleStreamingMessage } from './ControlBarSlice';
 import { selectCurrentChannel, selectCurrentChannelId } from '../server/ServerSlice';
 import { playSoundEffect } from '../settings/soundEffects/soundEffectsSlice';
-import { selectAccentColor, selectPrimaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectPrimaryColor, selectSecondaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style's
 import "./ControlBar.css";
@@ -24,6 +24,10 @@ import { Streampreview } from './StreamPreview/Streampreview';
 import { ControlBarOptionsButton } from './ControlBarOptionsButton/ControlBarOptionsButton';
 import { ExpandedControlBar } from './ExpandedControlBar/ExpandedControlBar';
 import { StreamingMessage } from './StreamingMessage/StreamingMessage';
+import { AltOptionsButton } from '../../components/buttons/AltOptionsButton/AltOptionsButton';
+import { ControlProfileButton } from './ControlProfileButton/ControlProfileButton';
+import { MusicOverlayButton } from '../../components/buttons/MusicOverlayButton/MusicOverlayButton';
+import { toggleOverlay } from '../server/ChannelRoom/Room/Music/MusicSlice';
 
 
 
@@ -32,6 +36,8 @@ export const ControlBar = () => {
     const dispatch = useDispatch();
 
     const [expandedOpen, toggleExpanded] = React.useState(false);
+
+    const [hasMediaWidget, toggleHasMediaWidget] = React.useState(false);
 
     let [streamingInterval, incrementStreamingInterval] = React.useState(0);
 
@@ -48,11 +54,13 @@ export const ControlBar = () => {
 
     const current_channel_id = useSelector(selectCurrentChannelId);
 
+    const primaryColor = useSelector(selectPrimaryColor);
+
     const channel = useSelector(selectCurrentChannel);
 
     const inChannel = useSelector(selectCurrentChannelId);
 
-    const secondaryColor = useSelector(selectPrimaryColor);
+    const secondaryColor = useSelector(selectSecondaryColor);
 
     const loadingWebCam = useSelector(selectLoadingWebCam);
 
@@ -64,6 +72,25 @@ export const ControlBar = () => {
 
     const seenStreamingMessageThisSession = useSelector(selectSeenStreamingMessage);
     
+    React.useEffect(() => {
+
+        if (channel?.widgets) {
+
+            const exists = channel.widgets.findIndex(w => w.type === 'music');
+
+            if (exists !== -1) {
+                toggleHasMediaWidget(true);
+            } else {
+                toggleHasMediaWidget(false);
+            }
+        }
+
+        return () => {
+            toggleHasMediaWidget(false);
+        }
+
+    }, [channel?.widgets])
+
     React.useEffect(() => {
 
         let interval;
@@ -94,7 +121,7 @@ export const ControlBar = () => {
         
         if (window.location.hash.includes("/appsettings/voice-video")) return;
 
-        if (current_channel_id === null) return;
+       // if (current_channel_id === null) return;
 
         if ((current_channel_id === null || channel.disable_streams || channel?.users?.length === 1) && state === 'webCamState') return;
         
@@ -148,56 +175,55 @@ export const ControlBar = () => {
                 <AnimatePresence> 
                     {currentScreen ? <Streampreview key={'stream-preview-container'} /> : null}
                 </AnimatePresence>
-                <ControlBarOptionsButton action={() => {toggleExpanded(!expandedOpen)}} state={!expandedOpen} />
+                {current_channel_id === null || channel.disable_streams || channel?.users?.length === 1 ? null :
+                <div className='room-video-controls-wrapper'>
+                    <WebCamButton id={'web-cam-toggle-button'} action={() => {toggleFunction('webCamState')}} width={hasMediaWidget ? 60 : 100} state={webCamState} loading={loadingWebCam} />
+                    <ShareScreenButton sharing_screen={currentScreen} id={'screen-share-toggle-button'} action={() => {toggleFunction('screenShareState')}} width={hasMediaWidget ? 60 : 100} state={screenShareState} loading={loadingScreenShare} />
+                    {hasMediaWidget ?
+                    <MusicOverlayButton action={() => {dispatch(toggleOverlay())}} description={"Open Media Widget"} invert={true} backgroundColor={secondaryColor} width={60} height={25} padding={'5px 3px'} />
+                    : null}
+                </div>
+                }
                 <div style={{backgroundColor: accentColor}} className='controls-wrapper'>  
+                    <ControlProfileButton inChannel={current_channel_id} micState={microphoneState} />
                     <MicToggleButton 
-                    width={32}
+                    width={18}
                     height={18}
-                    padding={9}
-                    desc_space={30}
-
+                    padding={6}
+                    desc_space={20}
+                    desc_width={80}
                     action={() => {toggleFunction('microphoneState')}} 
                     state={microphoneState} 
-                    active={current_channel_id === null || channel.disable_streams}
+                    active={channel.disable_streams}
                     id={"toggle-microphone-button"}
                     />
                     <AudioToggleButton 
-                    width={32}
+                    width={18}
                     borderRadius={5}
                     height={18}
-                    padding={9}
-                    desc_space={30}
+                    padding={6}
+                    desc_space={20}
                     desc_width={80}
                     opacity={0.5}
                     altInvert={true}
                     action={() => {toggleFunction('audioState')}} 
                     state={audioState} 
-                    active={current_channel_id === null || channel.disable_streams}
+                    active={channel.disable_streams}
                     id={"mute-audio-toggle-button"}
-                    description={(current_channel_id === null  || channel.disable_streams) ? null : `${audioState ? 'Deafen' : 'Un-Deafen'}`}
+                    description={(channel.disable_streams) ? null : `${audioState ? 'Deafen' : 'Un-Deafen'}`}
                     />
-                    <WebCamButton 
-                    width={32}
+                                        
+                    <AltOptionsButton 
+                    action={() => {toggleExpanded(!expandedOpen)}}
+                    description={"Options"}
+                    width={18}
+                    borderRadius={5}
                     height={18}
-                    padding={9}
-                    desc_space={30}
-                    action={() => {toggleFunction('webCamState')}} 
-                    state={webCamState} 
-                    active={current_channel_id === null || channel.disable_streams || channel?.users?.length === 1}
-                    id={'web-cam-toggle-button'}
-                    loading={loadingWebCam}
-                    />
-                    <ShareScreenButton 
-                    width={32}
-                    height={18}
-                    padding={9}
-                    desc_space={30}
-                    loading={loadingScreenShare}
-                    action={() => {toggleFunction('screenShareState')}} 
-                    state={screenShareState} 
-                    active={current_channel_id === null || channel.disable_streams || channel?.users?.length === 1}
-                    id={"screen-share-toggle-button"}
-                    sharing_screen={currentScreen}
+                    padding={6}
+                    desc_space={20}
+                    desc_width={80}
+                    margin={"0 3px 0 0"}
+                    zIndex={3}
                     />
                 </div>
                 

@@ -438,7 +438,7 @@ export const ServerNavigation = () => {
                 
                 {channel?.channel_name ?
                 <>
-                <div className='channel-room-icon-wrapper'>
+                <div style={{marginLeft: 4}} className='channel-room-icon-wrapper'>
                 {channel?.icon ?
                 <img src={channel?.icon} />
                 : channel?.disable_streams ?
@@ -467,11 +467,11 @@ export const ServerNavigation = () => {
                     <div
                     style={{
                         height: 20,
-                        width: 3,
+                        width: 2,
                         margin: '0px 5px',
                         flexShrink: 0,
                         backgroundColor: textColor,
-                        opacity: 0.4,
+                        
                         borderRadius: 5
                     }}
                     />
@@ -487,7 +487,9 @@ export const ServerNavigation = () => {
                         wordWrap: 'normal',
                         fontSize: '12px',
                         maxWidth: '100%',
-                        flexShrink: 4
+                        flexShrink: 4,
+                        lineHeight: 1,
+                        margin: 0
                     }}>{socialChannel?.guidelines}</p>
                     </>
                     : null}

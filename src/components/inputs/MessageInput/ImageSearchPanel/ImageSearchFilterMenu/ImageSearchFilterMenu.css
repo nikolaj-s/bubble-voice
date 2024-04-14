@@ -1,0 +1,23 @@
+.image-search-filter-menu {
+    height: 30px;
+    width: calc(100% - 10px);
+    margin: 5px;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+}
+
+.format-mini-menu {
+    position: absolute;
+    width: 100px;
+    border-radius: 10px;
+    left: 40px;
+    padding: 3px;
+    z-index: 3;
+    top: 78px;
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.663);
+}
+
+.input-mini-menu {
+    width: calc(100% - 51px);
+}

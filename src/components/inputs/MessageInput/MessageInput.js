@@ -310,9 +310,7 @@ export const MessageInput = ({handleStatus = () => {}, setFallbackImage, channel
             className='message-input-wrapper'>
                 {direct_message ? null : <MembersInChatContainer channelId={channelId} />}
                 <ImagePreview processingImage={processingImage} percent={percent} type={files[0]?.type} fileName={files[0]?.name} cancel={handleCancel} preview={files[0]?.preview} />
-                {value.length > 0 || files[0]?.type !== undefined ?
                 <InputEditor handleEmoji={handleEmojiText} updateState={updateStyleState} handleNsfw={handleNsfw} state={textStyle} nsfw={nsfw} />
-                : null}
                 <motion.div 
                 key={"message-text-input"}
                 animate={animation}

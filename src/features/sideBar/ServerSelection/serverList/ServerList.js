@@ -73,7 +73,7 @@ export const ServerList = ({selectServer, serverList = [], loading = false, anim
             </Reorder.Group>
             <MessagesNavigation />
             <div style={{backgroundColor: color}} className="application-navigation-spacer"></div>
-            <ProfileButton />
+            
             <SavedMediaButton />
             <CreateServerButton />
             <div className='server-select-nav-bottom-spacer'></div>

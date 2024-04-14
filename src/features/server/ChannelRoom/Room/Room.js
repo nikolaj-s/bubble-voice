@@ -10,7 +10,7 @@ import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPus
 import { selectDisplayName, selectProfileColor, selectProfilePictureShape, selectUserBanner, selectUserImage, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { playSoundEffect, selectMuteSoundEffectsWhileMutedState } from '../../../settings/soundEffects/soundEffectsSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { selectAudioState, selectCurrentScreen, selectCurrentScreenName, selectMicrophoneState, selectScreenShareState, selectWebCamState, setCurrentScreen, setScreens, setSelectingScreensState, toggleConnectionError, toggleConnectionLoading, toggleControlState, toggleLoadingScreenShare, toggleLoadingWebCam } from '../../../controlBar/ControlBarSlice';
+import { selectAudioState, selectCurrentScreen, selectCurrentScreenName, selectMicrophoneState, selectScreenShareState, selectWebCamState, setCurrentScreen, setScreens, setSelectingScreensState, toggleConnectionError, toggleConnectionLoading, toggleControlState, toggleLoadingScreenShare, toggleLoadingWebCam, toggleVoiceActive } from '../../../controlBar/ControlBarSlice';
 import { updateMusicState } from './Music/MusicSlice';
 
 // style
@@ -320,7 +320,7 @@ const Component = () => {
         }
     // eslint-disable-next-line
     }, [current_channel_id])
-
+    
     // handle state change for screen sharing
     React.useEffect(() => {
         console.log(experimentalAudioCapture)
@@ -508,7 +508,8 @@ const Component = () => {
         let captureTimeout = null;
 
         try {
-
+            if (channel.disable_streams) return; 
+            
             if (client && loaded === true) {
                 if (voiceActivityDetection === true && microphoneState === true) {
                     navigator.mediaDevices.getUserMedia({
@@ -546,12 +547,16 @@ const Component = () => {
                                 
                                 socket.emit('user status', {username: user.username, action: {active: true, channel_specific: true}})
                                 
+                                dispatch(toggleVoiceActive(true));
+
                                 handleRestartInactivityTimer();
                             }
 
                             const onVoiceStop = () => {
 
                                 client.pauseProducer('audioType')
+
+                                dispatch(toggleVoiceActive(false));
 
                                 dispatch(updateMemberStatus({username: user.username, action: {active: false}}))
                                 
@@ -686,6 +691,8 @@ const Component = () => {
                                     
                                         socket.emit('user status', {username: user.username, action: {active: true, channel_specific: true}})
                                         
+                                        dispatch(toggleVoiceActive(true));
+
                                         handleRestartInactivityTimer();
                                         
                                     } else if (avg < voiceActivationSensitivity) {
@@ -697,6 +704,8 @@ const Component = () => {
                                         clearTimeout(timeout);
 
                                         timeout = null;
+
+                                        dispatch(toggleVoiceActive(false));
 
                                         timeout = setTimeout(() => {
 
@@ -724,6 +733,8 @@ const Component = () => {
                     
                     if (pushToTalkActive) {
 
+                        dispatch(toggleVoiceActive(true));
+
                         client.resumeProducer('audioType');
 
                         dispatch(updateMemberStatus({username: user.username, action: {active: true}}))
@@ -731,6 +742,8 @@ const Component = () => {
                         socket.emit('user status', {username: user.username, action: {active: true, channel_specific: true}})
                                 
                     } else { 
+
+                        dispatch(toggleVoiceActive(false));
 
                         client.pauseProducer('audioType')
 

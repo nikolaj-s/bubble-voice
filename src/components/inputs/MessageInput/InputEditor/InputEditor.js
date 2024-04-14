@@ -126,7 +126,7 @@ export const InputEditor = ({handleEmoji, handleNsfw, nsfw, state = {fontSize: 1
             <div style={{backgroundColor: glassColor, flexShrink: 0, width: 2, borderRadius: 4, height: 15, margin: '0px 5px'}} />
             <CtxButton icon={<AltDownIcon flip={fontFamilyMenu} />} action={() => {toggleFontFamilyMenu(!fontFamilyMenu); toggleEmojiMenuOpen(false)}} name={state.fontFamily} width={100} />
         </div>
-        <div style={{width: '98%', height: 2, borderRadius: 4, backgroundColor: glassColor}} />
+        <div style={{width: 'calc(100% - 10px)', height: 2, borderRadius: 4, backgroundColor: glassColor}} />
     </>
   )
 }

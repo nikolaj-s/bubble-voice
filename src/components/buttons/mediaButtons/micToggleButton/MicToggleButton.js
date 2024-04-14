@@ -12,6 +12,7 @@ export const MicToggleButton = ({action, state, active, id, width = 25, height =
         width={width}
         height={height}
         desc_space={desc_space}
+        desc_width='80px'
         padding={padding}
         action={action}
         active={active}

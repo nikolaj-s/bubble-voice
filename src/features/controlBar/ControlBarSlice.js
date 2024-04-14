@@ -18,9 +18,13 @@ const controlBarSlice = createSlice({
         connectionError: false,
         webcamPreview: false,
         showStreamingMessage: false,
-        seenStreamingMessageThisSession: false
+        seenStreamingMessageThisSession: false,
+        voiceActive: false
     },
     reducers: {
+        toggleVoiceActive: (state, action) => {
+            state.voiceActive = action.payload;
+        },
         toggleStreamingMessage: (state, action) => {
 
             if (action.payload === false) {
@@ -54,9 +58,9 @@ const controlBarSlice = createSlice({
             state.setSelectedScreen = action.payload;
         },
         resetControlState: (state, action) => {
-            state.microphoneState = true;
+           // state.microphoneState = true;
             state.webCamState = true;
-            state.audioState = true;
+          //  state.audioState = true;
             state.screenShareState = true;
             state.loadingWebCam = false;
             state.loadingScreenShare = false;
@@ -126,8 +130,10 @@ export const selectWebCamPreview = state => state.controlBarSlice.webcamPreview;
 export const selectStreamingMessage = state => state.controlBarSlice.showStreamingMessage;
 
 export const selectSeenStreamingMessage = state => state.controlBarSlice.seenStreamingMessageThisSession;
+
+export const selectVoiceActive = state => state.controlBarSlice.voiceActive;
 // actions
 
-export const {manuallySetMicrophoneState, toggleStreamingMessage,closeScreenShareMenu, toggleWebCamPreview, toggleConnectionLoading, toggleConnectionError, toggleLoadingScreenShare, toggleLoadingWebCam, setCurrentScreen, setSelectingScreensState, resetControlState, toggleControlState, setScreens, setSelectedScreen } = controlBarSlice.actions;
+export const {toggleVoiceActive, manuallySetMicrophoneState, toggleStreamingMessage,closeScreenShareMenu, toggleWebCamPreview, toggleConnectionLoading, toggleConnectionError, toggleLoadingScreenShare, toggleLoadingWebCam, setCurrentScreen, setSelectingScreensState, resetControlState, toggleControlState, setScreens, setSelectedScreen } = controlBarSlice.actions;
 
 export default controlBarSlice.reducer;
