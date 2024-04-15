@@ -24,7 +24,7 @@ export const ProfileImage = ({decoration, pinned_to_profile_state, hover, timeSt
             marginBottom: 5,
             backgroundColor: (color || primaryColor)
             }} onClick={action} className='message-profile-picture'>
-                <Image  borderRadius={(profile_picture_shape !== 'circle' && profile_picture_shape !== 'undefined') ? '5px' : '50%'} image_class={'user-image'} cursor='pointer' image={user_image || current_message.user_image} />
+                <Image disableErr={true} borderRadius={(profile_picture_shape !== 'circle' && profile_picture_shape !== 'undefined') ? '5px' : '50%'} image_class={'user-image'} cursor='pointer' image={user_image || current_message.user_image} />
                 <Decoration width='52px' height='52px' decoration={decoration} />
             </div>
         : <p id={`alt-time-stamp-${current_message?._id}`} style={{opacity: hover ? 0.9 : 0, color: textColor, fontSize: 9, margin: '5px 0px 0px 0px',textAlign: 'center'}}>{timeStamp}</p>}

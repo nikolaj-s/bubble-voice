@@ -76,7 +76,7 @@ export const ChannelUserDisplay = ({user, channel_id, dragging = () => {}}) => {
             <div 
             style={{position: 'relative', borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%', width: 28, height: 28}}
             className='channel-user-placeholder-user-image'>
-                <Image borderRadius={(user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%'} image_class={'user-image'} cursor='pointer' objectFit='cover' image={user.user_image?.includes('.gif') ? "" : user.user_image} />
+                <Image disableErr={true} borderRadius={(user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%'} image_class={'user-image'} cursor='pointer' objectFit='cover' image={user.user_image?.includes('.gif') ? "" : user.user_image} />
                
                 <div style={{
                     position: 'absolute',
