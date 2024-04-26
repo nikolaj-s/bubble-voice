@@ -4,8 +4,9 @@ import { useSelector } from 'react-redux';
 import { selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 import "./TextInput.css";
+import { SearchIcon } from '../../Icons/SearchIcon/SearchIcon';
 
-export const TextInput = ({action = () => {}, placeholder, inputValue, keyCode = false, type = 'text', stateSelector = "", marginBottom = '0', marginTop = '0', id, invert}) => {
+export const TextInput = ({action = () => {}, placeholder, inputValue, keyCode = false, type = 'text', stateSelector = "", marginBottom = '0', marginTop = '0', id, invert, showSearchIcon = false, enableClear = false}) => {
 
     const color = useSelector(selectPrimaryColor);
 
@@ -74,6 +75,7 @@ export const TextInput = ({action = () => {}, placeholder, inputValue, keyCode =
         }} 
         className='text-input-container'>
             <input id={id} onMouseUpCapture={handleMouseButton} className='text-input' style={{color: focusColor}} onKeyUp={returnKeyCode} onChange={returnInputValue} type={type} placeholder={placeholder} value={inputValue} />
+            {showSearchIcon ? <SearchIcon /> : null}
         </motion.div>
     )
 }

@@ -288,11 +288,11 @@ export const MusicWidget = ({roomOverlay, editing = false, widget, controls = tr
                     :
                     results.length !== 0 ?
                     results.map(song => {
-                        return <Song search_result={true} author={song.author} addToQueue={() => {handleAddSavedSongToQueue(song)}} saved={true} liked={song.liked} action={() => {handleSavingSong(song)}} id={song._id} key={song._id} name={song.title} duration={song.duration} image={song.thumbnail} url={song.id} />
+                        return <Song data={song} search_result={true} author={song.author} addToQueue={() => {handleAddSavedSongToQueue(song)}} saved={true} liked={song.liked} action={() => {handleSavingSong(song)}} id={song._id} key={song._id} name={song.title} duration={song.duration} image={song.thumbnail} url={song.id} />
                     })
                     :
                     recentSongs.map(song => {
-                        return <Song search_result={true} author={song.author} addToQueue={() => {handleAddSavedSongToQueue(song)}} saved={true} liked={song.liked} action={() => {handleSavingSong(song)}} id={song._id} key={song._id} name={song.title} duration={song.duration} image={song.thumbnail} url={song.id} />
+                        return <Song data={song} search_result={true} author={song.author} addToQueue={() => {handleAddSavedSongToQueue(song)}} saved={true} liked={song.liked} action={() => {handleSavingSong(song)}} id={song._id} key={song._id} name={song.title} duration={song.duration} image={song.thumbnail} url={song.id} />
                     })
                     }
                 </div>
@@ -306,7 +306,7 @@ export const MusicWidget = ({roomOverlay, editing = false, widget, controls = tr
                     }}
                     >. . .</p>    
                     : savedMusic.map(song => {
-                        return <Song url={song.id} in_channel={true} author={song.author} addToQueue={() => {handleAddSavedSongToQueue(song)}} saved={true} liked={song.liked} action={() => {handleSavingSong(song)}} id={song._id} key={song._id} name={song.title} duration={song.duration} image={song.thumbnail} />
+                        return <Song data={song} url={song.id} in_channel={true} author={song.author} addToQueue={() => {handleAddSavedSongToQueue(song)}} saved={true} liked={song.liked} action={() => {handleSavingSong(song)}} id={song._id} key={song._id} name={song.title} duration={song.duration} image={song.thumbnail} />
                     })}
                 </div> 
                 : null}
@@ -325,7 +325,7 @@ export const MusicWidget = ({roomOverlay, editing = false, widget, controls = tr
                     : queue.map((song, i) => {
                         return (
                             i === 0 ? null :
-                            <Song url={song.id} author={song.author} added_by={song.added_by} removeFromQueue={() => {handleRemoveFromQueue(song)}} inQueue={true} liked={song.liked} action={() => {handleSavingSong(song)}} id={song._id} key={song._id} name={song.title} duration={song.duration} image={song.thumbnail} />
+                            <Song url={song.id} author={song.author} added_by={song.added_by} removeFromQueue={() => {handleRemoveFromQueue(song)}} inQueue={true} liked={song.liked} action={() => {handleSavingSong(song)}} id={song._id} key={song._id} name={song.title} duration={song.duration} image={song.thumbnail} data={song} />
                         )
                     })}
                 </div>
@@ -343,7 +343,7 @@ export const MusicWidget = ({roomOverlay, editing = false, widget, controls = tr
                         <Range min={0} value={volume} action={handleMusicVolume} max={100} step={0.05} />
                     </div> : null}
                     {queue[0]?.title && editing === false ? 
-                    <Song url={queue[0]?.id} playing={true} width={'calc(100% - 125px)'} added_by={queue[0]?.added_by} liked={queue[0]?.liked} action={() => {handleSavingSong(queue[0])}} id={queue[0]._id} key={queue[0]._id} name={queue[0].title} duration={queue[0].duration} image={queue[0].thumbnail} />
+                    <Song data={queue[0]} url={queue[0]?.id} playing={true} width={'calc(100% - 125px)'} added_by={queue[0]?.added_by} liked={queue[0]?.liked} action={() => {handleSavingSong(queue[0])}} id={queue[0]._id} key={queue[0]._id} name={queue[0].title} duration={queue[0].duration} image={queue[0].thumbnail} />
                     :
                     <p
                     style={{

@@ -4,6 +4,7 @@ import { selectHideProfileImagesOnMessages } from '../../../features/settings/ap
 import { Image } from '../../Image/Image';
 import { selectTextColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { Decoration } from '../../Decoration/Decoration';
+import { Gif } from '../../Gif/Gif';
 
 export const ProfileImage = ({decoration, pinned_to_profile_state, hover, timeStamp, prevDate, date, activity, previous_message, current_message, user_image, primaryColor, color, profile_picture_shape, action}) => {
     
@@ -24,7 +25,20 @@ export const ProfileImage = ({decoration, pinned_to_profile_state, hover, timeSt
             marginBottom: 5,
             backgroundColor: (color || primaryColor)
             }} onClick={action} className='message-profile-picture'>
-                <Image disableErr={true} borderRadius={(profile_picture_shape !== 'circle' && profile_picture_shape !== 'undefined') ? '5px' : '50%'} image_class={'user-image'} cursor='pointer' image={user_image || current_message.user_image} />
+                {user_image?.includes('.gif') ?
+                <Gif 
+                gif={user_image}
+                cursor='pointer'
+                borderRadius={(profile_picture_shape !== 'circle' && profile_picture_shape !== 'undefined') ? '5px' : '50%'} 
+                objectFit='cover'
+                />
+                :
+                <Image disableErr={true} 
+                borderRadius={(profile_picture_shape !== 'circle' && profile_picture_shape !== 'undefined') ? '5px' : '50%'} 
+                image_class={'user-image'} 
+                cursor='pointer' 
+                image={user_image || current_message.user_image} />
+                }
                 <Decoration width='52px' height='52px' decoration={decoration} />
             </div>
         : <p id={`alt-time-stamp-${current_message?._id}`} style={{opacity: hover ? 0.9 : 0, color: textColor, fontSize: 9, margin: '5px 0px 0px 0px',textAlign: 'center'}}>{timeStamp}</p>}

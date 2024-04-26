@@ -53,7 +53,7 @@ export const ScreenShot = ({channelId, username}) => {
                    
                     let local_id = ((Math.random(5 * Math.random(55)) + 1) * 5) + username;
                     
-                    dispatch(sendMessage({username: username, file: file, channel_id: channelId, local_id: local_id, text: `Shared A Screen Shot of ${data.text}`, image_preview: data?.preview, screen_shot: true}))
+                    dispatch(sendMessage({username: username, file: file, channel_id: channelId, local_id: local_id, text: `Shared a screenshot of: ${data.text}`, image_preview: data?.preview, screen_shot: true}))
                     
                     setTimeout(() => {
                         setImage({});

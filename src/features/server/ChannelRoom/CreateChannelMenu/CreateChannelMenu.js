@@ -4,7 +4,7 @@ import { AnimatePresence, motion, useAnimation} from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 
 // state
-import { createCategory, createChannel, selectCreateChannelMenuState, selectServerChannels, selectServerMembers, selectServerOwner, toggleCreateChannelMenu } from '../../ServerSlice';
+import { createCategory, createChannel, selectCreateChannelMenuState, selectServerChannels, selectServerMembers, selectServerOwner, selectUsersPermissions, throwServerError, toggleCreateChannelMenu } from '../../ServerSlice';
 import { selectGlassColor, selectPrimaryColor, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // components
@@ -58,6 +58,8 @@ export const CreateChannelMenu = () => {
 
     const members = useSelector(selectServerMembers);
 
+    const permissions = useSelector(selectUsersPermissions);
+
     React.useEffect(() => {
 
         for (const c of channels) {
@@ -93,6 +95,8 @@ export const CreateChannelMenu = () => {
     }
 
     const create = () => {
+
+        if (!permissions?.user_can_create_channels) return dispatch(throwServerError({errorMessage: "Error: You do not have permission to perform that action"}));
 
         if (type === "category") {
             dispatch(createCategory({category_name: channelName}));

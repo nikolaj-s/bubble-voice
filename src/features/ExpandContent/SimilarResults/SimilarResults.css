@@ -1,0 +1,7 @@
+.similar-results-container {
+    width: 100%;
+    min-height: 150px;
+    position: relative;
+    overflow-y: auto;
+    margin-top: 5px;
+}

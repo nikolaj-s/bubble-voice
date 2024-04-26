@@ -13,7 +13,7 @@ import {  selectAccentColor, selectActivationColor, selectGlassColor, selectGlas
 // style
 import "./ChannelButton.css";
 import { SocialButton } from '../SocialButton/SocialButton';
-import { moveUser, selectChannelSocialId, selectCurrentChannelId, setChannelSocialId, throwServerError } from '../../../features/server/ServerSlice';
+import { moveUser, selectChannelSocialId, selectCurrentChannelId, selectUsersPermissions, setChannelSocialId, throwServerError } from '../../../features/server/ServerSlice';
 import { SOCIAL_DATA } from '../../../util/LocalData';
 import { VoiceDisabledIcon } from '../../Icons/VoiceDisabledIcon/VoiceDisabledIcon';
 import { VoiceEnabledIcon } from '../../Icons/VoiceEnabledIcon/VoiceEnabledIcon';
@@ -38,6 +38,8 @@ export const ChannelButton = ({category_id, collapse, channel, action = () => {}
     const [unReadMessage, toggleUnReadMessage] = React.useState(false);
 
     const [moveIndicator, toggleMoveIndicator] = React.useState(false);
+
+    const [mouseDown, toggleMouseDown] = React.useState(false);
 
     const animation = useAnimation();
 
@@ -64,6 +66,8 @@ export const ChannelButton = ({category_id, collapse, channel, action = () => {}
     const active = (currentChannelId === channel._id) || (currentSocialId === channel._id);
 
     const disableChannelIcons = useSelector(selectDisableChannelIcons);
+
+    const permissions = useSelector(selectUsersPermissions);
 
     React.useEffect(() => {
 
@@ -94,6 +98,8 @@ export const ChannelButton = ({category_id, collapse, channel, action = () => {}
         if (channel.text_only) return dispatch(setChannelSocialId(channel._id));
 
         if (active) dispatch(setChannelSocialId(null));;
+
+        if (active && !channel.text_only) dispatch(handleChangePage('voice'));
 
         dispatch(setSelectedMember(""));
 
@@ -172,13 +178,14 @@ export const ChannelButton = ({category_id, collapse, channel, action = () => {}
         const selected_username = split_id.length > 2 ? `${split_id[1]} ${split_id[2]}` : split_id[1];
 
         const channel_id = split_id[0];
-        console.log(selected_username)
+       
         if (channel_id === channel._id) return;
 
         if (selected_username === username) {
             document.getElementById(`channel-button-${channel._id}`).click();
         } else if (selected_username && channel_id) {
-            
+            if (!permissions?.user_can_move_users) return dispatch(throwServerError({errorMessage: "ERROR: you are not authorized to move other users"}));
+
             dispatch(moveUser({username: selected_username, channel_id: channel_id, arg: channel._id}))
         }
 
@@ -251,16 +258,17 @@ export const ChannelButton = ({category_id, collapse, channel, action = () => {}
             id={`channel-button-${channel._id}`}
             animate={animation} 
             onMouseEnter={() => {handleAnimation(primaryColor, true)}}
-            onMouseLeave={() => {handleAnimation(transparentPrimaryColor, false)}}
+            onMouseLeave={() => {handleAnimation(transparentPrimaryColor, false); toggleMouseDown(false)}}
             onMouseOver={() => {handleAnimation(primaryColor, true)}}
-            onMouseDown={() => {handleAnimation(accentColor)}}
-            onMouseUp={() => {handleAnimation(primaryColor)}}
+            onMouseDown={() => {handleAnimation(accentColor); toggleMouseDown(true)}}
+            onMouseUp={() => {handleAnimation(primaryColor); toggleMouseDown(false)}}
             onClick={handleAction}
             transition={{duration: 0}}
             style={{
                 backgroundColor: active ? accentColor : transparentPrimaryColor,
-                cursor: active ? "default" : "pointer",
+                cursor: "pointer",
                 marginBottom: users.length > 0 && channel.auth && !channel.status ? '8px' : null,
+                scale: mouseDown ? 0.95 : 1
             }}
             className='channel-button-container'>
                 <div style={{backgroundColor: unReadMessage && channel.auth ? textColor : null}} className='unread-message-indicator'></div>   

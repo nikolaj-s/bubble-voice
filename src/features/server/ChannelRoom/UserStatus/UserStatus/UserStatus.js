@@ -9,12 +9,15 @@ import { GetTimeDifference } from '../../../../../util/GetTimeDifference';
 import { AwayIcon } from '../../../../../components/Icons/AwayIcon/AwayIcon';
 import { UserTypingIndicator } from '../../../../../components/UserTypingIndicator/UserTypingIndicator';
 import { Decoration } from '../../../../../components/Decoration/Decoration';
+import { Gif } from '../../../../../components/Gif/Gif';
 
 export const UserStatus = ({user}) => {
 
     const [preview, togglePreview] = React.useState(false);
 
     const [timeStamp, setTimeStamp] = React.useState(false);
+
+    const [mouseDown, toggleMouseDown] = React.useState(false);
 
     React.useEffect(() => {
         
@@ -52,8 +55,14 @@ export const UserStatus = ({user}) => {
     
     return (
         <div 
-        style={{backgroundColor: preview ? primaryColor : transparentColor, opacity: preview ? 1 : user?.status === 'offline' || !user?.status ? 0.6 : 1,}}
-        onClick={openMemberPanel} onMouseEnter={(e) => {handleMouseEnter(e, true)}} onMouseLeave={(e) => {handleMouseLeave(e, false)}} className={`user-status-container ${user._id}-user-status-card status-${user.status}`}>
+        onMouseDown={() => {toggleMouseDown(true)}}
+        onMouseUp={() => {toggleMouseDown(false)}}
+        style={{
+            backgroundColor: preview ? primaryColor : transparentColor,
+            opacity: preview ? 1 : user?.status === 'offline' || !user?.status ? 0.6 : 1,
+            transform: mouseDown ? "scale(0.95)" : "scale(1)"
+        }}
+        onClick={openMemberPanel} onMouseEnter={(e) => {handleMouseEnter(e, true)}} onMouseLeave={(e) => {handleMouseLeave(e, false); toggleMouseDown(false)}} className={`user-status-container ${user._id}-user-status-card status-${user.status}`}>
             <div
             style={{
                 borderRadius: (user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%',
@@ -61,7 +70,16 @@ export const UserStatus = ({user}) => {
                 backgroundColor: (user?.color || primaryColor),
             }}
             className='user-status-image-container'>
-                <Image borderRadius={(user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%'} disableErr={true}  image_class={"user-image"} cursor='pointer' image={user.user_image?.includes('gif') ? "" : user.user_image} />
+                {user.user_image?.includes('.gif') ?
+                <Gif 
+                location="user-status-location"
+                key={user.user_image + "user-status-location"}
+                borderRadius={(user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%'}
+                objectFit='cover' gif={user.user_image} />
+                :
+                <Image 
+                borderRadius={(user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%'} disableErr={true}  image_class={"user-image"} cursor='pointer' image={user.user_image?.includes('gif') ? "" : user.user_image} />
+                }
                 <Decoration width={52} height={52} decoration={user.decoration} />
                 {user.status === 'Away' || user.status === 'away' ?
                 <div 

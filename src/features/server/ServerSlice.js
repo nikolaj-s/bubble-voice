@@ -4,6 +4,7 @@ import { fetchMusicWidgetVolume } from "../../util/LocalData";
 
 import { socket } from "./ServerBar/ServerBar";
 import { addActivityMessage, setActivityFeed, setPinnedSubReddits } from "./ChannelRoom/ServerDashBoard/ServerDashBoardSlice";
+import { setVideos } from "./ChannelRoom/ServerDashBoard/ServerMedia/ServerMediaSlice";
 
 export const unBanMember = createAsyncThunk(
     'serverSlice/unBanMember',
@@ -112,6 +113,10 @@ export const fetchServerDetails = createAsyncThunk(
 
         dispatch(setPinnedSubReddits(server?.pinned_sub_reddits));
 
+        if (server?.recent_videos) {
+            dispatch(setVideos(server?.recent_videos));
+        }
+
         return server;
     }
 )
@@ -203,10 +208,15 @@ export const moveUser = createAsyncThunk(
     'serverSlice',
     async ({username, channel_id, arg}, {rejectWithValue}) => {
 
-        await socket.request('move user', {channel_id: channel_id, username: username, to_move: arg})
+        const data = await socket.request('move user', {channel_id: channel_id, username: username, to_move: arg})
         .catch(error => {
-            rejectWithValue({error: true})
+      
+            return {error: true, errorMessage: error};
         })
+
+        if (data.error) return rejectWithValue({error: true, errorMessage: data.errorMessage});
+
+        return;
 
     }
 )
@@ -824,7 +834,7 @@ const serverSlice = createSlice({
     extraReducers: {
         [moveUser.rejected]: (state, action) => {
             state.error = true;
-            state.errorMessage = "Error Moving User";
+            state.errorMessage = action.payload.errorMessage;
         },
         [navigateToServer.pending]: (state, action) => {
             state.loading = true;

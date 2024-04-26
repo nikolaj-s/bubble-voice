@@ -46,6 +46,29 @@ export const ViewSubReddit = ({expand, explore, disableFullMode, subreddit, subr
 
     const [reverse, toggleReverse] = React.useState(false);
 
+    // persist scroll posistion
+    React.useEffect(() => {
+        try {
+            if (posts.length > 0) {
+
+                const pos = sessionStorage.getItem(`${subreddit}-scroll-position`);
+    
+                const el = document.getElementsByClassName('view-sub-reddit-wrapper')[0];
+                console.log(pos, el)
+                if (pos && el) {
+                    el.scrollTo(0, Number(pos));
+                }
+    
+            } else {
+                sessionStorage.removeItem(`${subreddit}-scroll-position`);
+            }
+        } catch (error) {
+            return;
+        }
+        
+
+    }, [])
+
     const handleSearchSubreddit = async () => {
 
         if (loading) return;
@@ -137,11 +160,14 @@ export const ViewSubReddit = ({expand, explore, disableFullMode, subreddit, subr
         if (bottom) {
             dispatch(GetPostsFromSubReddit({subreddit: subreddit, sort: sortState}));
         }
+
+        sessionStorage.setItem(`${subreddit}-scroll-position`, e.target.scrollTop.toString());
     }
 
     const handleExpand = (value) => {
         dispatch(setExpandedContent(value))
     }
+
 
     return (
         <>
@@ -173,7 +199,7 @@ export const ViewSubReddit = ({expand, explore, disableFullMode, subreddit, subr
                 {subreddit ? null :
                 <>
                 <InputTitle title={"Search For Sub Subreddit"} />
-                <TextInput keyCode={(keyCode) => {if (keyCode === 13) handleSearchSubreddit()}} inputValue={query} action={(value) => {setQeury(value)}} placeholder={'Subreddit'} />
+                <TextInput showSearchIcon={true} keyCode={(keyCode) => {if (keyCode === 13) handleSearchSubreddit()}} inputValue={query} action={(value) => {setQeury(value)}} placeholder={'Subreddit'} />
                 <TextButton marginTop={5} action={handleSearchSubreddit} name={"Search"} />
                 
                 <InputTitle title={"Results"} />

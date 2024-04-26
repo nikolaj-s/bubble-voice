@@ -6,7 +6,7 @@ import { VideoPreview } from '../../../../../../components/VideoPreview/VideoPre
 import { useSelector } from 'react-redux'
 import { selectShowFullResPreviews } from '../../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice'
 
-export const Reccomendations = ({media, count, expand}) => {
+export const Reccomendations = ({media, count, expand, openMetaData}) => {
 
     const showFullResPreviews = useSelector(selectShowFullResPreviews);
 
@@ -21,7 +21,7 @@ export const Reccomendations = ({media, count, expand}) => {
                         return (
                            <>
                             {img.type === 'image' ?
-                            <ImagePreview nsfw={img.nsfw} image={showFullResPreviews ? img.image : img.preview} action={() => {expand(img.image ? img.image : img.preview)}} tags={img.tags} />
+                            <ImagePreview altImage={img.preview} nsfw={img.nsfw} image={img.image} expand={(i) => {expand(i); openMetaData(img)}} tags={img.tags} />
                             :
                             <VideoPreview action={() => {expand(img.link)}} video={img} />}
                             </>

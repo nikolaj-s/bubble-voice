@@ -505,8 +505,12 @@ const Wrapper = () => {
             }
             </>
             : null}
+            {permission?.user_can_delete_channels ?
+            <>
             <InputTitle title={"Delete Channel"} />
             <TextButton marginBottom={'100px'} action={handleDeleteChannel} name={"Delete Channel"} icon={<DeleteIcon />} />
+            </>
+            : null}
             <div style={{flexShrink: 0, height: 100, width: '100%'}} />
             <ApplyCancelButton position={edited === false ? null : 'fixed'} right={20} toggled={edited === false ? true : null} apply={handleUpdateChannel} cancel={handleCancel} />
             <Loading backgroundColor={glassColor}  loading={loading} />

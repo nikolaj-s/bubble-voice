@@ -12,7 +12,7 @@ import {  selectAccentColor, selectPrimaryColor, selectSecondaryColor, selectTex
 
 // style
 import "./Message.css";
-import { setExpandedContent } from '../../features/ExpandContent/ExpandContentSlice';
+import { setExpandedContent, setMetaData } from '../../features/ExpandContent/ExpandContentSlice';
 import { Iframe } from '../Iframe/Iframe';
 import { MessageLink } from './MessageLink/MessageLink';
 import { MessageText } from './MessageText/MessageText';
@@ -32,6 +32,8 @@ import { NsfwImageOverlay } from '../Image/NsfwImageOverlay/NsfwImageOverlay';
 import { ConvertTime } from '../../util/ConvertTime';
 import { RedditPost } from '../RedditPost/RedditPost';
 import { handleAddingMedia, selectLoadingMusicState } from '../../features/server/ChannelRoom/Room/Music/MusicSlice';
+import { Gif } from '../Gif/Gif';
+import { VideoCard } from '../VideoCard/VideoCard';
 
 export const Message = ({pinned_to_profile_state, activity_feed = false,dashboard = false, direct_message, message, overlay = false, id, channel_id, perm, pinMessage, pinned, index, previous_message, current_message, persist, pin_to_profile}) => {
 
@@ -83,7 +85,13 @@ export const Message = ({pinned_to_profile_state, activity_feed = false,dashboar
     }, [previous_message, current_message])
 
     const expandContent = (source) => {
-        dispatch(setExpandedContent(source))
+        dispatch(setExpandedContent(source));
+
+        if (current_message?.content?.media_meta_data) {
+            dispatch(setMetaData(current_message?.content?.media_meta_data))
+        }
+
+        
     }
 
     const hoverEffect = (e, bool) => {
@@ -131,12 +139,15 @@ export const Message = ({pinned_to_profile_state, activity_feed = false,dashboar
                     }
                     {(message.image || message.video || message.iFrame || message.reddit) || message.gallery ? null : <MessageLink link={message.link} />
                     }
-                    {message.link_preview ?
+                    {message.link_preview && !message.media_video ?
                     <LinkPreview expand={expandContent} data={message.link_preview} />
                     : null}
                     <div className='message-content-wrapper'>
+                            {message.media_video ?
+                            <VideoCard message={true} data={message.media_video}  />
+                            : null}
                             {message.song ?
-                            <Song profile_pin={pinned_to_profile_state} url={message?.song?.id} addToQueue={handleAddToQueue} in_channel={currentChannelId} in_social={true} name={message.song.title} duration={message.song.duration} image={message.song.thumbnail} author={message.song.author}  />
+                            <Song data={message.song} profile_pin={pinned_to_profile_state} url={message?.song?.id} addToQueue={handleAddToQueue} in_channel={currentChannelId} in_social={true} name={message.song.title} duration={message.song.duration} image={message.song.thumbnail} author={message.song.author}  />
                             : null}
                             {message.reddit ?
                             <RedditPost action={expandContent} inSocial={true} data={message.reddit} />
@@ -158,8 +169,10 @@ export const Message = ({pinned_to_profile_state, activity_feed = false,dashboar
                             borderRadius: (activity_feed && message?.text?.includes('channel')) ? '50%' : null 
                             }}
                             className='message-image-container'>
+                               
                                 <Image alt_image={message?.fall_back_image} loadingState='eager' nsfw={current_message.nsfw} borderRadius={20} minLoadHeight={'50px'} altHeight={
                                     maximizeMediaSize ? '100%' : 350}  expandContent={expandContent} imgHeight={!activity_feed && !maximizeMediaSize ? 'auto' : 'auto'} cursor='pointer' width={null} altWidth={'100%'} objectFit='contain' image={message.image} />
+                                
                             </div>
                             : null}
                             {message.video ? 

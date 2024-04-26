@@ -8,6 +8,7 @@ import { selectAccentColor, selectActivationColor, selectPrimaryColor, selectSec
 import { selectProfileTabOpen, toggleProfileTab } from '../../Profile/ProfileSlice';
 import { selectVoiceActive } from '../ControlBarSlice';
 import { Decoration } from '../../../components/Decoration/Decoration';
+import { Gif } from '../../../components/Gif/Gif';
 
 export const ControlProfileButton = ({micState, inChannel}) => {
 
@@ -52,7 +53,24 @@ export const ControlProfileButton = ({micState, inChannel}) => {
         onMouseLeave={() => {toggleHover(false)}}
         className='control-profile-button-container'>
             <div className='control-profile-image-container'>
-                <Image cursor='pointer' borderRadius={shape !== 'circle' ? 5 : '50%'} image={profilePicture} width='100%' height='100%' objectFit='cover' />
+                {profilePicture?.includes('.gif') ?
+                <Gif
+                alt_trigger={true}
+                active={(inChannel && voiceState)} 
+                location="control-bar-location"
+                key={profilePicture + "control-bar-location"}
+                gif={profilePicture}
+                cursor='pointer' 
+                objectFit='cover'
+                zIndex={1}
+                borderRadius={shape !== 'circle' ? 5 : '50%'}
+                />
+                :
+                <Image 
+                disableErr={true} 
+                backgroundColor={secondaryColor} 
+                cursor='pointer' borderRadius={shape !== 'circle' ? 5 : '50%'} image={profilePicture} width='100%' height='100%' objectFit='cover' />
+                }
                 <Decoration decoration={decoration} width={40} height={40} />
             </div>
             <h3 style={{color: color}}>{displayName}</h3>

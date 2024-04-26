@@ -94,12 +94,17 @@ export const ImageInput = ({
             if (acceptedFiles.length === 0) return;
 
             toggleProcessingImage(true);
-            console.log(acceptedFiles[0].type)
+            
             const options = {maxSizeMB: maxSize, onProgress: handlePercent, maxIteration: 30, type: acceptedFiles[0].type, maxWidthOrHeight: maxDimensions}
 
             let compressed_image;
 
-            if (acceptedFiles[0].type.includes('gif') && acceptedFiles[0].size < 950000) {
+            if (acceptedFiles[0].type.includes('gif') && acceptedFiles[0].size > 3000000) {
+                toggleProcessingImage(false);
+                return dispatch(throwServerError({error: true, errorMessage: "ERROR: Gif cannot be larger than 3MB"}));
+            }
+
+            if (acceptedFiles[0].type.includes('gif') && acceptedFiles[0].size < 3000000) {
                 compressed_image = acceptedFiles[0];
             } else {
                 compressed_image = await imageCompression(acceptedFiles[0], options);

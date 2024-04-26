@@ -117,7 +117,8 @@ const MiscellaneousSettingsSlice = createSlice({
         disableNsfwBlur: false,
         muteSocial: false,
         enablePushToTalkSoundEffect: false,
-        disableMediaWidgetStatusUpdates: false
+        disableMediaWidgetStatusUpdates: false,
+        enableAnimatedGifsInRoomOutOfFocus: false
     },
     reducers: {
         pushPokeNotification: (state, action) => {
@@ -254,6 +255,8 @@ const MiscellaneousSettingsSlice = createSlice({
             if (saved_data.enablePushToTalkSoundEffect) state.enablePushToTalkSoundEffect = true;
         
             if (saved_data.disableMediaWidgetStatusUpdates) state.disableMediaWidgetStatusUpdates = true;
+
+            if (saved_data.enableAnimatedGifsInRoomOutOfFocus) state.enableAnimatedGifsInRoomOutOfFocus = true;
         }
     }
 })
@@ -323,6 +326,8 @@ export const selectMuteSocial = state => state.MiscellaneousSettingsSlice.muteSo
 export const selectPushToTalkSoundEffectState = state => state.MiscellaneousSettingsSlice.enablePushToTalkSoundEffect
 
 export const selectDisableMediaWidgetStatusUpdates = state => state.MiscellaneousSettingsSlice.disableMediaWidgetStatusUpdates;
+
+export const selectEnableGifsOutOfFocusInRoom = state => state.MiscellaneousSettingsSlice.enableAnimatedGifsInRoomOutOfFocus;
 
 export const { toggleWebVersion,toggleAppFocus, setVideoVolume, pushPokeNotification, setDefaultServer, changeRoomScale, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, miscSettingsClearError, miscSettingsChannelSpecificStateChange } = MiscellaneousSettingsSlice.actions;
 

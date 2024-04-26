@@ -107,7 +107,7 @@ export const fetchFilteredMessages = createAsyncThunk(
 
 export const sendMessage = createAsyncThunk(
     'SocialSlice/sendMessage',
-    async ({username, file, channel_id, local_id, text, image_preview, screen_shot = false, emoji, nsfw, textStyle, fall_back_image}, {rejectWithValue, getState, dispatch}) => {
+    async ({username, file, channel_id, local_id, text, image_preview, screen_shot = false, emoji, nsfw, textStyle, fall_back_image, media_meta_data, media_video}, {rejectWithValue, getState, dispatch}) => {
         try {
 
             const message = {
@@ -124,7 +124,9 @@ export const sendMessage = createAsyncThunk(
                     emoji: emoji,
                     textStyle: textStyle,
                     fall_back_image: fall_back_image,
-                    reddit: false
+                    reddit: false,
+                    media_meta_data: media_meta_data,
+                    media_video: media_video
                 },
                 valid: true,
                 screen_shot: screen_shot,
@@ -214,7 +216,10 @@ export const RequestDeleteMessage = createAsyncThunk(
                 return result;
             })
             .catch(error => {
-                
+                console.log(error);
+
+                dispatch(throwServerError({errorMessage: error}));
+
                 return rejectWithValue({errorMessage: error});
             })
 
@@ -318,7 +323,7 @@ const SocialSlice = createSlice({
         messageCleanUp: (state, action) => {
             if (state.messages[action.payload]) {
 
-                state.messages[action.payload] = state.messages[action.payload].slice(0, 40);
+            //    state.messages[action.payload] = state.messages[action.payload].slice(0, 40);
             
             }
         },

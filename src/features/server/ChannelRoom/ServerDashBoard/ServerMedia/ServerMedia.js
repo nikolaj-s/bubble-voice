@@ -6,13 +6,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectAccentColor, selectDisableTransitionAnimations, selectGlassColor, selectSecondaryColor, selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { Reccomendations } from './Recommendations/Reccomendations';
 import { ViewSubReddit } from './ViewSubReddits/ViewSubReddit';
-import { GetPostsFromSubReddit, addMoreMedia, selectCurrentSubReddit, selectLoadingNewMedia, selectLoadingSubReddit, selectMedia, selectMediaQuery, selectNextPostPage, selectScrollServerMediaScrollPosition, selectServerMediaPage, selectSubRedditSortState, setMediaQuery, setNewMedia, setScrollPosition, setServerMediaPage, toggleLoadingNewMedia } from './ServerMediaSlice';
+import { GetPostsFromSubReddit, addMoreMedia, selectCurrentSubReddit, selectLoadingNewMedia, selectLoadingSubReddit, selectMedia, selectMediaQuery, selectNextPostPage, selectScrollServerMediaScrollPosition, selectServerMediaPage, selectSubRedditSortState, setMediaQuery, setNewMedia, setScrollPosition, setServerMediaPage, setVideos, toggleLoadingNewMedia } from './ServerMediaSlice';
 import { TextInput } from '../../../../../components/inputs/TextInput/TextInput';
 import { Loading } from '../../../../../components/LoadingComponents/Loading/Loading';
 import { ImageSearch } from '../../../../../util/ImageSearch';
 import { selectServerId, throwServerError } from '../../../ServerSlice';
 import {motion} from 'framer-motion';
 import { clearCache } from '../../../../../util/ClearCaches';
+import { setMetaData } from '../../../../ExpandContent/ExpandContentSlice';
+import { ImageSearchFilterMenu } from '../../../../../components/inputs/MessageInput/ImageSearchPanel/ImageSearchFilterMenu/ImageSearchFilterMenu';
+import { VideoSearch } from '../../../../../util/VideoSearch';
+import { VideoMediaList } from './VideoMediaList/VideoMediaList';
+
 
 export const ServerMedia = ({media, expand}) => {
     
@@ -50,6 +55,12 @@ export const ServerMedia = ({media, expand}) => {
 
     const disableTransition = useSelector(selectDisableTransitionAnimations);
 
+    const [sortBy, setSortBy] = React.useState("relevance");
+
+    const [format, setFormat] = React.useState("images");
+
+    const [mediaLocation, setMediaLocation] = React.useState("");
+
     const handleLoadMore = (e) => {
         
         const bottom = e.target.scrollHeight - e.target.scrollTop <= (e.target.clientHeight + 600);
@@ -59,22 +70,16 @@ export const ServerMedia = ({media, expand}) => {
         if (loading) return;
 
         if (bottom) {
-            if (page === 'recommendations') {
-
-                if (loadingNewMedia) return;
-
-                increaseCount(count + 15);
-
-                if (newMedia.length > 1 && newMedia.length < count) {
-                    console.log(newMedia[newMedia.length - 1])
-                    searchMedia(false, newMedia[newMedia.length - 1]?.tags)
-                }
-            } else if (page === 'subreddit') {
+            if (page === 'subreddit') {
                 dispatch(GetPostsFromSubReddit({subreddit: selectedSubReddit.url, sort: sortState, after: nextPostPage}))
             }   
         }
 
         
+    }
+
+    const openMetaData = (data) => {
+        dispatch(setMetaData(data));
     }
 
     const setPage = (page) => {
@@ -93,23 +98,29 @@ export const ServerMedia = ({media, expand}) => {
 
     const searchMedia = async (newSearch = true, query = false) => {
 
-        if (newSearch) document.getElementsByClassName('server-media-container')[0].scrollTop = 0;
-
-        if (newSearch) dispatch(setNewMedia([{}]));
+        document.getElementsByClassName('server-media-wrappers')[0].scrollTop = 0;
 
         dispatch(toggleLoadingNewMedia(true));
 
-        const images = await ImageSearch(query ? query : mediaQuery, serverId);
+        if (page === 'images') {
+
+            const images = await ImageSearch(query ? query : mediaQuery, serverId, format, mediaLocation, sortBy);
+
+            if (images.error) return dispatch(throwServerError({error: true, errorMessage: images.errorMessage}))
+            
+            dispatch(setNewMedia(images.media));
+            
+
+        } else if (page === 'videos') {
+            
+            const videos = await VideoSearch(query ? query : mediaQuery, serverId);
+
+            if (videos.error) return dispatch(throwServerError({error: true, errorMessage: videos.errorMessage}));
+
+            dispatch(setVideos(videos.media));
+        }
 
         dispatch(toggleLoadingNewMedia(false));
-
-        if (images.error) return dispatch(throwServerError({error: true, errorMessage: images.errorMessage}))
-        
-        if (newSearch) {
-            dispatch(setNewMedia(images.media));
-        } else {
-            dispatch(addMoreMedia(images.media));
-        }
 
         dispatch(setMediaQuery(""));
 
@@ -145,21 +156,28 @@ export const ServerMedia = ({media, expand}) => {
         transition={disableTransition ? {duration: 0} : {duration: 0.2}}
         className='server-media-wrappers' initial={{opacity: 0}} animate={{opacity: 1}} 
         exit={{opacity: 0}}>
-            <div style={{backgroundColor: secondaryColor}} className='server-media-navigation-container'>
+            
+            <div style={{backgroundColor: secondaryColor,
+            zIndex: 4, borderRadius: 10}} className='server-media-navigation-container'>
                     
-                    <h3 onClick={() => {setPage('recommendations')}} style={{color: textColor, opacity: page === 'recommendations' ? 1 : 0.5, cursor: page === 'recommendations' ? 'default' : 'pointer', backgroundColor: page === 'recommendations' ? accentColor : null}}>Recommendations</h3>
+                    <h3 onClick={() => {setPage('recommendations')}} style={{color: textColor, opacity: page === 'recommendations' ? 1 : 0.5, cursor: page === 'recommendations' ? 'default' : 'pointer', backgroundColor: page === 'recommendations' ? accentColor : null}}>Images</h3>
+                    <h3 onClick={() => {setPage('videos')}} style={{color: textColor, opacity: page === 'videos' ? 1 : 0.5, cursor: page === 'videos' ? 'default' : 'pointer', backgroundColor: page === 'videos' ? accentColor : null}}>Videos</h3>
                     <h3 onClick={() => {setPage('subreddit')}} style={{color: textColor, opacity: page === 'subreddit' ? 1 : 0.5, cursor: page === 'subreddit' ? 'default' : 'pointer', backgroundColor: page === 'subreddit' ? accentColor : null}}>Subreddits</h3>
             </div>
-            {page === 'recommendations' ?
-            <div className='server-media-image-search'>
-                <TextInput keyCode={handleEnter} action={handleQueryInput} inputValue={mediaQuery} placeholder={'Search Media'} />
+            {page === 'recommendations' || page === "videos" ?
+            <div 
+            style={{backgroundColor: secondaryColor, zIndex: 2}}
+            className='server-media-image-search'>
+                <TextInput showSearchIcon={true} keyCode={handleEnter} action={handleQueryInput} inputValue={mediaQuery} placeholder={'Search Media'} />
+                {page === 'videos' ? null : <ImageSearchFilterMenu videoSort={page === 'videos'} format={format} mediaLocation={mediaLocation} setMediaLocation={setMediaLocation} setSortBy={setSortBy} sortBy={sortBy} updateFormat={setFormat} />}
             </div>
             : null}
-            <div style={{height: page === 'subreddit' ? 'calc(100% - 40px)' : page === 'screenShots' ? 'calc(100% - 40px)' : null}} onScroll={handleLoadMore} className='server-media-container'>
+           
+            <div style={{height: 'auto'}} onScroll={handleLoadMore} className='server-media-container'>
                 
-                {page === 'recommendations' ? <Reccomendations count={count} expand={expand} media={newMedia.length > 0 ? newMedia : media} /> : null}
+                {page === 'recommendations' ? <Reccomendations openMetaData={openMetaData} count={count} expand={expand} media={newMedia.length > 0 ? newMedia : media} /> : null}
                 {page === 'subreddit' ? <ViewSubReddit expand={expand} /> : null}
-                
+                {page === 'videos' ? <VideoMediaList /> : null}
             </div>
             
             <Loading backgroundColor={glassColor} loading={loadingNewMedia} />

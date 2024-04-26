@@ -1,7 +1,7 @@
 
 .ctx-menu-container {
     position: fixed;
-    z-index: 10;
+    z-index: 99;
     border-radius: 6px;
     min-width: 200px;
     padding: 5px;

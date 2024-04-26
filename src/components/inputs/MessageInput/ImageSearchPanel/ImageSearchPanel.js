@@ -23,7 +23,7 @@ import { ImagePreview } from '../../../ImagePreview/ImagePreview';
 import { selectSavedMedia } from '../../../../features/SavedMedia/SavedMediaSlice';
 import { selectDisableTransparancyEffects, selectShowFullResPreviews } from '../../../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { ViewSubReddit } from '../../../../features/server/ChannelRoom/ServerDashBoard/ServerMedia/ViewSubReddits/ViewSubReddit';
-import { selectLoadingNewMedia, selectMedia, setNewMedia } from '../../../../features/server/ChannelRoom/ServerDashBoard/ServerMedia/ServerMediaSlice';
+import { selectLoadingNewMedia, selectMedia, selectVideoResults, setNewMedia, setVideos } from '../../../../features/server/ChannelRoom/ServerDashBoard/ServerMedia/ServerMediaSlice';
 import { NoSavesIcon } from '../../../Icons/NoSavesIcon/NoSavesIcon';
 import { ImageButton } from '../ImageButton/ImageButton';
 import { AltImageIcon } from '../../../Icons/AltImageIcon/AltImageIcon';
@@ -33,7 +33,8 @@ import { RedditIcon } from '../../../Icons/RedditIcon/RedditIcon'
 import { SavesIcon } from '../../../Icons/SavesIcon/SavesIcon'
 import { EmojiMenu } from '../../../EmojiPicker/EmojiMenu';
 import { ImageSearchFilterMenu } from './ImageSearchFilterMenu/ImageSearchFilterMenu';
-export const ImageSearchPanel = ({channelId,hideOptions = false,direct_message, searchingForImage, selectImage, serverId, inputHeight, close, upload_image, persist, postEmoji}) => {
+import { VideoCard } from '../../../VideoCard/VideoCard';
+export const ImageSearchPanel = ({channelId, hideOptions = false,direct_message, searchingForImage, selectImage, serverId, inputHeight, close, upload_image, persist, postEmoji, setVideo}) => {
 
     const primaryColor = useSelector(selectPrimaryColor);
 
@@ -51,6 +52,8 @@ export const ImageSearchPanel = ({channelId,hideOptions = false,direct_message, 
 
     const showFullResPreviews = useSelector(selectShowFullResPreviews);
 
+    const [sortBy, setSortBy] = React.useState("relevance");
+
     const [mediaType, setMediaType] = React.useState('Images');
 
     const [format, setFormat] = React.useState("images");
@@ -58,6 +61,8 @@ export const ImageSearchPanel = ({channelId,hideOptions = false,direct_message, 
     const [mediaLocation, setMediaLocation] = React.useState("");
 
     const dispatch = useDispatch();
+
+    const videoResults = useSelector(selectVideoResults);
 
     const [loading, toggleLoading] = React.useState(false);
 
@@ -68,8 +73,6 @@ export const ImageSearchPanel = ({channelId,hideOptions = false,direct_message, 
     const bannedKeywords = useSelector(selectBannedKeywords);
 
     const disableTransparancy = useSelector(selectDisableTransparancyEffects);
-
-    const [videos, setVideos] = React.useState([]);
 
     const [query, setQuery] = React.useState("");
 
@@ -101,7 +104,7 @@ export const ImageSearchPanel = ({channelId,hideOptions = false,direct_message, 
 
         toggleLoading(true);
 
-        const result = mediaType === 'Videos' ? await VideoSearch(query, serverId) : await ImageSearch(query, serverId, format, mediaLocation);
+        const result = format === 'videos' ? await VideoSearch(query, serverId) : await ImageSearch(query, serverId, format, mediaLocation, sortBy);
         
       //  setQuery("");
 
@@ -119,7 +122,7 @@ export const ImageSearchPanel = ({channelId,hideOptions = false,direct_message, 
             
             toggleLoading(false);
             
-            mediaType === 'Images' ? dispatch(setNewMedia(result.media)) : setVideos(result.media);
+            format === 'videos' ? dispatch(setVideos(result.media)) : dispatch(setNewMedia(result.media));
 
         }, 100)
         
@@ -166,7 +169,7 @@ export const ImageSearchPanel = ({channelId,hideOptions = false,direct_message, 
             document.getElementsByClassName('message-image-search-button')[0].click();
         }, 50)
     }
-console.log(images)
+
     return (
         <AnimatePresence>
             {searchingForImage ?
@@ -214,17 +217,21 @@ console.log(images)
                             <input 
                             id="message-image-search-input"
                             style={{color: textColor, backgroundColor: primaryColor}}
-                            maxLength={120} onKeyUp={handleEnter} onChange={handleQuery} value={query} placeholder={`Search For ${mediaType}`} />
+                            maxLength={120} onKeyUp={handleEnter} onChange={handleQuery} value={query} placeholder={`Search`} />
                             <div style={{opacity: query.length > 0 ? 1 : 0.5}} className='message-image-search-button'>
                                 <AltSearchButton padding={5} active={query.length === 0} action={search} margin={'0 5px 0 10px'} width={20} height={18}  borderRadius={5} />
                             </div>
                         </div>
-                        <ImageSearchFilterMenu mediaLocation={mediaLocation} setMediaLocation={(v) => {setMediaLocation(v)}} format={format} updateFormat={(f) => {setFormat(f)}} />
+                        <ImageSearchFilterMenu allowVideoOption={true} sortBy={sortBy} setSortBy={setSortBy} mediaLocation={mediaLocation} setMediaLocation={(v) => {setMediaLocation(v)}} format={format} updateFormat={(f) => {setFormat(f)}} />
                         </>
                         }
                         <AnimatePresence>
                         <motion.div transition={{duration: 0.1}} key={mediaType} initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} className='message-image-search-results-container'>
-                            {mediaType === 'Videos' ?
+                            {format === 'videos' ?
+                            videoResults?.map(video => {
+                                return <VideoCard altAction={true} send={setVideo} data={video} />
+                            })
+                            : mediaType === 'Videos' ?
                                     <EmojiMenu action={handleEmoji} social={true} width={'100%'} height={'100%'} />
                                     : 
                             mediaType === 'Reddit' ?
@@ -247,7 +254,7 @@ console.log(images)
                                     
                                     : (images?.length > 0 ? images : loading ? [] : recommendations.filter(v => v.type === 'image').slice(0, 40)).map((image, key) => {
                                         return (
-                                            <ImagePreview altImage={image.preview} tag_action={handleTag} tags={image.tags} image={showFullResPreviews ? image.image : image.image.includes('gif') ? image.image : image.preview} nsfw={image.nsfw} action={(e) => {handleSelectImage({...image, preview: image.image, fallback_image: image.preview})}} />
+                                            <ImagePreview altImage={image.preview} tag_action={handleTag} tags={image.tags} image={showFullResPreviews ? image.image : image?.image?.includes('gif') ? image.image : image.preview} nsfw={image.nsfw} action={(e) => {handleSelectImage({...image, preview: image.image, fallback_image: image.preview})}} />
                                         )
                                     })}
                                 </Masonry>

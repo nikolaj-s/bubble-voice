@@ -48,6 +48,7 @@ import { ImageSearch } from '../../util/ImageSearch';
 import { SearchIcon } from '../../components/Icons/SearchIcon/SearchIcon';
 import { RequestDeleteMessage } from '../server/SocialSlice';
 import { openDirectMessage } from '../Messages/MessagesSlice';
+import { findSimilarImages, openSimilarImageMenu, selectSimilarImages, setSimilarImagePosistion } from '../SimilarImageMenu/SimilarImageSlice';
 
 export const ContextMenu = () => {
 
@@ -92,9 +93,13 @@ export const ContextMenu = () => {
 
     const [showHideUserStatus, toggleShowHideUserStatus] = React.useState(false);
 
+    const [openSimilarImagesMenu, toggleOpenSimilarImagesMenu] = React.useState(false);
+
     const disableMediaWidget = useSelector(selectDisableMediaWidget);
 
     const loadingNewMedia = useSelector(selectLoadingNewMedia);
+
+    const similarImages = useSelector(selectSimilarImages);
 
     const primaryColor = useSelector(selectPrimaryColor)
 
@@ -233,6 +238,12 @@ export const ContextMenu = () => {
         setMediaWidgetState(false);
 
         toggleShowHideUserStatus(false);
+
+        if (similarImages.length > 0) {
+            toggleOpenSimilarImagesMenu(true);
+        } else {
+            toggleOpenSimilarImagesMenu(false);
+        }
         
         const path = e.path || (e.composedPath && e.composedPath());
         
@@ -297,14 +308,10 @@ export const ContextMenu = () => {
 
                 if (!p.src.includes('cloudinary')) {
                     dispatch(setContextMenuOptions({state: 'copyLink', value: p.src}));
+                
+                    dispatch(setContextMenuOptions({state: 'seeSimilar', value: p.src}));
                 }
 
-                if (p.id.includes('&tags')) {
-
-                    if (p.id.split('&tags')[1].length < 5) return;
-
-                    dispatch(setContextMenuOptions({state: 'seeSimilar', value: p.id.split('&tags=')[1]}))
-                }
             }
 
             if (p.className?.includes('category')) {
@@ -572,7 +579,7 @@ export const ContextMenu = () => {
                         poke: true,
                         volume: true,
                         member_id: user._id,
-                        move: permissions.user_can_kick_user
+                        move: permissions.user_can_move_users
                     }))
 
                     const L_USER = USER_PREFS.get(id);
@@ -624,7 +631,7 @@ export const ContextMenu = () => {
 
         setOrigin((e.view.innerHeight - e.pageY) < 300 ? true : false)
     // eslint-disable-next-line
-    }, [ctxCordinates, ctxActive, permissions, currentChannelId, channels, members])
+    }, [ctxCordinates, ctxActive, permissions, currentChannelId, channels, members, similarImages])
 
     const closeCtxMenu = () => {
 
@@ -1138,25 +1145,12 @@ export const ContextMenu = () => {
 
     const handleFindSimilarImages = async () => {
         try {
-            if (loadingNewMedia) return;
+            if (!seeSimilarImage) return;
 
-            let el = document.getElementsByClassName('server-media-container')[0]
+            dispatch(findSimilarImages({image: seeSimilarImage}));
 
-            let searchPanel = document.getElementsByClassName('message-image-search-results-container')[0]
+            dispatch(setSimilarImagePosistion({posX: ctxCordinates.x, posY: ctxCordinates.y}))
 
-            if (el) el.scrollTop = 0;
-
-            if (searchPanel) searchPanel.scrollTop = 0;
-            
-            dispatch(toggleLoadingNewMedia(true));
-
-            const images = await ImageSearch(seeSimilarImage, serverId);
-
-            dispatch(toggleLoadingNewMedia(false));
-
-            if (images.error) return dispatch(throwServerError({error: true, errorMessage: images.errorMessage}));
-
-            dispatch(setNewMedia(images.media));
         } catch (err) {
             dispatch(throwServerError({error: true, errorMessage: "Fatal error finding a similar image"}))
         }
@@ -1191,6 +1185,13 @@ export const ContextMenu = () => {
         setSelectedCategory("");
     }
 
+    const handleOpenSimilarImagesMenu = () => {
+        dispatch(setSimilarImagePosistion({posX: ctxCordinates.x, posY: ctxCordinates.y}))
+
+        dispatch(openSimilarImageMenu());
+
+    }
+
     return (
         <>
         {ctxActive ? 
@@ -1204,7 +1205,8 @@ export const ContextMenu = () => {
         }}
         className='ctx-menu-container'>
             {saveImage ? <CtxButton action={() => {handleSave(true)}} name={"Download Image"} icon={<SaveIcon />} /> : null}
-            {seeSimilarImage ? <CtxButton action={handleFindSimilarImages} name={"Find Similar"} icon={<SearchIcon />}  /> : null}
+            {seeSimilarImage ? <CtxButton action={handleFindSimilarImages} name={"Find Similar Images"} icon={<SearchIcon />}  /> : null}
+            {openSimilarImagesMenu ? <CtxButton action={handleOpenSimilarImagesMenu} name={"Open Similar Images Menu"} /> : null}
             {saveVideo ? <CtxButton action={() => {handleSave(false)}} name={"Download Video"} icon={<SaveIcon />} /> : null}
             {saveImage || saveVideo ? <CtxButton action={() => {addToSaves()}} name={unSave ? "Unsave" : "Save"} icon={unSave ? <SavedIcon /> : <SavesIcon />} /> : null}
             {pasteCtxState ? <CtxButton name={"Paste"} action={paste} /> : null}

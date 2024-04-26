@@ -23,7 +23,7 @@ export const VideoSearch = async (query, serverId) => {
             return {error: true, errorMessage: error.message}
         
         })
-
+        console.log(videos)
         return videos;
 
     } catch (error) {

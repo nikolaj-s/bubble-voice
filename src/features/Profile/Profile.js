@@ -6,7 +6,7 @@ import { selectCreatePostMenuOpen, selectProfileTabOpen, toggleCreatePostMenu, t
 import "./Profile.css";
 import { selectPrimaryColor, selectSecondaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { Image } from '../../components/Image/Image';
-import { selectCurrentDecoration, selectProfileBio, selectProfileColor, selectProfilePinnedMessage, selectUserBanner, selectUserImage, selectUsersScreenShots } from '../settings/appSettings/accountSettings/accountSettingsSlice';
+import { selectCurrentDecoration, selectProfileBio, selectProfileColor, selectProfilePictureShape, selectProfilePinnedMessage, selectUserBanner, selectUserImage, selectUsersScreenShots } from '../settings/appSettings/accountSettings/accountSettingsSlice';
 
 import { UserStatusMenu } from '../../components/UserStatusMenu/UserStatusMenu';
 import { UserBio } from '../../components/UserBio/UserBio';
@@ -26,6 +26,8 @@ export const Profile = () => {
     const secondaryColor = useSelector(selectSecondaryColor);
 
     const pinnedMessage = useSelector(selectProfilePinnedMessage);
+
+    const profileShape = useSelector(selectProfilePictureShape);
 
     const userBanner = useSelector(selectUserBanner);
 
@@ -53,12 +55,12 @@ export const Profile = () => {
                 animate={{opacity: 1,}}
                 exit={{opacity: 0,}}
                 transition={{duration: 0.1}}
-                style={{backgroundColor: (profileColor || secondaryColor)}}
+                style={{backgroundColor: (profileColor || secondaryColor), border: `solid 4px ${(profileColor || secondaryColor)}`}}
                 className='profile-tab-container'>
                     <div style={{marginBottom: serverId ? null : 5}} className='profile-tab-picture-wrappper'>
                         <Image position='absolute' width='100%' image={userBanner} />
                         <div className='profile-picture-tab-container'>
-                            <Image image={userImage} />
+                            <Image borderRadius={profileShape === 'square' ? '5px' : '50%'} image={userImage} />
                             <Decoration decoration={decoration} width={85} height={85} />
                         </div>
                         

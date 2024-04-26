@@ -68,9 +68,13 @@ const ServerMediaSlice = createSlice({
         mediaQuery: "",
         loadingNewMedia: false,
         fullMode: false,
-        index: 0
+        index: 0,
+        videos: []
     },
     reducers: {
+        setVideos: (state, action) => {
+            state.videos = action.payload;
+        },
         toggleLoadingRedditMedia: (state, action) => {
             state.loading = action.payload;
         },
@@ -177,6 +181,8 @@ export const selectCurrentRedditIndex = state => state.ServerMediaSlice.index;
 
 export const selectFullModeState = state => state.ServerMediaSlice.fullMode;
 
-export const { setRedditIndex, toggleFullMode, clearMedia, toggleLoadingNewMedia, addMoreMedia, setNewMedia, setMediaQuery, setScrollPosition, setSubRedditQuery, toggleSortSubPosts, setSubReddit, toggleLoadingRedditMedia, setServerMediaPage} = ServerMediaSlice.actions;
+export const selectVideoResults = state => state.ServerMediaSlice.videos;
+
+export const { setVideos, setRedditIndex, toggleFullMode, clearMedia, toggleLoadingNewMedia, addMoreMedia, setNewMedia, setMediaQuery, setScrollPosition, setSubRedditQuery, toggleSortSubPosts, setSubReddit, toggleLoadingRedditMedia, setServerMediaPage} = ServerMediaSlice.actions;
 
 export default ServerMediaSlice.reducer;

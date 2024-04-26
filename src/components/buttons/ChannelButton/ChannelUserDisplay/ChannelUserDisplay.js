@@ -21,11 +21,14 @@ import { DisabledWebCamIcon } from '../../../Icons/DisabledWebCamIcon/DisabledWe
 import { DisabledStreamIcon } from '../../../Icons/DisabledStreamIcon/DisabledStreamIcon';
 import { setPanelPosition, setSelectedMember } from '../../../../features/server/ChannelRoom/MemberPanel/MemberPanelSlice';
 import { selectCurrentChannelId } from '../../../../features/server/ServerSlice';
+import { Gif } from '../../../Gif/Gif';
 
 
 export const ChannelUserDisplay = ({user, channel_id, dragging = () => {}}) => {
 
     const [hover, toggleHover] = React.useState(false);
+
+    const [mouseDown, toggleMouseDown] = React.useState(false);
 
     const dispatch = useDispatch();
 
@@ -72,12 +75,39 @@ export const ChannelUserDisplay = ({user, channel_id, dragging = () => {}}) => {
     }
 
     return (
-        <div onDragStart={onDragStart} onDragEnd={onDragEnd} draggable='true' onClick={openMemberPanel} onMouseEnter={(e) => {hoverEffect(e, true)}} onMouseLeave={(e) => {hoverEffect(e, false)}} id={`${user._id}-channel-user-display-channel-id-${channel_id}`} style={{zIndex: 1, backgroundColor: hover ? primaryColor : null,}} key={user.username} className='channel-user-placeholder'>
+        <div 
+        onMouseDown={() => {toggleMouseDown(true)}}
+        onMouseUp={() => {toggleMouseDown(false)}}
+        onDragStart={onDragStart} 
+        onDragEnd={onDragEnd} 
+        draggable='true' 
+        onClick={openMemberPanel} 
+        onMouseEnter={(e) => {hoverEffect(e, true)}} 
+        onMouseLeave={(e) => {hoverEffect(e, false); toggleMouseDown(false)}} 
+        id={`${user._id}-channel-user-display-channel-id-${channel_id}`} 
+        style={{
+            zIndex: 1, 
+            backgroundColor: hover ? primaryColor : null,
+            transform: mouseDown ? 'scale(0.95)' : 'scale(1)'
+        }} 
+        key={user.username} className='channel-user-placeholder'>
             <div 
             style={{position: 'relative', borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%', width: 28, height: 28}}
             className='channel-user-placeholder-user-image'>
+                {user.user_image?.includes('.gif') ?
+                <Gif  
+                location="channel-button-location"
+                key={user.user_image + "channel-button-location"}
+                borderRadius={(user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%'}
+                objectFit='cover'
+                cursor='pointer'
+                gif={user.user_image}
+                alt_trigger={true}
+                active={(user.active && user.microphone && currentChannelId === channel_id)}
+                />
+                :
                 <Image disableErr={true} borderRadius={(user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%'} image_class={'user-image'} cursor='pointer' objectFit='cover' image={user.user_image?.includes('.gif') ? "" : user.user_image} />
-               
+                }
                 <div style={{
                     position: 'absolute',
                     top: 0,

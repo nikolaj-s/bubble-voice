@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import "./ImageOfTheDay.css";
 import { Image } from '../../../../../../components/Image/Image';
 import { selectGlassPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
-import { setExpandedContent } from '../../../../../ExpandContent/ExpandContentSlice';
+import { setExpandedContent, setMetaData } from '../../../../../ExpandContent/ExpandContentSlice';
 import { AltImageIcon } from '../../../../../../components/Icons/AltImageIcon/AltImageIcon';
 
 export const ImageOfTheDay = ({imageOfTheDay}) => {
@@ -17,6 +17,7 @@ export const ImageOfTheDay = ({imageOfTheDay}) => {
 
     const handleExpand = (d) => {
         dispatch(setExpandedContent(imageOfTheDay.image));
+        dispatch(setMetaData(imageOfTheDay))
     }
 
     const secondaryColor = useSelector(selectSecondaryColor);

@@ -184,7 +184,7 @@ export const MemberPanel = () => {
 
         setPokeMessage(value);
     }
-console.log(member.status)
+    
     return (
         <>
         <AnimatePresence>

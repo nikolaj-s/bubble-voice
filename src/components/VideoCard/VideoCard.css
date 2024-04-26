@@ -1,0 +1,56 @@
+.video-card-outer-container {
+    width: calc(100% - 20px);
+    height: 200px;
+    display: flex;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.video-card-details-container {
+    margin-left: 5px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.video-card-details-container h3 {
+    margin: 0px;
+    font-weight: 400;
+}
+
+.video-card-details-container p {
+    margin: 5px 0px 0px 0px;
+    opacity: 0.5;
+    font-weight: 300;
+}
+
+.video-card-thumbnail-container {
+    height: 100%;
+    flex-shrink: 0;
+    width: 355px;
+    border-radius: 10px;
+    background-color: black;
+}
+
+.video-card-thumbnail-container img,
+.video-card-thumbnail-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: black;
+}
+
+.copy-video-card-link-container {
+    display: flex;
+    align-items: center;
+    padding: 4px 0px;
+}
+
+.copy-video-card-link-container p:hover {
+    text-decoration: underline;
+}

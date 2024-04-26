@@ -7,7 +7,7 @@ import { selectPrimaryColor, selectSecondaryColor } from '../../features/setting
 
 import "./Iframe.css";
 
-export const Iframe = ({link, marginLeft, maxWidth = 800, marginRight, disableMax}) => {
+export const Iframe = ({link, marginLeft, maxWidth = 800, marginRight, disableMax, height = 350}) => {
 
     const [rendered, toggleRender] = React.useState(false);
 
@@ -25,7 +25,7 @@ export const Iframe = ({link, marginLeft, maxWidth = 800, marginRight, disableMa
         {link ?
             <div 
             className='iframe-outer-container'
-            style={{maxWidth: disableMax ? null : maxWidth, marginLeft: marginLeft, minHeight: link?.includes('spotify') ? 160 : link?.includes('steampowered') ? '200px' : 350, maxHeight: disableMax ? null : link?.includes('steampowered') ? '200px' : 350, borderRadius: 20, position: 'relative', display: 'flex', overflow: 'hidden', marginRight: marginRight, marginTop: 4, marginBottom: 4}}>
+            style={{maxWidth: disableMax ? null : maxWidth, marginLeft: marginLeft, minHeight: link?.includes('spotify') ? 160 : link?.includes('steampowered') ? '200px' : height, maxHeight: disableMax ? null : link?.includes('steampowered') ? '200px' : 350, borderRadius: 20, position: 'relative', display: 'flex', overflow: 'hidden', marginRight: marginRight, marginTop: 4, marginBottom: 4}}>
                 
                 <iframe 
                 onLoad={loaded}

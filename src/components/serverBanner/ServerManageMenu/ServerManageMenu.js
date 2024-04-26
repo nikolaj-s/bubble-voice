@@ -20,7 +20,7 @@ export const ServerManageMenu = ({leaveServer, openAddChannel, permissions, open
         <div
         style={{backgroundColor: secondaryColor}}
         className='server-manage-menu-container'>
-            {permissions?.user_can_manage_channels ?
+            {permissions?.user_can_create_channels ?
             <CtxButton 
             borderRadius={4}
             action={openAddChannel}

@@ -95,7 +95,7 @@ export const RedditPost = ({data = {}, action, disableMax, inSocial}) => {
                         style={{width: 5, height: 5, borderRadius: '50%',
                         flexShrink: 0, backgroundColor: textColor, opacity: 0.8, margin: '0 5px'}}
                         />
-                        <p onClick={openAlt} style={{color: textColor, margin: 0, opacity: 0.8}}>{data.domain}</p>
+                        <p onClick={openAlt} style={{color: textColor, margin: 0, opacity: 0.8, fontSize: '0.8rem'}}>{data.domain}</p>
                     </div>
                    {inSocial ? null : <CopyButton action={handleCopy} borderRadius={8} zIndex={2} width={16} height={16} description={copied ? "Copied" : "Copy"} />}
                     

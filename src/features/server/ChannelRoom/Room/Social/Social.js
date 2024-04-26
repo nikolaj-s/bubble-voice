@@ -54,6 +54,10 @@ export const Social = ({hideChannelBackgrounds, currentChannel, channelId, socia
 
     const [fallBackImage, setFallbackImage] = React.useState("");
 
+    const [mediaMetaData, setMediaMetaData] = React.useState({});
+
+    const [mediaVideo, setMediaVideo] = React.useState({});
+
     const loadingMore = useSelector(selectLoadingMessages);
 
     const altLoading = useSelector(selectAltSocialLoading);
@@ -81,6 +85,26 @@ export const Social = ({hideChannelBackgrounds, currentChannel, channelId, socia
     const primaryColor = useSelector(selectPrimaryColor);
 
     let allMessages = direct_message ? currentChannel.social : social[channelId];
+
+    // handle scroll position
+    React.useEffect(() => {
+
+        if (currentChannel?.type === 'mediahistory' || currentChannel?.type === 'screenshots') return;
+
+        const scrollPos = sessionStorage.getItem(`scroll-posistion-${channelId}`);
+
+        setTimeout(() => {
+            if (scrollPos && allMessages) {
+                
+                if (messagesRef.current.scrollHeight < Number(scrollPos)) return;
+
+                messagesRef.current.scrollTop = (Number(scrollPos));
+    
+            }
+        }, 5)
+        
+        
+    }, [channelId])
 
     const handleSocialStatus = async (channel) => {
         try {
@@ -147,7 +171,7 @@ export const Social = ({hideChannelBackgrounds, currentChannel, channelId, socia
                 toggleInitialMount(false);
 
                 setTimeout(() => {
-                    messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+                  //  messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
 
                     setTimeout(() => {
 
@@ -178,7 +202,7 @@ export const Social = ({hideChannelBackgrounds, currentChannel, channelId, socia
             if (bulletin) return;
             
             setTimeout(() => {
-                messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+            //    messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
 
             }, 500)
         
@@ -204,12 +228,12 @@ export const Social = ({hideChannelBackgrounds, currentChannel, channelId, socia
     }
    
     const send = async (textStyle) => {
-
+        console.log(mediaVideo)
         if (!permission.user_can_post_channel_social) return;
         
-        if (text.replace(/\s/g, '').length < 1 && !image.size && !emoji) return;
+        if (text.replace(/\s/g, '').length < 1 && !image.size && !emoji && !mediaVideo.url) return;
 
-        if (text.length === 0 && !image.size && !emoji) return;
+        if (text.length === 0 && !image.size && !emoji && !mediaVideo.url) return;
         
         if (text.length > 1024) return dispatch(throwServerError({errorMessage: "Message cannot be longer than 1024 characters"}));
 
@@ -231,7 +255,9 @@ export const Social = ({hideChannelBackgrounds, currentChannel, channelId, socia
                 display_name: displayName,
                 emoji: emoji,
                 textStyle: textStyle,
-                fall_back_image: fallBackImage
+                fall_back_image: fallBackImage,
+                image_meta_data: mediaMetaData,
+                media_video: mediaVideo,
             },
             valid: true,
             nsfw: nsfw
@@ -266,7 +292,7 @@ export const Social = ({hideChannelBackgrounds, currentChannel, channelId, socia
 
         } else {
             
-            dispatch(sendMessage({username: username, file: image, channel_id: channelId, local_id: local_id, text: text, image_preview: image.preview ? true : false, emoji: emoji, nsfw: nsfw, textStyle: textStyle, fall_back_image: fallBackImage}))
+            dispatch(sendMessage({username: username, file: image, channel_id: channelId, local_id: local_id, text: text, image_preview: image.preview ? true : false, emoji: emoji, nsfw: nsfw, textStyle: textStyle, fall_back_image: fallBackImage, media_meta_data: mediaMetaData, media_video: mediaVideo}))
         }
 
         setTimeout(() => {
@@ -278,7 +304,10 @@ export const Social = ({hideChannelBackgrounds, currentChannel, channelId, socia
         URL.revokeObjectURL(image?.preview);
 
         setFallbackImage("");
+
+        setMediaMetaData({});
         
+        setMediaVideo({});
     }
 
     const listenToEnter = (keycode, style) => {
@@ -318,6 +347,14 @@ export const Social = ({hideChannelBackgrounds, currentChannel, channelId, socia
             }
             
         }
+        const feedElement = document.getElementById(`social-feed-${channelId}`);
+
+        if (feedElement) {
+          
+            sessionStorage.setItem(`scroll-posistion-${channelId}`, (messagesRef?.current?.scrollTop)?.toString());
+        
+        }
+        
     
     }
 
@@ -373,7 +410,7 @@ export const Social = ({hideChannelBackgrounds, currentChannel, channelId, socia
 
     React.useEffect(() => {
 
-        if (allMessages?.length > 0 && allMessages?.length <= 25) {
+        if (allMessages?.length > 0 && allMessages?.length <= 5) {
             const firstMessage = allMessages[0];
 
             const el = document.getElementById(`${firstMessage._id}/${channelId}`);
@@ -391,7 +428,7 @@ export const Social = ({hideChannelBackgrounds, currentChannel, channelId, socia
         className='social-outer-container'
         style={{backgroundColor: !hideChannelBackgrounds && currentChannel.channel_background ? 'rgba(0,0,0,0)' :  primaryColor}}
         >
-        {permission?.user_can_view_channel_content && currentChannel?.auth ?
+        {(permission?.user_can_view_channel_content && currentChannel?.auth) || direct_message ?
             <>
             {(loadingMore || mounting) && allMessages?.length > 0 ?
             <motion.div initial={{opacity: 0, top: '-120px'}} exit={{opacity: 0, top: '-120px'}} animate={{opacity: 1, top: 0}} style={{backgroundColor: glassColor}} className='social-loading-container'>
@@ -404,7 +441,7 @@ export const Social = ({hideChannelBackgrounds, currentChannel, channelId, socia
             className='social-wrapper-container'>
                 <div  className='social-inner-container'>
                     
-                    <div onScroll={handleLoadMoreOnScroll} style={{overflowY: initialMount ? 'hidden' : 'auto'}} ref={messagesRef} className='social-messages-wrapper'>
+                    <div id={`social-feed-${channelId}`} onScroll={handleLoadMoreOnScroll} style={{overflowY: initialMount ? 'hidden' : 'auto'}} ref={messagesRef} className='social-messages-wrapper'>
                         {(loadingMore || initialMount) && (!allMessages || allMessages?.length === 0) ? 
                         <MessagePlaceHolderLoader arr={[200, 300, 150, 90, 300, 200, 100, 400, 90]} /> :
                         nsfwNotice && !disableNsfwWarning ?
@@ -417,10 +454,10 @@ export const Social = ({hideChannelBackgrounds, currentChannel, channelId, socia
                         {direct_message ? null : <PersistedDataNotice type={currentChannel.type} channelName={currentChannel.channel_name} persisted={!currentChannel.persist_social} guidelines={currentChannel.guidelines} />}
                         
                     </div>
-                    {(direct_message && status) ? <MessageInput setFallbackImage={setFallbackImage} nsfw={nsfw} handleNsfw={handleToggleNsfw} setEmoji={setEmoji} cancel_image={handleCancelImageSend} direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : 
+                    {(direct_message && status) ? <MessageInput setVideo={setMediaVideo} setMediaMetaData={setMediaMetaData} setFallbackImage={setFallbackImage} nsfw={nsfw} handleNsfw={handleToggleNsfw} setEmoji={setEmoji} cancel_image={handleCancelImageSend} direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} /> : 
                     currentChannel.type === 'screenshots' || currentChannel.type === 'mediahistory' ? null :
                     permission?.user_can_post_channel_social && !direct_message ?
-                    <MessageInput handleStatus={handleSocialStatus} setFallbackImage={setFallbackImage} channelId={channelId} nsfw={nsfw} handleNsfw={handleToggleNsfw} setEmoji={setEmoji} channel_name={currentChannel?.channel_name} direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} />
+                    <MessageInput setVideo={setMediaVideo} setMediaMetaData={setMediaMetaData} handleStatus={handleSocialStatus} setFallbackImage={setFallbackImage} channelId={channelId} nsfw={nsfw} handleNsfw={handleToggleNsfw} setEmoji={setEmoji} channel_name={currentChannel?.channel_name} direct_message={direct_message} socialRoute={socialRoute} updateInputHeight={setInputHeight} persist={currentChannel.persist_social} image={handleImage} keyCode={listenToEnter} value={text} text={handleTextInput} send={send} />
                      : null}
                 </div>
             </div>

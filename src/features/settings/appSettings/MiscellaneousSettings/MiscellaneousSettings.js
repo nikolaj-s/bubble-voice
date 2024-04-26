@@ -15,7 +15,7 @@ import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/Se
 
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { miscSettingsChannelSpecificStateChange, miscSettingsClearError, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, selectActivityStatus, selectDisableChannelIcons, selectDisableMediaWidget, selectDisableTransparancyEffects, selectHardwareAcceleration,selectHideUserStatus, selectMiscSettingsError, selectMiscSettingsErrorMessage, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectMiscSettingsLoading, selectRestartNotice, selectShowFullResPreviews, selectSystemNotifcations } from './MiscellaneousSettingsSlice';
+import { miscSettingsChannelSpecificStateChange, miscSettingsClearError, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, selectActivityStatus, selectDisableChannelIcons, selectDisableMediaWidget, selectDisableTransparancyEffects, selectEnableGifsOutOfFocusInRoom, selectHardwareAcceleration,selectHideUserStatus, selectMiscSettingsError, selectMiscSettingsErrorMessage, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectMiscSettingsLoading, selectRestartNotice, selectShowFullResPreviews, selectSystemNotifcations } from './MiscellaneousSettingsSlice';
 
 import { clearSaves } from '../../../SavedMedia/SavedMediaSlice';
 
@@ -50,6 +50,8 @@ const Settings = () => {
     const showFullResPreviews = useSelector(selectShowFullResPreviews);
 
     const disableChannelIcons = useSelector(selectDisableChannelIcons);
+
+    const enableGifsOutoFocus = useSelector(selectEnableGifsOutOfFocusInRoom);
 
     React.useEffect(() => {
 
@@ -97,6 +99,8 @@ const Settings = () => {
             <ToggleButton action={() => {handleChannelSpecificStateChange('hideUserStatus')}} state={hideUserStatusBar} />
             <InputTitle title={'Hide Custom Channel Icons'} />
             <ToggleButton action={() => {handleChannelSpecificStateChange('disableChannelIcons')}} state={disableChannelIcons} />
+            <InputTitle title={"Enable animated gifs out of focus *may cause performance impact in game."} />
+            <ToggleButton state={enableGifsOutoFocus} action={() => {handleChannelSpecificStateChange('enableAnimatedGifsInRoomOutOfFocus')}} /> 
             <SettingsHeader title={"App Specific"} />
             <InputTitle title={"Disable Transparency Effects"} />
             <ToggleButton state={disableTransparancyEffects} action={() => {handleChannelSpecificStateChange('disableTransparancyEffects')}} />

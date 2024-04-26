@@ -32,6 +32,7 @@ import MessagesSlice from "../features/Messages/MessagesSlice";
 import SocialSlice from "../features/server/SocialSlice";
 import AudioInitSlice from "../features/AudioInit/AudioInitSlice";
 import {FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER} from 'redux-persist';
+import SimilarImageSlice from "../features/SimilarImageMenu/SimilarImageSlice";
 const { configureStore } = require("@reduxjs/toolkit");
 
 // state store
@@ -80,7 +81,9 @@ const store = configureStore({
         MessagesSlice: MessagesSlice,
         // Social
         SocialSlice: SocialSlice,
-        AudioInitSlice: AudioInitSlice
+        AudioInitSlice: AudioInitSlice,
+        // misc
+        SimilarImageSlice: SimilarImageSlice
     },
     middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

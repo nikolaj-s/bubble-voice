@@ -16,6 +16,7 @@ import { Muted } from '../../../../../components/Icons/Muted/Muted';
 import { MicMuted } from '../../../../../components/Icons/MicMuted/MicMuted';
 import { ScreenShare } from '../../../../../components/Icons/ScreenShare/ScreenShare';
 import { Decoration } from '../../../../../components/Decoration/Decoration';
+import { Gif } from '../../../../../components/Gif/Gif';
 
 export const User = ({user}) => {
 
@@ -36,6 +37,8 @@ export const User = ({user}) => {
     const secondaryColor = useSelector(selectSecondaryColor);
 
     return (
+        <>
+        {(hideNonVideoParticapents === true && user.webcam === false) || (hideNonVideoParticapents === true && prefs?.disabled_web_cam === true) ? null :
         <div 
         style={{
             
@@ -57,7 +60,11 @@ export const User = ({user}) => {
                     >{user.display_name}</h3>
                 
             </div>
+            {user.user_banner?.includes('.gif') ?
+            <Gif key={user.user_banner + "stream-room-location"} objectFit='cover' borderRadius={0} posistion={'absolute'} gif={user.user_banner} alt_trigger={true} active={user.active} />
+            : 
             <Image borderRadius={0} cursor='pointer' id="stream-room-user-banner" image_class={'user-image'} disableErr={true} backgroundColor={user.color || secondaryColor}  position='absolute' image={user.user_banner} />
+            }
             <div style={{borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%', position: user.webcam && !prefs?.disabled_web_cam ? 'absolute' : null,
             width: user.webcam && !prefs?.disabled_web_cam ?  40 : null,
             height: user.webcam && !prefs?.disabled_web_cam ?  40 : null,
@@ -67,7 +74,11 @@ export const User = ({user}) => {
             opacity: user.webcam && !prefs?.disabled_web_cam ? 0.7 : null,
             transition: '0.1s'
             }} className='active-user-profile-image-container'>
+                {user.user_image?.includes('.gif') ?
+                <Gif key={user.user_image + "stream-room-location"} alt_trigger={true} active={user.active} cursor='pointer' gif={user.user_image} objectFit='cover' borderRadius={(user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%'} />
+                :
                 <Image cursor='pointer' image_class={'user-image'} objectFit='cover' image={user.user_image} borderRadius={(user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%'} />
+                }
                 <Decoration width={156} height={156} decoration={user.decoration} />
             </div>
             <Loading  backgroundColor={user.color || 'black'} zIndex={1} show_success={false} loading={user.webcam && (user.username === username ? user.webcam : !prefs?.disabled_web_cam)} />
@@ -80,5 +91,7 @@ export const User = ({user}) => {
                 {user.screenshare ? prefs?.disable_stream ? <DisabledStreamIcon color={textColor} /> : <ScreenShare /> : null}
             </div>
         </div>
+        }
+        </>
     )
 }

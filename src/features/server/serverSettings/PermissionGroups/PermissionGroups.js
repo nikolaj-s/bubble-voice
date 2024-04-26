@@ -104,7 +104,13 @@ const Wrapper = () => {
             user_can_ban_user: false,
             user_can_edit_server_banner: false,
             user_can_edit_server_name: false,
-            user_can_edit_server_password: false
+            user_can_edit_server_password: false,
+            user_can_create_channels: false,
+            user_can_delete_channels: false,
+            user_can_create_server_groups: false,
+            user_can_delete_server_groups: false,
+            user_can_delete_other_users_messages: false,
+            user_can_move_users: false
         }
 
         perms.push(obj)
@@ -163,13 +169,13 @@ const Wrapper = () => {
         localPermissions.map((permission, key) => {
             return (
                 permission.server_group_name === 'Owner' ? null :
-                <Group handleDelete={handleDelete} key={permission.server_group_name + key} action={editGroup} permission={permission} />
+                <Group userPermissions={userPermissions} handleDelete={handleDelete} key={permission.server_group_name + key} action={editGroup} permission={permission} />
             )
         }):
         <NotAuthorizedMessage />
         }
         {
-        userPermissions?.user_can_manage_server_groups ?
+        userPermissions?.user_can_create_server_groups ?
         <>
         <InputTitle title={"Create Permission Group"} />
         <TextInput marginBottom='2%' action={handleNewServerGroupName} placeholder={"Permission Group Name"} inputValue={newServerGroupName}  />

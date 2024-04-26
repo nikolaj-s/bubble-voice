@@ -21,7 +21,7 @@
 .profile-tab-container {
     position: absolute;
     bottom: 85px;
-    width: 300px;
+    width: 295px;
     height: calc(100%);
     max-height: 500px;
     padding: 5px 5px 10px 5px;

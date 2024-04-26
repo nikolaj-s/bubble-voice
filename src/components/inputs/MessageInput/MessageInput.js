@@ -21,7 +21,7 @@ import { ImagePreview } from './ImagePreview/ImagePreview';
 import { InputEditor } from './InputEditor/InputEditor';
 import { MembersInChatContainer } from './MembersInChatContainer/MembersInChatContainer';
 
-export const MessageInput = ({handleStatus = () => {}, setFallbackImage, channelId, nsfw, handleNsfw, cancel_image, send, text, keyCode, image, value, persist, updateInputHeight, socialRoute, direct_message, channel_name, setEmoji}) => {
+export const MessageInput = ({handleStatus = () => {}, setFallbackImage, channelId, nsfw, handleNsfw, cancel_image, send, text, keyCode, image, value, persist, updateInputHeight, socialRoute, direct_message, channel_name, setEmoji, setMediaMetaData = () => {}, setVideo}) => {
 
     const [files, setFiles] = React.useState([{}])
 
@@ -241,7 +241,9 @@ export const MessageInput = ({handleStatus = () => {}, setFallbackImage, channel
         setFallbackImage(i.fallback_image);
 
         image({preview: i?.image?.includes('https') ? i?.image : i?.preview});
-      
+        
+        setMediaMetaData(i);
+
         if (i.nsfw) {
             handleNsfw(true);
         }
@@ -250,6 +252,19 @@ export const MessageInput = ({handleStatus = () => {}, setFallbackImage, channel
             document.getElementById('social-send-button')?.click();
         }, 100)
     
+    }
+
+    const handleSelectVideo = (data) => {
+
+        toggleSearchingForImage(false);
+
+        setVideo(data);
+
+        text(data.url);
+
+        setTimeout(() => {
+            document.getElementById('social-send-button')?.click();
+        }, 100)
     }
 
     const handleEmoji = (e) => {
@@ -297,7 +312,7 @@ export const MessageInput = ({handleStatus = () => {}, setFallbackImage, channel
 
     return (
         <> 
-        <ImageSearchPanel channelId={channelId} postEmoji={handleEmoji} persist={persist} upload_image={handleImageButton} direct_message={direct_message} close={toggleSearchingForImage} inputHeight={inputHeight} key="message-image-search-container" serverId={serverId} selectImage={selectImage} searchingForImage={searchingForImage} />
+        <ImageSearchPanel setVideo={handleSelectVideo} channelId={channelId} postEmoji={handleEmoji} persist={persist} upload_image={handleImageButton} direct_message={direct_message} close={toggleSearchingForImage} inputHeight={inputHeight} key="message-image-search-container" serverId={serverId} selectImage={selectImage} searchingForImage={searchingForImage} />
         {localError ? <p className='local-error-alert-social' style={{color: textColor, bottom: inputHeight + 5}}>{localError}</p> : null}
         <AnimatePresence>
             {persist ? <ImageDropListener key={"image-drop-listener"} root={getRootProps({className: 'dropzone'})} /> : null}

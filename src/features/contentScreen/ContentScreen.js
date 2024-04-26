@@ -30,6 +30,7 @@ import { selectOverlayOpenState, toggleOverlay } from '../server/ChannelRoom/Roo
 import { selectAccentColor, selectGlassColor, selectSecondaryColor } from '../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { MusicWidget } from '../../components/widgets/Widgets/MusicWIdget/MusicWIdget';
 import { CloseIcon } from '../../components/Icons/CloseIcon/CloseIcon';
+import { SimilarImageMenu } from '../SimilarImageMenu/SimilarImageMenu';
 
 export const ContentScreen = () => {
     // content
@@ -126,6 +127,7 @@ export const ContentScreen = () => {
             {kickedState ? <KickedMessage close={closeKickedMessage} message={kickedMessage} /> : null}
             {error ? <Error action={closeError} errorMessage={errorMessage} position='fixed' /> : null}
             {newAccount ? <NewAccount /> : null}
+            <SimilarImageMenu />
         </>
     )
 }

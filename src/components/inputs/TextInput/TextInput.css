@@ -7,6 +7,16 @@
     align-items: center;
     min-height: 34px;
     max-height: 34px;
+    position: relative;
+}
+
+.text-input-container svg {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    opacity: 0.6;
 }
 
 .text-input-container input {

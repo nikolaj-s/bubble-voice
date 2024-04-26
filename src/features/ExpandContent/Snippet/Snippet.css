@@ -1,0 +1,16 @@
+.snippet-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.domain-name-link {
+    cursor: pointer;
+    font-weight: 300;
+    opacity: 0.8;
+}
+.domain-name-link:hover {
+    opacity: 1;
+}

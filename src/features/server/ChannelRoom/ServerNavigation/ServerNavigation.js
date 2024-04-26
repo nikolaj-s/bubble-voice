@@ -368,7 +368,7 @@ export const ServerNavigation = () => {
     return (
         <motion.div
         style={{
-            maxWidth: (hideUsers) ? 'calc(100% - 378px)' : 'calc(100% - 378px)'
+            maxWidth: 'calc(100% - 385px)'
         }}
         className='server-navigation-container'>
             {!socialId ?

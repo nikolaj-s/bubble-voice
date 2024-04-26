@@ -186,6 +186,7 @@ if (!lock) {
 
 }
 
+
 if (!process.env.ELECTRON_START_URL && lock) {
 
   server = http.createServer((req, res) => {

@@ -5,7 +5,7 @@ import { InputTitle } from '../../../../../components/titles/inputTitle/InputTit
 import { InputPlaceHolder } from '../../../../../components/titles/InputPlaceHolder/InputPlaceHolder'
 import { DeleteIcon } from '../../../../../components/Icons/DeleteIcon/DeleteIcon';
 
-export const Group = ({permission, action, handleDelete}) => {
+export const Group = ({permission, action, handleDelete, userPermissions}) => {
     return (
         <>
         <InputTitle title={permission.server_group_name} />
@@ -20,7 +20,7 @@ export const Group = ({permission, action, handleDelete}) => {
                 return null
             }
         })}
-        {permission.server_group_name !== "Owner" && permission.server_group_name !== "Guest" && permission.delete !== true ?
+        {permission.server_group_name !== "Owner" && permission.server_group_name !== "Guest" && permission.delete !== true && userPermissions?.user_can_delete_server_groups ?
         <TextButton action={() => {handleDelete(permission._id)}} name={`Delete ${permission.server_group_name}`} icon={<DeleteIcon />} />
         :null
         }
