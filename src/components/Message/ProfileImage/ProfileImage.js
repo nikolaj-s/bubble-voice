@@ -6,7 +6,7 @@ import { selectTextColor } from '../../../features/settings/appSettings/appearan
 import { Decoration } from '../../Decoration/Decoration';
 import { Gif } from '../../Gif/Gif';
 
-export const ProfileImage = ({decoration, pinned_to_profile_state, hover, timeStamp, prevDate, date, activity, previous_message, current_message, user_image, primaryColor, color, profile_picture_shape, action}) => {
+export const ProfileImage = ({gifFrame, decoration, pinned_to_profile_state, hover, timeStamp, prevDate, date, activity, previous_message, current_message, user_image, primaryColor, color, profile_picture_shape, action}) => {
     
     const hideProfileImagesOnMessages = useSelector(selectHideProfileImagesOnMessages);
 
@@ -27,6 +27,7 @@ export const ProfileImage = ({decoration, pinned_to_profile_state, hover, timeSt
             }} onClick={action} className='message-profile-picture'>
                 {user_image?.includes('.gif') ?
                 <Gif 
+                gifFrame={gifFrame}
                 gif={user_image}
                 cursor='pointer'
                 borderRadius={(profile_picture_shape !== 'circle' && profile_picture_shape !== 'undefined') ? '5px' : '50%'} 

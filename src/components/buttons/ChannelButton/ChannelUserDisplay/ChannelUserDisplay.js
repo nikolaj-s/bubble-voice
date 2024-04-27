@@ -101,6 +101,7 @@ export const ChannelUserDisplay = ({user, channel_id, dragging = () => {}}) => {
                 borderRadius={(user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%'}
                 objectFit='cover'
                 cursor='pointer'
+                gifFrame={user.user_image_gif_frame}
                 gif={user.user_image}
                 alt_trigger={true}
                 active={(user.active && user.microphone && currentChannelId === channel_id)}
@@ -115,6 +116,7 @@ export const ChannelUserDisplay = ({user, channel_id, dragging = () => {}}) => {
                     width: 'calc(100% - 6px)',
                     height: 'calc(100% - 6px)',
                     borderRadius: user.profile_picture_shape === 'square' ? '5px' : '50%',
+                    zIndex: 2,
                     border: (user.active && user.microphone && currentChannelId === channel_id) ? `solid 3px ${activityColor}` : `solid 3px rgba(0,0,0,0)`,
                 }}>
 

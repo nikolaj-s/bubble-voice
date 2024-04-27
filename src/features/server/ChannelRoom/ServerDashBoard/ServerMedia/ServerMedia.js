@@ -102,7 +102,7 @@ export const ServerMedia = ({media, expand}) => {
 
         dispatch(toggleLoadingNewMedia(true));
 
-        if (page === 'images') {
+        if (page === 'recommendations') {
 
             const images = await ImageSearch(query ? query : mediaQuery, serverId, format, mediaLocation, sortBy);
 

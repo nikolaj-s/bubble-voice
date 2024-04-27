@@ -40,6 +40,7 @@ export const User = ({user}) => {
         <>
         {(hideNonVideoParticapents === true && user.webcam === false) || (hideNonVideoParticapents === true && prefs?.disabled_web_cam === true) ? null :
         <div 
+        key={user}
         style={{
             
             backgroundColor: user.active ? activeColor : user.color ? user.color : accentColor,
@@ -61,7 +62,7 @@ export const User = ({user}) => {
                 
             </div>
             {user.user_banner?.includes('.gif') ?
-            <Gif key={user.user_banner + "stream-room-location"} objectFit='cover' borderRadius={0} posistion={'absolute'} gif={user.user_banner} alt_trigger={true} active={user.active} />
+            <Gif gifFrame={user.user_banner_gif_frame} key={user.user_banner + "stream-room-location"} objectFit='cover' borderRadius={0} posistion={'absolute'} gif={user.user_banner} alt_trigger={true} active={user.active} />
             : 
             <Image borderRadius={0} cursor='pointer' id="stream-room-user-banner" image_class={'user-image'} disableErr={true} backgroundColor={user.color || secondaryColor}  position='absolute' image={user.user_banner} />
             }
@@ -75,7 +76,7 @@ export const User = ({user}) => {
             transition: '0.1s'
             }} className='active-user-profile-image-container'>
                 {user.user_image?.includes('.gif') ?
-                <Gif key={user.user_image + "stream-room-location"} alt_trigger={true} active={user.active} cursor='pointer' gif={user.user_image} objectFit='cover' borderRadius={(user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%'} />
+                <Gif gifFrame={user.user_image_gif_frame} key={user.user_image + "stream-room-location"} alt_trigger={true} active={user.active} cursor='pointer' gif={user.user_image} objectFit='cover' borderRadius={(user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%'} />
                 :
                 <Image cursor='pointer' image_class={'user-image'} objectFit='cover' image={user.user_image} borderRadius={(user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%'} />
                 }

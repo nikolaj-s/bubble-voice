@@ -2,7 +2,7 @@ import React from 'react'
 
 import "./ControlProfileButton.css";
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentDecoration, selectDisplayName, selectProfileDecorations, selectProfilePictureShape, selectUserImage } from '../../settings/appSettings/accountSettings/accountSettingsSlice';
+import { selectCurrentDecoration, selectDisplayName, selectProfileDecorations, selectProfilePictureShape, selectUserImage, selectUserImageGifFrame } from '../../settings/appSettings/accountSettings/accountSettingsSlice';
 import { Image } from '../../../components/Image/Image';
 import { selectAccentColor, selectActivationColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { selectProfileTabOpen, toggleProfileTab } from '../../Profile/ProfileSlice';
@@ -39,9 +39,12 @@ export const ControlProfileButton = ({micState, inChannel}) => {
     const accentColor = useSelector(selectAccentColor);
 
     const voiceState = useSelector(selectVoiceActive);
-   
+
+    const userImageGifFrame = useSelector(selectUserImageGifFrame);
+   console.log(userImageGifFrame)
     return (
         <div
+        key={profilePicture}
         onClick={() => {dispatch(toggleProfileTab(!profileTabOpen))}}
         style={{
             backgroundColor: (inChannel && voiceState) ? activationColor : hover ? secondaryColor : accentColor,
@@ -55,6 +58,7 @@ export const ControlProfileButton = ({micState, inChannel}) => {
             <div className='control-profile-image-container'>
                 {profilePicture?.includes('.gif') ?
                 <Gif
+                gifFrame={userImageGifFrame}
                 alt_trigger={true}
                 active={(inChannel && voiceState)} 
                 location="control-bar-location"

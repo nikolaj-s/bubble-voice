@@ -28,6 +28,7 @@ import { AltOptionsButton } from '../../components/buttons/AltOptionsButton/AltO
 import { ControlProfileButton } from './ControlProfileButton/ControlProfileButton';
 import { MusicOverlayButton } from '../../components/buttons/MusicOverlayButton/MusicOverlayButton';
 import { toggleOverlay } from '../server/ChannelRoom/Room/Music/MusicSlice';
+import { selectUserImage } from '../settings/appSettings/accountSettings/accountSettingsSlice';
 
 
 
@@ -71,6 +72,8 @@ export const ControlBar = () => {
     const accentColor = useSelector(selectAccentColor);
 
     const seenStreamingMessageThisSession = useSelector(selectSeenStreamingMessage);
+
+    const profilePicture = useSelector(selectUserImage);
     
     React.useEffect(() => {
 
@@ -185,7 +188,7 @@ export const ControlBar = () => {
                 </div>
                 }
                 <div style={{backgroundColor: accentColor}} className='controls-wrapper'>  
-                    <ControlProfileButton inChannel={current_channel_id} micState={microphoneState} />
+                    <ControlProfileButton key={profilePicture} inChannel={current_channel_id} micState={microphoneState} />
                     <MicToggleButton 
                     width={18}
                     height={18}

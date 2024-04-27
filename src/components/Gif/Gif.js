@@ -1,12 +1,11 @@
 import React from 'react'
 
-import ReactFreezeframe from 'react-freezeframe';
 import { useSelector } from 'react-redux';
 import { selectAppFocusedState, selectEnableGifsOutOfFocusInRoom } from '../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 import "./Gif.css";
 
-export const Gif = ({gif, location = "", objectFit = 'contain', width = '100%', height = '100%', overlay = false, alt_trigger = false, borderRadius = 15, cursor = 'default', expand = () => {}, maxHeight = '100%', id, active, posistion, zIndex = 0}) => {
+export const Gif = ({gif, gifFrame, location = "", objectFit = 'contain', width = '100%', height = '100%', overlay = false, alt_trigger = false, borderRadius = 15, cursor = 'default', expand = () => {}, maxHeight = '100%', id, active, posistion, zIndex = 0}) => {
     
     const gifRef = React.useRef();
     
@@ -16,22 +15,18 @@ export const Gif = ({gif, location = "", objectFit = 'contain', width = '100%', 
 
     const [loading, toggleLoading] = React.useState(true);
 
-    const [gifToDisplay, setGifToDisplay] = React.useState("");
+    const [playing, togglePlaying] = React.useState(false);
     
     React.useEffect(() => {
-
-        if (focused) gifRef.current.start();
 
         if (alt_trigger) {
 
             if (!allowAnimationOutofFocus && !focused) return;
 
-            if (focused) gifRef.current.start();
-
             if (active) {
-                gifRef?.current?.start();
+                togglePlaying(true);
             } else {
-                gifRef?.current?.stop();
+                togglePlaying(false);
             }
         }
     }, [active, allowAnimationOutofFocus, focused])
@@ -41,18 +36,12 @@ export const Gif = ({gif, location = "", objectFit = 'contain', width = '100%', 
         if (alt_trigger) return;
 
         if (focused) {
-            gifRef?.current?.start();
+            togglePlaying(true);
         } else {
-            gifRef?.current?.stop();
+            togglePlaying(false);
         }
 
     }, [focused])
-
-    React.useEffect(() => {
-
-        setGifToDisplay(gif);
-
-    }, [gif])
 
     return (
         <>
@@ -71,20 +60,13 @@ export const Gif = ({gif, location = "", objectFit = 'contain', width = '100%', 
             zIndex: zIndex
         }}
         className='gif-container-wrapper'>
-            <ReactFreezeframe
-            key={gifToDisplay + location}
+            <img 
             style={{
-                objectFit: objectFit,
-                borderRadius: borderRadius,
-                overflow: 'hidden'
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover'
             }}
-            options={{
-                overlay: overlay,
-                responsive: true,
-                trigger: false
-            }}
-            src={gifToDisplay} 
-            ref={gifRef} />
+            src={playing ? gif : gifFrame} />
         </div>
         
         </>

@@ -41,7 +41,9 @@ export const EditMemberPanel = ({
     username,
     disablePreview,
     currentDecoration,
-    setDecoration
+    setDecoration,
+    setImageGifFrame,
+    setBannerGifFrame
     }) => {
     
     const accentColor = useSelector(selectTextColor);   
@@ -68,11 +70,11 @@ export const EditMemberPanel = ({
                     position: 'relative'
                 }}
                 >
-                <ImageInput position='absolute' imageCleared={newImage} listenToClears={true} centerButtons={true} backgroundColor={'rgba(0,0,0,0)'} maxDimensions={250} getFile={getNewUserImage} initalImage={userImage} zIndex='1' width={"100px"} height={"100px"} borderRadius={newShape === 'circle' ? '50%' : '10px'} />
+                <ImageInput getGifFrame={setImageGifFrame} position='absolute' imageCleared={newImage} listenToClears={true} centerButtons={true} backgroundColor={'rgba(0,0,0,0)'} maxDimensions={250} getFile={getNewUserImage} initalImage={userImage} zIndex='1' width={"100px"} height={"100px"} borderRadius={newShape === 'circle' ? '50%' : '10px'} />
                 </div>
                 <ProfilePictureShape action={changeProfileShape} shape={newShape} />
                 <InputTitle title={"Update Profile Banner"} />
-                <ProfileImage newBanner={newBanner} newImage={newImage} color={updateColor} shape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} />
+                <ProfileImage getGifFrame={setBannerGifFrame} newBanner={newBanner} newImage={newImage} color={updateColor} shape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} />
                 <DecorationPicker currentDecoration={currentDecoration} setDecoration={setDecoration} />
                 <InputTitle title={"Change Accent Color"} />
                 <ColorInput rgb={color} action={updateColor} />
@@ -98,7 +100,10 @@ export const EditMemberPanel = ({
                     <div className='profile-banner-preview-wrapper'>
                         <Decoration decoration={currentDecoration} width={130} height={130} />
                         <img className='profile-baner-source' src={newBanner?.preview || userBanner} />
-                        <img style={{borderRadius: newShape === 'square' ? 5 : '50%'}} className='profile-image-source' src={newImage?.preview || userImage} />
+                        <div className='profile-image-source'>
+                            <img style={{borderRadius: newShape === 'square' ? 5 : '50%', objectFit: 'cover', width: '100%', height: '100%'}}  src={newImage?.preview || userImage} />
+                        </div>
+                        
                     </div>
                     <div 
                     style={{backgroundColor: primaryColor}}

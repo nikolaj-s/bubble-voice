@@ -37,7 +37,7 @@ export const fetchAccount = createAsyncThunk(
                     
                     setSocialData(parsed);
                 }
-                
+                console.log(account.account)
                 if (account.account.last_server) {
 
                     dispatch(setServerId(account.account.last_server));
@@ -90,7 +90,7 @@ export const verifyAccount = createAsyncThunk(
 
 export const updateAccount = createAsyncThunk(
     'accountSettingsSlice/updateAccount',
-    async ({userImage, userBanner, newShape, color, bio, displayName, decoration}, {rejectWithValue, getState, dispatch}) => {
+    async ({userImage, userBanner, newShape, color, bio, displayName, decoration, userImageGifFrame, userBannerGifFrame}, {rejectWithValue, getState, dispatch}) => {
         const token = await getToken();
 
         const {password, newPassword, confirmNewPassword, showCaseScreenShots} = getState().accountSettingsSlice;
@@ -118,6 +118,10 @@ export const updateAccount = createAsyncThunk(
         data.append("showCaseScreenShots", showCaseScreenShots);
 
         data.append("decoration", decoration);
+
+        data.append("userBannerGifFrame", userBannerGifFrame);
+
+        data.append("userImageGifFrame", userImageGifFrame);
 
         if (!token) return rejectWithValue({error: true, errorMessage: "validation error"})
 
@@ -231,6 +235,8 @@ const accountSettingsSlice = createSlice({
     initialState: {
         user_image: "",
         user_banner: "",
+        user_image_gif_frame: "",
+        user_banner_gif_frame: "",
         username: "",
         display_name: "",
         password: "",
@@ -307,6 +313,8 @@ const accountSettingsSlice = createSlice({
                 state.verified = action.payload.account.verified;
                 state.email = action.payload.account.email;
                 state.decoration = action.payload.account.decoration;
+                state.user_image_gif_frame = action.payload.account.user_image_gif_frame;
+                state.user_banner_gif_frame = action.payload.account.user_banner_gif_frame;
             } 
 
             state.change = false;
@@ -350,6 +358,10 @@ const accountSettingsSlice = createSlice({
             if (updated_info.profile_picture_shape) state.profilePictureShape = updated_info.profile_picture_shape;
 
             if (updated_info.decoration) state.decoration = updated_info.decoration;
+
+            state.user_banner_gif_frame = updated_info.user_banner_gif_frame;
+
+            state.user_image_gif_frame = updated_info.user_image_gif_frame;
         },
         [updateAccount.rejected]: (state, action) => {
             state.loading = false;
@@ -439,6 +451,10 @@ export const selectProfileDecorations = state => state.accountSettingsSlice.deco
 export const selectCurrentDecoration = state => state.accountSettingsSlice.decoration;
 
 export const selectLoadingDecorations = state => state.accountSettingsSlice.loadingDecorations;
+
+export const selectUserImageGifFrame = state => state.accountSettingsSlice.user_image_gif_frame;
+
+export const selectUserBannerGifFrame = state => state.accountSettingsSlice.user_banner_gif_frame;
 
 // actions
 export const {toggleShowCaseScreenShots, handleUpdateSteamLink, handleUpdateBio, updateNewAccountState, handleSignOut, updateAccountInputState, accountSettingsCloseError } = accountSettingsSlice.actions;

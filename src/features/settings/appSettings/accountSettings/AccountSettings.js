@@ -31,6 +31,10 @@ const Settings = () => {
 
     const [newUserBanner, setNewUserBanner] = React.useState({});
 
+    const [userImageGifFrame, setUserImageGifFrame] = React.useState({});
+
+    const [userBannerGifFrame, setUserBannerGifFrame] = React.useState({});
+
     const [color, setColor] = React.useState("");
 
     const [newShape, setNewShape] = React.useState("");
@@ -120,9 +124,17 @@ const Settings = () => {
 
         URL.revokeObjectURL(newUserImage.preview);
 
+        URL.revokeObjectURL(userImageGifFrame.preview);
+
+        URL.revokeObjectURL(userBannerGifFrame.preview);
+
         setNewUserBanner({});
 
         setNewUserImage({});
+
+        setUserBannerGifFrame({});
+
+        setUserImageGifFrame({});
 
         setNewDisplayName(displayName);
 
@@ -135,7 +147,17 @@ const Settings = () => {
     }
     
     const handleApply = () => {
-        dispatch(updateAccount({userImage: newUserImage, userBanner: newUserBanner, newShape: newShape, color: color, bio: newBio, displayName: newDisplayName, decoration: newDecoration}));
+        console.log(userImageGifFrame)
+        dispatch(updateAccount({userImage: newUserImage, userBanner: newUserBanner, newShape: newShape, color: color, bio: newBio, displayName: newDisplayName, decoration: newDecoration, userImageGifFrame: userImageGifFrame, userBannerGifFrame: userBannerGifFrame}));
+    
+        URL.revokeObjectURL(newUserBanner.preview);
+
+        URL.revokeObjectURL(newUserImage.preview);
+
+        URL.revokeObjectURL(userImageGifFrame.preview);
+
+        URL.revokeObjectURL(userBannerGifFrame.preview);
+
     }
 
     const getNewUserImage = (image) => {
@@ -193,7 +215,7 @@ const Settings = () => {
         <>
             <div className='settings-wrapper'>
                 <SettingsHeader title={"Account Settings"} />
-                <EditMemberPanel setDecoration={handleChangeDecoration} currentDecoration={newDecoration} username={username} newBanner={newUserBanner} newImage={newUserImage} handleNewDisplayName={handleNewDisplayName} screenShots={screenShots} toggleShowCaseScreenShots={handleToggleShowScreenShots} showCaseScreenShots={showCaseScreenShots} color={color || secondaryColor} updateColor={updateColor} newShape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} changeProfileShape={changeProfileShape} handleInput={handleInput} displayName={newDisplayName} previewBio={previewBio} togglePreviewBio={togglePreviewBio} profileBio={newBio} changeProfileBio={changeProfileBio} />
+                <EditMemberPanel setImageGifFrame={setUserImageGifFrame} setBannerGifFrame={setUserBannerGifFrame} setDecoration={handleChangeDecoration} currentDecoration={newDecoration} username={username} newBanner={newUserBanner} newImage={newUserImage} handleNewDisplayName={handleNewDisplayName} screenShots={screenShots} toggleShowCaseScreenShots={handleToggleShowScreenShots} showCaseScreenShots={showCaseScreenShots} color={color || secondaryColor} updateColor={updateColor} newShape={newShape} getNewUserBanner={getNewUserBanner} getNewUserImage={getNewUserImage} userImage={userImage} userBanner={userBanner} changeProfileShape={changeProfileShape} handleInput={handleInput} displayName={newDisplayName} previewBio={previewBio} togglePreviewBio={togglePreviewBio} profileBio={newBio} changeProfileBio={changeProfileBio} />
                 <SettingsHeader title={"Security"} />
                 <InputTitle title={"Change Password"} />
                 <div style={{maxWidth: 400}}>

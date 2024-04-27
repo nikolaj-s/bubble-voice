@@ -41,7 +41,8 @@ export const ImageInput = ({
     position = 'absolute',
     contain = false,
     imageCleared,
-    listenToClears = false
+    listenToClears = false,
+    getGifFrame = () => {}
 }) => {
     const dispatch = useDispatch();
     // state
@@ -99,6 +100,8 @@ export const ImageInput = ({
 
             let compressed_image;
 
+            let gif_frame;
+
             if (acceptedFiles[0].type.includes('gif') && acceptedFiles[0].size > 3000000) {
                 toggleProcessingImage(false);
                 return dispatch(throwServerError({error: true, errorMessage: "ERROR: Gif cannot be larger than 3MB"}));
@@ -106,6 +109,10 @@ export const ImageInput = ({
 
             if (acceptedFiles[0].type.includes('gif') && acceptedFiles[0].size < 3000000) {
                 compressed_image = acceptedFiles[0];
+
+                gif_frame = await imageCompression(acceptedFiles[0], {maxSizeMB: maxSize, onProgress: handlePercent, maxIteration: 30, type: 'image/jpeg', maxWidthOrHeight: maxDimensions});
+                
+                getGifFrame(gif_frame)
             } else {
                 compressed_image = await imageCompression(acceptedFiles[0], options);
             }

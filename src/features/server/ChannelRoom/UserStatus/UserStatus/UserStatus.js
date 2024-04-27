@@ -52,7 +52,7 @@ export const UserStatus = ({user}) => {
         
         dispatch(setPanelPosition({y: (e.view.innerHeight - 600) < 0 ? 30 : e.pageY, x: (e.view.innerWidth - e.pageX) < 350 ? (e.pageX - 350) : e.pageX, origin: e.view.innerHeight - 600 < 0 ? false : (e.view.innerHeight - e.pageY) < 500 ? true : false, left: null}));
     }
-    
+  
     return (
         <div 
         onMouseDown={() => {toggleMouseDown(true)}}
@@ -72,6 +72,7 @@ export const UserStatus = ({user}) => {
             className='user-status-image-container'>
                 {user.user_image?.includes('.gif') ?
                 <Gif 
+                gifFrame={user.user_image_gif_frame}
                 location="user-status-location"
                 key={user.user_image + "user-status-location"}
                 borderRadius={(user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%'}
