@@ -37,7 +37,7 @@ export const fetchAccount = createAsyncThunk(
                     
                     setSocialData(parsed);
                 }
-                console.log(account.account)
+                
                 if (account.account.last_server) {
 
                     dispatch(setServerId(account.account.last_server));

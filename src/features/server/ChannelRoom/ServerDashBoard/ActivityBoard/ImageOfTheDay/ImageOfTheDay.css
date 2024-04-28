@@ -20,6 +20,8 @@
     border-radius: 10px;
     overflow: hidden;
     background-color: black;
+    display: flex;
+    align-items: center;
 }
 
 .image-info-wrapper {

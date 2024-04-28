@@ -2,11 +2,11 @@ import React from 'react';
 
 import "./VideoCard.css";
 import { useDispatch, useSelector } from 'react-redux';
-import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectGlassColor, selectPrimaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { CopyButton } from '../buttons/CopyButton/CopyButton';
 import { setExpandedContent, setMetaData } from '../../features/ExpandContent/ExpandContentSlice';
 
-export const VideoCard = ({data = {}, send = () => {}, altAction, message}) => {
+export const VideoCard = ({mediaOfTheDay,data = {}, send = () => {}, altAction, message}) => {
 
     const [hover, toggleHover] = React.useState(false);
 
@@ -17,6 +17,8 @@ export const VideoCard = ({data = {}, send = () => {}, altAction, message}) => {
     const accentColor = useSelector(selectAccentColor);
 
     const primaryColor = useSelector(selectPrimaryColor);
+
+    const glassColor = useSelector(selectGlassColor);
 
     React.useEffect(() => {
 
@@ -72,7 +74,9 @@ export const VideoCard = ({data = {}, send = () => {}, altAction, message}) => {
         <div 
         onClick={open}
         style={{
-            backgroundColor: hover ? accentColor : primaryColor
+            zIndex: mediaOfTheDay ? 2 : null,
+            backgroundColor: hover ? accentColor : glassColor,
+            borderRadius: mediaOfTheDay ? 0 : null
         }}
         onMouseEnter={() => {toggleHover(true)}}
         onMouseLeave={() => {toggleHover(false)}}

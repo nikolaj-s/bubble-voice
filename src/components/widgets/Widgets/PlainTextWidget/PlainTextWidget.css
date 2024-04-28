@@ -1,13 +1,6 @@
 .plain-text-widget-container {
     width: 100%;
     height: auto;
-    border-radius: var(--border-radius);
-}
-
-.plain-text-widget-container p {
-    padding: 0.5rem;
-    overflow-wrap: break-word;
-    font-weight: 400;
-    letter-spacing: var(--font-spacing);
+    border-radius: 20px;
 }
 

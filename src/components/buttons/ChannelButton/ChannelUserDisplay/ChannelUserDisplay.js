@@ -98,7 +98,7 @@ export const ChannelUserDisplay = ({user, channel_id, dragging = () => {}}) => {
                 <Gif  
                 location="channel-button-location"
                 key={user.user_image + "channel-button-location"}
-                borderRadius={(user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%'}
+                borderRadius={(user.profile_picture_shape !== 'circle') ? '5px' : '50%'}
                 objectFit='cover'
                 cursor='pointer'
                 gifFrame={user.user_image_gif_frame}
@@ -107,7 +107,7 @@ export const ChannelUserDisplay = ({user, channel_id, dragging = () => {}}) => {
                 active={(user.active && user.microphone && currentChannelId === channel_id)}
                 />
                 :
-                <Image disableErr={true} borderRadius={(user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%'} image_class={'user-image'} cursor='pointer' objectFit='cover' image={user.user_image?.includes('.gif') ? "" : user.user_image} />
+                <Image disableErr={true} borderRadius={(user.profile_picture_shape !== 'circle') ? '5px' : '50%'} image_class={'user-image'} cursor='pointer' objectFit='cover' image={user.user_image?.includes('.gif') ? "" : user.user_image} />
                 }
                 <div style={{
                     position: 'absolute',

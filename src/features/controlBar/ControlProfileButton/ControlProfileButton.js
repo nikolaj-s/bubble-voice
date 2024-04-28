@@ -41,7 +41,7 @@ export const ControlProfileButton = ({micState, inChannel}) => {
     const voiceState = useSelector(selectVoiceActive);
 
     const userImageGifFrame = useSelector(selectUserImageGifFrame);
-   console.log(userImageGifFrame)
+
     return (
         <div
         key={profilePicture}

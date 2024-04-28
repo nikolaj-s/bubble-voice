@@ -6,6 +6,7 @@ import { Image } from '../../../../../../components/Image/Image';
 import { selectGlassPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { setExpandedContent, setMetaData } from '../../../../../ExpandContent/ExpandContentSlice';
 import { AltImageIcon } from '../../../../../../components/Icons/AltImageIcon/AltImageIcon';
+import { VideoCard } from '../../../../../../components/VideoCard/VideoCard';
 
 export const ImageOfTheDay = ({imageOfTheDay}) => {
 
@@ -26,21 +27,26 @@ export const ImageOfTheDay = ({imageOfTheDay}) => {
         <div 
         style={{backgroundColor: secondaryColor}}
         className='image-of-the-day-container'>
-            {imageOfTheDay.image ?
+            {imageOfTheDay ?
             <>
             <div 
             className='image-of-the-day-wrapper'>
+                {imageOfTheDay?.type === 'video' ?
+                <VideoCard mediaOfTheDay={true} data={imageOfTheDay} message={true} />
+                : 
+                <>
                 <Image nsfw={imageOfTheDay.nsfw} zIndex={2} objectFit='contain' minLoadHeight={150} expandContent={handleExpand} cursor='pointer' borderRadius={'10px'} image={imageOfTheDay.image} alt_image={imageOfTheDay.preview} />
-                <img alt="BLUR" className='back-drop-blur-image-of-the-day' src={imageOfTheDay.preview} />
-
                 
+                </>
+                }
+                <img alt="BLUR" className='back-drop-blur-image-of-the-day' src={imageOfTheDay.preview || imageOfTheDay.thumbnail} />
             </div>
             <div 
             style={{backgroundColor: glassColor}}
             className='image-info-wrapper'>
                 <p
                 style={{color: textColor}}
-                >This Image Was Found Related To The Query: {(imageOfTheDay.query || imageOfTheDay.tags)}</p>
+                >Found Related To The Query: {(imageOfTheDay.query || imageOfTheDay.tags)}</p>
             </div>
             </>
             :

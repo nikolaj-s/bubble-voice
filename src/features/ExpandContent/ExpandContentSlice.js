@@ -31,6 +31,14 @@ const ExpandContentSlice = createSlice({
 
                 state.selectedContent = action.payload;
                 
+                if (expandedContent.content_type === 'channel-info') {
+                    state.channelInfo = true;
+
+                    state.selectedContent = expandedContent;
+                    
+                    return;
+                }
+
                 const imageFormats = ['.webp', '.jpg', '.jpeg', '.png', '.gif', 'images', '-jpg', '-jpeg', '-png', '-gif'];
 
                 const image = imageFormats.some(format => action.payload.includes(format));
@@ -41,11 +49,6 @@ const ExpandContentSlice = createSlice({
                     
                     state.reddit = true;
 
-                } else if (expandedContent.content_type === 'channel-info') {
-                    state.channelInfo = true;
-
-                    state.selectedContent = expandedContent;
-                
                 } else if (expandedContent?.includes('https')) {
 
                     const text = expandedContent;

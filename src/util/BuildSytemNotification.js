@@ -1,6 +1,6 @@
 
 export const BuildSystemNotification = (data) => {
-    console.log(data.content.link)
+
     return {message: ` 
       <head>
         <style>

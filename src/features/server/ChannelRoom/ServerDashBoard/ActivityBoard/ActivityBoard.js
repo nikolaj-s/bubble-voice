@@ -64,7 +64,7 @@ export const ActivityBoard = ({loading}) => {
                 <ServerWelcomeMessage />
                 <div className='image-of-the-day-pin-wrapper'>
                 <div className='wrapper'>
-                    <DividerButton textMargin={5} icon={<AltImageIcon width='30px' />} extra={time >= 1 ? `Updates In: ${time} hour${time === 1 ? "" : 's'}` : null} action={() => {dispatch(toggleHideImageOfTheDay())}} state={hideImageOfTheDay} name={"Image of The Day"} />
+                    <DividerButton textMargin={5} icon={<AltImageIcon width='30px' />} extra={time >= 1 ? `Updates In: ${time} hour${time === 1 ? "" : 's'}` : null} action={() => {dispatch(toggleHideImageOfTheDay())}} state={hideImageOfTheDay} name={"Media of The Day"} />
                     {hideImageOfTheDay ? null : <ImageOfTheDay imageOfTheDay={imageOfTheDay} />}
                 </div>  
                 <div className='wrapper'> 

@@ -59,7 +59,7 @@ export const UserBio = ({bio = "", margin, loading, textWidget}) => {
     return (
         <>
         
-        <div style={{backgroundColor: primaryColor, margin: margin}} className='user-bio-preview-container'>
+        <div style={{backgroundColor: primaryColor, margin: margin, borderRadius: textWidget ? '20px' : null, overflow: 'hidden'}} className='user-bio-preview-container'>
             {loading ? 
              <motion.div 
              style={{
