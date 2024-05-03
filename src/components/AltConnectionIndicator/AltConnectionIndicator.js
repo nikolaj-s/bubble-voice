@@ -5,6 +5,7 @@ import { selectAccentColor, selectTextColor, selectPrimaryColor} from '../../fea
 import { checkConnection, selectServerPing } from '../../features/server/ServerSlice';
 import { Loading } from '../LoadingComponents/Loading/Loading';
 import { selectConnectionError, selectConnectionLoading } from '../../features/controlBar/ControlBarSlice';
+import { selectLoadingChannel } from '../../features/server/ChannelRoom/Room/RoomSlice';
 
 export const AltConnectionIndicator = ({active}) => {
 
@@ -12,7 +13,7 @@ export const AltConnectionIndicator = ({active}) => {
 
     const [hover, toggleHover] = React.useState(false);
 
-    const loading = useSelector(selectConnectionLoading);
+    const loading = useSelector(selectLoadingChannel);
 
     const error = useSelector(selectConnectionError);
 
@@ -45,12 +46,15 @@ export const AltConnectionIndicator = ({active}) => {
         onMouseLeave={() => {handleHover(false)}}
         className='saved-media-container'>
             <div style={{backgroundColor: accentColor, borderRadius: hover  ? '10px' : '50%', transition: '0.1s'}} className='extra-button-icon-container'>
-            <div style={{display: 'flex', width: 20, height: 20, justifyContent: 'center', alignItems: 'flex-end'}}>
-                <div style={{width: 5, height: 20, backgroundColor: ping <= 60 ? '#07fc03' : textColor, marginRight: 2, borderRadius: 4}} />
-                <div style={{width: 5, height: 15, backgroundColor: ping <= 60 ? '#07fc03' : ping <= 110 ? 'yellow' : textColor, marginRight: 2, borderRadius: 4}} />
-                <div style={{width: 5, height: 10, backgroundColor: ping <= 60 ? '#07fc03' : ping <= 110 ? 'yellow' : ping <= 999 ? 'red' : textColor, borderRadius: 4}} />
-            </div>
-            <Loading success_size={{width: 20, height: 20}} loading={loading} error={error} />
+                
+                {loading ?
+                <Loading backgroundColor={'rgba(0,0,0,0)'} success_size={{width: 20, height: 20}} loading={loading} error={error} />
+                : <div style={{display: 'flex', width: 20, height: 20, justifyContent: 'center', alignItems: 'flex-end'}}>
+                    <div style={{width: 5, height: 20, backgroundColor: ping <= 110 ? '#07fc03' : textColor, marginRight: 2, borderRadius: 4}} />
+                    <div style={{width: 5, height: 15, backgroundColor: ping <= 110 ? '#07fc03' : ping <= 180 ? 'yellow' : textColor, marginRight: 2, borderRadius: 4}} />
+                    <div style={{width: 5, height: 10, backgroundColor: ping <= 110 ? '#07fc03' : ping <= 180 ? 'yellow' : ping <= 999 ? 'red' : textColor, borderRadius: 4}} />
+                </div>}
+                
             </div>
             
             {hover ? 

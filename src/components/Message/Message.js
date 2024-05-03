@@ -115,7 +115,7 @@ export const Message = ({pinned_to_profile_state, activity_feed = false,dashboar
         dispatch(setPanelPosition({y: (e.view.innerHeight - 600) < 0 ? 30 : e.pageY, x: e.pageX, origin: e.view.innerHeight - 600 < 0 ? false : (e.view.innerHeight - e.pageY) < 500 ? true : false, left: 330}));
     
     }
-
+console.log(message)
     return (
         <>
             <div onMouseOut={(e) => {hoverEffect(e, false)}} onMouseOver={(e) => {hoverEffect(e, true)}}
@@ -143,7 +143,7 @@ export const Message = ({pinned_to_profile_state, activity_feed = false,dashboar
                     <LinkPreview expand={expandContent} data={message.link_preview} />
                     : null}
                     <div className='message-content-wrapper'>
-                            {message.media_video ?
+                            {message?.media_video?.url ?
                             <VideoCard message={true} data={message.media_video}  />
                             : null}
                             {message.song ?
@@ -152,7 +152,7 @@ export const Message = ({pinned_to_profile_state, activity_feed = false,dashboar
                             {message.reddit ?
                             <RedditPost action={expandContent} inSocial={true} data={message.reddit} />
                             : null}
-                            <Iframe maxWidth={550} marginRight={5}  link={message.iFrame} />
+                            {message.media_video ? null : <Iframe maxWidth={550} marginRight={5}  link={message.iFrame} />}
                             <MessageGallery gallery={message.gallery} expand={expandContent} />
                             {message.video_upload ?
                             <UploadedFileShare video={message.video_upload} />

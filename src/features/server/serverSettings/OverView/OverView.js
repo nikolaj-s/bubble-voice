@@ -27,6 +27,7 @@ import { ImageSearchKeywordFilter } from './ImageSearchKeywordFilter/ImageSearch
 import { selectPinnedSubreddits, setActivityFeed, setPinnedSubReddits } from '../../ChannelRoom/ServerDashBoard/ServerDashBoardSlice';
 import { AddSubRedditMenu } from './AddSubRedditMenu/AddSubRedditMenu';
 import { PinnedSubRedditWrapper } from '../../../../components/PinnedSubReddit/PinnedSubRedditWrapper';
+import { setVideos } from '../../ChannelRoom/ServerDashBoard/ServerMedia/ServerMediaSlice';
 
 const Wrapper = () => {
 
@@ -202,6 +203,8 @@ const Wrapper = () => {
                 toggleLoading(false);
 
                 dispatch(clearSearchData());
+
+                dispatch(setVideos([]));
             })
             .catch(err => {
                 toggleLoading(false);
@@ -352,7 +355,7 @@ const Wrapper = () => {
         <TextInput inputValue={newServerWelcomeMessage} action={handleUpdateServerWelcomeMessage} />
         <SettingsHeader zIndex={2} title={"Data"} />
         <ImageSearchKeywordFilter keywords={newKeywords} removeKeyword={removeKeyWord} addKeyword={handleAddKeyword} />
-        <InputTitle title={"Clear Image Search Recommendation Data"} />
+        <InputTitle title={"Clear Media Search Recommendation Data"} />
         <TextButton name={"Clear"} action={clearImageSearchData} />
         <InputTitle title={"Clear Activity Feed"} />
         <TextButton action={handleClearActivityFeed} name={clearActivity ? "Hit Apply To Save Changes" : "Clear"} toggled={clearActivity} />

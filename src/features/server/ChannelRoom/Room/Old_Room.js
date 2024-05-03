@@ -2,12 +2,15 @@
 import React from 'react'
 import { useRoutes } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux';
+import * as mediasoupClient from 'mediasoup-client';
 
 // state
-import { selectCurrentChannel, selectCurrentChannelId, selectPushToTalkActive, selectServerId, toggleLoadingChannel, updateMemberStatus, throwServerError, selectReconnectingState, checkConnection, clearServerPing } from '../../ServerSlice';
-import { selectAudioInput, selectVoiceActivityState, selectPushToTalkState, selectMirroredWebCamState, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, selectVoiceActivationSensitivity, selectAutoGainControl, selectAdvancedVoiceActivation } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
-import { selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
-import { selectAudioState, selectCurrentScreen, selectMicrophoneState, selectScreenShareState, selectWebCamState, setCurrentScreen, setScreens, setSelectingScreensState, toggleControlState } from '../../../controlBar/ControlBarSlice';
+import { selectCurrentChannel, selectCurrentChannelId, selectPushToTalkActive, selectServerId, toggleLoadingChannel, updateMemberStatus, selectServerMembers, throwServerError, updateJoiningChannelState, selectReconnectingState, toggleReconnectingState, checkConnection, clearServerPing } from '../../ServerSlice';
+import { selectAudioInput, selectVideoInput, selectVoiceActivityState, selectPushToTalkState, selectMirroredWebCamState, selectEchoCancellatio, selectNoiseSuppression, selectMicInputVolume, selectVoiceActivationSensitivity, selectAutoGainControl, selectAdvancedVoiceActivation, selectExperimentalAudioCapture } from '../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice'
+import { selectDisplayName, selectProfileColor, selectProfilePictureShape, selectUserBanner, selectUserBannerGifFrame, selectUserImage, selectUserImageGifFrame, selectUsername } from '../../../settings/appSettings/accountSettings/accountSettingsSlice';
+import { playSoundEffect, selectMuteSoundEffectsWhileMutedState } from '../../../settings/soundEffects/soundEffectsSlice';
+import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
+import { selectAudioState, selectCurrentScreen, selectCurrentScreenName, selectMicrophoneState, selectScreenShareState, selectWebCamState, setCurrentScreen, setScreens, setSelectingScreensState, toggleConnectionError, toggleConnectionLoading, toggleControlState, toggleLoadingScreenShare, toggleLoadingWebCam, toggleVoiceActive } from '../../../controlBar/ControlBarSlice';
 import { updateMusicState } from './Music/MusicSlice';
 
 // style
@@ -17,34 +20,34 @@ import "./Room.css";
 import { socket } from '../../ServerBar/ServerBar';
 
 // client
-
+import { RoomClient } from './RoomClient';
 import { Social } from './Social/Social';
 import { Widgets } from './Widgets/Widgets';
 import { RoomUserWrapper } from './RoomUserWrapper/RoomUserWrapper';
 import { ChannelBackground } from './ChannelBackground/ChannelBackground';
 import { selectMiscSettingsHideChannelBackground } from '../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
-import { selectGlassColor, selectGlassState, selectPrimaryColor, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectDisableTransitionAnimations, selectGlassColor, selectGlassState, selectPrimaryColor, selectSecondaryColor } from '../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { audioCtx } from '../../../AudioInit/AudioInit';
 import { selectCurrentServerPageState } from '../ServerNavigation/ServerNavigationSlice';
 import { AnimatePresence, motion} from 'framer-motion';
 import { ScreenShot } from './ScreenShot/ScreenShot';
 import { MediaControls } from './Music/MediaControls';
 
-import { CLEAR_CLIENT, client, handleAudioState, handleMicrophoneProducer, handleScreenProducer, handleStreamsDisabled, handleVoiceActive, handleWebCamProducer, joinChannel, leftChannel, selectJoiningChannelState, selectLoadingMicrophoneProducer, selectLoadingScreenProducer, selectLoadingWebCamProducer } from './RoomSlice';
-import { analyserFrequencyAverage } from '../../../../util/AudioFunctions';
-import { current } from '@reduxjs/toolkit';
+export let client;
 
 const Component = () => {
     
     const dispatch = useDispatch();
 
-    const [hover, toggleHover] = React.useState(false);
+    const [loaded, setLoaded] = React.useState(false);
 
-    const [media, setMedia] = React.useState(false);
+    const [hover, toggleHover] = React.useState(false);
 
     const page = useSelector(selectCurrentServerPageState);
     // state 
     const channel = useSelector(selectCurrentChannel);
+
+    const currentScreenName = useSelector(selectCurrentScreenName);
 
     const glass = useSelector(selectGlassState);
 
@@ -62,9 +65,17 @@ const Component = () => {
 
     const screenShareState = useSelector(selectScreenShareState);
 
+    const videoDevice = useSelector(selectVideoInput);
+
     const audioDevice = useSelector(selectAudioInput);
 
     const username = useSelector(selectUsername);
+
+    const displayName = useSelector(selectDisplayName);
+
+    const userBanner = useSelector(selectUserBanner);
+
+    const userImage = useSelector(selectUserImage);
 
     const currentScreen = useSelector(selectCurrentScreen);
 
@@ -72,9 +83,13 @@ const Component = () => {
 
     const webCamMirroredState = useSelector(selectMirroredWebCamState);
 
+    const soundEffectsMuted = useSelector(selectMuteSoundEffectsWhileMutedState);
+
     const microphoneInputVolume = useSelector(selectMicInputVolume);
 
     const hideChannelBackgrounds = useSelector(selectMiscSettingsHideChannelBackground);
+
+    const disableTransition = useSelector(selectDisableTransitionAnimations);
 
     // audio pref state
     const echoCancellation = useSelector(selectEchoCancellatio);
@@ -89,25 +104,27 @@ const Component = () => {
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
+    const experimentalAudioCapture = useSelector(selectExperimentalAudioCapture);
+
     const advancedVoiceActivationDetection = useSelector(selectAdvancedVoiceActivation);
+
+    const profileImageShape = useSelector(selectProfilePictureShape);
+
+    const profileColor = useSelector(selectProfileColor);
 
     const primaryColor = useSelector(selectPrimaryColor)
     
-    const loaded = useSelector(selectJoiningChannelState);
+    const media = channel?.widgets?.filter(w => w.type === 'music');
 
-    const loadingMicrophoneProducer = useSelector(selectLoadingMicrophoneProducer);
+    const userImageGifFrame = useSelector(selectUserImageGifFrame);
 
-    const loadingWebCamProducer = useSelector(selectLoadingWebCamProducer);
-
-    const loadingScreenProducer = useSelector(selectLoadingScreenProducer);
+    const userBannerGifFrame = useSelector(selectUserBannerGifFrame);
 
     // fall back code
     React.useEffect(() => {
-
         if (channel?.error || !channel) {
-
-            const channel_location_id = window.location.hash.split('channel/')[1];
-            
+           const channel_location_id = window.location.hash.split('channel/')[1];
+            console.log(channel_location_id)
             const el = document.getElementById(`channel-button-${channel_location_id}`);
 
             if (el) {
@@ -132,14 +149,6 @@ const Component = () => {
             }
 
         }
-
-        if (channel) {
-            const media = channel?.widgets?.filter(w => w.type === 'music');
-
-            setMedia(media);
-        }
-        
-
     }, [channel])
 
     React.useEffect(() => {
@@ -153,14 +162,16 @@ const Component = () => {
     }, [noiseSuppression, echoCancellation, microphoneInputVolume, autoGainControl])
 
     React.useEffect(() => {
-        let el = document.getElementById(`${username}-web-cam`)
+        let el = document.getElementById(user._id)
         
         if (!webcamState && el) {
+
+            let vid = el.querySelector('video')
             
-            if (webCamMirroredState && el) {
-               el.style.transform = 'scaleX(-1)'
-            } else if (el) {
-                el.style.transform = 'scaleX(1)'
+            if (webCamMirroredState && vid) {
+               vid.style.transform = 'scaleX(-1)'
+            } else if (vid) {
+                vid.style.transform = 'scaleX(1)'
             }
         
         }
@@ -172,6 +183,51 @@ const Component = () => {
     const voiceActivityDetection = useSelector(selectVoiceActivityState);
 
     const pushToTalk = useSelector(selectPushToTalkState);
+
+    const members = useSelector(selectServerMembers);
+
+    const member = members.find(member => member.username === username);
+    
+    const user = {
+        ...member
+    }
+
+    const event = (arg) => {
+        
+        if (arg.action === 'playSoundEffect') return dispatch(playSoundEffect(arg.value));
+
+        if (arg.action === 'error') return dispatch(throwServerError({errorMessage: arg.value}));
+        
+        if (arg.action === 'webcam-loading-state') return dispatch(toggleLoadingWebCam(false));
+        
+        if (arg.action === 'screen-share-loading-state') return dispatch(toggleLoadingScreenShare(arg.value));
+       
+        if (arg.action === 'close-stream') return dispatch(toggleControlState('screenShareState'));
+
+        if (arg.action === 'reconnecting') {
+            setLoaded(arg.value);
+
+            if (arg.value === true) {
+                dispatch(toggleReconnectingState());
+            }
+            
+        };
+
+        if (arg.action === 'connection') return dispatch(toggleConnectionLoading(arg.value));
+
+        if (arg.action === 'connectionError') return dispatch(toggleConnectionError(arg.value));
+    }
+
+    const init = async () => {
+
+        client = new RoomClient(socket, current_channel_id, server_id, mediasoupClient, audioDevice, videoDevice, microphoneState, webcamState, user, event, audioState, webCamMirroredState, echoCancellation, noiseSuppression, microphoneInputVolume)
+
+        await client.join();
+
+        return true
+        
+            
+    }
 
     const handleScreenShare = async () => {
         try {
@@ -193,14 +249,14 @@ const Component = () => {
         } catch (error) {
             
             client?.produce('screenType', currentScreen);
-            dispatch(updateMemberStatus({username: username, action: {screenshare: true}}))
-            socket?.emit('user status', {username: username, action: {screenshare: true}})
+            dispatch(updateMemberStatus({username: user.username, action: {screenshare: true}}))
+            socket?.emit('user status', {username: user.username, action: {screenshare: true}})
         }
 
     }
 
     const updatePing = () => {
-        console.log('checking ping');
+        console.log('checking ping')
 
         dispatch(checkConnection());
     }
@@ -208,122 +264,197 @@ const Component = () => {
     // handle initial channel join, and init of roomClient
     React.useEffect(() => {
 
-        dispatch(joinChannel());
+        dispatch(updateJoiningChannelState(true));
 
         let interval;
 
-        interval = setInterval(() => {
-            updatePing();
-        }, 300000)
+        setTimeout(() => {
+
+            init().then( async () => {
+                setLoaded(true);
+
+                await socket.request('fetch current music info')
+                .then(data => {
+                    console.log(data)
+                    if (data.music_info) {
+                        dispatch(updateMusicState({playing: data.music_info.playing, queue: data.music_info.queue}))
+                    }
+                    
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+
+                setTimeout(() => {
+
+                    dispatch(updateJoiningChannelState(false));
+
+                    dispatch(checkConnection());
+                
+                }, 500)
+                    
+                interval = setInterval(updatePing, 120000);
+            })
+        
+            dispatch(setHeaderTitle(channel.channel_name));
+        
+        }, 100) 
 
         return () => {
-            clearInterval(interval);
-            dispatch(toggleLoadingChannel(true));
-            dispatch(setScreens([]));
+            dispatch(setHeaderTitle('Select Channel'))
+            dispatch(toggleLoadingChannel(true))
+            dispatch(setScreens([]))
             dispatch(setSelectingScreensState(false));
             dispatch(setCurrentScreen(null));
+            setLoaded(false);
             dispatch(clearServerPing());
-            dispatch(updateMusicState({playing: false, queue: []}));
-            dispatch(leftChannel());
-            CLEAR_CLIENT();
+            dispatch(updateMusicState({playing: false, queue: []}))
+            client?.exit();
             if (socket) {
                 console.log('channel left/ channel change')
             }
+            clearInterval(interval);
         }
     // eslint-disable-next-line
     }, [current_channel_id])
     
     // handle state change for screen sharing
     React.useEffect(() => {
-        
+        console.log(experimentalAudioCapture)
         try {
-
-            if (!currentScreen) return;
-
             if (channel?.users?.length === 1) return;
+            console.log('this should not be called')
+            if (currentScreen !== null) {
+                
+                dispatch(setScreens([]));
+                dispatch(setSelectingScreensState(false));
 
-            if (loadingScreenProducer) return;
+                setTimeout(() => {
+                    const ipcRenderer = window.require('electron').ipcRenderer;
+
+                    ipcRenderer.send("set-window-id", {id: currentScreen});
+
+                    client?.produce('screenType', currentScreen, currentScreenName, experimentalAudioCapture, profileColor);
+                    dispatch(updateMemberStatus({username: user.username, action: {screenshare: true}}))
+                    socket?.emit('user status', {username: user.username, action: {screenshare: true}})
+                
+                    dispatch(playSoundEffect('controlSoundEffect'))
+                }, 200)
+                    
             
-            dispatch(handleScreenProducer({currentScreen: currentScreen}));
-            
+            }
         } catch (error) {
-            
+            console.log(error);
             dispatch(throwServerError({errorMessage: error.message}))
         }
     // eslint-disable-next-line
-    }, [currentScreen])
+    }, [currentScreen, reconnecting, currentScreenName, experimentalAudioCapture])
 
     // handle change of user control state
     React.useEffect(() => {
-        if (loaded === true && client) {
+        if (client && loaded === true) {
 
-            if (channel?.users?.length === 1) {
-                dispatch(handleScreenProducer({currentScreen: null}));
+            if (channel.disable_streams) {
 
-                console.log(screenShareState);
+                client.closeProducer('audioType');
+                dispatch(updateMemberStatus({username: user.username, action: {microphone: false}}))
+                socket.emit('user status', {username: user.username, action: {microphone: false}})
+                dispatch(updateMemberStatus({username: user.username, action: {active: false}}))    
+                socket.emit('user status', {username: user.username, action: {active: false, channel_specific: true}})
+                const audio_sources_to_mute = document.querySelectorAll('video, audio');
+
+                for (const el of audio_sources_to_mute) {
+
+                    if (soundEffectsMuted === false) {
+
+                        if (el.id !== 'sound-effects-source') {
+                            el.muted = true;
+                        } 
+
+                        continue;
+                    } else {
+                        el.muted = true;
+                    }
+
+                }
+
+                dispatch(updateMemberStatus({username: user.username, action: {muted: true}}))
+                
+                client.toggleAudioState(true)
+                
+                socket.emit('user status', {username: user.username, action: {muted: true}})
 
                 return;
-            };
+            
+            }
 
-            if (channel.disable_streams) return;
+            // handle microphone state changes
+            if (microphoneState) {
+                client.produce('audioType', audioDevice._id);
+                dispatch(updateMemberStatus({username: user.username, action: {microphone: true}}))
+                socket.emit('user status', {username: user.username, action: {microphone: true}})
+            } else if (microphoneState === false) {
+                client.closeProducer('audioType');
+                dispatch(updateMemberStatus({username: user.username, action: {microphone: false}}))
+                socket.emit('user status', {username: user.username, action: {microphone: false}})
+                dispatch(updateMemberStatus({username: user.username, action: {active: false}}))    
+                socket.emit('user status', {username: user.username, action: {active: false, channel_specific: true}})
+            }
+
+            if (webcamState === false) {
+                client.produce('videoType', videoDevice._id);
+                dispatch(updateMemberStatus({username: user.username, action: {webcam: true}}))
+                socket.emit('user status', {username: user.username, action: {webcam: true}})
+            } else if (webcamState === true) {
+                client.closeProducer('videoType');
+                dispatch(updateMemberStatus({username: user.username, action: {webcam: false}}))
+                socket.emit('user status', {username: user.username, action: {webcam: false}})
+            }
 
             if (screenShareState === false && currentScreen === null) {
                 handleScreenShare();
             } else if (screenShareState === true) {
-                dispatch(handleScreenProducer({currentScreen: null}));
+                client.closeProducer('screenType')
+                dispatch(setScreens([]))
+                dispatch(setSelectingScreensState(false));
+                dispatch(setCurrentScreen(null));
+                dispatch(updateMemberStatus({username: user.username, action: {screenshare: false}}))
+                socket.emit('user status', {username: user.username, action: {screenshare: false}})
+            }
+
+            if (audioState) {
+                document.querySelectorAll('video, audio').forEach(el => el.muted = false)
+                dispatch(updateMemberStatus({username: user.username, action: {muted: false}}))
+                client.toggleAudioState(false)
+                socket.emit('user status', {username: user.username, action: {muted: false}})
+            } else if (audioState === false) {
+                const audio_sources_to_mute = document.querySelectorAll('video, audio');
+
+                for (const el of audio_sources_to_mute) {
+
+                    if (soundEffectsMuted === false) {
+
+                        if (el.id !== 'sound-effects-source') {
+                            el.muted = true;
+                        } 
+
+                        continue;
+                    } else {
+                        el.muted = true;
+                    }
+
+                }
+
+                dispatch(updateMemberStatus({username: user.username, action: {muted: true}}))
+                
+                client.toggleAudioState(true)
+                
+                socket.emit('user status', {username: user.username, action: {muted: true}})
             }
 
         }
     // eslint-disable-next-line
-    }, [loaded, screenShareState, channel.disable_streams, currentScreen])
-
-    React.useEffect(() => {
-
-        if (loaded && channel.disable_streams) {
-            dispatch(handleStreamsDisabled());
-        }
-
-    }, [loaded, channel.disable_streams])
-
-    // handle webcam state
-    React.useEffect(() => {
-
-        if (channel.disable_streams) return;
-
-        if (loadingWebCamProducer) return;
-
-        if (loaded) {
-            dispatch(handleWebCamProducer({data: webcamState}));
-        }
-
-    }, [loaded, webcamState])
-
-
-    // handle audio mute and unmute
-    React.useEffect(() => {
-
-        if (channel.disable_streams) return;
-
-        if (loadingMicrophoneProducer) return;
-
-        if (loaded) {
-            dispatch(handleAudioState({state: audioState}));
-        }
-
-    }, [audioState, loaded])
-
-    // handle mic mute and unmute
-    React.useEffect(() => {
-
-        if (channel.disable_streams) return;
-
-        if (loadingMicrophoneProducer) return;
-
-        if (loaded) {
-            dispatch(handleMicrophoneProducer({state: microphoneState}));
-        }
-
-    }, [microphoneState, loaded]);
+    }, [microphoneState, webcamState, loaded, screenShareState, audioState, soundEffectsMuted, reconnecting, channel.disable_streams, currentScreen])
 
     // handle voice activity
 
@@ -406,15 +537,60 @@ const Component = () => {
                             scriptProcessor.connect(audioCtx.destination);
 
                             const onVoiceStart = () => {
-                             
-                                dispatch(handleVoiceActive({active: true}));
+
+                                client.resumeProducer('audioType');
+
+                                dispatch(updateMemberStatus({username: user.username, action: {active: true}}))
+                                
+                                socket.emit('user status', {username: user.username, action: {active: true, channel_specific: true}})
+                                
+                                dispatch(toggleVoiceActive(true));
 
                                 handleRestartInactivityTimer();
                             }
 
                             const onVoiceStop = () => {
 
-                               dispatch(handleVoiceActive({active: false}));
+                                client.pauseProducer('audioType')
+
+                                dispatch(toggleVoiceActive(false));
+
+                                dispatch(updateMemberStatus({username: user.username, action: {active: false}}))
+                                
+                                socket.emit('user status', {username: user.username, action: {active: false, channel_specific: true}})  
+                                
+                            }
+
+                            const frequencyToIndex = (frequency, sampleRate, frequencyBinCount) => {
+
+                                let nyquist = sampleRate / 2;
+                                
+                                let index = Math.round(frequency / nyquist * frequencyBinCount);
+
+                                return Math.min(Math.max(index, 0), frequencyBinCount);
+                            
+                            }
+
+                            const analyserFrequencyAverage = (div, analyser, frequencies, minHz, maxHz) => {
+                                
+                                let sampleRate = analyser.context.sampleRate;
+
+                                let binCount = analyser.frequencyBinCount;
+
+                                let start = frequencyToIndex(minHz, sampleRate, binCount);
+
+                                let end = frequencyToIndex(maxHz, sampleRate, binCount);
+
+                                let count = end - start;
+
+                                let sum = 0;
+
+                                for (; start < end; start ++) {
+                                    sum += frequencies[start] / div;
+                                }
+                                
+                                return count === 0 ? 0 : (sum / count);
+                            
                             }
 
                             const init = () => {
@@ -506,7 +682,13 @@ const Component = () => {
 
                                         playing = true;
 
-                                        dispatch(handleVoiceActive({active: true}))
+                                        client.resumeProducer('audioType');
+
+                                        dispatch(updateMemberStatus({username: user.username, action: {active: true}}))
+                                    
+                                        socket.emit('user status', {username: user.username, action: {active: true, channel_specific: true}})
+                                        
+                                        dispatch(toggleVoiceActive(true));
 
                                         handleRestartInactivityTimer();
                                         
@@ -520,10 +702,16 @@ const Component = () => {
 
                                         timeout = null;
 
+                                        dispatch(toggleVoiceActive(false));
+
                                         timeout = setTimeout(() => {
 
-                                            dispatch(handleVoiceActive({active: false}));
-                                            
+                                            client.pauseProducer('audioType');
+
+                                            dispatch(updateMemberStatus({username: user.username, action: {active: false}}))
+                                                
+                                            socket.emit('user status', {username: user.username, action: {active: false, channel_specific: true}})
+                                        
                                         }, 500)
                                        
                                     }
@@ -540,7 +728,27 @@ const Component = () => {
                     })
                 } else if (pushToTalk === true && microphoneState === true) {
                     
-                    dispatch(handleVoiceActive({active: pushToTalkActive}));
+                    if (pushToTalkActive) {
+
+                        dispatch(toggleVoiceActive(true));
+
+                        client.resumeProducer('audioType');
+
+                        dispatch(updateMemberStatus({username: user.username, action: {active: true}}))
+                            
+                        socket.emit('user status', {username: user.username, action: {active: true, channel_specific: true}})
+                                
+                    } else { 
+
+                        dispatch(toggleVoiceActive(false));
+
+                        client.pauseProducer('audioType')
+
+                        dispatch(updateMemberStatus({username: user.username, action: {active: false}}))
+                            
+                        socket.emit('user status', {username: user.username, action: {active: false, channel_specific: true}}) 
+                            
+                    }
 
                 }  else {
                     if (scriptProcessor) {
@@ -575,21 +783,29 @@ const Component = () => {
         }
         
         return () => {
-            captureTimeout && clearTimeout(captureTimeout);
-
+            captureTimeout && clearTimeout(captureTimeout)
             if (scriptProcessor) {
                 scriptProcessor.onaudioprocess = null;
             }
-
             analyser?.disconnect();
             scriptProcessor?.disconnect();
             source?.disconnect();
-            
+            try {
+
+                const {webFrame} = window.require('electron');
+                
+                webFrame.clearCache();
+
+            } catch (err) {
+                console.log(err)
+                return;
+            }
         }
        
     // eslint-disable-next-line   
     }, [pushToTalk, voiceActivityDetection, loaded, current_channel_id, microphoneState, pushToTalkActive, reconnecting, advancedVoiceActivationDetection])
-
+    
+    
     React.useEffect(() => {
 
         if (channel?.users?.length === 1) {
@@ -601,10 +817,10 @@ const Component = () => {
             if (screenShareState === false) {
                 dispatch(toggleControlState('screenShareState'));
             }
-            
         }
-        
-    }, [channel.users, screenShareState, webcamState])
+
+    }, [channel.users, webcamState, screenShareState])
+
 
     return (
         <>
@@ -625,14 +841,14 @@ const Component = () => {
                 <AnimatePresence>       
                     {page === "social" ? 
                     <motion.div 
-                    transition={{duration: 0.05}}
+                    transition={disableTransition ? {duration: 0} : {duration: 0.2}}
                     style={{height: '100%', width: '100%', top: '0px', left: '0px', position: 'absolute', zIndex: 2}} key={'social-page-wrapper'} initial={{translateX: '100%'}} animate={{translateX: '0%'}} exit={{translateX: '-100%'}} >
                         <Social currentChannel={channel} channelId={current_channel_id} /> 
                     </motion.div>
                     : null}
                     {page === "widgets" ? 
                     <motion.div 
-                    transition={{duration: 0.05}}
+                    transition={disableTransition ? {duration: 0} : {duration: 0.2}}
                     key={'room-widgets-preview'} style={{height: '100%', width: '100%', top: '0px', left: '0px', position: 'absolute', zIndex: 4, backgroundColor: primaryColor}} initial={{opacity: 0}} animate={{opacity: 1}} 
                     exit={{opacity: 0}}>
                         <Widgets key={'widgets'} /> 

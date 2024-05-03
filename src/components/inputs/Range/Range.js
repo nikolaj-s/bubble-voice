@@ -44,9 +44,9 @@ export const Range = ({min = 0, max = 1, action, step = 0.001, value = 0, fill =
     
     React.useEffect(() => {
         
-        document.getElementById("root").style.setProperty('--range-main-background', textColor);
+        ref.current.style.setProperty('--range-main-background', textColor);
 
-        document.getElementById("root").style.setProperty('--range-main-thumb', invert ? secondaryColor : accentColor);
+        ref.current.style.setProperty('--range-main-thumb', invert ? secondaryColor : accentColor);
         
         ref.current.style.backgroundSize = (value - min) * 100 / (max - min) + '% 100%'
         

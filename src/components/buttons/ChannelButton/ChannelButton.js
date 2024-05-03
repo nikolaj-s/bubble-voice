@@ -8,7 +8,7 @@ import { SubMenuButton } from '../subMenuButton/SubMenuButton';
 import { ChannelUserDisplay } from './ChannelUserDisplay/ChannelUserDisplay';
 import { AltImageIcon } from '../../Icons/AltImageIcon/AltImageIcon';
 // state
-import {  selectAccentColor, selectActivationColor, selectGlassColor, selectGlassPrimaryColor, selectPrimaryColor, selectSecondaryColor, selectTextColor, selectTransparentPrimaryColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import {  selectAccentColor, selectActivationColor, selectGlassPrimaryColor, selectPrimaryColor, selectTextColor, selectTransparentPrimaryColor } from '../../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 
 // style
 import "./ChannelButton.css";
@@ -27,6 +27,7 @@ import { setSelectedMember } from '../../../features/server/ChannelRoom/MemberPa
 import { ChannelStatus } from './ChannelStatus/ChannelStatus';
 import { RedditIcon } from '../../Icons/RedditIcon/RedditIcon';
 import { HistoryIcon } from '../../Icons/HistoryIcon/HistoryIcon';
+import { selectLoadingChannel } from '../../../features/server/ChannelRoom/Room/RoomSlice';
 
 
 export const ChannelButton = ({category_id, collapse, channel, action = () => {}, users, index, move = () => {}, draggingUser, toggleDraggingUser = () => {}, draggingChannel, toggleDraggingChannel}) => {
@@ -47,8 +48,6 @@ export const ChannelButton = ({category_id, collapse, channel, action = () => {}
 
     const primaryColor = useSelector(selectPrimaryColor);
 
-    const secondaryColor = useSelector(selectSecondaryColor);
-
     const accentColor = useSelector(selectAccentColor);
 
     const textColor = useSelector(selectTextColor);
@@ -68,6 +67,8 @@ export const ChannelButton = ({category_id, collapse, channel, action = () => {}
     const disableChannelIcons = useSelector(selectDisableChannelIcons);
 
     const permissions = useSelector(selectUsersPermissions);
+
+    const loadingChannel = useSelector(selectLoadingChannel);
 
     React.useEffect(() => {
 
@@ -101,6 +102,8 @@ export const ChannelButton = ({category_id, collapse, channel, action = () => {}
 
         if (active && !channel.text_only) dispatch(handleChangePage('voice'));
 
+        if (loadingChannel) return;
+        
         dispatch(setSelectedMember(""));
 
         action(channel)

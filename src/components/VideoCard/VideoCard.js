@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectAccentColor, selectGlassColor, selectPrimaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { CopyButton } from '../buttons/CopyButton/CopyButton';
 import { setExpandedContent, setMetaData } from '../../features/ExpandContent/ExpandContentSlice';
+import { NsfwImageOverlay } from '../Image/NsfwImageOverlay/NsfwImageOverlay';
 
 export const VideoCard = ({mediaOfTheDay,data = {}, send = () => {}, altAction, message}) => {
 
@@ -95,11 +96,14 @@ export const VideoCard = ({mediaOfTheDay,data = {}, send = () => {}, altAction, 
                 :
                 <img src={data.thumbnail} />
                 }
+                {data.nsfw ?
+                <NsfwImageOverlay />
+                : null}
             </div>
             <div className='video-card-details-container'>
                 <h3 style={{color: textColor}}>{data.title}</h3>
                 <div onClick={(e) => {e.stopPropagation(); openLink()}} className='copy-video-card-link-container'>
-                    <p style={{color: textColor, margin: 0, opacity: 0.8}}>{data.url.split('/')[2]}</p>
+                    <p style={{color: textColor, margin: 0, opacity: 0.8}}>{data?.url?.split('/')[2]}</p>
                 </div>
                 <p style={{color: textColor}}>{data.duration}</p>
                 {message ? null : <div
@@ -110,7 +114,7 @@ export const VideoCard = ({mediaOfTheDay,data = {}, send = () => {}, altAction, 
                     right: 2
                 }}
                 >
-                    <CopyButton  padding={4} width={20} height={20} />
+                    <CopyButton action={copyLink} padding={4} width={20} height={20} />
                 </div>}
                 
             </div>       

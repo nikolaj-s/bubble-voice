@@ -33,13 +33,15 @@ export const Messages = () => {
     return (
         <AnimatePresence>
             {selectedDirectMessage !== "" ?
-            <div onClick={close} className='side-tab-outer-container'>
+            <div 
+            
+            onClick={close} className='side-tab-outer-container'>
                 <motion.div 
                 onClick={(e) => {e.stopPropagation()}}
                 initial={{opacity: 0, marginLeft: '-600px'}}
                 animate={{opacity: 1, marginLeft: 0}}
                 exit={{opacity: 0, marginLeft: '-600px'}}
-                style={{backgroundColor: glassState ? glassColor : secondaryColor}}
+                style={{backgroundColor: glassState ? glassColor : secondaryColor, width: 600}}
                 className='saved-media-outer-container'>
                     <Social currentChannel={{persist_data: false, social: directMessages[index]?.messages}} direct_message={true} direct_message_user={selectedDirectMessage} status={userStatus?.status !== 'offline'} />
                 </motion.div>

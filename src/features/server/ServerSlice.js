@@ -858,6 +858,12 @@ const serverSlice = createSlice({
         },
         [fetchServerDetails.fulfilled]: (state, action) => {
 
+            if (!action.payload) {
+                state.error = true;
+                state.errorMessage = 'Fatal Error Fetching Server Details';
+                return;
+            }
+
             state.loading = false;
             state.serverName = action.payload.server_name;
             state.serverBanner = action.payload.server_banner;

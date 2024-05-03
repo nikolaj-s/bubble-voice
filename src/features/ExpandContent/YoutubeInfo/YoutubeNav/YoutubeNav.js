@@ -12,6 +12,8 @@ export const YoutubeNav = ({thumbnail, artist, song}) => {
 
     const dispatch = useDispatch();
 
+    const [copyState, toggleCopyState] = React.useState("Copy");
+
     const textColor = useSelector(selectTextColor);
     
     const inChannel = useSelector(selectCurrentChannelId);
@@ -28,10 +30,17 @@ export const YoutubeNav = ({thumbnail, artist, song}) => {
 
     const copy = () => {
         try {
-
+            
             const { clipboard } = window.require('electron');
 
             clipboard.writeText(song.url);
+
+            toggleCopyState("Copied");
+
+            setTimeout(() => {
+                toggleCopyState("Copy")
+            }, 500)
+
 
         } catch (error) {
             console.log(error);
@@ -77,7 +86,7 @@ export const YoutubeNav = ({thumbnail, artist, song}) => {
                 <h1 onClick={openChannel} style={{color: textColor}}>{artist}</h1>
             </div>
             <div className='youtube-nav-controls-wrapper'>
-                <CopyButton action={copy} description={"Copy"} padding={6} width={16} height={16} />
+                <CopyButton desc_width={80} action={copy} description={copyState} padding={6} width={16} height={16} />
                 <OpenLinkButton action={openVideo} desc_width={80} description={"Open In Browser"} padding={6} width={16} height={16} />
                 {inChannel && song?.url?.includes('youtu') ? <AddButton action={addToQueue} description={"Play In Channel"} padding={8} width={12} height={12} /> : null}
             </div>

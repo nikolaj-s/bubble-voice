@@ -47,7 +47,8 @@ const Menu = () => {
         const serverNav = document.getElementsByClassName('server-navigation-container')[0];
         const controlBar = document.getElementsByClassName('control-bar-container')[0];
 
-        if (controlBar) controlBar.style.display = 'none'
+        if (controlBar) controlBar.style.display = 'none';
+        
         if (serverNav) serverNav.style.display = 'none';
 
         if (rmAmbiance) rmAmbiance.style.display = 'none';
@@ -115,7 +116,7 @@ const Menu = () => {
                 {permissions?.server_group_name === 'Owner' ? 
                 <SettingsCategoryButton margin={'0 0 10px 0'} action={navigateServerSettings} link={'delete-server'} active={window.location.hash.search('delete-server') !== -1} name={'Delete Server'} /> 
                 :
-                <SettingsCategoryButton margin={'0 0 10px 0'} name="Dispand Server" />
+                <SettingsCategoryButton margin={'0 0 10px 0'} name="Disband Server" />
                 }
             </div>
         </motion.div>

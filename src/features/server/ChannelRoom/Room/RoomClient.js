@@ -484,7 +484,7 @@ export class RoomClient {
         }
     }
 
-    closeProducer(type) {
+    async closeProducer(type) {
         try {
             if (!this.producerLabel.has(type)) {
                 console.log('There is no producer for this type ' + type)
@@ -495,7 +495,7 @@ export class RoomClient {
     
             console.log('Close producer', producer_id)
         
-            this.socket.emit('producerClosed', {
+            await this.socket.request('producerClosed', {
                 producer_id
             })
         
@@ -521,8 +521,12 @@ export class RoomClient {
     
             this.producers.delete(producer_id);
 
+            return;
+
         } catch (error) {
+            
             console.log(error);
+            return;
 
         }
     }
@@ -583,7 +587,7 @@ export class RoomClient {
                 return
         }
         
-        if (!this.device.canProduce('video') && !audio) {
+        if (!this?.device?.canProduce('video') && !audio) {
             this.dispatch({error: true, errorMessage: "Unable to produce video or audio"})
             return;
         }
@@ -821,6 +825,7 @@ export class RoomClient {
                 this.dispatch({action: 'webcam-loading-state', value: false})
             }, 500) 
 
+            return;
         } catch (error) {
             console.log(error)
 
@@ -828,7 +833,7 @@ export class RoomClient {
 
             this.dispatch({action: 'screen-share-loading-state', value: false})
 
-            this.closeProducer(type);
+            await this.closeProducer(type);
 
             if (error.message.includes('Queue')) {
                 
@@ -838,7 +843,7 @@ export class RoomClient {
                 this.dispatch({action: 'error', value: error.message})
             }
 
-            
+            return;
         }
     }
 
@@ -888,7 +893,7 @@ export class RoomClient {
         }
     }
 
-    exit(offline = false) {
+    async exit(offline = false) {
         try {
             let clean = function() {
                 this.consumerTransport.close();
@@ -899,7 +904,7 @@ export class RoomClient {
             }.bind(this)
     
             if (!offline) {
-                this?.socket?.request('leaves channel')
+                await this?.socket?.request('leaves channel')
                 .finally( function () {clean()})
             } else {
                 clean();
@@ -950,6 +955,7 @@ export class RoomClient {
             this.dispatch({action: "playSoundEffect", value: "connected"});
         }.bind(this))
         .catch(error => {
+            console.log(error)
             this.dispatch({action: 'sdp-error'});
         })
 
@@ -973,9 +979,9 @@ export class RoomClient {
            return this.dispatch({action: 'error', value: "Unable to establish a secure connection please try relaunching the application"})
         } else {
             try {
-                this.closeProducer('audioType');
-                this.closeProducer('screenType');
-                this.closeProducer('videoType');
+               await this.closeProducer('audioType');
+               await this.closeProducer('screenType');
+               await this.closeProducer('videoType');
                 this.consumerTransport.close();
                 this.producerTransport.close();
                 this.socket.off('disconnect');

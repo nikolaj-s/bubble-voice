@@ -19,6 +19,12 @@
 .video-card-details-container h3 {
     margin: 0px;
     font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
 .video-card-details-container p {
@@ -30,9 +36,11 @@
 .video-card-thumbnail-container {
     height: 100%;
     flex-shrink: 0;
-    width: 355px;
+    width: 300px;
     border-radius: 10px;
     background-color: black;
+    position: relative;
+    display: inline-block;
 }
 
 .video-card-thumbnail-container img,

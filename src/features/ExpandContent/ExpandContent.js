@@ -31,6 +31,8 @@ export const ExpandContent = () => {
 
     const [saved, toggleSaved] = React.useState(false);
 
+    const [copyState, toggleCopyState] = React.useState("Copy Link");
+
     const savedMedia = useSelector(selectSavedMedia);
 
     const iframe = useSelector(selectIframeExpanded);
@@ -77,6 +79,12 @@ export const ExpandContent = () => {
             const { clipboard } = window.require('electron');
 
             clipboard.writeText(expandedContent);
+
+            toggleCopyState("Copied");
+
+            setTimeout(() => {
+                toggleCopyState("Copy Link");
+            }, 1000)
 
         } catch (e) {
             return;

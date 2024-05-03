@@ -14,7 +14,6 @@ import { Image } from '../../../../Image/Image';
 // style
 import "./Song.css";
 import { setExpandedContent, setMetaData } from '../../../../../features/ExpandContent/ExpandContentSlice';
-import { PlayButton } from '../../../../buttons/PlayButton/PlayButton';
 
 export const Song = ({profile_pin, in_channel, in_social, search_result, playing, author, id, image, name, duration, action, liked, saved, addToQueue, inQueue, removeFromQueue, width = null, added_by, url, data, altSong}) => {
 
@@ -35,7 +34,7 @@ export const Song = ({profile_pin, in_channel, in_social, search_result, playing
     const time = `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`
     
     const expandContent = () => {
-        dispatch(setExpandedContent(`song:${url}`));
+        dispatch(setExpandedContent(url.includes('https://') ? url : `song:${url}`));
         dispatch(setMetaData(data));
     }
 

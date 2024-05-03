@@ -52,13 +52,13 @@ const ExpandContentSlice = createSlice({
                 } else if (expandedContent?.includes('https')) {
 
                     const text = expandedContent;
-
+                    
                     if (text.includes('redgif')) {
                     
                         state.iframe = "https://redgifs.com/ifr/" + (text.split('redgifs.com/')[1]?.includes('watch') ? text.split('redgifs.com/')[1]?.split('watch/')[1].toLowerCase() : text.split('redgifs.com/')[1]?.split('-')[0].toLowerCase());
                     
                     } else if (text.includes('youtu.be') || text.includes('youtube.com')) {
-                        console.log(text)
+                        
                         state.youtube = text.includes('youtu.be') ? text.split('be/')[1] : text.includes('youtube.com/v/') ? text.split('/v/')[1] : text.split('v=')[1];
 
                     } else if (text.includes('pornhub')) {
@@ -80,7 +80,9 @@ const ExpandContentSlice = createSlice({
                     } else if (text.includes('vimeo')) {
                         
                             state.iframe = "https://player.vimeo.com/video/" + text.split('com/')[1];
-                        
+                    }else if (text.includes('xxbrits') || text.includes('sextaped')) {
+
+                        state.iframe = text.replace('/videos/', '/embed/')
                     }  else {
                         state.iframe = text;
                     }

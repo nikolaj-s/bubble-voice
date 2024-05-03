@@ -8,37 +8,38 @@ import { Song } from '../../../components/widgets/Widgets/MusicWIdget/Song/Song'
 import { Loading } from '../../../components/LoadingComponents/Loading/Loading';
 
 import { SearchIcon } from '../../../components/Icons/SearchIcon/SearchIcon'
+import { selectVideoResults, setVideos } from '../../server/ChannelRoom/ServerDashBoard/ServerMedia/ServerMediaSlice';
+import { VideoSearch } from '../../../util/VideoSearch';
+import { selectServerId, throwServerError } from '../../server/ServerSlice';
 
 export const YoutubeSearch = () => {
 
     const [query, setQuery] = React.useState("");
 
+    const [loading, toggleLoading] = React.useState(false);
+
     const dispatch = useDispatch();
 
     const recentMedia = useSelector(selectRecentSongs);
 
-    const results = useSelector(selectSearchResults);
+    const results = useSelector(selectVideoResults);
 
-    const loading = useSelector(selectLoadingMusicState);
+    const serverId = useSelector(selectServerId);
 
-    const loadingRecentSongs = useSelector(selectLoadingRecentSongs);
-    
-    React.useEffect(() => {
-
-        if (recentMedia.length > 0) return;
-
-        if (loadingRecentSongs) return;
-        
-        dispatch(fetchRecentSongs());
-
-    }, [loadingRecentSongs, recentMedia])
-
-    const handleSearch = () => {
-        if (loading || loadingRecentSongs) return;
+    const handleSearch = async () => {
+        if (loading) return;
 
         if (query.length < 1) return;
 
-        dispatch(searchMedia(query));
+        toggleLoading(true);
+
+        const videos = await VideoSearch(query, serverId);
+
+        if (videos.error) return dispatch(throwServerError({errorMessage: videos.errorMessage}));
+
+        dispatch(setVideos(videos.media));
+
+        toggleLoading(false);
 
     }
 
@@ -47,7 +48,7 @@ export const YoutubeSearch = () => {
             handleSearch();
         }
     }
-console.log(results)
+
     return (
         <div className='youtube-search-container'>
             <div className='youtube-search-navigation'>
@@ -65,14 +66,14 @@ console.log(results)
             <div className='youtube-search-results-container'>
                 {results.length > 0 ?
                     results.map(song => {
-                        return <Song author={song.author} url={song.id} altSong={true} data={song} duration={song.duration} name={song.title} image={song.thumbnail}  />
+                        return <Song author={song.author} url={song.url} altSong={true} data={song} duration={song.duration} name={song.title} image={song.thumbnail}  />
                     })
                 : 
                 recentMedia.map(song => {
-                    return <Song author={song.author} url={song.id} altSong={true} data={song} duration={song.duration} name={song.title} image={song.thumbnail}  />
+                    return <Song author={song.author} url={song.url} altSong={true} data={song} duration={song.duration} name={song.title} image={song.thumbnail}  />
                 })
                 }
-                <Loading loading={loading || loadingRecentSongs} />
+                <Loading loading={loading} />
             </div>
         </div>
     )

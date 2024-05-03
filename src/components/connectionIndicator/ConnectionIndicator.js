@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectConnectionError, selectConnectionLoading } from '../../features/controlBar/ControlBarSlice';
-import { checkConnection, selectServerPing } from '../../features/server/ServerSlice';
+import { checkConnection, selectLoadingChannel, selectServerPing } from '../../features/server/ServerSlice';
 
 import { selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 import { ButtonAnimationWrapper } from '../buttons/ButtonAnimationWrapper/ButtonAnimationWrapper';
@@ -15,7 +15,7 @@ export const ConnectionIndicator = ({active, width}) => {
 
     const textColor = useSelector(selectTextColor);
 
-    const loading = useSelector(selectConnectionLoading);
+    const loading = useSelector(selectLoadingChannel);
 
     const error = useSelector(selectConnectionError);
     

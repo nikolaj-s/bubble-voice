@@ -38,9 +38,7 @@ export const User = ({user}) => {
 
     return (
         <>
-        {(hideNonVideoParticapents === true && user.webcam === false) || (hideNonVideoParticapents === true && prefs?.disabled_web_cam === true) ? null :
         <div 
-        key={user}
         style={{
             
             backgroundColor: user.active ? activeColor : user.color ? user.color : accentColor,
@@ -92,7 +90,6 @@ export const User = ({user}) => {
                 {user.screenshare ? prefs?.disable_stream ? <DisabledStreamIcon color={textColor} /> : <ScreenShare /> : null}
             </div>
         </div>
-        }
         </>
     )
 }

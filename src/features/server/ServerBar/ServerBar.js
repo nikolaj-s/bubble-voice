@@ -31,7 +31,7 @@ import { addPinnedMessage, removePinnedMessage, setPinnedMessages } from '../Cha
 import { MobileServerBanner } from '../../../components/MobileServerBanner/MobileServerBanner';
 import { clearDirectMessages, sendDirectMessage } from '../../Messages/MessagesSlice';
 
-import { clearMedia } from '../ChannelRoom/ServerDashBoard/ServerMedia/ServerMediaSlice';
+import { clearMedia, setVideos } from '../ChannelRoom/ServerDashBoard/ServerMedia/ServerMediaSlice';
 import { clearMessages, clearSocialById, deleteMessage, receiveMessage } from '../SocialSlice';
 import { updateUserStatus } from '../ChannelRoom/UserStatus/UserStatusSlice';
 
@@ -421,6 +421,8 @@ const Bar = () => {
 
         socket.on('image data cleared', () => {
             dispatch(clearSearchData());
+
+            dispatch(setVideos([]));
             
         })
 

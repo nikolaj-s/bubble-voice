@@ -29,6 +29,7 @@ import { ControlProfileButton } from './ControlProfileButton/ControlProfileButto
 import { MusicOverlayButton } from '../../components/buttons/MusicOverlayButton/MusicOverlayButton';
 import { toggleOverlay } from '../server/ChannelRoom/Room/Music/MusicSlice';
 import { selectUserImage } from '../settings/appSettings/accountSettings/accountSettingsSlice';
+import { selectLoadingMicrophoneProducer, selectLoadingScreenProducer, selectLoadingWebCamProducer } from '../server/ChannelRoom/Room/RoomSlice';
 
 
 
@@ -63,9 +64,9 @@ export const ControlBar = () => {
 
     const secondaryColor = useSelector(selectSecondaryColor);
 
-    const loadingWebCam = useSelector(selectLoadingWebCam);
+    const loadingWebCam = useSelector(selectLoadingWebCamProducer);
 
-    const loadingScreenShare = useSelector(selectLoadingScreenShare);
+    const loadingScreenShare = useSelector(selectLoadingScreenProducer);
 
     const selectingScreen = useSelector(selectingScreensState);
 
@@ -74,6 +75,8 @@ export const ControlBar = () => {
     const seenStreamingMessageThisSession = useSelector(selectSeenStreamingMessage);
 
     const profilePicture = useSelector(selectUserImage);
+
+    const loadingMicrophoneProducer = useSelector(selectLoadingMicrophoneProducer);
     
     React.useEffect(() => {
 
@@ -121,6 +124,8 @@ export const ControlBar = () => {
     const toggleFunction = (state) => {
 
         if (channel.disable_streams) return;
+
+        if (state === 'microphoneState' && loadingMicrophoneProducer) return;
         
         if (window.location.hash.includes("/appsettings/voice-video")) return;
 
@@ -195,9 +200,14 @@ export const ControlBar = () => {
                     padding={6}
                     desc_space={20}
                     desc_width={80}
-                    action={() => {toggleFunction('microphoneState')}} 
+                    action={() => {
+                    if (channel.disable_streams || loadingMicrophoneProducer) {
+                        return;
+                    }
+                    toggleFunction('microphoneState')
+                    }} 
                     state={microphoneState} 
-                    active={channel.disable_streams}
+                    active={channel.disable_streams || loadingMicrophoneProducer}
                     id={"toggle-microphone-button"}
                     />
                     <AudioToggleButton 
@@ -209,9 +219,13 @@ export const ControlBar = () => {
                     desc_width={80}
                     opacity={0.5}
                     altInvert={true}
-                    action={() => {toggleFunction('audioState')}} 
+                    action={() => {
+                    if (channel.disable_streams || loadingMicrophoneProducer) {
+                        return;
+                    }
+                    toggleFunction('audioState')}} 
                     state={audioState} 
-                    active={channel.disable_streams}
+                    active={channel.disable_streams || loadingMicrophoneProducer}
                     id={"mute-audio-toggle-button"}
                     description={(channel.disable_streams) ? null : `${audioState ? 'Deafen' : 'Un-Deafen'}`}
                     />

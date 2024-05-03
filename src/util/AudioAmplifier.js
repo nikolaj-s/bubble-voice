@@ -41,9 +41,9 @@ export const handleAmplifyLevel = (e) => {
 
     if (prefs) {
         if (stream) {
-            volume = prefs.stream_volume;
+            volume = prefs?.stream_volume ? Number(prefs.stream_volume) : 1;
         } else {
-            volume = prefs.volume;
+            volume = prefs?.volume ? Number(prefs.volume) : 1;
         }
     } 
     console.log(streaming);
@@ -91,7 +91,7 @@ export const handleAmplifyLevel = (e) => {
             amplified = amplifyMedia(e.target, Number(volume).toFixed(2));
         
         }
-        console.log(amplified)
+    
         audioMap.set(consumer_id, amplified);
 
     }
