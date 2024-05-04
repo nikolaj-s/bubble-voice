@@ -66,11 +66,11 @@ export const YoutubeSearch = () => {
             <div className='youtube-search-results-container'>
                 {results.length > 0 ?
                     results.map(song => {
-                        return <Song author={song.author} url={song.url} altSong={true} data={song} duration={song.duration} name={song.title} image={song.thumbnail}  />
+                        return <Song key={song.url} author={song.author} url={song.url} altSong={true} data={song} duration={song.duration} name={song.title} image={song.thumbnail}  />
                     })
                 : 
                 recentMedia.map(song => {
-                    return <Song author={song.author} url={song.url} altSong={true} data={song} duration={song.duration} name={song.title} image={song.thumbnail}  />
+                    return <Song key={song.url} author={song.author} url={song.url} altSong={true} data={song} duration={song.duration} name={song.title} image={song.thumbnail}  />
                 })
                 }
                 <Loading loading={loading} />

@@ -136,7 +136,7 @@ export const ExpandContent = () => {
         }
     // eslint-disable-next-line
     }, [])
-  console.log(youtube)
+  
     return (
         <>
         {expandedContent ? 
@@ -159,6 +159,7 @@ export const ExpandContent = () => {
             />
             <div style={{backgroundColor: secondaryColor}} className='content-expanded-inner-container'>
                 <div 
+                key={expandedContent}
                 style={{backgroundColor: (youtube || channelInfo) ? 'rgba(0,0,0,0)' : null}}
                 className='content-expanded-wrapper'>
                     {channelInfo ?

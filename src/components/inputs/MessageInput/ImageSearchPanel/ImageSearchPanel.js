@@ -229,7 +229,7 @@ export const ImageSearchPanel = ({channelId, hideOptions = false,direct_message,
                         <motion.div transition={{duration: 0.1}} key={mediaType} initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} className='message-image-search-results-container'>
                             {format === 'videos' ?
                             videoResults?.map(video => {
-                                return <VideoCard altAction={true} send={setVideo} data={video} />
+                                return <VideoCard key={video.url} altAction={true} send={setVideo} data={video} />
                             })
                             : mediaType === 'Videos' ?
                                     <EmojiMenu action={handleEmoji} social={true} width={'100%'} height={'100%'} />
@@ -252,7 +252,7 @@ export const ImageSearchPanel = ({channelId, hideOptions = false,direct_message,
                                         )
                                     })
                                     
-                                    : (images?.length > 0 ? images : loading ? [] : recommendations.filter(v => v.type === 'image').slice(0, 40)).map((image, key) => {
+                                    : (images?.length > 0 ? images : loading ? [] : recommendations.filter(v => v.type === 'image')).map((image, key) => {
                                         return (
                                             <ImagePreview altImage={image.preview} tag_action={handleTag} tags={image.tags} image={showFullResPreviews ? image.image : image?.image?.includes('gif') ? image.image : image.preview} nsfw={image.nsfw} action={(e) => {handleSelectImage({...image, preview: image.image, fallback_image: image.preview})}} />
                                         )

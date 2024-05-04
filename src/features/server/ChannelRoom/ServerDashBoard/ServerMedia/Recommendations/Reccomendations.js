@@ -17,7 +17,7 @@ export const Reccomendations = ({media, count, expand, openMetaData}) => {
             :
             <ResponsiveMasonry style={{width: 'calc(100% - 5px)'}} columnsCountBreakPoints={{800: 1, 1000: 2, 1500: 3, 1900: 4, 2500: 5}}>
                 <Masonry gutter='5px'> 
-                    {media.slice(0, count).map((img, key) => {
+                    {media.map((img, key) => {
                         return (
                            <>
                             {img.type === 'image' ?

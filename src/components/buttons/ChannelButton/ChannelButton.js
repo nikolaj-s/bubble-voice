@@ -101,7 +101,7 @@ export const ChannelButton = ({category_id, collapse, channel, action = () => {}
         if (active) dispatch(setChannelSocialId(null));;
 
         if (active && !channel.text_only) dispatch(handleChangePage('voice'));
-
+        
         if (loadingChannel) return;
         
         dispatch(setSelectedMember(""));

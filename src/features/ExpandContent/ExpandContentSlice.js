@@ -27,6 +27,11 @@ const ExpandContentSlice = createSlice({
                 state.reddit = false;
                 state.channelInfo = false;
             } else {
+                state.iframe = false;
+                state.youtube = false;
+                state.reddit = false;
+                state.channelInfo = false;
+
                 const expandedContent = action.payload;
 
                 state.selectedContent = action.payload;
@@ -42,7 +47,7 @@ const ExpandContentSlice = createSlice({
                 const imageFormats = ['.webp', '.jpg', '.jpeg', '.png', '.gif', 'images', '-jpg', '-jpeg', '-png', '-gif'];
 
                 const image = imageFormats.some(format => action.payload.includes(format));
-
+                
                 if (image) return;
 
                 if (expandedContent.type === 'reddit') {
@@ -63,7 +68,7 @@ const ExpandContentSlice = createSlice({
 
                     } else if (text.includes('pornhub')) {
         
-                        state.iframe = "https://www.pornhub.com/embed/" + (text.split('viewkey=')[1])
+                        state.iframe = "https://www.pornhub.com/embed/" + (text.split('viewkey=')[1]) + "?autostart=true"
         
                     } else  if (text.includes('xvideos')) {
         
