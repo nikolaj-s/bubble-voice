@@ -20,19 +20,17 @@ import { SenderInfo } from './SenderInfo/SenderInfo';
 import { setPanelPosition, setSelectedMember } from '../../features/server/ChannelRoom/MemberPanel/MemberPanelSlice';
 import { selectCurrentChannelId, selectServerMembers } from '../../features/server/ServerSlice';
 import { DateSpacer } from './DateSpacer/DateSpacer';
-import { GetTimeDifference } from '../../util/GetTimeDifference';
 import { ProfileImage } from './ProfileImage/ProfileImage';
-import { selectDisableNsfwBlur, selectHideLinksOnMedia, selectMaximizeMedia } from '../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { selectDisableNsfwBlur, selectMaximizeMedia } from '../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 import { MessageGallery } from './MessageGallery/MessageGallery';
 import { ProcessingIndicator } from './ProcessingIndicator/ProcessingIndicator';
 import { UploadedFileShare } from './UploadedFileShare/UploadeFileShare';
 import { LinkPreview } from './LinkPreview/LinkPreview';
-import { NsfwImageOverlay } from '../Image/NsfwImageOverlay/NsfwImageOverlay';
 import { ConvertTime } from '../../util/ConvertTime';
 import { RedditPost } from '../RedditPost/RedditPost';
 import { handleAddingMedia, selectLoadingMusicState } from '../../features/server/ChannelRoom/Room/Music/MusicSlice';
-import { Gif } from '../Gif/Gif';
+
 import { VideoCard } from '../VideoCard/VideoCard';
 
 export const Message = ({pinned_to_profile_state, activity_feed = false,dashboard = false, direct_message, message, overlay = false, id, channel_id, perm, pinMessage, pinned, index, previous_message, current_message, persist, pin_to_profile}) => {

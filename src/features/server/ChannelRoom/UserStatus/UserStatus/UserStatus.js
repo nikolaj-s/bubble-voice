@@ -81,7 +81,7 @@ export const UserStatus = ({user}) => {
                 <Image 
                 borderRadius={(user.profile_picture_shape !== 'circle' && user.profile_picture_shape !== 'undefined') ? '5px' : '50%'} disableErr={true}  image_class={"user-image"} cursor='pointer' image={user.user_image?.includes('gif') ? "" : user.user_image} />
                 }
-                <Decoration width={52} height={52} decoration={user.decoration} />
+                <Decoration cursor='pointer' width={52} height={52} decoration={user.decoration} />
                 {user.status === 'Away' || user.status === 'away' ?
                 <div 
                 

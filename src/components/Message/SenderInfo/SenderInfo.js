@@ -14,23 +14,30 @@ export const SenderInfo = ({prevDate, date, submenuId, activity = false, timeSta
 
     const profilePin = useSelector(selectProfilePinnedMessage);
 
-    const [copyDesc, toggleCopyDesc] = React.useState('Copy')
+    const [copyDesc, toggleCopyDesc] = React.useState('Copy Post Link')
 
-    const handleCopy = () => {
-        try {
+    const handleCopy = async () => {
+        try {   
+
+            if (!current_message?._id) return;
 
             const { clipboard } = window.require('electron');
 
-            clipboard.writeText(link);
+            clipboard.writeText(`https://bubble-sharing.netlify.app/post/${current_message?._id}`);
 
             toggleCopyDesc('Copied');
 
             setTimeout(() => {
-                toggleCopyDesc('Copy')
+                toggleCopyDesc('Copy Post Link')
             }, 500)
         } catch (error) {
-            console.log(error);
-            toggleCopyDesc('Error Copying');
+            await navigator.clipboard.writeText(`https://bubble-sharing.netlify.app/post/${current_message?._id}`);
+
+            toggleCopyDesc('Copied');
+
+            setTimeout(() => {
+                toggleCopyDesc('Copy Post Link')
+            }, 500)
         }
     }
 
@@ -68,7 +75,7 @@ export const SenderInfo = ({prevDate, date, submenuId, activity = false, timeSta
                     <>
                     {(userName === current_message.username && !direct_message) ? <PinToProfileButton borderRadius={"5px 0px 0px 5px"} pinned={profilePin?._id === current_message?._id} action={() => {pin_to_profile(current_message?._id)}} width={18} padding={5} height={18} /> : null}
                     {(perm && persist) ? <PinButton borderRadius={(userName === current_message.username && !direct_message) ? 0 : "5px 0px 0px 5px"} flip_description={index === 0} desc_width={50} description={pinned ? 'Unpin' : 'Pin'} padding={5} action={pinMessage} width={18} desc_space={12}  height={18} pinned={pinned} /> : null}
-                    {link ? <CopyButton borderRadius={0} action={handleCopy} padding={5} flip_description={index === 0} altInvert={true} width={18} height={18} description={copyDesc} desc_width={60} desc_space={12} /> : null}
+                    <CopyButton borderRadius={0} action={handleCopy} padding={5} flip_description={index === 0} altInvert={true} width={18} height={18} description={copyDesc} desc_width={80} desc_space={12} />
                     {perm ? <SubMenuButton altInvert={true} invert={false} target={`${id}-ctx-message-overlay`} flip_description={index === 0} desc_width={40} zIndex={2} description={"Extra"} desc_space={12} padding={5} width={18} height={18} borderRadius={"0px 5px 5px 0px"} /> : null}
                     </>
                     : null}                   

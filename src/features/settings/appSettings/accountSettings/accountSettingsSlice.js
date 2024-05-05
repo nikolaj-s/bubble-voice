@@ -47,7 +47,7 @@ export const fetchAccount = createAsyncThunk(
                 } else {
                     window.location.hash = '/dashboard';
                 }
-
+                console.log(account)
                 return account;
             } else {
                 return rejectWithValue({error: true, errorMessage: "No Valid Token"});
@@ -90,7 +90,7 @@ export const verifyAccount = createAsyncThunk(
 
 export const updateAccount = createAsyncThunk(
     'accountSettingsSlice/updateAccount',
-    async ({userImage, userBanner, newShape, color, bio, displayName, decoration, userImageGifFrame, userBannerGifFrame}, {rejectWithValue, getState, dispatch}) => {
+    async ({userImage, userBanner, newShape, color, bio, displayName, decoration, userImageGifFrame, userBannerGifFrame, hotLinkPostsDisabled}, {rejectWithValue, getState, dispatch}) => {
         const token = await getToken();
 
         const {password, newPassword, confirmNewPassword, showCaseScreenShots} = getState().accountSettingsSlice;
@@ -122,6 +122,8 @@ export const updateAccount = createAsyncThunk(
         data.append("userBannerGifFrame", userBannerGifFrame);
 
         data.append("userImageGifFrame", userImageGifFrame);
+
+        data.append("hotLinkPostsDisabled", hotLinkPostsDisabled);
 
         if (!token) return rejectWithValue({error: true, errorMessage: "validation error"})
 
@@ -259,6 +261,7 @@ const accountSettingsSlice = createSlice({
         loadingDecorations: true,
         decoration: "",
         decorations: [],
+        hotLinkedPostsDisabled: false
     },
     reducers: {
         handleUpdateSteamLink: (state, action) => {
@@ -315,6 +318,7 @@ const accountSettingsSlice = createSlice({
                 state.decoration = action.payload.account.decoration;
                 state.user_image_gif_frame = action.payload.account.user_image_gif_frame;
                 state.user_banner_gif_frame = action.payload.account.user_banner_gif_frame;
+                state.hotLinkedPostsDisabled = action.payload.account.hot_link_posts_disabled;
             } 
 
             state.change = false;
@@ -358,6 +362,8 @@ const accountSettingsSlice = createSlice({
             if (updated_info.profile_picture_shape) state.profilePictureShape = updated_info.profile_picture_shape;
 
             if (updated_info.decoration) state.decoration = updated_info.decoration;
+
+            state.hotLinkedPostsDisabled = updated_info.hot_link_posts_disabled;
 
             state.user_banner_gif_frame = updated_info.user_banner_gif_frame;
 
@@ -455,6 +461,8 @@ export const selectLoadingDecorations = state => state.accountSettingsSlice.load
 export const selectUserImageGifFrame = state => state.accountSettingsSlice.user_image_gif_frame;
 
 export const selectUserBannerGifFrame = state => state.accountSettingsSlice.user_banner_gif_frame;
+
+export const selectHotLinkedPostsState = state => state.accountSettingsSlice.hotLinkedPostsDisabled;
 
 // actions
 export const {toggleShowCaseScreenShots, handleUpdateSteamLink, handleUpdateBio, updateNewAccountState, handleSignOut, updateAccountInputState, accountSettingsCloseError } = accountSettingsSlice.actions;

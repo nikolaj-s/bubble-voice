@@ -5,7 +5,7 @@ import { useRoutes } from 'react-router'
 import { AnimatePresence } from 'framer-motion';
 
 // state
-import { selectUserBanner, selectUserImage, selectDisplayName, selectAccountSettingsLoading, selectAccountSettingsErrorState, selectAccountSettingsErrorMessage, updateAccount, updateAccountInputState, selectAccountSettingsPassword, selectAccountSettingsNewPassword, selectAccountSettingsConfirmNewPassword, accountSettingsCloseError, selectAccountSettingsStateChanged, selectProfilePictureShape, selectProfileBio, selectProfileColor, selectShowCaseScreenShotsState, selectUsersScreenShots, toggleShowCaseScreenShots, selectUsername, selectCurrentDecoration } from './accountSettingsSlice';
+import { selectUserBanner, selectUserImage, selectDisplayName, selectAccountSettingsLoading, selectAccountSettingsErrorState, selectAccountSettingsErrorMessage, updateAccount, updateAccountInputState, selectAccountSettingsPassword, selectAccountSettingsNewPassword, selectAccountSettingsConfirmNewPassword, accountSettingsCloseError, selectAccountSettingsStateChanged, selectProfilePictureShape, selectProfileBio, selectProfileColor, selectShowCaseScreenShotsState, selectUsersScreenShots, toggleShowCaseScreenShots, selectUsername, selectCurrentDecoration, selectHotLinkedPostsState } from './accountSettingsSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 
 // components
@@ -20,6 +20,7 @@ import { SettingsHeader } from '../../../../components/titles/SettingsHeader/Set
 
 import { EditMemberPanel } from './EditMemberPanel/EditMemberPanel';
 import { selectPrimaryColor, selectSecondaryColor } from '../appearanceSettings/appearanceSettingsSlice';
+import { ToggleButton } from '../../../../components/buttons/ToggleButton/ToggleButton';
 
 const Settings = () => {
 
@@ -46,6 +47,8 @@ const Settings = () => {
     const [newDisplayName, setNewDisplayName] = React.useState("");
 
     const [newDecoration, setNewDecoration] = React.useState("");
+
+    const [localHotLinkPostsState, toggleLocalHotLinkPostsState] = React.useState(false);
     
     // account slice state
     const displayName = useSelector(selectDisplayName);
@@ -86,6 +89,8 @@ const Settings = () => {
 
     const username = useSelector(selectUsername);
 
+    const hotLinkedPostsDisabledState = useSelector(selectHotLinkedPostsState);
+
     React.useEffect(() => {
         dispatch(setHeaderTitle("Account Settings"));
 
@@ -98,6 +103,8 @@ const Settings = () => {
         setNewBio(profileBio);
 
         setNewDecoration(currentDecoration);
+
+        toggleLocalHotLinkPostsState(hotLinkedPostsDisabledState);
 
         return () => {
             
@@ -142,13 +149,15 @@ const Settings = () => {
 
         setNewDecoration(currentDecoration);
 
+        toggleLocalHotLinkPostsState(hotLinkedPostsDisabledState);
+
         dispatch(updateAccountInputState({state: 'change', value: false}));
         
     }
     
     const handleApply = () => {
         console.log(userImageGifFrame)
-        dispatch(updateAccount({userImage: newUserImage, userBanner: newUserBanner, newShape: newShape, color: color, bio: newBio, displayName: newDisplayName, decoration: newDecoration, userImageGifFrame: userImageGifFrame, userBannerGifFrame: userBannerGifFrame}));
+        dispatch(updateAccount({userImage: newUserImage, userBanner: newUserBanner, newShape: newShape, color: color, bio: newBio, displayName: newDisplayName, decoration: newDecoration, userImageGifFrame: userImageGifFrame, userBannerGifFrame: userBannerGifFrame, hotLinkPostsDisabled: localHotLinkPostsState}));
     
         URL.revokeObjectURL(newUserBanner.preview);
 
@@ -211,6 +220,11 @@ const Settings = () => {
         setNewDecoration(value);
     }
 
+    const handleDisableHotLinkPosts = () => {
+        dispatch(updateAccountInputState({state: "change", value: true}));
+        toggleLocalHotLinkPostsState(!localHotLinkPostsState);
+    }
+
     return (
         <>
             <div className='settings-wrapper'>
@@ -223,6 +237,9 @@ const Settings = () => {
                 <TextInput action={handleInput} stateSelector='newPassword' marginBottom='2%' type='password' placeholder={"New Password"} inputValue={newPassword} />
                 <TextInput action={handleInput} inputValue={confirmNewPassword} stateSelector="confirmNewPassword" type='password' placeholder={"Confirm New Password"} />
                 </div>
+                <SettingsHeader title={"Privacy"} />
+                <InputTitle title={"Do not allow your posts to be hotlinkable"} />
+                <ToggleButton state={localHotLinkPostsState} action={handleDisableHotLinkPosts} />
                {stateChanged ? <ApplyCancelButton apply={handleApply} cancel={handleCancel} position={'fixed'} right={20} /> : null}
                 <SettingsSpacer />
             </div>

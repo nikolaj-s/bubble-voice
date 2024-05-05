@@ -75,7 +75,7 @@ export const ControlProfileButton = ({micState, inChannel}) => {
                 backgroundColor={secondaryColor} 
                 cursor='pointer' borderRadius={shape !== 'circle' ? 5 : '50%'} image={profilePicture} width='100%' height='100%' objectFit='cover' />
                 }
-                <Decoration decoration={decoration} width={40} height={40} />
+                <Decoration cursor='pointer' decoration={decoration} width={40} height={40} />
             </div>
             <h3 style={{color: color}}>{displayName}</h3>
         </div>
