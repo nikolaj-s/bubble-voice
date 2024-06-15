@@ -31,6 +31,8 @@ let update_available = false;
 
 let no_update = false;
 
+let disable_auto_launch = false;
+
 let loading_template = `
 
 <head>
@@ -148,6 +150,7 @@ try {
   
   hardwareAccelToggled = data?.toggled;
 
+  disable_auto_launch = data?.disable_auto_launch;
 } catch (error) {
 
   console.log(error)
@@ -155,7 +158,7 @@ try {
 
 }
 
-
+console.log(disable_auto_launch)
 // prevent multiple instances from occuring
 
 const lock = app.requestSingleInstanceLock();
@@ -316,7 +319,8 @@ function createWindow () {
     try {
       let window_data = {
         toggled: hardwareAccelToggled !== data?.toggled ? hardwareAccelToggled : data?.toggled,
-        bounds: win.getBounds()
+        bounds: win.getBounds(),
+        disable_auto_launch: disable_auto_launch
       }
       
       fs.writeFileSync(initPath, JSON.stringify(window_data))
@@ -660,9 +664,11 @@ ipcMain.on('download', (event, data) => {
 let tray;
 
 app.setLoginItemSettings({
-  openAtLogin: true,
-  args: ['--hidden']
+  openAtLogin: disable_auto_launch ? false : true,
+  args: ['--hidden'],
+  name: 'Bubble',
 })
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -754,6 +760,12 @@ ipcMain.on('get_app_ver', (event) => {
 ipcMain.on('write-hardware-change', (event, args) => {
   
   hardwareAccelToggled = args.toggled;
+
+})
+
+ipcMain.on('WRITE-APP-STARTUP-STATE', (event, args) => {
+
+  disable_auto_launch = args.toggled;
 
 })
 

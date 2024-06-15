@@ -161,14 +161,17 @@ export const sendMessage = createAsyncThunk(
 
             message.content.reddit = redditData;
 
-            if (file?.type?.includes('video')) {
+            if (!file?.type?.includes('image') && file?.size) {
 
                 let data = await UploadVideo(file);
             
                 if (data.error) {
                     dispatch(throwServerError({error: true, errorMessage: data.error}));
-                    return rejectWithValue({error: true})
+                    
+                    return rejectWithValue(message)
+                
                 }
+             
                 message.content.video_upload = {link: data.link, name: data.data.fileName};
                 
             } else if (file?.type?.includes('image')) {

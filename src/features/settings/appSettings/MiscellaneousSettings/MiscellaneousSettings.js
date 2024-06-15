@@ -15,7 +15,7 @@ import { SettingsSpacer } from '../../../../components/Spacers/SettingsSpacer/Se
 
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { miscSettingsChannelSpecificStateChange, miscSettingsClearError, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, selectActivityStatus, selectDisableChannelIcons, selectDisableMediaWidget, selectDisableTransparancyEffects, selectEnableGifsOutOfFocusInRoom, selectHardwareAcceleration,selectHideUserStatus, selectMiscSettingsError, selectMiscSettingsErrorMessage, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectMiscSettingsLoading, selectRestartNotice, selectShowFullResPreviews, selectSystemNotifcations } from './MiscellaneousSettingsSlice';
+import { handleAppAutoLaunchState, miscSettingsChannelSpecificStateChange, miscSettingsClearError, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, selectActivityStatus, selectAppAutoLaunchState, selectDisableChannelIcons, selectDisableMediaWidget, selectDisableTransparancyEffects, selectEnableGifsOutOfFocusInRoom, selectHardwareAcceleration,selectHideUserStatus, selectMiscSettingsError, selectMiscSettingsErrorMessage, selectMiscSettingsHideChannelBackground, selectMiscSettingsHideNonVideoParticapents, selectMiscSettingsLoading, selectRestartNotice, selectShowFullResPreviews, selectSystemNotifcations } from './MiscellaneousSettingsSlice';
 
 import { clearSaves } from '../../../SavedMedia/SavedMediaSlice';
 
@@ -53,6 +53,8 @@ const Settings = () => {
 
     const enableGifsOutoFocus = useSelector(selectEnableGifsOutOfFocusInRoom);
 
+    const appAutoLaunchState = useSelector(selectAppAutoLaunchState);
+
     React.useEffect(() => {
 
         dispatch(setHeaderTitle("Miscellaneous Settings"));
@@ -82,6 +84,10 @@ const Settings = () => {
         dispatch(miscSettingsChannelSpecificStateChange(state));
     }
 
+    const handleAppAutoLaunchStateLocal = () => {
+        dispatch(handleAppAutoLaunchState());
+    }
+
 
     return (
         <>
@@ -102,6 +108,8 @@ const Settings = () => {
             <InputTitle title={"Enable animated gifs out of focus *may cause performance impact in game."} />
             <ToggleButton state={enableGifsOutoFocus} action={() => {handleChannelSpecificStateChange('enableAnimatedGifsInRoomOutOfFocus')}} /> 
             <SettingsHeader title={"App Specific"} />
+            <InputTitle title={"Disable Application Auto Launch"} />
+            <ToggleButton state={appAutoLaunchState} action={handleAppAutoLaunchStateLocal} />
             <InputTitle title={"Disable Transparency Effects"} />
             <ToggleButton state={disableTransparancyEffects} action={() => {handleChannelSpecificStateChange('disableTransparancyEffects')}} />
             <InputTitle title={"Disable Hardware Acceleration"} />

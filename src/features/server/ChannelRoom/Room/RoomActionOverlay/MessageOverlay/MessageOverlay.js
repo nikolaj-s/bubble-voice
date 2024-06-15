@@ -65,7 +65,7 @@ export const MessageOverlay = ({data, onEnd, page}) => {
         initial={{scale: 0}} 
         animate={{scale: 1}} 
         exit={{scale: 0}} className='message-overlay-container'>
-            <h3 style={{color: textColor}}>Posted in: {channelName}</h3>
+            <h3 style={{color: textColor, opacity: 0.7}}>posted in: {channelName}</h3>
             <Message dashboard={true} overlay={true} message={data.content} current_message={data} />
         </motion.div>
     )

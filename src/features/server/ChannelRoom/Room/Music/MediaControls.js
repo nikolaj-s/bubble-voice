@@ -64,6 +64,7 @@ export const MediaControls = ({hover}) => {
     const volume = useSelector(selectMusicVolume);
 
     const handleSkip = async () => {
+
         if (musicQueue.length === 0) return;
 
         if (loading) return;
@@ -77,7 +78,12 @@ export const MediaControls = ({hover}) => {
         
         })
 
-        dispatch(toggleLoadingMusic(false));
+        setTimeout(() => {
+
+            dispatch(toggleLoadingMusic(false));
+
+        }, 500) 
+
     }
 
     const handleTogglePlaying = async () => {
@@ -100,7 +106,12 @@ export const MediaControls = ({hover}) => {
             return;
         })
         
-        dispatch(toggleLoadingMusic(false));
+        setTimeout(() => {
+
+            dispatch(toggleLoadingMusic(false));
+
+        }, 500)
+        
 
     }
 

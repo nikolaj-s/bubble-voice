@@ -7,6 +7,8 @@ import "./ImageSearchFilterMenu.css";
 import { BoolButton } from '../../../../buttons/BoolButton/BoolButton';
 import { TextInput } from '../../../TextInput/TextInput';
 import { LinkInput } from './LinkInput/LinkInput';
+import { selectDisableSafeSearch } from '../../../../../features/server/ServerSlice';
+import { SafeSearchIndicator } from '../../../../SafeSearchIndicator/SafeSearchIndicator';
 
 export const ImageSearchFilterMenu = ({sortBy, setSortBy, format, updateFormat, mediaLocation, setMediaLocation, videoSort = false, allowVideoOption = false}) => {
 
@@ -19,6 +21,8 @@ export const ImageSearchFilterMenu = ({sortBy, setSortBy, format, updateFormat, 
     const accentColor = useSelector(selectAccentColor);
 
     const textColor = useSelector(selectTextColor);
+
+    const safeSearchDisabled = useSelector(selectDisableSafeSearch);
 
     const handleFormatChange = (v) => {
         toggleFormatMenuState(false);
@@ -96,6 +100,7 @@ export const ImageSearchFilterMenu = ({sortBy, setSortBy, format, updateFormat, 
                 }}>Sort By: {sortBy}</p>
             </ButtonAnimationWrapper>
             }
+            <SafeSearchIndicator active={safeSearchDisabled} />
         </div>
         {formatMenuState ?
         <div style={{backgroundColor: primaryColor}} className='format-mini-menu'>

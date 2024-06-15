@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { clearLocalData, fetchHardWareAcceleration, fetchSavedLocalData, saveHardwareAcceleration, saveLocalData } from "../../../../util/LocalData";
+import { clearLocalData, fetchAppStartUpState, fetchHardWareAcceleration, fetchSavedLocalData, saveAppStartUpState, saveHardwareAcceleration, saveLocalData } from "../../../../util/LocalData";
 import { BuildSystemNotification } from "../../../../util/BuildSytemNotification";
 
 export const fetchMiscellaneousSettings = createAsyncThunk(
@@ -29,9 +29,11 @@ export const fetchSavedHardwareAcceleration = createAsyncThunk(
 
             const data = await fetchHardWareAcceleration();
 
-            if (data?.error || !data) return rejectWithValue({error: true});
+            const disabledAppAutoLaunch = await fetchAppStartUpState();
 
-            return data;
+            if (data?.error || !data) return rejectWithValue({error: true});
+          
+            return {...data, disabledAppAutoLaunch: disabledAppAutoLaunch};
 
         } catch (error) {
             console.log(error);
@@ -118,9 +120,17 @@ const MiscellaneousSettingsSlice = createSlice({
         muteSocial: false,
         enablePushToTalkSoundEffect: false,
         disableMediaWidgetStatusUpdates: false,
-        enableAnimatedGifsInRoomOutOfFocus: false
+        enableAnimatedGifsInRoomOutOfFocus: false,
+        disableAppAutoLaunch: false
     },
     reducers: {
+        handleAppAutoLaunchState: (state, action) => {
+
+            saveAppStartUpState(!state.disableAppAutoLaunch);
+
+            state.disableAppAutoLaunch = !state.disableAppAutoLaunch;
+
+        },
         pushPokeNotification: (state, action) => {
 
             if (state.enabledSystemNotifications) {
@@ -192,6 +202,8 @@ const MiscellaneousSettingsSlice = createSlice({
     extraReducers: {
         [fetchSavedHardwareAcceleration.fulfilled]: (state, action) => {
             state.hardwareAcceleration = action.payload.toggled;
+
+            if (action.payload.disabledAppAutoLaunch) state.disableAppAutoLaunch = true;
         },
         [fetchSavedHardwareAcceleration.rejected]: (state, action) => {
             return;
@@ -329,6 +341,8 @@ export const selectDisableMediaWidgetStatusUpdates = state => state.Miscellaneou
 
 export const selectEnableGifsOutOfFocusInRoom = state => state.MiscellaneousSettingsSlice.enableAnimatedGifsInRoomOutOfFocus;
 
-export const { toggleWebVersion,toggleAppFocus, setVideoVolume, pushPokeNotification, setDefaultServer, changeRoomScale, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, miscSettingsClearError, miscSettingsChannelSpecificStateChange } = MiscellaneousSettingsSlice.actions;
+export const selectAppAutoLaunchState = state => state.MiscellaneousSettingsSlice.disableAppAutoLaunch;
+
+export const { handleAppAutoLaunchState, toggleWebVersion,toggleAppFocus, setVideoVolume, pushPokeNotification, setDefaultServer, changeRoomScale, miscSettingsClearLocalData, miscSettingsToggleHardwareAcceleration, miscSettingsClearError, miscSettingsChannelSpecificStateChange } = MiscellaneousSettingsSlice.actions;
 
 export default MiscellaneousSettingsSlice.reducer;

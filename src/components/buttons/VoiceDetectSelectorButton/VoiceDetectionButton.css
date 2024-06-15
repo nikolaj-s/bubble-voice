@@ -1,0 +1,40 @@
+
+.voice-activation-type-selector {
+    width: calc(50% - 8px);
+    padding: 4px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    border-radius: 5px;
+    position: relative;
+    transition: 0.05s;
+}
+
+.voice-activation-type-selector h4 {
+    font-size: 0.9rem;
+    margin: 0;
+    text-align: center;
+    font-weight: 400;
+}
+
+.voice-state-selected {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.voice-state-selected div {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+    border-radius: 50%;
+}

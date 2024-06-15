@@ -15,7 +15,7 @@ import { Error } from '../../../Error/Error';
 
 // state
 import { Loading } from '../../../LoadingComponents/Loading/Loading';
-import {  fetchRecentSongs, handleAddingMedia, like_song, searchMedia, selectLoadingMusicState, selectLoadingRecentSongs, selectMusicError, selectMusicErrorMessage, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, selectRecentSongs, selectSavesVisible, selectSearchResults, selectSearchResultsVisible, throwMusicError, toggleLoadingMusic, toggleMusicPlaying, toggleResultsVisible, toggleSavesVisible, un_like_song, updateMusicVolume } from '../../../../features/server/ChannelRoom/Room/Music/MusicSlice';
+import {  fetchRecentSongs, handleAddingMedia, like_song, searchMedia, selectLoadingMusicState, selectLoadingRecentSongs, selectMusicError, selectMusicErrorMessage, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, selectRecentSongs, selectSavesVisible, selectSearchResults, selectSearchResultsVisible, setTime, throwMusicError, toggleLoadingMusic, toggleMusicPlaying, toggleResultsVisible, toggleSavesVisible, un_like_song, updateMusicVolume } from '../../../../features/server/ChannelRoom/Room/Music/MusicSlice';
 
 // style
 import "./MusicWidget.css";
@@ -164,26 +164,48 @@ export const MusicWidget = ({roomOverlay, editing = false, widget, controls = tr
     }   
 
     const handlePlayPause = async () => {
+
+        if (loading) return;
+
         if (queue.length === 0 || editing === true) return;
+
+        dispatch(toggleLoadingMusic(true));
 
         await socket.request('toggle playing music', {playing: !playing})
         .catch(error => {
 
             dispatch(throwMusicError({error: true, errorMessage: error}));
 
+            setTimeout(() => {
+                dispatch(toggleLoadingMusic(false));
+            }, 1000)
         })
 
+        setTimeout(() => {
+            dispatch(toggleLoadingMusic(false));
+        }, 500)
     }
 
     const handleSkip = async () => {
 
+        if (loading) return;
+
         if (queue.length === 0 || editing === true) return;
+
+        dispatch(toggleLoadingMusic(true));
 
         await socket.request('skip song')
         .catch(error => {
-            console.log(error)
             dispatch(throwMusicError({error: true, errorMessage: error}))
+            
+            setTimeout(() => {
+                dispatch(toggleLoadingMusic(false));
+            }, 1000)
         })
+
+        setTimeout(() => {
+            dispatch(toggleLoadingMusic(false));
+        }, 500)
     }
 
     const handleInput = (value) => {

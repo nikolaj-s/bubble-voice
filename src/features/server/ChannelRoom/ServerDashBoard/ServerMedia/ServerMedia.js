@@ -106,7 +106,11 @@ export const ServerMedia = ({media, expand}) => {
 
             const images = await ImageSearch(query ? query : mediaQuery, serverId, format, mediaLocation, sortBy);
 
-            if (images.error) return dispatch(throwServerError({error: true, errorMessage: images.errorMessage}))
+            if (images.error) {
+                dispatch(toggleLoadingNewMedia(false));
+                dispatch(throwServerError({error: true, errorMessage: images.errorMessage}));
+                return;
+            }
             
             dispatch(setNewMedia(images.media));
             
@@ -115,7 +119,11 @@ export const ServerMedia = ({media, expand}) => {
             
             const videos = await VideoSearch(query ? query : mediaQuery, serverId);
 
-            if (videos.error) return dispatch(throwServerError({error: true, errorMessage: videos.errorMessage}));
+            if (videos.error) {
+                dispatch(throwServerError({error: true, errorMessage: videos.errorMessage}));
+                dispatch(toggleLoadingNewMedia(false));
+                return;
+            } 
 
             dispatch(setVideos(videos.media));
         }

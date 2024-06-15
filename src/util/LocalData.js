@@ -171,7 +171,7 @@ export const fetchSocialData = async () => {
     const w_data = localStorage.getItem("SOCIALDATA");
 
     let d  = JSON.parse(w_data);
-    console.log(d)
+   
     return;
 }
 
@@ -231,6 +231,57 @@ export const fetchSavedUserPrefs = async () => {
         return;
 
     }
+}
+
+// handle app start up setting
+export const saveAppStartUpState = async (bool) => {
+    try {
+
+        const os = window.require('os');
+
+        const isMac = os.platform() === "darwin";
+
+        if (isMac) return;
+
+        const keytar = window.require('keytar');
+
+        const ipcRenderer = window.require('electron').ipcRenderer;
+
+        await keytar.setPassword("APP", "STARTUP", JSON.stringify({toggled: bool}));
+
+        ipcRenderer.send('WRITE-APP-STARTUP-STATE', {toggled: bool});
+
+    } catch (error) {
+        console.log(error);
+
+        return {error: true}
+    }
+}
+
+export const fetchAppStartUpState = async (bool) => {
+    try {
+
+        const os = window.require('os');
+
+        const isMac = os.platform() === "darwin";
+
+        if (isMac) return;
+
+        const keytar = window.require('keytar');
+
+        const data = await keytar.getPassword("APP", "STARTUP");
+        
+        const parsed = JSON.parse(data);
+
+        if (!parsed) return false;
+
+        return parsed?.toggled;
+
+    } catch (error) {   
+        console.log(error);
+
+        return {error: true}
+    } 
 }
 
 // handle hardware acceleration toggle

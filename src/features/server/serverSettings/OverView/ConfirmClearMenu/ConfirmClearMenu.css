@@ -1,0 +1,44 @@
+
+.confirm-clear-outer-container {
+    position: fixed;
+    top: 0;
+    left: 250px;
+    width: calc(100% - 250px);
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+}
+
+.confirm-clear-inner-container{
+    padding: 15px;
+    border-radius: 20px;
+    box-shadow: 5px 5px 25px rgba(0, 0, 0, 0.595);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 450px;
+}
+
+.confirm-clear-inner-container h2 {
+    margin: 0 0 10px 0;
+    font-weight: 300;
+    text-align: center;
+}
+
+.confirm-button-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.confirm-button-wrapper h3 {
+    font-weight: 200;
+    font-size: 0.9rem;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.confirm-button-wrapper h3:hover {
+    scale: 0.95;
+}

@@ -32,9 +32,13 @@ const ExpandContentSlice = createSlice({
                 state.reddit = false;
                 state.channelInfo = false;
 
-                const expandedContent = action.payload;
+                let expandedContent;
 
-                state.selectedContent = action.payload;
+                if (action.payload.includes('.host.church') && action.payload.includes('.md.')) {
+                    expandedContent = action.payload.replace('.md', '');
+                } else {
+                    expandedContent = action.payload;
+                }
                 
                 if (expandedContent.content_type === 'channel-info') {
                     state.channelInfo = true;
@@ -47,7 +51,9 @@ const ExpandContentSlice = createSlice({
                 const imageFormats = ['.webp', '.jpg', '.jpeg', '.png', '.gif', 'images', '-jpg', '-jpeg', '-png', '-gif'];
 
                 const image = imageFormats.some(format => action.payload.includes(format));
-                
+
+                state.selectedContent = expandedContent;
+
                 if (image) return;
 
                 if (expandedContent.type === 'reddit') {

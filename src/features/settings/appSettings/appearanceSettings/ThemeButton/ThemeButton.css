@@ -1,0 +1,71 @@
+
+.theme-button-container {
+    width: 150px;
+    height: 150px;
+    display: flex;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-right: 3px;
+    margin-top: 3px;
+    cursor: pointer;
+    position: relative;
+}
+.theme-button-container:hover {
+    opacity: 0.8;
+}
+
+.side-nav-prev-display-container {
+    height: 100%;
+    width: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.side-nav-prev-display-container div {
+    width: 15px;
+    height: 15px;
+    margin-bottom: 2px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.main-content-display-prev {
+    width: calc(100% - 20px);
+    height: calc((100% - 10px));
+    margin-top: 10px;
+    border-top-left-radius: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+
+.control-bar-display-prev {
+    height: 10px;
+    width: 30px;
+    flex-shrink: 0;
+}
+
+.theme-button-selected-indicator {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    top: 3px;
+    right: 3px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border: 1px solid black;
+    opacity: 0.8;
+}
+
+.theme-button-selected-indicator div {
+    width: 19px;
+    height: 19px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background-color: black;
+}

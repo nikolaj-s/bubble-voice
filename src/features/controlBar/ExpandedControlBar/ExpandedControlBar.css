@@ -33,3 +33,8 @@
     border-radius: 10px;
     background-color: black;
 }
+
+.voice-input-type-container {
+    width: 100%;
+    display: flex;
+}

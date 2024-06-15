@@ -15,6 +15,7 @@ import { Loading } from '../../../components/LoadingComponents/Loading/Loading';
 import { selectSoundEffectVolume, setSoundEffectsVolume } from '../../settings/soundEffects/soundEffectsSlice';
 import { ToggleButton } from '../../../components/buttons/ToggleButton/ToggleButton';
 import { miscSettingsChannelSpecificStateChange, selectPushToTalkSoundEffectState } from '../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
+import { VoiceDetectionButton } from '../../../components/buttons/VoiceDetectSelectorButton/VoiceDetectionButton';
 
 export const ExpandedControlBar = ({close}) => {
 
@@ -116,8 +117,10 @@ export const ExpandedControlBar = ({close}) => {
         className='expanded-control-bar-container'
         >
             <InputTitle fontSize='0.7rem' marginTop={6} marginBottom={6} title={"Input Type"} />
-            <RadioButton action={handleToggleVoiceState} state={pushToTalk} name={"Push To Talk"} />
-            <RadioButton action={handleToggleVoiceState}  state={voiceActivity} name={"Voice Activation"} />
+            <div className='voice-input-type-container'>
+                <VoiceDetectionButton action={handleToggleVoiceState} active={voiceActivity} state='Voice Activation' margin={'0px 4px 0px 0px'} />
+                <VoiceDetectionButton action={handleToggleVoiceState} active={pushToTalk} />
+            </div>
             <InputTitle title={"Enable Push To Talk Sound Effect"} />
             <ToggleButton state={pushToTalkSoundEffect} action={() => {dispatch(miscSettingsChannelSpecificStateChange("enablePushToTalkSoundEffect"))}}  />
             <InputTitle fontSize='0.7rem' marginBottom={6} marginTop={6} title={"Preview Webcam"} />

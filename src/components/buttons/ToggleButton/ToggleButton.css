@@ -8,7 +8,7 @@
     padding: 5px;
     align-self: flex-start;
     cursor: pointer;
-    transition: 0.1s;
+    transition: 0.05s;
 }
 
 .toggle-button-container .switch {

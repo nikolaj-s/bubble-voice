@@ -13,7 +13,7 @@ export const VideoMediaList = () => {
     return (
         <div className='video-search-outer-container'>
             {videos.map(video => {
-                return <VideoCard key={video.url} data={video} />
+                return <VideoCard data={video} />
             })}
         </div>
     )

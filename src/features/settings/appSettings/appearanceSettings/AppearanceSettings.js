@@ -10,12 +10,15 @@ import { DropDownList } from '../../../../components/DropDownList/DropDownList'
 import { ToggleButton } from '../../../../components/buttons/ToggleButton/ToggleButton';
 // state
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
-import { changeTheme, saveTheme, selectAccentColor, selectActivationColor, selectAppearanceChangeMade, selectCurrentTheme, selectDisableTransitionAnimations, selectGlassState, selectGradient, selectGradients, selectPrimaryColor, selectScaleState, selectSecondaryColor, selectTextColor, selectThemeOptions, toggleDisableAnimatedTransitions, updateColorValue, updateGlassState, updateGradient, updateScaleState } from './appearanceSettingsSlice';
+import { changeTheme, saveTheme, selectAccentColor, selectActivationColor, selectAppearanceChangeMade, selectCurrentTheme, selectDisableTransitionAnimations, selectGlassState, selectGradient, selectGradients, selectPrimaryColor, selectScaleState, selectSecondaryColor, selectTextColor, selectThemeOptions, selectThemes, toggleDisableAnimatedTransitions, updateColorValue, updateGlassState, updateGradient, updateScaleState } from './appearanceSettingsSlice';
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 import { ColorInput } from '../../../../components/inputs/ColorInput/ColorInput';
 import { TextButton } from '../../../../components/buttons/textButton/TextButton';
 import { Gradients } from './Gradients/Gradients';
 import { RadioButton } from '../../../../components/buttons/RadioButton/RadioButton';
+import { ThemeButton } from './ThemeButton/ThemeButton';
+
+import "./AppearanceSettings.css"
 
 const Settings = () => {
 
@@ -43,6 +46,8 @@ const Settings = () => {
     const currentTheme = useSelector(selectCurrentTheme);
 
     const themeOptions = useSelector(selectThemeOptions);
+
+    const themes = useSelector(selectThemes);
 
     const changeMade = useSelector(selectAppearanceChangeMade);
 
@@ -111,7 +116,13 @@ const Settings = () => {
         <div className='settings-wrapper'>
             <SettingsHeader title={"Presets"} />
             <InputTitle title={"Change Preset"} />
-            <DropDownList action={handleToggleAppearanceModes} selectedItem={currentTheme.label} list={themeOptions} />
+            <div className='theme-wrapper'>
+            {
+            themeOptions.map((theme, key) => {
+                return <ThemeButton action={handleToggleAppearanceModes} color_data={themes[theme.state]} active={currentTheme.label === theme.label} theme={theme} />
+            })
+            }
+            </div>
             {/** 
                 <SettingsHeader title={"Choose Background"} />
             <RadioButton action={handleToggleImageBackground} name={'Use Gradients'} state={!useImageBackground} />

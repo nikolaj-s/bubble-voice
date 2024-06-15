@@ -96,7 +96,7 @@ const appearanceSettingsSlice = createSlice({
                 primaryColor: "rgb(95, 113, 97)",
                 secondaryColor: "rgb(109, 139, 116)",
                 accentColor: "rgb(239, 234, 216)",
-                textColor: "rgb(208, 201, 192)",
+                textColor: "rgb(0,0,0)",
                 activationColor: "rgb(95, 113, 97)",
             },
             neon: {
@@ -349,6 +349,8 @@ export const selectServerAmbiance = state => state.appearanceSettingsSlice.disab
 export const selectScaleState = state => state.appearanceSettingsSlice.scale;
 
 export const selectUseImageBackgroundState = state => state.appearanceSettingsSlice.useImageBackground;
+
+export const selectThemes = state => state.appearanceSettingsSlice.color_themes;
 
 export const selectGlassPrimaryColor = state => {
     return `rgba(${state.appearanceSettingsSlice.primaryColor.split('rgb(')[1].split(')')[0]}, 0.4)`

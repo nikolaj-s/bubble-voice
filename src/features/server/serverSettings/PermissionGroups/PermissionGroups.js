@@ -180,10 +180,11 @@ const Wrapper = () => {
         <InputTitle title={"Create Permission Group"} />
         <TextInput marginBottom='2%' action={handleNewServerGroupName} placeholder={"Permission Group Name"} inputValue={newServerGroupName}  />
         <TextButton action={pushNewServerGroup} name={"Create"} />
-        {updated ? <ApplyCancelButton cancel={handleCancel} apply={handleSaveChanges} /> : null}
+        
         <SettingsSpacer />
         </>
         : null}
+        {updated ? <ApplyCancelButton cancel={handleCancel} apply={handleSaveChanges} /> : null}
         <Loading loading={loading} error={error} />
         </>
     )

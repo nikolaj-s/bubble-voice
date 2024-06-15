@@ -76,10 +76,7 @@ export const MessageInput = ({handleStatus = () => {}, setFallbackImage, channel
     }
 
     const {getRootProps} = useDropzone({
-        accept: {
-            "image/*": ['.jpeg', '.png', '.webp', '.jpg', '.gif'],
-            "video/*": ['.mp4', '.webm'],
-        },
+        
         maxFiles: 1,
         onDrop: async (acceptedFiles, e) => {
             
@@ -91,12 +88,12 @@ export const MessageInput = ({handleStatus = () => {}, setFallbackImage, channel
 
             if (acceptedFiles.length === 0) return;
 
-            if (acceptedFiles[0].type.includes('video')) {
+            if (!acceptedFiles[0].type.includes('image')) {
 
-                if (acceptedFiles[0].size > 50000000) return dispatch(throwServerError({error: true, errorMessage: "Video File Size Exceeds 50mb"}));
+                if (acceptedFiles[0].size > 50000000) return dispatch(throwServerError({error: true, errorMessage: "File Size Exceeds 50mb"}));
 
                 setFiles([Object.assign(acceptedFiles[0], {preview: URL.createObjectURL(acceptedFiles[0])})]);
-
+                console.log(acceptedFiles)
             } else {
                 toggleProcessingImage(true);
 

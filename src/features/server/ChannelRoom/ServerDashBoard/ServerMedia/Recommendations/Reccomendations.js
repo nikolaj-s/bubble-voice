@@ -15,13 +15,13 @@ export const Reccomendations = ({media, count, expand, openMetaData}) => {
         {media?.length === 0 ?
             <NoMedia alt={true} message={"No Server Media, Start Using The Image Search To Populate This Area"} />
             :
-            <ResponsiveMasonry style={{width: 'calc(100% - 5px)'}} columnsCountBreakPoints={{800: 1, 1000: 2, 1500: 3, 1900: 4, 2500: 5}}>
+            <ResponsiveMasonry key="recommendations-data" style={{width: 'calc(100% - 5px)'}} columnsCountBreakPoints={{800: 1, 1000: 2, 1500: 3, 1900: 4, 2500: 5}}>
                 <Masonry gutter='5px'> 
                     {media.map((img, key) => {
                         return (
                            <>
                             {img.type === 'image' ?
-                            <ImagePreview altImage={img.preview} nsfw={img.nsfw} image={img.image} expand={(i) => {expand(i); openMetaData(img)}} tags={img.tags} />
+                            <ImagePreview key={img.image} altImage={img.preview} nsfw={img.nsfw} image={img.image} expand={(i) => {expand(i); openMetaData(img)}} tags={img.tags} />
                             :
                             <VideoPreview action={() => {expand(img.link)}} video={img} />}
                             </>

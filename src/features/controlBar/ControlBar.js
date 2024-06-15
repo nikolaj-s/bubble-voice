@@ -103,7 +103,7 @@ export const ControlBar = () => {
 
         if (seenStreamingMessageThisSession) return;
 
-        if (streamingInterval === 1200) dispatch(toggleStreamingMessage(true))
+        if (streamingInterval === 2700) dispatch(toggleStreamingMessage(true))
 
         if (currentScreen) {
             

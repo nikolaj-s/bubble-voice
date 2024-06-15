@@ -14,7 +14,7 @@ import { ApplyCancelButton } from '../../../../components/buttons/ApplyCancelBut
 import { SettingsHeader } from '../../../../components/titles/SettingsHeader/SettingsHeader';
 
 // state
-import { clearSearchData, selectBannedKeywords, selectInactiveChannel, selectInactiveChannels, selectServerBanner, selectServerId, selectServerName, selectServerWelcomeMessage, selectUsersPermissions, setServerName, setWelcomeMessage, throwServerError, updateBannedKeywords, updateInactiveChannel, updateServerBanner } from '../../ServerSlice';
+import { clearSearchData, handleDisableSafeSearch, selectBannedKeywords, selectDisableSafeSearch, selectInactiveChannel, selectInactiveChannels, selectServerBanner, selectServerId, selectServerName, selectServerWelcomeMessage, selectUsersPermissions, setServerName, setWelcomeMessage, throwServerError, updateBannedKeywords, updateInactiveChannel, updateServerBanner } from '../../ServerSlice';
 import { setHeaderTitle } from '../../../contentScreen/contentScreenSlice';
 import { socket } from '../../ServerBar/ServerBar';
 import { Loading } from '../../../../components/LoadingComponents/Loading/Loading';
@@ -28,6 +28,8 @@ import { selectPinnedSubreddits, setActivityFeed, setPinnedSubReddits } from '..
 import { AddSubRedditMenu } from './AddSubRedditMenu/AddSubRedditMenu';
 import { PinnedSubRedditWrapper } from '../../../../components/PinnedSubReddit/PinnedSubRedditWrapper';
 import { setVideos } from '../../ChannelRoom/ServerDashBoard/ServerMedia/ServerMediaSlice';
+import { ToggleButton } from '../../../../components/buttons/ToggleButton/ToggleButton';
+import { ConfirmClearMenu } from './ConfirmClearMenu/ConfirmClearMenu';
 
 const Wrapper = () => {
 
@@ -58,6 +60,10 @@ const Wrapper = () => {
 
     const [pinnedSubReddits, setLocalPinnedSubReddits] = React.useState([]);
 
+    const [localDisableSafeSearch, toggleLocalDisableSafeSearch] = React.useState(false);
+
+    const [confirmMediaClearScreen, toggleConfirmMediaClearScreen] = React.useState(false);
+
     const serverName = useSelector(selectServerName);
 
     const serverBanner = useSelector(selectServerBanner);
@@ -77,6 +83,8 @@ const Wrapper = () => {
     const bannedKeywords = useSelector(selectBannedKeywords);
 
     const l_pinnedSubreddits = useSelector(selectPinnedSubreddits);
+
+    const disableSafeSearch = useSelector(selectDisableSafeSearch);
 
     // handle local state changes
     const handleBannerChange = (image) => {
@@ -135,7 +143,8 @@ const Wrapper = () => {
                 welcome_message: newServerWelcomeMessage,
                 banned_keywords: newKeywords,
                 clearActivity: clearActivity,
-                pinned_sub_reddits: pinnedSubReddits
+                pinned_sub_reddits: pinnedSubReddits,
+                disable_safe_search: localDisableSafeSearch
             }
 
             await socket.request('update server', data)
@@ -164,7 +173,8 @@ const Wrapper = () => {
                 if (data.data.pinned_sub_reddits) {
                     dispatch(setPinnedSubReddits(data.data.pinned_sub_reddits));
                 }
-                console.log(data.data)
+                
+                dispatch(handleDisableSafeSearch(data.data.disable_safe_search));
                 
                 dispatch(setActivityFeed(data.data.activity_feed));
 
@@ -195,6 +205,8 @@ const Wrapper = () => {
 
     const clearImageSearchData = async () => {
         try {
+
+            toggleConfirmMediaClearScreen(false);
 
             toggleLoading(true);
 
@@ -237,11 +249,13 @@ const Wrapper = () => {
 
         setLocalPinnedSubReddits(l_pinnedSubreddits);
 
+        toggleLocalDisableSafeSearch(disableSafeSearch);
+
         return () => {
             dispatch(setHeaderTitle("Select Channel"))
         }
     // eslint-disable-next-line
-    }, [serverName, bannedKeywords, welcomeMessage, l_pinnedSubreddits])
+    }, [serverName, bannedKeywords, welcomeMessage, l_pinnedSubreddits, disableSafeSearch])
 
     const handleCancel = () => {
         setUpdate(false)
@@ -251,6 +265,7 @@ const Wrapper = () => {
         setNewServerWelcomeMessage(welcomeMessage);
         setKeywords(bannedKeywords);
         toggleClearActivity(false);
+        toggleLocalDisableSafeSearch(disableSafeSearch);
     }
     
     const changeInactiveChannel = (_, channel) => {
@@ -297,7 +312,12 @@ const Wrapper = () => {
 
         setLocalPinnedSubReddits(pinnedSubReddits.filter(s => s.url !== url));
         
-        console.log(pinnedSubReddits)
+    }
+
+    const handleToggleDisableSafeSearch = () => {
+        setUpdate(true);
+
+        toggleLocalDisableSafeSearch(!localDisableSafeSearch);
     }
 
     return (
@@ -356,12 +376,19 @@ const Wrapper = () => {
         <SettingsHeader zIndex={2} title={"Data"} />
         <ImageSearchKeywordFilter keywords={newKeywords} removeKeyword={removeKeyWord} addKeyword={handleAddKeyword} />
         <InputTitle title={"Clear Media Search Recommendation Data"} />
-        <TextButton name={"Clear"} action={clearImageSearchData} />
+        <TextButton name={"Clear"} action={() => {toggleConfirmMediaClearScreen(true)}} />
         <InputTitle title={"Clear Activity Feed"} />
         <TextButton action={handleClearActivityFeed} name={clearActivity ? "Hit Apply To Save Changes" : "Clear"} toggled={clearActivity} />
         <SettingsHeader title={"Set Inactive User Channel"} />
         <InputTitle title={"Users who go inactive will automatically be moved to this channel"} />
         <DropDownList action={changeInactiveChannel} selectedItem={inactiveChannel.label} list={inactiveChannels}  />
+        </>
+        : null}
+        {permissions?.user_can_manage_server_safe_search ?
+        <>
+        <SettingsHeader title={"Media"} />
+        <InputTitle title={"Disable Safe Search Within Media"} />
+        <ToggleButton state={localDisableSafeSearch} action={handleToggleDisableSafeSearch} />
         </>
         : null}
         {permissions?.user_can_edit_server_password ?
@@ -376,6 +403,7 @@ const Wrapper = () => {
         {update ? <ApplyCancelButton cancel={handleCancel} apply={submitChange} /> : null}
         <Loading loading={loading} />
         <SettingsSpacer />
+        {confirmMediaClearScreen ? <ConfirmClearMenu cancel={() => {toggleConfirmMediaClearScreen(false)}} clear={clearImageSearchData} /> : null}
         </>
     )
 }

@@ -12,6 +12,8 @@ export const ChannelStatus = ({status, active}) => {
 
     const [hover, toggleHover] = React.useState(false);
 
+    const [mouseDown, toggleMouseDown] = React.useState(false);
+
     const textColor = useSelector(selectTextColor);
 
     const focused = useSelector(selectAppFocusedState);
@@ -28,9 +30,12 @@ export const ChannelStatus = ({status, active}) => {
     return (
         <div 
         onMouseEnter={() => {toggleHover(true)}}
-        onMouseLeave={() => {toggleHover(false)}}
+        onMouseLeave={() => {toggleHover(false); toggleMouseDown(false)}}
+        onMouseDown={() => {toggleMouseDown(true)}}
+        onMouseUp={() => {toggleMouseDown(false)}}
         style={{
-            backgroundColor: hover ? primaryColor : null
+            backgroundColor: hover ? primaryColor : null,
+            transform: mouseDown ? 'scale(0.95)' : 'scale(1)'
         }}
         onClick={handleOpenMedia}
         className={`channel-status-wrapper`}>

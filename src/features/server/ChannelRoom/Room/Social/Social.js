@@ -228,7 +228,7 @@ export const Social = ({hideChannelBackgrounds, currentChannel, channelId, socia
     }
    
     const send = async (textStyle) => {
-        console.log(mediaVideo)
+       
         if (!permission.user_can_post_channel_social) return;
         
         if (text.replace(/\s/g, '').length < 1 && !image.size && !emoji && !mediaVideo.url) return;
@@ -269,7 +269,7 @@ export const Social = ({hideChannelBackgrounds, currentChannel, channelId, socia
         
         }
 
-        data = {...data, file: image?.size && !image?.type?.includes('video') ? image : null}
+        data = {...data, file: image?.size && image?.type?.includes('image') ? image : null}
         
         messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
         
@@ -318,10 +318,11 @@ export const Social = ({hideChannelBackgrounds, currentChannel, channelId, socia
 
     const handleImage = (image) => {
 
-        if (image.size > 1000000 && !image.type.includes('video')) {
+        if (image.size > 1000000 && image.type.includes('image')) {
             dispatch(throwServerError({errorMessage: "Image File Size Cannot Be Larger Than 1MB"}));
             return;
         }
+
         setImage(image);
     }
 

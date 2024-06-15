@@ -44,7 +44,7 @@ export const StreamingMessage = () => {
                 </div>
                 <h3
                 style={{color: textColor}}
-                >You have been streaming for over 20 minutes, please consider donating to cover server costs as streaming video is not FREE!</h3>
+                >You have been streaming for over 45 minutes, please consider donating to cover server costs as streaming video is not FREE!</h3>
                 <TextButton action={openDonateLink} name="Contribute" icon={<PayPalIcon />} />
             </div>
             
