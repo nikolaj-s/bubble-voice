@@ -207,7 +207,8 @@ export const ChannelButton = ({category_id, collapse, channel, action = () => {}
             const id = e.dataTransfer.getData('text');
 
             if (!id || id.split(' ').length > 1) return;
-
+            console.log(channel)
+            console.log(id, channel._id, category_id);
             move(id, channel._id, category_id);
 
         } catch (error) {
@@ -244,7 +245,8 @@ export const ChannelButton = ({category_id, collapse, channel, action = () => {}
             
             style={{
                 display: (!active && collapse && channel?.users?.length === 0 && !unReadMessage || (!channel.auth && collapse)) ? 'none' : null,
-                marginBottom: (channel.auth && channel?.users?.length > 0) ? 10 : null
+                marginBottom: (channel.auth && channel?.users?.length > 0) ? 10 : null,
+                position: 'relative'
             }} 
         >
             <div 
@@ -314,7 +316,7 @@ export const ChannelButton = ({category_id, collapse, channel, action = () => {}
                 )
             }) : null}
             </div>
-            <div onDragOver={(e) => {e.preventDefault()}} style={{width: '100%', height: collapse ? 0 : 10, flexShrink: 0, backgroundColor: moveIndicator && !draggingUser ? activationColor : null, zIndex: draggingChannel ? 2 : -1, pointerEvents: 'all', position: 'absolute'}} onDrop={handleNewChannelPosition} onDragEnter={() => {toggleMoveIndicator(true)}} onDragLeave={() => {toggleMoveIndicator(false)}} />
+            <div onDragOver={(e) => {e.preventDefault()}} style={{width: '100%', height: collapse ? 0 : 10, flexShrink: 0, backgroundColor: moveIndicator && !draggingUser ? activationColor : null, zIndex: draggingChannel ? 2 : -1, pointerEvents: 'all', position: 'absolute', bottom: 0}} onDrop={handleNewChannelPosition} onDragEnter={() => {toggleMoveIndicator(true)}} onDragLeave={() => {toggleMoveIndicator(false)}} />
         </div>
 
         </>

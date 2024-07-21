@@ -27,7 +27,7 @@ export const ImageOfTheDay = ({imageOfTheDay}) => {
         <div 
         style={{backgroundColor: secondaryColor}}
         className='image-of-the-day-container'>
-            {imageOfTheDay ?
+            {imageOfTheDay && imageOfTheDay?.query ?
             <>
             <div 
             className='image-of-the-day-wrapper'>

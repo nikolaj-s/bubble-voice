@@ -362,6 +362,7 @@ const serverSlice = createSlice({
         },
         clearSearchData: (state, action) => {
             state.popular_searches = [];
+            state.imageOfTheDay = {};
         },
         toggleCreateChannelMenu: (state, action) => {
             state.create_channel_menu_open = action.payload;

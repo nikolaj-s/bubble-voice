@@ -119,7 +119,7 @@ const Settings = () => {
                 <TextInput keyCode={handleKeyCodeUpdate} stateSelector='share_screen' inputValue={local['share_screen'] ? local['share_screen'].key : shareScreenKey.key} />
                 <AltCloseCornerButton action={() => {handleKeyCodeUpdate({}, "share_screen", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} />
             </div>    
-            <InputTitle title={"Screen Shot *Screen Shots Auto Share To Your Current Channel"} />
+            <InputTitle title={"Screenshot *Screenshots Auto Share To Your Current Channel"} />
             <div className='key-bind-input-wrapper'>
                 <TextInput keyCode={handleKeyCodeUpdate} stateSelector='screen_shot' inputValue={local['screen_shot'] ? local['screen_shot'].key : screenShotKey.key} />
                 <AltCloseCornerButton action={() => {handleKeyCodeUpdate({}, "screen_shot", {nativeEvent: {key: ""}, keyCode: "", key: ""})}} />
