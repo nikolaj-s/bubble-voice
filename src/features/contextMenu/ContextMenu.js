@@ -1199,7 +1199,7 @@ export const ContextMenu = () => {
         onClick={() => {closeCtxMenu()}}
         className='context-menu-mouse-nullifier'>
             <motion.div
-            onClick={(e) => {e.stopPropagation()}}
+            
             style={{
                 top: ctxCordinates.y,
                 left: ctxCordinates.x,
