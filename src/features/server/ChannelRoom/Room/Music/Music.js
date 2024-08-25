@@ -147,7 +147,7 @@ export const Music = () => {
             clearInterval(interval);
         }
     }, [time, currentlyPlaying, musicQueue, musicPlaying])
-
+console.log(currentlyPlaying)
     return (
         <>
         
@@ -159,10 +159,7 @@ export const Music = () => {
         }}
         id={'room-media-player-component'}
         className='active-user-container'>
-            <img className='media-player-corner-thumbnail' src={musicQueue[0]?.thumbnail} />
             <div
-            
-            
             style={{transition: '0.2s'}} className='youtube-player-wrapper' id="youtube-media-container">
                 <YouTube 
                 
@@ -185,6 +182,8 @@ export const Music = () => {
                         height: '100%',
                     }} />
                     <div className='youtube-disable-clicking'>
+                        <img className='media-player-corner-thumbnail' src={musicQueue[0]?.thumbnail} />
+            
                         <div className='song-title-container'>
                             <p style={{color: textColor}}>{musicQueue[0]?.title}</p>
                             <p style={{color: textColor, fontSize: '0.7rem', opacity: 0.7}}>Added By: {musicQueue[0]?.added_by}</p>

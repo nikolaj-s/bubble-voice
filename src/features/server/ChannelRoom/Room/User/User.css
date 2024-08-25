@@ -72,9 +72,10 @@
     align-items: center;
     justify-content: flex-end;
     justify-content: space-evenly;
-    border-radius: 4px;
+    border-radius: 10px;
+    padding: 4px;
     z-index: 2;
-    opacity: 0.8;
+    opacity: 1;
     max-width: calc(100% - 10px);
     flex-wrap: wrap;
 }

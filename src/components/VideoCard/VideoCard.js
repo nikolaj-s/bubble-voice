@@ -76,7 +76,7 @@ export const VideoCard = ({mediaOfTheDay,data = {}, send = () => {}, altAction, 
         onClick={open}
         style={{
             zIndex: mediaOfTheDay ? 2 : null,
-            backgroundColor: hover ? accentColor : glassColor,
+            backgroundColor: mediaOfTheDay ? primaryColor : hover ? accentColor : glassColor,
             borderRadius: mediaOfTheDay ? 0 : null
         }}
         onMouseEnter={() => {toggleHover(true)}}

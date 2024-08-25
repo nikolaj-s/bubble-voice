@@ -99,9 +99,14 @@ export const EditMemberPanel = ({
                 className='edit-panel-profile-preview'>
                     <div className='profile-banner-preview-wrapper'>
                         <Decoration decoration={currentDecoration} width={130} height={130} />
-                        <img className='profile-baner-source' src={newBanner?.preview || userBanner} />
+                        <img className='profile-baner-source'
+                        style={{
+                            border: 'none',
+                            backgroundColor: 'black'
+                        }}
+                        src={newBanner?.preview || userBanner} />
                         <div className='profile-image-source'>
-                            <img style={{borderRadius: newShape === 'square' ? 5 : '50%', objectFit: 'cover', width: '100%', height: '100%'}}  src={newImage?.preview || userImage} />
+                            <img style={{borderRadius: newShape === 'square' ? 5 : '50%', objectFit: 'cover', width: '100%', height: '100%', backgroundColor: 'black'}}  src={newImage?.preview || userImage} />
                         </div>
                         
                     </div>

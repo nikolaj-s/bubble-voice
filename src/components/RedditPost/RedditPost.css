@@ -57,7 +57,7 @@
 
 .reddit-post-info-container h3,
 .reddit-post-info-container p {
-    margin: 5px;
+    margin: 0px;
     padding: 0;
     cursor: pointer;
     opacity: 0.6;

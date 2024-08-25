@@ -1,6 +1,6 @@
 .new-account-state-container {
     position: fixed;
-    z-index: 20;
+    z-index: 10;
     top: 0;
     left: 0;
     width: 100%;
@@ -11,8 +11,8 @@
 }
 
 .inner-new-account-state-container {
-    width: 100%;
-    height: 100%;
+    width: calc(100% - 120px);
+    height: calc(100% - 100px);
     border-radius: var(--border-radius);
     display: flex;
     flex-direction: column;
@@ -36,8 +36,8 @@
 .new-account-nav-container {
     display: flex;
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: 60px;
+    right: 125px;
     justify-content: flex-end;
     width: 100%;
     margin-bottom: 5px;

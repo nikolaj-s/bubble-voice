@@ -29,5 +29,6 @@
 .link-info-preview-wrapper h3,
 .link-info-preview-wrapper p {
     margin: 5px 0px;
-    word-break: break-all;
+    word-break: keep-all;
+    white-space: break-spaces;
 }

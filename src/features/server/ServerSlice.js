@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import { fetchMusicWidgetVolume } from "../../util/LocalData";
 
 import { socket } from "./ServerBar/ServerBar";
-import { addActivityMessage, setActivityFeed, setPinnedSubReddits } from "./ChannelRoom/ServerDashBoard/ServerDashBoardSlice";
+import { addActivityMessage, setActivityFeed, SetMediaOfTheDay, setPinnedSubReddits } from "./ChannelRoom/ServerDashBoard/ServerDashBoardSlice";
 import { setVideos } from "./ChannelRoom/ServerDashBoard/ServerMedia/ServerMediaSlice";
 
 export const unBanMember = createAsyncThunk(
@@ -110,6 +110,7 @@ export const fetchServerDetails = createAsyncThunk(
             return rejectWithValue({error: true, errorMessage: error});
         })
 
+        dispatch(SetMediaOfTheDay({media: server.image_of_the_day}));
 
         dispatch(setPinnedSubReddits(server?.pinned_sub_reddits));
 

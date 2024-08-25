@@ -201,7 +201,7 @@ export const ChannelList = ({loading}) => {
     return (
         <>
         <motion.div 
-        style={{backgroundColor: glassState ? `rgba(${secondaryColor.split('(')[1].split(')')[0]}, 0.8)` : secondaryColor, maxHeight: currentScreen ? 'calc(100% - 360px)' : currentChannelId && (currentChannel?.users?.length > 1 && !currentChannel?.disable_streams) ? 'calc(100% - 208px)' : 'calc(100%)', paddingBottom: 40}}
+        style={{backgroundColor: glassState ? `rgba(${secondaryColor.split('(')[1].split(')')[0]}, 0.8)` : secondaryColor, maxHeight: currentScreen ? 'calc(100% - 360px)' : currentChannelId && (currentChannel?.users?.length > 1 && !currentChannel?.disable_streams) ? 'calc(100% - 208px)' : 'calc(100% - 169px)', paddingBottom: 40}}
         className='channel-list-outer-container'>
             {categories?.map(category => {
                 return <Category moveCategory={handleReOrderCategories} draggingCategory={draggingCategory} toggleDraggingCategory={toggleDraggingCategory} category_id={category._id} key={category._id} catagoryName={category.category_name} channels={localChannels.filter(c => c.category === category._id)} draggingChannel={draggingChannel} toggleDraggingChannel={toggleDraggingChannel} toggleDragginUser={toggleDragginUser} draggingUser={draggingUser} move={handleReorder} handleJoinChannel={handleJoinChannel} loading={loading} />

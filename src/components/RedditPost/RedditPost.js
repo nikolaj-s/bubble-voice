@@ -12,7 +12,7 @@ import { NsfwImageOverlay } from '../Image/NsfwImageOverlay/NsfwImageOverlay';
 import { selectDisableNsfwBlur } from '../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { Iframe } from '../Iframe/Iframe';
 
-export const RedditPost = ({data = {}, action, disableMax, inSocial}) => {
+export const RedditPost = ({data = {}, action, disableMax, inSocial, mediaOfTheDay}) => {
 
     const [hover, toggleHover] = React.useState(false);
 
@@ -79,11 +79,12 @@ export const RedditPost = ({data = {}, action, disableMax, inSocial}) => {
         onMouseLeave={() => {toggleHover(false)}}
         onClick={(e) => {e.preventDefault()}} 
         style={{
-            backgroundColor: inSocial ? null : hover ? primaryColor : null,
-            padding: inSocial ? 0 : null,
+            backgroundColor: mediaOfTheDay ? primaryColor : inSocial ? null : hover ? primaryColor : null,
+            padding: mediaOfTheDay ? 5 : inSocial ? 0 : null,
             marginBottom: inSocial ? 5 : null,
             maxWidth: inSocial ? 600 : null,
-            borderRadius: inSocial ? 0 : null
+            borderRadius: mediaOfTheDay ? 10 : inSocial ? 0 : null,
+            width: mediaOfTheDay ? '100%' : null
         }}
         className='reddit-post-container'>
                 <div className='reddit-post-info-container'>
@@ -97,14 +98,18 @@ export const RedditPost = ({data = {}, action, disableMax, inSocial}) => {
                         />
                         <p onClick={openAlt} style={{color: textColor, margin: 0, opacity: 0.8, fontSize: '0.8rem'}}>{data.domain}</p>
                     </div>
-                   {inSocial ? null : <CopyButton action={handleCopy} borderRadius={8} zIndex={2} width={16} height={16} description={copied ? "Copied" : "Copy"} />}
+                   {inSocial ? null : <CopyButton action={handleCopy} borderRadius={8} zIndex={2} width={14} height={14} padding={5} description={mediaOfTheDay ? null : copied ? "Copied" : "Copy"} />}
                     
                 </div>
                 <p className='reddit-post-title' style={{color: textColor, marginBottom: 4}}>{data.title}</p>
                 {data.selftext?.length > 1 ?
                 <p className='reddit-post-title' style={{color: textColor}} >{data.selftext}</p>
                 : null}
-                <div className='reddit-media-container'>
+                <div
+                style={{
+                    borderRadius: mediaOfTheDay ? 10 : null
+                }}
+                className='reddit-media-container'>
                     {data?.thumbnail && data?.thumbnail?.startsWith('https://') ?
                     <img className='background-blur-red-effect' src={data.thumbnail} />
                     : null}
@@ -117,7 +122,7 @@ export const RedditPost = ({data = {}, action, disableMax, inSocial}) => {
                     : data.gallery_data ?
                     <SimpleImageCarousel expand={action} images={data.gallery_data.items.map(id => `https://i.redd.it/${id.media_id}.jpg`)} />
                     : (data.url.includes('.jpg') || data.url.includes('.png') || data.url.includes('.webp') || data.url.includes('.gif') || data.url.includes('.jpeg')) && data.url.startsWith('https') ?
-                    <Image  height={inSocial ? 350 : 500} borderRadius={20} expandContent={() => {action(data.url)}} objectFit='contain' cursor='pointer' image={data.url} />
+                    <Image  height={inSocial ? 350 : 500} borderRadius={mediaOfTheDay ? 5 : 20} expandContent={() => {action(data.url)}} objectFit='contain' cursor='pointer' image={data.url} />
                     : null}
                     {data.over_18 && !disableBlur ?
                     <NsfwImageOverlay /> : null}

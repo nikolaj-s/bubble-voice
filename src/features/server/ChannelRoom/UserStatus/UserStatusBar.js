@@ -193,6 +193,10 @@ export const UserStatusBar = () => {
             offlineUsers.map((u) => {
                 return <UserStatus user={u} key={u._id} />
             })}
+            <div style={{
+                height: 20,
+                flexShrink: 0
+            }} />
         </div>
         }
         </>

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ServerWelcomeMessage } from './ServerWelcomeMessage/ServerWelcomeMessage';
 import { DividerButton } from '../../../../../components/Spacers/DividerButton/DividerButton';
 import { ImageOfTheDay } from './ImageOfTheDay/ImageOfTheDay';
-import { selectHideActivityFeed, selectHideImageOfTheDay, selectHideRecentPin, selectPinnedMessages, selectPinnedSubreddits, toggleHideActivityFeed, toggleHideImageOfTheDay, toggleRecentPinnedMessage } from '../ServerDashBoardSlice';
+import { selectHideActivityFeed, selectHideImageOfTheDay, selectHideRecentPin, selectMediaOfTheDay, selectPinnedMessages, selectPinnedSubreddits, toggleHideActivityFeed, toggleHideImageOfTheDay, toggleRecentPinnedMessage } from '../ServerDashBoardSlice';
 import { ActivityFeed } from './ActivityFeed/ActivityFeed';
 import { selectImageOfTheDay } from '../../../ServerSlice';
 import { selectDisableTransitionAnimations, selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice';
@@ -29,7 +29,7 @@ export const ActivityBoard = ({loading}) => {
 
     const hideRecentPin = useSelector(selectHideRecentPin);
 
-    const imageOfTheDay = useSelector(selectImageOfTheDay);
+    const imageOfTheDay = useSelector(selectMediaOfTheDay);
 
     const textColor = useSelector(selectTextColor);
 
@@ -76,6 +76,7 @@ export const ActivityBoard = ({loading}) => {
                 {hideActivityFeed ? null : <ActivityFeed />}
                 
             </div>
+            
         </motion.div>
         }
         </>

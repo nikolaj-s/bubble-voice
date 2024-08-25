@@ -140,7 +140,7 @@ export const updateAccount = createAsyncThunk(
 
             return response.data;
         })
-
+        console.log(update)
         if (update && socket) {
             await socket.request('update member file')
             .then(res => {

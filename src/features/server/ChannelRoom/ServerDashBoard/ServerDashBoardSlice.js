@@ -2,6 +2,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { socket } from "../../ServerBar/ServerBar";
 import { throwServerError } from "../../ServerSlice";
 
+import Axios from 'axios';
+
 export const FetchPins = createAsyncThunk(
     'FetchPins/ServerDashBoardSlice',
     async (_, {rejectWithValue, dispatch, getState}) => {
@@ -69,6 +71,39 @@ export const FetchScreenShots = createAsyncThunk(
     }
 )
 
+export const SetMediaOfTheDay = createAsyncThunk(
+    'SetMediaOfTheDay/ServerDashboardSlice',
+    async ({media}, {rejectWithValue, dispatch}) => {
+        try {
+
+            let mediaOfTheDay = {};
+
+            if (media.type === 'subreddit') {
+
+                const data = await Axios.get(`http://www.reddit.com${media.media_state}top/.json?t=day`).then(res => {
+
+                    if (res.data) {
+                        return res.data.data.children[0]?.data;
+                    }
+
+                })
+
+                mediaOfTheDay = {...media, media_data: data};
+
+            } else {   
+                
+                mediaOfTheDay = media;
+            
+            }
+
+            return mediaOfTheDay;
+
+        } catch (error) {
+            return rejectWithValue({error: true});
+        }
+    }
+)
+
 const ServerDashBoardSlice = createSlice({
     name: "ServerDashBoardSlice",
     initialState: {
@@ -84,7 +119,8 @@ const ServerDashBoardSlice = createSlice({
         hideActivityFeed: true,
         hideRecentlyPinnedMessage: false,
         pinnedSubReddits: [],
-        loadedSubreddits: {}
+        loadedSubreddits: {},
+        mediaOfTheDay: {}
     },
     reducers: {
         setLoadedSubReddit: (state, action) => {
@@ -170,6 +206,15 @@ const ServerDashBoardSlice = createSlice({
         [FetchActivityFeed.rejected]: (state, action) => {
             state.error = true;
             state.errorMessage = action.payload.errorMessage;
+        },
+        [SetMediaOfTheDay.fulfilled]: (state, action) => {
+            state.mediaOfTheDay = action.payload;
+        },
+        [SetMediaOfTheDay.rejected]: (state, action) => {
+            state.mediaOfTheDay = {};
+        },
+        [SetMediaOfTheDay.pending]: (state, action) => {
+            state.mediaOfTheDay = {};
         }
     }
 })
@@ -196,6 +241,8 @@ export const selectPinnedSubreddits = state => state.ServerDashBoardSlice.pinned
 export const selectLoadedSubreddits = state => state.ServerDashBoardSlice.loadedSubreddits;
 
 export const selectHideRecentPin = state => state.ServerDashBoardSlice.hideRecentlyPinnedMessage;
+
+export const selectMediaOfTheDay = state => state.ServerDashBoardSlice.mediaOfTheDay;
 
 export const {toggleRecentPinnedMessage, setLoadedSubReddit, setPinnedSubReddits, setActivityFeed, addActivityMessage, toggleHideActivityFeed, toggleHideImageOfTheDay, setPinnedMessages, removePinnedMessage, addPinnedMessage  } = ServerDashBoardSlice.actions;
 
