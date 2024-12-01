@@ -132,6 +132,7 @@
     height: auto;
     min-height: 90px;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .music-widget-icon-wrapper {

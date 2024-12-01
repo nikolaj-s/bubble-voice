@@ -259,7 +259,7 @@ function createWindow () {
         if (process.argv.includes('--hidden')) {
           win.hide();
         } else {
-            win.show();
+          win.show();
         }
 
       }, 500)

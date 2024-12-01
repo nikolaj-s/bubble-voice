@@ -36,12 +36,8 @@ export const Image = ({aspect_ratio, alt_image = null, draggable = false,image_c
 
     const handleError = (e) => {
 
-        toggleLoading(false);
-        
-        if (alt_image) return e.target.src = alt_image;
-
         toggleError(true);
-    console.log('error loading img')
+    
     }
 
     const onLoadStart = (e) => {

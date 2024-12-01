@@ -20,7 +20,6 @@ export const Music = () => {
 
     const [player, setPlayer] = React.useState(null);
 
-
     const dispatch = useDispatch();
 
     const [currentlyPlaying, setCurrentlyPlaying] = React.useState("");
@@ -147,7 +146,7 @@ export const Music = () => {
             clearInterval(interval);
         }
     }, [time, currentlyPlaying, musicQueue, musicPlaying])
-console.log(currentlyPlaying)
+
     return (
         <>
         

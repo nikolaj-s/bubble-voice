@@ -122,7 +122,7 @@ export const Song = ({profile_pin, in_channel, in_social, search_result, playing
             <p className='song-time-stamp' style={{
                 color: textColor,
                 fontSize: 10
-            }}>{time}</p>}
+            }}>{data.livestream ? 'LIVE' : time}</p>}
         </div>
     )
 }
