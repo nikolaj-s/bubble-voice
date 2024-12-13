@@ -35,8 +35,12 @@ export const Image = ({aspect_ratio, alt_image = null, draggable = false,image_c
     }
 
     const handleError = (e) => {
-
-        toggleError(true);
+        
+        if (e.target.src !== alt_image) {
+            e.target.src = alt_image;
+        } else {
+            toggleError(true);
+        }
     
     }
 

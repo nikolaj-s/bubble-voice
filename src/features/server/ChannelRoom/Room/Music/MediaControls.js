@@ -1,10 +1,10 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectAccentColor, selectGlassPrimaryColor, selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice'
+import { selectPrimaryColor, selectSecondaryColor, selectTextColor } from '../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 import { MusicOverlayButton } from '../../../../../components/buttons/MusicOverlayButton/MusicOverlayButton';
-import { selectLoadingMusicState, selectMediaColor, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, selectMuteState, selectTime, setMediaColor, toggleLoadingMusic, toggleMuted, toggleOverlay, updateMusicVolume } from './MusicSlice';
+import { selectLoadingMusicState, selectMusicPlayingState, selectMusicQueue, selectMusicVolume, selectMuteState, selectTime, setMediaColor, toggleLoadingMusic, toggleMuted, toggleOverlay, updateMusicVolume } from './MusicSlice';
 import { selectUsername } from '../../../../settings/appSettings/accountSettings/accountSettingsSlice';
-import { selectCurrentChannel, selectMusicSavedState, selectUsersPermissions, throwServerError } from '../../../ServerSlice';
+import { selectCurrentChannel, selectUsersPermissions, throwServerError } from '../../../ServerSlice';
 import { SkipButton } from '../../../../../components/buttons/SkipButton/SkipButton';
 
 import { socket } from '../../../ServerBar/ServerBar';
@@ -15,11 +15,8 @@ import { AudioToggleButton } from '../../../../../components/buttons/mediaButton
 import { selectExperimentalAudioCapture } from '../../../../settings/appSettings/voiceVideoSettings/voiceVideoSettingsSlice';
 import { selectCurrentScreen } from '../../../../controlBar/ControlBarSlice';
 import { Range } from '../../../../../components/inputs/Range/Range';
-import { MusicWidget } from '../../../../../components/widgets/Widgets/MusicWIdget/MusicWIdget';
 
 import { motion } from 'framer-motion'
-import { Image } from '../../../../../components/Image/Image';
-import { GetImageColorData } from '../../../../../util/GetImageColorData';
 import { miscSettingsChannelSpecificStateChange, selectDisableMediaWidget } from '../../../../settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { ImageButton } from '../../../../../components/buttons/ImageButton/ImageButton';
 
@@ -38,8 +35,6 @@ export const MediaControls = ({hover}) => {
     const time = useSelector(selectTime);
 
     const hideVideo = useSelector(selectDisableMediaWidget);
-
-    const accentColor = useSelector(selectAccentColor);
 
     const primaryColor = useSelector(selectPrimaryColor);
 

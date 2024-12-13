@@ -172,7 +172,7 @@ export const Music = () => {
                         fs: 0,
                         autoplay: 1,
                         enablejsapi: 1,
-                        start: musicQueue[0]?.current ? musicQueue[0].current : 0,
+                        start: musicQueue[0]?.livestream ? null : musicQueue[0]?.current ? musicQueue[0].current : 0,
                         controls: 0,
                         modestbranding: 1,
                         disablekb: 1
