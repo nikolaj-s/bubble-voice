@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux'
 import { selectSecondaryColor, selectTextColor } from '../../../../../settings/appSettings/appearanceSettings/appearanceSettingsSlice'
 import { Message } from '../../../../../../components/Message/Message';
 
+import './RecentPin.css';
+
 export const RecentPin = ({message}) => {
 
     const secondaryColor = useSelector(selectSecondaryColor);

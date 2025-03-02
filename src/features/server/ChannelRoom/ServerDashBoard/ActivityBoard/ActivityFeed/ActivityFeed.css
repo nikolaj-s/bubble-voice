@@ -1,12 +1,13 @@
 
 .activity-feed-container {
-    width: calc(100% - 10px);
-    padding-top: 20px;
-    margin-top: -20px;
+    width: calc(100% - 20px);
+    
+    margin-top: -50px;
     z-index: 1;
     border-radius: 10px;
     padding-bottom: 5px;
-    margin-bottom: 10px;
+    max-height: 800px;
+    overflow-y: auto;
 }
 
 .activity-feed-inner-container {

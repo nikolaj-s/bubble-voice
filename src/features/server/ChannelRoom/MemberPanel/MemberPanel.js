@@ -50,6 +50,8 @@ export const MemberPanel = () => {
 
     const [serverScore, setServerScore] = React.useState(0);
 
+    const [screenShotCount, setScreenShotCount] = React.useState(0);
+
     const userColor = useSelector(selectProfileColor);
 
     const selectedMember = useSelector(selectCurrentMemberPanel);
@@ -151,6 +153,8 @@ export const MemberPanel = () => {
 
                     if (user.server_score) setServerScore(user.server_score);
 
+                    setScreenShotCount(user.screen_shot_count);
+
                     toggleLoading(false);
 
                     console.log(user.recent_activity)
@@ -251,7 +255,7 @@ export const MemberPanel = () => {
                             }</p>
                         </div>
                         <UserBio loading={loading} bio={bio} margin={'5px 0px'} />
-                        <ScreenShotShowCase marginTop={0} screenShots={screenShots} />
+                        <ScreenShotShowCase username={member?.username} marginTop={0} screenShots={screenShots} screenShotCount={screenShotCount} />
                         <PinnedProfileMessage loading={loading} message={message} />   
                     </div>
                 </div>

@@ -36,10 +36,17 @@ export const ActivityFeed = () => {
     }, [])
 
     return (
+        <>
+        <div style={{width: '100%', height: 30, marginBottom: '-25px', flexShrink: 0, backgroundColor: secondaryColor}} />
         <div 
-        style={{backgroundColor: secondaryColor}}
+        style={{backgroundColor: secondaryColor,
+            border: `solid 10px ${secondaryColor}`,
+            borderTop: `solid 50px ${secondaryColor}`
+        }}
         className='activity-feed-container'>
-            <div className='activity-feed-inner-container'>
+            <div 
+           
+            className='activity-feed-inner-container'>
                 <Loading loading={loadingActivityFeed} />
                 {activityFeed[0]?.no_status && activityFeed.length === 1 ?
                 <p className='no-status-messages' style={{color: textColor}}>No Status Messages To Display</p>
@@ -50,5 +57,6 @@ export const ActivityFeed = () => {
                 })}
             </div>
         </div>
+        </>
     )
 }

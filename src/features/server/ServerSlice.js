@@ -56,9 +56,9 @@ export const navigateToServer = createAsyncThunk(
 
             const { server_id } = getState().serverSlice;
 
-            if (window.location.hash.includes('channel')) {
-                document.getElementById('disconnect-from-channel-button').click();
-            }
+            // if (window.location.hash.includes('channel')) {
+            //     document.getElementById('disconnect-from-channel-button').click();
+            // }
 
             if (server_id) {
                 await socket.request("left server")

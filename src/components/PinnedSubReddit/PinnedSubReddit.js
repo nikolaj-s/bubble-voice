@@ -1,5 +1,4 @@
 import React from 'react'
-import Masonry from 'react-responsive-masonry';
 import { RedditPost } from '../RedditPost/RedditPost';
 import { Loading } from '../LoadingComponents/Loading/Loading';
 
@@ -7,17 +6,18 @@ import Axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLoadedSubreddits, setLoadedSubReddit } from '../../features/server/ChannelRoom/ServerDashBoard/ServerDashBoardSlice';
 import { CloseIcon } from '../Icons/CloseIcon/CloseIcon';
-import { selectAccentColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
+import { selectAccentColor, selectPrimaryColor, selectTextColor } from '../../features/settings/appSettings/appearanceSettings/appearanceSettingsSlice';
 import { setExpandedContent } from '../../features/ExpandContent/ExpandContentSlice';
-import { PinIcon } from '../Icons/PinIcon/PinIcon'
 
-export const PinnedSubReddit = ({subreddit, onLoad, editing, remove = () => {}}) => {
+export const PinnedSubReddit = ({subreddit, onLoad, editing, remove = () => {}, mediaOfTheDay}) => {
 
     const dispatch = useDispatch();
 
     const accentColor = useSelector(selectAccentColor);
     
     const textColor = useSelector(selectTextColor);
+
+    const primaryColor = useSelector(selectPrimaryColor);
 
     const [loading, toggleLoading] = React.useState(false);
 
@@ -77,9 +77,11 @@ export const PinnedSubReddit = ({subreddit, onLoad, editing, remove = () => {}})
     const handleOpen = (data) => {
         dispatch(setExpandedContent(data))
     }
-
+    console.log(mediaOfTheDay)
     return (
-        <div className='pinned-sub-reddit-container'>
+        <div 
+        style={{backgroundColor: editing ? primaryColor : null, borderRadius: editing ? 10 : null, margin: editing ? 3 : 0}}
+        className={`pinned-sub-reddit-container`}>
             {editing ? 
             <div 
             style={{
@@ -91,7 +93,10 @@ export const PinnedSubReddit = ({subreddit, onLoad, editing, remove = () => {}})
             </div>
             : 
             null}
-            {posts.length > 0 ? <RedditPost action={handleOpen} data={posts[index]} /> : null}
+            {editing ?
+            <h3 style={{color: textColor, width: 'auto', margin: '10px'}}>{subreddit.url}</h3>
+            :
+            posts.length > 0 ? <RedditPost pinned={true} action={handleOpen} data={posts[index]} /> : null}
             <Loading loading={loading} />
         </div>
     )

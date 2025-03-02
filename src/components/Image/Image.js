@@ -10,7 +10,7 @@ import { ImageErrorIcon } from '../Icons/ImageErrorIcon/ImageErrorIcon';
 import { NsfwImageOverlay } from './NsfwImageOverlay/NsfwImageOverlay';
 import { selectDisableNsfwBlur } from '../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
-export const Image = ({aspect_ratio, alt_image = null, draggable = false,image_class, img_id, image, objectFit = 'cover', position = 'relative', zIndex = 0, loadingState = 'lazy', opacity = 1, width = '100%', cursor = 'default', altWidth = '100%', imgHeight = '100%', expandContent = () => {}, disableErr = false, hideOnError = false, id, imageError = "https://res.cloudinary.com/drlkgoter/image/upload/v1674339889/no-picture_m4dmai.jpg", onLoad = () => {}, backgroundColor = null, altHeight = '100%', minLoadHeight = null, borderRadius, errorIconDimension = 50, nsfw = false, height = '100%'}) => {
+export const Image = ({aspect_ratio, alt_image = false, draggable = false,image_class, img_id, image, objectFit = 'cover', position = 'relative', zIndex = 0, loadingState = 'lazy', opacity = 1, width = '100%', cursor = 'default', altWidth = '100%', imgHeight = '100%', expandContent = () => {}, disableErr = false, hideOnError = false, id, imageError = "https://res.cloudinary.com/drlkgoter/image/upload/v1674339889/no-picture_m4dmai.jpg", onLoad = () => {}, backgroundColor = null, altHeight = '100%', minLoadHeight = null, borderRadius, errorIconDimension = 50, nsfw = false, height = '100%'}) => {
 
     const [loading, toggleLoading] = React.useState(true);
 
@@ -35,7 +35,9 @@ export const Image = ({aspect_ratio, alt_image = null, draggable = false,image_c
     }
 
     const handleError = (e) => {
-        
+        console.log(alt_image)
+        if (!alt_image || alt_image === null) return toggleError(true);
+
         if (e.target.src !== alt_image) {
             e.target.src = alt_image;
         } else {

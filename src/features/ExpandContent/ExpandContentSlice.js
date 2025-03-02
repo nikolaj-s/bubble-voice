@@ -7,6 +7,8 @@ const ExpandContentSlice = createSlice({
         selectedContent: false,
         iframe: false,
         reddit: false,
+        screenShots: false,
+        selectedUser: "",
         videoStartTime: 0,
         youtube: false,
         channelInfo: false,
@@ -26,13 +28,23 @@ const ExpandContentSlice = createSlice({
                 state.youtube = false;
                 state.reddit = false;
                 state.channelInfo = false;
+                state.screenShots = false;
+                state.selectedUser = "";
             } else {
                 state.iframe = false;
                 state.youtube = false;
                 state.reddit = false;
                 state.channelInfo = false;
+                state.screenShots = false;
+                state.selectedUser = "";
 
                 let expandedContent;
+
+                if (action.payload.includes('userscreenshots/')) {
+                    state.screenShots = true;
+                    state.selectedContent = action.payload.split('/')[1];
+                    return;
+                }
 
                 if (action.payload.includes('.host.church') && action.payload.includes('.md.')) {
                     expandedContent = action.payload.replace('.md', '');
@@ -119,6 +131,8 @@ export const selectYouTubeExpand = state => state.ExpandContentSlice.youtube;
 export const selectChannelInfoExpanded = state => state.ExpandContentSlice.channelInfo;
 
 export const selectMediaMetaData = state => state.ExpandContentSlice.metaData;
+
+export const selectExpandedScreenShots = state => state.ExpandContentSlice.screenShots;
 
 export const { setExpandedContent, setVideoStartTime, setMetaData } = ExpandContentSlice.actions;
 

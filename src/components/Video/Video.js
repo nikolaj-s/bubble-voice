@@ -16,7 +16,7 @@ import {Range} from '../inputs/Range/Range';
 import "./Video.css";
 import { VideoPlayOverlayAnimation } from './VideoPlayOverlayAnimation/VideoPlayOverlayAnimation';
 
-export const Video = ({width, backgroundColor = 'black', maxHeight = '100%', video, id, looping = false, objectFit = 'contain', height = "100%", mutedToggled, marginLeft, forceAutoPlay = false, currentTime = 0}) => {
+export const Video = ({borderRadius = 20, width, backgroundColor = 'black', maxHeight = '100%', video, id, looping = false, objectFit = 'contain', height = "100%", mutedToggled, marginLeft, forceAutoPlay = false, currentTime = 0}) => {
 
     const ref = React.useRef();
 
@@ -219,7 +219,8 @@ export const Video = ({width, backgroundColor = 'black', maxHeight = '100%', vid
             objectFit: objectFit,
             marginLeft: marginLeft,
             backgroundColor: backgroundColor,
-            width: width
+            width: width,
+            borderRadius: borderRadius
         }}
         onMouseMove={() => {showControls(true)}}
         onMouseLeave={() => {showControls(false)}}

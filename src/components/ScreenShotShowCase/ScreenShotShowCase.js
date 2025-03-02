@@ -7,7 +7,7 @@ import { selectPrimaryColor, selectTextColor } from '../../features/settings/app
 import { Image } from '../Image/Image';
 import { setExpandedContent } from '../../features/ExpandContent/ExpandContentSlice';
 
-export const ScreenShotShowCase = ({screenShots, marginTop = 5}) => {
+export const ScreenShotShowCase = ({screenShots, marginTop = 5, username, screenShotCount}) => {
 
     const dispatch = useDispatch();
 
@@ -35,6 +35,11 @@ export const ScreenShotShowCase = ({screenShots, marginTop = 5}) => {
                     <div className='other-screenshots-wrapper'>
                         {screenShots.map((data, i) => {
                             return (i === 0 ? null :
+                            i === 4 ?
+                            <div onClick={() => {expand(`userscreenshots/${username}`)}} style={{color: textColor}} className='show-all-screen-shots-button'>
+                                <p style={{color: textColor}} >+{screenShotCount}</p>
+                            </div>
+                            :
                             <div className='screen-shot-showcase-wrapper'>
                                 <Image expandContent={expand} cursor='pointer' objectFit='cover' image={data.content.image} />
                             </div>

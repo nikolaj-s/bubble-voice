@@ -1,6 +1,6 @@
 
 .divider-button-container {
-    width: calc(100%  - 20px);
+    width: calc(100%  - 10px);
     padding: 5px;
     display: flex;
     justify-content: space-between;
@@ -8,8 +8,8 @@
     cursor: pointer;
     height: 35px;
     border-radius: 10px;
-    margin-bottom: 5px;
-    z-index: 2;
+    z-index: 5;
+    position: relative;
 }
 
 .divider-button-container svg {
@@ -20,15 +20,15 @@
 .divider-line {
     width: 100%;
     flex-grow: 4;
-    height: 2px;
+    height: 0px;
     border-radius: 3px;
 }
 
 .divider-button-container h3 {
     flex-shrink: 0;
     margin-right: 5px;
-    font-weight: 300;
-    font-size: .9rem;
+    font-weight: 400;
+    font-size: 1.2rem;
     padding: 0;
     overflow: hidden;
     text-overflow: ellipsis;

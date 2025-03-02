@@ -1,44 +1,46 @@
 
 .image-of-the-day-container {
-    width: calc(100% - 10px);
+    width: calc(100%);
     min-height: 90px;
     border-radius: 10px;
     overflow: hidden;
     z-index: 1;
-    padding-top: 20px;
-    margin-top: -20px;
-    margin-bottom: 5px;
+    padding-top: 45px;
+    margin-top: -45px;
+    position: relative;
 }
 
 .image-of-the-day-wrapper {
-    margin-left: 5px;
-    margin-right: 5px;
     height: auto;
-    width: calc(100% - 10px);
+    width: calc(100%);
     position: relative;
     min-height: 90px;
-    border-radius: 10px;
     overflow: hidden;
     display: flex;
+    flex-direction: column;
     align-items: center;
+    z-index: 2;
+    margin-top: 10px;
 }
 
 .image-info-wrapper {
-    width: calc(100% - 30px);
+    width: calc(100% - 20px);
     padding: 10px;
-    margin-left: 5px;
-    margin-right: 5px;
     bottom: 0;
     left: 0;
     z-index: 2;
     border-radius: 10px;
     margin-top: 5px;
-    margin-bottom: 5px;
+}
+
+.image-info-wrapper h3 {
+    margin: 0px 0px 5px 0px;
 }
 
 .image-info-wrapper p {
     font-weight: 300;
-    margin: 3px 0 3px 5px;
+    margin: 0px;
+    font-size: 0.7rem;
 }
 
 .no-image-of-the-day {
@@ -59,7 +61,7 @@
 
 .back-drop-blur-image-of-the-day {
     position: absolute;
-    z-index: 1;
+    z-index: 0;
     top: 0;
     left: 0;
     width: 100%;

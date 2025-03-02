@@ -6,6 +6,7 @@ import { selectAccentColor, selectGlassColor, selectPrimaryColor, selectTextColo
 import { CopyButton } from '../buttons/CopyButton/CopyButton';
 import { setExpandedContent, setMetaData } from '../../features/ExpandContent/ExpandContentSlice';
 import { NsfwImageOverlay } from '../Image/NsfwImageOverlay/NsfwImageOverlay';
+import { selectDisableNsfwBlur } from '../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 
 export const VideoCard = ({mediaOfTheDay,data = {}, send = () => {}, altAction, message}) => {
 
@@ -20,6 +21,8 @@ export const VideoCard = ({mediaOfTheDay,data = {}, send = () => {}, altAction, 
     const primaryColor = useSelector(selectPrimaryColor);
 
     const glassColor = useSelector(selectGlassColor);
+
+    const disableNsfwBlur = useSelector(selectDisableNsfwBlur);
 
     React.useEffect(() => {
 
@@ -76,34 +79,50 @@ export const VideoCard = ({mediaOfTheDay,data = {}, send = () => {}, altAction, 
         onClick={open}
         style={{
             zIndex: mediaOfTheDay ? 2 : null,
-            backgroundColor: mediaOfTheDay ? primaryColor : hover ? accentColor : glassColor,
-            borderRadius: mediaOfTheDay ? 0 : null
+            backgroundColor: mediaOfTheDay ? null : hover ? accentColor : glassColor,
+            borderRadius: mediaOfTheDay ? 0 : null,
+            flexDirection: mediaOfTheDay ? 'column' : null,
+            height: mediaOfTheDay ? 'auto' : null,
+            padding: mediaOfTheDay ? 0 : null,
+            width: mediaOfTheDay ? '100%' : null
         }}
         onMouseEnter={() => {toggleHover(true)}}
         onMouseLeave={() => {toggleHover(false)}}
         className='video-card-outer-container'>
-            <div className='video-card-thumbnail-container'>
+            <div
+            style={{width: mediaOfTheDay ? '100%' : null}}
+            className='video-card-thumbnail-container'>
                 {data.video_preview ?
                 <video 
                 id={data.video_preview}
                 controls={false}
                 playsInline={true}
                 muted={true}
-                
+                style={{width: mediaOfTheDay ? '100%' : null,
+                borderRadius: mediaOfTheDay ? 0 : null
+                }}
                 src={data.video_preview}
-                poster={data.thumbnail}
+                poster={mediaOfTheDay ? null : data.thumbnail}
                 />
                 :
                 <img src={data.thumbnail} />
                 }
-                {data.nsfw ?
+                {disableNsfwBlur ? null :
+                data.nsfw ?
                 <NsfwImageOverlay />
                 : null}
             </div>
-            <div className='video-card-details-container'>
+            <div 
+            style={{
+                marginTop: mediaOfTheDay ? 5 : null,
+                marginLeft: mediaOfTheDay ? 0 : null,
+                width: mediaOfTheDay ? 'calc(100% - 20px)' : null,
+                padding: mediaOfTheDay ? '5px 10px 10px 10px' : 0
+            }}
+            className='video-card-details-container'>
                 <h3 style={{color: textColor}}>{data.title}</h3>
                 <div onClick={(e) => {e.stopPropagation(); openLink()}} className='copy-video-card-link-container'>
-                    <p style={{color: textColor, margin: 0, opacity: 0.8}}>{data?.url?.split('/')[2]}</p>
+                    <p style={{color: textColor, margin: 0}}>{data?.url?.split('/')[2]}</p>
                 </div>
                 <p style={{color: textColor}}>{data.duration}</p>
                 {message ? null : <div

@@ -10,7 +10,7 @@ import { VideoCard } from '../../../../../../components/VideoCard/VideoCard';
 import { RedditPost } from '../../../../../../components/RedditPost/RedditPost';
 import YouTube from 'react-youtube';
 
-export const ImageOfTheDay = ({imageOfTheDay}) => {
+export const ImageOfTheDay = ({imageOfTheDay, updatesIn}) => {
 
     const dispatch = useDispatch();
 
@@ -35,7 +35,7 @@ export const ImageOfTheDay = ({imageOfTheDay}) => {
             <>
             <div 
             style={{
-                height: imageOfTheDay?.type === 'video' || imageOfTheDay?.type === 'subreddit' ? 'auto' : 500
+                height: imageOfTheDay?.type === 'video' || imageOfTheDay?.type === 'subreddit' ? 'auto' : 'auto'
             }}
             className='image-of-the-day-wrapper'>
                 {
@@ -60,28 +60,28 @@ export const ImageOfTheDay = ({imageOfTheDay}) => {
                 />
                 :
                 <>
-                <Image nsfw={imageOfTheDay.nsfw} zIndex={2} objectFit='contain' minLoadHeight={150} expandContent={handleExpand} cursor='pointer' borderRadius={'10px'} image={imageOfTheDay.image} alt_image={imageOfTheDay.preview} />
-                <img alt="BLUR" className='back-drop-blur-image-of-the-day' src={imageOfTheDay.preview || imageOfTheDay.thumbnail} />
+                <Image nsfw={imageOfTheDay.nsfw} zIndex={2} objectFit='contain' minLoadHeight={150} expandContent={handleExpand} cursor='pointer' borderRadius={'0px'} image={imageOfTheDay.image} alt_image={imageOfTheDay.preview} />
+                
                 </>
                 }
-                
-            </div>
-            <div 
-            style={{backgroundColor: primaryColor}}
-            className='image-info-wrapper'>
-                <p
+                <div
+                className='image-info-wrapper'>
+                <h3
                 style={{color: textColor}}
                 >
                 {imageOfTheDay?.type === "subreddit" ?
                 `Top post selected randomly from one of the added subreddit channels`
                 :
                 imageOfTheDay?.type === 'song' ?
-                `Random Youtube Video From Previous Results: ${imageOfTheDay?.content?.song?.title}`
+                `Random Youtube Video From Previous Results: "${imageOfTheDay?.content?.song?.title}"`
                 :
-                `Found Related To The Query: ${(imageOfTheDay.query || imageOfTheDay.tags)}`
+                `Found Related To The Query: "${(imageOfTheDay.query || imageOfTheDay.tags)}"`
                 }
-                </p>
+                </h3>
+                <p style={{color: textColor}}>{updatesIn}</p>
             </div>
+            </div>
+            
             </>
             :
             <div
@@ -92,6 +92,7 @@ export const ImageOfTheDay = ({imageOfTheDay}) => {
             </div>
             
             }
+            <img alt="BLUR" className='back-drop-blur-image-of-the-day' src={imageOfTheDay.preview || imageOfTheDay.thumbnail} />
         </div>
     )
 }

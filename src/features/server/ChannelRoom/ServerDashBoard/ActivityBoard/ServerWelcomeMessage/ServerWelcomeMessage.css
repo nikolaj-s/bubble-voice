@@ -15,20 +15,20 @@
 .server-welcome-message-wrapper {
     top: 0;
     left: 0;
-    width: calc(100% - 10px);
-    margin-top: 5px;
+    width: calc(100%);
+   
     height: auto;
     border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 5px;
     z-index: 1;
 }
 
 .server-welcome-message-wrapper h3 {
     font-weight: 400;
-    font-size: 1rem;
+    font-size: 1.2rem;
     text-align: center;
     cursor: default;
+    margin: 10px;
 }

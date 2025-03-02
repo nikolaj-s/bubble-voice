@@ -21,10 +21,6 @@
     align-items: center;
 }
 
-.reddit-post-title {
-    margin: 0 0 5px 0px;
-}
-
 .sub-reddits-button-wrapper {
     display: flex;
     flex-wrap: wrap;
@@ -38,7 +34,6 @@
 }
 
 .subreddit-feed-wrapper {
-    max-width: 800px;
     width: calc(100% - 10px);
 }
 

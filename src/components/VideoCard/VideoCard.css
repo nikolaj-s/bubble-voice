@@ -29,8 +29,9 @@
 
 .video-card-details-container p {
     margin: 5px 0px 0px 0px;
-    opacity: 0.5;
+    opacity: 1;
     font-weight: 300;
+    font-size: 0.7rem;
 }
 
 .video-card-thumbnail-container {
@@ -38,7 +39,6 @@
     flex-shrink: 0;
     width: 300px;
     border-radius: 10px;
-    background-color: black;
     position: relative;
     display: inline-block;
 }

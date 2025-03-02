@@ -46,15 +46,10 @@ export const ServerSelection = () => {
             dispatch(setTopPos(top_pos));
     
             dispatch(setServerName(name));
-    
-            setTimeout(() => {
-    
-                navigate(`/dashboard/server/${name}`)
             
-            }, 5)
         }
 
-       
+        navigate(`/dashboard/server/${_id}`)
             
     }
 

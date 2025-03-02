@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Image } from '../../components/Image/Image';
 
 // state
-import { selectChannelInfoExpanded, selectExpandedContent, selectIframeExpanded, selectMediaMetaData, selectRedditExpanded, selectVideoStartTime, selectYouTubeExpand, setExpandedContent, setMetaData } from './ExpandContentSlice'
+import { selectChannelInfoExpanded, selectExpandedContent, selectExpandedScreenShots, selectIframeExpanded, selectMediaMetaData, selectRedditExpanded, selectVideoStartTime, selectYouTubeExpand, setExpandedContent, setMetaData } from './ExpandContentSlice'
 
 // style
 import "./ExpandContent.css";
@@ -24,6 +24,7 @@ import { Snippet } from './Snippet/Snippet';
 import { SimilarResults } from './SimilarResults/SimilarResults';
 import { YoutubeInfo } from './YoutubeInfo/YoutubeInfo';
 import { YoutubeSearch } from './YoutubeSearch/YoutubeSearch';
+import { ViewAllScreenShots } from './ViewAllScreenShots/ViewAllScreenShots';
 
 export const ExpandContent = () => {
 
@@ -38,6 +39,8 @@ export const ExpandContent = () => {
     const iframe = useSelector(selectIframeExpanded);
 
     const reddit = useSelector(selectRedditExpanded);
+
+    const screenShots = useSelector(selectExpandedScreenShots);
 
     const expandedContent = useSelector(selectExpandedContent);
 
@@ -160,9 +163,15 @@ export const ExpandContent = () => {
             <div style={{backgroundColor: secondaryColor}} className='content-expanded-inner-container'>
                 <div 
                 key={expandedContent}
-                style={{backgroundColor: (youtube || channelInfo) ? 'rgba(0,0,0,0)' : null}}
+                style={{
+                    width: screenShots ? '100%' : null,
+                    backgroundColor: (youtube || channelInfo) ? 'rgba(0,0,0,0)' : null}}
                 className='content-expanded-wrapper'>
-                    {channelInfo ?
+                    {
+                    screenShots ?
+                    <ViewAllScreenShots username={expandedContent} />
+                    :
+                    channelInfo ?
                         <div 
                         style={{backgroundColor: primaryColor}}
                         className='channel-info-expanded-container'>
@@ -239,18 +248,19 @@ export const ExpandContent = () => {
                         
                 </div>
                 
+                {screenShots ? null :
                 <div style={{backgroundColor: primaryColor}} className='expanded-content-navigation-container'>                
                     {youtube || iframe ?
                     <YoutubeSearch />
                     : null}
-                    {youtube || channelInfo ?
+                    {youtube || channelInfo || screenShots ?
                     null :
                     !metaData.image ?
                     null
                     : 
                     <Snippet handleLink={handleLink} metaData={metaData} snippet={metaData?.snippet} />
                     }
-                    {youtube || channelInfo || iframe ? null :
+                    {youtube || channelInfo || iframe || screenShots ? null :
                     <div 
                     style={{marginBottom: 5}}
                     className='expanded-nav-button-wrapper'>
@@ -263,10 +273,10 @@ export const ExpandContent = () => {
                         
                     </div>}
                     
-                    {youtube || channelInfo || iframe ?
+                    {youtube || channelInfo || iframe || screenShots ?
                     null :
                     <SimilarResults expandedContent={expandedContent} />}
-                </div>
+                </div>}
             </div>
             <div 
             onClick={closeExpanded}

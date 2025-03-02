@@ -462,7 +462,8 @@ const Bar = () => {
                     "TOKEN": token
                 },
                 reconnectionAttempts: 50,
-                reconnectionDelay: 1000
+                reconnectionDelay: 3000,
+
             })
 
             socket.on('reconnect_failed', () => {

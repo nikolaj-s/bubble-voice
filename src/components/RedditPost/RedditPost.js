@@ -12,7 +12,7 @@ import { NsfwImageOverlay } from '../Image/NsfwImageOverlay/NsfwImageOverlay';
 import { selectDisableNsfwBlur } from '../../features/settings/appSettings/MiscellaneousSettings/MiscellaneousSettingsSlice';
 import { Iframe } from '../Iframe/Iframe';
 
-export const RedditPost = ({data = {}, action, disableMax, inSocial, mediaOfTheDay}) => {
+export const RedditPost = ({data = {}, action, disableMax, inSocial, mediaOfTheDay, pinned = false}) => {
 
     const [hover, toggleHover] = React.useState(false);
 
@@ -79,14 +79,13 @@ export const RedditPost = ({data = {}, action, disableMax, inSocial, mediaOfTheD
         onMouseLeave={() => {toggleHover(false)}}
         onClick={(e) => {e.preventDefault()}} 
         style={{
-            backgroundColor: mediaOfTheDay ? primaryColor : inSocial ? null : hover ? primaryColor : null,
             padding: mediaOfTheDay ? 5 : inSocial ? 0 : null,
             marginBottom: inSocial ? 5 : null,
             maxWidth: inSocial ? 600 : null,
             borderRadius: mediaOfTheDay ? 10 : inSocial ? 0 : null,
-            width: mediaOfTheDay ? '100%' : null
+            width: mediaOfTheDay ? '100%' : 'auto'
         }}
-        className='reddit-post-container'>
+        className={pinned ? 'image-of-the-day-container' : 'reddit-post-container'}>
                 <div className='reddit-post-info-container'>
                     <div className='reddit-post-info-wrapper'>
                         <h3 
@@ -101,33 +100,33 @@ export const RedditPost = ({data = {}, action, disableMax, inSocial, mediaOfTheD
                    {inSocial ? null : <CopyButton action={handleCopy} borderRadius={8} zIndex={2} width={14} height={14} padding={5} description={mediaOfTheDay ? null : copied ? "Copied" : "Copy"} />}
                     
                 </div>
-                <p className='reddit-post-title' style={{color: textColor, marginBottom: 4}}>{data.title}</p>
+                <p className='reddit-post-title' style={{color: textColor, marginLeft: inSocial ? 5 : null}}>{data.title}</p>
                 {data.selftext?.length > 1 ?
-                <p className='reddit-post-title' style={{color: textColor}} >{data.selftext}</p>
+                <p className='reddit-post-title' style={{color: textColor, marginLeft: inSocial ? 5 : null}} >{data.selftext}</p>
                 : null}
                 <div
                 style={{
                     borderRadius: mediaOfTheDay ? 10 : null
                 }}
                 className='reddit-media-container'>
-                    {data?.thumbnail && data?.thumbnail?.startsWith('https://') ?
-                    <img className='background-blur-red-effect' src={data.thumbnail} />
-                    : null}
+                    
                     
                     {data?.secure_media_embed && (data.domain.includes('youtu')) ?
                     <Iframe link={data?.secure_media_embed?.media_domain_url} />
                     :
                     data.url.includes('.gifv') || data.url.includes('.mp4') || data.url.includes('redgifs') || data.url.includes('gfycat') || data.media?.reddit_video ? 
-                    <Video width={'100%'} height={inSocial ? 350 : 500}  backgroundColor={null} objectFit='contain' video={data.url.includes('.gifv') ? data.url.split('.gifv')[0] + '.mp4' : data.preview?.reddit_video_preview?.fallback_url || data.media?.reddit_video?.fallback_url} />
+                    <Video borderRadius={0} width={'100%'} height={inSocial || mediaOfTheDay || pinned ? 350 : 'calc(100vh - 160px)'}  backgroundColor={'rgba(0,0,0,0)'} objectFit='contain' video={data.url.includes('.gifv') ? data.url.split('.gifv')[0] + '.mp4' : data.preview?.reddit_video_preview?.fallback_url || data.media?.reddit_video?.fallback_url} />
                     : data.gallery_data ?
                     <SimpleImageCarousel expand={action} images={data.gallery_data.items.map(id => `https://i.redd.it/${id.media_id}.jpg`)} />
                     : (data.url.includes('.jpg') || data.url.includes('.png') || data.url.includes('.webp') || data.url.includes('.gif') || data.url.includes('.jpeg')) && data.url.startsWith('https') ?
-                    <Image  height={inSocial ? 350 : 500} borderRadius={mediaOfTheDay ? 5 : 20} expandContent={() => {action(data.url)}} objectFit='contain' cursor='pointer' image={data.url} />
+                    <Image  height={inSocial || pinned ? 350 : 'calc(100vh - 160px)'} borderRadius={mediaOfTheDay ? 5 : 20} expandContent={() => {action(data.url)}} objectFit='contain' cursor='pointer' image={data.url} />
                     : null}
                     {data.over_18 && !disableBlur ?
                     <NsfwImageOverlay /> : null}
                 </div>
-
+                {data?.thumbnail && data?.thumbnail?.startsWith('https://') ?
+                <img className='background-blur-red-effect' src={data.thumbnail} />
+                : null}
         </div>
     )
 }
