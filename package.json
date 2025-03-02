@@ -1,6 +1,6 @@
 {
   "name": "bubble",
-  "version": "0.9.92",
+  "version": "1.0.0",
   "private": false,
   "dependencies": {
     "@popmotion/popcorn": "^0.4.4",
@@ -37,12 +37,12 @@
   "homepage": "./",
   "main": "electron/main.js",
   "scripts": {
-    "start": "react-scripts start",
+    "start": "set PORT=3001 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron-dev": "set ELECTRON_START_URL=http://localhost:3000 && electron .",
-    "mac-electron-dev": "export ELECTRON_START_URL=http://localhost:3000 && electron .",
+    "electron-dev": "set ELECTRON_START_URL=http://localhost:3001 && electron .",
+    "mac-electron-dev": "export ELECTRON_START_URL=http://localhost:3001 && electron .",
     "build-electron": "robocopy electron build/electron /S",
     "package": "electron-builder build -w -c.extraMetadata.main=build/electron/main.js --publish always",
     "mac-package": "electron-builder build --mac -c.extraMetadata.main=build/electron/main.js --publish always"

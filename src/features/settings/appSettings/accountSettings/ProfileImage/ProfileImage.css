@@ -1,8 +1,0 @@
-
-.profile-image-container {
-    position: relative;
-    width: 400px;
-    width: calc(100%);
-    height: 225px;
-    flex-shrink: 0;
-}

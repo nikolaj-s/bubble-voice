@@ -1,5 +1,5 @@
 
-export const url = 'http://35.88.11.222:3016'
+export const url = 'http://10.0.0.38:3016'
 
 export const getToken = async () => {
     try {
@@ -21,7 +21,7 @@ export const setToken = async (jwt) => {
 
         keytar.setPassword("TOKEN", "USER_ACCOUNT", jwt);
     } catch (error) {
-        document.cookie = `token=${jwt}`
+        document.cookie = `token=${jwt}; Secure;`
     }
 }
 
