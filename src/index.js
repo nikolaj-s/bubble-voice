@@ -5,8 +5,6 @@ import App from './app/App';
 import { Provider } from 'react-redux';
 
 import store from './store/store';
-import { HashRouter } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

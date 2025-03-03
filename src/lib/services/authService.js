@@ -1,11 +1,9 @@
 
-export const url = 'http://10.0.0.38:3016'
-
-export const getToken = async () => {
+export const getToken = () => {
     try {
         const keytar = window.require('keytar');
 
-        const token = await keytar.getPassword("TOKEN", "USER_ACCOUNT");
+        const token = keytar.getPassword("TOKEN", "USER_ACCOUNT");
 
         return token;
     
@@ -15,22 +13,31 @@ export const getToken = async () => {
     }
 }
 
-export const setToken = async (jwt) => {
+export const setToken = (jwt) => {
+    console.log(jwt)
     try {
         const keytar = window.require('keytar');
 
         keytar.setPassword("TOKEN", "USER_ACCOUNT", jwt);
+
+        return;
     } catch (error) {
-        document.cookie = `token=${jwt}; Secure;`
+        document.cookie = `token=${jwt};`
     }
 }
 
-export const clearToken = async () => {
+export const clearToken = () => {
     try {
         const keytar = window.require('keytar');
 
         keytar.deletePassword("TOKEN", "USER_ACCOUNT");
+
+        return;
     } catch (error) {
         document.cookie = "token=;"
     }
 }
+
+export const isAuthenticated = () => {
+    return getToken();
+};

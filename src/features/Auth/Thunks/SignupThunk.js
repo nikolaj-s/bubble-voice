@@ -1,0 +1,56 @@
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { validateConfirmPassword, validateEmail, validatePassword, validateUsername } from "../../../lib/handlers/inputValidation/inputValidation";
+import axios from "axios";
+import { API_URL } from "../../../lib/Validation";
+import { setToken } from "../../../lib/services/authService";
+
+export const signupThunk = createAsyncThunk(
+    'auth/signUp',
+    async ({ username, email, password, confirmPassword }, { rejectWithValue }) => {
+        try {
+            console.log(username,email,password,confirmPassword)
+            if (!validateUsername(username)) {
+                return rejectWithValue({ errorMessage: 'Username must be 3-30 characters long and can only contain letters, numbers, and underscores.', errorType: 'usernameError' });
+            }
+            if (!validateEmail(email)) {
+                return rejectWithValue({ errorMessage: 'Please enter a valid email address.', errorType: "emailError" });
+            }
+            if (!validatePassword(password)) {
+                return rejectWithValue({ errorMessage: 'Password must be at least 8 characters long and contain both letters, numbers, and at least 1 special character.', errorType: 'passwordError' });
+            }
+            if (!validateConfirmPassword(password, confirmPassword)) {
+                return rejectWithValue({ errorMessage: 'Passwords do not match.', errorType: 'confirmPasswordError' });
+            }
+
+            const response = await axios.post(`${API_URL}/sign-up`, { email, password, username, confirmPassword });
+
+            
+            if (response.status >= 200 && response.status < 300) {
+
+                if (response?.data?.success) {
+                    setToken(response?.data?.token)
+
+                    return {authorized: true}
+                }
+
+                return {error: "Fatal Error"}; // Expected to contain user info and token
+            } else {
+            return rejectWithValue('Unexpected server response');
+            }
+        
+            return; // Assuming the response contains the user data
+        } catch (error) {
+            if (error.response) {
+                // Server responded with a status code outside 2xx
+                return rejectWithValue(error.response.data?.errorMessage || 'Invalid credentials');
+              } else if (error.request) {
+                // Request was made but no response received
+                return rejectWithValue('No response from the server');
+              } else {
+                // Something else went wrong
+                return rejectWithValue('An error occurred during sign-in');
+              } // Assuming the error message is in response.data
+        }
+    }
+);
+

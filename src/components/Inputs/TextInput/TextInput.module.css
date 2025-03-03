@@ -1,0 +1,34 @@
+.inputContainer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .input {
+    padding: 10px;
+    border: 2px solid var(--primary-color); /* Using Bubble Blue for the border */
+    border-radius: 5px;
+    font-size: 16px;
+    color: var(--text-color); /* Light grayish text color */
+    background-color: var(--background-color); /* Dark Slate background */
+    transition: border-color 0.3s ease-in-out;
+    outline: none;
+  }
+  
+  .input:focus {
+    border-color: var(--button-background); /* Highlight color on focus */
+  }
+ 
+  .error .input {
+    border-color: var(--error-color); /* Red border on error */
+  }
+  
+  .errorMessage {
+    color: var(--error-color); /* Error message in red */
+    font-size: 12px;
+    margin-top: 5px;
+    text-align: start;
+    bottom: -18px;
+    left: 5px;
+  }

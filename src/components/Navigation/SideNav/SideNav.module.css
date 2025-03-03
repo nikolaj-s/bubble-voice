@@ -1,0 +1,17 @@
+.container {
+
+    height: 100vh;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .logo {
+    width: 60px;
+    height: 60px;
+  }
+
+  .logo svg {
+    width: 100%;
+    height: 100%;
+  }

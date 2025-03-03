@@ -1,0 +1,20 @@
+/* Main layout */
+.layout {
+    display: grid;
+    grid-template-columns: 75px 1fr; /* Side Nav (250px) + Main Content (1fr) */
+    grid-template-rows: auto 1fr; /* Top Nav (auto height) + Content (rest of the space) */
+    height: 100vh; /* Full height */
+  }
+  
+  /* Side Navigation */
+  
+  
+  /* Main Content Area */
+  .wrapper {
+    display: grid;
+    grid-template-rows: 40px 1fr; /* Top Nav (60px), 3 equal sections */
+  }
+  .mainContent {
+    background-color: var(--primary-color);
+    border-top-left-radius: 20px;
+  }

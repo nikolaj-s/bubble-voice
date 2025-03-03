@@ -1,0 +1,42 @@
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { fetchAccount } from "../../features/Account/Thunks/fetchAccount";
+
+import DashboardSkeleton from "../../components/Loading/DashBoardSkeleton/DashBoardSkeleton";
+import { selectAccount, selectAccountError } from "../../features/Account/accountSlice";
+import { clearToken } from "../../lib/services/authService";
+
+const FetchAccountWrapper = ({ children }) => {
+
+    const dispatch = useDispatch();
+
+    const navigate = useNavigate();
+
+    const user = useSelector(selectAccount);
+
+    const error = useSelector(selectAccountError);
+
+    useEffect(() => {
+
+        dispatch(fetchAccount());
+
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (error) {
+            clearToken() // Clear JWT token
+            navigate("/"); // Redirect to login
+        }
+    }, [error, dispatch, navigate]);
+
+    if (!user) return <DashboardSkeleton />;
+
+    return (
+        <>
+        {children}
+        </>
+    );
+};
+
+export default FetchAccountWrapper;

@@ -1,5 +1,9 @@
 
-import AppFeature from '../app/AppFeature';
+import appSlice from '../features/App/appSlice';
+
+import authSlice from '../features/Auth/AuthSlice';
+
+import accountSlice from '../features/Account/accountSlice';
 
 import {FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER} from 'redux-persist';
 
@@ -8,7 +12,9 @@ const { configureStore } = require("@reduxjs/toolkit");
 // state store
 const store = configureStore({
     reducer: {
-      AppFeature: AppFeature
+      appSlice: appSlice,
+      authSlice: authSlice,
+      accountSlice: accountSlice,
     },
     middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

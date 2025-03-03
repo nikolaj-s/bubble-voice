@@ -1,0 +1,24 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .label {
+    font-size: 14px;
+    color: var(--text-color, #d1d9e6); /* Default light text */
+    transition: color 0.3s ease;
+  }
+  
+  .errorLabel {
+    color: var(--error-color, #e16b6b); /* Error color */
+  }
+  
+  .errorText {
+    font-size: 12px;
+    color: var(--error-color, #e16b6b);
+    background: rgba(225, 107, 107, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  
