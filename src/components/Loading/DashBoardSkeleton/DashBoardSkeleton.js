@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './DashBoardSkeleton.module.css';
-import { Logo } from '../../../Icons/Bubble/Logo';
+import { Logo } from '../../Icons/Bubble/Logo';
 
 const DashboardSkeleton = () => {
   return (

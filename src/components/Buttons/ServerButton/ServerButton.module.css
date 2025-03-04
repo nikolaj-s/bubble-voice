@@ -4,13 +4,21 @@
   cursor: pointer;
   border-radius: 50%;
   transition: 0.1s;
-  margin: 2px 0px;
+  margin: 5px 0px;
   z-index: 20;
   display: flex;
   align-items: center;
   left: 0;
   flex-shrink: 0;
   float: right;
+}
+
+.server-button-container:active {
+  scale: 0.95;
+}
+
+.server-button-container:hover {
+  scale: 1.05;
 }
 
 .server-button-image-container {

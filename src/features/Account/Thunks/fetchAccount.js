@@ -9,7 +9,7 @@ import { API_URL } from "../../../lib/Validation";
 // Async thunk to fetch account details
 export const fetchAccount = createAsyncThunk(
     'account/fetchAccount',
-    async (_, { rejectWithValue }) => {
+    async (_, { rejectWithValue, dispatch }) => {
       try {
   
           const token = getToken();
@@ -27,7 +27,6 @@ export const fetchAccount = createAsyncThunk(
               return rejectWithValue("Not Authroized")
           }
   
-          return response; // Return account data
       } catch (error) {
   
           console.log(error);

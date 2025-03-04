@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./BackSplash.module.css";
-import { Logo } from "../../../Icons/Bubble/Logo";
+import { Logo } from "../../Icons/Bubble/Logo";
 
 const BackSplash = ({ children }) => {
   const [bubbles, setBubbles] = useState([]);

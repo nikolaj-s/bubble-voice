@@ -1,0 +1,4 @@
+
+.svg path {
+    stroke: var(--text-color);
+}

@@ -1,0 +1,39 @@
+.tooltipContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .tooltip {
+    position: absolute;
+    background-color: var(--background-color); /* Tailwind gray-700 equivalent */
+    color: var(--text-color);
+    border: solid 1px var(--text-color);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+    pointer-events: none;
+  }
+  
+  .tooltipTop {
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-5px);
+  }
+  
+  .tooltipBottom {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(5px);
+  }
+  
+  .tooltipVisible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  

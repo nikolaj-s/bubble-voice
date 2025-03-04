@@ -2,8 +2,9 @@
     font-family: "Arial", sans-serif;
     color: var(--text-color);
     margin-bottom: 15px;
-    text-align: center;
+    text-align: start;
     font-weight: bold;
+    margin-top: 15px;
   }
   
   h1 {

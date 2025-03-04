@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import TextButton from '../../components/Buttons/TextButton/TextButton';
 import TextInput from '../../components/Inputs/TextInput/TextInput';
 import TextNavButton from '../../components/NavButtons/TextNavButton/TextNavButton';
-import { FormWrapper } from '../../components/Wrappers/FormWrapper/FormWrapper';
+import { FormWrapper } from '../../components/ui/Wrappers/FormWrapper/FormWrapper';
 import styles from './Signup.module.css';
 
 import React from 'react'

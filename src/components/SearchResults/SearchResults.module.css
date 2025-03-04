@@ -1,0 +1,15 @@
+
+.container {
+    width: 100%;
+    height: auto;
+    background-color: var(--card-background-color);
+    margin-top: 2px;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: calc(100vh - 200px);
+}
+

@@ -1,15 +1,12 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login, selectAuthLoading, selectEmailError, selectGeneralAuthError, selectPasswordError, selectSigninError } from "../../features/Auth/AuthSlice";
-import { useNavigate } from "react-router-dom";
+import {  selectAuthLoading, selectGeneralAuthError, selectSigninError } from "../../features/Auth/AuthSlice";
+
 import styles from "./Login.module.css";
-import { motion } from "framer-motion";
 import TextInput from "../../components/Inputs/TextInput/TextInput";
 import TextButton from "../../components/Buttons/TextButton/TextButton";
-import Label from "../../components/Titles/Label/Label";
-import Header from "../../components/Titles/Header/Header";
-import TextNavButton from "../../components/NavButtons/TextNavButton/TextNavButton";
-import { FormWrapper } from "../../components/Wrappers/FormWrapper/FormWrapper";
+import TextNavButton from "../../components/NavButtons/TextNavButton/TextNavButton"
+import { FormWrapper } from "../../components/ui/Wrappers/FormWrapper/FormWrapper";
 import { signinThunk } from "../../features/Auth/Thunks/SigninThunk";
 import { IsAuthenticated } from "../../components/Auth/IsAuthenticated/IsAuthenticated";
 
@@ -53,7 +50,7 @@ const Login = () => {
               error={error}
               autoComplete={'password'}
             />
-            <TextButton title="Log In" />
+            <TextButton  action={handleLogin} title="Log In" />
             <TextNavButton to="/signup" text="Sign Up" />
         </FormWrapper>
       </div>

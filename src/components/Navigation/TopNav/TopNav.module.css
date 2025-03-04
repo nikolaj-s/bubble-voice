@@ -1,5 +1,62 @@
 
-.container {
-    width: 100%;
-    height: 100%;
-}
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background-color: var(--dark-slate);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .navbar h2 {
+    color: var(--text-color);
+  }
+  
+  .searchContainer {
+    display: flex;
+    align-items: center;
+    background: var(--soft-blue);
+    padding: 6px 12px;
+    border-radius: 8px;
+  }
+  
+  .searchInput {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--light-grayish-white);
+    margin-left: 8px;
+  }
+  
+  .icon {
+    color: var(--light-grayish-white);
+    width: 20px;
+    height: 20px;
+  }
+  
+  .buttonGroup {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .navButton {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bubble-highlight);
+    color: var(--light-grayish-white);
+    border: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+  }
+  
+  .navButton:hover {
+    background: var(--highlight-blue);
+  }
+  
+  .buttonIcon {
+    width: 18px;
+    height: 18px;
+  }
+  

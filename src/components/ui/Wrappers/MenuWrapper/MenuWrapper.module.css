@@ -1,0 +1,48 @@
+.cardWrapper {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    width: calc(100%);
+    background-color: var(--card-background-color);
+    color: var(--text-color);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .sidebar {
+    width: calc(100% - 10px);
+    background-color: var(--background-color);
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .navButton {
+    padding: 12px 8px;
+    font-size: 16px;
+    color: var(--text-color);
+    background-color: transparent;
+    border: none;
+    border-radius: 8px;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .navButton:hover {
+    background-color: var(--button-hover);
+    transform: scale(1.05);
+  }
+  
+  .activeNavButton {
+    background-color: var(--secondary-color);
+    cursor: default;
+  }
+  
+  .contentArea {
+    flex: 1;
+    padding: 20px;
+    background-color: var(--card-background-color);
+  }
+  

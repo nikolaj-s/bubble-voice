@@ -17,4 +17,5 @@
     position: relative;
     box-sizing: border-box;
     background-color: var(--background-color);
+    color: var(--text-color);
 }

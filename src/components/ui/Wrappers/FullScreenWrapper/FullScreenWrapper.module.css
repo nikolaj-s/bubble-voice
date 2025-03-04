@@ -1,0 +1,25 @@
+.wrapper {
+    position: fixed; /* Make the wrapper take the whole screen */
+    top: 0;
+    left: 0;
+    width: 100vw; /* Full width */
+    height: 100vh; /* Full height *//* Semi-transparent dark background */
+    display: flex;
+    justify-content: center; /* Center children horizontally */
+    align-items: center; /* Center children vertically */
+    z-index: 9999; /* Ensure it's on top of other content */
+   
+  }
+  
+  .content {
+    padding: 5px;
+    background-color: var(--background-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    max-width: 800px; /* Optional: Set a max width for the content */
+    width: calc(100% - 40px);
+    height: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
