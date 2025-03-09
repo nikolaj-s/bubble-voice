@@ -9,10 +9,14 @@ import { selectActiveOverlay, closeOverlay } from "../../features/Overlay/overla
 import { Search } from "../Search/Search";
 
 import { CreateServer } from "../../pages/createServer/CreateServer";
+import { ServerSettings } from "../../pages/serverSettings/ServerSettings";
+import { Settings } from "../../pages/settings/settings";
 
 const overlayComponents = {
   search: Search,
   createServer: CreateServer,
+  serverSettings: ServerSettings,
+  settings:Settings
 };
 
 export const Overlay = ({ children }) => {

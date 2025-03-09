@@ -1,0 +1,81 @@
+.circle-button-container {
+    position: relative;
+    height: 60px;
+    width: 60px;
+    cursor: pointer;
+    border-radius: 50%;
+    scale: 1;
+    transition: scale 0.1s;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background-color: var(--primary-color);
+  }
+  
+  .circle-button-container:active {
+    scale: 0.95;
+  }
+  
+  .circle-button-container:hover {
+    scale: 1.05;
+  }
+  
+  /* Button Content (Children) */
+  .circle-button-content {
+    border-radius: 50%;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+    overflow: hidden;
+    color: var(--text-color);
+  }
+  
+  /* Tooltip */
+  .circle-button-name-container {
+    position: absolute;
+    left: 70px;
+    border-radius: 5px;
+    height: auto;
+    display: flex;
+    align-items: center;
+    z-index: 20;
+    padding: 5px;
+    max-width: 150px;
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.5);
+    animation: pop-in forwards linear 0.1s;
+    background-color: var(--background-color);
+    border: solid 1px var(--text-color);
+  }
+  
+  .circle-button-name-container h2 {
+    font-size: 0.9rem;
+    font-weight: 400;
+    text-align: center;
+    margin: 0;
+    padding: 3px;
+    color: var(--text-color);
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  /* Active Indicator */
+  .activeWrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 4px solid transparent;
+    transition: border 0.2s ease-in-out;
+  }
+  
+  .active {
+    border: 4px solid var(--accent-color);
+  }
+  

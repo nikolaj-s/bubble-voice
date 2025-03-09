@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
+
 import { useState } from "react";
+
 import styles from "./ToolTip.module.css";
 
 const Tooltip = ({ content, position = "top", children }) => {

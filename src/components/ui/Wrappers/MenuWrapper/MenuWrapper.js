@@ -3,11 +3,11 @@ import { useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./MenuWrapper.module.css";
 
-const MenuWrapper = ({ navItems, children }) => {
+const MenuWrapper = ({ navItems, children, permissions }) => {
   
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const activeSection = searchParams.get("section") || navItems[0].key;
+  const activeSection = children[searchParams.get("section")] ? searchParams.get("section") : navItems[0].key;
 
   const handleNavClick = (key) => {
     setSearchParams({ section: key });
@@ -24,8 +24,6 @@ const MenuWrapper = ({ navItems, children }) => {
             className={`${styles.navButton} ${
               activeSection === item.key ? styles.activeNavButton : ""
             }`}
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 300 }}
           >
             {item.label}
           </motion.button>
@@ -41,8 +39,9 @@ const MenuWrapper = ({ navItems, children }) => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
+            className={styles.contentWrapper}
           >
-            {children[activeSection]}
+             {React.cloneElement(children[activeSection], { permissions })}
           </motion.div>
         </AnimatePresence>
       </div>

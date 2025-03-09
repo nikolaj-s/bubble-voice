@@ -2,7 +2,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { BrowserRouter, HashRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import ProtectedRoute from '../components/Auth/ProtectedRoute/ProtectedRoute';
 
@@ -30,7 +30,7 @@ function App() {
           <Route path="/login" element={<BackSplash><Login /></BackSplash>} />
           <Route path="/signup" element={<BackSplash><Signup /></BackSplash>} />
           <Route path="/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/" element={<ProtectedRoute><></></ProtectedRoute>} />
+          <Route path="/" element={<ProtectedRoute><Navigate to={'/dashboard'} /></ProtectedRoute>} />
         </Routes>
       </div>
     </Router>

@@ -13,6 +13,9 @@ const searchSlice = createSlice({
     reducers: {
         toggleOpenSearch: (state, action) => {
             state.open = action.payload;
+        },
+        setFilter: (state, action) => {
+            state.filter = action.payload;
         }
     },
     extraReducers: {
@@ -26,6 +29,6 @@ export const selectCurrentSearchFilter = state => state.searchSlice.filter;
 
 export const selectSearchOpen = state => state.searchSlice.open;
 
-export const {toggleOpenSearch} = searchSlice.actions;
+export const {toggleOpenSearch, setFilter} = searchSlice.actions;
 
 export default searchSlice.reducer;

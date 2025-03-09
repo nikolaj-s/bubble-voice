@@ -1,7 +1,7 @@
 .label {
     font-size: 16px;
     color: var(--text-color); /* Using the primary color from the theme */
-    margin-bottom: 8px;
+    margin-top: 8px;
     display: block;
     text-align: start;
 }

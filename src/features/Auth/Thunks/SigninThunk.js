@@ -11,9 +11,9 @@ export const signinThunk = createAsyncThunk(
     async ({email, password}, { rejectWithValue }) => {
       try {
         
-        // if (!validateEmail(email) || !validatePassword(password)) {
-        //     return rejectWithValue({ errorMessage: 'Invalid Credentials', errorType: "signinError" });
-        // }
+        if (!validateEmail(email) || !validatePassword(password)) {
+            return rejectWithValue({ errorMessage: 'Invalid Credentials', errorType: "signinError" });
+        }
 
         const response = await axios.post(`${API_URL}/sign-in`, { email, password });
         

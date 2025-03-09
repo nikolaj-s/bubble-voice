@@ -1,0 +1,33 @@
+/* Set the root colors for consistency */
+
+  .spinnerWrapper {
+    width: 200px;
+    height: 200px;
+    background-color: var(--card-background-color);
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin: auto;
+  }
+  
+  .spinner {
+    border: 8px solid var(--primary-color); /* Base color of the spinner */
+    border-top: 8px solid var(--secondary-color); /* Color for the spinner's rotating part */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1.5s linear infinite;
+  }
+  
+  /* Animation for spinning */
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  

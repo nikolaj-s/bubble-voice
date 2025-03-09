@@ -1,8 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { testServerListData } from "../../lib/TestData";
 
-const serverSlice = createSlice({
-    name: 'serverSlice',
+const serversSlice = createSlice({
+    name: 'serversSlice',
     initialState: {
         servers: [],
         loading: false,
@@ -10,11 +9,20 @@ const serverSlice = createSlice({
     },
     reducers: {
         setServers: (state, action) => {
-            state.servers = action.payload;
+            
+            if (Array.isArray(action.payload)) {
+                state.servers = action.payload;
+            }
+             
+        },
+        addServer: (state, action) => {
+            state.servers.push(action.payload);
         }
     }
 })
 
-export const selectServers = state => state.serverSlice.servers;
+export const selectServers = state => state.serversSlice.servers;
 
-export default serverSlice.reducer;
+export const {setServers, addServer} = serversSlice.actions;
+
+export default serversSlice.reducer;

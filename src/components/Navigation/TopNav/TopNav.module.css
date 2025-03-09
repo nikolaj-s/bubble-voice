@@ -1,14 +1,26 @@
 
 .navbar {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 200px 1fr 200px;
+    grid-template-rows: 1fr;
     align-items: center;
-    padding: 10px 16px;
-    background-color: var(--dark-slate);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    justify-content: center;
   }
+
+  .header {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   .navbar h2 {
     color: var(--text-color);
+    margin: 0px;
+    padding: 0px;
+    font-size: 1.2rem;
+    margin-left: 5px;
   }
   
   .searchContainer {

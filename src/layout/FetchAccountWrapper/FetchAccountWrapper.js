@@ -6,6 +6,7 @@ import { fetchAccount } from "../../features/Account/Thunks/fetchAccount";
 import DashboardSkeleton from "../../components/Loading/DashBoardSkeleton/DashBoardSkeleton";
 import { selectAccount, selectAccountError } from "../../features/Account/accountSlice";
 import { clearToken } from "../../lib/services/authService";
+import { fetchDevices } from "../../features/Devices/DeviceSlice";
 
 const FetchAccountWrapper = ({ children }) => {
 
@@ -18,6 +19,8 @@ const FetchAccountWrapper = ({ children }) => {
     const error = useSelector(selectAccountError);
 
     useEffect(() => {
+
+        dispatch(fetchDevices());
 
         dispatch(fetchAccount());
 

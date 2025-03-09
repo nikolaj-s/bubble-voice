@@ -7,6 +7,9 @@ import FetchAccountWrapper from "../../layout/FetchAccountWrapper/FetchAccountWr
 import { Route, Routes } from "react-router";
 import { Notices } from "../../components/Notices/Notices";
 import { Overlay } from "../../layout/Overlay/Overlay";
+import { DashboardHome } from "../../components/DashboardHome/DashboardHome";
+import { Server } from "../server/server";
+import ServerNotFound from "../../components/Error/ServerNotFound/ServerNotFound";
 
 const Dashboard = () => {
   return (
@@ -18,13 +21,11 @@ const Dashboard = () => {
             <div className={styles.wrapper}>
               <TopNav />
               <div className={styles.mainContent}>
-                <section></section>
-                <section className={styles["middle-content"]}>
-                  <Routes>
-                    <Route path="/" element={<Notices />} />
-                  </Routes>
-                </section>
-                <section></section>
+                <Routes>
+                  <Route path="/" element={<DashboardHome />} />
+                  <Route path="/server/:serverID" element={<Server />} />
+                  <Route path="/not-found" element={<ServerNotFound />} />
+                </Routes>
               </div>
             </div>
           </div>

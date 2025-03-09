@@ -1,0 +1,34 @@
+.skeletonLoader {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .skeletonField {
+    width: 100%;
+    height: 40px;
+    background-color: var(--card-background-color);
+    border-radius: 8px;
+    animation: pulse 1.5s infinite ease-in-out;
+  }
+  
+  .skeletonButton {
+    width: 100%;
+    height: 50px;
+    background-color: var(--button-background);
+    border-radius: 8px;
+    animation: pulse 1.5s infinite ease-in-out;
+  }
+  
+  @keyframes pulse {
+    0% {
+      background-color: var(--secondary-color);
+    }
+    50% {
+      background-color: var(--accent-color);
+    }
+    100% {
+      background-color: var(--secondary-color);
+    }
+  }
+  

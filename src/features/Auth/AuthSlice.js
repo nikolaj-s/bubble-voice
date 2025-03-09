@@ -3,7 +3,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { signupThunk as signUp } from "./Thunks/SignupThunk";
 import { signinThunk as signIn } from "./Thunks/SigninThunk";
 
-
 const authSlice = createSlice({
   name: "authSlice",
   initialState: {

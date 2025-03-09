@@ -33,7 +33,7 @@ const Dropdown = ({ selectedItem, options }) => {
                 key={index}
                 className={`${styles.option} ${option === selected ? styles.selectedOption : ''}`}
                 onClick={() => handleSelect(option)}
-                whileHover={{ scale: 1.05 }}
+               
                 transition={{ type: 'spring', stiffness: 300 }}
               >
                 {option}

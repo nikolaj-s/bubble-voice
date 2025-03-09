@@ -1,0 +1,22 @@
+
+@keyframes server-fade-on {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.sectionOne {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 80px 1fr 80px;
+}
+
+
+.sectionOne,
+.sectionTwo,
+.sectionThree {
+    animation: server-fade-in 0.3s linear forwards ease-in;
+}

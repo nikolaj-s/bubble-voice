@@ -4,6 +4,7 @@
     grid-template-columns: 70px 1fr; /* Side Nav (70px) + Main Content (1fr) */
     grid-template-rows: 30px 1fr; /* Top Nav (30px) + Content (rest of the space) */
     height: 100vh; /* Full height */
+    opacity: 0.5;
   }
   
   /* Side Navigation */
@@ -70,7 +71,7 @@
     flex-grow: 1;
     background-color: #bdc3c7;
     animation: pulse 1.5s infinite ease-in-out;
-    margin: 0px 2px;
+
   }
   
   /* Pulse Animation for Skeleton */

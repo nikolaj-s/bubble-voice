@@ -15,19 +15,17 @@
 }
 .mainContent {
   display: grid;
-  background-color: var(--primary-color);
+  
   border-top-left-radius: 20px;
+  overflow: hidden;
   grid-template-columns: 200px 1fr 200px;
-
+  gap: 1px;
 }
 
 .mainContent section {
   height: 100%;
   width: 100%;
+  background-color: var(--primary-color);
 }
 
-.middle-content {
-  border-left: 1px solid var(--background-color);
-  border-right: 1px solid var(--background-color);
-}
 

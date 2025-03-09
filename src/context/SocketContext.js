@@ -5,13 +5,15 @@ import io from 'socket.io-client';
 
 import { API_URL } from '../lib/Validation';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import DashboardSkeleton from '../components/Loading/DashBoardSkeleton/DashBoardSkeleton';
 
 import { clearToken, getToken } from '../lib/services/authService';
 
 import { useNavigate } from 'react-router';
+
+import { selectServers } from '../features/Servers/serversSlice';
 
 const SocketContext = createContext();
 
@@ -22,8 +24,6 @@ export const SocketProvider = ({ children }) => {
     const [socket, setSocket] = useState(null);
 
     const [loading, toggleLoading] = useState(true);
-
-    const dispatch = useDispatch();
 
     useEffect(() => {
 
@@ -37,14 +37,14 @@ export const SocketProvider = ({ children }) => {
         
         }
 
-        const socketConnection = io(API_URL,{query: {
+        const socket = io(API_URL,{query: {
             "TOKEN": token
         }});
 
-        socketConnection.on('connect', () => {
+        socket.on('connect', () => {
             console.log('Connected to socket');
 
-            socketConnection.request = function request(type, data = {}) {
+            socket.request = function request(type, data = {}) {
                 return new Promise((resolve, reject) => {
                     socket.emit(type, data, (data) => {
                         if (data.error) {
@@ -59,17 +59,22 @@ export const SocketProvider = ({ children }) => {
             toggleLoading(false);
         });
 
-        socketConnection.on('disconnect', () => {
-            console.log('Disconnected from socket');
+        socket.on("duplicate_connection", (message) => {
+            alert("You have been disconnected due to duplicate connection");
+            socket.disconnect();
+        })
+
+        socket.on('disconnect', (reason) => {
+            console.log('Disconnected from socket', reason);
         });
 
-        setSocket(socketConnection);
+        setSocket(socket);
 
         return () => {
 
-            if (socketConnection) {
+            if (socket) {
 
-                socketConnection.disconnect();
+                socket.disconnect();
 
                 setSocket(null);
             }

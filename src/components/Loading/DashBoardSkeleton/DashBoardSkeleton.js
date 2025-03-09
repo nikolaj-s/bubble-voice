@@ -2,8 +2,16 @@ import React from 'react';
 import styles from './DashBoardSkeleton.module.css';
 import { Logo } from '../../Icons/Bubble/Logo';
 
-const DashboardSkeleton = () => {
+const DashboardSkeleton = ({alt = false}) => {
   return (
+    <>
+    {alt ?
+    <>
+        <div className={styles.fixedSection}></div>
+        <div className={styles.centerSection}></div>
+        <div className={styles.fixedSection}></div>
+    </>
+    :
     <div className={styles.layout}>
       <div className={styles.sideNav}>
         {/* Circle Buttons */}
@@ -24,7 +32,8 @@ const DashboardSkeleton = () => {
           <div className={styles.fixedSection}></div>
         </div>
       </div>
-    </div>
+    </div>}
+    </>
   );
 };
 

@@ -1,0 +1,54 @@
+
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    color: var(--text-color);
+  }
+  
+  .card {
+    background: var(--card-background-color);
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .errorCode {
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--error-color);
+  }
+  
+  .errorMessage {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
+  }
+  
+  .description {
+    font-size: 0.9rem;
+    color: rgba(209, 217, 230, 0.8);
+    margin-top: 0.5rem;
+  }
+  
+  .backButton {
+    margin-top: 1.5rem;
+    padding: 0.7rem 1.5rem;
+    border: none;
+    background-color: var(--button-background);
+    color: var(--text-color);
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+  }
+  
+  .backButton:hover {
+    background-color: var(--button-hover);
+  }
+  
