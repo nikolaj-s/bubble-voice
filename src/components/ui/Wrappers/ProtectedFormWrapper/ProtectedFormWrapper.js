@@ -38,7 +38,18 @@ const ProtectedFormWrapper = ({ children }) => {
       const response = await axios.get(`${API_URL}/permissions/${serverId}`, {
         headers: { TOKEN: token },
       });
-      console.log(response.data)
+      
+      if (response.data.admin) {
+
+        const adminPermissions = new Proxy({}, {
+          get: () => true, // Always returns true for any accessed key
+        });
+
+        setPermissions(adminPermissions);
+        setIsAuthorized(true);
+        return;
+      }
+
       if (response.data.permissions) {
         setIsAuthorized(true);
         setPermissions(response.data.permissions);

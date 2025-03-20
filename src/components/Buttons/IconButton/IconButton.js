@@ -12,7 +12,7 @@ const IconButton = ({
   className = "",
   width = 30,
   height = 30,
-  backgroundColor = 'transparent',
+  backgroundColor = 'rgba(0,0,0,0)',
   backgroundHover = 'var(--button-hover)'
 }) => {
   

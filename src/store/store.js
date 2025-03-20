@@ -31,6 +31,8 @@ import channelsSlice from '../features/Channels/channelsSlice';
 
 import mediaControlSlice from '../features/MediaControl/mediaControlSlice';
 
+import serverPermissionsSlice from '../features/ServerPermissions/serverPermissionsSlice';
+
 import {FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER} from 'redux-persist';
 
 // state store
@@ -52,6 +54,7 @@ const store = configureStore({
       serverDetailsSlice: serverDetailsSlice,
       serverUsersSlice: serverUsersSlice,
       channelsSlice: channelsSlice,
+      serverPermissionsSlice: serverPermissionsSlice,
       // media
       mediaControlSlice: mediaControlSlice
     },

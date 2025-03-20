@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { resetServerDetails, selectServerDetailsStatus, setServerDetails, setServerDetailsStatus } from '../../features/ServerDetails/serverDetailsSlice';
 import DashboardSkeleton from '../../components/Loading/DashBoardSkeleton/DashBoardSkeleton';
 import { useNavigate, useParams } from 'react-router';
+import { setPermissions } from '../../features/ServerPermissions/serverPermissionsSlice';
 
 export const FetchServerDetailsProvider = ({children}) => {
 
@@ -28,8 +29,8 @@ export const FetchServerDetailsProvider = ({children}) => {
 
             dispatch(setServerDetailsStatus('loading'));
 
-            const details = await socket.request('fetch server details', {server_id: serverID})
-            .then(res => res.data)
+            const data = await socket.request('fetch server details', {server_id: serverID})
+            .then(res => res)
             .catch(error => {
                 console.log(error);
                 if (error === "Server Not Found") {
@@ -38,13 +39,16 @@ export const FetchServerDetailsProvider = ({children}) => {
                     navigate('/dashboard/not-found')
                 }
             });
+            console.log(data)
+            if (data.details) {
 
-            if (details) {
-
-                dispatch(setServerDetails(details));
+                dispatch(setServerDetails(data.details));
 
             }
 
+            if (data.permissions) {
+                dispatch(setPermissions(data.permissions));
+            }
         }
 
         const handleServerDetailsUpdate = (data) => {

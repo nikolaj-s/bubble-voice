@@ -1,34 +1,41 @@
-/* Style for the container */
-.typeInputWrapper {
-    display: flex;
-    gap: 10px;
-    margin: 10px 0;
-  }
-  
-  /* Style for the option buttons */
-  .typeButton {
-    background-color: var(--card-background-color);
-    border: 2px solid var(--primary-color);
-    border-radius: 8px;
-    padding: 8px 16px;
-    color: var(--text-color);
-    font-size: 16px;
-    cursor: pointer;
-    text-transform: capitalize;
-    transition: all 0.3s ease;
-  }
-  
-  /* Style for the selected option */
-  .typeButton.selected {
-    background-color: var(--primary-color);
-    color: var(--text-color);
-    border: 2px solid var(--secondary-color);
-  }
-  
-  /* Hover effect for the options */
-  .typeButton:hover {
-    background-color: var(--secondary-color);
-    color: var(--card-background-color);
-    border-color: var(--secondary-color);
-  }
-  
+
+.container {
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+  background: var(--background-color);
+  padding: 20px;
+  border-radius: 10px;
+  font-family: var(--font-family);
+}
+
+.option {
+  background: var(--card-background-color);
+  padding: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.option:hover {
+  background: var(--secondary-color);
+}
+
+.option.selected {
+  border-color: var(--success-color);
+  background: var(--accent-color);
+}
+
+.title {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 18px;
+}
+
+.description {
+  margin: 5px 0 0;
+  color: var(--text-color);
+  font-size: 14px;
+  opacity: 0.8;
+}

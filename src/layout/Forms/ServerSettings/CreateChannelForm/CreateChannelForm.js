@@ -18,7 +18,11 @@ export const CreateChannelForm = ({permissions}) => {
 
     const [channelType, setChannelType] = React.useState("voice");
 
-    const [channelTypes, setChannelTypes] = React.useState(["voice", "text", "thread"]);
+    const [channelTypes, setChannelTypes] = React.useState([
+        {title: "Voice / Video", description: "Instant voice and video communication for seamless real-time interaction.", type: 'voice'},
+        {title: "Text", description: "Live text-based conversations with instant messaging and rich formatting.", type: "text"},
+        {title: "Thread", description: "Structured thread channel for paginated rich text discussions with formatting and media support.", type: "thread"}
+    ]);
 
     const [channelIcon, setChannelIcon] = React.useState(null);
 
