@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './DropDown.module.css';
 
-const Dropdown = ({ selectedItem, options }) => {
+const Dropdown = ({ selected, options, setSelected }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(selectedItem);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 

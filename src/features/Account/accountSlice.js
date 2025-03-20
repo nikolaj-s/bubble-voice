@@ -40,7 +40,8 @@ const accountSlice = createSlice({
         state.updateError = false;
       })
       .addCase(updateAccount.rejected, (state, action) => {
-        state.updateError = action.payload.errorMessage;
+        state.updateError = action.payload;
+        state.updateLoading = false;
       })
       .addCase(updateAccount.fulfilled, (state, action) => {
         state.updateLoading = false;

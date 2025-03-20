@@ -1,89 +1,88 @@
-/* Main layout */
 .layout {
-    display: grid;
-    grid-template-columns: 70px 1fr; /* Side Nav (70px) + Main Content (1fr) */
-    grid-template-rows: 30px 1fr; /* Top Nav (30px) + Content (rest of the space) */
-    height: 100vh; /* Full height */
-    opacity: 0.5;
-  }
-  
-  /* Side Navigation */
-  .sideNav {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 5px;
-  }
-  
-  /* Circle Skeleton Loader */
-  .circle {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: #bdc3c7;
-    margin-bottom: 5px;
-    animation: pulse 1.5s infinite ease-in-out;
-  }
-  .logo {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-bottom: 5px;
-  }
-  .logo svg {
-    width: 100%;
-    height: 100%;
-  }
-  
-  /* Top Navigation */
-  .topNav {
-    height: 30px;
-  }
-  
-  /* Content Section */
-  .mainContent {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100vh;
-  }
-  
-  /* Main Content Sections */
-  .contentSection {
-    display: flex;
-    flex-direction: row;
-    height: 100%;
-    border-top-left-radius: 20px;
-    overflow: hidden;
-  }
-  
-  /* Fixed Sections (250px width) */
-  .fixedSection {
-    width: 200px;
-    background-color: #bdc3c7;
-    animation: pulse 1.5s infinite ease-in-out;
-    
-  }
-  
-  /* Center Section (fills remaining space) */
-  .centerSection {
-    flex-grow: 1;
-    background-color: #bdc3c7;
-    animation: pulse 1.5s infinite ease-in-out;
+  display: grid;
+  grid-template-columns: 70px 1fr; /* Side Nav (70px) + Main Content (1fr) */
+  grid-template-rows: 40px 1fr; /* Top Nav (30px) + Content (rest of the space) */
+  height: 100vh;
+  opacity: 0.75;
+}
 
+/* Side Navigation */
+.sideNav {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 5px;
+}
+
+/* Circle Skeleton Loader */
+.circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: var(--secondary-color);
+  margin-bottom: 5px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-bottom: 5px;
+}
+
+.logo svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Top Navigation */
+.topNav {
+  height: 40px;
+}
+
+/* Content Section */
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+}
+
+/* Main Content Sections */
+.contentSection {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  border-top-left-radius: 20px;
+  overflow: hidden;
+  background-color: var(--card-background-color);
+}
+
+/* Fixed Sections (250px width) */
+.fixedSection {
+  width: 200px;
+  background-color: var(--secondary-color);
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* Center Section (fills remaining space) */
+.centerSection {
+  flex-grow: 1;
+  background-color: var(--card-background-color);
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* Pulse Animation for Skeleton */
+@keyframes pulse {
+  0% {
+    background-color: var(--primary-color);
   }
-  
-  /* Pulse Animation for Skeleton */
-  @keyframes pulse {
-    0% {
-      background-color: #bdc3c7;
-    }
-    50% {
-      background-color: #878787;
-    }
-    100% {
-      background-color: #bdc3c7;
-    }
+  50% {
+    background-color: var(--card-background-color);
   }
-  
+  100% {
+    background-color: var(--primary-color);
+  }
+}

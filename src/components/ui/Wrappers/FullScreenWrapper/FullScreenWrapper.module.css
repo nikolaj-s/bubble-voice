@@ -21,5 +21,6 @@
     height: auto;
     display: flex;
     flex-direction: column;
+    max-height: calc(100vh - 20px);
   }
   

@@ -2,20 +2,17 @@ import axios from "axios";
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-import { getToken } from "../../../lib/services/authService";
-
 import { API_URL } from "../../../lib/Validation";
 import { setServers } from "../../Servers/serversSlice";
+import { APIErrorHandler } from "../../../lib/handlers/APIErrorHandler/APIErrorHandler";
 
 // Async thunk to fetch account details
 export const fetchAccount = createAsyncThunk(
     'account/fetchAccount',
-    async (_, { rejectWithValue, dispatch }) => {
+    async (_, { rejectWithValue, dispatch, getState }) => {
       try {
   
-          const token = await getToken();
-          
-          if (!token) rejectWithValue("Not Authorized");
+          const {token} = getState().authSlice;
   
           const response = await axios.get(`${API_URL}/fetch-account`, {
               method: 'GET',
@@ -42,7 +39,7 @@ export const fetchAccount = createAsyncThunk(
   
           console.log(error);
   
-          return rejectWithValue(error.message); // Return error message
+          return  APIErrorHandler(rejectWithValue, error, 'Internal Server Error'); // Return error message
       }
     }
   );

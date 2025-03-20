@@ -3,6 +3,7 @@ import { validateConfirmPassword, validateEmail, validatePassword, validateUsern
 import axios from "axios";
 import { API_URL } from "../../../lib/Validation";
 import { setToken } from "../../../lib/services/authService";
+import { APIErrorHandler } from "../../../lib/handlers/APIErrorHandler/APIErrorHandler";
 
 export const signupThunk = createAsyncThunk(
     'auth/signUp',
@@ -30,7 +31,7 @@ export const signupThunk = createAsyncThunk(
                 if (response?.data?.success) {
                     setToken(response?.data?.token)
 
-                    return {authorized: true}
+                    return {authorized: true, token: response.data.token}
                 }
 
                 return {error: "Fatal Error"}; // Expected to contain user info and token
@@ -40,16 +41,7 @@ export const signupThunk = createAsyncThunk(
         
             return; // Assuming the response contains the user data
         } catch (error) {
-            if (error.response) {
-                // Server responded with a status code outside 2xx
-                return rejectWithValue(error.response.data?.errorMessage || 'Invalid credentials');
-              } else if (error.request) {
-                // Request was made but no response received
-                return rejectWithValue('No response from the server');
-              } else {
-                // Something else went wrong
-                return rejectWithValue('An error occurred during sign-in');
-              } // Assuming the error message is in response.data
+           return APIErrorHandler(rejectWithValue, error, 'Fatal error signing up, please try again later')// Assuming the error message is in response.data
         }
     }
 );

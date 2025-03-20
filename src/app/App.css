@@ -9,6 +9,7 @@
     --button-hover: #4c8b9e;
     --error-color: #e16b6b;
     --success-color: #76c7a5;
+    --font-family: "Inter", sans-serif,
   }
 
 .App {
@@ -18,4 +19,5 @@
     box-sizing: border-box;
     background-color: var(--background-color);
     color: var(--text-color);
+    font-family: var(--font-family);
 }

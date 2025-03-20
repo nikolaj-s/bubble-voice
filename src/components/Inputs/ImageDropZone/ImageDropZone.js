@@ -9,7 +9,8 @@ const ImageDropZone = ({
   onImageChange, 
   borderRadius = "8px", 
   width = 200, 
-  height = 200 
+  height = 200,
+  dimensions = 800
 }) => {
   
   const [preview, setPreview] = useState(existingImage || "");
@@ -29,7 +30,7 @@ const ImageDropZone = ({
       if (acceptedFiles.length === 0) return;
 
       const file = acceptedFiles[0];
-      const maxSize = Math.max(width, height); // Use the largest dimension
+      const maxSize = dimensions// Use the largest dimension
       const options = {
         maxSizeMB: 0.75,
         maxWidthOrHeight: maxSize,
@@ -51,7 +52,7 @@ const ImageDropZone = ({
   );
 
   const { getRootProps, getInputProps } = useDropzone({
-    accept: "image/*",
+    accept: ['image/jpeg', 'image/jpg', 'image/webp', 'image/png'],
     onDrop,
     multiple: false,
   });
@@ -60,7 +61,7 @@ const ImageDropZone = ({
     <div 
       {...getRootProps()} 
       className={styles.dropzone} 
-      style={{ width, height, borderRadius }}
+      style={{ width, height, borderRadius, flexShrink: 0, maxWidth: 'calc(100% - 10px)' }}
     >
       <input {...getInputProps()} />
       {preview ? (

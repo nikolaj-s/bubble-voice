@@ -1,9 +1,12 @@
 import { Navigate } from "react-router-dom";
 
-import { isAuthenticated } from "../../../lib/services/authService";
+import { useSelector } from "react-redux";
 
 const ProtectedRoute = ({ children }) => {
-  return isAuthenticated() ? children : <Navigate to="/login" />;
+
+  const jwt = useSelector(state => state.authSlice.token);
+
+  return jwt ? children : <Navigate to="/login" />;
 };
 
 export default ProtectedRoute;

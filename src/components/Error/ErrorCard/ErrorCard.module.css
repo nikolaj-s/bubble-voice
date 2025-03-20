@@ -1,0 +1,22 @@
+.errorCard {
+    background-color: var(--card-background-color);
+    color: var(--text-color);
+    border: 1px solid var(--error-color);
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    text-align: center;
+    font-family: var(--font-family);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+  }
+  
+  .errorMessage {
+    font-size: 1.2rem;
+    color: var(--error-color);
+  }
+  

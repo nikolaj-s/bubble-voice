@@ -3,15 +3,17 @@ import FullScreenWrapper from '../../components/ui/Wrappers/FullScreenWrapper/Fu
 import FloatingSearch from '../../components/Inputs/FloatingSearch/FloatingSearch'
 import { SearchResults } from '../../components/SearchResults/SearchResults'
 import { useSelector } from 'react-redux'
+import TextLabelError from '../../components/Error/TextLabelError/TextLabelError'
 
 export const Search = ({close}) => {
 
-    const {loading, results} = useSelector(state => state.searchSlice);
+    const {loading, results, filter, error} = useSelector(state => state.searchSlice);
 
     return (
-       <FullScreenWrapper onClose={close}>
-            <FloatingSearch />
-            <SearchResults results={results} loading={loading} />
+       <FullScreenWrapper maxContentWidth={600} onClose={close}>
+                {error ? <TextLabelError label='Error:' error={error} /> : null}
+                <FloatingSearch />
+                <SearchResults results={results[filter]} loading={loading} filter={filter} />
        </FullScreenWrapper>
     )
 }

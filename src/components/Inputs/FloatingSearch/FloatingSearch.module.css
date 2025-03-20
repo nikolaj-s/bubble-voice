@@ -17,6 +17,8 @@
     transition: width 0.3s ease-in-out;
     color: var(--text-color);
     background: none;
+    font-weight: 200;
+    font-family: var(--font-family);
     
   }
   

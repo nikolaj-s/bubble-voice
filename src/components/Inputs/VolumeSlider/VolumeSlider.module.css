@@ -1,44 +1,50 @@
-.volume-slider {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    position: relative;
-    width: 100%;
-  }
-  
-  .slider {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    height: 6px;
-    background: var(--background-color);
-    border-radius: 5px;
-    outline: none;
-    transition: 0.2s;
-    cursor: pointer;
-  }
-  
-  .slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 14px;
-    height: 14px;
-    background: var(--accent-color);
-    border-radius: 50%;
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
-  
-  .slider::-webkit-slider-thumb:hover {
-    transform: scale(1.2);
-  }
-  
-  .volume-label {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--text-color);
-    background: var(--background-color);
-    padding: 4px 8px;
-    border-radius: 5px;
-  }
-  
+.volumeSlider {
+  display: flex;
+  align-items: center;
+}
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(to right, var(--accent-color) 0%, var(--accent-color) calc(100% * var(--slider-value)), var(--background-color) calc(100% * var(--slider-value)), var(--background-color) 100%);
+  border-radius: 5px;
+  outline: none;
+  transition: 0.2s;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+/* For webkit browsers like Chrome, Safari */
+.slider::-webkit-slider-runnable-track {
+  height: 6px;
+  background: transparent;  /* Don't overwrite the background in the track */
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  background: var(--accent-color);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s;
+  margin-top: -4px;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.volumeLabel {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-color);
+  background: var(--background-color);
+  padding: 4px 8px;
+  border-radius: 5px;
+  width: 50px;
+  text-align: center;
+}

@@ -4,6 +4,7 @@
     height: auto;
     background-color: var(--card-background-color);
     margin-top: 2px;
+    border-radius: 0px 0px 10px 10px;
 }
 
 .wrapper {

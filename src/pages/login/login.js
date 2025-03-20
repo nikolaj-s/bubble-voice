@@ -9,6 +9,7 @@ import TextNavButton from "../../components/NavButtons/TextNavButton/TextNavButt
 import { FormWrapper } from "../../components/ui/Wrappers/FormWrapper/FormWrapper";
 import { signinThunk } from "../../features/Auth/Thunks/SigninThunk";
 import { IsAuthenticated } from "../../components/Auth/IsAuthenticated/IsAuthenticated";
+import Label from "../../components/Titles/Label/Label";
 
 const Login = () => {
 
@@ -33,7 +34,8 @@ const Login = () => {
   return (
     <IsAuthenticated>
       <div className={styles.wrapper}>
-        <FormWrapper error={altError} header="BUBBLE" label="Log in to your Bubble account" onSubmit={handleLogin} loading={loading}>
+        <FormWrapper error={altError} header="BUBBLE" onSubmit={handleLogin} loading={loading}>
+            <Label label="Log in to your Bubble Account"/>
             <TextInput
               type="text"
               placeholder="email"

@@ -1,22 +1,29 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 import { signupThunk as signUp } from "./Thunks/SignupThunk";
 import { signinThunk as signIn } from "./Thunks/SigninThunk";
+import { getToken } from "../../lib/services/authService";
+
+const initialState = {
+  isAuthenticated: false,
+  isLoading: false,
+  user: null,
+  emailError: false,
+  passwordError: false,
+  usernameError: false,
+  signinError: false,
+  confirmPasswordError: false,
+  error: false,
+  token: getToken()
+}
 
 const authSlice = createSlice({
   name: "authSlice",
-  initialState: {
-    isAuthenticated: false,
-    isLoading: false,
-    user: null,
-    emailError: false,
-    passwordError: false,
-    usernameError: false,
-    signinError: false,
-    confirmPasswordError: false,
-    error: false
-  },
+  initialState,
   reducers: {
+    setJWT: (state, action) => {
+      state.token = action.payload;
+    },
     login: (state, action) => {
       state.isAuthenticated = true;
       state.user = action.payload;
@@ -41,6 +48,7 @@ const authSlice = createSlice({
       state.successMessage = 'Sign-in successful!';
       if (action.payload.authorized) {
         state.isAuthenticated = true;
+        state.token = action.payload.token;
       }
     })
     .addCase(signIn.rejected, (state, action) => {
@@ -67,6 +75,7 @@ const authSlice = createSlice({
       state.successMessage = 'Sign-up successful!';
       if (action.payload.authorized) {
         state.isAuthenticated = true;
+        state.token = action.payload.token;
       }
       
     })

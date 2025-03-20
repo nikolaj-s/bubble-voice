@@ -1,22 +1,12 @@
 
-@keyframes server-fade-on {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-
 .sectionOne {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 80px 1fr 80px;
+    grid-template-rows: 80px 1fr 65px;
+    border-top-left-radius: 10px;
 }
 
-
-.sectionOne,
-.sectionTwo,
-.sectionThree {
-    animation: server-fade-in 0.3s linear forwards ease-in;
+.sectionTwo {
+    max-height: calc(100vh - 40px);
+    overflow: hidden;
 }

@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import styles from "./FullScreenWrapper.module.css"; // Assuming you're using CSS modules
 
-const FullScreenWrapper = ({ children, onClose }) => {
+const FullScreenWrapper = ({ children, onClose, maxContentWidth = 800 }) => {
   const handleWrapperClick = () => {
     onClose();
   };
@@ -16,6 +16,10 @@ const FullScreenWrapper = ({ children, onClose }) => {
       onClick={handleWrapperClick} // Attach the click handler
     >
       <motion.div
+
+      style={{
+        maxWidth: maxContentWidth
+      }}
       initial={{ opacity: 0, scale: 0.8,}}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.8 }}

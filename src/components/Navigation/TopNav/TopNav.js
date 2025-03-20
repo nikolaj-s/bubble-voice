@@ -1,4 +1,3 @@
-import { useLocation } from "react-router-dom";
 
 import styles from "./TopNav.module.css";
 import IconButton from "../../Buttons/IconButton/IconButton";
@@ -7,19 +6,18 @@ import { SearchIcon } from "../../Icons/Search/SearchIcon";
 import { NotificationBellIcon } from "../../Icons/NotificationBell/NotificationBellIcon";
 import { useDispatch, useSelector } from "react-redux";
 import { setOverlay } from "../../../features/Overlay/overlaySlice";
-import { selectServerDetailsID, selectServerName } from "../../../features/ServerDetails/serverDetailsSlice";
+import { selectServerName } from "../../../features/ServerDetails/serverDetailsSlice";
 
-import { Settings2 } from "lucide-react";
+import { LayoutDashboard, Settings2 } from "lucide-react";
+import { Route, Routes } from "react-router";
 
 const TopNav = () => {
   
   const dispatch = useDispatch();
 
-  const location = useLocation();
-
   const serverName = useSelector(selectServerName);
 
-  const isServerRoute = useSelector(selectServerDetailsID);
+  const isServerRoute = useSelector(state => state.serverDetailsSlice.server_id);
 
   const textColor = getComputedStyle(document.documentElement)
     .getPropertyValue('--text-color')
@@ -36,11 +34,21 @@ const TopNav = () => {
   
       {/* Dynamic Buttons */}
       <div className={styles.serverButtons}>
-      {isServerRoute && <></>}
+      {isServerRoute && (
+        <Routes>
+          <Route path="/server/:serverID" element={(
+            <>
+            <IconButton Icon={<LayoutDashboard color="var(--text-color)"  />} title={"Dashboard"} position="bottom"  />
+            </>
+          )}>
+
+          </Route>
+        </Routes>
+      )}
       </div>
       <div className={styles.buttonGroup}>
         
-        <IconButton onClick={() => {dispatch(setOverlay('search'))}} Icon={<SearchIcon />} position="bottom" title={"Search"} />
+        <IconButton width={60} onClick={() => {dispatch(setOverlay('search'))}} Icon={<SearchIcon />} position="bottom" title={"Search"} />
         <IconButton
           Icon={<NotificationBellIcon />}
           position="bottom"

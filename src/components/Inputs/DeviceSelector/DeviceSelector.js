@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchDevices, setWebcam, setMicrophone, setSpeaker } from "../../../features/Devices/DeviceSlice";
+import { fetchDevices, setWebcam, setMicrophone, setSpeaker } from "../../../features/Settings/Devices/DeviceSlice";
 import styles from "./DeviceSelector.module.css";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react"; // Import an icon from lucide-react

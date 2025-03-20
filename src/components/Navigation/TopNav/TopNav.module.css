@@ -45,9 +45,9 @@
     height: 20px;
   }
   
+  .serverButtons,
   .buttonGroup {
     display: flex;
-    gap: 10px;
   }
   
   .navButton {

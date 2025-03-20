@@ -9,6 +9,7 @@ import React from 'react'
 import {  selectAuthLoading, selectConfirmPasswordError, selectEmailError, selectGeneralAuthError, selectPasswordError, selectUsernameError } from '../../features/Auth/AuthSlice';
 import { signupThunk } from '../../features/Auth/Thunks/SignupThunk';
 import { IsAuthenticated } from '../../components/Auth/IsAuthenticated/IsAuthenticated';
+import Label from '../../components/Titles/Label/Label';
 
 const Signup = () => {
 
@@ -43,7 +44,8 @@ const Signup = () => {
     return (
         <IsAuthenticated>
             <div className={styles.wrapper}>
-                <FormWrapper onSubmit={handleSignUp} label="Create a Bubble Account" header="BUBBLE" loading={loading} error={error}>
+                <FormWrapper onSubmit={handleSignUp}  header="BUBBLE" loading={loading} error={error}>
+                    <Label label="Create a Bubble Account" />
                     <TextInput autoComplete="username" error={usernameError} onChange={(v) => {setUsername(v)}} value={username} placeholder={"Username"} />
                     <TextInput autoComplete="email" error={emailError} onChange={(v) => {setEmail(v)}} value={email} placeholder={"Email"} />
                     <TextInput autoComplete="new-password" error={passwordError} onChange={(v) => {setPassword(v)}} value={password} placeholder={"Password"} type='password' /> 

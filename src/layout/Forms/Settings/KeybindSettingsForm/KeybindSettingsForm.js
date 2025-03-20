@@ -3,7 +3,7 @@ import Header from '../../../../components/Titles/Header/Header'
 import Label from '../../../../components/Titles/Label/Label'
 import KeybindInput from '../../../../components/Inputs/KeybindInput/KeybindInput'
 import { useDispatch, useSelector } from 'react-redux';
-import { setKeybind } from '../../../../features/Keybinds/keybindsSlice';
+import { setKeybind } from '../../../../features/Settings/Keybinds/keybindsSlice';
 
 export const KeybindSettingsForm = () => {
   const dispatch = useDispatch();

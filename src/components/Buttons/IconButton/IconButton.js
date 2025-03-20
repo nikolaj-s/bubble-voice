@@ -10,14 +10,23 @@ const IconButton = ({
   onClick,
   position = "top",
   className = "",
+  width = 30,
+  height = 30,
+  backgroundColor = 'transparent',
+  backgroundHover = 'var(--button-hover)'
 }) => {
   
+  const handleClick = (e) => {
+    e.stopPropagation();
+    onClick(e);
+  }
   return (
     <Tooltip content={title} position={position}>
       <motion.button
-        onClick={onClick}
+        style={{width, height, backgroundColor }}
+        onClick={handleClick}
         className={`${styles.button} ${className}`}
-        whileHover={{ opacity: 0.75 }}
+        whileHover={{ backgroundColor: backgroundHover}}
         whileTap={{ scale: 0.9 }}
       >
         {Icon}

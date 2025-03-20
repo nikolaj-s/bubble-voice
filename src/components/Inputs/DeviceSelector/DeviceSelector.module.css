@@ -25,7 +25,7 @@
     font-size: 14px;
     border-radius: 6px;
     border: none;
-    background-color: var(--button-background);
+    background-color: var(--background-color);
     color: var(--text-color);
     display: flex;
     justify-content: space-between;

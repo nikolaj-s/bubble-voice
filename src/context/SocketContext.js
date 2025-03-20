@@ -5,15 +5,10 @@ import io from 'socket.io-client';
 
 import { API_URL } from '../lib/Validation';
 
-import { useDispatch, useSelector } from 'react-redux';
-
 import DashboardSkeleton from '../components/Loading/DashBoardSkeleton/DashBoardSkeleton';
 
-import { clearToken, getToken } from '../lib/services/authService';
-
 import { useNavigate } from 'react-router';
-
-import { selectServers } from '../features/Servers/serversSlice';
+import { useSelector } from 'react-redux';
 
 const SocketContext = createContext();
 
@@ -25,15 +20,14 @@ export const SocketProvider = ({ children }) => {
 
     const [loading, toggleLoading] = useState(true);
 
+    const token = useSelector(state => state.authSlice.token);
+
     useEffect(() => {
 
-        const token = getToken();
 
         if (!token) {
 
-            clearToken();
-
-            navigate("/");
+            return navigate('/login');
         
         }
 
@@ -41,20 +35,20 @@ export const SocketProvider = ({ children }) => {
             "TOKEN": token
         }});
 
+        socket.request = function request(type, data = {}) {
+            return new Promise((resolve, reject) => {
+                socket.emit(type, data, (data) => {
+                    if (data.error) {
+                    reject(data.errorMessage);
+                    } else {
+                    resolve(data);
+                    }
+                })
+            })
+        }
+
         socket.on('connect', () => {
             console.log('Connected to socket');
-
-            socket.request = function request(type, data = {}) {
-                return new Promise((resolve, reject) => {
-                    socket.emit(type, data, (data) => {
-                        if (data.error) {
-                        reject(data.errorMessage);
-                        } else {
-                        resolve(data);
-                        }
-                    })
-                })
-            }
 
             toggleLoading(false);
         });

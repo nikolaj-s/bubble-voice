@@ -1,26 +1,16 @@
 import React from 'react';
 
 import styles from './Channels.module.css';
-import { useSocket } from '../../../context/SocketContext';
-import { useDispatch } from 'react-redux';
+import { ChannelsProvider } from '../../../providers/ChannelsProvider/ChannelsProvider';
+import { ReOrderChannels } from './ReOrderChannels/ReOrderChannels';
 
 export const Channels = () => {
 
-    const socket = useSocket();
-
-    const dispatch = useDispatch();
-
-    React.useEffect(() => {
-
-        if (!socket) return;
-
-        
-
-    }, [socket])
-
     return (
         <div className={styles.container}>
-
+            <ChannelsProvider>
+                <ReOrderChannels />
+            </ChannelsProvider>
         </div>
     )
 }

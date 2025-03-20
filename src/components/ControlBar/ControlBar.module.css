@@ -1,0 +1,34 @@
+.wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--card-background-color);
+}
+
+.container {
+    width: calc(100% - 10px);
+    height: 55px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.channelControlWrapper {
+    width: calc(100% - 10px);
+    height: 35px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    border-bottom: 2px solid var(--background-color);
+}
+
+.buttonWrapper {
+    display: flex;
+    position: relative;
+    flex-shrink: 0;
+}

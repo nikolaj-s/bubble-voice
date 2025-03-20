@@ -17,7 +17,7 @@
   display: grid;
   
   border-top-left-radius: 20px;
-  overflow: hidden;
+
   grid-template-columns: 200px 1fr 200px;
   gap: 1px;
 }

@@ -10,7 +10,9 @@ export const ContentSettingsForm = () => {
     return (
        <>
        <Header text='Content Settings' />
-       <Label label='Disable Content Filter' />
+       <Label label='Disable Safe Search Within Global Search' />
+       <ToggleSwitch />
+       <Label label='Disable Blur of Explicit Content' />
        <ToggleSwitch />
        </>
     )

@@ -11,12 +11,14 @@ import { Search } from "../Search/Search";
 import { CreateServer } from "../../pages/createServer/CreateServer";
 import { ServerSettings } from "../../pages/serverSettings/ServerSettings";
 import { Settings } from "../../pages/settings/settings";
+import { JoinServer } from "../../pages/joinServer/joinServer";
 
 const overlayComponents = {
   search: Search,
   createServer: CreateServer,
   serverSettings: ServerSettings,
-  settings:Settings
+  settings:Settings,
+  joinServer: JoinServer
 };
 
 export const Overlay = ({ children }) => {

@@ -9,6 +9,8 @@ import { SocialSettingsForm } from '../../layout/Forms/Settings/SocialSettingsFo
 import { VoiceVideoSettingsForm } from '../../layout/Forms/Settings/VoiceVideoSettingsForm/VoiceVideoSettingsForm'
 import { KeybindSettingsForm } from '../../layout/Forms/Settings/KeybindSettingsForm/KeybindSettingsForm'
 import { SoundSettingsForm } from '../../layout/Forms/Settings/SoundSettingsForm/SoundSettingsForm'
+import { PrivacySettingsForm } from '../../layout/Forms/Settings/PrivacySettingsForm/PrivacySettingsForm'
+import { SecuritySettingsForm } from '../../layout/Forms/Settings/SecuritySettingsForm/SecuritySettingsForm'
 
 export const Settings = ({close}) => {
 
@@ -19,7 +21,9 @@ export const Settings = ({close}) => {
         {key: "content", label: "Content"},
         {key: "voiceVideo", label: "Voice / Video"},
         {key: "keybinds", label: "Keybinds"},
-        {key: "sound", label: "Sound"}
+        {key: "sound", label: "Sound"},
+        {key: "privacy", label: "Privacy"},
+        {key: "security", label: "Security"}
     ].sort((a, b) => a.label.localeCompare(b.label));
 
     const content = {
@@ -29,7 +33,9 @@ export const Settings = ({close}) => {
         content: <ContentSettingsForm />,
         voiceVideo: <VoiceVideoSettingsForm />,
         keybinds: <KeybindSettingsForm />,
-        sound: <SoundSettingsForm />
+        sound: <SoundSettingsForm />,
+        privacy: <PrivacySettingsForm />,
+        security: <SecuritySettingsForm />
     }
         
     return (

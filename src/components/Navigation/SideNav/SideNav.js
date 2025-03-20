@@ -4,7 +4,7 @@ import styles from "./SideNav.module.css"
 import { Logo } from '../../Icons/Bubble/Logo';
 import {ServerButton} from '../../Buttons/ServerButton/ServerButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectServers } from '../../../features/Servers/serversSlice';
+import { selectServers, updateServerButton } from '../../../features/Servers/serversSlice';
 import { useNavigate } from 'react-router';
 import { useSocket } from '../../../context/SocketContext';
 import { CircleButton } from '../../Buttons/CircleButton/CircleButton';
@@ -50,12 +50,20 @@ export const SideNav = () => {
                 }
             }
 
+            const handleUpdateServerButton = (data) => {
+                dispatch(updateServerButton(data));
+            }
+
             handleJoinServer();
 
             socket.on('connect', handleJoinServer);
 
+            socket.on('update server button', handleUpdateServerButton);
+
             return () => {
                 socket.off('connect', handleJoinServer);
+
+                socket.off('update server button', handleUpdateServerButton);
             }
 
         }
@@ -69,7 +77,7 @@ export const SideNav = () => {
             </div>
             <div className={styles.serverButtons}>
                 {servers.map(s => {
-                    return <ServerButton action={handleSwitchServer} key={s._id} {...s} />
+                    return <ServerButton action={handleSwitchServer} key={s.server_id} {...s} />
                 })}
             </div>
             <div className={styles.navButtons}>

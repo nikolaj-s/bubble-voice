@@ -6,7 +6,7 @@ import { resetServerDetails, selectServerDetailsStatus, setServerDetails, setSer
 import DashboardSkeleton from '../../components/Loading/DashBoardSkeleton/DashBoardSkeleton';
 import { useNavigate, useParams } from 'react-router';
 
-export const FetchServerDetailsWrapper = ({children}) => {
+export const FetchServerDetailsProvider = ({children}) => {
 
     const navigate = useNavigate();
 
@@ -47,21 +47,36 @@ export const FetchServerDetailsWrapper = ({children}) => {
 
         }
 
+        const handleServerDetailsUpdate = (data) => {
+            if (data.server_id) {
+                dispatch(setServerDetails(data));
+            }
+        }   
+
+        socket.on(`update server details ${serverID}`, handleServerDetailsUpdate);
+
+        socket.on('connect', handleFetchServerDetails);
+
         handleFetchServerDetails();
 
         return () => {
+            socket.off(`update server details ${serverID}`, handleServerDetailsUpdate);
+
+            socket.off('connect', handleFetchServerDetails);
+
             dispatch(resetServerDetails());
         }
 
-    }, [socket, serverID])
+    }, [socket, serverID, dispatch])
 
+    
     if (status === 'idle') {
 
         return <></>
 
     } else if (status === 'loading') {
 
-        return <DashboardSkeleton alt={true} />
+        return <DashboardSkeleton key="dashboard-loader" alt={true} />
 
     } else if (status === 'complete') {
 

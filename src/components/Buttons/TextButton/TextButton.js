@@ -3,6 +3,8 @@ import styles from "./TextButton.module.css";
 
 const TextButton = ({ title, disabled, action }) => {
   return (
+    <>
+    {disabled ? null :
     <button
       className={`${styles.button} ${disabled ? styles.disabled : ""}`}
       onClick={action}
@@ -10,6 +12,8 @@ const TextButton = ({ title, disabled, action }) => {
     >
       {title}
     </button>
+    }
+    </>
   );
 };
 

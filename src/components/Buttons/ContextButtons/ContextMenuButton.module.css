@@ -1,0 +1,90 @@
+.contextButton {
+    background: var(--button-background);
+    color: var(--text-color);
+    border: none;
+    padding: 8px 12px;
+    width: 100%;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+    font-family: var(--font-family);
+}
+
+.contextButton:hover {
+    background: var(--button-hover);
+}
+
+/* RADIO BUTTON */
+.radioButton {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-family: var(--font-family);
+    color: var(--text-color);
+}
+
+.radioButton input {
+    display: none;
+}
+
+.radioIndicator {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--text-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease-in-out;
+}
+
+.radioButton input:checked + .radioIndicator {
+    background: var(--success-color);
+    border-color: var(--success-color);
+}
+
+/* RANGE INPUT */
+.rangeContainer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-family);
+    color: var(--text-color);
+}
+
+.rangeLabel {
+    font-size: 14px;
+}
+
+.rangeInput {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100px;
+    height: 4px;
+    background: var(--button-background);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+}
+
+.rangeInput:hover {
+    background: var(--button-hover);
+}
+
+.rangeInput::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    background: var(--success-color);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.rangeInput::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    background: var(--success-color);
+    border-radius: 50%;
+    cursor: pointer;
+}

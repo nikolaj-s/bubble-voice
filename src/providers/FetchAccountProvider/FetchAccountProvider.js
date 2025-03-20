@@ -5,10 +5,9 @@ import { fetchAccount } from "../../features/Account/Thunks/fetchAccount";
 
 import DashboardSkeleton from "../../components/Loading/DashBoardSkeleton/DashBoardSkeleton";
 import { selectAccount, selectAccountError } from "../../features/Account/accountSlice";
-import { clearToken } from "../../lib/services/authService";
-import { fetchDevices } from "../../features/Devices/DeviceSlice";
+import { fetchDevices } from "../../features/Settings/Devices/DeviceSlice";
 
-const FetchAccountWrapper = ({ children }) => {
+const FetchAccountProvider = ({ children }) => {
 
     const dispatch = useDispatch();
 
@@ -18,18 +17,27 @@ const FetchAccountWrapper = ({ children }) => {
 
     const error = useSelector(selectAccountError);
 
+    const token = useSelector(state => state.authSlice.token);
+
     useEffect(() => {
 
         dispatch(fetchDevices());
+        
+        if (token.trim() === ';') return;
 
-        dispatch(fetchAccount());
+        if (token) {
 
-    }, [dispatch]);
+            dispatch(fetchAccount());
+        
+        }
+
+    }, [dispatch, token]);
 
     useEffect(() => {
         if (error) {
-            clearToken() // Clear JWT token
-            navigate("/"); // Redirect to login
+
+            navigate("/login"); // Redirect to login
+
         }
     }, [error, dispatch, navigate]);
 
@@ -42,4 +50,4 @@ const FetchAccountWrapper = ({ children }) => {
     );
 };
 
-export default FetchAccountWrapper;
+export default FetchAccountProvider;

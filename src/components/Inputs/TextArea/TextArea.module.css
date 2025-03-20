@@ -1,0 +1,42 @@
+.textareaContainer {
+    position: relative;
+    width: 100%;
+  }
+  
+  .textarea {
+    width: calc(100% - 20px);
+    min-height: 100px;
+    max-height: 300px;
+    resize: vertical;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--primary-color);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    outline: none;
+    transition: border 0.2s ease-in-out;
+    font-family: var(--font-family);
+  }
+  
+  .textarea:focus {
+    border: 1px solid var(--button-background);
+  }
+  
+  .counter {
+    position: absolute;
+    bottom: 8px;
+    right: 12px;
+    font-size: 0.9rem;
+    color: var(--text-color);
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .warning {
+    color: var(--button-hover);
+  }
+  
+  .error {
+    color: var(--error-color);
+  }
+  

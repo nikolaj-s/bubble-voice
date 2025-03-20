@@ -4,8 +4,6 @@ import axios from "axios";
 
 import { useSelector } from "react-redux";
 
-import { selectServerDetailsID } from "../../../../features/ServerDetails/serverDetailsSlice";
-
 import { API_URL } from "../../../../lib/Validation";
 
 import { getToken } from "../../../../lib/services/authService";
@@ -16,7 +14,7 @@ import LoadingSpinnerCard from "../../../Loading/LoadingSpinnerCard/LoadingSpinn
 
 const ProtectedFormWrapper = ({ children }) => {
 
-  const serverId = useSelector(selectServerDetailsID);
+  const serverId = useSelector(state => state.serverDetailsSlice.server_id);
 
   const [loading, setLoading] = useState(true);
 
@@ -40,7 +38,7 @@ const ProtectedFormWrapper = ({ children }) => {
       const response = await axios.get(`${API_URL}/permissions/${serverId}`, {
         headers: { TOKEN: token },
       });
-
+      console.log(response.data)
       if (response.data.permissions) {
         setIsAuthorized(true);
         setPermissions(response.data.permissions);
@@ -73,7 +71,7 @@ const ProtectedFormWrapper = ({ children }) => {
     return React.cloneElement(child, {permissions: permissions})
   })
   
-  return <div>{childrenWithProps}</div>;
+  return <>{childrenWithProps}</>;
 };
 
 export default ProtectedFormWrapper;

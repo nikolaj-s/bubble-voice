@@ -14,6 +14,10 @@
   flex-shrink: 0;
 }
 
+.server-button-container:active {
+  scale: 0.98;
+}
+
 .server-button-container:hover {
   scale: 1.05;
 }

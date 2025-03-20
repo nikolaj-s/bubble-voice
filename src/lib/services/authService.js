@@ -9,12 +9,16 @@ export const getToken = () => {
     
     } catch (error) {
 
-        return document.cookie.split('token=')[1]
+        const match = document.cookie.match(/(^| )token=([^;]+)/);
+        
+        return match ? match[2] : null;
     }
 }
 
 export const setToken = (jwt) => {
-    console.log(jwt)
+
+    if (jwt.split('.').length !== 3) return;
+
     try {
         const keytar = window.require('keytar');
 
@@ -34,10 +38,11 @@ export const clearToken = () => {
 
         return;
     } catch (error) {
-        document.cookie = "token=;"
+        document.cookie = "`token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; SameSite=Lax;"
     }
 }
 
 export const isAuthenticated = () => {
     return getToken();
 };
+

@@ -1,0 +1,72 @@
+.channelContainer {
+    width: 100%;
+    font-family: var(--font-family);
+    border-radius: 8px;
+}
+
+.channelButton {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    border-radius: 8px;
+    background-color: transparent;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+    height: 25px;
+}
+
+.active {
+    background-color: var(--secondary-color);
+    cursor: default;
+}
+
+.channelButton:hover {
+    background-color: var(--button-hover);
+}
+
+.channelButton:active {
+    scale: 0.98;
+}
+
+.icon {
+    height: 20px;
+    width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 5px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.channelName {
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.userList {
+    background-color: var(--card-background-color);
+    margin-top: 5px;
+    padding: 5px;
+    border-radius: 6px;
+    margin-bottom: 5px;
+}
+
+.userItem {
+    padding: 5px;
+    color: var(--text-color);
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.userItem:last-child {
+    border-bottom: none;
+}
+
+.subButtonWrapper {
+    justify-self: flex-end;
+    flex-shrink: 0;
+    margin-left: auto;
+}

@@ -25,7 +25,7 @@ export const signinThunk = createAsyncThunk(
 
           }
 
-          return {authorized: true}; // Expected to contain user info and token
+          return {authorized: true, token: response.data.token}; // Expected to contain user info and token
 
         } else {
 
