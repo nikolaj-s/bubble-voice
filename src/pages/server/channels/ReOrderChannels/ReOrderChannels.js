@@ -1,13 +1,17 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React from "react";
+
 import { useDispatch, useSelector } from "react-redux";
-import styles from "../Channels.module.css";
-import ChannelButton from "../../../../components/Buttons/ChannelButton/ChannelButton";
+
 import { Category } from "../../../../components/ChannelCategory/ChannelCategory";
+
 import { reOrderCategories, reOrderChannels } from "../../../../features/Channels/channelsSlice";
 
+import { useSocket } from "../../../../context/SocketContext";
 
 // 🔹 Main Channels Component
 export const ReOrderChannels = ({ onDrop }) => {
+
+    const socket = useSocket();
 
     const dispatch = useDispatch();
 
@@ -46,8 +50,19 @@ export const ReOrderChannels = ({ onDrop }) => {
         id_array.splice(originatingPos, 1);
 
         id_array.splice(move_to_pos, 0, element);
+
+        const data = {newOrder: id_array, category: category, channel_id: id}
         
-        dispatch(reOrderChannels({newOrder: id_array, category: category, channel_id: id}));
+        await socket.request('reorder channels', data)
+        .then(res => {
+
+            dispatch(reOrderChannels(res));
+            return;
+        }).catch(err => {
+            console.log(err);
+            return;
+        })
+
        
         toggleReordering(false);
     
@@ -55,7 +70,9 @@ export const ReOrderChannels = ({ onDrop }) => {
 
     const handleReOrderCategories = async (category_id, move_to, below) => {
     
-        console.log(category_id)
+        if (category_id === 'channels') return;
+
+        toggleReordering(true);
 
         let id_array = categories.map(c => c.category_id);
 
@@ -73,9 +90,21 @@ export const ReOrderChannels = ({ onDrop }) => {
 
         id_array.splice(move_to_pos, 0, el);
 
-        console.log(id_array)
+        const data = {
+            newOrder: id_array
+        }
         
-        dispatch(reOrderCategories({newOrder: id_array}));
+        await socket.request('reorder categories', data)
+        .then(res => {
+            dispatch(reOrderCategories(res));
+            return;
+        })
+        .catch(err => {
+            console.log(err);
+            return;
+        })
+
+        toggleReordering(false);
 
     }
 
@@ -84,6 +113,13 @@ export const ReOrderChannels = ({ onDrop }) => {
             {categories.map(category => {
                 return <Category move={handleReorder} moveCategory={handleReOrderCategories} draggingCategory={draggingCategory} toggleDraggingCategory={toggleDraggingCategory} category_id={category.category_id} key={category.category_id} catagoryName={category.category_name} channels={localChannels.filter(c => c.category === category.category_id)} draggingChannel={draggingChannel} toggleDraggingChannel={toggleDraggingChannel} />
             })}
+            <Category move={handleReorder} moveCategory={() => {}} draggingCategory={() => {}} toggleDraggingCategory={() => {}}
+            catagoryName={'Channels'}
+            category_id={'channels'}
+            channels={channels.filter(channel => !channel.category || channel.category === 'channels')}
+            draggingChannel={draggingChannel}
+            toggleDraggingChannel={toggleDraggingChannel}
+            />
         </>
     );
 };

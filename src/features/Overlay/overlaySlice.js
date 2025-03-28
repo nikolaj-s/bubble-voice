@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  activeOverlay: null, // Stores the currently active overlay ('search', 'createServer', etc.)
+  activeOverlay: null,// Stores the currently active overlay ('search', 'createServer', etc.)
 };
 
 const overlaySlice = createSlice({

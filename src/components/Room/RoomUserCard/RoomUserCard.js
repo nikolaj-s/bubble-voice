@@ -13,13 +13,19 @@ export const RoomUserCard = ({ user_id, consumers, action }) => {
 
     const audioContainerRef = useRef(null);  // Container for audio elements
 
+    const webcamContainerRef = useRef()
+
+    const webcamElementRef = useRef({});
+
       // Effect to handle consumers and audio elements
       useEffect(() => {
         // Add new audio elements for consumers
         consumers.forEach(consumer => {
-            if (consumer.appData.type === 'microphone') {
-                const track = consumer.track;
+  
+            const track = consumer.track;
 
+            if (consumer.appData.type === 'microphone') {
+               
                 // If the consumer doesn't already have an audio element
                 if (track && !audioElementsRef.current[consumer.id]) {
                     const audioElement = document.createElement("audio");
@@ -38,15 +44,46 @@ export const RoomUserCard = ({ user_id, consumers, action }) => {
                     }
                 }
             }
+
+            if (consumer.appData.type === 'webcam') {
+               
+                if (track && !webcamElementRef.current[consumer.id]) {
+
+                    const videoElement = document.createElement('video');
+
+                    videoElement.srcObject = new MediaStream([track])
+                    videoElement.autoplay = true;
+                    videoElement.controls = false;
+                    videoElement.muted = true;
+                    videoElement.id = `${consumer.id}-webcam-source`;
+                    webcamElementRef.current[consumer.id] = videoElement;
+
+                    if (webcamContainerRef.current) {
+                        webcamContainerRef.current.appendChild(videoElement);
+                    }
+                }
+            }
         });
 
         // Cleanup function when component unmounts or when consumers change
         return () => {
-            consumers.forEach(consumer => {
-                // If an audio element exists for the consumer, clean it up
-                if (audioElementsRef.current[consumer.id]) {
-                    audioElementsRef.current[consumer.id].remove(); // Remove the audio element from the DOM
-                    delete audioElementsRef.current[consumer.id]; // Remove the reference
+            // Identify all current consumers by their ID
+            const currentConsumerIds = consumers.map(consumer => consumer.id);
+
+            // Clean up elements that are no longer in the consumers list
+            Object.keys(audioElementsRef.current).forEach(consumerId => {
+                if (!currentConsumerIds.includes(consumerId)) {
+                    // Remove audio element if consumer is no longer in the list
+                    audioElementsRef.current[consumerId].remove();
+                    delete audioElementsRef.current[consumerId];
+                }
+            });
+
+            Object.keys(webcamElementRef.current).forEach(consumerId => {
+                if (!currentConsumerIds.includes(consumerId)) {
+                    // Remove webcam element if consumer is no longer in the list
+                    webcamElementRef.current[consumerId].remove();
+                    delete webcamElementRef.current[consumerId];
                 }
             });
         };
@@ -76,8 +113,16 @@ export const RoomUserCard = ({ user_id, consumers, action }) => {
             <div className={styles.userImage}>
                 <ImageComponent src={user.user_image} />
             </div>
+            
+            <div  
+            style={{
+                borderColor: user.voiceActive ? 'var(--success-color)' : 'transparent'
+            }}
+            className={styles.overlay} />
+
             {/* Audio elements will be appended here */}
             <div ref={audioContainerRef} className={styles.audioContainer}></div>
+            <div ref={webcamContainerRef} className={styles.webcamSource} ></div>
         </div>
     );
 };

@@ -66,7 +66,9 @@ export const AccountSettingsForm = () => {
     <Label label='Choose An Accent Color' />
     <ColorPicker onColorChange={setColor} />
     {updateError ? <TextLabelError label='Error:' error={updateError} /> : null}
-    <TextButton action={handleUpdateAccount} title='Update Account' />
+    <TextButton 
+    disabled={color === user_color && display_name === displayName && userImage === null && userBanner === null && user_bio === bio}
+    action={handleUpdateAccount} title='Update Account' />
     {updateLoading ? <SpinnerLoading /> : null}
     
     </>

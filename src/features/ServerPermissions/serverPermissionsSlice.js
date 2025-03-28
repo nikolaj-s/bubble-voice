@@ -10,11 +10,31 @@ const serverPermissionsSlice = createSlice({
     },
     reducers: {
         setPermissions: (state, action) => {
-            state.permissions = action.payload;
+            const permissions = action.payload;
+
+            Object.keys(permissions).forEach((key) => {
+                if (permissions[key].admin) {
+                    state.permissions[key] = new Proxy({}, {get: () => true})
+                } else {
+                    state.permissions[key] = permissions[key]
+                }
+            })
         },
+        updatePermission: (state, action) => {
+
+            if (action.payload._id) {
+                state.permissions[action.payload._id] = action.payload;
+            }
+
+        },
+        deletePermission: (state, action) => {
+            if (action.payload._id) {
+                delete state.permissions[action.payload._id];
+            }
+        }
     }
 })
 
-export const { setPermissions } = serverPermissionsSlice.actions;
+export const { setPermissions, updatePermission } = serverPermissionsSlice.actions;
 
 export default serverPermissionsSlice.reducer;

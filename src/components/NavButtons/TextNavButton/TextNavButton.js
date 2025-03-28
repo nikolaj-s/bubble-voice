@@ -5,7 +5,7 @@ import styles from "./TextNavButton.module.css";
 const TextNavButton = ({ to, text, disabled = false }) => {
   return (
     <Link to={to} className={`${styles.button} ${disabled ? styles.disabled : ""}`} aria-disabled={disabled}>
-      {text}
+      <p>{text}</p>
     </Link>
   );
 };

@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { GlobalSearch } from "./Thunks/GlobalSearch";
+import { globalSearch } from "./Thunks/globalSearch";
+import { fetchSearchHistory } from "./Thunks/fetchSearchHistory";
+import { deleteSearchHistoryItem } from "./Thunks/deleteSearchHistoryItem";
 
 const searchSlice = createSlice({
     name: "searchSlice",
@@ -9,8 +11,12 @@ const searchSlice = createSlice({
         error: false,
         filter: "servers",
         filters: ["servers", "social", "images", "videos"],
+        searchHistory: [],
         open: false,
-        query: ""
+        query: "",
+        scrollPos: 0,
+        loadingSearchHistory: false,
+        searchHistoryFetched: false
     },
     reducers: {
         toggleOpenSearch: (state, action) => {
@@ -21,26 +27,55 @@ const searchSlice = createSlice({
         },
         setQuery: (state, action) => {
             state.query = action.payload;
+        },
+        setSearchResultsScrollPos: (state,action) => {
+            state.scrollPos = action.payload;
         }
     },
     extraReducers: (builder) => {
+        // search
         builder
-        .addCase(GlobalSearch.pending, (state) => {
+        .addCase(globalSearch.pending, (state) => {
             state.loading = true;
             state.error = false
         })
-        .addCase(GlobalSearch.rejected, (state, action) => {
+        .addCase(globalSearch.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload;
         })
-        .addCase(GlobalSearch.fulfilled, (state, action) => {
+        .addCase(globalSearch.fulfilled, (state, action) => {
             state.loading = false;
             state.error = false;
             state.results[action.payload.filter] = action.payload.results;
         })
+
+        // search history
+        builder.addCase(fetchSearchHistory.pending, (state) => {
+            state.error = false;
+            state.loadingSearchHistory = true;
+            state.searchHistoryFetched = true;
+        })
+        builder.addCase(fetchSearchHistory.rejected, (state, action) => {
+            state.error = action.payload;
+            state.loadingSearchHistory = false;
+        })
+        builder.addCase(fetchSearchHistory.fulfilled, (state, action) => {
+            state.error = false;
+            state.loadingSearchHistory = false;
+            state.searchHistory = action.payload;
+        })
+
+        // delete search history item
+        builder.addCase(deleteSearchHistoryItem.pending, (state, action) => {
+            const query = action.meta.arg.query;
+            state.searchHistory = state.searchHistory.filter(item => item.query !== query);
+        })
+        builder.addCase(deleteSearchHistoryItem.rejected, (state, action) => {
+            state.error = action.payload;
+        })
     }
 })
 
-export const {toggleOpenSearch, setFilter, setQuery} = searchSlice.actions;
+export const {toggleOpenSearch, setFilter, setQuery, setSearchResultsScrollPos} = searchSlice.actions;
 
 export default searchSlice.reducer;

@@ -4,11 +4,11 @@
     height: 100%;
     display: flex;
     gap: 5px;
+    z-index: 9999;
 }
 
 .contextMenu {
     position: absolute;
-    background-color: var(--card-background-color);
     border-radius: 8px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
     list-style: none;

@@ -13,9 +13,9 @@
   }
   
   .button:hover {
-    scale: 1.02;
     background-color: var(--button-hover);
   }
+  
   .button:active {
     scale: 0.99;
   }

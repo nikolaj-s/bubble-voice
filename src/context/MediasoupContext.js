@@ -143,7 +143,7 @@ export const MediasoupProvider = ({ children }) => {
     if (!deviceRef.current) return;
 
     if (producersRef.current.has(type)) {
-      closeProducer(type);
+      await closeProducer(type);
     }
 
     let params = { track, appData: { type } };

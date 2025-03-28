@@ -5,6 +5,7 @@ import ProtectedFormWrapper from '../../components/ui/Wrappers/ProtectedFormWrap
 import { CreateChannelForm } from '../../layout/Forms/ServerSettings/CreateChannelForm/CreateChannelForm'
 import { CreateCategoryForm } from '../../layout/Forms/ServerSettings/CreateCategoryForm/CreateCategoryForm'
 import { EditServerDetailsForm } from '../../layout/Forms/ServerSettings/EditServerDetailsForm/EditServerDetailsForm'
+import { EditPermissionsForm } from '../../layout/Forms/ServerSettings/EditPermissionsForm/EditPermissionsForm'
 
 export const ServerSettings = ({close}) => {
 
@@ -19,7 +20,7 @@ export const ServerSettings = ({close}) => {
     const content = {
         general: <EditServerDetailsForm />,
         createChannel: <CreateChannelForm />,
-        permissions: <></>,
+        permissions: <EditPermissionsForm />,
         createCategory: <CreateCategoryForm />,
         security: <></>
     }

@@ -6,6 +6,10 @@
     gap: 15px;
   }
 
+.darwin {
+    margin-top: 20px;
+  }
+
   .logo {
     width: 60px;
     height: 60px;

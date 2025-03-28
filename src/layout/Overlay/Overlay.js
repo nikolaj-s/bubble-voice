@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { selectActiveOverlay, closeOverlay } from "../../features/Overlay/overlaySlice";
 
-import { Search } from "../Search/Search";
+import { Search } from "../../components/Search/Search";
 
 import { CreateServer } from "../../pages/createServer/CreateServer";
 import { ServerSettings } from "../../pages/serverSettings/ServerSettings";
@@ -18,7 +18,7 @@ const overlayComponents = {
   createServer: CreateServer,
   serverSettings: ServerSettings,
   settings:Settings,
-  joinServer: JoinServer
+  joinServer: JoinServer,
 };
 
 export const Overlay = ({ children }) => {

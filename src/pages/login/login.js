@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {  selectAuthLoading, selectGeneralAuthError, selectSigninError } from "../../features/Auth/AuthSlice";
+import {  selectAuthLoading, selectGeneralAuthError, selectSigninError } from "../../features/Auth/authSlice";
 
 import styles from "./Login.module.css";
 import TextInput from "../../components/Inputs/TextInput/TextInput";
@@ -34,6 +34,7 @@ const Login = () => {
   return (
     <IsAuthenticated>
       <div className={styles.wrapper}>
+        <div className='application-drag-area-for-desktop'/>
         <FormWrapper error={altError} header="BUBBLE" onSubmit={handleLogin} loading={loading}>
             <Label label="Log in to your Bubble Account"/>
             <TextInput

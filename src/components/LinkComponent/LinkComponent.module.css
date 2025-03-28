@@ -1,0 +1,35 @@
+
+.linkWrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+a {
+    text-decoration: none;
+    color: var(--accent-color);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+    transition: color 0.3s;
+    word-break: break-word; /* Ensures words break and wrap properly */
+    max-width: calc(100% - 40px);
+    overflow: hidden; /* Prevents text overflow */
+    white-space: normal; /* Allows text to wrap */
+}
+a:hover {
+    color: var(--button-hover);
+}
+
+a:active {
+    color: var(--button-background);
+}
+
+a:focus {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 4px;
+}

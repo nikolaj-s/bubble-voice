@@ -2,8 +2,9 @@
 .layout {
   display: grid;
   grid-template-columns: 75px 1fr; /* Side Nav (250px) + Main Content (1fr) */
-  grid-template-rows: auto 1fr; /* Top Nav (auto height) + Content (rest of the space) */
-  height: 100vh; /* Full height */
+  grid-template-rows: 1fr; /* Top Nav (auto height) + Content (rest of the space) */
+  height: var(--app-height); /* Full height */
+  max-height: 100svh;
 }
 
 /* Side Navigation */
@@ -23,7 +24,7 @@
 }
 
 .mainContent section {
-  height: 100%;
+
   width: 100%;
   background-color: var(--primary-color);
 }

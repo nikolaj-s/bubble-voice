@@ -12,6 +12,7 @@ const Dropdown = ({ selected, options, setSelected }) => {
     setIsOpen(false);
   };
 
+
   return (
     <div className={styles.dropdown}>
       <button className={styles.dropdownButton} onClick={toggleDropdown}>

@@ -13,7 +13,7 @@ const FullScreenWrapper = ({ children, onClose, maxContentWidth = 800 }) => {
       initial={{backgroundColor: 'rgba(0,0,0,0)'}}
       animate={{backgroundColor: 'rgba(0,0,0,0.4)'}}
       exit={{backgroundColor: 'rgba(0,0,0,0)'}}
-      onClick={handleWrapperClick} // Attach the click handler
+      // Attach the click handler
     >
       <motion.div
 
@@ -24,13 +24,12 @@ const FullScreenWrapper = ({ children, onClose, maxContentWidth = 800 }) => {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.8 }}
       transition={{ duration: 0.2 }}
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
+       
         className={styles.content}
       >
         {children}
       </motion.div>
+      <div className={styles.closeListener} onClick={handleWrapperClick} />
     </motion.div>
   );
 };

@@ -1,0 +1,66 @@
+import ContextMenuButton from "./ContextMenuButton";
+
+import React, {useState, useRef, useEffect } from "react";
+
+const ContextMenuButtonWithSubmenu = ({ label, submenuOptions, top, bottom}) => {
+    const [hovered, setHovered] = useState(false);
+    const buttonRef = useRef(null);
+    const submenuRef = useRef(null);
+    const [submenuPosition, setSubmenuPosition] = useState("right");
+
+    useEffect(() => {
+        if (hovered && buttonRef.current && submenuRef.current) {
+            
+            const buttonRect = buttonRef.current.getBoundingClientRect();
+
+            const submenuWidth = submenuRef.current.offsetWidth;
+
+            if (buttonRect.right + submenuWidth > window.innerWidth) {
+                setSubmenuPosition("right");
+            } else {
+                setSubmenuPosition("left");
+            }
+        }
+    }, [hovered]);
+
+    return (
+        <div
+            ref={buttonRef}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+            style={{ position: "relative", cursor: "pointer",  }}
+        >
+            <ContextMenuButton label={label} top={top} bottom={bottom} />
+            {hovered && (
+                <div
+                    ref={submenuRef}
+                    style={{
+                        position: "absolute",
+                        top: 0,
+                        [submenuPosition]: "100%", // Either 'left' or 'right'
+                        color: "var(--text-color)",
+                        borderRadius: "10px",
+                        overflow: 'hidden',
+                        [`padding${submenuPosition.charAt(0).toUpperCase() + submenuPosition.slice(1)}`]: '10px',
+                        minWidth: 150,
+                        zIndex:0
+                    }}
+                >
+                    {submenuOptions.map((option, index) => (
+                        <div
+                        key={`ctx-sub-option-${index}`}
+                        style={{
+                            cursor: "pointer",
+                            borderBottom: index !== submenuOptions.length - 1 ? "1px solid var(--background-color)" : "none",
+                        }}
+                        >
+                        <ContextMenuButton {...option} top={index === 0} bottom={index === submenuOptions.length - 1}  />
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default ContextMenuButtonWithSubmenu;

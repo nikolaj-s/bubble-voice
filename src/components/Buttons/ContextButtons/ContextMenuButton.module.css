@@ -2,11 +2,21 @@
     background: var(--button-background);
     color: var(--text-color);
     border: none;
-    padding: 8px 12px;
+    height: 45px;
+    padding: 5px;
     width: 100%;
     cursor: pointer;
     transition: background 0.2s ease-in-out;
     font-family: var(--font-family);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.contextButton p {
+    margin: 0;
+    padding: 0;
 }
 
 .contextButton:hover {

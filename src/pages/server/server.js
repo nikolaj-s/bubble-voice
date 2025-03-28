@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { FetchServerDetailsProvider} from '../../providers/FetchServerDetailsProvider/FetchServerDetailsProvider'
+import { ServerDetailsProvider} from '../../providers/ServerDetailsProvider/ServerDetailsProvider'
 
 import { Banner } from '../../components/Banner/Banner';
 
@@ -27,7 +27,7 @@ export const Server = () => {
     const {currentChannel} = useSelector(state => state.channelsSlice);
     
     return (
-        <FetchServerDetailsProvider>
+        <ServerDetailsProvider>
             <motion.section 
             key="channels"
             initial={{opacity: 0}}
@@ -36,7 +36,7 @@ export const Server = () => {
             transition={{duration: 0.2}}
             className={styles.sectionOne}
             style={{
-                gridTemplateRows: currentChannel?.channel_type === 'voice' ? '80px 1fr 110px' : '80px 1fr 65px'
+                gridTemplateRows: currentChannel?.channel_type === 'voice' ? '80px minmax(0px, 1fr) 110px' : '80px minmax(0px, 1fr) 65px'
             }}
             >
                 <Banner image={banner} />
@@ -61,6 +61,6 @@ export const Server = () => {
             className={styles.sectionThree}>
                 <UserBar />
             </motion.section>
-        </FetchServerDetailsProvider>
+        </ServerDetailsProvider>
     )
 }

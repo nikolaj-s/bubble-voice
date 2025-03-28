@@ -2,7 +2,7 @@ import React from 'react'
 import { useSocket } from '../../context/SocketContext';
 import { useDispatch, useSelector } from 'react-redux';
 import ChannelButtonSkeleton from '../../components/Loading/ChannelButtonSkeleton/ChannelButtonSkeleton';
-import { addCategory, addChannel, setCategories, setChannels, userJoinsChannel, userLeavesChannel } from '../../features/Channels/channelsSlice';
+import { addCategory, addChannel, reOrderCategories, reOrderChannels, setCategories, setChannels, userJoinsChannel, userLeavesChannel } from '../../features/Channels/channelsSlice';
 
 export const ChannelsProvider = ({children}) => {
 
@@ -78,6 +78,14 @@ export const ChannelsProvider = ({children}) => {
             }
         }
 
+        const handleReOrderChannels = (data) => {
+            dispatch(reOrderChannels(data));
+        }
+
+        const handleReOrderCategories = (data) => {
+            dispatch(reOrderCategories(data));
+        }
+
         socket.on('connect', handleFetchChannels);
 
         socket.on(`add category to ${server_id}`, handleAddCategory);
@@ -87,6 +95,10 @@ export const ChannelsProvider = ({children}) => {
         socket.on(`user joins channel ${server_id}`, handleUserJoinsChannel);
 
         socket.on(`user leaves channel ${server_id}`, handleUserLeavesChannel);
+
+        socket.on(`update channel order for ${server_id}`, handleReOrderChannels);
+
+        socket.on(`update category order for ${server_id}`, handleReOrderCategories);
 
         handleFetchChannels();
 
@@ -98,6 +110,10 @@ export const ChannelsProvider = ({children}) => {
             socket.off(`user joins channel ${server_id}`, handleUserJoinsChannel);
 
             socket.off(`user leaves channel ${server_id}`, handleUserLeavesChannel);
+
+            socket.off(`update channel order for ${server_id}`, handleReOrderChannels);
+
+            socket.off(`update category order for ${server_id}`, handleReOrderCategories);
         }
 
     }, [socket, server_id, dispatch])

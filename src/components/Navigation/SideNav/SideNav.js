@@ -71,7 +71,7 @@ export const SideNav = () => {
     }, [socket, servers])
 
     return (
-        <div className={styles.container}>
+        <div className={`${styles.container} side-navigation-global`}>
             <div onClick={handleReturnToDashBoard} className={styles.logo}>
                 <Logo />
             </div>

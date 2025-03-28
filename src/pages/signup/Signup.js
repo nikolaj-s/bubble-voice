@@ -6,7 +6,7 @@ import { FormWrapper } from '../../components/ui/Wrappers/FormWrapper/FormWrappe
 import styles from './Signup.module.css';
 
 import React from 'react'
-import {  selectAuthLoading, selectConfirmPasswordError, selectEmailError, selectGeneralAuthError, selectPasswordError, selectUsernameError } from '../../features/Auth/AuthSlice';
+import {  selectAuthLoading, selectConfirmPasswordError, selectEmailError, selectGeneralAuthError, selectPasswordError, selectUsernameError } from '../../features/Auth/authSlice';
 import { signupThunk } from '../../features/Auth/Thunks/SignupThunk';
 import { IsAuthenticated } from '../../components/Auth/IsAuthenticated/IsAuthenticated';
 import Label from '../../components/Titles/Label/Label';
@@ -44,6 +44,7 @@ const Signup = () => {
     return (
         <IsAuthenticated>
             <div className={styles.wrapper}>
+            <div className='application-drag-area-for-desktop'/>
                 <FormWrapper onSubmit={handleSignUp}  header="BUBBLE" loading={loading} error={error}>
                     <Label label="Create a Bubble Account" />
                     <TextInput autoComplete="username" error={usernameError} onChange={(v) => {setUsername(v)}} value={username} placeholder={"Username"} />

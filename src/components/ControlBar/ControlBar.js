@@ -6,7 +6,7 @@ import IconButton from '../Buttons/IconButton/IconButton';
 
 import { Mic, MicOff, ScreenShare, ScreenShareOff, Unplug, Video, VideoOff, Volume2, VolumeOff } from 'lucide-react';
 import UserButton from '../Buttons/UserButton/UserButton';
-import { toggleAudioMute, toggleMicrophone } from '../../features/MediaControl/mediaControlSlice';
+import { toggleAudioMute, toggleMicrophone, toggleWebcam } from '../../features/MediaControl/mediaControlSlice';
 import { useSocket } from '../../context/SocketContext';
 import { useNavigate, useParams } from 'react-router';
 
@@ -31,7 +31,7 @@ export const ControlBar = ({inChannel = false}) => {
         const updateStatus = () => {
             if (socket) {
     
-                socket.emit('user updates channel status', {isMicrophoneMuted: isMicrophoneMuted, isAudioMuted: isAudioMuted})
+                socket.emit('user updates channel status', {isMicrophoneMuted, isAudioMuted, isWebcamOn, isScreenSharing})
     
             }
         }
@@ -44,7 +44,7 @@ export const ControlBar = ({inChannel = false}) => {
             socket.off('connect', updateStatus)
         }
 
-    }, [isAudioMuted, isMicrophoneMuted, socket])
+    }, [isAudioMuted, isMicrophoneMuted, isWebcamOn, isScreenSharing, socket])
 
     const handleToggleMicrophone = () => {
         if (loading) return;
@@ -59,6 +59,12 @@ export const ControlBar = ({inChannel = false}) => {
         dispatch(toggleAudioMute(!isAudioMuted));
     }
 
+    const handleToggleWebCam = () => {
+        if (loading) return;
+
+        dispatch(toggleWebcam(!isWebcamOn));
+    }
+
     const handleDisconnect = () => {
         navigate(`/dashboard/server/${serverID}`)
     }
@@ -68,9 +74,10 @@ export const ControlBar = ({inChannel = false}) => {
             {inChannel ?
             <div className={styles.channelControlWrapper}>
                 <IconButton 
-                backgroundColor='var(--primary-color)'
+                backgroundColor={isWebcamOn ? 'var(--success-color)' : 'var(--primary-color)'}
                 width={60}
                 height={30}
+                onClick={handleToggleWebCam}
                 title={isWebcamOn ? "Turn off Webcam" : "Turn on Webcam"}
                 Icon={isWebcamOn ? <VideoOff  color={'var(--text-color)'} /> : <Video height={50} width={50} color={'var(--text-color)'} />}
                 />
@@ -78,7 +85,7 @@ export const ControlBar = ({inChannel = false}) => {
                 backgroundColor='var(--primary-color)'
                 width={60}
                 height={30}
-                title={isScreenSharing ? "Share Screen" : "Stop Sharing Screen"}
+                title={isScreenSharing ? "Stop Sharing Screen" : "Share Screen"}
                 Icon={isScreenSharing ? <ScreenShareOff height={20} width={20} color={'var(--text-color)'} /> : <ScreenShare height={'20px'} width={'20px'} color={'var(--text-color)'} />}
                 />
                 <IconButton 

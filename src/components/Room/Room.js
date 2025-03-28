@@ -4,7 +4,7 @@ import styles from './Room.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMediasoup } from '../../context/MediasoupContext';
 import { toggleMediaControlLoading } from '../../features/MediaControl/mediaControlSlice';
-import { getMicrophoneMedia } from '../../lib/services/getUserMedia';
+import { getMicrophoneMedia, getWebcamMedia } from '../../lib/services/getUserMedia';
 import { RoomUserWrapper } from './RoomUserWrapper/RoomUserWrapper';
 import { useDetectSpeech } from '../../hooks/useDetectSpeech';
 
@@ -15,7 +15,7 @@ export const Room = () => {
 
     const { produce, resumeProducer, pauseProducer, closeProducer, getConsumers, getProducers } = useMediasoup();
 
-    const { isMicrophoneMuted } = useSelector(state => state.mediaControlSlice);
+    const { isMicrophoneMuted, isWebcamOn } = useSelector(state => state.mediaControlSlice);
 
     const { user_id: account_id} = useSelector(state => state.accountSlice.account);
    
@@ -36,6 +36,7 @@ export const Room = () => {
                 if (track.error) return;
 
                 await produce('microphone', track);
+
                 await pauseProducer('microphone');
             }
 
@@ -44,6 +45,28 @@ export const Room = () => {
         
         handleMicrophone(isMicrophoneMuted);
     }, [isMicrophoneMuted]);
+
+    // handle webcam
+    React.useEffect(() => {
+
+        const handleWebcam = async (state) => {
+            dispatch(toggleMediaControlLoading(true));
+
+            if (state) {
+                const track = await getWebcamMedia();
+
+                if (track.error) return;
+
+                await produce('webcam', track);
+            } else {
+                await closeProducer('webcam');
+            }
+
+            dispatch(toggleMediaControlLoading(false));
+        }
+
+        handleWebcam(isWebcamOn);
+    }, [isWebcamOn])
 
     // Hook for detecting speech
     useDetectSpeech(isMicrophoneMuted, pauseProducer, resumeProducer);

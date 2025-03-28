@@ -4,13 +4,11 @@ import axios from "axios";
 
 import { API_URL } from "../../../lib/Validation";
 
-import { getToken } from "../../../lib/services/authService";
-
 import { APIErrorHandler } from "../../../lib/handlers/APIErrorHandler/APIErrorHandler";
 
 
-export const GlobalSearch = createAsyncThunk(
-    'searchSlice/GlobalSearch',
+export const globalSearch = createAsyncThunk(
+    'searchSlice/globalSearch',
     async (_, {rejectWithValue, getState}) => {
         try {
 
@@ -20,7 +18,7 @@ export const GlobalSearch = createAsyncThunk(
 
             if (!filter) return rejectWithValue("Invalid Filter");
 
-            const token = await getToken();
+            const {token }= getState().authSlice;
 
             const response = await axios.get(`${API_URL}/search/${filter}`, {
                 headers: {TOKEN: token},

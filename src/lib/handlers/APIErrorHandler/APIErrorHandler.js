@@ -1,6 +1,6 @@
 
 
-export const APIErrorHandler = (rejectWithValue = () => {}, error = {}, errorPlaceholder = "") => {
+export const APIErrorHandler = (rejectWithValue = () => {}, error = {}, errorPlaceholder = "Internal Server Error") => {
     if (error.response) {
         // Server responded with a status code outside 2xx
         return rejectWithValue(error.response.data?.errorMessage || 'Invalid credentials');

@@ -1,0 +1,10 @@
+
+.time {
+    font-size: 10px;
+    color: var(--text-color);
+    margin: 5px 0px;
+    opacity: 0.6;
+    font-weight: 800;
+    padding: 0px;
+}
+

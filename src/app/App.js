@@ -23,6 +23,40 @@ function App() {
   
   const Router = isElectron ? HashRouter : BrowserRouter;
 
+  React.useEffect(() => {
+    const setHeight = () => {
+      document.documentElement.style.setProperty("--app-height", `${window.innerHeight}px`);
+    };
+    
+    setHeight();
+    window.addEventListener("resize", setHeight);
+  
+    return () => window.removeEventListener("resize", setHeight);
+  }, []);
+  
+
+  // application specific
+
+  React.useEffect(() => {
+
+    try {
+
+      const { ipcRenderer } = window.require('electron');
+  
+      ipcRenderer.on('platform-info', (event, platform) => {
+        // Add platform-specific class to the body tag
+       
+        document.body.classList.add(platform);
+      });    
+  
+    } catch (error) {
+      return;
+    }
+
+  }, [])
+
+  
+
   return (
     <Router>
       <div className={`App`}>

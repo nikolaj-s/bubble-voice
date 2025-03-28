@@ -25,6 +25,7 @@ export const ServerUsersProvider = ({children}) => {
 
             await socket.request('fetch users')
             .then(res => {
+                console.log(res)
                 dispatch(setUsers(res.data));
                 setStatus('complete');
                 return;

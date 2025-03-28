@@ -1,0 +1,106 @@
+@keyframes shimmer {
+    0% { background-position: -200px 0; }
+    100% { background-position: 200px 0; }
+  }
+
+  @keyframes breath {
+   0% {
+    opacity: 0.5;
+   }
+   100% {opacity: 1;}
+  }
+
+  .sending {
+    animation: breath 1s infinite linear;
+  }
+  
+  .skeleton {
+    background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+    background-size: 200px 100%;
+    animation: shimmer 1.5s infinite linear;
+    border-radius: 4px;
+  }
+  
+  .messageItem {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    border-left: 5px solid var(--accent-color);
+  }
+
+  .messageItem:hover {
+    background-color: var(--background-color);
+  }
+
+  
+  .userImageWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+    width: 40px;
+    flex-shrink: 0;
+  }
+  .userImage {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: var(--primary-color);
+    flex-shrink: 0;
+  }
+  
+  .messageContent {
+    flex-grow: 1;
+    margin-left: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .userName {
+    width: auto;
+    height: 14px;
+    border-radius: 4px;
+    margin-bottom: 6px;
+  }
+
+  .userName h3 {
+    margin: 0px;
+  }
+  
+  .textBlock {
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+
+    word-break: break-word; /* Works in most browsers */
+    overflow-wrap: break-word; /* Ensures breaking in modern browsers */
+  }
+
+  
+  .textBlock.short {
+    width: 60%;
+  }
+  
+  .textBlock.long {
+    width: 90%;
+  }
+  
+  .imageBlock {
+    max-width: 300px;
+    height: auto;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .imageSkeleton {
+    width: 300px;
+    max-width: 100%;
+    height: 200px;
+    border-radius: 6px;
+    background-color: var(--accent-color);
+    margin-top: 6px;
+  }
+  

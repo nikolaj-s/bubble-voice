@@ -3,8 +3,8 @@ export const getToken = () => {
     try {
         const keytar = window.require('keytar');
 
-        const token = keytar.getPassword("TOKEN", "USER_ACCOUNT");
-
+        const token = localStorage.getItem("TOKEN");
+        
         return token;
     
     } catch (error) {
@@ -22,7 +22,7 @@ export const setToken = (jwt) => {
     try {
         const keytar = window.require('keytar');
 
-        keytar.setPassword("TOKEN", "USER_ACCOUNT", jwt);
+        localStorage.setItem("TOKEN", jwt);
 
         return;
     } catch (error) {
@@ -34,7 +34,7 @@ export const clearToken = () => {
     try {
         const keytar = window.require('keytar');
 
-        keytar.deletePassword("TOKEN", "USER_ACCOUNT");
+        localStorage.removeItem("TOKEN");
 
         return;
     } catch (error) {

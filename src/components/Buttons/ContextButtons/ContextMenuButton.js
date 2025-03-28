@@ -1,10 +1,18 @@
 import React from "react";
 import styles from "./ContextMenuButton.module.css";
 
-const ContextMenuButton = ({ label, onClick }) => {
+const ContextMenuButton = ({ label, onClick, icon, top, bottom, zIndex }) => {
     return (
-        <button className={styles.contextButton} onClick={onClick}>
+        <button
+        style={{
+            borderRadius: top ? '10px 10px 0px 0px' : bottom ? '0px 0px 10px 10px' : '0px',
+            style: zIndex
+        }}
+        className={styles.contextButton} onClick={onClick}>
+            <p>
             {label}
+            </p>
+            {icon}
         </button>
     );
 };

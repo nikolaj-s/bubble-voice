@@ -1,0 +1,23 @@
+.spacerContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    color: var(--text-color);
+    flex-shrink: 0;
+    height: 50px;
+  }
+  
+  .line {
+    flex: 1;
+    border-top: 1px solid var(--accent-color);
+    margin: 0 10px;
+  }
+  
+  .date {
+    font-weight: bold;
+    color: var(--text-color);
+    padding: 0 10px;
+    letter-spacing: 2px;
+  }
+  

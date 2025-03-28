@@ -7,10 +7,12 @@ import { ReOrderChannels } from './ReOrderChannels/ReOrderChannels';
 export const Channels = () => {
 
     return (
-        <div className={styles.container}>
-            <ChannelsProvider>
-                <ReOrderChannels />
-            </ChannelsProvider>
+        <div data-context={JSON.stringify({createChannel: true, createCategory: true, type: "channelList"})} className={styles.container}>
+             <div className={styles.wrapper}>
+                <ChannelsProvider>
+                    <ReOrderChannels />
+                </ChannelsProvider>
+            </div>
         </div>
     )
 }

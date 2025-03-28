@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 import styles from './ChannelUserButton.module.css';
 import { ImageComponent } from '../../Image/Image';
-import { MicOff, VolumeOff } from 'lucide-react';
+import { MicOff, ScreenShare, Video, VolumeOff } from 'lucide-react';
 
 export const ChannelUserButton = ({user_id, active}) => {
     
@@ -23,8 +23,10 @@ export const ChannelUserButton = ({user_id, active}) => {
                 <h3>{user.display_name}</h3>
                 {user.channel_status ?
                 <div className={styles.statusContainer}>
-                    {user.channel_status.isMicrophoneMuted ? <MicOff width={20} height={20} color='var(--text-color)' /> : null}
-                    {user.channel_status.isAudioMuted ? <VolumeOff width={20} height={20} color='var(--text-color)' /> : null}
+                    {user?.channel_status?.isMicrophoneMuted ? <MicOff width={20} height={20} color='var(--text-color)' /> : null}
+                    {user?.channel_status?.isAudioMuted ? <VolumeOff width={20} height={20} color='var(--text-color)' /> : null}
+                    {user?.channel_status?.isWebcamOn ? <Video width={20} height={20} color='var(--text-color)' />  : null}
+                    {user?.channel_status?.isScreenSharing ? <ScreenShare width={20} height={20} color='var(--text-color)' /> : null}
                 </div>
                 : null}
             </div>

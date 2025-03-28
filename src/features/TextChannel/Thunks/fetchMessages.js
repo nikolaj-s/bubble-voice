@@ -1,0 +1,44 @@
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { APIErrorHandler } from "../../../lib/handlers/APIErrorHandler/APIErrorHandler";
+import axios from "axios";
+import { API_URL } from "../../../lib/Validation";
+
+
+export const fetchMessages = createAsyncThunk(
+    'fetchMessages/textChannelSlice',
+    async (params, {rejectWithValue, getState, dispatch}) => {
+        try {
+
+            const {token} = getState().authSlice;
+
+            const {server_id} = getState().serverDetailsSlice;
+
+            if (!params.channel_id) return rejectWithValue("Invalid Channel");
+
+            const {textChannelPos} = getState().textChannelSlice;
+
+            let count = 20;
+
+            if (textChannelPos[params.channel_id] && !params?.last_message_id) {
+                count = textChannelPos[params.channel_id].count;
+            }
+
+            const response = await axios({
+                method: "GET",
+                url: `${API_URL}/social/fetch`,
+                params: {channel_id: params.channel_id, last_message_id: params?.last_message_id, count: count},
+                headers: {TOKEN: token}
+            })
+
+            if (response.data.messages) {
+                return response.data;
+            }
+
+            return {messages: [], no_more_messages: true};
+
+        } catch (error) {
+            console.log(error);
+            return APIErrorHandler(rejectWithValue, error, 'Internal Server Error');
+        }
+    }
+)

@@ -265,6 +265,14 @@ function createWindow () {
       }, 500)
   })
 
+  win.webContents.on('did-finish-load', () => {
+
+    const platform = process.platform;
+
+    // Add platform-specific classes
+    win.webContents.send('platform-info', platform);
+  })
+
   win.once('focus', () => win.flashFrame(false));
 
   const mainScreen = screen.getPrimaryDisplay();
@@ -295,7 +303,7 @@ function createWindow () {
   notification.show();
 
   // Open the DevTools.
-  process.env.ELECTRON_START_URL ? win.webContents.openDevTools() : null
+  if (process.env.ELECTRON_START_URL) win.webContents.openDevTools();
 
   const handleRedirect = (e, url) => {
     e.preventDefault();

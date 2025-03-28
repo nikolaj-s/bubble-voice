@@ -1,0 +1,67 @@
+
+  .linkPreview {
+    display: flex;
+    align-items: center;
+    background: var(--card-background-color);
+    color: var(--text-color);
+    text-decoration: none;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: background 0.2s ease-in-out;
+    max-width: 500px;
+  }
+  
+  .linkPreview:hover {
+    background: var(--primary-color);
+  }
+  
+  .previewImage {
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+    border-right: 3px solid var(--accent-color);
+  }
+  
+  .previewContent {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-height: 80px;
+  }
+  
+  .siteInfo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--secondary-color);
+  }
+  
+  .favicon {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .siteName {
+    font-weight: bold;
+  }
+  
+  .title {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--text-color);
+    margin: 0px;
+  }
+  
+  .description {
+    font-size: 14px;
+    margin: 0px;
+    color: var(--secondary-color);
+    display: -webkit-box;
+  -webkit-line-clamp: 2;        /* Limit to 2 lines */
+  -webkit-box-orient: vertical; /* Set the box orientation to vertical */
+  overflow: hidden;             /* Hide overflow content */
+  text-overflow: ellipsis;   
+  }
+  

@@ -1,4 +1,5 @@
 import React from "react";
+import { useParams } from "react-router";
 
 export const ChannelButtonDragWrapper = ({
   children,
@@ -10,14 +11,15 @@ export const ChannelButtonDragWrapper = ({
   collapse,
   draggingCategory,
 }) => {
+  const { channelID } = useParams();
+
   const [moveIndicator, toggleMoveIndicator] = React.useState(false);
 
   const onDrop = (event) => {
     try {
       toggleDraggingChannel(false);
 
-
-        event.target.style.zIndex = 'atuo'
+      event.target.style.zIndex = "atuo";
 
       document.getElementById(
         `channel-wrapper-button-${channel._id}`
@@ -47,9 +49,7 @@ export const ChannelButtonDragWrapper = ({
 
   const handleNewChannelPosition = (e) => {
     try {
-
-
-    e.target.style.zIndex = 'atuo'
+      e.target.style.zIndex = "atuo";
 
       toggleMoveIndicator(false);
 
@@ -66,10 +66,10 @@ export const ChannelButtonDragWrapper = ({
   };
 
   const handleDragStart = (e) => {
-    console.log(e)
+    console.log(e);
     e.stopPropagation();
 
-    e.target.style.zIndex = 999
+    e.target.style.zIndex = 999;
 
     e.dataTransfer.setData("text/plain", `${channel.channel_id}`);
 
@@ -79,8 +79,7 @@ export const ChannelButtonDragWrapper = ({
   };
 
   const handleDragEnd = (e) => {
-
-    e.target.style.zIndex = 'atuo'
+    e.target.style.zIndex = "atuo";
 
     toggleDraggingChannel(false);
   };
@@ -93,9 +92,11 @@ export const ChannelButtonDragWrapper = ({
         id={`channel-wrapper-button-${channel._id}`}
         draggable={true}
         onDrop={onDrop}
-        onDragOver={(e) => {e.preventDefault()}}
+        onDragOver={(e) => {
+          e.preventDefault();
+        }}
         style={{
-          display: collapse && channel?.users?.length === 0 ? "none" : null,
+          display: collapse && channel?.channel_id !== channelID ? "none" : null,
         }}
       >
         {children}
@@ -106,9 +107,21 @@ export const ChannelButtonDragWrapper = ({
           style={{
             width: "100%",
             flexShrink: 0,
-            height: draggingChannel && !moveIndicator ? 3 : draggingChannel && moveIndicator ? 5 : 0,
-            backgroundColor: draggingChannel ? 'var(--success-color)' : 'transparent',
-            opacity: draggingChannel && !moveIndicator ? 0.5 : draggingChannel && moveIndicator ? 1 : 0,
+            height:
+              draggingChannel && !moveIndicator
+                ? 3
+                : draggingChannel && moveIndicator
+                ? 5
+                : 0,
+            backgroundColor: draggingChannel
+              ? "var(--success-color)"
+              : "transparent",
+            opacity:
+              draggingChannel && !moveIndicator
+                ? 0.5
+                : draggingChannel && moveIndicator
+                ? 1
+                : 0,
             pointerEvents: "all",
             position: "relative",
             bottom: 0,

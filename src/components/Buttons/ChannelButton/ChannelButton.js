@@ -1,17 +1,22 @@
 import React from "react";
 import { motion } from "framer-motion";
 import styles from "./ChannelButton.module.css";
-import { Ellipsis, Hash, Volume1 } from "lucide-react";
+import { Ellipsis, Hash, TextQuote, Volume1 } from "lucide-react";
 import { ImageComponent } from "../../Image/Image";
 import { useNavigate, useParams } from "react-router";
 import { ChannelUserButton } from "../ChannelUserButton/ChannelUserButton";
 import IconButton from "../IconButton/IconButton";
+import { useDispatch, useSelector } from "react-redux";
 
 const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, channel_type, server_id}) => {
+
+    const dispatch = useDispatch();
 
     const [active, toggleActive] = React.useState(false);
 
     const [hover, toggleHover] = React.useState(false);
+
+    const {currentChannel} = useSelector(state => state.channelsSlice);
 
     const navigate = useNavigate();
 
@@ -19,10 +24,18 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
 
     const openChannel = () => {
 
+        if (currentChannel?.channel_type === 'voice' && channel_type === 'text') {
+
+            
+        
+        }
+
         if (active) {
+
             if (channel_type === 'text') {
                 navigate(`/dashboard/server/${server_id}`);
             }
+
         } else {
             navigate(`/dashboard/server/${server_id}/channel/${channel_id}`);
         }
@@ -73,6 +86,8 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
                     <ImageComponent src={channel_icon} />
                     : channel_type === 'text' ?
                     <Hash color="var(--text-color)" style={{marginLeft: '-5px'}} width={'100%'} height={'100%'} />
+                    : channel_type === 'thread' ?
+                    <TextQuote />
                     :
                     <Volume1 width={'100%'} height={'100%'} />}
                 </span>
@@ -82,7 +97,7 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
                 <IconButton 
                 onClick={openContext}
                 Icon={<Ellipsis color="var(--text-color)"/>}
-                title={"Channel Options"}
+                title={"more"}
                 position="top"
                 width={25}
                 height={25}

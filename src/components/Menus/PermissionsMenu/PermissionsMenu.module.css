@@ -1,0 +1,62 @@
+
+.container {
+    position: relative;
+    display: inline-block;
+}
+
+.button {
+    background-color: var(--button-background);
+    color: var(--text-color);
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.button:hover {
+    background-color: var(--button-hover);
+}
+
+.menu {
+    position: absolute;
+    border-radius: 5px;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.wrapper {
+    width: 500px;
+    max-width: 100%;
+    border-radius: 10px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100% - 40px);
+    padding: 10px;
+    overflow-y: auto;
+    background-color: var(--card-background-color);
+}
+
+.permissionItem {
+    margin: 5px 0;
+}
+
+.label {
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+input[type="checkbox"] {
+    accent-color: var(--success-color);
+}

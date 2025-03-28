@@ -5,7 +5,7 @@ import { fetchAccount } from "../../features/Account/Thunks/fetchAccount";
 
 import DashboardSkeleton from "../../components/Loading/DashBoardSkeleton/DashBoardSkeleton";
 import { selectAccount, selectAccountError } from "../../features/Account/accountSlice";
-import { fetchDevices } from "../../features/Settings/Devices/DeviceSlice";
+import { fetchDevices } from "../../features/Settings/Devices/deviceSlice";
 
 const FetchAccountProvider = ({ children }) => {
 
@@ -20,17 +20,22 @@ const FetchAccountProvider = ({ children }) => {
     const token = useSelector(state => state.authSlice.token);
 
     useEffect(() => {
+        try {
+            dispatch(fetchDevices());
+            
+            if (!token) return;
 
-        dispatch(fetchDevices());
-        
-        if (token.trim() === ';') return;
+            if (token?.trim() === ';') return;
 
-        if (token) {
+            if (token) {
 
-            dispatch(fetchAccount());
-        
+                dispatch(fetchAccount());
+            
+            }
+
+        } catch (error) {
+            navigate('/login')
         }
-
     }, [dispatch, token]);
 
     useEffect(() => {

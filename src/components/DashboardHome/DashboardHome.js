@@ -6,7 +6,7 @@ export const DashboardHome = () => {
 
     return (
         <>
-        <section>
+        <section style={{borderTopLeftRadius: 10}}>
         
         </section>
         <section>

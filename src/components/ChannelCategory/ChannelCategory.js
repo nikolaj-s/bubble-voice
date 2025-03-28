@@ -48,7 +48,7 @@ export const Category = ({
   const onCategoryDragStart = (e) => {
     e.stopPropagation();
 
-    if (!category_id) return;
+    if (!category_id || category_id === 'channels') return;
 
     e.dataTransfer.setData("text/plain", `${category_id}`);
 
@@ -98,7 +98,7 @@ export const Category = ({
         
     >
       <div
-        draggable={true}
+        draggable={category_id === 'channels' ? false : true}
         onDragStart={onCategoryDragStart}
         onDragEnd={onCategoryDragEnd}
         style={{
@@ -147,6 +147,7 @@ export const Category = ({
           })}
         </>
       </div>
+      {category_id === 'channels' ? null :
       <div
         onDragOver={(e) => {
           e.preventDefault();
@@ -166,7 +167,7 @@ export const Category = ({
         onDragLeave={() => {
           toggleMoveIndicator(false);
         }}
-      />
+      />}
     </div>
   );
 };

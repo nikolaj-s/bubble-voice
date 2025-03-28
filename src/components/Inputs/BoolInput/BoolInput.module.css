@@ -1,0 +1,37 @@
+
+.boolInput {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-color);
+    font-size: 14px;
+    cursor: pointer;
+    text-transform: capitalize;
+}
+
+.boolInput input[type="checkbox"] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background-color: var(--card-background-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    transition: background 0.3s, border 0.3s;
+    cursor: pointer;
+}
+
+.boolInput input[type="checkbox"]:checked {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+    position: relative;
+}
+
+.boolInput input[type="checkbox"]:checked::after {
+
+    position: absolute;
+    left: 4px;
+    top: -1px;
+    font-size: 14px;
+    color: var(--background-color);
+    font-weight: bold;
+}

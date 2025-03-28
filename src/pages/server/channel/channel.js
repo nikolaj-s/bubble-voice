@@ -4,26 +4,23 @@ import { ChannelProvider } from '../../../providers/ChannelProvider/ChannelProvi
 
 import { useSelector } from 'react-redux';
 
-import { RoomProvider } from '../../../providers/RoomProvider/RoomProvider';
-import { MediasoupProvider } from '../../../context/MediasoupContext';
-import { Room } from '../../../components/Room/Room';
+import { VoiceChannel } from './VoiceChannel/VoiceChannel';
+import { TextChannel } from './TextChannel/TextChannel';
 
 export const Channel = () => {
 
     const channel = useSelector(state => state.channelsSlice.currentChannel);
+
+    const textChannel = useSelector(state => state.textChannelSlice.currentTextChannel);
    
     return (
         <ChannelProvider>
             {channel ?
             channel?.channel_type === 'voice' ?
-            <RoomProvider key={channel?.channel_id} channel={channel} >
-                <MediasoupProvider>
-                    <Room />
-                </MediasoupProvider>
-            </RoomProvider>
-            :
-            <></>
-            : null}
+            <VoiceChannel channel={channel} />
+            : channel?.channel_type === 'text' ?
+            <TextChannel channel={textChannel} />
+            : null : null}
         </ChannelProvider>
     )
 }
