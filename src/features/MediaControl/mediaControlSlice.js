@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const initialState = () => {
 
-const mediaControlSlice = createSlice({
-    name: "mediaControlSlice",
-    initialState: {
+    const usingPushToTalk = JSON.parse(localStorage.getItem('usingPushToTalk'))
+
+    return {
         isAudioMuted: false,
         isWebcamOn: false,
         isScreenSharing: false,
@@ -11,9 +12,29 @@ const mediaControlSlice = createSlice({
         microphoneError: false,
         cameraError: false,
         screenShareError: false,
-        loading: false
-    },
+        loading: false,
+        usingPushToTalk: usingPushToTalk || false,
+        isPushToTalkActive: false,
+        voiceThreshold: 25
+    }
+}
+
+
+const mediaControlSlice = createSlice({
+    name: "mediaControlSlice",
+    initialState,
     reducers: {
+        setVoiceThreshold: (state, action) => {
+            state.voiceThreshold = action.payload;
+        },
+        toggleUsingPushToTalk: (state) => {
+            state.usingPushToTalk = !state.usingPushToTalk;
+
+            localStorage.setItem('usingPushToTalk', state.usingPushToTalk);
+        },
+        togglePushToTalkActive: (state, action) => {
+            state.isPushToTalkActive = action.payload;
+        },
         toggleScreenShare: (state, action) => {
             if (state.loading) return;
 
@@ -27,9 +48,9 @@ const mediaControlSlice = createSlice({
         toggleMicrophone: (state, action) => {
             if (state.loading) return;
 
-            state.isMicrophoneMuted = action.payload;
+            state.isMicrophoneMuted = !state.isMicrophoneMuted;
 
-            if (state.isAudioMuted === true && action.payload === false) {
+            if (state.isAudioMuted === true && !state.isMicrophoneMuted) {
                 state.isAudioMuted = false;
             }
 
@@ -37,13 +58,18 @@ const mediaControlSlice = createSlice({
         toggleAudioMute: (state, action) => {
             if (state.loading) return;
 
-            state.isAudioMuted = action.payload;
+            state.isAudioMuted = !state.isAudioMuted;
 
-            state.isMicrophoneMuted = action.payload;
+            if (state.isAudioMuted && !state.isMicrophoneMuted) {
+                state.isMicrophoneMuted = true;
+            } else if (!state.isAudioMuted && state.isMicrophoneMuted) {
+                state.isMicrophoneMuted = false;
+            }
         },
         toggleMediaControlLoading: (state,action) => {
             state.loading = action.payload;
-        }
+        },
+
     }
 })
 
@@ -52,7 +78,10 @@ export const {
     toggleWebcam,
     toggleMicrophone,
     toggleScreenShare,
-    toggleMediaControlLoading
+    toggleMediaControlLoading,
+    togglePushToTalkActive,
+    toggleUsingPushToTalk,
+    setVoiceThreshold
 } = mediaControlSlice.actions;
 
 export default mediaControlSlice.reducer;

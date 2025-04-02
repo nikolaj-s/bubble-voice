@@ -12,5 +12,6 @@
     vertical-align: middle;
     flex: 1;
     overflow: hidden;
+    z-index: 1;
 }
 

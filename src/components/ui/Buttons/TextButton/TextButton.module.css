@@ -1,0 +1,31 @@
+.button {
+   
+    border: none;
+    color: var(--text-color);
+    font-size: 16px;
+    cursor: pointer;
+    padding: 10px;
+    transition: 0.1s ease-in-out;
+    text-align: center;
+    outline: none;
+    background-color: var(--button-background);
+    border-radius: 5px;
+  }
+  
+  .button:hover {
+    background-color: var(--button-hover) !important;
+  }
+  
+  .button:active {
+    scale: 0.99;
+  }
+  
+  .disabled {
+    color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .disabled:hover {
+    color: #ccc;
+  }
+  

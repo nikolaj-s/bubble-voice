@@ -7,11 +7,13 @@ import { toggleMediaControlLoading } from '../../features/MediaControl/mediaCont
 import { getMicrophoneMedia, getWebcamMedia } from '../../lib/services/getUserMedia';
 import { RoomUserWrapper } from './RoomUserWrapper/RoomUserWrapper';
 import { useDetectSpeech } from '../../hooks/useDetectSpeech';
+import { ChannelBackground } from '../ChannelBackground/ChannelBackground';
+import { RoomOverlay } from './RoomOverlay/RoomOverlay';
 
 export const Room = () => {
     const dispatch = useDispatch();
 
-    const { users } = useSelector(state => state.channelsSlice.currentChannel);
+    const { users, channel_background } = useSelector(state => state.channelsSlice.currentChannel);
 
     const { produce, resumeProducer, pauseProducer, closeProducer, getConsumers, getProducers } = useMediasoup();
 
@@ -89,7 +91,11 @@ export const Room = () => {
 
     return (
         <div className={styles.container}>
+    
             <RoomUserWrapper users={combinedUsers} />
+            <ChannelBackground channel_background={channel_background} />
+            <RoomOverlay />
+        
         </div>
     );
 };

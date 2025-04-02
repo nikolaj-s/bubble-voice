@@ -1,12 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = () => {
+    try {
+        const saved = JSON.parse(localStorage.getItem('disableNsfwBlur'));
 
-    const saved = localStorage.getItem('disableNsfwBlur');
-
-    return {
-        safeSearchDisabled: false,
-        disableNsfwBlur: saved ? true : false
+        return {
+            safeSearchDisabled: false,
+            disableNsfwBlur: saved
+        }
+    } catch (error) {
+        return {
+            safeSearchDisabled: false,
+            disableNsfwBlur: false
+        }
     }
 }
 

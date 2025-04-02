@@ -3,10 +3,10 @@ import React from 'react';
 import {motion} from 'framer-motion';
 
 import styles from './FormWrapper.module.css';
-import Label from '../../../Titles/Label/Label';
-import Header from '../../../Titles/Header/Header';
+import Label from '../../../ui/Titles/Label/Label';
+import Header from '../../../ui/Titles/Header/Header';
 
-import SpinnerLoading from '../../../Loading/Spinner/SpinnerLoading';
+import SpinnerLoading from '../../../ui/Loading/Spinner/SpinnerLoading';
 import TextLabelError from '../../../Error/TextLabelError/TextLabelError';
 
 export const FormWrapper = ({children, header = false, label = false, onSubmit, loading = false, error = false}) => {

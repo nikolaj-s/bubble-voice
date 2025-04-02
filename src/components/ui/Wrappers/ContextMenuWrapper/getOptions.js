@@ -6,27 +6,27 @@ import { copyToClipboard, downloadImage } from "../../../../lib/services/helperF
 import { deleteMessage } from "../../../../features/TextChannel/Thunks/deleteMessage";
 import { closeOverlay, setOverlay } from "../../../../features/Overlay/overlaySlice";
 import { sendMessage } from "../../../../features/TextChannel/Thunks/sendMessage";
+import { setCurrentTextChannel } from "../../../../features/TextChannel/textChannelSlice";
+import { setFilter, setQuery, setSimilarImageSrc } from "../../../../features/Search/searchSlice";
+import { globalSearch } from "../../../../features/Search/Thunks/globalSearch";
+import { setChannelToEdit } from "../../../../features/editChannel/editChannelSlice";
 
 export const useContextMenuOptions = () => {
 
     const [searchParams, setSearchParams] = useSearchParams();
-    
-    const {user_id} = useSelector(state => state.accountSlice);
 
     const dispatch = useDispatch();
 
     const navigate = useNavigate();
 
     const getOptions = useCallback(
-        (e, permissions, currentTextChannel, channels) => {
+        (e, permissions, currentTextChannel, channels, currentChannel, user) => {
         try {
             const options = [];
 
             const path = e.composedPath();
 
             const data = {};
-
-            console.log(permissions);
 
             for (const el of path) {
             try {
@@ -71,7 +71,14 @@ export const useContextMenuOptions = () => {
 
                     options.push({
                         label: "Edit Channel",
-                        onClick: () => {},
+                        onClick: () => {
+
+                            dispatch(setChannelToEdit(channel));
+
+                            setSearchParams({section: 'editChannel'});
+                            
+                            dispatch(setOverlay('serverSettings'));
+                        },
                         type: "button",
                         icon: <FilePenLine color="var(--text-color)" />
                     });
@@ -126,9 +133,26 @@ export const useContextMenuOptions = () => {
                         type: "button",
                         icon: <ImageDown color="var(--text-color)" />
                     })
-                }
+                    options.push({
+                        label: "Find Similar Images",
+                        onClick: () => {
 
-                if (data.message.user_id === user_id || permissions.user_can_delete_other_users_messages) {
+                            dispatch(setQuery(""));
+
+                            dispatch(setSimilarImageSrc(data.message.image));
+
+                            dispatch(setFilter({path: 'images', label: "Images"}));
+
+                            dispatch(globalSearch());
+
+                            dispatch(setOverlay('search'));
+
+                        },
+                        type: "button"
+                    })
+                }
+                console.log(data.message.user_id, user.user_id)
+                if (data.message.user_id === user.user_id || permissions.user_can_delete_other_users_messages) {
                     options.push({
                         label: "Delete Message",
                         onClick: () => {dispatch(deleteMessage({message_id: data.message.message_id}))},
@@ -165,8 +189,17 @@ export const useContextMenuOptions = () => {
                                 onClick: () => {
                                     dispatch(closeOverlay());
 
-                                    navigate(`/dashboard/server/${channel.server_id}/channel/${channel.channel_id}`);
+                                    if (currentChannel?.channel_type === 'voice') {
 
+                                        dispatch(setCurrentTextChannel(channel.channel_id));
+
+                                    } else {
+
+                                        navigate(`/dashboard/server/${channel.server_id}/channel/${channel.channel_id}`);
+
+                                    }
+
+                                    
                                     dispatch(sendMessage({channel_id: channel.channel_id, text: data.imageSearchResult.src, ...data.imageSearchResult}));
                                     
                                 },
@@ -185,23 +218,58 @@ export const useContextMenuOptions = () => {
                 
                 }
 
+            }
+
+            if (data.image || data.imageSearchResult) {
+
+                if (!data.image?.src && !data.imageSearchResult?.src) return;
+
+                options.push({
+                    label: "Find Similar Images",
+                    onClick: () => {
+
+                        dispatch(setQuery(""));
+
+                        dispatch(setSimilarImageSrc(data.imageSearchResult?.src || data.image?.src));
+
+                        dispatch(setFilter({path: "images", label: "Images"}));
+
+                        dispatch(globalSearch());
+
+                        dispatch(setOverlay('search'));
+
+                    },
+                    type: "button"
+                })
+
                 options.push({
                     label: "Copy Link",
-                    onClick: () => {copyToClipboard(data.imageSearchResult.src)},
+                    onClick: () => {copyToClipboard(data.imageSearchResult?.src || data.image?.src)},
                     type: 'button',
                     icon: <Link color="var(--text-color)" />
                 })
 
                 options.push({
                     label: "Download Image",
-                    onClick: () => {downloadImage(data.imageSearchResult.src)},
+                    onClick: () => {downloadImage(data.imageSearchResult?.src || data.image?.src)},
                     type: "button",
                     icon: <ImageDown color="var(--text-color)" />
                 })
-
-
             }
 
+            if (data.user) {
+
+                if (permissions.user_can_assign_server_groups) {
+                    options.push({
+                        label: "Assign Permissions",
+                        onClick: () => {
+
+                        },
+                        type: "button"
+                    })
+                }
+
+            }
 
 
 

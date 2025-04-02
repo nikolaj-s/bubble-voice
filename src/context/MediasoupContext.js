@@ -173,6 +173,12 @@ export const MediasoupProvider = ({ children }) => {
     consumer.user_id = user;
     consumer.appData = data;
 
+    consumer.on("trackended", () => document.getElementById(consumer.id)?.remove());
+
+    consumer.on("close", () => document.getElementById(consumer.id)?.remove()); 
+    
+    consumer.on("transportclose", () => document.getElementById(consumer.id)?.remove());    
+
     consumersRef.current.set(consumer.id, consumer);
     consumer.on("transportclose", () => closeConsumer(consumer.id));
     forceUpdate();

@@ -1,10 +1,10 @@
 import React from 'react'
-import Header from '../../../../components/Titles/Header/Header'
-import Label from '../../../../components/Titles/Label/Label'
-import TextInput from '../../../../components/Inputs/TextInput/TextInput'
+import Header from '../../../../components/ui/Titles/Header/Header'
+import Label from '../../../../components/ui/Titles/Label/Label'
+import TextInput from '../../../../components/ui/Inputs/TextInput/TextInput'
 import { useDispatch, useSelector } from 'react-redux'
-import TextButton from '../../../../components/Buttons/TextButton/TextButton'
-import ToggleSwitch from '../../../../components/Inputs/ToggleSwitch/ToggleSwitch'
+import TextButton from '../../../../components/ui/Buttons/TextButton/TextButton'
+import ToggleSwitch from '../../../../components/ui/Inputs/ToggleSwitch/ToggleSwitch'
 
 export const SecuritySettingsForm = () => {
 

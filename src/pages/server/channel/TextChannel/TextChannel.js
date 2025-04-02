@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { sendMessage } from '../../../../features/TextChannel/Thunks/sendMessage'
 import { fetchMessages } from '../../../../features/TextChannel/Thunks/fetchMessages'
 import { setTextChannelPos } from '../../../../features/TextChannel/textChannelSlice'
+import { ChannelBackground } from '../../../../components/ChannelBackground/ChannelBackground'
 
 export const TextChannel = ({channel}) => {
 
@@ -21,6 +22,8 @@ export const TextChannel = ({channel}) => {
     const [image, setImage] = React.useState(null);
 
     const [text, setText] = React.useState("");
+
+    const channel_details = useSelector(state => state.channelsSlice.channels.find(c => c.channel_id === channel));
 
     const handleSend = () => {
 
@@ -52,6 +55,7 @@ export const TextChannel = ({channel}) => {
     return (
         <TextChannelProvider channel={channel} >
             <ChatContainer position={position?.position} returnPos={saveTextChannelPos} key={channel} users={users} loadingMore={loadingMore} loadMoreMessages={loadMoreMessages} sending={sending} send={handleSend} messages={messages} error={error} loading={loading}  setImage={setImage} setValue={setText} value={text} />
+            <ChannelBackground {...channel_details} />
         </TextChannelProvider>
     )
 }

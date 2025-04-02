@@ -2,4 +2,7 @@
     width: 100%;
     border-top-left-radius: 10px;
     overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

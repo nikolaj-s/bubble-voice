@@ -2,14 +2,14 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { validateConfirmPassword, validateEmail, validatePassword, validateUsername } from "../../../lib/handlers/inputValidation/inputValidation";
 import axios from "axios";
 import { API_URL } from "../../../lib/Validation";
-import { setToken } from "../../../lib/services/authService";
+import { clearToken, setToken } from "../../../lib/services/authService";
 import { APIErrorHandler } from "../../../lib/handlers/APIErrorHandler/APIErrorHandler";
 
 export const signupThunk = createAsyncThunk(
     'auth/signUp',
     async ({ username, email, password, confirmPassword }, { rejectWithValue }) => {
         try {
-            console.log(username,email,password,confirmPassword)
+
             if (!validateUsername(username)) {
                 return rejectWithValue({ errorMessage: 'Username must be 3-30 characters long and can only contain letters, numbers, and underscores.', errorType: 'usernameError' });
             }
@@ -29,6 +29,9 @@ export const signupThunk = createAsyncThunk(
             if (response.status >= 200 && response.status < 300) {
 
                 if (response?.data?.success) {
+
+                    clearToken();
+
                     setToken(response?.data?.token)
 
                     return {authorized: true, token: response.data.token}
@@ -39,7 +42,6 @@ export const signupThunk = createAsyncThunk(
             return rejectWithValue('Unexpected server response');
             }
         
-            return; // Assuming the response contains the user data
         } catch (error) {
            return APIErrorHandler(rejectWithValue, error, 'Fatal error signing up, please try again later')// Assuming the error message is in response.data
         }

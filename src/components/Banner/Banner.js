@@ -1,7 +1,7 @@
 import React from 'react';
 
 import styles from './Banner.module.css'
-import { ImageComponent } from '../Image/Image';
+import { ImageComponent } from '../ui/Image/Image';
 
 export const Banner = ({image, height = 80}) => {
 

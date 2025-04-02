@@ -9,9 +9,10 @@ const searchSlice = createSlice({
         loading: false,
         results: {},
         error: false,
-        filter: "servers",
-        filters: ["servers", "social", "images", "videos"],
+        filter: {label: "Bubbles", path: "servers"},
+        filters: [{label: "Bubbles", path: "servers"}, {label: "Images", path: "images"}],
         searchHistory: [],
+        similarImageSrc: false,
         open: false,
         query: "",
         scrollPos: 0,
@@ -23,13 +24,23 @@ const searchSlice = createSlice({
             state.open = action.payload;
         },
         setFilter: (state, action) => {
-            state.filter = action.payload;
+
+            state.error = false;
+
+            const filter = state.filters.find(f => f.path === action.payload.path);
+
+            if (filter) {
+                state.filter = filter;
+            }
         },
         setQuery: (state, action) => {
             state.query = action.payload;
         },
         setSearchResultsScrollPos: (state,action) => {
             state.scrollPos = action.payload;
+        },
+        setSimilarImageSrc: (state, action) => {
+            state.similarImageSrc = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -76,6 +87,6 @@ const searchSlice = createSlice({
     }
 })
 
-export const {toggleOpenSearch, setFilter, setQuery, setSearchResultsScrollPos} = searchSlice.actions;
+export const {toggleOpenSearch, setFilter, setQuery, setSearchResultsScrollPos, setSimilarImageSrc} = searchSlice.actions;
 
 export default searchSlice.reducer;

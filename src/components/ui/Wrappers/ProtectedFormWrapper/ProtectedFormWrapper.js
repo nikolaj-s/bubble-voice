@@ -10,7 +10,7 @@ import { getToken } from "../../../../lib/services/authService";
 
 import ErrorMessage from "../../../Error/ErrorMessage/ErrorMessage";
 
-import LoadingSpinnerCard from "../../../Loading/LoadingSpinnerCard/LoadingSpinnerCard";
+import LoadingSpinnerCard from "../../../ui/Loading/LoadingSpinnerCard/LoadingSpinnerCard";
 
 const ProtectedFormWrapper = ({ children }) => {
 
@@ -39,7 +39,7 @@ const ProtectedFormWrapper = ({ children }) => {
         headers: { TOKEN: token },
       });
       
-      if (response.data.admin) {
+      if (response.data?.permissions.admin) {
 
         const adminPermissions = new Proxy({}, {
           get: () => true, // Always returns true for any accessed key

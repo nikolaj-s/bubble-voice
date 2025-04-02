@@ -1,11 +1,19 @@
 
 import React from 'react'
+
 import { useSocket } from '../../context/SocketContext'
+
 import { useDispatch, useSelector } from 'react-redux';
+
 import { resetServerDetails, selectServerDetailsStatus, setServerDetails, setServerDetailsStatus } from '../../features/ServerDetails/serverDetailsSlice';
-import DashboardSkeleton from '../../components/Loading/DashBoardSkeleton/DashBoardSkeleton';
+
+import DashboardSkeleton from '../../components/ui/Loading/DashBoardSkeleton/DashBoardSkeleton';
+
 import { useNavigate, useParams } from 'react-router';
-import { setPermissions } from '../../features/ServerPermissions/serverPermissionsSlice';
+
+import { deletePermission, setPermissions, updatePermissions } from '../../features/ServerPermissions/serverPermissionsSlice';
+
+import { removeServerGroupFromUsers } from '../../features/ServerUsers/serverUsersSlice';
 
 export const ServerDetailsProvider = ({children}) => {
 
@@ -18,6 +26,8 @@ export const ServerDetailsProvider = ({children}) => {
     const dispatch = useDispatch();
 
     const status = useSelector(selectServerDetailsStatus);
+
+    const [showLoading, toggleShowLoading] = React.useState(false);
 
     React.useEffect(() => {
 
@@ -52,33 +62,78 @@ export const ServerDetailsProvider = ({children}) => {
                 if (data.permissions) {
                     dispatch(setPermissions(data.permissions));
                 }
-            }, 300)
+            }, 10)
                 
 
             return;
         }
 
         const handleServerDetailsUpdate = (data) => {
+
             if (data.server_id) {
                 dispatch(setServerDetails(data));
             }
-        }   
+        }
+        
+        const handlePermissionGroupUpdate = (data) => {
+            console.log(data)
+            if (data._id) {
+                dispatch(updatePermissions(data));
+            }
+        }
 
-        socket.on(`update server details ${serverID}`, handleServerDetailsUpdate);
+        const handleRemoveServerGroup = (data) => {
+            if (data.old_server_group_id && data.new_server_group_id) {
+                dispatch(removeServerGroupFromUsers(data));
+
+                dispatch(deletePermission(data));
+            }
+        }
+
+        socket.on(`update permission group for ${serverID}`, handlePermissionGroupUpdate);
+
+        socket.on(`remove server group from ${serverID}`, handleRemoveServerGroup);
+
+        socket.on(`update server details for ${serverID}`, handleServerDetailsUpdate);
 
         socket.on('connect', handleFetchServerDetails);
 
         handleFetchServerDetails();
 
         return () => {
+
+            socket.off(`remove server group from ${serverID}`, handleRemoveServerGroup);
+
+            socket.off(`update permission group for ${serverID}`, handlePermissionGroupUpdate);
+
             socket.off(`update server details ${serverID}`, handleServerDetailsUpdate);
 
             socket.off('connect', handleFetchServerDetails);
 
             dispatch(resetServerDetails());
+        
         }
 
     }, [socket, serverID, dispatch])
+
+
+    React.useEffect(() => {
+
+        let timer;
+
+        if (status === 'loading') {
+            timer = setTimeout(() => {
+
+                toggleShowLoading(true)
+            }, 200)
+        } else {
+            clearTimeout(timer);
+            toggleShowLoading(false);
+        }
+
+        return () => clearTimeout(timer);
+
+    }, [status])
 
     
     if (status === 'idle') {
@@ -87,7 +142,7 @@ export const ServerDetailsProvider = ({children}) => {
 
     } else if (status === 'loading') {
 
-        return <DashboardSkeleton key="dashboard-loader" alt={true} />
+        return showLoading ? <DashboardSkeleton key="dashboard-loader" alt={true} /> : null
 
     } else if (status === 'complete') {
 

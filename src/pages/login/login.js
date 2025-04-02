@@ -3,19 +3,21 @@ import { useDispatch, useSelector } from "react-redux";
 import {  selectAuthLoading, selectGeneralAuthError, selectSigninError } from "../../features/Auth/authSlice";
 
 import styles from "./Login.module.css";
-import TextInput from "../../components/Inputs/TextInput/TextInput";
-import TextButton from "../../components/Buttons/TextButton/TextButton";
-import TextNavButton from "../../components/NavButtons/TextNavButton/TextNavButton"
+import TextInput from "../../components/ui/Inputs/TextInput/TextInput";
+import TextButton from "../../components/ui/Buttons/TextButton/TextButton";
 import { FormWrapper } from "../../components/ui/Wrappers/FormWrapper/FormWrapper";
 import { signinThunk } from "../../features/Auth/Thunks/SigninThunk";
 import { IsAuthenticated } from "../../components/Auth/IsAuthenticated/IsAuthenticated";
-import Label from "../../components/Titles/Label/Label";
+import Label from "../../components/ui/Titles/Label/Label";
+import { useNavigate } from "react-router";
 
 const Login = () => {
 
   const [email, setEmail] = useState("");
 
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
 
   const altError = useSelector(selectGeneralAuthError);
 
@@ -30,6 +32,10 @@ const Login = () => {
     
     dispatch(signinThunk({email, password}));
   };
+
+  const redirect = () => {
+    navigate('/signup')
+  }
 
   return (
     <IsAuthenticated>
@@ -54,7 +60,7 @@ const Login = () => {
               autoComplete={'password'}
             />
             <TextButton  action={handleLogin} title="Log In" />
-            <TextNavButton to="/signup" text="Sign Up" />
+            <TextButton action={redirect} title="Sign Up" />
         </FormWrapper>
       </div>
     </IsAuthenticated>

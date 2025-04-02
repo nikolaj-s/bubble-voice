@@ -23,13 +23,26 @@
   
   .messageItem {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     padding: 5px;
     border-left: 5px solid var(--accent-color);
+    position: relative;
+  }
+
+  .buttons {
+    display: none;
+    align-items: center;
+    position: absolute;
+    top: 10px;
+    right: 10px;
   }
 
   .messageItem:hover {
     background-color: var(--background-color);
+  }
+
+  .messageItem:hover .buttons {
+    display: flex;
   }
 
   
@@ -49,6 +62,9 @@
     overflow: hidden;
     background-color: var(--primary-color);
     flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   
   .messageContent {
@@ -56,18 +72,21 @@
     margin-left: 12px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 5px;
   }
   
   .userName {
+    display: flex;
+    align-items: center;
+    gap: 5px;
     width: auto;
-    height: 14px;
+    height: 18px;
     border-radius: 4px;
-    margin-bottom: 6px;
   }
 
   .userName h3 {
     margin: 0px;
+    font-size: 16px;
   }
   
   .textBlock {
@@ -89,10 +108,11 @@
   }
   
   .imageBlock {
-    max-width: 300px;
+    max-width: 400px;
     height: auto;
-    border-radius: 5px;
+    border-radius: 10px;
     overflow: hidden;
+    cursor: pointer;
   }
 
   .imageSkeleton {

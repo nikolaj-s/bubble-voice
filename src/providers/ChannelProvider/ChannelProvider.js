@@ -1,5 +1,5 @@
 import React from 'react'
-import LoadingSpinnerCard from '../../components/Loading/LoadingSpinnerCard/LoadingSpinnerCard';
+import LoadingSpinnerCard from '../../components/ui/Loading/LoadingSpinnerCard/LoadingSpinnerCard';
 import { useParams } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { useSocket } from '../../context/SocketContext';
@@ -79,11 +79,11 @@ export const ChannelProvider = ({children, overlay = false, channel_id_prop}) =>
 
             socket.off('connect', handleFetchChannelDetails);
 
-            dispatch(clearCurrentChannel());
+            if (!overlay) dispatch(clearCurrentChannel());
 
         }
 
-    }, [channelID, serverID, socket, dispatch]) 
+    }, [channelID, serverID, socket, dispatch, overlay]) 
 
     React.useEffect(() => {
         let timer;

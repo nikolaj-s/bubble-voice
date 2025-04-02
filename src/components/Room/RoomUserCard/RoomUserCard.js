@@ -1,9 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import styles from "./RoomUserCard.module.css";
-import {ImageComponent }from "../../Image/Image";  // Assuming this is a valid component
+import {ImageComponent }from "../../ui/Image/Image";  // Assuming this is a valid component
 
 export const RoomUserCard = ({ user_id, consumers, action }) => {
+
+    const [state, toggleState] = React.useState(false);
 
     const user = useSelector(state => state.serverUsersSlice.users[user_id]);
 
@@ -17,9 +19,19 @@ export const RoomUserCard = ({ user_id, consumers, action }) => {
 
     const webcamElementRef = useRef({});
 
+    // 🔹 Function to remove video elements for webcam
+    const removeWebcamElement = (consumerId) => {
+        if (webcamElementRef.current[consumerId]) {
+            console.log(`Removing video element for consumer ${consumerId}`);
+            webcamElementRef.current[consumerId].remove();
+            delete webcamElementRef.current[consumerId];
+        }
+    };
+
       // Effect to handle consumers and audio elements
       useEffect(() => {
         // Add new audio elements for consumers
+       
         consumers.forEach(consumer => {
   
             const track = consumer.track;
@@ -33,7 +45,7 @@ export const RoomUserCard = ({ user_id, consumers, action }) => {
                     audioElement.autoplay = true;
                     audioElement.muted = false;  // Ensure the audio is not muted
                     audioElement.controls = false;
-                    audioElement.id = `${consumer.user_id}-microphone-source`; // Use the correct user_id
+                    audioElement.id = `${consumer.user_id}`; // Use the correct user_id
                     audioElement.volume = 0.5;
                     audioElement.style.display = 'none'; // Optional: add controls to the audio element
                     audioElementsRef.current[consumer.id] = audioElement; // Store the audio element reference
@@ -55,16 +67,46 @@ export const RoomUserCard = ({ user_id, consumers, action }) => {
                     videoElement.autoplay = true;
                     videoElement.controls = false;
                     videoElement.muted = true;
-                    videoElement.id = `${consumer.id}-webcam-source`;
+                    videoElement.id = `${consumer.id}`;
                     webcamElementRef.current[consumer.id] = videoElement;
 
                     if (webcamContainerRef.current) {
                         webcamContainerRef.current.appendChild(videoElement);
                     }
+
+                    track.onended = () => {
+                        removeWebcamElement(consumer.id);
+
+                        webcamContainerRef.current.removeChild(videoElement);
+                    };
                 }
+            }
+
+
+        });
+        
+        const currentConsumerIds = consumers.map(consumer => consumer.id);
+
+        // 🔹 Cleanup when consumers array is empty
+        Object.keys(audioElementsRef.current).forEach(consumerId => {
+            if (!currentConsumerIds.includes(consumerId)) {
+                // Remove audio element if consumer is no longer in the list
+                audioElementsRef.current[consumerId].remove();
+                delete audioElementsRef.current[consumerId];
+                document.getElementById(consumerId)?.remove();
+               
             }
         });
 
+        Object.keys(webcamElementRef.current).forEach(consumerId => {
+            if (!currentConsumerIds.includes(consumerId)) {
+                // Remove webcam element if consumer is no longer in the list
+                webcamElementRef.current[consumerId].remove();
+                delete webcamElementRef.current[consumerId];
+                document.getElementById(consumerId)?.remove();
+          
+            }
+        });
         // Cleanup function when component unmounts or when consumers change
         return () => {
             // Identify all current consumers by their ID
@@ -76,6 +118,8 @@ export const RoomUserCard = ({ user_id, consumers, action }) => {
                     // Remove audio element if consumer is no longer in the list
                     audioElementsRef.current[consumerId].remove();
                     delete audioElementsRef.current[consumerId];
+                    document.getElementById(consumerId)?.remove();
+                   
                 }
             });
 
@@ -84,6 +128,8 @@ export const RoomUserCard = ({ user_id, consumers, action }) => {
                     // Remove webcam element if consumer is no longer in the list
                     webcamElementRef.current[consumerId].remove();
                     delete webcamElementRef.current[consumerId];
+                    document.getElementById(consumerId)?.remove();
+              
                 }
             });
         };

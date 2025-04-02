@@ -1,13 +1,13 @@
 import React from 'react'
-import Header from '../../../components/Titles/Header/Header'
+import Header from '../../../components/ui/Titles/Header/Header'
 import { useDispatch, useSelector } from 'react-redux'
-import { ImageComponent } from '../../../components/Image/Image';
-import Label from '../../../components/Titles/Label/Label';
-import TextInput from '../../../components/Inputs/TextInput/TextInput';
-import TextButton from '../../../components/Buttons/TextButton/TextButton';
+import { ImageComponent } from '../../../components/ui/Image/Image';
+import Label from '../../../components/ui/Titles/Label/Label';
+import TextInput from '../../../components/ui/Inputs/TextInput/TextInput';
+import TextButton from '../../../components/ui/Buttons/TextButton/TextButton';
 import { setServerToJoinPassword } from '../../../features/JoinServer/joinServerSlice';
 import TextLabelError from '../../../components/Error/TextLabelError/TextLabelError';
-import SpinnerLoading from '../../../components/Loading/Spinner/SpinnerLoading';
+import SpinnerLoading from '../../../components/ui/Loading/Spinner/SpinnerLoading';
 import { useNavigate } from 'react-router';
 import { JoinServer } from '../../../features/JoinServer/Thunks/JoinServer';
 

@@ -1,8 +1,8 @@
 import React from 'react'
 import { useSocket } from '../../context/SocketContext';
-import { useDispatch, useSelector } from 'react-redux';
-import UserButtonSkeleton from '../../components/Buttons/UserButton/UserButtonSkeleton';
-import { setUsers, updateUser, updateUserChannelStatus, updateUserStatus } from '../../features/ServerUsers/serverUsersSlice';
+import { useDispatch } from 'react-redux';
+import UserButtonSkeleton from '../../components/ui/Buttons/UserButton/UserButtonSkeleton';
+import { addUser, setUsers, updateUser, updateUserChannelStatus, updateUserStatus } from '../../features/ServerUsers/serverUsersSlice';
 import { useParams } from 'react-router';
 
 export const ServerUsersProvider = ({children}) => {
@@ -71,6 +71,23 @@ export const ServerUsersProvider = ({children}) => {
             }
         }
 
+        const handleUserJoinsServer = (data) => {
+
+            if (data.user_id) {
+                dispatch(addUser(data));
+            }
+        }
+
+        const handleUpdatePermissions = (data) => {
+            if (data.user_id) {
+                dispatch(updateUser(data));
+            }
+        }
+ 
+        socket.on(`update permissions for user in ${serverID}`, handleUpdatePermissions);
+
+        socket.on(`user joins ${serverID}`, handleUserJoinsServer);
+
         socket.on('user updates channel status', handleUpdateUserChannelStatus);
 
         socket.on(`user account update ${serverID}`, updateUserAccount);
@@ -84,6 +101,10 @@ export const ServerUsersProvider = ({children}) => {
         fetchUsers();
 
         return () => {
+
+            socket.off(`update permissions for user in ${serverID}`, handleUpdatePermissions);
+
+            socket.off(`user joins ${serverID}`, handleUserJoinsServer);
 
             socket.off('user updates channel status', handleUpdateUserChannelStatus);
 

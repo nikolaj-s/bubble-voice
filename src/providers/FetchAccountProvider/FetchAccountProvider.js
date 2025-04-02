@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchAccount } from "../../features/Account/Thunks/fetchAccount";
 
-import DashboardSkeleton from "../../components/Loading/DashBoardSkeleton/DashBoardSkeleton";
+import DashboardSkeleton from "../../components/ui/Loading/DashBoardSkeleton/DashBoardSkeleton";
 import { selectAccount, selectAccountError } from "../../features/Account/accountSlice";
 import { fetchDevices } from "../../features/Settings/Devices/deviceSlice";
 
@@ -34,17 +34,18 @@ const FetchAccountProvider = ({ children }) => {
             }
 
         } catch (error) {
-            navigate('/login')
+            navigate('/account-error')
         }
     }, [dispatch, token]);
 
     useEffect(() => {
+        console.log(error)
         if (error) {
 
-            navigate("/login"); // Redirect to login
+            navigate("/account-error"); // Redirect to login
 
         }
-    }, [error, dispatch, navigate]);
+    }, [error, dispatch]);
 
     if (!user) return <DashboardSkeleton />;
 

@@ -1,6 +1,6 @@
 
 import styles from "./TopNav.module.css";
-import IconButton from "../../Buttons/IconButton/IconButton";
+import IconButton from "../../ui/Buttons/IconButton/IconButton";
 
 import { SearchIcon } from "../../Icons/Search/SearchIcon";
 import { NotificationBellIcon } from "../../Icons/NotificationBell/NotificationBellIcon";
@@ -8,8 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setOverlay } from "../../../features/Overlay/overlaySlice";
 import { selectServerName } from "../../../features/ServerDetails/serverDetailsSlice";
 
-import { LayoutDashboard, Settings2 } from "lucide-react";
-import { Route, Routes } from "react-router";
+import { Settings2 } from "lucide-react";
+import { Routes } from "react-router";
 
 const TopNav = () => {
   
@@ -36,13 +36,7 @@ const TopNav = () => {
       <div className={styles.serverButtons}>
       {isServerRoute && (
         <Routes>
-          <Route path="/server/:serverID" element={(
-            <>
-            <IconButton Icon={<LayoutDashboard color="var(--text-color)"  />} title={"Dashboard"} position="bottom"  />
-            </>
-          )}>
-
-          </Route>
+          
         </Routes>
       )}
       </div>

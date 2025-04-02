@@ -1,16 +1,16 @@
 import React from 'react'
-import Header from '../../../../components/Titles/Header/Header'
-import Label from '../../../../components/Titles/Label/Label'
-import TextInput from '../../../../components/Inputs/TextInput/TextInput'
-import ImageDropZone from '../../../../components/Inputs/ImageDropZone/ImageDropZone'
-import TextButton from '../../../../components/Buttons/TextButton/TextButton'
+import Header from '../../../../components/ui/Titles/Header/Header'
+import Label from '../../../../components/ui/Titles/Label/Label'
+import TextInput from '../../../../components/ui/Inputs/TextInput/TextInput'
+import ImageDropZone from '../../../../components/ui/Inputs/ImageDropZone/ImageDropZone'
+import TextButton from '../../../../components/ui/Buttons/TextButton/TextButton'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectAccount } from '../../../../features/Account/accountSlice'
-import SpinnerLoading from '../../../../components/Loading/Spinner/SpinnerLoading'
+import SpinnerLoading from '../../../../components/ui/Loading/Spinner/SpinnerLoading'
 import TextLabelError from '../../../../components/Error/TextLabelError/TextLabelError'
 import { updateAccount } from '../../../../features/Account/Thunks/updateAccount'
-import TextArea from '../../../../components/Inputs/TextArea/TextArea'
-import ColorPicker from '../../../../components/Inputs/ColorPicker/ColorPicker'
+import TextArea from '../../../../components/ui/Inputs/TextArea/TextArea'
+import ColorPicker from '../../../../components/ui/Inputs/ColorPicker/ColorPicker'
 
 export const AccountSettingsForm = () => {
 
@@ -51,7 +51,7 @@ export const AccountSettingsForm = () => {
     setUserBanner(null);
 
   }
-
+console.log(user_color)
   return (
     <>
     <Header text='Account Settings' />
@@ -64,7 +64,7 @@ export const AccountSettingsForm = () => {
     <Label label='Bio' />
     <TextArea text={bio} setText={setBio} limit={512} placeholder='Enter a bio...' />
     <Label label='Choose An Accent Color' />
-    <ColorPicker onColorChange={setColor} />
+    <ColorPicker onColorChange={setColor} selectedColor={color} />
     {updateError ? <TextLabelError label='Error:' error={updateError} /> : null}
     <TextButton 
     disabled={color === user_color && display_name === displayName && userImage === null && userBanner === null && user_bio === bio}

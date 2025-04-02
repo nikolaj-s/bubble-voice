@@ -25,10 +25,11 @@ const accountSlice = createSlice({
     builder
       .addCase(fetchAccount.pending, (state) => {
         state.status = 'loading';
+        state.error = false;
       })
       .addCase(fetchAccount.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        console.log(action.payload)
+        state.error = false;
         state.account = action.payload.account; // Set the account details
       })
       .addCase(fetchAccount.rejected, (state, action) => {

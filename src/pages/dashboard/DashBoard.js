@@ -11,6 +11,7 @@ import ServerNotFound from "../../components/Error/ServerNotFound/ServerNotFound
 import FetchAccountProvider from "../../providers/FetchAccountProvider/FetchAccountProvider";
 import ContextMenuWrapper from "../../components/ui/Wrappers/ContextMenuWrapper/ContextMenuWrapper";
 import { Channel } from "../server/channel/channel";
+import { MediaControlsProvider } from "../../context/MediaControlsContext";
 
 const Dashboard = () => {
   return (
@@ -18,21 +19,23 @@ const Dashboard = () => {
       <FetchAccountProvider>
         <SocketProvider>
           <Overlay>
-            <div className={styles.layout}>
-              <SideNav />
-              <div className={styles.wrapper}>
-                <TopNav />
-                <div className={styles.mainContent}>
-                  <Routes>
-                    <Route path="/" element={<DashboardHome />} />
-                    <Route path="/server/:serverID/*" element={<Server />} >
-                      <Route path="channel/:channelID" element={<Channel />} />
-                    </Route>
-                    <Route path="/not-found" element={<ServerNotFound />} />
-                  </Routes>
+            <MediaControlsProvider>
+              <div className={styles.layout}>
+                <SideNav />
+                <div className={styles.wrapper}>
+                  <TopNav />
+                  <div className={styles.mainContent}>
+                    <Routes>
+                      <Route path="/" element={<DashboardHome />} />
+                      <Route path="/server/:serverID/*" element={<Server />} >
+                        <Route path="channel/:channelID" element={<Channel />} />
+                      </Route>
+                      <Route path="/not-found" element={<ServerNotFound />} />
+                    </Routes>
+                  </div>
                 </div>
               </div>
-            </div>
+              </MediaControlsProvider>
           </Overlay>
         </SocketProvider>
       </FetchAccountProvider>

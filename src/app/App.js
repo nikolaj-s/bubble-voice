@@ -16,6 +16,7 @@ import BackSplash from '../components/Misc/BackSplash/BackSplash';
 
 import "./App.css";
 import Dashboard from '../pages/dashboard/DashBoard';
+import FatalErrorPage from '../pages/FatalErrorPage/FatalErrorPage';
 
 function App() {
 
@@ -64,6 +65,7 @@ function App() {
           <Route path="/login" element={<BackSplash><Login /></BackSplash>} />
           <Route path="/signup" element={<BackSplash><Signup /></BackSplash>} />
           <Route path="/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/account-error" element={<FatalErrorPage />} />
           <Route path="/" element={<ProtectedRoute><Navigate to={'/dashboard'} /></ProtectedRoute>} />
         </Routes>
       </div>

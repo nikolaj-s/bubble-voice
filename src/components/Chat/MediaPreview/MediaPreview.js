@@ -1,7 +1,7 @@
 import React from 'react';
 
 import styles from './MediaPreview.module.css';
-import { ImageComponent } from '../../Image/Image';
+import { ImageComponent } from '../../ui/Image/Image';
 import { CircleX } from 'lucide-react';
 
 export const MediaPreview = ({preview, clear}) => {

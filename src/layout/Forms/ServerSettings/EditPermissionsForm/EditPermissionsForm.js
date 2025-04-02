@@ -1,33 +1,49 @@
 import React from 'react'
 import { NotAuthorized } from '../../../../components/Error/NotAuthorized/NotAuthorized'
 import { LoadingErrorFormWrapper } from '../../../../components/ui/Wrappers/LoadingErrorFormWrapper/LoadingErrorFormWrapper'
-import Header from '../../../../components/Titles/Header/Header'
-import { useSelector } from 'react-redux'
-import PermissionsMenu from '../../../../components/Menus/PermissionsMenu/PermissionsMenu'
-import Label from '../../../../components/Titles/Label/Label'
-import TextButton from '../../../../components/Buttons/TextButton/TextButton'
-import TextInput from '../../../../components/Inputs/TextInput/TextInput'
+import Header from '../../../../components/ui/Titles/Header/Header'
+import { useDispatch, useSelector } from 'react-redux'
+import PermissionsMenu from '../../../../components/Permissions/PermissionsMenu/PermissionsMenu'
+import Label from '../../../../components/ui/Titles/Label/Label'
+import TextButton from '../../../../components/ui/Buttons/TextButton/TextButton'
+import TextInput from '../../../../components/ui/Inputs/TextInput/TextInput'
+import { createPermissionGroup } from '../../../../features/ServerPermissions/Thunks/createPermissionGroup'
+import ConfirmationPopup from '../../../../components/ui/Menus/ConfirmationPopup/ConfirmationPopup'
+import { deletePermissionGroup } from '../../../../features/ServerPermissions/Thunks/deletePermissionGroup'
 
 export const EditPermissionsForm = ({permissions}) => {
 
+    const dispatch = useDispatch();
+
     const [name, setName] = React.useState("");
+
+    const [permissionToDelete, setPermissionToDelete] = React.useState(false);
 
     const permissionGroups = useSelector(state => state.serverPermissionsSlice.permissions);
 
-    const [groupsToUpdate, setGroupsToUpdate] = React.useState({});
+    const users = useSelector(state => state.serverUsersSlice.users);
 
-    const handleSetGroupToUpdate = (group) => {
-        setGroupsToUpdate(
-            groupsToUpdate[group._id] = group
-        )
-    }   
+    const handleCreatePermissionGroup = () => {
 
-    const createServerGroup = () => {
+        if (name.trim().length < 3) return;
+
+        dispatch(createPermissionGroup({name}));
+
+        setName("")
 
     }
 
-    const submitChanges = () => {
+    const handleCancelDelete = () => {
 
+
+        setPermissionToDelete(false);
+    }
+
+    const handleDeletePermission = () => {
+
+        dispatch(deletePermissionGroup({permissionGroup: permissionToDelete}))
+
+        setPermissionToDelete(false);
     }
 
     return (
@@ -35,16 +51,23 @@ export const EditPermissionsForm = ({permissions}) => {
             <LoadingErrorFormWrapper sliceName='serverPermissionsSlice'>
                 <Header text='Create User Permission Group' />
                 <Label label='Enter a permission group name:' />
-                <TextInput value={name} onChange={setName} placeholder={'Server Group Name'} />
-                <TextButton disabled={name.length < 3} title='Create Server Group' />
+                <TextInput value={name} onChange={setName} placeholder={'Name'} action={setName} />
+                <TextButton disabled={name.length < 3} title='Create Server Group' action={handleCreatePermissionGroup} />
                 <Header text='Edit User Permissions' />
                 {Object.values(permissionGroups).map(group => 
-                    group.admin ? null :
-                     
-                    <PermissionsMenu onUpdate={handleSetGroupToUpdate} key={group._id} permissions={group} />
-                    
+                
+                <PermissionsMenu 
+                handleDelete={setPermissionToDelete}
+                users={Object.values(users).filter(u => u.server_group === group._id)}
+                key={group._id} 
+                permissions={group} />    
+
                 )}
-                <TextButton disabled={Object.keys(groupsToUpdate).length === 0} title='Confirm Permission Group Changes' />
+                {permissionToDelete && (<ConfirmationPopup 
+                onConfirm={handleDeletePermission}
+                onCancel={handleCancelDelete}
+                message={`Are you sure you want to delete the permission group: ${permissionToDelete.server_group_name}`}
+                />)}
             </LoadingErrorFormWrapper>
         </NotAuthorized>
     )

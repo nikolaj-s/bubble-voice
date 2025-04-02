@@ -1,7 +1,7 @@
 import React from 'react'
-import Header from '../../../../components/Titles/Header/Header'
-import Label from '../../../../components/Titles/Label/Label'
-import ToggleSwitch from '../../../../components/Inputs/ToggleSwitch/ToggleSwitch'
+import Header from '../../../../components/ui/Titles/Header/Header'
+import Label from '../../../../components/ui/Titles/Label/Label'
+import ToggleSwitch from '../../../../components/ui/Inputs/ToggleSwitch/ToggleSwitch'
 import { useDispatch, useSelector } from 'react-redux'
 import { toggleDisableNsfwBlur } from '../../../../features/Settings/Content/contentSettingsSlice'
 

@@ -1,11 +1,11 @@
 import React from 'react'
-import Header from '../../../../components/Titles/Header/Header'
-import Label from '../../../../components/Titles/Label/Label'
-import TextInput from '../../../../components/Inputs/TextInput/TextInput'
-import TextButton from '../../../../components/Buttons/TextButton/TextButton'
-import TypeInput from '../../../../components/Inputs/TypeInput/TypeInput'
+import Header from '../../../../components/ui/Titles/Header/Header'
+import Label from '../../../../components/ui/Titles/Label/Label'
+import TextInput from '../../../../components/ui/Inputs/TextInput/TextInput'
+import TextButton from '../../../../components/ui/Buttons/TextButton/TextButton'
+import TypeInput from '../../../../components/ui/Inputs/TypeInput/TypeInput'
 import { NotAuthorized } from '../../../../components/Error/NotAuthorized/NotAuthorized'
-import ImageDropZone from '../../../../components/Inputs/ImageDropZone/ImageDropZone'
+import ImageDropZone from '../../../../components/ui/Inputs/ImageDropZone/ImageDropZone'
 import { LoadingErrorFormWrapper } from '../../../../components/ui/Wrappers/LoadingErrorFormWrapper/LoadingErrorFormWrapper'
 import { useDispatch } from 'react-redux'
 import { createChannel } from '../../../../features/Channels/Thunks/createChannel'
@@ -37,7 +37,7 @@ export const CreateChannelForm = ({permissions}) => {
                 <Label label='Choose a custom channel icon:' />
                 <ImageDropZone dimensions={50} width={50} height={50} borderRadius='50%' onImageChange={setChannelIcon} />
                 <Label label='Set your channel name:' />
-                <TextInput placeholder={'Enter Channel Name'} onChange={setChannelName} />
+                <TextInput placeholder={'Enter Channel Name'} value={channelName} onChange={setChannelName} />
                 <Label label='Select a channel type:' />
                 <TypeInput selected={channelType} types={channelTypes} onSelect={setChannelType} />
                 <TextButton action={handleCreateChannel} disabled={channelName.length < 3} title='Create Channel' />

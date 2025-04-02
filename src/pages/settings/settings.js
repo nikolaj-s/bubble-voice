@@ -11,6 +11,7 @@ import { KeybindSettingsForm } from '../../layout/Forms/Settings/KeybindSettings
 import { SoundSettingsForm } from '../../layout/Forms/Settings/SoundSettingsForm/SoundSettingsForm'
 import { PrivacySettingsForm } from '../../layout/Forms/Settings/PrivacySettingsForm/PrivacySettingsForm'
 import { SecuritySettingsForm } from '../../layout/Forms/Settings/SecuritySettingsForm/SecuritySettingsForm'
+import { SearchSettingsForm } from '../../layout/Forms/Settings/SearchSettingsForm/SearchSettingsForm'
 
 export const Settings = ({close}) => {
 
@@ -23,7 +24,8 @@ export const Settings = ({close}) => {
         {key: "keybinds", label: "Keybinds"},
         {key: "sound", label: "Sound"},
         {key: "privacy", label: "Privacy"},
-        {key: "security", label: "Security"}
+        {key: "security", label: "Security"},
+        {key: "search", label: "Search"}
     ].sort((a, b) => a.label.localeCompare(b.label));
 
     const content = {
@@ -35,7 +37,8 @@ export const Settings = ({close}) => {
         keybinds: <KeybindSettingsForm />,
         sound: <SoundSettingsForm />,
         privacy: <PrivacySettingsForm />,
-        security: <SecuritySettingsForm />
+        security: <SecuritySettingsForm />,
+        search: <SearchSettingsForm />
     }
         
     return (

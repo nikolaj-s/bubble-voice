@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import imageCompression from "browser-image-compression";
 import styles from "./MessageInput.module.css";
-import IconButton from "../../Buttons/IconButton/IconButton";
+import IconButton from "../../ui/Buttons/IconButton/IconButton";
 import { CirclePlus } from "lucide-react";
 import { MediaPreview } from "../MediaPreview/MediaPreview";
 import { useDispatch } from "react-redux";
@@ -72,7 +72,7 @@ export const MessageInput = ({ value, setValue, setImage = () => {}, error, send
 
     const handleOpenSearchMedia = () => {
         
-        dispatch(setFilter('images'));
+        dispatch(setFilter({path: 'images'}));
 
         dispatch(setOverlay('search'));
     }

@@ -1,69 +1,26 @@
 import React from 'react';
 
 import styles from  "./ControlBar.module.css";
-import { useDispatch, useSelector } from 'react-redux';
-import IconButton from '../Buttons/IconButton/IconButton';
+
+import IconButton from '../ui/Buttons/IconButton/IconButton';
 
 import { Mic, MicOff, ScreenShare, ScreenShareOff, Unplug, Video, VideoOff, Volume2, VolumeOff } from 'lucide-react';
-import UserButton from '../Buttons/UserButton/UserButton';
-import { toggleAudioMute, toggleMicrophone, toggleWebcam } from '../../features/MediaControl/mediaControlSlice';
-import { useSocket } from '../../context/SocketContext';
+
+import UserButton from '../ui/Buttons/UserButton/UserButton';
+
 import { useNavigate, useParams } from 'react-router';
+import { useMediaControls } from '../../context/MediaControlsContext';
+import { useSelector } from 'react-redux';
 
 export const ControlBar = ({inChannel = false}) => {
 
-    const socket = useSocket();
+    const {isWebcamOn, isMicrophoneMuted, isAudioMuted, isScreenSharing, handleToggleAudio, handleToggleMicrophone, handleToggleWebcam } = useMediaControls();
 
-    const dispatch = useDispatch();
+    const {account} = useSelector(state => state.accountSlice);
 
     const {serverID} = useParams();
 
     const navigate = useNavigate();
-
-    const {account, loading} = useSelector(state => state.accountSlice);
-
-    const {isMicrophoneMuted, isAudioMuted, isWebcamOn, isScreenSharing} = useSelector(state => state.mediaControlSlice);
-
-    React.useEffect(() => {
-
-        if (!socket) return;
-
-        const updateStatus = () => {
-            if (socket) {
-    
-                socket.emit('user updates channel status', {isMicrophoneMuted, isAudioMuted, isWebcamOn, isScreenSharing})
-    
-            }
-        }
-
-        updateStatus();
-
-        socket.on('connect', updateStatus);
-
-        return () => {
-            socket.off('connect', updateStatus)
-        }
-
-    }, [isAudioMuted, isMicrophoneMuted, isWebcamOn, isScreenSharing, socket])
-
-    const handleToggleMicrophone = () => {
-        if (loading) return;
-
-        dispatch(toggleMicrophone(!isMicrophoneMuted));
-
-    }
-
-    const handleToggleAudio = () => {
-        if (loading) return;
-
-        dispatch(toggleAudioMute(!isAudioMuted));
-    }
-
-    const handleToggleWebCam = () => {
-        if (loading) return;
-
-        dispatch(toggleWebcam(!isWebcamOn));
-    }
 
     const handleDisconnect = () => {
         navigate(`/dashboard/server/${serverID}`)
@@ -77,7 +34,7 @@ export const ControlBar = ({inChannel = false}) => {
                 backgroundColor={isWebcamOn ? 'var(--success-color)' : 'var(--primary-color)'}
                 width={60}
                 height={30}
-                onClick={handleToggleWebCam}
+                onClick={handleToggleWebcam}
                 title={isWebcamOn ? "Turn off Webcam" : "Turn on Webcam"}
                 Icon={isWebcamOn ? <VideoOff  color={'var(--text-color)'} /> : <Video height={50} width={50} color={'var(--text-color)'} />}
                 />

@@ -1,11 +1,17 @@
 import { useEffect, useRef } from 'react';
 
 export const useDetectSpeech = (isMicrophoneMuted, pauseProducer, resumeProducer) => {
+    
     const audioContextRef = useRef(null);
+
     const analyserRef = useRef(null);
+
     const mediaStreamRef = useRef(null);
+
     const animationFrameRef = useRef(null);
+
     const speakingRef = useRef(false);
+
     const pauseTimeoutRef = useRef(null);
 
     // Stores past energy levels to smooth detection
@@ -51,7 +57,7 @@ export const useDetectSpeech = (isMicrophoneMuted, pauseProducer, resumeProducer
 
                     // Speech detection threshold (adjustable)
                     const speechThreshold = 25;  // Increase this if still too sensitive
-                    const pauseDelay = 1000; // Delay in ms before pausing
+                    const pauseDelay = 200; // Delay in ms before pausing
 
                     if (smoothedEnergy > speechThreshold) {
                         if (!speakingRef.current) {

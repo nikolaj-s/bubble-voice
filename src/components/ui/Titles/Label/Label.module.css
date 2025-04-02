@@ -1,0 +1,8 @@
+.label {
+    font-size: 16px;
+    color: var(--text-color); /* Using the primary color from the theme */
+    margin: 2px 0px;
+    display: block;
+    text-align: start;
+    text-transform: capitalize;
+}

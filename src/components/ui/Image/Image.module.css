@@ -1,0 +1,37 @@
+@keyframes loading {
+    0% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.loading {
+    animation: loading infinite .5s ease-in-out;
+}
+
+.imageContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #222;
+    overflow: hidden;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+}
+
+.placeholder {
+    width: 50%;
+    height: 50%;
+    
+}
+
+.placeholder path {
+    stroke: var(--text-color);
+}

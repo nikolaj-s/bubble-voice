@@ -4,7 +4,7 @@ import { validateEmail, validatePassword } from "../../../lib/handlers/inputVali
 import axios from 'axios';
 
 import { API_URL } from "../../../lib/Validation";
-import { setToken } from "../../../lib/services/authService";
+import { clearToken, setToken } from "../../../lib/services/authService";
 
 export const signinThunk = createAsyncThunk(
     'auth/signIn',
@@ -20,6 +20,8 @@ export const signinThunk = createAsyncThunk(
         if (response.status >= 200 && response.status < 300) {
 
           if (response?.data?.success) {
+
+            clearToken();
 
             setToken(response?.data?.token);
 

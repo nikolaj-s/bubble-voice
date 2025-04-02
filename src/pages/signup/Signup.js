@@ -1,19 +1,26 @@
 import { useDispatch, useSelector } from 'react-redux';
-import TextButton from '../../components/Buttons/TextButton/TextButton';
-import TextInput from '../../components/Inputs/TextInput/TextInput';
-import TextNavButton from '../../components/NavButtons/TextNavButton/TextNavButton';
+
+import TextButton from '../../components/ui/Buttons/TextButton/TextButton';
+
+import TextInput from '../../components/ui/Inputs/TextInput/TextInput';
+
 import { FormWrapper } from '../../components/ui/Wrappers/FormWrapper/FormWrapper';
+
 import styles from './Signup.module.css';
 
 import React from 'react'
+
 import {  selectAuthLoading, selectConfirmPasswordError, selectEmailError, selectGeneralAuthError, selectPasswordError, selectUsernameError } from '../../features/Auth/authSlice';
 import { signupThunk } from '../../features/Auth/Thunks/SignupThunk';
 import { IsAuthenticated } from '../../components/Auth/IsAuthenticated/IsAuthenticated';
-import Label from '../../components/Titles/Label/Label';
+import Label from '../../components/ui/Titles/Label/Label';
+import { useNavigate } from 'react-router';
 
 const Signup = () => {
 
     const dispatch = useDispatch();
+
+    const navigate = useNavigate();
 
     const [username, setUsername] = React.useState("");
 
@@ -41,6 +48,10 @@ const Signup = () => {
         dispatch(signupThunk({username, email, password, confirmPassword}));
     }
 
+    const redirect = () => {
+        navigate('/login')
+    }
+
     return (
         <IsAuthenticated>
             <div className={styles.wrapper}>
@@ -52,7 +63,7 @@ const Signup = () => {
                     <TextInput autoComplete="new-password" error={passwordError} onChange={(v) => {setPassword(v)}} value={password} placeholder={"Password"} type='password' /> 
                     <TextInput autoComplete="new-password" error={confirmPasswordError} onChange={(v) => {setConfirmPassword(v)}} placeholder={"Confirm password"} value={confirmPassword} type='password' />
                     <TextButton title='Create Account' />
-                    <TextNavButton text='Log In' to='/login' />
+                    <TextButton action={redirect} title='Login' />
                 </FormWrapper>
             </div>
         </IsAuthenticated>

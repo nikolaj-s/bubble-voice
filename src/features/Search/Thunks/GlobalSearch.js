@@ -12,23 +12,23 @@ export const globalSearch = createAsyncThunk(
     async (_, {rejectWithValue, getState}) => {
         try {
 
-            const {query, filter} = getState().searchSlice;
+            const {query, filter, similarImageSrc} = getState().searchSlice;
 
-            if (!query) return rejectWithValue("Query cannot be empty");
+            if (!query.trim().length === 0 && !similarImageSrc) return rejectWithValue("Query cannot be empty");
 
             if (!filter) return rejectWithValue("Invalid Filter");
 
             const {token }= getState().authSlice;
 
-            const response = await axios.get(`${API_URL}/search/${filter}`, {
+            const response = await axios.get(`${API_URL}/search/${filter.path}`, {
                 headers: {TOKEN: token},
-                params: {query: query}
+                params: {query, similarImage: similarImageSrc}
             }).then(res => {
                 return res.data;
             })
 
             if (response.success) {
-                return {filter: filter, ...response};
+                return {filter: filter.path, ...response};
             }
             
             return rejectWithValue("No Results");

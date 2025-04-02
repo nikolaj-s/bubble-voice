@@ -1,0 +1,51 @@
+
+.container {
+    height: 30px;
+    width: calc(100% - 10px);
+    border-radius: 5px;
+    display: flex;
+    justify-content: flex-start;
+    gap: 5px;
+    padding: 0px 5px;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.container:active {
+    scale: 0.98;
+}
+
+.container:hover {
+    background-color: var(--secondary-color);
+}
+
+.userImage {
+    width: 25px;
+    height: 25px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.container h3 {
+    margin: 0px;
+    padding: 0px;
+    font-size: 0.9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: keep-all;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+.statusContainer {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    height: 100%;
+    justify-self: flex-end;
+    margin-left: auto;
+    gap: 5px;
+    opacity: 0.75;
+}

@@ -7,6 +7,8 @@ const reducers = {};
 
 const sliceContext = require.context('../features', true, /Slice\.js$/);
 
+// dynamic store
+
 sliceContext.keys().forEach((key) => {
   const slice = sliceContext(key).default;
   const sliceName = key.split('/').pop().replace('.js', '');

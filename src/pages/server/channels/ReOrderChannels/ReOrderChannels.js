@@ -32,7 +32,7 @@ export const ReOrderChannels = ({ onDrop }) => {
     }, [channels])
 
     const handleReorder = async (id, moveTo, category) => {
-
+console.log(id, moveTo, category)
         if (reordering) return;
 
         toggleReordering(true);
@@ -113,7 +113,11 @@ export const ReOrderChannels = ({ onDrop }) => {
             {categories.map(category => {
                 return <Category move={handleReorder} moveCategory={handleReOrderCategories} draggingCategory={draggingCategory} toggleDraggingCategory={toggleDraggingCategory} category_id={category.category_id} key={category.category_id} catagoryName={category.category_name} channels={localChannels.filter(c => c.category === category.category_id)} draggingChannel={draggingChannel} toggleDraggingChannel={toggleDraggingChannel} />
             })}
-            <Category move={handleReorder} moveCategory={() => {}} draggingCategory={() => {}} toggleDraggingCategory={() => {}}
+            <Category 
+            move={handleReorder} 
+            moveCategory={() => {}} 
+            draggingCategory={draggingCategory} 
+            toggleDraggingCategory={() => {}}
             catagoryName={'Channels'}
             category_id={'channels'}
             channels={channels.filter(channel => !channel.category || channel.category === 'channels')}

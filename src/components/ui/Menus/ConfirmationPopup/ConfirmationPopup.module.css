@@ -1,0 +1,60 @@
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+}
+
+.popup {
+    background: var(--card-background-color);
+    color: var(--text-color);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    min-width: 300px;
+}
+
+.message {
+    margin-bottom: 15px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+}
+
+.confirm, .cancel {
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: background 0.2s ease-in-out;
+}
+
+.confirm {
+    background: var(--success-color);
+    color: #fff;
+}
+
+.confirm:hover {
+    background: #5ca887;
+}
+
+.cancel {
+    background: var(--error-color);
+    color: #fff;
+}
+
+.cancel:hover {
+    background: #c55b5b;
+}

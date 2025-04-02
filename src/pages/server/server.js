@@ -19,15 +19,19 @@ import { Channels } from './channels/Channels';
 import { Outlet } from 'react-router';
 
 import { ControlBar } from '../../components/ControlBar/ControlBar';
+import { TextChannelOverlay } from './channel/TextChannelOverlay/TextChannelOverlay';
 
 export const Server = () => {
 
     const banner = useSelector(selectServerBanner);
     
     const {currentChannel} = useSelector(state => state.channelsSlice);
-    
+
+    const {currentTextChannel} = useSelector(state => state.textChannelSlice);
+
     return (
         <ServerDetailsProvider>
+
             <motion.section 
             key="channels"
             initial={{opacity: 0}}
@@ -51,6 +55,9 @@ export const Server = () => {
             transition={{duration: 0.2}}
             className={styles.sectionTwo}>
                <Outlet  />
+               {currentTextChannel && currentChannel?.channel_type === 'voice' && currentChannel.channel_id !== currentTextChannel && (
+                <TextChannelOverlay />
+               )}
             </motion.section>
             <motion.section 
             key="users"
@@ -61,6 +68,7 @@ export const Server = () => {
             className={styles.sectionThree}>
                 <UserBar />
             </motion.section>
+            
         </ServerDetailsProvider>
     )
 }

@@ -6,6 +6,9 @@ import { CreateChannelForm } from '../../layout/Forms/ServerSettings/CreateChann
 import { CreateCategoryForm } from '../../layout/Forms/ServerSettings/CreateCategoryForm/CreateCategoryForm'
 import { EditServerDetailsForm } from '../../layout/Forms/ServerSettings/EditServerDetailsForm/EditServerDetailsForm'
 import { EditPermissionsForm } from '../../layout/Forms/ServerSettings/EditPermissionsForm/EditPermissionsForm'
+import { EditPermissionGroupForm } from '../../layout/Forms/ServerSettings/EditPermissionGroupForm/EditPermissionGroupForm'
+import { EditChannelForm } from '../../layout/Forms/ServerSettings/EditChannelForm/EditChannelForm'
+import { UserManagementForm } from '../../layout/Forms/ServerSettings/UserManagementForm/UserManagementForm'
 
 export const ServerSettings = ({close}) => {
 
@@ -14,7 +17,8 @@ export const ServerSettings = ({close}) => {
         {key: "createChannel", label: "Create Channel" },
         {key: "createCategory", label: "Create Category"},
         {key: "permissions", label: "Edit Permissions"},
-        {key: "security", label: "Security"}
+        {key: "manageUsers", label: "Manage Users"},
+        {key: "security", label: "Security"},
     ]
 
     const content = {
@@ -22,7 +26,10 @@ export const ServerSettings = ({close}) => {
         createChannel: <CreateChannelForm />,
         permissions: <EditPermissionsForm />,
         createCategory: <CreateCategoryForm />,
-        security: <></>
+        security: <></>,
+        editPermissionGroup: <EditPermissionGroupForm />,
+        editChannel: <EditChannelForm />,
+        manageUsers: <UserManagementForm />
     }
 
     return (

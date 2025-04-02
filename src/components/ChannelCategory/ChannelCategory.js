@@ -1,9 +1,9 @@
 import React from "react";
 
 import styles from "./ChannelCategory.module.css";
-import ChannelButton from "../Buttons/ChannelButton/ChannelButton";
+import ChannelButton from "../ui/Buttons/ChannelButton/ChannelButton";
 import { ChevronDown } from "lucide-react";
-import { ChannelButtonDragWrapper } from "../Buttons/ChannelButton/ChannelButtonDragWrapper";
+import { ChannelButtonDragWrapper } from "../ui/Buttons/ChannelButton/ChannelButtonDragWrapper";
 
 export const Category = ({
   category_id,
@@ -26,11 +26,9 @@ export const Category = ({
 
   const handleCategoryMove = (e) => {
     try {
-      const id = e.dataTransfer.getData("text");
 
-        toggleMoveIndicator(false);
-        toggleDraggingCategory(false);
-        toggleDraggingChannel(false);
+      const id = e.dataTransfer.getData("text");
+console.log(draggingCategory)
       if (draggingCategory) {
         if (!id) return;
         console.log(id, category_id);
@@ -40,6 +38,10 @@ export const Category = ({
 
         move(id, 0, category_id);
       }
+
+      toggleMoveIndicator(false);
+      toggleDraggingCategory(false);
+      toggleDraggingChannel(false);
     } catch (error) {
       console.log(error);
     }
@@ -141,7 +143,7 @@ export const Category = ({
                 draggingCategory={draggingCategory}
                 toggleDraggingChannel={toggleDraggingChannel}
               >
-                <ChannelButton {...channel} key={channel.channel_id} />
+                <ChannelButton {...channel} channel={channel} key={channel.channel_id} />
               </ChannelButtonDragWrapper>
             );
           })}

@@ -1,8 +1,8 @@
 import React from 'react'
 import { useSocket } from '../../context/SocketContext';
 import { useDispatch, useSelector } from 'react-redux';
-import ChannelButtonSkeleton from '../../components/Loading/ChannelButtonSkeleton/ChannelButtonSkeleton';
-import { addCategory, addChannel, reOrderCategories, reOrderChannels, setCategories, setChannels, userJoinsChannel, userLeavesChannel } from '../../features/Channels/channelsSlice';
+import ChannelButtonSkeleton from '../../components/ui/Loading/ChannelButtonSkeleton/ChannelButtonSkeleton';
+import { addCategory, addChannel, reOrderCategories, reOrderChannels, setCategories, setChannels, updateChannelDetails, userJoinsChannel, userLeavesChannel } from '../../features/Channels/channelsSlice';
 
 export const ChannelsProvider = ({children}) => {
 
@@ -86,6 +86,10 @@ export const ChannelsProvider = ({children}) => {
             dispatch(reOrderCategories(data));
         }
 
+        const handleUpdateChannelDetails = (data) => {
+            dispatch(updateChannelDetails(data));
+        }
+
         socket.on('connect', handleFetchChannels);
 
         socket.on(`add category to ${server_id}`, handleAddCategory);
@@ -99,6 +103,8 @@ export const ChannelsProvider = ({children}) => {
         socket.on(`update channel order for ${server_id}`, handleReOrderChannels);
 
         socket.on(`update category order for ${server_id}`, handleReOrderCategories);
+
+        socket.on(`update channel in ${server_id}`, handleUpdateChannelDetails);
 
         handleFetchChannels();
 
@@ -114,6 +120,8 @@ export const ChannelsProvider = ({children}) => {
             socket.off(`update channel order for ${server_id}`, handleReOrderChannels);
 
             socket.off(`update category order for ${server_id}`, handleReOrderCategories);
+
+            socket.off(`update channel in ${server_id}`, handleUpdateChannelDetails);
         }
 
     }, [socket, server_id, dispatch])

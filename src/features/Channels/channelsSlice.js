@@ -28,14 +28,19 @@ const channelsSlice = createSlice({
                 state.channels.push(action.payload);
             }
         },
-        editChannel: (state, action) => {
-            state.channels = state.channels.map(channel => {
-                if (channel.channel_id === action.payload.channel_id) {
-                    return action.payload
-                } else {
-                    return channel;
-                }
-            })
+        updateChannelDetails: (state, action) => {
+            console.log(action.payload)
+            if (action.payload.channel_id) {
+                
+                state.channels = state.channels.map(channel => {
+                    if (channel.channel_id === action.payload.channel_id) {
+                        return {...channel, ...action.payload}
+                    } else {
+                        return channel;
+                    }
+                })
+
+            }
         },
         reOrderCategories: (state, action) => {
             const sortOrder = action.payload.newOrder;
@@ -148,6 +153,18 @@ const channelsSlice = createSlice({
     }
 })
 
-export const {reOrderCategories, reOrderChannels, setCategories, addCategory, addChannel, editChannel, setChannels, setCurrentChannel, clearCurrentChannel, userLeavesChannel, userJoinsChannel} = channelsSlice.actions;
+export const {
+    reOrderCategories, 
+    reOrderChannels, 
+    setCategories, 
+    addCategory, 
+    addChannel, 
+    setChannels, 
+    setCurrentChannel, 
+    clearCurrentChannel, 
+    userLeavesChannel, 
+    userJoinsChannel,
+    updateChannelDetails
+} = channelsSlice.actions;
 
 export default channelsSlice.reducer;

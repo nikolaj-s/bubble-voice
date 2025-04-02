@@ -1,7 +1,7 @@
 import React from 'react'
-import Header from '../../../../components/Titles/Header/Header'
-import Label from '../../../../components/Titles/Label/Label'
-import KeybindInput from '../../../../components/Inputs/KeybindInput/KeybindInput'
+import Header from '../../../../components/ui/Titles/Header/Header'
+import Label from '../../../../components/ui/Titles/Label/Label'
+import KeybindInput from '../../../../components/ui/Inputs/KeybindInput/KeybindInput'
 import { useDispatch, useSelector } from 'react-redux';
 import { setKeybind } from '../../../../features/Settings/Keybinds/keybindsSlice';
 

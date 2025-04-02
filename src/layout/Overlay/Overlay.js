@@ -6,12 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { selectActiveOverlay, closeOverlay } from "../../features/Overlay/overlaySlice";
 
-import { Search } from "../../components/Search/Search";
+import { Search } from "../Overlays/Search/Search";
 
 import { CreateServer } from "../../pages/createServer/CreateServer";
 import { ServerSettings } from "../../pages/serverSettings/ServerSettings";
 import { Settings } from "../../pages/settings/settings";
 import { JoinServer } from "../../pages/joinServer/joinServer";
+import { ExpandedImage } from "../Overlays/ExpandedImage/ExpandedImage";
 
 const overlayComponents = {
   search: Search,
@@ -19,6 +20,7 @@ const overlayComponents = {
   serverSettings: ServerSettings,
   settings:Settings,
   joinServer: JoinServer,
+  expandImage: ExpandedImage
 };
 
 export const Overlay = ({ children }) => {

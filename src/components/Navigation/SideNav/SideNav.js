@@ -2,15 +2,15 @@ import React from 'react';
 
 import styles from "./SideNav.module.css"
 import { Logo } from '../../Icons/Bubble/Logo';
-import {ServerButton} from '../../Buttons/ServerButton/ServerButton';
+import {ServerButton} from '../../ui/Buttons/ServerButton/ServerButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectServers, updateServerButton } from '../../../features/Servers/serversSlice';
 import { useNavigate } from 'react-router';
 import { useSocket } from '../../../context/SocketContext';
-import { CircleButton } from '../../Buttons/CircleButton/CircleButton';
-import {SettingsIcon} from '../../Icons/Settings/SettingsIcon';
+import { CircleButton } from '../../ui/Buttons/CircleButton/CircleButton';
 import { setOverlay } from '../../../features/Overlay/overlaySlice';
-import { Settings } from 'lucide-react';
+import { Plus, Settings } from 'lucide-react';
+import { PillSpacer } from '../../ui/Spacers/PillSpacer/PillSpacer';
 
 export const SideNav = () => {
 
@@ -21,10 +21,6 @@ export const SideNav = () => {
     const navigate = useNavigate();
 
     const servers = useSelector(selectServers);
-
-    const textColor = getComputedStyle(document.documentElement)
-    .getPropertyValue('--text-color')
-    .trim();
 
     const handleSwitchServer = (server_id) => {
         navigate(`/dashboard/server/${server_id}`)
@@ -81,8 +77,12 @@ export const SideNav = () => {
                 })}
             </div>
             <div className={styles.navButtons}>
+                <PillSpacer />
+                <CircleButton action={() => {dispatch(setOverlay('createServer'))}} name="Create" >
+                    <Plus color='var(--text-color)' />
+                </CircleButton>
                 <CircleButton action={() => {dispatch(setOverlay('settings'))}} name={"Settings"} >
-                    <Settings color={textColor} />
+                    <Settings color='var(--text-color)' />
                 </CircleButton>
             </div>
         </div>

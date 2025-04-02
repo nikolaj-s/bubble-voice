@@ -38,3 +38,17 @@ export const getFormattedDate = (data) => {
 
     return {formattedDate, formattedTime}
 }
+
+export const triggerContext = (e, id) => {
+    const element = document.getElementById(id);
+
+    const event = new MouseEvent("contextmenu", {
+        bubbles: true,
+        cancelable: true,
+        view: window,
+        clientX: e.clientX, // Set X position
+        clientY: e.clientY, // Set Y position
+        });
+        
+        element.dispatchEvent(event);
+}

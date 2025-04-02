@@ -1,0 +1,41 @@
+.vuMeterContainer {
+  width: 350px;
+  min-height: 50px;
+  background-color: var(--background-color);
+  border-radius: 5px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
+  height: auto;
+}
+
+.vuMeterBar {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2px;
+  position: relative;
+}
+
+.vuMeterPid {
+  width: 3.33%; /* 100% divided by 30 segments */
+  height: 100%;
+  background-color: var(--primary-color);
+  transition: background-color 0.3s ease;
+}
+
+.vuMeterPid.active {
+  background-color: var(--success-color);
+}
+
+.thresholdLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--error-color);
+  z-index: 1;
+}

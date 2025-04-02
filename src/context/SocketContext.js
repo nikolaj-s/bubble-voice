@@ -5,7 +5,7 @@ import io from 'socket.io-client';
 
 import { API_URL } from '../lib/Validation';
 
-import DashboardSkeleton from '../components/Loading/DashBoardSkeleton/DashBoardSkeleton';
+import DashboardSkeleton from '../components/ui/Loading/DashBoardSkeleton/DashBoardSkeleton';
 
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';

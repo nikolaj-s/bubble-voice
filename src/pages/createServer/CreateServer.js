@@ -6,7 +6,7 @@ import { CreateServerForm } from '../../layout/Forms/CreateServerForm/CreateServ
 export const CreateServer = ({close}) => {
 
     const navItems = [
-        {key: "create", label: "Create"}
+        {key: "create", label: "Create a Bubble"}
     ]
 
     const content = {

@@ -38,7 +38,10 @@ export const clearToken = () => {
 
         return;
     } catch (error) {
-        document.cookie = "`token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; SameSite=Lax;"
+        document.cookie.split(";").forEach(cookie => {
+            const [name] = cookie.split("=");
+            document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; `;
+        });
     }
 }
 

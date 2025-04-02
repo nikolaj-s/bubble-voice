@@ -1,0 +1,27 @@
+
+  .container {
+    background: var(--card-background-color);
+    padding: 20px;
+    border-radius: 12px;
+    max-width: calc(100% - 40px);
+  }
+  
+  .title {
+    color: var(--text-color);
+    font-size: 20px;
+    text-align: start;
+    margin-bottom: 16px;
+  }
+  
+  .permissionsList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .buttonWrapper {
+    display: flex;
+    gap: 5px;
+    margin: 5px 0px;
+  }
+  

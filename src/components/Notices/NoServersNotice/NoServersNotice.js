@@ -1,8 +1,8 @@
 import React from 'react'
 
-import Header from '../../Titles/Header/Header'
-import Label from '../../Titles/Label/Label'
-import TextButton from '../../Buttons/TextButton/TextButton'
+import Header from '../../ui/Titles/Header/Header'
+import Label from '../../ui/Titles/Label/Label'
+import TextButton from '../../ui/Buttons/TextButton/TextButton'
 import CardWrapper from '../../ui/Wrappers/CardWrapper/CardWrapper';
 
 export const NoServersNotice = ({joinServer, createServer}) => {

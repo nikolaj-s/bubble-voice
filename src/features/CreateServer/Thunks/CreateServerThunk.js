@@ -53,7 +53,7 @@ export const CreateServerThunk = createAsyncThunk(
         } catch (error) {
             console.log(error);
 
-            APIErrorHandler(rejectWithValue, error, "Fatal Error Creating Server")
+            return APIErrorHandler(rejectWithValue, error, "Fatal Error Creating Server")
         }
     }
 )

@@ -18,9 +18,10 @@ export const NsfwWrapper = ({children, nsfw: obj}) => {
         <div className={styles.wrapper}>
             {children}
             {nsfw && filter ?
-            <div onClick={() => {toggleFilter(false)}} className={styles.filter}>
-                <TriangleAlert color='var(--text-color)' />
-                <p>NSFW - Click To Reveal</p>
+            <div onClick={(e) => {e.stopPropagation(); toggleFilter(false)}} className={styles.filter}>
+                <TriangleAlert size={30} color='var(--error-color)' />
+                <h4>18+</h4>
+                <p>Click To Reveal</p>
             </div>
             : null}
         </div>

@@ -1,0 +1,10 @@
+
+
+.spacer {
+    width: calc(100% - 20px);
+    flex-shrink: 0;
+    height: 5px;
+    border-radius: 5px;
+    background-color: var(--text-color);
+    margin: 5px auto;
+}

@@ -1,20 +1,26 @@
 import React, { useState, useRef, useEffect } from "react";
-import styles from "./ContextMenuWrapper.module.css";
+
 import { useSelector } from "react-redux";
-import ContextMenuButton from "../../../Buttons/ContextButtons/ContextMenuButton";
-import ContextRadioButton from "../../../Buttons/ContextButtons/ContextRadioButton";
-import ContextRangeInput from "../../../Buttons/ContextButtons/ContextRangeInput";
+
+import ContextMenuButton from "../../Buttons/ContextButtons/ContextMenuButton";
+
+import ContextRadioButton from "../../Buttons/ContextButtons/ContextRadioButton";
+
+import ContextRangeInput from "../../Buttons/ContextButtons/ContextRangeInput";
+
 import { useContextMenuOptions } from "./getOptions";
-import ContextMenuButtonWithSubmenu from "../../../Buttons/ContextButtons/ContextMenuButtonWithSubMenu";
 
-const ContextMenuWrapper = ({ children, getMenuOptions }) => {
+import ContextMenuButtonWithSubmenu from "../../Buttons/ContextButtons/ContextMenuButtonWithSubMenu";
 
+const ContextMenuWrapper = ({ children }) => {
 
     const account = useSelector((state) => state.accountSlice.account);
     
     const user = useSelector((state) => state.serverUsersSlice?.users[account?.user_id]);
 
     const currentTextChannel = useSelector((state) => state.textChannelSlice.currentTextChannel);
+
+    const {currentChannel} = useSelector((state) => state.channelsSlice);
 
     const channels = useSelector((state) => state.channelsSlice.channels);
 
@@ -34,43 +40,49 @@ const ContextMenuWrapper = ({ children, getMenuOptions }) => {
     };
 
     useEffect(() => {
-
         const handleContextMenu = (event) => {
-            
             event.preventDefault();
-
-            const options =getOptions(event, permissions[user?.server_group], currentTextChannel, channels);
     
+            const options = getOptions(event, permissions[user?.server_group], currentTextChannel, channels, currentChannel, user);
             if (!options || options.length === 0) return;
     
             let clickX = event.clientX;
             let clickY = event.clientY;
     
-            // Ensure the menu does not go out of bounds before setting state
-            if (menuRef.current) {
-                const { offsetWidth, offsetHeight } = menuRef.current;
-                if (clickX + offsetWidth > window.innerWidth) {
-                    clickX = window.innerWidth - offsetWidth;
-                }
-                if (clickY + offsetHeight > window.innerHeight) {
-                    clickY = window.innerHeight - offsetHeight;
-                }
-            }
-    
+            // First, set the menu at the raw click position
             setContextMenu({ visible: true, x: clickX, y: clickY, options });
+    
+            // Delay position adjustment to the next render cycle
+            requestAnimationFrame(() => {
+                if (menuRef.current) {
+                    const { offsetWidth, offsetHeight } = menuRef.current;
+    
+                    let adjustedX = clickX;
+                    let adjustedY = clickY;
+    
+                    if (clickX + offsetWidth > window.innerWidth) {
+                        adjustedX = window.innerWidth - offsetWidth;
+                    }
+                    if (clickY + offsetHeight > window.innerHeight) {
+                        adjustedY = window.innerHeight - offsetHeight;
+                    }
+    
+                    setContextMenu((prev) => ({ ...prev, x: adjustedX, y: adjustedY }));
+                }
+            });
         };
-
-        
+    
         document.addEventListener("contextmenu", handleContextMenu);
         document.addEventListener("click", handleClick);
         window.addEventListener("click", handleClick);
-
+    
         return () => {
             document.removeEventListener("contextmenu", handleContextMenu);
             document.removeEventListener("click", handleClick);
-            window.removeEventListener("click", handleClick)
+            window.removeEventListener("click", handleClick);
         };
-    }, [getOptions, permissions, user, currentTextChannel, channels]);
+    }, [getOptions, permissions, user, currentTextChannel, channels, currentChannel]);
+    
 
     return (
         <div>

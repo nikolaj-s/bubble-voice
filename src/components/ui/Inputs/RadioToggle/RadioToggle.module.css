@@ -1,0 +1,83 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px
+  }
+  
+  .radioOption {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: var(--card-background-color);
+    transition: background-color 0.2s ease, transform 0.1s ease;
+  }
+  
+  .radioOption:active {
+    transform: scale(0.98);
+  }
+  
+  .radioOption:hover {
+    background-color: var(--button-hover);
+  }
+  
+  .hiddenInput {
+    display: none;
+  }
+  
+  .customRadio {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+  
+  .customRadio .icon {
+    width: 14px;
+    height: 14px;
+    color: var(--text-color);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  
+  .radioOption input:checked + .customRadio {
+    background-color: var(--button-background);
+    border-color: var(--button-hover);
+  }
+  
+  .radioOption input:checked + .customRadio .icon {
+    opacity: 1;
+  }
+  
+  .radioOption input:checked ~ .textContainer {
+    color: var(--text-color);
+  }
+  
+  .radioOption input:checked {
+    background-color: var(--button-background);
+  }
+  
+  .textContainer {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-color);
+  }
+  
+  .description {
+    font-size: 0.85rem;
+    color: var(--text-color);
+    opacity: 0.7;
+  }
+  
+  
