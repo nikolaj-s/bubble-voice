@@ -4,17 +4,27 @@ import styles from  "./ControlBar.module.css";
 
 import IconButton from '../ui/Buttons/IconButton/IconButton';
 
-import { Mic, MicOff, ScreenShare, ScreenShareOff, Unplug, Video, VideoOff, Volume2, VolumeOff } from 'lucide-react';
+import { Mic, MicOff, ScreenShare, ScreenShareOff, Settings2, Unplug, Video, VideoOff, Volume2, VolumeOff } from 'lucide-react';
 
 import UserButton from '../ui/Buttons/UserButton/UserButton';
 
 import { useNavigate, useParams } from 'react-router';
+
 import { useMediaControls } from '../../context/MediaControlsContext';
-import { useSelector } from 'react-redux';
+
+import { useDispatch, useSelector } from 'react-redux';
+
+import { KeybindToolTip } from '../ui/Titles/KeybindToolTip/KeybindToolTip';
+
+import { setOverlay } from '../../features/Overlay/overlaySlice';
 
 export const ControlBar = ({inChannel = false}) => {
 
+    const dispatch = useDispatch();
+
     const {isWebcamOn, isMicrophoneMuted, isAudioMuted, isScreenSharing, handleToggleAudio, handleToggleMicrophone, handleToggleWebcam } = useMediaControls();
+
+    const {keybinds} = useSelector(state => state.keybindsSlice);
 
     const {account} = useSelector(state => state.accountSlice);
 
@@ -27,6 +37,7 @@ export const ControlBar = ({inChannel = false}) => {
     }
 
     return (
+        <>
         <div className={styles.wrapper}>
             {inChannel ?
             <div className={styles.channelControlWrapper}>
@@ -56,7 +67,10 @@ export const ControlBar = ({inChannel = false}) => {
             </div>
             : null}
             <div className={styles.container} >
-                <UserButton maxWidth={'calc(100% - 65px)'} {...account} />
+                <UserButton 
+                onClick={() => {dispatch(setOverlay('userQuickMenu'))}}
+                maxWidth={'calc(100% - 65px)'} 
+                {...account} />
                 <div className={styles.buttonWrapper}>
                     <IconButton 
                     onClick={handleToggleMicrophone}
@@ -67,18 +81,35 @@ export const ControlBar = ({inChannel = false}) => {
                     :
                     <Mic color='var(--text-color)' />
                     }
-                    title={`${isMicrophoneMuted ? 'Un-Mute' : 'Mute'}`}
+                    title={<KeybindToolTip 
+                        label={`${isMicrophoneMuted ? 'Un-Mute' : 'Mute'}`}
+                        binds={[keybinds['muteMicrophone']?.key]}
+                        />}
                     />
+                    
                     <IconButton 
                     onClick={handleToggleAudio}
-                    position='top' title={`${isAudioMuted ? 'Un-Deafen' : 'Deafen'}`} Icon={
+                    position='top' 
+                    title={
+                        <KeybindToolTip 
+                        label={`${isAudioMuted ? 'Un-Deafen' : 'Deafen'}`}
+                        binds={[keybinds['deafen']?.key]}
+                        />
+                    }
+                    Icon={
                     isAudioMuted ?
                     <VolumeOff color='var(--text-color)' />
                     :
                     <Volume2 color='var(--text-color)' />
                     } />
+                    <IconButton 
+                    title={"Quick Options"}
+                    Icon={<Settings2 color='var(--text-color)' />}
+
+                    />
                 </div>
             </div>
         </div>
+        </>
     )
 }

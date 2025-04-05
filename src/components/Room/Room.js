@@ -9,6 +9,7 @@ import { RoomUserWrapper } from './RoomUserWrapper/RoomUserWrapper';
 import { useDetectSpeech } from '../../hooks/useDetectSpeech';
 import { ChannelBackground } from '../ChannelBackground/ChannelBackground';
 import { RoomOverlay } from './RoomOverlay/RoomOverlay';
+import { usePushToTalk } from '../../hooks/usePushToTalk';
 
 export const Room = () => {
     const dispatch = useDispatch();
@@ -17,7 +18,7 @@ export const Room = () => {
 
     const { produce, resumeProducer, pauseProducer, closeProducer, getConsumers, getProducers } = useMediasoup();
 
-    const { isMicrophoneMuted, isWebcamOn } = useSelector(state => state.mediaControlSlice);
+    const { isMicrophoneMuted, isWebcamOn, voiceThreshold, usingPushToTalk, isPushToTalkActive } = useSelector(state => state.mediaControlSlice);
 
     const { user_id: account_id} = useSelector(state => state.accountSlice.account);
    
@@ -71,7 +72,9 @@ export const Room = () => {
     }, [isWebcamOn])
 
     // Hook for detecting speech
-    useDetectSpeech(isMicrophoneMuted, pauseProducer, resumeProducer);
+    useDetectSpeech(isMicrophoneMuted, pauseProducer, resumeProducer, voiceThreshold, usingPushToTalk);
+
+    usePushToTalk(isMicrophoneMuted, usingPushToTalk, isPushToTalkActive, resumeProducer, pauseProducer);
 
     // Memoizing combinedUsers to update only when the length of consumers changes
     const combinedUsers = React.useMemo(() => {

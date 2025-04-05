@@ -2,17 +2,17 @@ import React, { useState, useRef, useEffect } from "react";
 
 import { useSelector } from "react-redux";
 
-import ContextMenuButton from "../../Buttons/ContextButtons/ContextMenuButton";
+import ContextMenuButton from "../../components/ui/Buttons/ContextButtons/ContextMenuButton";
 
-import ContextRadioButton from "../../Buttons/ContextButtons/ContextRadioButton";
+import ContextRadioButton from "../../components/ui/Buttons/ContextButtons/ContextRadioButton";
 
-import ContextRangeInput from "../../Buttons/ContextButtons/ContextRangeInput";
+import ContextRangeInput from "../../components/ui/Buttons/ContextButtons/ContextRangeInput";
 
 import { useContextMenuOptions } from "./getOptions";
 
-import ContextMenuButtonWithSubmenu from "../../Buttons/ContextButtons/ContextMenuButtonWithSubMenu";
+import ContextMenuButtonWithSubmenu from "../../components/ui/Buttons/ContextButtons/ContextMenuButtonWithSubMenu";
 
-const ContextMenuWrapper = ({ children }) => {
+const ContextMenu = ({ children }) => {
 
     const account = useSelector((state) => state.accountSlice.account);
     
@@ -33,7 +33,6 @@ const ContextMenuWrapper = ({ children }) => {
     const getOptions = useContextMenuOptions();
     
     const menuRef = useRef(null);
-
  
     const handleClick = () => {
         setContextMenu(null);
@@ -99,6 +98,8 @@ const ContextMenuWrapper = ({ children }) => {
                         boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
                         zIndex: 1000,
                         minWidth: 150,
+                        padding: 5,
+                        backgroundColor: 'var(--button-background)'
                         
                     }}
                 >
@@ -110,7 +111,8 @@ const ContextMenuWrapper = ({ children }) => {
                             }}
                             style={{
                                 cursor: "pointer",
-                                borderBottom: index !== contextMenu.options.length - 1 ? "1px solid var(--background-color)" : "none",
+                                borderBottom: index !== contextMenu.options.length - 1 ? "1px solid rgba(0,0,0,0.1)" : "none",
+                                
                             }}
                         >
                             {option.submenuOptions ?
@@ -133,4 +135,4 @@ const ContextMenuWrapper = ({ children }) => {
     );
 };
 
-export default ContextMenuWrapper;
+export default ContextMenu;

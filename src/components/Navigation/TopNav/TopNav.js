@@ -2,14 +2,14 @@
 import styles from "./TopNav.module.css";
 import IconButton from "../../ui/Buttons/IconButton/IconButton";
 
-import { SearchIcon } from "../../Icons/Search/SearchIcon";
-import { NotificationBellIcon } from "../../Icons/NotificationBell/NotificationBellIcon";
 import { useDispatch, useSelector } from "react-redux";
 import { setOverlay } from "../../../features/Overlay/overlaySlice";
 import { selectServerName } from "../../../features/ServerDetails/serverDetailsSlice";
 
-import { Settings2 } from "lucide-react";
-import { Routes } from "react-router";
+import { Bell, Settings2, UsersRound } from "lucide-react";
+import { Route, Routes } from "react-router";
+import { SearchButton } from "./SearchButton/SearchButton";
+import ChannelHeader from "../../Headers/ChannelHeader/ChannelHeader";
 
 const TopNav = () => {
   
@@ -19,16 +19,20 @@ const TopNav = () => {
 
   const isServerRoute = useSelector(state => state.serverDetailsSlice.server_id);
 
-  const textColor = getComputedStyle(document.documentElement)
-    .getPropertyValue('--text-color')
-    .trim();
+  const { hideUsers } = useSelector(state => state.appearanceSlice);
+
+  const {currentChannel} = useSelector(state => state.channelsSlice);
+
+  const {currentTextChannel} = useSelector(state => state.textChannelSlice);
+
+  const channelDetails = useSelector(state => state.channelsSlice.channels.find(channel => channel?.channel_id === (currentTextChannel || currentChannel?.channel_id)));
 
   return (
     <nav className={styles.navbar}>
       <div className={styles.header}>
         <h2>{serverName || "BUBBLE"}</h2>
         {isServerRoute ?
-        <IconButton Icon={<Settings2 color={textColor} />} position="bottom" title={`${serverName} Settings`} onClick={() => {dispatch(setOverlay('serverSettings'))}} />
+        <IconButton Icon={<Settings2 color={"var(--text-color)"} />} position="bottom" title={`${serverName} Settings`} onClick={() => {dispatch(setOverlay('serverSettings'))}} />
         : null}
       </div>
   
@@ -36,17 +40,21 @@ const TopNav = () => {
       <div className={styles.serverButtons}>
       {isServerRoute && (
         <Routes>
-          
+          <Route path="/server/:serverID/channel/:channelID" element={<ChannelHeader {...channelDetails} />} />
         </Routes>
       )}
       </div>
       <div className={styles.buttonGroup}>
-        
-        <IconButton width={60} onClick={() => {dispatch(setOverlay('search'))}} Icon={<SearchIcon />} position="bottom" title={"Search"} />
+        <SearchButton onClick={() => {dispatch(setOverlay('search'))}} />
         <IconButton
-          Icon={<NotificationBellIcon />}
+          Icon={<Bell color="var(--text-color)" />}
           position="bottom"
           title={"Notifications"}
+        />
+        <IconButton
+        Icon={<UsersRound color="var(--text-color)" />}
+        position="bottom"
+        title={"Hide Users"}
         />
         {/* Notifications Button */}
       </div>

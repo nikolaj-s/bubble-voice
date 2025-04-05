@@ -1,11 +1,13 @@
 
 .navbar {
     display: grid;
-    grid-template-columns: 200px 1fr 200px;
+    grid-template-columns: 225px minmax(1px, 1fr) 225px;
     grid-template-rows: 1fr;
     align-items: center;
     justify-content: center;
     -webkit-app-region: drag;
+    position: relative;
+    z-index: 4;
   }
 
   .header {
@@ -49,6 +51,7 @@
   .serverButtons,
   .buttonGroup {
     display: flex;
+    gap: 2px;
   }
   
   .navButton {

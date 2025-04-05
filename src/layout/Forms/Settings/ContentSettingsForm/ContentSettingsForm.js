@@ -14,8 +14,7 @@ export const ContentSettingsForm = () => {
     return (
        <>
        <Header text='Content Settings' />
-       <Label label='Disable Safe Search Within Global Search' />
-       <ToggleSwitch />
+       
        <Label label='Disable Blur of Explicit Content' />
        <ToggleSwitch initialState={disableNsfwBlur} onToggle={() => {
         dispatch(toggleDisableNsfwBlur(!disableNsfwBlur))

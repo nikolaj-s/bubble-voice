@@ -2,7 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = () => {
 
-    const usingPushToTalk = JSON.parse(localStorage.getItem('usingPushToTalk'))
+    const usingPushToTalk = JSON.parse(localStorage.getItem('usingPushToTalk'));
+
+    const voiceThreshold = JSON.parse(localStorage.getItem('voiceThreshold'));
 
     return {
         isAudioMuted: false,
@@ -15,7 +17,7 @@ const initialState = () => {
         loading: false,
         usingPushToTalk: usingPushToTalk || false,
         isPushToTalkActive: false,
-        voiceThreshold: 25
+        voiceThreshold: voiceThreshold || 25
     }
 }
 
@@ -25,7 +27,10 @@ const mediaControlSlice = createSlice({
     initialState,
     reducers: {
         setVoiceThreshold: (state, action) => {
+           
             state.voiceThreshold = action.payload;
+
+            localStorage.setItem('voiceThreshold', state.voiceThreshold);
         },
         toggleUsingPushToTalk: (state) => {
             state.usingPushToTalk = !state.usingPushToTalk;

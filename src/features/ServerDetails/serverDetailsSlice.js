@@ -6,6 +6,7 @@ const initialState = {
     server_id: "",
     name: "",
     banner: "",
+    details: {},
     status: "idle",
     loading: false,
     error: false
@@ -28,6 +29,7 @@ const serverDetailsSlice = createSlice({
             state.name = action.payload.server_name;
             state.banner = action.payload.server_banner;
             state.server_id = action.payload.server_id;
+            state.details = action.payload;
             state.status = 'complete';
         },
         resetServerDetails: () => initialState,

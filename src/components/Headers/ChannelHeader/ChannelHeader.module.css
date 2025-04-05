@@ -1,0 +1,61 @@
+.header {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: calc(100% - 10px);
+  padding: 0px 10px 0px 0px;       /* Ensure header takes full available width */
+  overflow: hidden;  /* Hide any overflow */
+  min-width: 0;      /* Allow flex children to shrink */
+}
+
+.iconWrapper {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.channelIcon,
+.defaultIcon {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.info {
+  display: flex;
+  gap: 5px;
+  flex: 1;          /* Take up remaining space */
+  overflow: hidden; /* Prevent children from overflowing */
+  min-width: 0;     /* Allow children to shrink */
+}
+
+.channelName {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 1.25rem;
+  font-weight: bold;
+  word-break: keep-all;
+  white-space: nowrap;
+  flex-shrink: 0;   /* Never shrink the channel name */
+}
+
+.channelDescription {
+  margin: 0;
+  color: var(--secondary-color);
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  flex: 1;          /* Allow the description to fill available space */
+  min-width: 0;     /* Enable shrinking */
+}
+
+.channelDescription:hover {
+  color: var(--accent-color);
+}

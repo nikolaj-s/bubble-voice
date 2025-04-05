@@ -39,7 +39,10 @@ export const CreateChannelForm = ({permissions}) => {
                 <Label label='Set your channel name:' />
                 <TextInput placeholder={'Enter Channel Name'} value={channelName} onChange={setChannelName} />
                 <Label label='Select a channel type:' />
-                <TypeInput selected={channelType} types={channelTypes} onSelect={setChannelType} />
+                <TypeInput 
+                selected={channelType} 
+                types={channelTypes} 
+                onSelect={setChannelType} />
                 <TextButton action={handleCreateChannel} disabled={channelName.length < 3} title='Create Channel' />
             </LoadingErrorFormWrapper>
         </NotAuthorized>

@@ -12,6 +12,7 @@
   flex-shrink: 0;
   float: right;
   flex-shrink: 0;
+  pointer-events: auto;
 }
 
 .server-button-container:active {
@@ -58,7 +59,7 @@
   box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.5);
   animation: pop-in forwards linear 0.1s;
   background-color: var(--background-color);
-  border: solid 1px var(--text-color);
+  border: solid 1px var(--accent-color);
 }
 
 .server-button-name-container h2 {

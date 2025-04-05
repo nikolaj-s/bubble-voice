@@ -8,8 +8,6 @@ import TextInput from '../../../../components/ui/Inputs/TextInput/TextInput';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { selectServerBanner, selectServerName } from '../../../../features/ServerDetails/serverDetailsSlice';
-
 import ImageDropZone from '../../../../components/ui/Inputs/ImageDropZone/ImageDropZone';
 
 import TextButton from '../../../../components/ui/Buttons/TextButton/TextButton';
@@ -18,6 +16,7 @@ import { updateServerDetails } from '../../../../features/ServerDetails/Thunks/u
 
 import { LoadingErrorFormWrapper } from '../../../../components/ui/Wrappers/LoadingErrorFormWrapper/LoadingErrorFormWrapper';
 import { NotAuthorized } from '../../../../components/Error/NotAuthorized/NotAuthorized';
+import TextArea from '../../../../components/ui/Inputs/TextArea/TextArea';
 
 export const EditServerDetailsForm = ({permissions}) => {
 
@@ -25,19 +24,21 @@ export const EditServerDetailsForm = ({permissions}) => {
 
   const [serverName, setServerName] = React.useState("");
 
+  const [welcomeMessage, setWelcomeMessage] = React.useState("");
+
   const [serverBanner, setServerBanner] = React.useState(null);
 
   const [serverNameError, setServerNameError] = React.useState(null);
 
-  const server_name = useSelector(selectServerName);
-  
-  const server_banner = useSelector(selectServerBanner);
+  const {server_name, server_banner, welcome_message} = useSelector(state => state.serverDetailsSlice.details);
 
   React.useEffect(() => {
 
     setServerName(server_name);
 
-  }, [])
+    setWelcomeMessage(welcome_message);
+
+  }, [server_name, welcome_message])
   
   const handleUpdate = () => {
 
@@ -45,9 +46,9 @@ export const EditServerDetailsForm = ({permissions}) => {
 
     if (serverName.length > 84) return setServerNameError("Bubble name cannot be longer than 84 characters long");
 
-    if (serverName === server_name && !serverBanner) return;
+    if (serverName === server_name && !serverBanner && welcomeMessage === welcome_message) return;
 
-    dispatch(updateServerDetails({serverName, serverBanner}));
+    dispatch(updateServerDetails({serverName, serverBanner, welcomeMessage}));
 
     setServerBanner(null);
     
@@ -69,9 +70,18 @@ export const EditServerDetailsForm = ({permissions}) => {
         <ImageDropZone width={320} height={200} existingImage={server_banner} onImageChange={setServerBanner}  />
         </>
         : null}
-
-        {permissions.user_can_edit_server_banner || permissions.user_can_edit_server_name ?
-        serverName !== server_name || serverBanner ?
+        {permissions.user_can_edit_server_welcome_message && (
+        <>
+        <Label label='Edit Welcome Message' />
+        <TextArea 
+         text={welcomeMessage}
+        setText={(value) => {setWelcomeMessage(value)}}
+        limit={512}
+        />
+        </>
+        )}
+        {permissions.user_can_edit_server_banner || permissions.user_can_edit_server_name || permissions.user_can_edit_server_welcome_message ?
+        serverName !== server_name || serverBanner || welcomeMessage !== welcome_message ?
         <TextButton action={handleUpdate} title='Submit' />
         : null :
         null

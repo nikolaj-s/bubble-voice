@@ -1,0 +1,53 @@
+.serverNav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+  }
+  
+  .navButton {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    text-align: left;
+    height: 35px;
+  }
+  
+  .navButton:hover {
+    background-color: var(--button-hover);
+  }
+
+  .navButton:active {
+    scale: 0.98;
+  }
+  
+
+
+  .active {
+    background-color: var(--secondary-color);
+    cursor: default;
+  }
+
+  .active:active {
+    scale: 1;
+  }
+  
+  .icon {
+    /* Size your icons as needed */
+    width: 20px;
+    height: 20px;
+  }
+  
+  .label {
+    /* Prevent the label from wrapping */
+    white-space: nowrap;
+  }
+  

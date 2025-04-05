@@ -16,7 +16,7 @@ import { UserBar } from './users/UserBar';
 
 import { Channels } from './channels/Channels';
 
-import { Outlet } from 'react-router';
+import { Outlet, Route, Routes } from 'react-router';
 
 import { ControlBar } from '../../components/ControlBar/ControlBar';
 import { TextChannelOverlay } from './channel/TextChannelOverlay/TextChannelOverlay';
@@ -44,7 +44,7 @@ export const Server = () => {
             }}
             >
                 <Banner image={banner} />
-                <Channels />
+                <Channels currentChannel={currentChannel} />
                 <ControlBar inChannel={currentChannel?.channel_type === 'voice'} />
             </motion.section>
             <motion.section 

@@ -11,14 +11,32 @@ import { setVoiceThreshold, toggleUsingPushToTalk } from '../../../../features/M
 import { setKeybind } from '../../../../features/Settings/Keybinds/keybindsSlice'
 import KeybindInput from '../../../../components/ui/Inputs/KeybindInput/KeybindInput'
 import { TestMicrophone } from '../../../../components/TestMicrophone/TestMicrophone'
+import TypeInput from '../../../../components/ui/Inputs/TypeInput/TypeInput'
 
 export const VoiceVideoSettingsForm = () => {
 
     const dispatch = useDispatch();
 
+    const [voiceThreshold, setThreshold] = React.useState(25);
+
+    const options= [
+        {
+            title: "Voice Activation Detection",
+            type: "vad",
+            description: "Automatically activates the microphone when sound is detected."
+        },
+        {
+            title: "Push To Talk",
+            type: "ptt",
+            description: "Activates the microphone when a specific key is pressed."
+        }
+    ]
+
+    const voiceThresholdRef = React.useRef(voiceThreshold);
+
     const usingPushToTalk = useSelector(state => state.mediaControlSlice.usingPushToTalk);
 
-    const voiceThreshold = useSelector(state => state.mediaControlSlice.voiceThreshold);
+    const voice_threshold = useSelector(state => state.mediaControlSlice.voiceThreshold);
 
     const keybinds = useSelector((state) => state.keybindsSlice.keybinds);
     
@@ -26,6 +44,25 @@ export const VoiceVideoSettingsForm = () => {
         // Dispatch an action to update the keybind
         dispatch(setKeybind({ actionType, keybind }));
     };
+
+    React.useEffect(() => {
+
+        voiceThresholdRef.current = voiceThreshold;
+
+    }, [voiceThreshold])
+
+    React.useEffect(() => {
+
+        setThreshold(voice_threshold);
+
+        return () => {
+
+            if (voiceThresholdRef.current === voice_threshold) return;
+
+            dispatch(setVoiceThreshold(voiceThresholdRef.current));
+        }
+
+    }, [dispatch, voice_threshold])
     
     return (
         <>
@@ -35,26 +72,15 @@ export const VoiceVideoSettingsForm = () => {
         <DeviceSelector type={'webcam'} />
         <Label label='Test Your Microphone' />
         <TestMicrophone 
-        setVoiceThreshold={(value) => {dispatch(setVoiceThreshold(value))}}
+        setVoiceThreshold={(value) => {setThreshold(value)}}
         voiceThreshold={voiceThreshold}
         usingPushToTalk={usingPushToTalk}
         />
         <Label label='Voice Input Mode' />
-        <RadioToggle 
-        options={[
-            {
-                label: "Voice Activation Detection",
-                value: "vad",
-                description: "Automatically activates the microphone when sound is detected."
-            },
-            {
-                label: "Push To Talk",
-                value: "ptt",
-                description: "Activates the microphone when a specific key is pressed."
-            }
-        ]}
+        <TypeInput 
+        types={options}
         selected={usingPushToTalk ? "ptt" : "vad"}
-        onChange={() => dispatch(toggleUsingPushToTalk())}
+        onSelect={() => dispatch(toggleUsingPushToTalk())}
         />
         {usingPushToTalk ?
         <>

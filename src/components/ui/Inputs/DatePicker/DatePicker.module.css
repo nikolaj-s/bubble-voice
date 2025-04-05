@@ -1,0 +1,94 @@
+
+  .datePickerContainer {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .datePickerButton {
+    color: var(--text-color);
+    border: none;
+    padding: 5px 15px;
+    font-size: 16px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+    background-color: rgba(0,0,0,0);
+  }
+  
+  .datePickerButton:hover {
+    background: var(--button-hover);
+  }
+  
+  .clearButton {
+    background: none;
+    border: none;
+    color: var(--error-color);
+    cursor: pointer;
+    margin-left: 8px;
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  .datePickerMenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--card-background-color);
+    color: var(--text-color);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    width: 280px;
+    border: 1px solid var(--accent-color);
+    margin-top: 5px;
+  }
+  
+  .calendarHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 5px;
+  }
+  
+  .dropdown {
+    background: var(--background-color);
+    color: var(--text-color);
+    border: none;
+    padding: 5px;
+    font-size: 14px;
+    border-radius: 6px;
+    width: 100%;
+    cursor: pointer;
+  }
+  
+  .calendarGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+  }
+  
+  .calendarDay {
+    border: none;
+    color: var(--text-color);
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+    background-color: rgba(0,0,0,0);
+  }
+  
+  .calendarDay:hover {
+    background: var(--accent-color);
+  }
+  
+  .selected {
+    background: var(--success-color) !important;
+    color: var(--background-color) !important;
+  }
+  

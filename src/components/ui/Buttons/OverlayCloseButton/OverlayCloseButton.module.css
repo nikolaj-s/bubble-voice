@@ -1,0 +1,23 @@
+
+.button {
+    position: fixed;
+    top: 50px;
+    right: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+    gap: 10px;
+    z-index: 999;
+}
+
+.button p {
+    margin: 0px;
+    padding: 0px;
+}
+
+.button:hover {
+    opacity: 1;
+}

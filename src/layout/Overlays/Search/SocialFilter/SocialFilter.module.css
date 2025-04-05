@@ -1,0 +1,38 @@
+.filterContainer {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background-color: var(--card-background-color);
+    margin-top: 2px;
+    padding: 5px;
+  }
+  
+  .filterButton {
+    border: none;
+    padding: 8px;
+    border-radius: 20px;
+    gap: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--card-background-color);
+    transition: background 0.3s;
+    color: var(--text-color);
+    opacity: 0.75;
+  }
+
+  .filterButton p {
+    margin: 0px;
+    padding: 0px;
+  }
+  
+  .filterButton:hover {
+    opacity: 1;
+  }
+  
+  .filterButton.active {
+    background: var(--accent-color);
+    opacity: 1;
+  }
+  

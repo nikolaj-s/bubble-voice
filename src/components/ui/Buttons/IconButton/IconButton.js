@@ -14,7 +14,8 @@ const IconButton = ({
   height = 30,
   backgroundColor = 'rgba(0,0,0,0)',
   backgroundHover = 'var(--button-hover)',
-  padding = 5
+  padding = 5,
+  borderRadius
 }) => {
   
   const handleClick = (e) => {
@@ -24,7 +25,7 @@ const IconButton = ({
   return (
     <Tooltip content={title} position={position}>
       <motion.button
-        style={{width, height, backgroundColor, padding }}
+        style={{width, height, backgroundColor, padding, borderRadius }}
         onClick={handleClick}
         className={`${styles.button} ${className}`}
         whileHover={{ backgroundColor: backgroundHover}}

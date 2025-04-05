@@ -8,16 +8,18 @@ import SpinnerLoading from '../../../components/ui/Loading/Spinner/SpinnerLoadin
 import TextButton from '../../../components/ui/Buttons/TextButton/TextButton'
 import { CreateServerThunk } from '../../../features/CreateServer/Thunks/CreateServerThunk'
 import TextLabelError from '../../../components/Error/TextLabelError/TextLabelError'
+import PasswordRequirements from '../../../components/ui/PasswordRequirements/PasswordRequirements'
+import CreateBubbleSplash from '../../../components/Headers/CreateBubbleSplash/CreateBubbleSplash'
 
 export const CreateServerForm = () => {
 
     const dispatch = useDispatch();
 
-    const [name, setName] = React.useState("The Igloo");
+    const [name, setName] = React.useState("");
 
-    const [password, setPassword] = React.useState("TheIgloo321$");
+    const [password, setPassword] = React.useState("");
 
-    const [confirmPassword, setConfirmPassword] = React.useState("TheIgloo321$");
+    const [confirmPassword, setConfirmPassword] = React.useState("");
 
     const [banner, setBanner] = React.useState({});
 
@@ -33,14 +35,18 @@ export const CreateServerForm = () => {
 
     return (
         <>
+            <CreateBubbleSplash />
+            <Label label='Upload A Banner' />
+            <ImageDropZone width={320} height={200} onImageChange={setBanner}/>
             <Label label='Bubble Name:' />
             <TextInput placeholder={"Name"} type='text' value={name} onChange={setName} />
             <Label label='Bubble Password: ' />
-            <TextInput placeholder={"Password"}  value={password} onChange={setPassword} />
+            <TextInput placeholder={"Password"}  value={password} onChange={setPassword} type='password' />
+            
             <Label label="Confirm Password" />
-            <TextInput placeholder={'Confirm Password'} value={confirmPassword} onChange={setConfirmPassword} />
-            <Label label='Select A Banner' />
-            <ImageDropZone width={320} height={200} onImageChange={setBanner}/>
+            <TextInput placeholder={'Confirm Password'} value={confirmPassword} onChange={setConfirmPassword} type='password' />
+            <PasswordRequirements password={password} />
+ 
             {loading ? <SpinnerLoading /> : null}
             {error ? <TextLabelError label='Error:' error={error} /> : null}
             <TextButton action={handleCreateServer} title='Create'  />

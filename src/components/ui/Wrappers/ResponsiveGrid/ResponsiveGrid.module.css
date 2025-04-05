@@ -1,0 +1,33 @@
+.grid {
+  display: grid;
+  gap: 5px;
+  justify-content: center;
+  width: calc(100% - 20px);
+  padding: 10px;
+  /* Default to a single column for narrow screens */
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 1010px) {
+  /* If the container is wide enough for two or more 500px cards (plus gap),
+     switch to auto-fit columns that are up to 500px wide */
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(0, 500px));
+  }
+}
+
+.card {
+  width: 100%;
+  max-width: 500px;        /* The card will be at most 500px wide */
+  aspect-ratio: 1 / 1;      /* Keep the card square */
+  background-color: var(--card-background-color);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.02);
+}
+
+  

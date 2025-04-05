@@ -2,14 +2,14 @@ import { FilePenLine, ImageDown, Link, Pin, PinOff, Plus, Send, Trash2, Unplug }
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { copyToClipboard, downloadImage } from "../../../../lib/services/helperFunctions";
-import { deleteMessage } from "../../../../features/TextChannel/Thunks/deleteMessage";
-import { closeOverlay, setOverlay } from "../../../../features/Overlay/overlaySlice";
-import { sendMessage } from "../../../../features/TextChannel/Thunks/sendMessage";
-import { setCurrentTextChannel } from "../../../../features/TextChannel/textChannelSlice";
-import { setFilter, setQuery, setSimilarImageSrc } from "../../../../features/Search/searchSlice";
-import { globalSearch } from "../../../../features/Search/Thunks/globalSearch";
-import { setChannelToEdit } from "../../../../features/editChannel/editChannelSlice";
+import { copyToClipboard, downloadImage } from "../../lib/services/helperFunctions";
+import { deleteMessage } from "../../features/TextChannel/Thunks/deleteMessage";
+import { closeOverlay, setOverlay } from "../../features/Overlay/overlaySlice";
+import { sendMessage } from "../../features/TextChannel/Thunks/sendMessage";
+import { setCurrentTextChannel } from "../../features/TextChannel/textChannelSlice";
+import { setFilter, setQuery, setSimilarImageSrc } from "../../features/Search/searchSlice";
+import { globalSearch } from "../../features/Search/Thunks/globalSearch";
+import { setChannelToEdit } from "../../features/editChannel/editChannelSlice";
 
 export const useContextMenuOptions = () => {
 

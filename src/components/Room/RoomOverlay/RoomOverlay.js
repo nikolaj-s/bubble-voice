@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import { PillSpacer } from '../../ui/Spacers/PillSpacer/PillSpacer';
 import { useMediaControls } from '../../../context/MediaControlsContext';
+import { KeybindToolTip } from '../../ui/Titles/KeybindToolTip/KeybindToolTip';
 
 export const RoomOverlay = () => {
 
@@ -18,6 +19,8 @@ export const RoomOverlay = () => {
     const navigate = useNavigate();
 
     const {isWebcamOn, isMicrophoneMuted, isAudioMuted, isScreenSharing, handleToggleAudio, handleToggleMicrophone, handleToggleWebCam } = useMediaControls();
+
+    const {keybinds} = useSelector(state => state.keybindsSlice);
     
     const handleDisconnect = () => {
         navigate(`/dashboard/server/${serverID}`)
@@ -43,7 +46,10 @@ export const RoomOverlay = () => {
             </div>
             <div className={styles.bottomButtons}>
                     <IconButton 
-                   
+                    padding={15}
+                    borderRadius={"50%"}
+                    width={50}
+                    height={50}
                     onClick={handleToggleMicrophone}
                     position='top'
                     Icon={
@@ -52,12 +58,23 @@ export const RoomOverlay = () => {
                     :
                     <Mic color='var(--text-color)' />
                     }
-                    title={`${isMicrophoneMuted ? 'Un-Mute' : 'Mute'}`}
+                    title={<KeybindToolTip 
+                        label={`${isMicrophoneMuted ? 'Un-Mute' : 'Mute'}`}
+                        binds={[keybinds['muteMicrophone']?.key]}
+                        />}
                     />
                     <IconButton 
-                    
+                    padding={15}
+                    width={50}
+                    height={50}
+                    borderRadius={"50%"}
                     onClick={handleToggleAudio}
-                    position='top' title={`${isAudioMuted ? 'Un-Deafen' : 'Deafen'}`} Icon={
+                    position='top' title={
+                        <KeybindToolTip 
+                        label={`${isAudioMuted ? 'Un-Deafen' : 'Deafen'}`}
+                        binds={[keybinds['deafen']?.key]}
+                        />
+                    } Icon={
                     isAudioMuted ?
                     <VolumeOff color='var(--text-color)' />
                     :
@@ -66,7 +83,10 @@ export const RoomOverlay = () => {
                     <PillSpacer verticle={true} />
                     <IconButton 
                     onClick={handleDisconnect}
-                    
+                    padding={15}
+                    width={50}
+                    height={50}
+                    borderRadius={"50%"}
                     title={"Disconnect"}
                     backgroundColor='var(--error-color)'
                     Icon={<Unplug color='var(--text-color)' />}

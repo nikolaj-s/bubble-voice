@@ -11,6 +11,7 @@ import { CircleButton } from '../../ui/Buttons/CircleButton/CircleButton';
 import { setOverlay } from '../../../features/Overlay/overlaySlice';
 import { Plus, Settings } from 'lucide-react';
 import { PillSpacer } from '../../ui/Spacers/PillSpacer/PillSpacer';
+import IconButton from '../../ui/Buttons/IconButton/IconButton';
 
 export const SideNav = () => {
 
@@ -68,9 +69,26 @@ export const SideNav = () => {
 
     return (
         <div className={`${styles.container} side-navigation-global`}>
-            <div onClick={handleReturnToDashBoard} className={styles.logo}>
-                <Logo />
+            <div className={styles.logo}>
+                <IconButton 
+                onClick={handleReturnToDashBoard}
+                Icon={<Logo />}
+                padding={0}
+                width={60}
+                height={60}
+                title={
+                <p style={{
+                    padding: 5,
+                    margin: 0,
+                    fontSize: '14px'
+                }}>
+                    Dashboard
+                </p>}
+                position='right'
+                />
+                <PillSpacer />
             </div>
+           
             <div className={styles.serverButtons}>
                 {servers.map(s => {
                     return <ServerButton action={handleSwitchServer} key={s.server_id} {...s} />

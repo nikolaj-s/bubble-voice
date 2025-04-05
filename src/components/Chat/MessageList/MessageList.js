@@ -87,7 +87,8 @@ const MessageList = ({position = 0, messages = [], loadMoreMessages = () => {}, 
   }, [messages])
 
   return (
-    <div className={styles.messageListContainer} ref={listRef} onScroll={handleScroll}>
+    <div 
+    className={styles.messageListContainer} ref={listRef} onScroll={handleScroll}>
       <AnimatePresence>
         {loadingMore && (
           <div className={styles.loadingIndicator}>

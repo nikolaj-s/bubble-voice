@@ -27,13 +27,15 @@
     padding: 5px;
     border-left: 5px solid var(--accent-color);
     position: relative;
+    flex-shrink: 0;
+    min-height: 25px;
   }
 
   .buttons {
     display: none;
     align-items: center;
     position: absolute;
-    top: 10px;
+    top: 2px;
     right: 10px;
   }
 

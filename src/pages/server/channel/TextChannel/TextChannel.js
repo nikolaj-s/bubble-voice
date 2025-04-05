@@ -13,6 +13,8 @@ export const TextChannel = ({channel}) => {
 
     const {messages, loading, loadingMore, error, sending, noMoreMessages} = useSelector(state => state.textChannelSlice);
 
+    const [showBackground, toggeShowBackground] = React.useState(false);
+
     const {user_id} = useSelector(state => state.accountSlice.account);
 
     const users = useSelector(state => state.serverUsersSlice.users);
@@ -51,11 +53,21 @@ export const TextChannel = ({channel}) => {
     const saveTextChannelPos = (data) => {
         dispatch(setTextChannelPos(data));
     }
+
+    React.useEffect(() => {
+
+        requestAnimationFrame(() => {
+
+            toggeShowBackground(true)
+
+        })
+
+    }, [])
    
     return (
         <TextChannelProvider channel={channel} >
             <ChatContainer position={position?.position} returnPos={saveTextChannelPos} key={channel} users={users} loadingMore={loadingMore} loadMoreMessages={loadMoreMessages} sending={sending} send={handleSend} messages={messages} error={error} loading={loading}  setImage={setImage} setValue={setText} value={text} />
-            <ChannelBackground {...channel_details} />
+            {showBackground ? <ChannelBackground {...channel_details} /> : null}
         </TextChannelProvider>
     )
 }

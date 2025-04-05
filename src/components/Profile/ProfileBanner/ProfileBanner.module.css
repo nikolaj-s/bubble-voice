@@ -1,0 +1,38 @@
+
+  .bannerContainer {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    border-radius: 12px;
+    overflow: hidden;
+    text-align: center;
+    padding-bottom: 50px;
+  }
+  
+  .bannerImage {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-bottom: 4px solid var(--background-color);
+  }
+  
+  .profileWrapper {
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid var(--background-color);
+    background: var(--secondary-color);
+  }
+  
+  .profileImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  

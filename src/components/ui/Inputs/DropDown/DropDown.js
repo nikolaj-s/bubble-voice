@@ -52,7 +52,7 @@ const Dropdown = ({ selected, options, setSelected, selector = "label" }) => {
           >
             {options.map((option) => (
               <motion.li
-                key={typeof option === "string" ? option : option._id}
+                key={typeof option === "string" ? option : option.path}
                 className={`${styles.option} ${
                   selected && getLabel(selected) === getLabel(option) ? styles.selectedOption : ""
                 }`}

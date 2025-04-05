@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-export const useDetectSpeech = (isMicrophoneMuted, pauseProducer, resumeProducer) => {
+export const useDetectSpeech = (isMicrophoneMuted, pauseProducer, resumeProducer, speechThreshold = 25, usingPushToTalk) => {
     
     const audioContextRef = useRef(null);
 
@@ -18,7 +18,7 @@ export const useDetectSpeech = (isMicrophoneMuted, pauseProducer, resumeProducer
     const energyHistory = useRef([]);
 
     useEffect(() => {
-        if (isMicrophoneMuted) return;
+        if (isMicrophoneMuted || usingPushToTalk) return;
 
         const initAudioProcessing = async () => {
             try {
@@ -56,7 +56,7 @@ export const useDetectSpeech = (isMicrophoneMuted, pauseProducer, resumeProducer
                     const smoothedEnergy = energyHistory.current.reduce((sum, value) => sum + value, 0) / energyHistory.current.length;
 
                     // Speech detection threshold (adjustable)
-                    const speechThreshold = 25;  // Increase this if still too sensitive
+                     // Increase this if still too sensitive
                     const pauseDelay = 200; // Delay in ms before pausing
 
                     if (smoothedEnergy > speechThreshold) {
@@ -101,5 +101,5 @@ export const useDetectSpeech = (isMicrophoneMuted, pauseProducer, resumeProducer
                 clearTimeout(pauseTimeoutRef.current);
             }
         };
-    }, [isMicrophoneMuted, pauseProducer, resumeProducer]);
+    }, [isMicrophoneMuted, pauseProducer, resumeProducer, speechThreshold, usingPushToTalk]);
 };

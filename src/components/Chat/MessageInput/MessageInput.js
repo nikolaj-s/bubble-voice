@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import imageCompression from "browser-image-compression";
 import styles from "./MessageInput.module.css";
 import IconButton from "../../ui/Buttons/IconButton/IconButton";
-import { CirclePlus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { MediaPreview } from "../MediaPreview/MediaPreview";
 import { useDispatch } from "react-redux";
 import { setFilter } from "../../../features/Search/searchSlice";
@@ -126,13 +126,18 @@ export const MessageInput = ({ value, setValue, setImage = () => {}, error, send
                         } 
                     }}
                 />
-                <IconButton 
-                title={"Add Media"}
-                Icon={<CirclePlus color="var(--text-color)" />}
-                onClick={toggleMenu}
-                />
+                
             </div>
-
+            <IconButton 
+            padding={12}
+            borderRadius={'50%'}
+            height={50}
+            width={50}
+            title={"Add Media"}
+            Icon={<Plus color="var(--text-color)" />}
+            onClick={toggleMenu}
+            backgroundColor="var(--card-background-color)"
+            />
             <AnimatePresence>
                 {menuOpen && (
                     <motion.div

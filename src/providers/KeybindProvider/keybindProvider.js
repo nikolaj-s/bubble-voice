@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleAudioMute, toggleMicrophone, toggleWebcam } from "../../features/MediaControl/mediaControlSlice"; // Update with correct path
+import { toggleAudioMute, toggleMicrophone, togglePushToTalkActive, toggleWebcam } from "../../features/MediaControl/mediaControlSlice"; // Update with correct path
 
 const KeybindProvider = ({ children }) => {
   const dispatch = useDispatch();
@@ -25,6 +25,10 @@ const KeybindProvider = ({ children }) => {
     }
   };
 
+  const handlePushToTalk = (state) => {
+    dispatch(togglePushToTalkActive(state));
+  }
+
   useEffect(() => {
     const handleKeyDown = (event) => {
       const key = event.code;
@@ -43,7 +47,7 @@ const KeybindProvider = ({ children }) => {
 
       if (key === keybinds["pushToTalk"]?.keyCode) {
         event.preventDefault();
-        console.log("Push to Talk: Activated");
+        handlePushToTalk(true);
       }
     };
 
@@ -55,7 +59,7 @@ const KeybindProvider = ({ children }) => {
 
       if (key === keybinds["pushToTalk"]?.keyCode) {
         event.preventDefault();
-        console.log("Push to Talk: Deactivated");
+        handlePushToTalk(false);
       } else {
         Object.entries(keybinds).forEach(([action, boundKey]) => {
           if (key === boundKey?.keyCode && action !== "pushToTalk") {
@@ -80,7 +84,7 @@ const KeybindProvider = ({ children }) => {
 
       if (mouseKey === keybinds["pushToTalk"]?.keyCode) {
         event.preventDefault();
-        console.log("Push to Talk: Activated (Mouse)");
+        handlePushToTalk(true);
       }
     };
 
@@ -90,7 +94,7 @@ const KeybindProvider = ({ children }) => {
 
       if (mouseKey === keybinds["pushToTalk"]?.keyCode) {
         event.preventDefault();
-        console.log("Push to Talk: Deactivated (Mouse)");
+        handlePushToTalk(false);
       } else {
         Object.entries(keybinds).forEach(([action, boundKey]) => {
           if (mouseKey === boundKey?.keyCode && action !== "pushToTalk") {

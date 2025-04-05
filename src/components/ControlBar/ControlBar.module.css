@@ -5,6 +5,8 @@
     flex-direction: column;
     background-color: var(--card-background-color);
     flex-shrink: 0;
+    position: relative;
+    z-index: 4;
 }
 
 .container {

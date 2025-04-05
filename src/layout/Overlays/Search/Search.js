@@ -10,6 +10,7 @@ import { fetchSearchHistory } from '../../../features/Search/Thunks/fetchSearchH
 import { deleteSearchHistoryItem } from '../../../features/Search/Thunks/deleteSearchHistoryItem'
 import SpinnerLoading from '../../../components/ui/Loading/Spinner/SpinnerLoading'
 import NoImageResults from '../../../components/Misc/NoImageResults/NoImageResults'
+import SocialFilter from './SocialFilter/SocialFilter'
 
 export const Search = ({close}) => {
 
@@ -69,6 +70,9 @@ export const Search = ({close}) => {
                 similarImageSrc={similarImageSrc}
                 clearSimilarImage={clearFindSimilarImage}
                 />
+                {filter.path === 'social' &&
+                <SocialFilter />
+                }
                 {error ? 
                 <TextLabelError error={error} /> 
                 : null}
