@@ -6,10 +6,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { setOverlay } from "../../../features/Overlay/overlaySlice";
 import { selectServerName } from "../../../features/ServerDetails/serverDetailsSlice";
 
-import { Bell, Settings2, UsersRound } from "lucide-react";
+import { Bell, Pin, Settings2, UsersRound } from "lucide-react";
 import { Route, Routes } from "react-router";
 import { SearchButton } from "./SearchButton/SearchButton";
 import ChannelHeader from "../../Headers/ChannelHeader/ChannelHeader";
+import { setFilter, setFromDate, setSelectedChannelToFilter, setTextChannelFilter } from "../../../features/Search/searchSlice";
+import { globalSearch } from "../../../features/Search/Thunks/globalSearch";
 
 const TopNav = () => {
   
@@ -27,6 +29,34 @@ const TopNav = () => {
 
   const channelDetails = useSelector(state => state.channelsSlice.channels.find(channel => channel?.channel_id === (currentTextChannel || currentChannel?.channel_id)));
 
+  const handleOpenSearch = () => {
+
+    if (channelDetails?.channel_type === 'text') {
+
+      dispatch(setSelectedChannelToFilter(channelDetails));
+
+      dispatch(setFilter({path: 'text-channel'}));
+    
+    }
+
+    dispatch(setOverlay('search'));
+  }
+
+  const handleOpenPins = () => {
+
+    dispatch(setSelectedChannelToFilter(channelDetails));
+
+    dispatch(setFilter({path: 'text-channel'}));
+
+    dispatch(setTextChannelFilter({isPinned: true, hasImage: false, hasVideo: false, hasLink: false}));
+
+    dispatch(setFromDate(null));
+
+    dispatch(globalSearch());
+
+    dispatch(setOverlay('search'));
+  }
+
   return (
     <nav className={styles.navbar}>
       <div className={styles.header}>
@@ -40,12 +70,25 @@ const TopNav = () => {
       <div className={styles.serverButtons}>
       {isServerRoute && (
         <Routes>
-          <Route path="/server/:serverID/channel/:channelID" element={<ChannelHeader {...channelDetails} />} />
+          <Route path="/server/:serverID/channel/:channelID" element={
+            <>
+            <ChannelHeader {...channelDetails} />
+            {channelDetails?.channel_type === 'text' && 
+            <IconButton 
+            Icon={<Pin color="var(--text-color)" />}
+            title={"Pinned Messages"}
+            position="bottom"
+            margin={"0 2px 0 0"}
+            onClick={handleOpenPins}
+            />
+            }
+            </>
+          } />
         </Routes>
       )}
       </div>
       <div className={styles.buttonGroup}>
-        <SearchButton onClick={() => {dispatch(setOverlay('search'))}} />
+        <SearchButton onClick={handleOpenSearch} />
         <IconButton
           Icon={<Bell color="var(--text-color)" />}
           position="bottom"

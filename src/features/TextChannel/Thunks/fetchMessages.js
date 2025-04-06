@@ -10,12 +10,12 @@ export const fetchMessages = createAsyncThunk(
         try {
 
             const {token} = getState().authSlice;
-
-            const {server_id} = getState().serverDetailsSlice;
-
+            
             if (!params.channel_id) return rejectWithValue("Invalid Channel");
 
             const {textChannelPos} = getState().textChannelSlice;
+
+            const {server_id} = getState().serverDetailsSlice;
 
             let count = 20;
 
@@ -26,7 +26,7 @@ export const fetchMessages = createAsyncThunk(
             const response = await axios({
                 method: "GET",
                 url: `${API_URL}/social/fetch`,
-                params: {channel_id: params.channel_id, last_message_id: params?.last_message_id, count: count},
+                params: {channel_id: params.channel_id, last_message_id: params?.last_message_id, count: count, server_id: server_id},
                 headers: {TOKEN: token}
             })
 

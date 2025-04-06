@@ -21,7 +21,7 @@ export const Room = () => {
     const { isMicrophoneMuted, isWebcamOn, voiceThreshold, usingPushToTalk, isPushToTalkActive } = useSelector(state => state.mediaControlSlice);
 
     const { user_id: account_id} = useSelector(state => state.accountSlice.account);
-   
+
     const consumers = getConsumers();
 
     const producers = getProducers();

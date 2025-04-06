@@ -20,7 +20,7 @@ export const deleteMessage = createAsyncThunk(
             const data = generateFormData({...params, server_id: server_id});
 
             const response = await axios({
-                method: "POST",
+                method: "DELETE",
                 url: `${API_URL}/social/delete`,
                 headers: {TOKEN: token},
                 data

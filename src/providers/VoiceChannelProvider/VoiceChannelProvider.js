@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ErrorCard from "../../components/Error/ErrorCard/ErrorCard";
 
 import { useSocket } from "../../context/SocketContext";
@@ -16,12 +16,16 @@ export const VoiceChannelProvider = ({channel, children}) => {
 
     const [error, toggleError] = React.useState(false);
 
+    const channelsStatus = useSelector(state => state.channelsSlice.status)
+
     React.useEffect(() => {
 
         if (!socket) return;
 
         if (!channel?.channel_id) return;
 
+        if (channelsStatus !== 'complete') return;
+ 
         if (channel?.channel_type !== 'voice') return toggleError("Invalid Channel Error");
 
         const handleJoinChannel = async () => {
@@ -71,7 +75,7 @@ export const VoiceChannelProvider = ({channel, children}) => {
 
         }
 
-    }, [socket, channel?.channel_id, dispatch]);
+    }, [socket, channel?.channel_id, dispatch, channelsStatus]);
 
     if (loading) return <></>
 

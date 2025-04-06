@@ -1,4 +1,4 @@
-import { Edit2, FilePenLine, ImageDown, Link, Pin, PinOff, Plus, Send, Trash2, Unplug, UserPen, Video } from "lucide-react";
+import { Edit2, FilePenLine, ImageDown, Link, Pin, PinOff, Plus, Reply, Send, Trash2, Unplug, UserPen, Video } from "lucide-react";
 import { useCallback } from "react";
 import { useDispatch,} from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -10,6 +10,7 @@ import { setCurrentTextChannel } from "../../features/TextChannel/textChannelSli
 import { setFilter, setQuery, setSimilarImageSrc } from "../../features/Search/searchSlice";
 import { globalSearch } from "../../features/Search/Thunks/globalSearch";
 import { setChannelToEdit } from "../../features/editChannel/editChannelSlice";
+import { pinMessage } from "../../features/TextChannel/Thunks/pinMessage";
 
 export const useContextMenuOptions = () => {
 
@@ -111,8 +112,15 @@ export const useContextMenuOptions = () => {
             if (data.message) {
 
                 options.push({
-                    label: data.message.pinned ? "Un-Pin" : "Pin",
+                    label: "Reply",
                     onClick: () => {},
+                    type: 'button',
+                    icon: <Reply color="var(--text-color)" />
+                })
+
+                options.push({
+                    label: data.message.pinned ? "Unpin" : "Pin",
+                    onClick: () => {dispatch(pinMessage(data.message))},
                     type: 'button',
                     icon: data.message.pinned ? <PinOff color="var(--text-color)" /> : <Pin color="var(--text-color)" />
                 })

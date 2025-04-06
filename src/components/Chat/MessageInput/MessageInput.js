@@ -108,36 +108,37 @@ export const MessageInput = ({ value, setValue, setImage = () => {}, error, send
                     (<TextLabelError label="Error:" error={error} />) 
             }
             {preview && <MediaPreview clear={() => {setPreview(null); setImage(null)}} preview={preview} />}
-
-            <div className={styles["input-wrapper"]}>
-                <textarea
-                    ref={textAreaRef}
-                    id="chat-input"
-                    type="text"
-                    className={styles["message-input"]}
-                    placeholder="Type a message..."
-                    value={value}
-                    onChange={(e) => handleSetValue(e.target.value)}
-                    onKeyUp={handleSend}
-                    maxLength={1024}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                            e.preventDefault();
-                        } 
-                    }}
+            <div className={styles.inputButtonWrapper}>
+                <div className={styles["input-wrapper"]}>
+                    <textarea
+                        ref={textAreaRef}
+                        id="chat-input"
+                        type="text"
+                        className={styles["message-input"]}
+                        placeholder="Type a message..."
+                        value={value}
+                        onChange={(e) => handleSetValue(e.target.value)}
+                        onKeyUp={handleSend}
+                        maxLength={1024}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                e.preventDefault();
+                            } 
+                        }}
+                    />
+                    
+                </div>
+                <IconButton 
+                padding={12}
+                borderRadius={'50%'}
+                height={50}
+                width={50}
+                title={"Add Media"}
+                Icon={<Plus color="var(--text-color)" />}
+                onClick={toggleMenu}
+                backgroundColor="var(--card-background-color)"
                 />
-                
             </div>
-            <IconButton 
-            padding={12}
-            borderRadius={'50%'}
-            height={50}
-            width={50}
-            title={"Add Media"}
-            Icon={<Plus color="var(--text-color)" />}
-            onClick={toggleMenu}
-            backgroundColor="var(--card-background-color)"
-            />
             <AnimatePresence>
                 {menuOpen && (
                     <motion.div

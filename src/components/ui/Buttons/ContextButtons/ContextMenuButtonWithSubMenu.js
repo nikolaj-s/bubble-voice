@@ -36,12 +36,13 @@ const ContextMenuButtonWithSubmenu = ({ label, submenuOptions, top, bottom}) => 
                     ref={submenuRef}
                     style={{
                         position: "absolute",
-                        top: 0,
+                        backgroundColor: 'var(--button-background)',
+                        top: -5,
                         [submenuPosition]: "100%", // Either 'left' or 'right'
                         color: "var(--text-color)",
                         borderRadius: "10px",
                         overflow: 'hidden',
-                        [`padding${submenuPosition.charAt(0).toUpperCase() + submenuPosition.slice(1)}`]: '10px',
+                        padding: '5px',
                         minWidth: 150,
                         zIndex:0
                     }}
@@ -51,7 +52,7 @@ const ContextMenuButtonWithSubmenu = ({ label, submenuOptions, top, bottom}) => 
                         key={`ctx-sub-option-${index}`}
                         style={{
                             cursor: "pointer",
-                            borderBottom: index !== submenuOptions.length - 1 ? "1px solid var(--background-color)" : "none",
+                            borderBottom: index !== submenuOptions.length - 1 ? "1px solid rgba(0,0,0,0.1)" : "none",
                         }}
                         >
                         <ContextMenuButton {...option} top={index === 0} bottom={index === submenuOptions.length - 1}  />

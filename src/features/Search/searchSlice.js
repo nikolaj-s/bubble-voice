@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { globalSearch } from "./Thunks/globalSearch";
 import { fetchSearchHistory } from "./Thunks/fetchSearchHistory";
 import { deleteSearchHistoryItem } from "./Thunks/deleteSearchHistoryItem";
+import { getFormattedDate } from "../../lib/services/helperFunctions";
 
 const searchSlice = createSlice({
     name: "searchSlice",
@@ -10,14 +11,21 @@ const searchSlice = createSlice({
         results: {},
         error: false,
         filter: {label: "Bubbles", path: "servers"},
-        filters: [{label: "Bubbles", path: "servers"}, {label: "Images", path: "images"}, {label: "Text Channels", path: "social"}],
+        filters: [{label: "Bubbles", path: "servers"}, {label: "Images", path: "images"}, {label: "Text Channels", path: "text-channel"}],
         searchHistory: [],
         similarImageSrc: false,
         open: false,
         query: "",
         scrollPos: 0,
         loadingSearchHistory: false,
-        searchHistoryFetched: false
+        searchHistoryFetched: false,
+        // text channel search params
+        isPinned: false,
+        hasImage: false,
+        hasVideo: false,
+        hasLink: false,
+        fromDate: false,
+        selectedChannel: {channel_name: "All", channel_id: "*"}
     },
     reducers: {
         toggleOpenSearch: (state, action) => {
@@ -41,6 +49,17 @@ const searchSlice = createSlice({
         },
         setSimilarImageSrc: (state, action) => {
             state.similarImageSrc = action.payload;
+        },
+        setFromDate: (state, action) => {
+            state.fromDate = action.payload;
+        },
+        setTextChannelFilter: (state, action) => {
+            for (const [key,value] of Object.entries(action.payload)) {
+                state[key] = value;
+            }
+        },
+        setSelectedChannelToFilter: (state, action) => {
+            state.selectedChannel = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -57,7 +76,20 @@ const searchSlice = createSlice({
         .addCase(globalSearch.fulfilled, (state, action) => {
             state.loading = false;
             state.error = false;
-            state.results[action.payload.filter] = action.payload.results;
+
+            let results = [];
+
+            if (action.payload.filter === 'text-channel') {
+                
+                results = action.payload.results.map(m => {
+                    return {...m, ...getFormattedDate(m.date)}
+                })
+
+            } else {
+                results = action.payload.results;
+            }
+
+            state.results[action.payload.filter] = results;
         })
 
         // search history
@@ -87,6 +119,15 @@ const searchSlice = createSlice({
     }
 })
 
-export const {toggleOpenSearch, setFilter, setQuery, setSearchResultsScrollPos, setSimilarImageSrc} = searchSlice.actions;
+export const {
+    toggleOpenSearch, 
+    setFilter, 
+    setQuery, 
+    setSearchResultsScrollPos, 
+    setSimilarImageSrc,
+    setTextChannelFilter,
+    setSelectedChannelToFilter,
+    setFromDate
+} = searchSlice.actions;
 
 export default searchSlice.reducer;

@@ -12,8 +12,6 @@ export const ServerUsersProvider = ({children}) => {
 
     const {server_id: serverID} = useSelector(state => state.serverDetailsSlice);
 
-
-
     const dispatch = useDispatch();
 
     const socket = useSocket();
@@ -146,7 +144,7 @@ export const ServerUsersProvider = ({children}) => {
 
     }, [status])
 
-    if (status === 'loading') return showLoading ? [...Array(10)].map((_, index) => (<UserButtonSkeleton key={index} />)) : null;
+    if (status === 'loading' && showLoading) return [...Array(10)].map((_, index) => (<UserButtonSkeleton key={index} />));
 
     return (
         <>

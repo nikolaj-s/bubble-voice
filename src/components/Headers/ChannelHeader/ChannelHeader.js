@@ -4,7 +4,7 @@ import styles from './ChannelHeader.module.css';
 import { Hash, Volume1 } from 'lucide-react';
 import { PillSpacer } from '../../ui/Spacers/PillSpacer/PillSpacer';
 
-const ChannelHeader = ({ channel_name, channel_description, channel_type, channel_icon }) => {
+const ChannelHeader = ({ channel_name, channel_description, channel_type, channel_icon, channel_id }) => {
   // Determine which icon to display if no custom channel_icon is provided.
   const renderDefaultIcon = () => {
     if (channel_type === 'voice') {
@@ -37,6 +37,7 @@ const ChannelHeader = ({ channel_name, channel_description, channel_type, channe
       >
         {channel_description}
       </p>
+      
     </header>
   );
 };

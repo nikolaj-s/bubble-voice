@@ -124,6 +124,9 @@ const channelsSlice = createSlice({
         },
         clearCurrentChannel: (state,action) => {
             state.currentChannel = null;
+        },
+        setChannelsStatus: (state, action) => {
+            state.status = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -164,7 +167,8 @@ export const {
     clearCurrentChannel, 
     userLeavesChannel, 
     userJoinsChannel,
-    updateChannelDetails
+    updateChannelDetails,
+    setChannelsStatus
 } = channelsSlice.actions;
 
 export default channelsSlice.reducer;

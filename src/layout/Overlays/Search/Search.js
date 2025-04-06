@@ -70,8 +70,8 @@ export const Search = ({close}) => {
                 similarImageSrc={similarImageSrc}
                 clearSimilarImage={clearFindSimilarImage}
                 />
-                {filter.path === 'social' &&
-                <SocialFilter />
+                {filter.path === 'text-channel' &&
+                <SocialFilter onFilterChange={handleSearch} />
                 }
                 {error ? 
                 <TextLabelError error={error} /> 

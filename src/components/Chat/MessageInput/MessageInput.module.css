@@ -1,18 +1,19 @@
 
 .message-input-container {
     display: flex;
-    align-items: flex-start;
-    width: calc(100% - 20px);
-    margin: 0px 10px 0px 10px;
+    flex-direction: column;
+    width: 100%;
     position: relative;
-    gap: 5px;
     flex-shrink: 0;
 }
 
-.errorContainer {
-    position: absolute;
-    bottom: 70px;
-    z-index: 10;
+.inputButtonWrapper {
+    display: flex;
+    align-items: flex-start;
+    width: calc(100% - 20px);
+    margin: 0px 10px 0px 10px;
+    flex-shrink: 0;
+    gap: 5px;
 }
 
 .error-message {

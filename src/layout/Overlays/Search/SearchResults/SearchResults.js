@@ -11,6 +11,7 @@ import { setSearchResultsScrollPos } from '../../../../features/Search/searchSli
 import { SearchHistory } from '../SearchHistory/SearchHistory';
 
 import { ServerResults } from './ServerResults/ServerResults';
+import { TextChannelResults } from './TextChannelResults/TextChannelResults';
 
 export const SearchResults = ({results = [], loading = false, filter, searchHistory, handleDeleteSearchHistoryItem, handleSearchFromHistory}) => {
 
@@ -46,10 +47,9 @@ export const SearchResults = ({results = [], loading = false, filter, searchHist
                 searchHistory={searchHistory} />
                 <ImageResults images={results} />
                 </>
-                :
-                <>
-
-                </>}
+                : filter === 'text-channel' ?
+                <TextChannelResults results={results} />
+                : null}
             </div>
         </div>
     )

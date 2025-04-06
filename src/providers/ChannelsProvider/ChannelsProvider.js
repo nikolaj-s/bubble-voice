@@ -2,7 +2,7 @@ import React from 'react'
 import { useSocket } from '../../context/SocketContext';
 import { useDispatch, useSelector } from 'react-redux';
 import ChannelButtonSkeleton from '../../components/ui/Loading/ChannelButtonSkeleton/ChannelButtonSkeleton';
-import { addCategory, addChannel, reOrderCategories, reOrderChannels, setCategories, setChannels, updateChannelDetails, userJoinsChannel, userLeavesChannel } from '../../features/Channels/channelsSlice';
+import { addCategory, addChannel, reOrderCategories, reOrderChannels, setCategories, setChannels, setChannelsStatus, updateChannelDetails, userJoinsChannel, userLeavesChannel } from '../../features/Channels/channelsSlice';
 
 export const ChannelsProvider = ({children}) => {
 
@@ -46,6 +46,8 @@ export const ChannelsProvider = ({children}) => {
                 console.log(error);
                 return;
             })
+
+            dispatch(setChannelsStatus("complete"));
 
             toggleLoading(false);
         }
@@ -122,6 +124,8 @@ export const ChannelsProvider = ({children}) => {
             socket.off(`update category order for ${server_id}`, handleReOrderCategories);
 
             socket.off(`update channel in ${server_id}`, handleUpdateChannelDetails);
+            
+            dispatch(setChannelsStatus("loading"));
         }
 
     }, [socket, server_id, dispatch])

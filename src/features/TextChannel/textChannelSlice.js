@@ -3,6 +3,7 @@ import { fetchMessages } from "./Thunks/fetchMessages";
 import { sendMessage } from "./Thunks/sendMessage";
 import { deleteMessage } from "./Thunks/deleteMessage";
 import { getFormattedDate } from "../../lib/services/helperFunctions";
+import { pinMessage } from "./Thunks/pinMessage";
 
 const initialState = {
     page: 0,
@@ -14,7 +15,7 @@ const initialState = {
     noMoreMessages: false,
     deleting: false,
     currentTextChannel: null,
-    textChannelPos: {}
+    textChannelPos: {},
 }
 
 const textChannelSlice = createSlice({
@@ -57,6 +58,17 @@ const textChannelSlice = createSlice({
             if (!action.payload.channel_id) return;
 
             state.textChannelPos[action.payload.channel_id] = action.payload;
+        },
+        updateMessage: (state, action) => {
+            if (!action.payload.message_id) return;
+
+            state.messages = state.messages.map(message => {
+                if (message.message_id === action.payload.message_id) {
+                    return {...message, ...action.payload};
+                } else {
+                    return message;
+                }
+            })
         }
     },
     extraReducers: (builder) => {
@@ -130,9 +142,24 @@ const textChannelSlice = createSlice({
             state.deleting = false;
             state.error = action.payload;
         })
+
+        // pinning messages
+        builder.addCase(pinMessage.pending, (state) => {
+            state.error = false;
+        })
+        builder.addCase(pinMessage.rejected, (state, action) => {
+            state.error = action.payload;
+        })
     }
 })
 
-export const {addMessage, removeMessage, clearTextChannelState, setCurrentTextChannel, setTextChannelPos} = textChannelSlice.actions;
+export const {
+    addMessage, 
+    removeMessage, 
+    clearTextChannelState, 
+    setCurrentTextChannel, 
+    setTextChannelPos,
+    updateMessage
+} = textChannelSlice.actions;
 
 export default textChannelSlice.reducer;

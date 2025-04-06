@@ -49,7 +49,7 @@ export const ControlBar = ({inChannel = false}) => {
             <div className={styles.channelControlWrapper}>
                 <IconButton 
                 backgroundColor={isWebcamOn ? 'var(--success-color)' : 'var(--primary-color)'}
-                width={60}
+                width={65}
                 height={30}
                 onClick={handleToggleWebcam}
                 title={isWebcamOn ? "Turn off Webcam" : "Turn on Webcam"}
@@ -57,14 +57,14 @@ export const ControlBar = ({inChannel = false}) => {
                 />
                 <IconButton 
                 backgroundColor='var(--primary-color)'
-                width={60}
+                width={65}
                 height={30}
                 title={isScreenSharing ? "Stop Sharing Screen" : "Share Screen"}
                 Icon={isScreenSharing ? <ScreenShareOff height={20} width={20} color={'var(--text-color)'} /> : <ScreenShare height={'20px'} width={'20px'} color={'var(--text-color)'} />}
                 />
                 <IconButton 
                 onClick={handleDisconnect}
-                width={60}
+                width={65}
                 height={30}
                 title={"Disconnect"}
                 backgroundColor='var(--error-color)'

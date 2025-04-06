@@ -15,7 +15,7 @@ import { Ellipsis } from 'lucide-react';
 import { triggerContext } from '../../../lib/services/helperFunctions';
 import VideoPlayer from '../../ui/Video/VideoPlayer/VideoPlayer';
 
-export const MessageItem = ({message, prevMessage = {}, loading, users = {}}) => {
+export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inSearch = false}) => {
 
     const dispatch = useDispatch();
 
@@ -35,10 +35,10 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}}) =>
 
     return (
         <>
-          
+            {isDifferentDay && inSearch && (<Spacer date={message.formattedDate} />)}
             <div 
             id={`message-id-${message._id}`}
-            data-context={JSON.stringify({...message, type: 'message'})}
+            data-context={JSON.stringify({...message, type: 'message', inSearch})}
             style={{
                 borderColor: users[message.user_id]?.color
             }}
@@ -90,7 +90,7 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}}) =>
                     <LinkPreview preview={message.link_preview} /> 
                 </div>
             </div>
-            {isDifferentDay && (<Spacer date={message.formattedDate} />)}
+            {isDifferentDay && !inSearch && (<Spacer date={message.formattedDate} />)}
         </>
     )
 }

@@ -22,7 +22,12 @@ const DatePicker = ({ onDateChange = () => {} }) => {
 
   const handleDateSelect = (date) => {
     setSelectedDate(date);
-    onDateChange(date);
+
+    const originalDate = new Date(date);
+
+    const iso = originalDate.toISOString().replace('Z', '+00:00');
+
+    onDateChange(iso);
     setIsOpen(false);
   };
 

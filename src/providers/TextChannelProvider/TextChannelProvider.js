@@ -1,13 +1,15 @@
 
 import React from "react";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { useSocket } from "../../context/SocketContext"
 import { fetchMessages } from "../../features/TextChannel/Thunks/fetchMessages";
-import { addMessage, clearTextChannelState, removeMessage, setCurrentTextChannel } from "../../features/TextChannel/textChannelSlice";
+import { addMessage, clearTextChannelState, removeMessage, setCurrentTextChannel, updateMessage } from "../../features/TextChannel/textChannelSlice";
 
 export const TextChannelProvider = ({children, channel}) => {
+
+    const { server_id } = useSelector(state => state.serverDetailsSlice);
 
     const dispatch = useDispatch();
 
@@ -31,9 +33,11 @@ export const TextChannelProvider = ({children, channel}) => {
 
         if (!socket) return;
 
+        if (!server_id) return;
+
         const handleFetchMessages = () => {
 
-            dispatch(fetchMessages({channel_id: channel}));
+            dispatch(fetchMessages({channel_id: channel, server_id}));
 
         }
 
@@ -47,11 +51,17 @@ export const TextChannelProvider = ({children, channel}) => {
             dispatch(removeMessage(data));
         }
 
+        const handleUpdateMessage = (data) => {
+            dispatch(updateMessage(data));
+        }
+
         socket.on('connect', handleFetchMessages);
 
         socket.on(`new message to ${channel}`, handleNewMessage);
 
         socket.on(`delete message in ${channel}`, handleDeleteMessage);
+
+        socket.on(`update message in ${channel}`, handleUpdateMessage);
 
         handleFetchMessages();
 
@@ -62,11 +72,13 @@ export const TextChannelProvider = ({children, channel}) => {
             socket.off(`new message to ${channel}`, handleNewMessage);
 
             socket.off(`delete message in ${channel}`, handleDeleteMessage);
+
+            socket.off(`update message in ${channel}`, handleUpdateMessage);
             
         }
 
 
-    }, [channel, socket, dispatch])
+    }, [channel, socket, dispatch, server_id])
 
     return (
         <>
