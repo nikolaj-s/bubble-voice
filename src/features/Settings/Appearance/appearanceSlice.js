@@ -8,6 +8,8 @@ const appearanceSlice = createSlice({
     reducers: {
         toggleAppearanceSetting: (state, action) => {
             state[action.payload] = !state[action.payload]
+
+            localStorage.setItem(action.payload, JSON.stringify(state[action.payload]));
         }
     }
 })

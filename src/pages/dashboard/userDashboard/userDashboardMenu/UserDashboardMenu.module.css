@@ -1,0 +1,13 @@
+.container {
+    display: flex; /* Ensures flex shrinking applies */
+    flex-direction: column; /* Stack elements */
+    width: calc(100% - 10px);
+    padding: 5px;
+    gap: 5px;
+    max-height: calc(100vh - 85px); /* Ensures it respects the viewport */
+    overflow-y: auto;
+    overflow-x: clip;
+    flex-grow: 1; /* Allows it to expand */
+    flex-shrink: 1; /* Ensures it shrinks when needed */
+    min-height: 0; /* Prevents overflow issues */
+}

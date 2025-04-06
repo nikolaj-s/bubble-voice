@@ -1,0 +1,11 @@
+.container {
+    display: grid;
+    border-top-left-radius: 20px;
+    grid-template-columns: 225px minmax(200px, 1fr) 225px;
+    gap: 1px;
+}
+
+.container section {
+    width: 100%;
+    background-color: var(--primary-color);
+}

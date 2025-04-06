@@ -10,16 +10,14 @@ import { useSelector } from 'react-redux';
 
 import { selectServerBanner } from '../../features/ServerDetails/serverDetailsSlice';
 
-import { motion} from 'framer-motion';
-
-import { UserBar } from './users/UserBar';
-
 import { Channels } from './channels/Channels';
 
-import { Outlet, Route, Routes } from 'react-router';
+import { Outlet } from 'react-router';
 
 import { ControlBar } from '../../components/ControlBar/ControlBar';
 import { TextChannelOverlay } from './channel/TextChannelOverlay/TextChannelOverlay';
+import { Users } from './users/Users';
+import { ServerLayoutWrapper } from '../../components/ui/Wrappers/ServerlayoutWrapper/ServerLayoutWrapper';
 
 export const Server = () => {
 
@@ -30,45 +28,30 @@ export const Server = () => {
     const {currentTextChannel} = useSelector(state => state.textChannelSlice);
 
     return (
-        <ServerDetailsProvider>
-
-            <motion.section 
-            key="channels"
-            initial={{opacity: 0}}
-            animate={{opacity: 1, y: 0}}
-            exit={{opacity: 0}}
-            transition={{duration: 0.2}}
-            className={styles.sectionOne}
-            style={{
-                gridTemplateRows: currentChannel?.channel_type === 'voice' ? '80px minmax(0px, 1fr) 110px' : '80px minmax(0px, 1fr) 65px'
-            }}
-            >
-                <Banner image={banner} />
-                <Channels currentChannel={currentChannel} />
-                <ControlBar inChannel={currentChannel?.channel_type === 'voice'} />
-            </motion.section>
-            <motion.section 
-            key="server-dash"
-            initial={{opacity: 0}}
-            animate={{opacity: 1, y: 0}}
-            exit={{opacity: 0}}
-            transition={{duration: 0.2}}
-            className={styles.sectionTwo}>
-               <Outlet  />
-               {currentTextChannel && currentChannel?.channel_type === 'voice' && currentChannel.channel_id !== currentTextChannel && (
-                <TextChannelOverlay />
-               )}
-            </motion.section>
-            <motion.section 
-            key="users"
-            initial={{opacity: 0}}
-            animate={{opacity: 1, y: 0}}
-            exit={{opacity: 0}}
-            transition={{duration: 0.2}}
-            className={styles.sectionThree}>
-                <UserBar />
-            </motion.section>
-            
-        </ServerDetailsProvider>
+        <ServerLayoutWrapper>
+            <ServerDetailsProvider>
+                    <section 
+                    className={styles.sectionOne}
+                    style={{
+                        gridTemplateRows: currentChannel?.channel_type === 'voice' ? '80px minmax(0px, 1fr) 110px' : '80px minmax(0px, 1fr) 65px'
+                    }}
+                    >
+                        <Banner image={banner} />
+                        <Channels currentChannel={currentChannel} />
+                        <ControlBar key={'control-bar'} inChannel={currentChannel?.channel_type === 'voice'} />
+                    </section>
+                    <section 
+                    className={styles.sectionTwo}>
+                    <Outlet  />
+                    {currentTextChannel && currentChannel?.channel_type === 'voice' && currentChannel.channel_id !== currentTextChannel && (
+                        <TextChannelOverlay />
+                    )}
+                    </section>
+                    <section 
+                    className={styles.sectionThree}>
+                        <Users />
+                    </section>
+            </ServerDetailsProvider>
+        </ServerLayoutWrapper>
     )
 }

@@ -1,33 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = () => {
-    try {
-        const saved = JSON.parse(localStorage.getItem('disableNsfwBlur'));
-
-        return {
-            safeSearchDisabled: false,
-            disableNsfwBlur: saved
-        }
-    } catch (error) {
-        return {
-            safeSearchDisabled: false,
-            disableNsfwBlur: false
-        }
-    }
-}
+import { initialState } from "./State/contentState";
 
 const contentSettingsSlice = createSlice({
     name: "contentSettingsSlice",
     initialState,
     reducers: {
-        toggleDisableNsfwBlur: (state, action) => {
-            state.disableNsfwBlur = action.payload;
+        toggleContentState: (state, action) => {
+            state[action.payload] = !state[action.payload];
 
-            localStorage.setItem('disableNsfwBlur', state.disableNsfwBlur);
+            localStorage.setItem(action.payload, JSON.stringify(state[action.payload]))
         }
     }
 })
 
-export const { toggleDisableNsfwBlur } = contentSettingsSlice.actions; 
+export const { toggleContentState } = contentSettingsSlice.actions; 
 
 export default contentSettingsSlice.reducer;

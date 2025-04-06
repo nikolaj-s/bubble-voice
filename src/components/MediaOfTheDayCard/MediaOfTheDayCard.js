@@ -4,6 +4,7 @@ import { Image, Video, Camera } from 'lucide-react';
 import styles from './MediaOfTheDayCard.module.css';
 
 const MediaOfTheDayCard = ({ title, query, tags, mediaUrl, type = 'image' }) => {
+  
   const Icon = type === 'video' ? Video : type === 'camera' ? Camera : Image;
 
   return (

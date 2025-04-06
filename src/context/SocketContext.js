@@ -81,13 +81,16 @@ export const SocketProvider = ({ children }) => {
 
         return <DashboardSkeleton />
 
+    } else {
+        
+        return (
+            <SocketContext.Provider value={socket}>
+                {children}
+            </SocketContext.Provider>
+        );
     }
 
-    return (
-        <SocketContext.Provider value={socket}>
-            {children}
-        </SocketContext.Provider>
-    );
+    
 };
 
 export const useSocket = () => {

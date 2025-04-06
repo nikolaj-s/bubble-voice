@@ -13,6 +13,7 @@ import { setExpandedImage } from '../../../features/Media/ExpandedImage/expanded
 import IconButton from '../../ui/Buttons/IconButton/IconButton';
 import { Ellipsis } from 'lucide-react';
 import { triggerContext } from '../../../lib/services/helperFunctions';
+import VideoPlayer from '../../ui/Video/VideoPlayer/VideoPlayer';
 
 export const MessageItem = ({message, prevMessage = {}, loading, users = {}}) => {
 
@@ -76,7 +77,15 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}}) =>
                             <ImageComponent src={message.image} />
                         </NsfwWrapper>
                     </div>
-                    : null}
+                    : 
+                    message.video ?
+                    <div className={styles.imageBlock}>
+                        <NsfwWrapper nsfw={message}>
+                            <VideoPlayer src={message.video} />
+                        </NsfwWrapper>
+                    </div>
+                    :
+                    null}
                     {!message.image  && !message.video && !message.link_preview && (<LinkComponent link={message.link} />)}
                     <LinkPreview preview={message.link_preview} /> 
                 </div>

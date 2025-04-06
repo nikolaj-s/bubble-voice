@@ -1,6 +1,6 @@
-import { FilePenLine, ImageDown, Link, Pin, PinOff, Plus, Send, Trash2, Unplug } from "lucide-react";
+import { Edit2, FilePenLine, ImageDown, Link, Pin, PinOff, Plus, Send, Trash2, Unplug, UserPen, Video } from "lucide-react";
 import { useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch,} from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { copyToClipboard, downloadImage } from "../../lib/services/helperFunctions";
 import { deleteMessage } from "../../features/TextChannel/Thunks/deleteMessage";
@@ -261,7 +261,7 @@ export const useContextMenuOptions = () => {
 
                 if (permissions.user_can_assign_server_groups) {
                     options.push({
-                        label: "Assign Permissions",
+                        label: "Manage User",
                         onClick: () => {
 
                         },
@@ -271,6 +271,27 @@ export const useContextMenuOptions = () => {
 
             }
 
+            if (data.controlBar) {
+
+                options.push({
+                    label: "Preview Webcam",
+                    icon: <Video color="var(--text-color)"/>,
+                    type: "button",
+                    onClick: () => {
+                        dispatch(setOverlay('webcamOverlay'))
+                    }
+                })
+
+                options.push({
+                    label: "Edit Account",
+                    icon: <UserPen color="var(--text-color)" />,
+                    type: "button",
+                    onClick: () => {
+                        setSearchParams({section: 'account'});
+                        dispatch(setOverlay("settings"));
+                    }
+                })
+            }
 
 
             return options;

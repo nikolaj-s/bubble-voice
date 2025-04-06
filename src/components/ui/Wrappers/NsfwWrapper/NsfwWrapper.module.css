@@ -20,6 +20,10 @@
     gap: 5px;
 }
 
+.filter h4 {
+    margin: 0px;
+}
+
 .filter p {
     font-size: 12px;
     text-align: center;

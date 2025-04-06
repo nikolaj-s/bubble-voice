@@ -7,26 +7,12 @@
   max-height: 100svh;
 }
 
-/* Side Navigation */
-
 /* Main Content Area */
 .wrapper {
   display: grid;
   grid-template-rows: 40px 1fr; /* Top Nav (60px), 3 equal sections */
 }
-.mainContent {
-  display: grid;
-  
-  border-top-left-radius: 20px;
 
-  grid-template-columns: 225px minmax(200px, 1fr) 225px;
-  gap: 1px;
-}
 
-.mainContent section {
-
-  width: 100%;
-  background-color: var(--primary-color);
-}
 
 

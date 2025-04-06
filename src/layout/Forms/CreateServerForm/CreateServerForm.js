@@ -40,13 +40,12 @@ export const CreateServerForm = () => {
             <ImageDropZone width={320} height={200} onImageChange={setBanner}/>
             <Label label='Bubble Name:' />
             <TextInput placeholder={"Name"} type='text' value={name} onChange={setName} />
-            <Label label='Bubble Password: ' />
+            <PasswordRequirements password={password} />
             <TextInput placeholder={"Password"}  value={password} onChange={setPassword} type='password' />
             
             <Label label="Confirm Password" />
             <TextInput placeholder={'Confirm Password'} value={confirmPassword} onChange={setConfirmPassword} type='password' />
-            <PasswordRequirements password={password} />
- 
+            
             {loading ? <SpinnerLoading /> : null}
             {error ? <TextLabelError label='Error:' error={error} /> : null}
             <TextButton action={handleCreateServer} title='Create'  />

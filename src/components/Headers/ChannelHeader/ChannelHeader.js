@@ -42,9 +42,9 @@ const ChannelHeader = ({ channel_name, channel_description, channel_type, channe
 };
 
 ChannelHeader.propTypes = {
-  channel_name: PropTypes.string.isRequired,
-  channel_description: PropTypes.string.isRequired,
-  channel_type: PropTypes.string.isRequired,
+  channel_name: PropTypes.string,
+  channel_description: PropTypes.string,
+  channel_type: PropTypes.string,
   channel_icon: PropTypes.string,
 };
 

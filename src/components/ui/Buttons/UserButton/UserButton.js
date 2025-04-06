@@ -3,11 +3,11 @@ import { motion } from "framer-motion";
 import styles from "./UserButton.module.css";
 import { ImageComponent } from "../../Image/Image";
 
-const UserButton = ({ user_id, user_image, display_name, status, onClick = () => {}, maxWidth, user }) => {
+const UserButton = ({ user_id, user_image, display_name, status, onClick = () => {}, maxWidth, user, controlBar }) => {
     
     return (
         <motion.button
-        data-context={JSON.stringify({...user, type: 'user'})}
+        data-context={controlBar ? null : JSON.stringify({...user, type: 'user'})}
         className={styles.userButton}
         onClick={() => onClick(user_id)}
         whileHover={{ scale: 1.05, opacity: 1 }}

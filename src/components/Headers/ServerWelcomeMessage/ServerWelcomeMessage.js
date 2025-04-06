@@ -10,7 +10,7 @@ const ServerWelcomeMessage = ({
   server_banner,
 }) => {
   // Use the provided welcome message or fallback to a default message.
-  const welcomeMessage = `Welcome ${display_name} to ${server_name}`;
+  const welcomeMessage = `Welcome ${display_name || ''} to ${server_name || 'Bubble'}`;
 
   return (
     <div className={styles.serverWelcomeMessage}>
@@ -30,8 +30,8 @@ const ServerWelcomeMessage = ({
 };
 
 ServerWelcomeMessage.propTypes = {
-  display_name: PropTypes.string.isRequired,
-  server_name: PropTypes.string.isRequired,
+  display_name: PropTypes.string,
+  server_name: PropTypes.string,
   server_welcome_message: PropTypes.string,
   server_banner: PropTypes.string,
 };

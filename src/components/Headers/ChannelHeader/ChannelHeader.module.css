@@ -3,7 +3,7 @@
   align-items: center;
   gap: 5px;
   width: calc(100% - 10px);
-  padding: 0px 10px 0px 0px;       /* Ensure header takes full available width */
+  padding: 0px 5px 0px 5px;       /* Ensure header takes full available width */
   overflow: hidden;  /* Hide any overflow */
   min-width: 0;      /* Allow flex children to shrink */
 }

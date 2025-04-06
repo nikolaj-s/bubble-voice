@@ -1,5 +1,6 @@
 .container {
     position: relative;
+    cursor: pointer;
 }
 
 .wrapper {

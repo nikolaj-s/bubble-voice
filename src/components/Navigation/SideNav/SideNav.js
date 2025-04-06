@@ -12,6 +12,7 @@ import { setOverlay } from '../../../features/Overlay/overlaySlice';
 import { Plus, Settings } from 'lucide-react';
 import { PillSpacer } from '../../ui/Spacers/PillSpacer/PillSpacer';
 import IconButton from '../../ui/Buttons/IconButton/IconButton';
+import { resetServerDetails } from '../../../features/ServerDetails/serverDetailsSlice';
 
 export const SideNav = () => {
 
@@ -28,6 +29,7 @@ export const SideNav = () => {
     }
 
     const handleReturnToDashBoard = () => {
+        dispatch(resetServerDetails())
         navigate('/dashboard')
     }
 

@@ -36,9 +36,15 @@ export const ControlBar = ({inChannel = false}) => {
         navigate(`/dashboard/server/${serverID}`)
     }
 
+    const openQuickSettings = () => {
+        dispatch(setOverlay('settingsQuickMenu'));
+    }
+
     return (
         <>
-        <div className={styles.wrapper}>
+        <div
+        data-context={JSON.stringify({type: 'controlBar'})}
+        className={styles.wrapper}>
             {inChannel ?
             <div className={styles.channelControlWrapper}>
                 <IconButton 
@@ -68,6 +74,7 @@ export const ControlBar = ({inChannel = false}) => {
             : null}
             <div className={styles.container} >
                 <UserButton 
+                controlBar={true}
                 onClick={() => {dispatch(setOverlay('userQuickMenu'))}}
                 maxWidth={'calc(100% - 65px)'} 
                 {...account} />
@@ -105,7 +112,7 @@ export const ControlBar = ({inChannel = false}) => {
                     <IconButton 
                     title={"Quick Options"}
                     Icon={<Settings2 color='var(--text-color)' />}
-
+                    onClick={openQuickSettings}
                     />
                 </div>
             </div>

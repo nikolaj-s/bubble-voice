@@ -8,17 +8,24 @@ import { selectActiveOverlay, closeOverlay, setOverlay } from "../../features/Ov
 
 import { Search } from "../Overlays/Search/Search";
 
-import { CreateServer } from "../../pages/createServer/CreateServer";
+import { CreateServer } from "../Overlays/createServer/CreateServer";
+
 import { ServerSettings } from "../../pages/serverSettings/ServerSettings";
+
 import { Settings } from "../../pages/settings/settings";
+
 import { JoinServer } from "../../pages/joinServer/joinServer";
+
 import { ExpandedImage } from "../Overlays/ExpandedImage/ExpandedImage";
 
 import { OverlayCloseButton } from "../../components/ui/Buttons/OverlayCloseButton/OverlayCloseButton";
+
 import { UserQuickMenu } from "../Overlays/UserQuickMenu/UserQuickMenu";
 
 // hooks
 import useKeyupListener from "../../hooks/useKeyupListener";
+import { SettingsQuickMenu } from "../Overlays/SettingsQuickMenu/SettingsQuickMenu";
+import { WebcamOverlay } from "../Overlays/WebcamOverlay/WebcamOverlay";
 
 const overlayComponents = {
   search: Search,
@@ -27,7 +34,9 @@ const overlayComponents = {
   settings:Settings,
   joinServer: JoinServer,
   expandImage: ExpandedImage,
-  userQuickMenu: UserQuickMenu
+  userQuickMenu: UserQuickMenu,
+  settingsQuickMenu: SettingsQuickMenu,
+  webcamOverlay: WebcamOverlay
 };
 
 export const Overlay = ({ children }) => {

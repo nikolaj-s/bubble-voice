@@ -62,7 +62,7 @@
 
 /* Fixed Sections (250px width) */
 .fixedSection {
-  width: 200px;
+  width: 225px;
   background-color: var(--secondary-color);
   animation: pulse 1.5s infinite ease-in-out;
 }

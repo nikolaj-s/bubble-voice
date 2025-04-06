@@ -110,7 +110,7 @@ export const ServerDetailsProvider = ({children}) => {
 
             socket.off('connect', handleFetchServerDetails);
 
-            dispatch(resetServerDetails());
+          //  dispatch(resetServerDetails());
         
         }
 
@@ -125,7 +125,7 @@ export const ServerDetailsProvider = ({children}) => {
             timer = setTimeout(() => {
 
                 toggleShowLoading(true)
-            }, 200)
+            }, 2000)
         } else {
             clearTimeout(timer);
             toggleShowLoading(false);
@@ -140,21 +140,17 @@ export const ServerDetailsProvider = ({children}) => {
 
         return <></>
 
-    } else if (status === 'loading') {
+    } else if (status === 'loading' && showLoading) {
 
         return showLoading ? <DashboardSkeleton key="dashboard-loader" alt={true} /> : null
 
-    } else if (status === 'complete') {
+    } else {
 
         return (
             <>
                 {children}
             </>
         )
-    } else {
-
-        return <></>
-
     }
     
 }

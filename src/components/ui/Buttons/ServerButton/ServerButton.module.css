@@ -9,9 +9,7 @@
   display: flex;
   align-items: center;
   left: 0;
-  flex-shrink: 0;
   float: right;
-  flex-shrink: 0;
   pointer-events: auto;
 }
 
@@ -20,7 +18,7 @@
 }
 
 .server-button-container:hover {
-  scale: 1.05;
+  scale: 1.02;
 }
 
 
@@ -33,7 +31,6 @@
   overflow: hidden;
   object-fit: cover;
   transition: 0.2s;
-  flex-shrink: 0;
   width: 60px;
   display: flex;
   justify-content: center;

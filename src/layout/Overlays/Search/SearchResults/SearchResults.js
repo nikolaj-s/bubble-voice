@@ -2,7 +2,7 @@ import React from 'react';
 
 import styles from './SearchResults.module.css';
 
-import { ImageGrid } from './ImageGrid/ImageGrid';
+import { ImageResults } from './ImageResults/ImageResults';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -44,7 +44,7 @@ export const SearchResults = ({results = [], loading = false, filter, searchHist
                 search={handleSearchFromHistory}
                 deleteItem={handleDeleteSearchHistoryItem} 
                 searchHistory={searchHistory} />
-                <ImageGrid images={results} />
+                <ImageResults images={results} />
                 </>
                 :
                 <>

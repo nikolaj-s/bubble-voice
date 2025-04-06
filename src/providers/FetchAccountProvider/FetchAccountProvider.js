@@ -1,11 +1,14 @@
 import React, { useEffect } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
+
 import { useNavigate } from "react-router-dom";
+
 import { fetchAccount } from "../../features/Account/Thunks/fetchAccount";
 
 import DashboardSkeleton from "../../components/ui/Loading/DashBoardSkeleton/DashBoardSkeleton";
+
 import { selectAccount, selectAccountError } from "../../features/Account/accountSlice";
-import { fetchDevices } from "../../features/Settings/Devices/deviceSlice";
 
 const FetchAccountProvider = ({ children }) => {
 
@@ -21,7 +24,6 @@ const FetchAccountProvider = ({ children }) => {
 
     useEffect(() => {
         try {
-            dispatch(fetchDevices());
             
             if (!token) return;
 
