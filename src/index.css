@@ -7,6 +7,24 @@
   animation: fadein 0.420s;
   
 }
+
+html, body {
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100svh;
+}
+
+button {
+  touch-action: manipulation;
+}
+
 html {
   scroll-behavior: smooth;
   background-color: rgb(21, 21, 21);

@@ -4,7 +4,7 @@
   grid-template-columns: 75px 1fr; /* Side Nav (250px) + Main Content (1fr) */
   grid-template-rows: 1fr; /* Top Nav (auto height) + Content (rest of the space) */
   height: var(--app-height); /* Full height */
-  max-height: 100svh;
+  height: 100svh;
 }
 
 /* Main Content Area */
@@ -13,6 +13,16 @@
   grid-template-rows: 40px 1fr; /* Top Nav (60px), 3 equal sections */
 }
 
+@media screen and (max-width: 730px) {
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    margin-top: 55px;
+    height: calc(100vh - 55px);
+  }
 
-
+  .wrapper {
+    grid-template-rows: 1fr;
+  }
+}
 

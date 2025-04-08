@@ -9,7 +9,7 @@ export const AbsoluteContentWrapper = ({children}) => {
         width: '100%',
         height: '100%',
         backgroundColor: 'var(--primary-color)',
-        zIndex: 10
+        zIndex: 9
     }}>
         {children}
     </div>

@@ -29,8 +29,6 @@
     scale: 0.98;
   }
   
-
-
   .active {
     background-color: var(--secondary-color);
     cursor: default;
@@ -51,3 +49,8 @@
     white-space: nowrap;
   }
   
+  @media screen and (max-width: 730px) {
+    .navButton {
+      height: 45px;
+    }
+  }

@@ -2,21 +2,34 @@ import React from "react";
 import { useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./MenuWrapper.module.css";
+import IconButton from "../../Buttons/IconButton/IconButton";
+import { Menu, X } from "lucide-react";
 
 const MenuWrapper = ({ navItems, children, permissions }) => {
+
+  const [mobileMenuOpen, toggleMobileMenuOpen] = React.useState(false);
   
   const [searchParams, setSearchParams] = useSearchParams();
 
   const activeSection = children[searchParams.get("section")] ? searchParams.get("section") : navItems[0].key;
 
   const handleNavClick = (key) => {
+
+    toggleMobileMenuOpen(false);
+
     setSearchParams({ section: key });
+
   };
 
   return (
-    <div className={styles.cardWrapper}>
+    <div className={`${styles.cardWrapper} ${mobileMenuOpen ? styles.menuOpen : ''}`}>
       {/* Sidebar Navigation */}
-      <div className={styles.sidebar}>
+      <div className={`${styles.sidebar} `}>
+        <IconButton 
+        className={styles.mobileMenuButton}
+        Icon={mobileMenuOpen ? <X color="var(--text-color)" /> : <Menu color="var(--text-color)" />}
+        onClick={() => {toggleMobileMenuOpen(!mobileMenuOpen)}}
+        />
         {navItems.map((item) => (
           <motion.button
             key={item.key}
@@ -31,7 +44,7 @@ const MenuWrapper = ({ navItems, children, permissions }) => {
       </div>
 
       {/* Right Content Area with Animation */}
-      <div className={styles.contentArea}>
+      <div onClick={() => {toggleMobileMenuOpen(false)}} className={styles.contentArea}>
         <AnimatePresence mode="wait">
           <motion.div
             key={activeSection}

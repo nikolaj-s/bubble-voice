@@ -1,0 +1,44 @@
+/* SearchButton.module.css */
+.searchButton {
+    width: 100px !important;
+}
+.searchWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: solid 1px var(--accent-color);
+    width: 98px;
+    border-radius: 5px;
+    padding: 0 5px;
+    height: 28px;
+    gap: 10px;
+  }
+  
+  .searchText {
+    margin: 0;
+    padding: 0;
+    opacity: 0.5;
+    color: var(--text-color);
+  }
+  
+  .searchIcon {
+    width: 20px !important;
+  }
+  
+  @media screen and (max-width: 730px) {
+    .searchWrapper {
+        width: auto;
+        border: none;
+    }
+    .searchText {
+        display: none;
+    }
+    .searchButton {
+        width: auto !important;
+        
+    }
+
+    .searchIcon {
+      width: auto !important;
+    }
+  }

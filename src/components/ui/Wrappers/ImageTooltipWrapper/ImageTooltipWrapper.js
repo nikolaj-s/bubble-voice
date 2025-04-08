@@ -19,6 +19,7 @@ export const ImageTooltipWrapper = ({image, children, style = {width: '100%', he
 
     return (
         <div 
+        id={image.src}
         style={style}
         onClick={expand}
         className={styles.container}

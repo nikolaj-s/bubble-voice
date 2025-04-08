@@ -14,8 +14,11 @@ import IconButton from '../../ui/Buttons/IconButton/IconButton';
 import { Ellipsis } from 'lucide-react';
 import { triggerContext } from '../../../lib/services/helperFunctions';
 import VideoPlayer from '../../ui/Video/VideoPlayer/VideoPlayer';
+import { LongPressGestureWrapper } from '../../ui/Gestures/LongPressGestureWrapper';
 
 export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inSearch = false}) => {
+
+    const timeoutRef = React.useRef();
 
     const dispatch = useDispatch();
 
@@ -30,12 +33,25 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
     }
 
     const openCtx = (e) => {
+        console.log(e)
         triggerContext(e, `message-id-${message._id}`)
     }
+
+    const handleTouchStart = (e) => {
+        timeoutRef.current = setTimeout(() => {
+          openCtx(e);
+        }, 600); // long press delay (ms)
+      };
+    
+      const handleTouchEnd = () => {
+        clearTimeout(timeoutRef.current);
+      };
+    
 
     return (
         <>
             {isDifferentDay && inSearch && (<Spacer date={message.formattedDate} />)}
+            <LongPressGestureWrapper onTouchContext={openCtx}>
             <div 
             id={`message-id-${message._id}`}
             data-context={JSON.stringify({...message, type: 'message', inSearch})}
@@ -90,6 +106,7 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
                     <LinkPreview preview={message.link_preview} /> 
                 </div>
             </div>
+            </LongPressGestureWrapper>
             {isDifferentDay && !inSearch && (<Spacer date={message.formattedDate} />)}
         </>
     )

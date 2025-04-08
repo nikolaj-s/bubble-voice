@@ -11,6 +11,8 @@
     transition: opacity 0.2s;
     gap: 10px;
     z-index: 999;
+    width: 60px;
+    height: 60px;
 }
 
 .button p {
@@ -20,4 +22,17 @@
 
 .button:hover {
     opacity: 1;
+}
+
+@media screen and (max-width: 730px) {
+    .button {
+        top: auto;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .button p {
+        display: none;
+    }
 }

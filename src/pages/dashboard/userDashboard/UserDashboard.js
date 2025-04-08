@@ -9,14 +9,18 @@ import { Banner } from '../../../components/Banner/Banner'
 import { useSelector } from 'react-redux'
 import { Notices } from '../../../components/Notices/Notices'
 import { UserRecommendations } from './userRecommendations/UserRecommendations'
+import { CloseMobileMenu } from '../../../components/CloseMobileMenu/CloseMobileMenu'
 
 export const UserDashboard = () => {
 
     const {user_banner} = useSelector(state => state.accountSlice.account)
 
+    const {isChannelMenuOpen} = useSelector(state => state.mobileSlice)
+
     return (
         <UserDashboardLayoutWrapper>
-            <section className={styles.sectionOne}>
+            <CloseMobileMenu />
+            <section className={`${styles.sectionOne} ${isChannelMenuOpen ? styles.sectionOneMobile : ''}`}>
                 <Banner image={user_banner} />
                 <UserDashboardMenu />
                 <ControlBar key={'control-bar'} inChannel={false} />

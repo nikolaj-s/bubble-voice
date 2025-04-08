@@ -12,6 +12,8 @@ import { useContextMenuOptions } from "./getOptions";
 
 import ContextMenuButtonWithSubmenu from "../../components/ui/Buttons/ContextButtons/ContextMenuButtonWithSubMenu";
 
+import styles from './ContextMenuWrapper.module.css'
+
 const ContextMenu = ({ children }) => {
 
     const account = useSelector((state) => state.accountSlice.account);
@@ -87,7 +89,10 @@ const ContextMenu = ({ children }) => {
         <div>
             {children}
             {contextMenu?.visible && (
+                <>
+                <div className={styles.mobileContainer} />
                 <div
+                    className={styles.container}
                     ref={menuRef}
                     style={{
                         position: "fixed",
@@ -130,6 +135,7 @@ const ContextMenu = ({ children }) => {
                         </div>
                     ))}
                 </div>
+                </>
             )}
         </div>
     );

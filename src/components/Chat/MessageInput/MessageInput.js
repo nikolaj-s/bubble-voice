@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import imageCompression from "browser-image-compression";
 import styles from "./MessageInput.module.css";
 import IconButton from "../../ui/Buttons/IconButton/IconButton";
-import { Plus } from "lucide-react";
+import { ImageUp, Plus, Search, SearchIcon } from "lucide-react";
 import { MediaPreview } from "../MediaPreview/MediaPreview";
 import { useDispatch } from "react-redux";
 import { setFilter } from "../../../features/Search/searchSlice";
@@ -147,8 +147,8 @@ export const MessageInput = ({ value, setValue, setImage = () => {}, error, send
                         animate={{ opacity: 1, y: -5 }}
                         exit={{ opacity: 0, y: -10 }}
                     >
-                        <button onClick={() => fileInputRef.current.click()}>Upload Image</button>
-                        <button onClick={handleOpenSearchMedia}>Search Media</button>
+                        <button onClick={() => fileInputRef.current.click()}>Upload Image <ImageUp color="var(--text-color)" size={20} /></button>
+                        <button onClick={handleOpenSearchMedia}>Search Media <SearchIcon color="var(--text-color)" size={20} /></button>
                     </motion.div>
                 )}
             </AnimatePresence>

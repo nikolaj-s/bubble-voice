@@ -6,21 +6,20 @@
     align-items: center;
     justify-content: center;
     min-height: 150px;
+    min-width: 150px;
 }
 
 .imageWrapper {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
     max-height: 800px;
     height: 100%;
 }
 
 .image {
     width: 100%;
-    max-height: 800px;
-    height: 100%;
+    max-height: calc(100svh - 20px);
     object-fit: contain;
 }
 

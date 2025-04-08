@@ -8,6 +8,7 @@
     -webkit-app-region: drag;
     position: relative;
     z-index: 4;
+    width: 100%;
   }
 
   .header {
@@ -76,3 +77,44 @@
     height: 18px;
   }
   
+  .mobileButton {
+    display: none;
+  }
+
+  .mobileMenuOptions {
+    display: none;
+  }
+
+@media screen and (max-width: 730px) {
+
+  .mobileMenuOptions {
+    display: flex;
+    gap: 2px;
+  }
+
+  .hideOnMobile {
+    display: none;
+  }
+
+  .navbar {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    grid-template-columns: auto minmax(10px, 1fr) auto;
+    padding: 5px 0px;
+    height: 45px;
+    flex-wrap: nowrap;
+  }
+  .desktopUserButton {
+    display: none;
+  }
+
+  .mobileButton {
+    display: block;
+  }
+  .buttonGroup:nth-of-type(2) {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}

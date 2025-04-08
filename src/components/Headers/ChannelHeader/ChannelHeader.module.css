@@ -2,6 +2,7 @@
   display: flex;
   align-items: center;
   gap: 5px;
+  flex-grow: 4;
   width: calc(100% - 10px);
   padding: 0px 5px 0px 5px;       /* Ensure header takes full available width */
   overflow: hidden;  /* Hide any overflow */

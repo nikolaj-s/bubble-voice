@@ -9,6 +9,7 @@ import IconButton from "../IconButton/IconButton";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentTextChannel } from "../../../../features/TextChannel/textChannelSlice";
 import { triggerContext } from "../../../../lib/services/helperFunctions";
+import { toggleMobileMenu } from "../../../../features/Mobile/mobileSlice";
 
 const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, channel_type, server_id, channel}) => {
 
@@ -20,13 +21,17 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
 
     const {currentChannel} = useSelector(state => state.channelsSlice);
 
-    const {currentTextChannel} = useSelector(state => state.textChannelSlice)
+    const {currentTextChannel} = useSelector(state => state.textChannelSlice);
+
+    const {isChannelMenuOpen} = useSelector(state => state.mobileSlice);
 
     const navigate = useNavigate();
 
     const { channelID } = useParams();
 
     const openChannel = () => {
+
+        if (isChannelMenuOpen) dispatch(toggleMobileMenu('isChannelMenuOpen'));
 
         if (currentChannel?.channel_type === 'voice' && channel_type === 'text') {
 
@@ -76,7 +81,7 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
             backgroundColor: users.length > 0 ? 'var(--card-background-color)' : 'transparent'
         }}
         className={styles.channelContainer}>
-            <div 
+            <button 
                 onClick={openChannel}
                 className={`${styles.channelButton} ${active ? styles.active : ''}`} 
             onMouseEnter={() => {toggleHover(true)}}
@@ -106,7 +111,7 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
                 />
                 </div>
                 : null}
-            </div>
+            </button>
 
             {users.length > 0 && (
                 <motion.div 

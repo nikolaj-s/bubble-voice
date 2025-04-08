@@ -19,6 +19,8 @@ import { TextChannelOverlay } from './channel/TextChannelOverlay/TextChannelOver
 import { Users } from './users/Users';
 import { ServerLayoutWrapper } from '../../components/ui/Wrappers/ServerlayoutWrapper/ServerLayoutWrapper';
 
+import { CloseMobileMenu } from '../../components/CloseMobileMenu/CloseMobileMenu';
+
 export const Server = () => {
 
     const banner = useSelector(selectServerBanner);
@@ -27,28 +29,28 @@ export const Server = () => {
 
     const {currentTextChannel} = useSelector(state => state.textChannelSlice);
 
+    const {isUserMenuOpen, isChannelMenuOpen} = useSelector(state => state.mobileSlice);
+
     return (
         <ServerLayoutWrapper>
             <ServerDetailsProvider>
+                    <CloseMobileMenu />
                     <section 
-                    className={styles.sectionOne}
-                    style={{
-                        gridTemplateRows: currentChannel?.channel_type === 'voice' ? '80px minmax(0px, 1fr) 110px' : '80px minmax(0px, 1fr) 65px'
-                    }}
+                    className={`${styles.sectionOne} ${isChannelMenuOpen ? styles.sectionOneMobile : ''} ${currentChannel?.channel_type === 'voice' ? styles.inVoiceChannel : ''}`}
                     >
                         <Banner image={banner} />
                         <Channels currentChannel={currentChannel} />
                         <ControlBar key={'control-bar'} inChannel={currentChannel?.channel_type === 'voice'} />
                     </section>
                     <section 
-                    className={styles.sectionTwo}>
+                    className={`${styles.sectionTwo}`}>
                     <Outlet  />
                     {currentTextChannel && currentChannel?.channel_type === 'voice' && currentChannel.channel_id !== currentTextChannel && (
                         <TextChannelOverlay />
                     )}
                     </section>
                     <section 
-                    className={styles.sectionThree}>
+                    className={`${styles.sectionThree} ${isUserMenuOpen ? styles.sectionThreeMobile : ''}`}>
                         <Users />
                     </section>
             </ServerDetailsProvider>

@@ -67,4 +67,31 @@
     flex-shrink: 0;
     height: auto;
   }
+
+  .mobileMenuButton {
+    display: none;
+  }
   
+  @media screen and (max-width: 730px) {
+
+    .mobileMenuButton {
+      display: flex;
+    }
+
+    .cardWrapper {
+      grid-template-columns: 45px 1fr;
+    }
+
+    .navButton {
+      display: none;
+    }
+
+
+    .menuOpen {
+      grid-template-columns: 200px 1fr;
+    }
+
+    .menuOpen .navButton {
+      display: flex;
+    }
+  }

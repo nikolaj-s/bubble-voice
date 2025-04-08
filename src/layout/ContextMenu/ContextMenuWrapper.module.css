@@ -1,32 +1,25 @@
-.wrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    gap: 5px;
-    z-index: 9999;
+
+.mobileContainer {
+    display: none;
 }
 
-.contextMenu {
-    position: absolute;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-    list-style: none;
-    min-width: 120px;
-    z-index: 1000;
-    overflow: hidden;
+@media screen and (max-width: 730px) {
+    .container {
+        bottom: 0px !important;
+        left: 0px !important;
+        top: auto !important;
+        width: calc(100% - 10px);
+        padding-bottom: 35px !important;
+    }
 
-    padding: 10px;
-}
-
-.menuItem {
-    color: var(--text-color);
-    cursor: pointer;
-    font-family: var(--font-family);
-    transition: background-color 0.2s;
-    width: 100%;
-}
-
-.menuItem:hover {
-    background-color: var(--button-hover);
+    .mobileContainer {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 120;
+        background-color: rgba(0, 0, 0, 0.3);
+        width: 100%;
+        height: 100%;
+    }
 }

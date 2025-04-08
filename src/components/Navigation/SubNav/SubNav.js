@@ -2,8 +2,12 @@ import React from 'react';
 import { useNavigate, useLocation, } from 'react-router-dom';
 import styles from './SubNav.module.css';
 import { LineSpacer } from '../../ui/Spacers/LineSpacer/LineSpacer';
+import { useDispatch } from 'react-redux';
+import { toggleMobileMenu } from '../../../features/Mobile/mobileSlice';
 
 export const SubNav = ({basePath = '/dashboard', options = []}) => {
+
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -13,6 +17,10 @@ export const SubNav = ({basePath = '/dashboard', options = []}) => {
   const normalizePath = (path) => path.replace(/\/+$/, '');
 
   const currentPath = normalizePath(location.pathname);
+
+  const closeMobileMenu = () => {
+    dispatch(toggleMobileMenu())
+  }
 
   return (
     <nav className={styles.subNav}>
@@ -25,7 +33,7 @@ export const SubNav = ({basePath = '/dashboard', options = []}) => {
         return (
           <button
             key={option.label}
-            onClick={() => navigate(option.path)}
+            onClick={() => {closeMobileMenu(); navigate(option.path)}}
             className={`${styles.navButton} ${active ? styles.active : ''}`}
           >
             {option.icon}

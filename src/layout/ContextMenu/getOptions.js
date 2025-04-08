@@ -1,4 +1,4 @@
-import { Edit2, FilePenLine, ImageDown, Link, Pin, PinOff, Plus, Reply, Send, Trash2, Unplug, UserPen, Video } from "lucide-react";
+import { Edit2, FilePenLine, ImageDown, Link, Pin, PinOff, Plus, Reply, Send, Settings2, Trash2, Unplug, User2, UserPen, Users, Video } from "lucide-react";
 import { useCallback } from "react";
 import { useDispatch,} from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -11,6 +11,7 @@ import { setFilter, setQuery, setSimilarImageSrc } from "../../features/Search/s
 import { globalSearch } from "../../features/Search/Thunks/globalSearch";
 import { setChannelToEdit } from "../../features/editChannel/editChannelSlice";
 import { pinMessage } from "../../features/TextChannel/Thunks/pinMessage";
+import { toggleMobileMenu } from "../../features/Mobile/mobileSlice";
 
 export const useContextMenuOptions = () => {
 
@@ -301,6 +302,31 @@ export const useContextMenuOptions = () => {
                 })
             }
 
+
+            // mobile menu
+            if (data.mobileMenu) {
+
+                options.push({
+                    label: "Users",
+                    icon: <Users color="var(--text-color)" />,
+                    type: 'button',
+                    onClick: () => {
+                        dispatch(toggleMobileMenu('isUserMenuOpen'))
+                    }
+                })
+
+                options.push({
+                    label: "Bubble Settings",
+                    icon: <Settings2 />,
+                    type: "button",
+                    onClick: () => {
+                        dispatch(setOverlay('serverSettings'))
+                    }
+                })
+
+                
+
+            }
 
             return options;
         } catch (error) {

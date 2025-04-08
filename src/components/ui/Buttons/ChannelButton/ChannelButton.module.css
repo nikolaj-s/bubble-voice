@@ -2,6 +2,7 @@
     width: 100%;
     font-family: var(--font-family);
     border-radius: 8px;
+    touch-action: manipulation;
 }
 
 .channelButton {
@@ -13,7 +14,10 @@
     color: var(--text-color);
     cursor: pointer;
     transition: background 0.2s ease-in-out;
-    height: 25px;
+    border: none;
+    width: calc(100%);
+    height: 35px;
+    touch-action: manipulation;
 }
 
 .active {
@@ -69,4 +73,10 @@
     justify-self: flex-end;
     flex-shrink: 0;
     margin-left: auto;
+}
+
+@media screen and (max-width: 730px) {
+    .channelButton {
+        height: 40px;
+    }
 }

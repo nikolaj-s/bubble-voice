@@ -9,10 +9,12 @@
     --button-hover: #4c8b9e;
     --error-color: #e16b6b;
     --success-color: #76c7a5;
-    --font-family: "Inter", sans-serif,
+    --font-family: "Inter", sans-serif;
+    --mobile-width: 730px;
   }
 
 .App {
+    
     width: 100%;
     height: var(--app-height);
     position: relative;

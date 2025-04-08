@@ -13,32 +13,48 @@ const FloatingSearch = ({filter, filters = [], loading, setFilter = () => {}, se
     const input = document.getElementById('global-search');
 
     if (input) {
+      
       input.focus();
+
+      input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      
+    }
+
+  }
+
+  const blurInput = () => {
+    const input = document.getElementById('global-search');
+
+    if (input) {
+      input.blur();
     }
 
   }
 
   const handleSetFilter = (value) => {
 
-    setFilter(value)
-
-    focusInput();
+    setFilter(value);
   
   }
 
   React.useEffect(() => {
 
-    focusInput();
+    focusInput()
+  
 
   }, [])
 
   const handleSearch = (e) => {
+
 
     if (value.trim().length === 0) return;
 
     if (loading) return;
 
     if (e.keyCode === 13) {
+
+      blurInput();
 
       search();
     

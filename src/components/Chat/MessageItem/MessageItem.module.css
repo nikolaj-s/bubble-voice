@@ -32,7 +32,7 @@
   }
 
   .buttons {
-    display: none;
+    display: flex;
     align-items: center;
     position: absolute;
     top: 2px;
@@ -42,11 +42,6 @@
   .messageItem:hover {
     background-color: var(--background-color);
   }
-
-  .messageItem:hover .buttons {
-    display: flex;
-  }
-
   
   .userImageWrapper {
     display: flex;

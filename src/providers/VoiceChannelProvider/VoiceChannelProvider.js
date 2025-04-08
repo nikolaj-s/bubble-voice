@@ -77,7 +77,7 @@ export const VoiceChannelProvider = ({channel, children}) => {
 
     }, [socket, channel?.channel_id, dispatch, channelsStatus]);
 
-    if (loading) return <></>
+    if (loading || channelsStatus !== 'complete') return <></>
 
     if (error) return <ErrorCard message={error} />
 

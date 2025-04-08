@@ -23,7 +23,7 @@ export const ChannelProvider = ({children, overlay = false, channel_id_prop}) =>
 
     const [channelID, setChannelID] = React.useState(null);
 
-    const channelsStatus = useSelector(state => state.channelsSlice.status);
+ //   const channelsStatus = useSelector(state => state.channelsSlice.status);
 
     React.useEffect(() => {
 
@@ -43,7 +43,7 @@ export const ChannelProvider = ({children, overlay = false, channel_id_prop}) =>
 
         if (!socket) return;
 
-        if (channelsStatus !== 'complete') return;
+      //  if (channelsStatus !== 'complete') return;
 
         const handleFetchChannelDetails = async () => {
 
@@ -87,7 +87,7 @@ export const ChannelProvider = ({children, overlay = false, channel_id_prop}) =>
 
         }
 
-    }, [channelID, serverID, socket, dispatch, overlay, channelsStatus]) 
+    }, [channelID, serverID, socket, dispatch, overlay]) 
 
     React.useEffect(() => {
         let timer;
@@ -106,7 +106,7 @@ export const ChannelProvider = ({children, overlay = false, channel_id_prop}) =>
 
     }, [loading]);
 
-    if (loading || error) return (
+    if ((loading && showSpinner) || error) return (
         <div style={{
             width: '100%',
             height: '100%',

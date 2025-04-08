@@ -53,3 +53,9 @@
   opacity: 1;
   transform: translateX(0) translateY(0);
 }
+
+@media screen and (max-width: 730px) {
+  .tooltip {
+    display: none;
+  }
+}

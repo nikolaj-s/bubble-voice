@@ -13,6 +13,8 @@ import { Plus, Settings } from 'lucide-react';
 import { PillSpacer } from '../../ui/Spacers/PillSpacer/PillSpacer';
 import IconButton from '../../ui/Buttons/IconButton/IconButton';
 import { resetServerDetails } from '../../../features/ServerDetails/serverDetailsSlice';
+import { toggleMobileMenu } from '../../../features/Mobile/mobileSlice';
+import { CloseMobileMenu } from '../../CloseMobileMenu/CloseMobileMenu';
 
 export const SideNav = () => {
 
@@ -24,11 +26,15 @@ export const SideNav = () => {
 
     const servers = useSelector(selectServers);
 
+    const {isServerMenuOpen} = useSelector(state => state.mobileSlice);
+
     const handleSwitchServer = (server_id) => {
+        handleCloseMobileMenu();
         navigate(`/dashboard/server/${server_id}`)
     }
 
     const handleReturnToDashBoard = () => {
+        handleCloseMobileMenu();
         dispatch(resetServerDetails())
         navigate('/dashboard')
     }
@@ -69,8 +75,15 @@ export const SideNav = () => {
 
     }, [socket, servers])
 
+    const handleCloseMobileMenu = () => {
+        if (isServerMenuOpen) {
+            dispatch(toggleMobileMenu('isServerMenuOpen'))
+        }
+    }
+
     return (
-        <div className={`${styles.container} side-navigation-global`}>
+        <>
+        <div className={`${styles.container} side-navigation-global ${isServerMenuOpen ? styles.sideNavVisible : ''}`}>
             <div className={styles.logo}>
                 <IconButton 
                 onClick={handleReturnToDashBoard}
@@ -106,5 +119,8 @@ export const SideNav = () => {
                 </CircleButton>
             </div>
         </div>
+        <CloseMobileMenu />
+        </>
+
     )
 }

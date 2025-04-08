@@ -24,6 +24,8 @@ export const ChannelsProvider = ({children}) => {
 
         const handleFetchChannels = async () => {
 
+            dispatch(setChannelsStatus("loading"))
+
             await socket.request('fetch channels')
             .then(res => {
                 
