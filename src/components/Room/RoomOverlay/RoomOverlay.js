@@ -3,7 +3,7 @@ import React from 'react';
 
 import styles from '../Room.module.css';
 import IconButton from '../../ui/Buttons/IconButton/IconButton';
-import { Ellipsis, ImageMinus, VideoOff, Mic, MicOff, ScreenShare, ScreenShareOff, Unplug, Video, Volume2, VolumeOff } from 'lucide-react';
+import { Ellipsis, ImageMinus, VideoOff, Mic, MicOff, ScreenShare, ScreenShareOff, Unplug, Video, Volume2, VolumeX } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import { PillSpacer } from '../../ui/Spacers/PillSpacer/PillSpacer';
@@ -76,7 +76,7 @@ export const RoomOverlay = () => {
                         />
                     } Icon={
                     isAudioMuted ?
-                    <VolumeOff color='var(--text-color)' />
+                    <VolumeX color='var(--text-color)' />
                     :
                     <Volume2 color='var(--text-color)' />
                     } />

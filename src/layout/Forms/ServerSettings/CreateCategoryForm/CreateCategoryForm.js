@@ -6,7 +6,7 @@ import TextButton from '../../../../components/ui/Buttons/TextButton/TextButton'
 import { useDispatch, useSelector } from 'react-redux'
 import { NotAuthorized } from '../../../../components/Error/NotAuthorized/NotAuthorized'
 import { LoadingErrorFormWrapper } from '../../../../components/ui/Wrappers/LoadingErrorFormWrapper/LoadingErrorFormWrapper'
-import { createCategory } from '../../../../features/Channels/Thunks/createCategory'
+import { createCategory } from '../../../../features/Categories/Thunks/createCategory'
 
 export const CreateCategoryForm = ({permissions}) => {
 

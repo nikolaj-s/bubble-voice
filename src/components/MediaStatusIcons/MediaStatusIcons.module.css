@@ -1,0 +1,13 @@
+.statusRow {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-left: auto;
+  }
+  
+  .icon {
+    width: 20px;
+    height: 20px;
+    color: var(--text-color);
+  }
+  

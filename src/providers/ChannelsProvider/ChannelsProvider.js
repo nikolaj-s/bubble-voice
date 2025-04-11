@@ -2,7 +2,8 @@ import React from 'react'
 import { useSocket } from '../../context/SocketContext';
 import { useDispatch, useSelector } from 'react-redux';
 import ChannelButtonSkeleton from '../../components/ui/Loading/ChannelButtonSkeleton/ChannelButtonSkeleton';
-import { addCategory, addChannel, reOrderCategories, reOrderChannels, setCategories, setChannels, setChannelsStatus, updateChannelDetails, userJoinsChannel, userLeavesChannel } from '../../features/Channels/channelsSlice';
+import { addChannel, reorderChannels, setChannels, setChannelsStatus, updateCategoryofChannels, updateChannelDetails, userJoinsChannel, userLeavesChannel } from '../../features/Channels/channelsSlice';
+import { removeCategory, reorderCategories, setCategories, updateCategoryDetails, addCategory } from '../../features/Categories/categoriesSlice';
 
 export const ChannelsProvider = ({children}) => {
 
@@ -14,6 +15,8 @@ export const ChannelsProvider = ({children}) => {
 
     const {server_id} = useSelector(state => state.serverDetailsSlice);
 
+    const serverStatus = useSelector(state => state.serverDetailsSlice.status);
+
     const socket = useSocket();
 
     React.useEffect(() => {
@@ -22,13 +25,15 @@ export const ChannelsProvider = ({children}) => {
 
         if (!socket) return;
 
+        if (serverStatus !== 'complete') return;
+
         const handleFetchChannels = async () => {
 
             dispatch(setChannelsStatus("loading"))
 
             await socket.request('fetch channels')
             .then(res => {
-                
+                console.log(res)
                 if (res.channels) {
 
                     dispatch(setChannels(res.channels));
@@ -83,15 +88,26 @@ export const ChannelsProvider = ({children}) => {
         }
 
         const handleReOrderChannels = (data) => {
-            dispatch(reOrderChannels(data));
+            dispatch(reorderChannels(data));
         }
 
         const handleReOrderCategories = (data) => {
-            dispatch(reOrderCategories(data));
+            dispatch(reorderCategories(data));
         }
 
         const handleUpdateChannelDetails = (data) => {
             dispatch(updateChannelDetails(data));
+        }
+
+        const handleUpdateCategoryDetails = (data) => {
+            dispatch(updateCategoryDetails(data));
+        }
+
+        const handleRemoveCategory = (data) => {
+            console.log(data);
+            dispatch(removeCategory(data));
+
+            dispatch(updateCategoryofChannels(data));
         }
 
         socket.on('connect', handleFetchChannels);
@@ -110,6 +126,10 @@ export const ChannelsProvider = ({children}) => {
 
         socket.on(`update channel in ${server_id}`, handleUpdateChannelDetails);
 
+        socket.on(`update category in ${server_id}`, handleUpdateCategoryDetails);
+
+        socket.on(`delete category in ${server_id}`, handleRemoveCategory);
+
         handleFetchChannels();
 
         return () => {
@@ -126,11 +146,15 @@ export const ChannelsProvider = ({children}) => {
             socket.off(`update category order for ${server_id}`, handleReOrderCategories);
 
             socket.off(`update channel in ${server_id}`, handleUpdateChannelDetails);
-            
+
+            socket.off(`update category in ${server_id}`, handleUpdateCategoryDetails);
+
+            socket.off(`delete category in ${server_id}`, handleRemoveCategory);
+
             dispatch(setChannelsStatus("loading"));
         }
 
-    }, [socket, server_id, dispatch])
+    }, [socket, server_id, dispatch, serverStatus])
 
     if (loading) return [...Array(10)].map((_, key) => (<ChannelButtonSkeleton key={key} />))
 

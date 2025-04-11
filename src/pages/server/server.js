@@ -31,8 +31,10 @@ export const Server = () => {
 
     const {isUserMenuOpen, isChannelMenuOpen} = useSelector(state => state.mobileSlice);
 
+    const hideUsers = useSelector(state => state.appearanceSlice.hideUsers);
+
     return (
-        <ServerLayoutWrapper>
+        <ServerLayoutWrapper hideUsers={hideUsers}>
             <ServerDetailsProvider>
                     <CloseMobileMenu />
                     <section 
@@ -50,7 +52,7 @@ export const Server = () => {
                     )}
                     </section>
                     <section 
-                    className={`${styles.sectionThree} ${isUserMenuOpen ? styles.sectionThreeMobile : ''}`}>
+                    className={`${styles.sectionThree} ${isUserMenuOpen ? styles.sectionThreeMobile : ''} ${hideUsers ? styles.hideUsers : ''}`}>
                         <Users />
                     </section>
             </ServerDetailsProvider>

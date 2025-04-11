@@ -16,7 +16,9 @@
     position: relative;
 }
 
-
+.hideUsers {
+    display: none;
+}
 
 @media screen and (max-width: 730px) {
     

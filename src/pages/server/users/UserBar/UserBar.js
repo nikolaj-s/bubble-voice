@@ -25,7 +25,9 @@ export const UserBar = () => {
         // 1️⃣ Group users by server_group
         const newGroupedUsers = {};
         Object.values(users).forEach(user => {
-       
+
+            if (user.status.toLowerCase() === 'offline') return;
+
             if (!newGroupedUsers[user.server_group]) {
                 newGroupedUsers[user.server_group] = [];
             }
@@ -52,10 +54,16 @@ export const UserBar = () => {
                     <p className={styles.groupName}>{group.server_group_name} </p>
                     {/* Users in this group */}
                     {groupedUsers[groupId]?.map(user => (
-                        <UserButton {...user} user={user} key={user.user_id} />
+                        user.status?.toLowerCase() !== 'offline' && <UserButton {...user} user={user} key={user.user_id} />
                     ))}
                 </div>
             ))}
+            <div className={styles.groupContainer}>
+                <p className={styles.groupName}>Offline</p>
+                {Object.values(users).map(user => (
+                    user.status === 'offline' && <UserButton {...user} user={user} key={user.user_id} />
+                ))}
+            </div>
         </div>
     );
 };

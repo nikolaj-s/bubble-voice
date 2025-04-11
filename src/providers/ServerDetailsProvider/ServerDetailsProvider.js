@@ -90,11 +90,17 @@ export const ServerDetailsProvider = ({children}) => {
             }
         }
 
+        const setServerDisconnectStatus = () => {
+            dispatch(setServerDetailsStatus('disconnected'));
+        }
+
         socket.on(`update permission group for ${serverID}`, handlePermissionGroupUpdate);
 
         socket.on(`remove server group from ${serverID}`, handleRemoveServerGroup);
 
         socket.on(`update server details for ${serverID}`, handleServerDetailsUpdate);
+
+        socket.on('disconnect', setServerDisconnectStatus);
 
         socket.on('connect', handleFetchServerDetails);
 
@@ -109,6 +115,8 @@ export const ServerDetailsProvider = ({children}) => {
             socket.off(`update server details ${serverID}`, handleServerDetailsUpdate);
 
             socket.off('connect', handleFetchServerDetails);
+
+            socket.off('disconnect', setServerDisconnectStatus);
 
           //  dispatch(resetServerDetails());
         

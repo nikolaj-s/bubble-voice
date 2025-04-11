@@ -12,6 +12,7 @@ import { RoomOverlay } from './RoomOverlay/RoomOverlay';
 import { usePushToTalk } from '../../hooks/usePushToTalk';
 
 export const Room = () => {
+    
     const dispatch = useDispatch();
 
     const { users, channel_background } = useSelector(state => state.channelsSlice.currentChannel);
@@ -79,7 +80,8 @@ export const Room = () => {
     // Memoizing combinedUsers to update only when the length of consumers changes
     const combinedUsers = React.useMemo(() => {
         // If the length of consumers has changed, recalculate combinedUsers
-        
+        if (!users) return;
+
         const updatedUsers = users.map(user => {
             // Find all consumers that match the current user's user_id
             const userConsumers = user === account_id ? producers.get('webcam') ? [producers.get('webcam')] : [] : Array.from(consumers.values()).filter(consumer => consumer.user_id === user);
@@ -91,7 +93,7 @@ export const Room = () => {
         return updatedUsers;
         
     }, [users, consumers, producers]);
-
+console.log(users)
     return (
         <div className={styles.container}>
     

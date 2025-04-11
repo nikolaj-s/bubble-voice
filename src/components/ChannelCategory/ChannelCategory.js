@@ -19,6 +19,7 @@ export const Category = ({
   toggleDraggingCategory,
   moveCategory,
   marginBottom = null,
+  category
 }) => {
   const [collapse, toggleCollapse] = React.useState(false);
 
@@ -28,7 +29,7 @@ export const Category = ({
     try {
 
       const id = e.dataTransfer.getData("text");
-console.log(draggingCategory)
+
       if (draggingCategory) {
         if (!id) return;
         console.log(id, category_id);
@@ -95,11 +96,11 @@ console.log(draggingCategory)
 
   return (
     <div
-        
+        data-context={category_id === 'channels' ? null : JSON.stringify({...category, type: 'category'})}
         id={category_id}
-        
     >
       <div
+
         draggable={category_id === 'channels' ? false : true}
         onDragStart={onCategoryDragStart}
         onDragEnd={onCategoryDragEnd}

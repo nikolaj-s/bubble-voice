@@ -1,0 +1,20 @@
+.notice {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    translate: -50%;
+    z-index: 9999;
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    background-color: var(--error-color);
+    color: var(--text-color);
+  }
+  
+  .reconnected {
+    background-color: var(--success-color);
+  }
+  

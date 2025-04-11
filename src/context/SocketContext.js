@@ -8,11 +8,14 @@ import { API_URL } from '../lib/Validation';
 import DashboardSkeleton from '../components/ui/Loading/DashBoardSkeleton/DashBoardSkeleton';
 
 import { useNavigate } from 'react-router';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setConnectionState } from '../features/Connection/connectionSlice';
 
 const SocketContext = createContext();
 
 export const SocketProvider = ({ children }) => {
+
+    const dispatch = useDispatch();
 
     const navigate = useNavigate();
 
@@ -50,15 +53,22 @@ export const SocketProvider = ({ children }) => {
         socket.on('connect', () => {
             console.log('Connected to socket');
 
+            dispatch(setConnectionState('connected'));
+
             toggleLoading(false);
         });
 
         socket.on("duplicate_connection", (message) => {
-            alert("You have been disconnected due to duplicate connection");
+           
             socket.disconnect();
+
+            dispatch(setConnectionState('duplicate'));
         })
 
         socket.on('disconnect', (reason) => {
+
+            dispatch(setConnectionState('disconnected'));
+
             console.log('Disconnected from socket', reason);
         });
 

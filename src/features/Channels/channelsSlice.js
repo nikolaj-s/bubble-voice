@@ -1,32 +1,34 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createChannel } from "./Thunks/createChannel";
-import { createCategory } from "./Thunks/createCategory";
 
 const channelsSlice = createSlice({
     name: "channelsSlice",
     initialState: {
         channels: [],
-        categories: [],
         currentChannel: null,
         loading: false,
         status: "loading",
         error: false
     },
     reducers: {
-        addCategory: (state, action) => {
-            const existingCategory = state.categories.find(category => category.category_id === action.payload.category_id);
-            if (!existingCategory) {
-                state.categories.push(action.payload);
-            }
-        },
-        setCategories: (state, action) => {
-            state.categories = Array.isArray(action.payload) ? action.payload : [];
-        },
         addChannel: (state, action) => {
             const existingChannel = state.channels.find(channel => channel.channel_id === action.payload.channel_id);
             if (!existingChannel) {
                 state.channels.push(action.payload);
             }
+        },
+        updateCategoryofChannels: (state, action) => {
+
+            if (action.payload.category_id) {
+                state.channels = state.channels.map(channel => {
+                    if (channel.category === action.payload.category_id) {
+                        return {...channel, category: 'channels'}
+                    } else {
+                        return channel
+                    }
+                })
+            }
+
         },
         updateChannelDetails: (state, action) => {
             console.log(action.payload)
@@ -42,15 +44,7 @@ const channelsSlice = createSlice({
 
             }
         },
-        reOrderCategories: (state, action) => {
-            const sortOrder = action.payload.newOrder;
-
-            state.categories = state.categories.sort((a, b) => {
-                return sortOrder.indexOf(a.category_id) - sortOrder.indexOf(b.category_id);
-            })
-            
-        },
-        reOrderChannels: (state, action) => {
+        reorderChannels: (state, action) => {
             const sortOrder = action.payload.newOrder;
 
             state.channels = state.channels.sort((a, b) => {
@@ -121,6 +115,7 @@ const channelsSlice = createSlice({
         },
         setCurrentChannel: (state, action) => {
             state.currentChannel = action.payload;
+            console.log(action.payload)
         },
         clearCurrentChannel: (state,action) => {
             state.currentChannel = null;
@@ -141,26 +136,12 @@ const channelsSlice = createSlice({
             state.loading = false;
             state.error = false;
         })
-        builder.addCase(createCategory.pending, (state) => {
-            state.error = false;
-            state.loading = true;
-        })
-        builder.addCase(createCategory.rejected, (state, action) => {
-            state.error = action.payload;
-            state.loading = false;
-        })
-        builder.addCase(createCategory.fulfilled, (state) => {
-            state.error = false;
-            state.loading = false;
-        })
+        
     }
 })
 
 export const {
-    reOrderCategories, 
-    reOrderChannels, 
-    setCategories, 
-    addCategory, 
+    reorderChannels, 
     addChannel, 
     setChannels, 
     setCurrentChannel, 
@@ -168,7 +149,8 @@ export const {
     userLeavesChannel, 
     userJoinsChannel,
     updateChannelDetails,
-    setChannelsStatus
+    setChannelsStatus,
+    updateCategoryofChannels
 } = channelsSlice.actions;
 
 export default channelsSlice.reducer;

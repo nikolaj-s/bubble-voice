@@ -9,6 +9,7 @@ import { EditPermissionsForm } from '../../layout/Forms/ServerSettings/EditPermi
 import { EditPermissionGroupForm } from '../../layout/Forms/ServerSettings/EditPermissionGroupForm/EditPermissionGroupForm'
 import { EditChannelForm } from '../../layout/Forms/ServerSettings/EditChannelForm/EditChannelForm'
 import { UserManagementForm } from '../../layout/Forms/ServerSettings/UserManagementForm/UserManagementForm'
+import { EditCategoryForm } from '../../layout/Forms/ServerSettings/EditCategoryForm/EditCategoryForm'
 
 export const ServerSettings = ({close}) => {
 
@@ -29,7 +30,8 @@ export const ServerSettings = ({close}) => {
         security: <></>,
         editPermissionGroup: <EditPermissionGroupForm />,
         editChannel: <EditChannelForm />,
-        manageUsers: <UserManagementForm />
+        manageUsers: <UserManagementForm />,
+        editCategory: <EditCategoryForm />
     }
 
     return (

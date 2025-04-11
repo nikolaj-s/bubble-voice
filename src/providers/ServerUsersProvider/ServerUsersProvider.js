@@ -10,7 +10,7 @@ export const ServerUsersProvider = ({children}) => {
 
     const [showLoading, toggleShowLoading] = React.useState(false);
 
-    const {server_id: serverID} = useSelector(state => state.serverDetailsSlice);
+    const {server_id: serverID, status: serverStatus} = useSelector(state => state.serverDetailsSlice);
 
     const dispatch = useDispatch();
 
@@ -19,6 +19,8 @@ export const ServerUsersProvider = ({children}) => {
     React.useEffect(() => {
         try {
             if (!socket || !serverID) return;
+
+            if (serverStatus !== 'complete') return;
 
             const fetchUsers = async () => {
 
@@ -121,7 +123,7 @@ export const ServerUsersProvider = ({children}) => {
             console.log(error)
         }
 
-    }, [socket, dispatch, serverID])
+    }, [socket, dispatch, serverID, serverStatus])
 
     React.useEffect(() => {
 

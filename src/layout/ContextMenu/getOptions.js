@@ -1,4 +1,4 @@
-import { Edit2, FilePenLine, ImageDown, Link, Pin, PinOff, Plus, Reply, Send, Settings2, Trash2, Unplug, User2, UserPen, Users, Video } from "lucide-react";
+import { Edit2, FilePenLine, ImageDown, Link, Pin, PinOff, Plus, Reply, Send, Settings, Settings2, Trash2, Unplug, User2, UserPen, Users, Video } from "lucide-react";
 import { useCallback } from "react";
 import { useDispatch,} from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -12,6 +12,8 @@ import { globalSearch } from "../../features/Search/Thunks/globalSearch";
 import { setChannelToEdit } from "../../features/editChannel/editChannelSlice";
 import { pinMessage } from "../../features/TextChannel/Thunks/pinMessage";
 import { toggleMobileMenu } from "../../features/Mobile/mobileSlice";
+import { setSelectedCategory } from "../../features/Categories/categoriesSlice";
+import { triggerAlert } from "../../features/Alerts/alertsSlice";
 
 export const useContextMenuOptions = () => {
 
@@ -33,8 +35,9 @@ export const useContextMenuOptions = () => {
             for (const el of path) {
             try {
                 if (el?.getAttribute("data-context")) {
-                const json = JSON.parse(el.getAttribute("data-context"));
-                data[json.type] = json;
+                    const json = JSON.parse(el.getAttribute("data-context"));
+
+                    data[json.type] = json;
                 }
             } catch (error) {
                 continue;
@@ -87,6 +90,26 @@ export const useContextMenuOptions = () => {
                 }
             }
 
+            if (data.category) {
+                if (permissions.user_can_manage_categories) {
+                    options.push({
+                        label: "Edit Category",
+                        icon: <FilePenLine color='var(--text-color)' />,
+                        onClick: () => {
+
+                            dispatch(setSelectedCategory(data.category));
+
+                            setSearchParams({section: "editCategory"});
+
+                            dispatch(setOverlay("serverSettings"));
+
+                        },
+                        type: "button"
+                    })
+                }
+                
+            }
+
             if (data.channelList) {
                 if (permissions.user_can_create_channels) {
                     options.push({
@@ -129,7 +152,7 @@ export const useContextMenuOptions = () => {
                 if (data.message.link) {
                     options.push({
                         label: "Copy Link",
-                        onClick: () => {copyToClipboard(data.message.link)},
+                        onClick: () => {copyToClipboard(data.message.link); dispatch(triggerAlert("Link Copied"))},
                         type: 'button',
                         icon: <Link color="var(--text-color)" />
                     })
@@ -253,7 +276,7 @@ export const useContextMenuOptions = () => {
 
                 options.push({
                     label: "Copy Link",
-                    onClick: () => {copyToClipboard(data.imageSearchResult?.src || data.image?.src)},
+                    onClick: () => {copyToClipboard(data.imageSearchResult?.src || data.image?.src); dispatch(triggerAlert('Link Copied'))},
                     type: 'button',
                     icon: <Link color="var(--text-color)" />
                 })
@@ -317,16 +340,26 @@ export const useContextMenuOptions = () => {
 
                 options.push({
                     label: "Bubble Settings",
-                    icon: <Settings2 />,
+                    icon: <Settings2 color="var(--text-color)" />,
                     type: "button",
                     onClick: () => {
                         dispatch(setOverlay('serverSettings'))
                     }
                 })
 
-                
+                options.push({
+                    label: "Settings",
+                    icon: <Settings color="var(--text-color)" />,
+                    type: "button",
+                    onClick: () => {
+                        dispatch(setOverlay('settings'))
+                    }
+                })
 
             }
+
+
+
 
             return options;
         } catch (error) {

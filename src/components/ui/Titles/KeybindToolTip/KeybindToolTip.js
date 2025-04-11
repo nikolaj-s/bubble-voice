@@ -3,7 +3,9 @@ import React from 'react'
 export const KeybindToolTip = ({binds, label, width}) => {
     return (
         <>
-        <p style={{
+        <p 
+        key={label}
+        style={{
             width: '100%',
             textAlign: 'center',
             margin: 0,
@@ -25,6 +27,7 @@ export const KeybindToolTip = ({binds, label, width}) => {
                 return (
                     <>
                     <p
+                    key={bind + key}
                     style={{
                         textAlign: 'center', 
                         backgroundColor: "var(--primary-color)", 

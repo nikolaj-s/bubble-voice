@@ -102,7 +102,7 @@ const ContextMenu = ({ children }) => {
                         borderRadius: "6px",
                         boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
                         zIndex: 1000,
-                        minWidth: 150,
+                        minWidth: 155,
                         padding: 5,
                         backgroundColor: 'var(--button-background)'
                         

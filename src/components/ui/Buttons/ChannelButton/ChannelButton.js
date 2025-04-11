@@ -17,8 +17,6 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
 
     const [active, toggleActive] = React.useState(false);
 
-    const [hover, toggleHover] = React.useState(false);
-
     const {currentChannel} = useSelector(state => state.channelsSlice);
 
     const {currentTextChannel} = useSelector(state => state.textChannelSlice);
@@ -80,12 +78,10 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
         style={{
             backgroundColor: users.length > 0 ? 'var(--card-background-color)' : 'transparent'
         }}
-        className={styles.channelContainer}>
-            <button 
-                onClick={openChannel}
-                className={`${styles.channelButton} ${active ? styles.active : ''}`} 
-            onMouseEnter={() => {toggleHover(true)}}
-            onMouseLeave={() => {toggleHover(false)}}
+        className={`${styles.channelContainer} ${active ? styles.active : ''}`}>
+            <button
+            onClick={openChannel}
+            className={`${styles.channelButton}`} 
             >
                 <span className={styles.icon}>
                     {channel_icon ?
@@ -98,8 +94,9 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
                     <Volume1 width={'100%'} height={'100%'} />}
                 </span>
                 <span className={styles.channelName}>{channel_name}</span>
-                {hover ?
-                <div className={styles.subButtonWrapper}>
+                
+            </button>
+            <div className={styles.subButtonWrapper}>
                 <IconButton 
                 onClick={openContext}
                 Icon={<Ellipsis color="var(--text-color)"/>}
@@ -109,10 +106,7 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
                 height={25}
                 backgroundHover="var(--background-color)"
                 />
-                </div>
-                : null}
-            </button>
-
+            </div>
             {users.length > 0 && (
                 <motion.div 
                     className={styles.userList} 

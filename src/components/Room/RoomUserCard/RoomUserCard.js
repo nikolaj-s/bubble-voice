@@ -66,6 +66,7 @@ export const RoomUserCard = ({ user_id, consumers, action }) => {
                     videoElement.srcObject = new MediaStream([track])
                     videoElement.autoplay = true;
                     videoElement.controls = false;
+                    videoElement.playsInline = true;
                     videoElement.muted = true;
                     videoElement.id = `${consumer.id}`;
                     webcamElementRef.current[consumer.id] = videoElement;
@@ -77,7 +78,7 @@ export const RoomUserCard = ({ user_id, consumers, action }) => {
                     track.onended = () => {
                         removeWebcamElement(consumer.id);
 
-                        webcamContainerRef.current.removeChild(videoElement);
+                        webcamContainerRef.current?.removeChild(videoElement);
                     };
                 }
             }

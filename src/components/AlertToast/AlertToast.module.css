@@ -1,0 +1,39 @@
+.alert {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    translate: -50%;
+    padding: 12px 20px;
+    background-color: var(--card-background-color);
+    color: var(--text-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 10000;
+    font-weight: 500;
+  }
+  
+  .success {
+    background-color: var(--success-color);
+  }
+  
+  .error {
+    background-color: var(--error-color);
+  }
+  
+  .info {
+    background-color: var(--secondary-color);
+  }
+  
+  .closeButton {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+  }
+  

@@ -3,11 +3,12 @@ import { APIErrorHandler } from "../../../lib/handlers/APIErrorHandler/APIErrorH
 import { generateFormData } from "../../../lib/services/generateFormData";
 import axios from "axios";
 import { API_URL } from "../../../lib/Validation";
+import { triggerAlert } from "../../Alerts/alertsSlice";
 
 
 export const pinMessage = createAsyncThunk(
     'pinMessage/textChannelSlice',
-    async (params, {rejectWithValue, getState}) => {
+    async (params, {rejectWithValue, getState, dispatch}) => {
         try {
 
             const {token} = getState().authSlice;
@@ -22,6 +23,8 @@ export const pinMessage = createAsyncThunk(
                 headers: {TOKEN: token},
                 data
             })
+
+            dispatch(triggerAlert(`Message ${!params.pinned ? 'Pinned' : 'Unpinned'}`));
 
             return true;
 

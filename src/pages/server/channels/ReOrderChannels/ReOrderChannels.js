@@ -4,7 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { Category } from "../../../../components/ChannelCategory/ChannelCategory";
 
-import { reOrderCategories, reOrderChannels } from "../../../../features/Channels/channelsSlice";
+import { reorderChannels } from "../../../../features/Channels/channelsSlice";
+
+import { reorderCategories } from "../../../../features/Categories/categoriesSlice";
 
 import { useSocket } from "../../../../context/SocketContext";
 
@@ -17,7 +19,7 @@ export const ReOrderChannels = ({ onDrop }) => {
 
     const channels = useSelector((state) => state.channelsSlice.channels);
 
-    const categories = useSelector((state) => state.channelsSlice.categories);
+    const categories = useSelector((state) => state.categoriesSlice.categories);
 
     const [reordering, toggleReordering] = React.useState(false);
 
@@ -32,7 +34,7 @@ export const ReOrderChannels = ({ onDrop }) => {
     }, [channels])
 
     const handleReorder = async (id, moveTo, category) => {
-console.log(id, moveTo, category)
+
         if (reordering) return;
 
         toggleReordering(true);
@@ -56,7 +58,7 @@ console.log(id, moveTo, category)
         await socket.request('reorder channels', data)
         .then(res => {
 
-            dispatch(reOrderChannels(res));
+            dispatch(reorderChannels(res));
             return;
         }).catch(err => {
             console.log(err);
@@ -96,7 +98,7 @@ console.log(id, moveTo, category)
         
         await socket.request('reorder categories', data)
         .then(res => {
-            dispatch(reOrderCategories(res));
+            dispatch(reorderCategories(res));
             return;
         })
         .catch(err => {
@@ -111,7 +113,18 @@ console.log(id, moveTo, category)
     return (
         <>
             {categories.map(category => {
-                return <Category move={handleReorder} moveCategory={handleReOrderCategories} draggingCategory={draggingCategory} toggleDraggingCategory={toggleDraggingCategory} category_id={category.category_id} key={category.category_id} catagoryName={category.category_name} channels={localChannels.filter(c => c.category === category.category_id)} draggingChannel={draggingChannel} toggleDraggingChannel={toggleDraggingChannel} />
+                return <Category 
+                move={handleReorder} 
+                moveCategory={handleReOrderCategories} 
+                draggingCategory={draggingCategory} 
+                toggleDraggingCategory={toggleDraggingCategory} 
+                category_id={category.category_id} 
+                key={category.category_id} 
+                catagoryName={category.category_name} 
+                channels={localChannels.filter(c => c.category === category.category_id)} 
+                draggingChannel={draggingChannel} toggleDraggingChannel={toggleDraggingChannel} 
+                category={category}
+                />
             })}
             <Category 
             move={handleReorder} 

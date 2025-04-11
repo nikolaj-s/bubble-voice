@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setOverlay } from "../../../features/Overlay/overlaySlice";
 import { selectServerName } from "../../../features/ServerDetails/serverDetailsSlice";
 
-import { Bell, Ellipsis, Menu, Pin, Settings2, UsersRound, X } from "lucide-react";
+import { Bell, Ellipsis, Menu, Pin, Settings2, UsersRound, UserX, X } from "lucide-react";
 import { Route, Routes } from "react-router";
 import { SearchButton } from "./SearchButton/SearchButton";
 import ChannelHeader from "../../Headers/ChannelHeader/ChannelHeader";
@@ -15,6 +15,7 @@ import { globalSearch } from "../../../features/Search/Thunks/globalSearch";
 import { toggleMobileMenu } from "../../../features/Mobile/mobileSlice";
 import { Logo } from "../../Icons/Bubble/Logo";
 import { triggerContext } from "../../../lib/services/helperFunctions";
+import { toggleAppearanceSetting } from "../../../features/Settings/Appearance/appearanceSlice";
 
 const TopNav = () => {
   
@@ -26,7 +27,7 @@ const TopNav = () => {
 
   const {isUserMenuOpen, isChannelMenuOpen, isServerMenuOpen} = useSelector(state => state.mobileSlice);
 
-  const { hideUsers } = useSelector(state => state.appearanceSlice);
+  const hideUsers = useSelector(state => state.appearanceSlice.hideUsers);
 
   const {currentChannel} = useSelector(state => state.channelsSlice);
 
@@ -100,45 +101,27 @@ const TopNav = () => {
           <Route path="/server/:serverID/channel/:channelID" element={
             <>
             <ChannelHeader {...channelDetails} />
-            {channelDetails?.channel_type === 'text' && 
-            <div className={styles.hideOnMobile}>
-            <IconButton 
-            Icon={<Pin color="var(--text-color)" />}
-            title={"Pinned Messages"}
-            position="bottom"
-            margin={"0 2px 0 0"}
-            onClick={handleOpenPins}
-            />
-            </div>
-            }
+            
             </>
           } />
         </Routes>
       )}
       </div>
       <div className={`${styles.buttonGroup} ${styles.hideOnMobile}`}>
-        <SearchButton onClick={handleOpenSearch} />
+        
         <IconButton
           Icon={<Bell color="var(--text-color)" />}
           position="bottom"
           title={"Notifications"}
         />
-        <div className={styles.desktopUserButton}>
         <IconButton
-        Icon={<UsersRound color="var(--text-color)" />}
+        Icon={hideUsers ? <UserX color="var(--text-color)" /> : <UsersRound color="var(--text-color)" />}
         position="bottom"
-        title={"Hide Users"}
+        title={hideUsers ? "Show Users" : "Hide Users"}
+        className={styles.desktopUserButton}
+        onClick={() => {dispatch(toggleAppearanceSetting('hideUsers'))}}
         />
-        </div>
-        <div className={styles.mobileButton}>
-        <IconButton
-        Icon={isUserMenuOpen ? <X color="var(--text-color)" /> : <UsersRound color="var(--text-color)" />}
-        position="bottom"
-        title={"Hide Users"}
-        onClick={() => {dispatch(toggleMobileMenu('isUserMenuOpen'))}}
-        />
-        </div>
-        
+        <SearchButton onClick={handleOpenSearch} />
         {/* Notifications Button */}
       </div>
       <div id="mobile-ctx-menu" data-context={JSON.stringify({type: 'mobileMenu'})} className={styles.mobileMenuOptions}>

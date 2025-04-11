@@ -4,7 +4,7 @@ import styles from  "./ControlBar.module.css";
 
 import IconButton from '../ui/Buttons/IconButton/IconButton';
 
-import { Mic, MicOff, ScreenShare, ScreenShareOff, Settings2, Unplug, Video, VideoOff, Volume2, VolumeOff } from 'lucide-react';
+import { Mic, MicOff, ScreenShare, ScreenShareOff, Settings2, Unplug, Video, VideoOff, Volume2, VolumeX } from 'lucide-react';
 
 import UserButton from '../ui/Buttons/UserButton/UserButton';
 
@@ -76,9 +76,9 @@ export const ControlBar = ({inChannel = false}) => {
                 <UserButton 
                 controlBar={true}
                 onClick={() => {dispatch(setOverlay('userQuickMenu'))}}
-                maxWidth={'calc(100% - 65px)'} 
+               
                 {...account} />
-                <div className={styles.buttonWrapper}>
+                <div className={`${styles.buttonWrapper} hideOnMobile`}>
                     <IconButton 
                     onClick={handleToggleMicrophone}
                     position='top'
@@ -105,7 +105,7 @@ export const ControlBar = ({inChannel = false}) => {
                     }
                     Icon={
                     isAudioMuted ?
-                    <VolumeOff color='var(--text-color)' />
+                    <VolumeX color='var(--text-color)' />
                     :
                     <Volume2 color='var(--text-color)' />
                     } />

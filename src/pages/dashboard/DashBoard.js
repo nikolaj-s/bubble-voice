@@ -18,6 +18,10 @@ import { UserDashboard } from "./userDashboard/UserDashboard";
 
 import useDeviceWatcher from "../../hooks/useDeviceWatcher";
 
+import ConnectionStatusNotice from "../../components/ConnectionStatusNotice/ConnectionStatusNotice";
+
+import AlertToast from "../../components/AlertToast/AlertToast";
+
 const Dashboard = () => {
 
   useDeviceWatcher();
@@ -46,6 +50,8 @@ const Dashboard = () => {
               </MediaControlsProvider>
           </Overlay>
         </SocketProvider>
+        <AlertToast />
+        <ConnectionStatusNotice />
       </FetchAccountProvider>
     </ContextMenu>
   );

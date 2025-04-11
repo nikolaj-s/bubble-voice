@@ -3,6 +3,7 @@
     font-family: var(--font-family);
     border-radius: 8px;
     touch-action: manipulation;
+    position: relative;
 }
 
 .channelButton {
@@ -20,17 +21,10 @@
     touch-action: manipulation;
 }
 
-.active {
-    background-color: var(--secondary-color);
-    cursor: default;
-}
-
-.channelButton:hover {
-    background-color: var(--button-hover);
-}
-
-.channelButton:active {
-    scale: 0.98;
+.channelName {
+    font-size: 15px;
+    font-weight: 400;
+    opacity: 0.75;
 }
 
 .icon {
@@ -43,12 +37,32 @@
     flex-shrink: 0;
     border-radius: 50%;
     overflow: hidden;
+    opacity: 0.75;
 }
 
-.channelName {
-    font-size: 15px;
-    font-weight: 400;
+.active .channelButton {
+    background-color: var(--secondary-color);
+    cursor: default;
 }
+
+.channelContainer:hover .channelName,
+.channelContainer:hover .icon {
+    opacity: 1;
+}
+
+.active .channelName,
+.active .icon {
+    opacity: 1;
+}
+
+.channelContainer:hover .channelButton {
+    background-color: var(--button-hover);
+}
+
+.channelButton:active {
+    scale: 0.98;
+}
+
 
 .userList {
     background-color: var(--card-background-color);
@@ -73,10 +87,12 @@
     justify-self: flex-end;
     flex-shrink: 0;
     margin-left: auto;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    display: none;
 }
 
-@media screen and (max-width: 730px) {
-    .channelButton {
-        height: 40px;
-    }
+.channelContainer:hover .subButtonWrapper {
+    display: flex;
 }

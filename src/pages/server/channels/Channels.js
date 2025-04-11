@@ -18,19 +18,19 @@ export const Channels = ({currentChannel}) => {
           label: 'Dashboard',
           // Dashboard route: "/dashboard/Sub/:SubID/"
           path: `${basePath}/`,
-          icon: <Home className={styles.icon} />
+          icon: <Home className={styles.icon} size={20} />
         },
         {
           label: 'Events',
           // Events route: "/dashboard/Sub/:SubID/events"
           path: `${basePath}/events`,
-          icon: <Calendar className={styles.icon} />
+          icon: <Calendar className={styles.icon} size={20}/>
         },
         {
           label: 'Activity',
           // Activity route: "/dashboard/Sub/:SubID/activity"
           path: `${basePath}/activity`,
-          icon: <Newspaper className={styles.icon} />
+          icon: <Newspaper className={styles.icon} size={20} />
         }
       ];
     

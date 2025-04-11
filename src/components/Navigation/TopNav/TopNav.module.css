@@ -52,7 +52,6 @@
   .serverButtons,
   .buttonGroup {
     display: flex;
-    gap: 2px;
   }
   
   .navButton {
@@ -83,6 +82,13 @@
 
   .mobileMenuOptions {
     display: none;
+  }
+
+  .buttonGroup {
+    padding: 0px 8px;
+    width: calc(100% - 16px);
+    justify-content: flex-end;
+    gap: 5px;
   }
 
 @media screen and (max-width: 730px) {

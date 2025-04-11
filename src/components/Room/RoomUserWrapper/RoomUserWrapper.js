@@ -2,12 +2,18 @@ import React from 'react';
 import { RoomUserCard } from '../RoomUserCard/RoomUserCard';
 
 import styles from './RoomUserWrapper.module.css';
+import { useSelector } from 'react-redux';
 
 export const RoomUserWrapper = ({ users }) => {
+
+    const { hideUsers } = useSelector(state => state.appearanceSlice);
+
     const [expanded, setExpanded] = React.useState("");
+
     const hidingNonVideoMembers = false;
 
     let margin = 8;
+
     const ratio = 9 / 16;
 
     React.useEffect(() => {
@@ -66,7 +72,7 @@ export const RoomUserWrapper = ({ users }) => {
             handleScaling();
         }
     // eslint-disable-next-line   
-    }, [expanded, hidingNonVideoMembers]);
+    }, [expanded, hidingNonVideoMembers, hideUsers]);
 
     React.useEffect(() => {
         let observer;
