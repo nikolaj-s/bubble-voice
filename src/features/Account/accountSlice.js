@@ -3,6 +3,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchAccount } from './Thunks/fetchAccount';
 
 import { updateAccount } from './Thunks/updateAccount';
+import { updateAccountStatus } from './Thunks/updateAccountStatus';
 
 const accountSlice = createSlice({
   name: 'accountSlice',
@@ -36,6 +37,8 @@ const accountSlice = createSlice({
         state.status = 'failed';
         state.error = action.payload; // Set the error message
       })
+
+      // update account
       .addCase(updateAccount.pending, (state) =>  {
         state.updateLoading = true;
         state.updateError = false;
@@ -48,6 +51,19 @@ const accountSlice = createSlice({
         state.updateLoading = false;
         state.updateError = false;
         state.account = action.payload.account;
+      })
+
+      // update account status
+      .addCase(updateAccountStatus.pending, (state) => {
+        state.updateLoading = true;
+      })
+      .addCase(updateAccountStatus.rejected, (state, action) => {
+        state.updateLoading = false;
+        state.updateError = action.payload;
+      })
+      .addCase(updateAccountStatus.fulfilled, (state, action) => {
+        state.updateLoading = false;
+        state.account = action.payload;
       })
   }
 });

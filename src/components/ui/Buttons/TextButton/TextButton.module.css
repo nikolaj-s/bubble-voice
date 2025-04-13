@@ -10,6 +10,10 @@
     outline: none;
     background-color: var(--button-background);
     border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
   }
   
   .button:hover {

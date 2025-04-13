@@ -1,4 +1,4 @@
-import { Edit2, FilePenLine, ImageDown, Link, Pin, PinOff, Plus, Reply, Send, Settings, Settings2, Trash2, Unplug, User2, UserPen, Users, Video } from "lucide-react";
+import { Edit2, FilePenLine, FolderPen, FolderPlus, ImageDown, Link, Pin, PinOff, Plus, Reply, Send, Settings, Settings2, Trash2, Unplug, User2, UserPen, Users, Video } from "lucide-react";
 import { useCallback } from "react";
 import { useDispatch,} from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -94,7 +94,7 @@ export const useContextMenuOptions = () => {
                 if (permissions.user_can_manage_categories) {
                     options.push({
                         label: "Edit Category",
-                        icon: <FilePenLine color='var(--text-color)' />,
+                        icon: <FolderPen color='var(--text-color)' />,
                         onClick: () => {
 
                             dispatch(setSelectedCategory(data.category));
@@ -128,7 +128,7 @@ export const useContextMenuOptions = () => {
                             dispatch(setOverlay('serverSettings'));
                         },
                         type: 'button',
-                        icon: <Plus color="var(--text-color)" />
+                        icon: <FolderPlus color="var(--text-color)" />
                     })
                 }
             }

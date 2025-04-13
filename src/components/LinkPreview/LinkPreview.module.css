@@ -85,7 +85,7 @@
     align-items: center;
     gap: 8px;
     font-size: 14px;
-    color: var(--secondary-color);
+    color: var(--accent-color);
   }
   
   .favicon {
@@ -112,7 +112,7 @@
   .description {
     font-size: 14px;
     margin: 0px;
-    color: var(--secondary-color);
+    color: var(--text-color);
     display: -webkit-box;
   -webkit-line-clamp: 2;        /* Limit to 2 lines */
   -webkit-box-orient: vertical; /* Set the box orientation to vertical */

@@ -12,6 +12,8 @@ import { setKeybind } from '../../../../features/Settings/Keybinds/keybindsSlice
 import KeybindInput from '../../../../components/ui/Inputs/KeybindInput/KeybindInput'
 import { TestMicrophone } from '../../../../components/TestMicrophone/TestMicrophone'
 import TypeInput from '../../../../components/ui/Inputs/TypeInput/TypeInput'
+import ToggleSwitch from '../../../../components/ui/Inputs/ToggleSwitch/ToggleSwitch'
+import { LineSpacer } from '../../../../components/ui/Spacers/LineSpacer/LineSpacer'
 
 export const VoiceVideoSettingsForm = () => {
 
@@ -70,6 +72,7 @@ export const VoiceVideoSettingsForm = () => {
         <DeviceSelector type={'microphone'} />
         <DeviceSelector type={'speaker'} />
         <DeviceSelector type={'webcam'} />
+        <LineSpacer />
         <Label label='Test Your Microphone' />
         <TestMicrophone 
         setVoiceThreshold={(value) => {setThreshold(value)}}
@@ -84,6 +87,7 @@ export const VoiceVideoSettingsForm = () => {
         />
         {usingPushToTalk ?
         <>
+        <LineSpacer />
         <Label label="Set your push to talk keybind" />
         <KeybindInput
             currentKeybind={keybinds['pushToTalk'] || ''}
@@ -95,6 +99,13 @@ export const VoiceVideoSettingsForm = () => {
         
         </>
         }
+        <Header text='Voice Processing' level={2} />
+        <Label label='Echo Cancellation' />
+        <ToggleSwitch />
+        <Label label='Noise Supression' />
+        <ToggleSwitch />
+        <Label label='Auto Gain Control' />
+        <ToggleSwitch />
         </>
     )
 }

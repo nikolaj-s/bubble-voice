@@ -3,10 +3,13 @@ import React from 'react';
 import styles from './ChannelBackground.module.css';
 
 import {motion} from 'framer-motion'
+import { useSelector } from 'react-redux';
 
 export const ChannelBackground = ({channel_background}) => {
 
-    if (!channel_background) return null;
+    const {hideChannelBackgrounds} = useSelector(state => state.appearanceSlice);
+
+    if (!channel_background || hideChannelBackgrounds) return null;
 
     return (
         <motion.div 

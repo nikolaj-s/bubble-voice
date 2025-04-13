@@ -22,8 +22,6 @@
   scale: 1.02;
 }
 
-
-
 .server-button-image-container {
   border-radius: 50%;
   cursor: pointer;
@@ -53,7 +51,6 @@
   align-items: center;
   z-index: 20;
   padding: 5px;
-  max-width: 150px;
   box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.5);
   animation: pop-in forwards linear 0.1s;
   background-color: var(--background-color);
@@ -86,4 +83,10 @@
 .active {
   
   border: 4px solid var(--accent-color);
+}
+
+@media screen and (max-width: 730px) {
+  .server-button-name-container {
+    display: none;
+  }
 }

@@ -23,6 +23,8 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
 
     const {isChannelMenuOpen} = useSelector(state => state.mobileSlice);
 
+    const {hideCustomChannelIcons} = useSelector(state => state.appearanceSlice);
+
     const navigate = useNavigate();
 
     const { channelID } = useParams();
@@ -84,7 +86,7 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
             className={`${styles.channelButton}`} 
             >
                 <span className={styles.icon}>
-                    {channel_icon ?
+                    {channel_icon && !hideCustomChannelIcons ?
                     <ImageComponent src={channel_icon} />
                     : channel_type === 'text' ?
                     <Hash color="var(--text-color)" style={{marginLeft: '-5px'}} width={'100%'} height={'100%'} />

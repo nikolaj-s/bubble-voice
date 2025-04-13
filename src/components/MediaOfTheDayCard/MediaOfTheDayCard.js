@@ -11,10 +11,17 @@ import { ImageComponent } from '../ui/Image/Image';
 import { ImageTooltipWrapper } from '../ui/Wrappers/ImageTooltipWrapper/ImageTooltipWrapper';
 import { LongPressGestureWrapper } from '../ui/Gestures/LongPressGestureWrapper';
 import { getTimeUntil24Hours, triggerContext } from '../../lib/services/helperFunctions';
+import { useDispatch } from 'react-redux';
+import { setExpandedImage } from '../../features/Media/ExpandedImage/expandedImageSlice';
+import { setOverlay } from '../../features/Overlay/overlaySlice';
 
 const MediaOfTheDayCard = ({ title = "Media of the day", query, tags = "", src, type = 'image', date, media = {}}) => {
 
+  const dispatch = useDispatch();
+
   const [untilUpdate, setUntilUpdate] = React.useState("");
+
+  const [source, setSource] = React.useState({});
   
   const Icon = type === 'video' ? Video : type === 'camera' ? Camera : Image;
 
@@ -25,6 +32,25 @@ const MediaOfTheDayCard = ({ title = "Media of the day", query, tags = "", src, 
     }
 
   }, [date])
+
+  React.useEffect(() => {
+
+    const imageExtensions = /\.(jpg|jpeg|png|gif|webp|svg)/i;
+
+    if (imageExtensions.test(query)) {
+      setSource({type: "image", src: query})
+    } else {
+      setSource({type: "query", src: query})
+    }
+
+  }, [query]);
+
+  const openSource = () => {
+    console.log(source)
+    dispatch(setExpandedImage({image: source?.src}));
+
+    dispatch(setOverlay("expandImage"));
+  }
 
   return (
     <div data-context={JSON.stringify({src, tags, query, type})} className={styles.mediaCard}>
@@ -44,7 +70,12 @@ const MediaOfTheDayCard = ({ title = "Media of the day", query, tags = "", src, 
       </div>
       <div className={styles.mediaFooter}>
         <div className={styles.mediaQuery}>
-          Media found related to "<strong>{query}</strong>"
+          Media found related to {
+          source.type === 'image' ?
+          <span onClick={openSource}>source</span>
+          :
+          <strong>{query}</strong>
+          }
         </div>
         <div className={styles.updatesIn}><Clock strokeWidth={3} color='var(--text-color)' size={15} /> updates in: {untilUpdate}</div>
         <div className={styles.mediaTags}>

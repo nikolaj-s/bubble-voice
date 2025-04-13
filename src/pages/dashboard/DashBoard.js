@@ -22,9 +22,13 @@ import ConnectionStatusNotice from "../../components/ConnectionStatusNotice/Conn
 
 import AlertToast from "../../components/AlertToast/AlertToast";
 
+import { useApplyTheme } from "../../hooks/useApplyTheme";
+
 const Dashboard = () => {
 
   useDeviceWatcher();
+
+  useApplyTheme();
 
   return (
     <ContextMenu>

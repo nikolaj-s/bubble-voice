@@ -45,6 +45,9 @@ const KeybindInput = ({ currentKeybind, onChange }) => {
 
   return (
     <button
+      style={{
+        width: listening ? 150 : 80
+      }}
       onClick={startListening}
       onBlur={stopListening}
       className={styles["keybind-button"]}

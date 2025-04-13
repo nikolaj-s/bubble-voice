@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import styles from "./TextButton.module.css";
 
-const TextButton = ({ title, disabled, action, backgroundColor, maxWidth }) => {
+const TextButton = ({ title, disabled, action, backgroundColor, maxWidth, icon }) => {
   return (
     <>
     {disabled ? null :
@@ -15,6 +15,7 @@ const TextButton = ({ title, disabled, action, backgroundColor, maxWidth }) => {
       disabled={disabled}
     >
       {title}
+      {icon}
     </button>
     }
     </>

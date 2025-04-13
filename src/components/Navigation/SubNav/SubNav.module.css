@@ -38,19 +38,35 @@
     scale: 1;
   }
   
+  .navButton svg {
+    opacity: 0.75;
+  }
+
   .icon {
     /* Size your icons as needed */
     width: 20px;
     height: 20px;
+    opacity: 0.75;
   }
   
   .label {
     /* Prevent the label from wrapping */
     white-space: nowrap;
+    opacity: 0.75;
   }
-  
-  @media screen and (max-width: 730px) {
-    .navButton {
-      height: 45px;
-    }
+
+  .navButton:hover .label {
+    opacity: 1;
+  }
+
+  .navButton:hover svg {
+    opacity: 1;
+  }
+
+  .active .label {
+    opacity: 1;
+  }
+
+  .active svg {
+    opacity: 1;
   }

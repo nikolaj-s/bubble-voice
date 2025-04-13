@@ -35,7 +35,7 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    border: 2px solid var(--card-background-color);
+    border: 2px solid var(--accent-color);
   }
   
   /* Status Colors */
@@ -63,7 +63,7 @@
   
   .statusText {
     font-size: 0.8rem;
-    color: var(--secondary-color);
+    color: var(--accent-color);
     white-space: nowrap;      /* Prevents the text from wrapping */
     overflow: hidden;         /* Hides any content that overflows */
     text-overflow: ellipsis;

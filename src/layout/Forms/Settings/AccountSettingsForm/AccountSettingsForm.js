@@ -11,6 +11,7 @@ import TextLabelError from '../../../../components/Error/TextLabelError/TextLabe
 import { updateAccount } from '../../../../features/Account/Thunks/updateAccount'
 import TextArea from '../../../../components/ui/Inputs/TextArea/TextArea'
 import ColorPicker from '../../../../components/ui/Inputs/ColorPicker/ColorPicker'
+import { LineSpacer } from '../../../../components/ui/Spacers/LineSpacer/LineSpacer'
 
 export const AccountSettingsForm = () => {
 
@@ -51,7 +52,7 @@ export const AccountSettingsForm = () => {
     setUserBanner(null);
 
   }
-console.log(user_color)
+
   return (
     <>
     <Header text='Account Settings' />
@@ -70,7 +71,8 @@ console.log(user_color)
     disabled={color === user_color && display_name === displayName && userImage === null && userBanner === null && user_bio === bio}
     action={handleUpdateAccount} title='Update Account' />
     {updateLoading ? <SpinnerLoading /> : null}
-    
+    <LineSpacer />
+    <TextButton title='Log out' maxWidth={150} backgroundColor={'var(--error-color)'} />
     </>
   )
 }

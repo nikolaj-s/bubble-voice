@@ -13,8 +13,8 @@ const LinkPreview = ({ preview }) => {
   }
 
   return (
-    <div onClick={openLink} className={`${styles.linkPreview} ${preview.type === 'reddit' ? styles.reddit : null}`}>
-      <div className={`${styles.previewImage} ${preview.type === 'reddit' ? styles.redditImage : null}`} >
+    <div onClick={openLink} className={`${styles.linkPreview} ${preview.type === 'reddit' || preview.video ? styles.reddit : null}`}>
+      <div className={`${styles.previewImage} ${preview.type === 'reddit' || preview.video ? styles.redditImage : null}`} >
           <NsfwWrapper nsfw={preview} >
             <div className={`${styles.mediaWrapper} ${preview.type === 'reddit' ? styles.redditMediaWrapper : null}`} >
               {
@@ -29,7 +29,7 @@ const LinkPreview = ({ preview }) => {
             </div>
           </NsfwWrapper>
       </div> 
-      <div className={`${styles.previewContent} ${preview.type === 'reddit' ? styles.redditPreviewContent : null}`}>
+      <div className={`${styles.previewContent} ${preview.type === 'reddit' || preview.video ? styles.redditPreviewContent : null}`}>
         <div className={styles.siteInfo}>
           {preview.favicon && <img src={preview.favicon} alt="Favicon" className={styles.favicon} />}
           <span className={styles.siteName}>{preview.siteName}</span>

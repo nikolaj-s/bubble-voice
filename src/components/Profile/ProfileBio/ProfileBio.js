@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './ProfileBio.module.css';
 
-const ProfileBio = ({ bio }) => {
+const ProfileBio = ({ bio = "" }) => {
   const imageRegex = /(https?:\/\/\S+\.(?:png|jpe?g|gif)\S*)/gi;
 
   const parts = bio.split(imageRegex);
@@ -41,8 +41,5 @@ ProfileBio.propTypes = {
   bio: PropTypes.string,
 };
 
-ProfileBio.defaultProps = {
-  bio: '',
-};
 
 export default ProfileBio;

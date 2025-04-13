@@ -15,7 +15,6 @@ const HoverVideoPreview = ({ src }) => {
   const handleMouseLeave = () => {
     setIsHovered(false);
     videoRef.current?.pause();
-    videoRef.current.currentTime = 0;
   };
 
   return (

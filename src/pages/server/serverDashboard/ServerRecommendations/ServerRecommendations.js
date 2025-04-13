@@ -5,6 +5,7 @@ import ErrorAltCard from '../../../../components/Error/ErrorAltCard/ErrorAltCard
 import MediaOfTheDaySkeleton from '../../../../components/MediaOfTheDayCard/MediaOfTheDaySkeleton';
 import { fetchServerRecommendations } from '../../../../features/ServerRecommendations/Thunks/fetchServerRecommendations';
 import RandomMediaGallery from '../../../../components/RandomMediaGallery/RandomMediaGallery';
+import NoRecommendationsPlaceholder from '../../../../components/Placeholders/NoRecommendationsPlaceholder/NoRecommendationsPlaceholder';
 
 export const ServerRecommendations = () => {
 
@@ -23,7 +24,9 @@ export const ServerRecommendations = () => {
 
     }, [server_id, dispatch])
 
-    if (loading) return <MediaOfTheDaySkeleton />
+    if (loading) return <MediaOfTheDaySkeleton />;
+
+    if (error === 'No recommendation data available') return <NoRecommendationsPlaceholder />
 
     if (error) return <ErrorAltCard message={error} />
 

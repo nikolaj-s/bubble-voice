@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {motion} from 'framer-motion';
 
@@ -13,9 +13,12 @@ import SpinnerLoading from '../../../components/ui/Loading/Spinner/SpinnerLoadin
 import { SwipeGestureWrapper } from '../../../components/ui/Gestures/SwipeGestureWrapper';
 import { LongPressGestureWrapper } from '../../../components/ui/Gestures/LongPressGestureWrapper';
 import { triggerContext } from '../../../lib/services/helperFunctions';
+import { enqueueMediaDeletion } from '../../../features/MediaDeletion/mediaDeletionSlice';
 
 
 export const ExpandedImage = ({ close = () => {} }) => {
+    const dispatch = useDispatch();
+
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(false);
   
@@ -25,7 +28,13 @@ export const ExpandedImage = ({ close = () => {} }) => {
     const handleClose = () => close();
   
     const showFallback = error || loading;
-  console.log(loading)
+
+    const handleError = () => {
+      if (data?._id) {
+        dispatch(enqueueMediaDeletion(data?._id))
+      }
+    }
+   
     return (
       <FullScreenWrapper onClose={handleClose} backgroundColor="none" width="auto">
         <SwipeGestureWrapper onSwipeUp={close} onSwipeDown={handleClose}>
@@ -68,6 +77,7 @@ export const ExpandedImage = ({ close = () => {} }) => {
                 onError={() => {
                     setLoading(false);
                     setError(true);
+                    handleError();
                 }}
                 draggable={false}
                 />}

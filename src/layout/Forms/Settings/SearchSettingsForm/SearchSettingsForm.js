@@ -9,7 +9,8 @@ export const SearchSettingsForm = () => {
         <Header text='Edit Search Settings' />
         <Label label='Disable Safe Search' />
         <ToggleSwitch />
-               
+        <Label label='Show Full Resolution Previews' />
+        <ToggleSwitch />
         </>
     )
 }

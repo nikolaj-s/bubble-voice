@@ -3,30 +3,49 @@ import PropTypes from 'prop-types';
 import { PlayCircle, PauseCircle, Maximize2, Volume2, VolumeX } from 'lucide-react';
 import styles from './VideoPlayer.module.css';
 import VolumeSlider from '../../Inputs/VolumeSlider/VolumeSlider';
+import { useSelector } from 'react-redux';
 
 const VideoPlayer = ({ src }) => {
+
   const videoRef = useRef(null);
+
   const [isPlaying, setIsPlaying] = useState(false);
+
   const [isMuted, setIsMuted] = useState(false);
+
   const [currentTime, setCurrentTime] = useState(0);
+
   const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(100); // volume from 0 to 100
+
+  const [volume, setVolume] = useState(100);
+   // volume from 0 to 100
   const [volumeHover, toggleVolumeHover] = useState(false);
+
+  const {muteVideo} = useSelector(state => state.contentSettingsSlice);
 
   // Toggle play/pause
   const togglePlay = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-      } else {
-        videoRef.current.play();
+    try {
+      if (videoRef.current) {
+        if (isPlaying) {
+          videoRef.current?.pause();
+        } else {
+          videoRef.current?.play();
+        }
       }
+    } catch (error) {
+      console.log(error);
+      return;
     }
+    
   };
 
   // Update current time and duration on video events
   useEffect(() => {
     const video = videoRef.current;
+
+    if (!video) return;
+
     const handleTimeUpdate = () => setCurrentTime(video.currentTime);
     const handleLoadedMetadata = () => {
       setDuration(video.duration);
@@ -44,6 +63,9 @@ const VideoPlayer = ({ src }) => {
   // Update playing state when video plays or pauses
   useEffect(() => {
     const video = videoRef.current;
+
+    if (!video) return;
+
     const handlePlay = () => setIsPlaying(true);
     const handlePause = () => setIsPlaying(false);
 
@@ -54,6 +76,20 @@ const VideoPlayer = ({ src }) => {
       video.removeEventListener('pause', handlePause);
     };
   }, []);
+
+  useEffect(() => {
+
+    if (videoRef.current && muteVideo) {
+
+      const newMuted = true;
+
+      setIsMuted(newMuted);
+      
+      videoRef.current.muted = newMuted;
+     
+    }
+
+  }, [muteVideo])
 
   // Handle progress bar click (seeking)
   const handleProgressClick = (e) => {
@@ -111,6 +147,8 @@ const VideoPlayer = ({ src }) => {
       }
     }
   };
+
+
 
   return (
     <div onMouseLeave={() => {toggleVolumeHover(false)}} className={styles.customVideoContainer}>

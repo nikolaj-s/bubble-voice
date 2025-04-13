@@ -19,12 +19,15 @@
     justify-content: space-between;
   }
 
-  .navbar h2 {
+  .header h2 {
     color: var(--text-color);
     margin: 0px;
     padding: 0px;
     font-size: 1.2rem;
-    margin-left: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: calc(100% - 30px);
   }
   
   .searchContainer {

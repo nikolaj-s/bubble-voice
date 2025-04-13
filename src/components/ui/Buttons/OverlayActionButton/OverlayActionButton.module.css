@@ -4,7 +4,7 @@
     left: 0;
     width: 100%;
     padding: 10px 16px;
-    background: rgba(0, 0, 0, 0.55); /* Dark semi-transparent overlay */
+    background: var(--overlay-color); /* Dark semi-transparent overlay */
     color: var(--text-color);
     font-family: var(--font-family);
     font-size: 0.9rem;
