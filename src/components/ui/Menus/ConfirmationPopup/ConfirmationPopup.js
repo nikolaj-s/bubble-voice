@@ -1,8 +1,9 @@
 import React from "react";
 import { motion } from "framer-motion";
 import styles from "./ConfirmationPopup.module.css";
+import { AlertCircle } from "lucide-react";
 
-const ConfirmationPopup = ({ message, onConfirm, onCancel }) => {
+const ConfirmationPopup = ({ message, onConfirm, onCancel, icon: Icon = AlertCircle }) => {
   return (
     <div className={styles.overlay}>
       <motion.div 
@@ -12,6 +13,7 @@ const ConfirmationPopup = ({ message, onConfirm, onCancel }) => {
         exit={{ opacity: 0, scale: 0.8 }}
         transition={{ duration: 0.2 }}
       >
+        <Icon color={'var(--text-color)'} size={40} />
         <p className={styles.message}>{message}</p>
         <div className={styles.buttons}>
           <button className={styles.cancel} onClick={onCancel}>Cancel</button>

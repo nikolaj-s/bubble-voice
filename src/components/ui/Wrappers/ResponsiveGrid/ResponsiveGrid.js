@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import styles from './ResponsiveGrid.module.css';
 
 const ResponsiveGrid = ({ children }) => {
+  const flattened = React.Children.toArray(children).flat();
+  console.log(flattened)
   return (
     <div className={styles.grid}>
-      {React.Children.map(children, (child, index) => (
+      {flattened.map((child, index) => (
         <div className={styles.card} key={index}>
           {child}
         </div>

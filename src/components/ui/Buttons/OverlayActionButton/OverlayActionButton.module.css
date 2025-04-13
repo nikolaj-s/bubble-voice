@@ -1,0 +1,31 @@
+.overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 16px;
+    background: rgba(0, 0, 0, 0.55); /* Dark semi-transparent overlay */
+    color: var(--text-color);
+    font-family: var(--font-family);
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+    z-index: 2;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  
+  .overlay:hover {
+    background: rgba(0, 0, 0, 0.7);
+  }
+  
+  .title {
+    pointer-events: none;
+  }
+  

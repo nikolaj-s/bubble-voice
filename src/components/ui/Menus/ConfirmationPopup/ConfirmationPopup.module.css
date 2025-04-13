@@ -20,6 +20,9 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     text-align: center;
     min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .message {
@@ -30,6 +33,7 @@
     display: flex;
     justify-content: flex-end;
     gap: 5px;
+    width: 100%;
 }
 
 .confirm, .cancel {

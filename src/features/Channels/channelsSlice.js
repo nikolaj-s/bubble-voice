@@ -122,6 +122,11 @@ const channelsSlice = createSlice({
         },
         setChannelsStatus: (state, action) => {
             state.status = action.payload;
+        },
+        removeChannel: (state, action) => {
+            if (action.payload._id) {
+                state.channels = state.channels.filter(channel => channel._id !== action.payload._id);
+            }
         }
     },
     extraReducers: (builder) => {
@@ -150,7 +155,8 @@ export const {
     userJoinsChannel,
     updateChannelDetails,
     setChannelsStatus,
-    updateCategoryofChannels
+    updateCategoryofChannels,
+    removeChannel
 } = channelsSlice.actions;
 
 export default channelsSlice.reducer;

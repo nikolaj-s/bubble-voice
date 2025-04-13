@@ -2,7 +2,7 @@ import React from 'react'
 import { useSocket } from '../../context/SocketContext';
 import { useDispatch, useSelector } from 'react-redux';
 import ChannelButtonSkeleton from '../../components/ui/Loading/ChannelButtonSkeleton/ChannelButtonSkeleton';
-import { addChannel, reorderChannels, setChannels, setChannelsStatus, updateCategoryofChannels, updateChannelDetails, userJoinsChannel, userLeavesChannel } from '../../features/Channels/channelsSlice';
+import { addChannel, removeChannel, reorderChannels, setChannels, setChannelsStatus, updateCategoryofChannels, updateChannelDetails, userJoinsChannel, userLeavesChannel } from '../../features/Channels/channelsSlice';
 import { removeCategory, reorderCategories, setCategories, updateCategoryDetails, addCategory } from '../../features/Categories/categoriesSlice';
 
 export const ChannelsProvider = ({children}) => {
@@ -87,28 +87,22 @@ export const ChannelsProvider = ({children}) => {
             }
         }
 
-        const handleReOrderChannels = (data) => {
-            dispatch(reorderChannels(data));
-        }
+        const handleReOrderChannels = data => dispatch(reorderChannels(data));
 
-        const handleReOrderCategories = (data) => {
-            dispatch(reorderCategories(data));
-        }
+        const handleReOrderCategories = data => dispatch(reorderCategories(data));
 
-        const handleUpdateChannelDetails = (data) => {
-            dispatch(updateChannelDetails(data));
-        }
+        const handleUpdateChannelDetails = data => dispatch(updateChannelDetails(data));
 
-        const handleUpdateCategoryDetails = (data) => {
-            dispatch(updateCategoryDetails(data));
-        }
+        const handleUpdateCategoryDetails = data => dispatch(updateCategoryDetails(data));
 
         const handleRemoveCategory = (data) => {
-            console.log(data);
+
             dispatch(removeCategory(data));
 
             dispatch(updateCategoryofChannels(data));
         }
+
+        const handleRemoveChannel = data => dispatch(removeChannel(data));
 
         socket.on('connect', handleFetchChannels);
 
@@ -125,6 +119,8 @@ export const ChannelsProvider = ({children}) => {
         socket.on(`update category order for ${server_id}`, handleReOrderCategories);
 
         socket.on(`update channel in ${server_id}`, handleUpdateChannelDetails);
+
+        socket.on(`delete channel in ${server_id}`, handleRemoveChannel);
 
         socket.on(`update category in ${server_id}`, handleUpdateCategoryDetails);
 
@@ -146,6 +142,8 @@ export const ChannelsProvider = ({children}) => {
             socket.off(`update category order for ${server_id}`, handleReOrderCategories);
 
             socket.off(`update channel in ${server_id}`, handleUpdateChannelDetails);
+
+            socket.off(`delete channel in ${server_id}`, handleRemoveChannel);
 
             socket.off(`update category in ${server_id}`, handleUpdateCategoryDetails);
 

@@ -17,10 +17,14 @@ export const LongPressGestureWrapper = ({ children, onTouchContext, width, heigh
     timeoutRef.current = setTimeout(() => {
       if (!movedRef.current) {
         controls.start({
-          scale: [1, 1.05, 1],
+          scale: 1.02,
           transition: { duration: 0.3, ease: 'easeInOut' },
         }).then(() => {
           onTouchContext?.(e);
+          controls.start({
+            scale: 1,
+            transition: { duration: 0.3, ease: 'easeInOut' },
+          })
         })
         
       }

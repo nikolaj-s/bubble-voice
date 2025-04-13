@@ -7,7 +7,7 @@
     border-radius: 8px;
     overflow: hidden;
     min-height: 100px;
-    min-width: 275px;
+    min-width: 220px;
   }
   
   .customVideo {
@@ -76,15 +76,30 @@
     font-size: 0.9rem;
     white-space: nowrap;
   }
-  
   .volumeControl {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 5px;
+    justify-content: center;
+  }
+  
+  .volumeWrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
   }
   
   .volumeSlider {
+    position: absolute;
+    bottom: 100%;
+    left: 5px; /* place it above the button */
+    margin-bottom: 8px;
+    height: 0px;
     width: 60px;
-    cursor: pointer;
+    transform: rotate(-90deg);
+    transform-origin: bottom left;
+    transition: opacity 0.2s ease;
   }
+
   

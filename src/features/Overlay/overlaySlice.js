@@ -1,24 +1,48 @@
-import { createSlice } from "@reduxjs/toolkit";
-
-const initialState = {
-  activeOverlay: null,// Stores the currently active overlay ('search', 'createServer', etc.)
-};
+import { createSlice } from '@reduxjs/toolkit';
 
 const overlaySlice = createSlice({
-  name: "overlaySlice",
-  initialState,
+  name: 'overlaySlice',
+  initialState: {
+    currentOverlay: null,
+    history: [] // { type: 'search', closed: false }
+  },
   reducers: {
     setOverlay: (state, action) => {
-      state.activeOverlay = action.payload; // Set active overlay
+      const newOverlay = action.payload;
+      if (state.currentOverlay) {
+        state.history.push({ type: state.currentOverlay, closed: false });
+      }
+      state.currentOverlay = newOverlay;
     },
+
     closeOverlay: (state) => {
-      state.activeOverlay = null; // Close any open overlay
+      if (!state.currentOverlay) return;
+
+      const lastOverlay = state.currentOverlay;
+      state.history.push({ type: lastOverlay, closed: true });
+
+      // Special behavior: restore "search" if we just closed "expandImage"
+      if (
+        lastOverlay === 'expandImage' &&
+        state.history.length > 0
+      ) {
+        const previous = [...state.history][state.history.length - 2]
+          
+        if (previous?.type === 'search' && previous?.closed === false) {
+          state.currentOverlay = 'search';
+          return;
+        }
+      }
+
+      state.currentOverlay = null;
     },
-  },
+
+    clearOverlayHistory: (state) => {
+      state.history = [];
+    }
+  }
 });
 
-export const { setOverlay, closeOverlay } = overlaySlice.actions;
-
-export const selectActiveOverlay = (state) => state.overlaySlice.activeOverlay;
+export const { setOverlay, closeOverlay, clearOverlayHistory } = overlaySlice.actions;
 
 export default overlaySlice.reducer;

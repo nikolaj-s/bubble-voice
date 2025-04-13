@@ -84,12 +84,12 @@
     display: none;
   }
 
-  .buttonGroup {
-    padding: 0px 8px;
-    width: calc(100% - 16px);
-    justify-content: flex-end;
-    gap: 5px;
-  }
+.navButtons {
+  padding: 0px 8px;
+  width: calc(100% - 16px);
+  justify-content: flex-end;
+  gap: 5px;
+}
 
 @media screen and (max-width: 730px) {
 

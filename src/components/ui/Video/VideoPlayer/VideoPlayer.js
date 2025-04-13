@@ -11,6 +11,7 @@ const VideoPlayer = ({ src }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(100); // volume from 0 to 100
+  const [volumeHover, toggleVolumeHover] = useState(false);
 
   // Toggle play/pause
   const togglePlay = () => {
@@ -112,13 +113,14 @@ const VideoPlayer = ({ src }) => {
   };
 
   return (
-    <div className={styles.customVideoContainer}>
+    <div onMouseLeave={() => {toggleVolumeHover(false)}} className={styles.customVideoContainer}>
       <video
         onClick={togglePlay}
         ref={videoRef}
         src={src}
         className={styles.customVideo}
         controls={false}
+        playsInline
       />
       {/* Overlay play button when video is not playing */}
       {!isPlaying && (
@@ -143,16 +145,29 @@ const VideoPlayer = ({ src }) => {
           />
         </div>
         <div className={styles.timeDisplay}>
-          {formatTime(currentTime)} / {formatTime(duration)}
+          {formatTime(currentTime)}
         </div>
         <div className={styles.volumeControl}>
+        <div 
+        onMouseEnter={() => {toggleVolumeHover(true)}}
+        className={styles.volumeWrapper}>
           <button onClick={toggleMute} className={styles.controlButton}>
             {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
           </button>
-          <div className={styles.volumeSlider}>
-            <VolumeSlider min={0} max={100} step={1} value={volume} onChange={handleVolumeChange} />
-          </div>
+          {volumeHover && <div 
+          onMouseEnter={() => {toggleVolumeHover(true)}}
+          onMouseLeave={() => {toggleVolumeHover(false)}}
+          className={styles.volumeSlider}>
+            <VolumeSlider
+              min={0}
+              max={100}
+              step={1}
+              value={volume}
+              onChange={handleVolumeChange}
+            />
+          </div>}
         </div>
+      </div>
         <button onClick={toggleFullScreen} className={styles.controlButton}>
           <Maximize2 size={24} />
         </button>

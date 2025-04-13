@@ -30,6 +30,7 @@ const HoverVideoPreview = ({ src }) => {
         className={styles.video}
         muted
         loop
+        playsInline
       />
       <motion.div
         className={styles.overlay}

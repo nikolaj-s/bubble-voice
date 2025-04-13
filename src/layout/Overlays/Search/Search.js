@@ -18,6 +18,8 @@ export const Search = ({close}) => {
 
     const {loading, results, filter, filters, query, error, searchHistory, searchHistoryFetched, similarImageSrc} = useSelector(state => state.searchSlice);
 
+    const {server_id} = useSelector(state => state.serverDetailsSlice);
+
     React.useEffect(() => {
 
         if (loading) return;
@@ -63,7 +65,7 @@ export const Search = ({close}) => {
                 value={query}
                 setValue={handleSetQuery}
                 filter={filter}
-                filters={filters}
+                filters={filters.filter(item => server_id ? true : item.path !== 'text-channel')}
                 loading={loading}
                 setFilter={handleSetFilter}
                 search={handleSearch}

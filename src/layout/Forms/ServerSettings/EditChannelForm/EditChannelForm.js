@@ -13,6 +13,9 @@ import TextArea from "../../../../components/ui/Inputs/TextArea/TextArea"
 import ToggleSwitch from "../../../../components/ui/Inputs/ToggleSwitch/ToggleSwitch"
 import { updateChannel } from "../../../../features/editChannel/Thunks/updateChannel"
 import { BoxLabel } from "../../../../components/ui/Titles/BoxLabel/BoxLabel"
+import { LineSpacer } from "../../../../components/ui/Spacers/LineSpacer/LineSpacer"
+import { deleteChannel } from "../../../../features/editChannel/Thunks/deleteChannel"
+import ConfirmationPopup from "../../../../components/ui/Menus/ConfirmationPopup/ConfirmationPopup"
 
 export const EditChannelForm = ({permissions}) => {
 
@@ -31,6 +34,8 @@ export const EditChannelForm = ({permissions}) => {
     const [channelName, setChannelName] = React.useState("");
 
     const [channelDescription, setChannelDescription] = React.useState("");
+
+    const [confirmDeleteChannel, toggleConfirmDeleteChannel] = React.useState(false);
 
     React.useEffect(() => {
 
@@ -53,6 +58,12 @@ export const EditChannelForm = ({permissions}) => {
         dispatch(updateChannel({channelIcon, channelBackground, channelName, channelDescription, channel_id: channel.channel_id}));
     }
 
+    const handleDeleteChannel = () => {
+        if (loading) return;
+
+        dispatch(deleteChannel(channel));
+    }
+
     return (
         <NotAuthorized permission={permissions.user_can_edit_channels}>
             <LoadingErrorFormWrapper sliceName="editChannelSlice">
@@ -72,7 +83,7 @@ export const EditChannelForm = ({permissions}) => {
                 />
                 <Label label="Edit Channel Name" />
                 <TextInput 
-                error={channelName.trim().length < 3 ? "Channel name must be longer than 3 characters" : null} 
+                error={channelName?.trim()?.length < 3 ? "Channel name must be longer than 3 characters" : null} 
                 value={channelName}
                 onChange={setChannelName}
                 placeholder={"Name"}
@@ -100,6 +111,20 @@ export const EditChannelForm = ({permissions}) => {
                 action={handleApplyChanges}
                 title="Apply Changes"
                 disabled={(!channelIcon && !channelBackground) && (channel.channel_name === channelName || channelName.trim().length < 3) && (channel.channel_description === channelDescription)} />
+                
+                {permissions?.user_can_delete_channels &&
+                <>
+                <LineSpacer />
+                <Label label="Delete Channel" />
+                <TextButton action={() => {toggleConfirmDeleteChannel(true)}} maxWidth={100} backgroundColor={'var(--error-color)'} title="Delete" />
+                </>
+                }
+                {confirmDeleteChannel && 
+                <ConfirmationPopup 
+                onCancel={() => {toggleConfirmDeleteChannel(false)}}
+                onConfirm={() => {handleDeleteChannel()}}
+                message={"Are you sure you want to delete this channel, this will permananetly remove all content"}
+                />}
             </LoadingErrorFormWrapper>
         </NotAuthorized>
     )

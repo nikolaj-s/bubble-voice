@@ -1,6 +1,6 @@
 import React from 'react'
 import LoadingSpinnerCard from '../../components/ui/Loading/LoadingSpinnerCard/LoadingSpinnerCard';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSocket } from '../../context/SocketContext';
 import ErrorCard from '../../components/Error/ErrorCard/ErrorCard';
@@ -8,6 +8,8 @@ import { clearCurrentChannel, setCurrentChannel } from '../../features/Channels/
 import { setCurrentTextChannel } from '../../features/TextChannel/textChannelSlice';
 
 export const ChannelProvider = ({children, overlay = false, channel_id_prop}) => {
+
+    const navigate = useNavigate();
 
     const dispatch = useDispatch();
 
@@ -22,8 +24,6 @@ export const ChannelProvider = ({children, overlay = false, channel_id_prop}) =>
     const {channelID: channel_id_param, serverID} = useParams();
 
     const [channelID, setChannelID] = React.useState(null);
-
- //   const channelsStatus = useSelector(state => state.channelsSlice.status);
 
     React.useEffect(() => {
 
@@ -75,13 +75,25 @@ export const ChannelProvider = ({children, overlay = false, channel_id_prop}) =>
 
         }   
 
+        const onChannelDelete = () => {
+            if (overlay) {
+                dispatch(setCurrentTextChannel(null));
+            } else {
+                navigate(`/dashboard/server/${serverID}`)
+            }
+        };
+
         socket.on('connect', handleFetchChannelDetails);
+
+        socket.on(`delete channel ${channelID}`, onChannelDelete);
 
         handleFetchChannelDetails();
 
         return () => {
 
             socket.off('connect', handleFetchChannelDetails);
+
+            socket.off(`delete channel ${channelID}`, onChannelDelete);
 
             if (!overlay) dispatch(clearCurrentChannel());
 

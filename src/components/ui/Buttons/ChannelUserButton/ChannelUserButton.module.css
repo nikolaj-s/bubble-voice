@@ -1,16 +1,16 @@
 
 .container {
     height: 30px;
-    width: calc(100% - 10px);
+    width: calc(100% - 6px);
     border-radius: 5px;
     display: flex;
     justify-content: flex-start;
     gap: 5px;
-    padding: 5px;
+    padding: 3px;
     align-items: center;
     cursor: pointer;
     transition: 0.2s ease;
-    margin: 5px 0px;
+    margin: 0px;
 }
 
 .container:active {

@@ -52,3 +52,20 @@ export const triggerContext = (e, id) => {
         
         element.dispatchEvent(event);
 }
+
+export const getTimeUntil24Hours = (timestamp) => {
+    const createdAt = new Date(timestamp);
+    const expiresAt = new Date(createdAt.getTime() + 24 * 60 * 60 * 1000);
+    const now = new Date();
+  
+    const diffMs = expiresAt - now;
+  
+    if (diffMs <= 0) return 'Already passed 24 hours';
+  
+    const hours = Math.floor(diffMs / (1000 * 60 * 60));
+    const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+  
+    return `${hours}h ${minutes}m`;
+  };
+  
+  

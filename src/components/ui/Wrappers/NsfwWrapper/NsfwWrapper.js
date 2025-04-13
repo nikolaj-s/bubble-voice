@@ -4,7 +4,7 @@ import styles from './NsfwWrapper.module.css';
 import { TriangleAlert } from 'lucide-react';
 import { useSelector } from 'react-redux';
 
-export const NsfwWrapper = ({children, nsfw: obj}) => {
+export const NsfwWrapper = ({children, nsfw: obj = {}}) => {
 
     const disableNsfwBlur = useSelector(state => state.contentSettingsSlice.disableNsfwBlur);
 

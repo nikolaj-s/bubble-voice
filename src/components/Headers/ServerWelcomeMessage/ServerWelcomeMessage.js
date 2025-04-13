@@ -23,8 +23,10 @@ const ServerWelcomeMessage = ({
           />
         </div>
       )}
-      <Header text={welcomeMessage} level={3} />
-      {welcome_message && <p>{welcome_message}</p>}
+      <div className={styles.welcomeMessageText}>
+        <h3>{welcomeMessage}</h3>
+        {welcome_message && <p>{welcome_message}</p>}
+      </div>
     </div>
   );
 };

@@ -43,7 +43,7 @@ export const Overlay = ({ children }) => {
 
   const dispatch = useDispatch();
 
-  const activeOverlay = useSelector(selectActiveOverlay);
+  const activeOverlay = useSelector(state => state.overlaySlice.currentOverlay);
 
   const ActiveComponent = overlayComponents[activeOverlay];
 
