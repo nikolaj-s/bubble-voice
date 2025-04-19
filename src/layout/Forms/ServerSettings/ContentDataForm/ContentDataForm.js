@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchServerSettings } from '../../../../features/ServerSettings/Thunks/fetchServerSettings'
 import TextButton from '../../../../components/ui/Buttons/TextButton/TextButton'
 import { updateServerSettings } from '../../../../features/ServerSettings/Thunks/updateServerSettings'
-import { toggleLoadingServerSettings } from '../../../../features/ServerSettings/serverSettingsSlice'
 
 export const ContentDataForm = ({permissions}) => {
 
@@ -21,14 +20,12 @@ export const ContentDataForm = ({permissions}) => {
 
     const [changeMade, setChangeMade] = React.useState(false);
 
-
+    const [initLoading, toggleInitLoading] = React.useState(true);
 
     // Fetch settings if user has permission
     React.useEffect(() => {
 
         if (!permissions?.user_can_manage_data_settings) return;
-
-        dispatch(toggleLoadingServerSettings(true));
       
         const timeout = setTimeout(() => {
 
@@ -43,11 +40,17 @@ export const ContentDataForm = ({permissions}) => {
 
     // Set newSettings on settings load
     React.useEffect(() => {
-        console.log(settings)
-        if (settings) {
+        
+        if (settings?.server_id) {
+            
             setNewSettings(settings);
+
+            toggleInitLoading(false);
+
         }
-    }, [settings]);
+
+        
+    }, [settings, loading]);
 
     // Detect if newSettings differ from original settings
     React.useEffect(() => {
@@ -74,7 +77,7 @@ export const ContentDataForm = ({permissions}) => {
 
     return (
         <NotAuthorized permission={permissions?.user_can_manage_data_settings}>
-            <LoadingErrorFormWrapper sliceName='serverSettingsSlice'>
+            <LoadingErrorFormWrapper sliceName='serverSettingsSlice' initialLoading={initLoading} >
                 <Header text='Content & Data' />
                 <LineSpacer />
                 <Header level={4} text='Recommendation Data' />

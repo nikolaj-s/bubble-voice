@@ -61,7 +61,7 @@ const MediaOfTheDayCard = ({ title = "Media of the day", query, tags = "", src, 
         ) : (
           <LongPressGestureWrapper width={'100%'} height={'100%'} onTouchContext={(e) => {triggerContext(e, src)}}>
             <ImageTooltipWrapper image={{src, type}}>
-              <ImageComponent src={src} alt={title} />
+              <ImageComponent objectFit='contain' src={src} alt={title} />
             </ImageTooltipWrapper>
           </LongPressGestureWrapper>
         )}

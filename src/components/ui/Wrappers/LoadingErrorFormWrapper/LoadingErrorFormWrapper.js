@@ -7,8 +7,9 @@ import SpinnerLoading from '../../../ui/Loading/Spinner/SpinnerLoading'
 import ErrorPopup from '../../../Error/ErrorPopup/ErrorPopup'
 
 import { AnimatePresence } from 'framer-motion'
+import { SettingsSkeletonLoader } from '../../Loading/SettingsSkeletonLoader/SettingsSkeletonLoader'
 
-export const LoadingErrorFormWrapper = ({children, sliceName = ""}) => {
+export const LoadingErrorFormWrapper = ({children, sliceName = "", initialLoading}) => {
 
     const [displayError, setDisplayError] = React.useState(null);
 
@@ -22,6 +23,8 @@ export const LoadingErrorFormWrapper = ({children, sliceName = ""}) => {
         }
 
     }, [error])
+
+    if (initialLoading) return <SettingsSkeletonLoader />
 
     try {
 
