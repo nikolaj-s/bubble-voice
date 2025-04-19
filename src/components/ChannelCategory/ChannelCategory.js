@@ -26,35 +26,24 @@ export const Category = ({
   const [moveIndicator, toggleMoveIndicator] = React.useState(false);
 
   const handleCategoryMove = (e) => {
-    try {
-
-      const id = e.dataTransfer.getData("text");
-
-      if (draggingCategory) {
-        if (!id) return;
-        console.log(id, category_id);
-        moveCategory(id, category_id, false);
-      } else {
-        if (!id || id.split(" ").length > 1) return;
-
-        move(id, 0, category_id);
-      }
-
-      toggleMoveIndicator(false);
-      toggleDraggingCategory(false);
-      toggleDraggingChannel(false);
-    } catch (error) {
-      console.log(error);
+    e.preventDefault();
+    const id = e.dataTransfer.getData("application/category-id") || e.dataTransfer.getData("application/channel-id");
+  
+    if (!id) return;
+  
+    if (draggingCategory) {
+      moveCategory(id, category_id, false);
+    } else if (id !== category_id) {
+      move(id, 0, category_id);
     }
+  
+    toggleDraggingCategory(false);
+    toggleDraggingChannel(false);
   };
 
   const onCategoryDragStart = (e) => {
     e.stopPropagation();
-
-    if (!category_id || category_id === 'channels') return;
-
-    e.dataTransfer.setData("text/plain", `${category_id}`);
-
+    e.dataTransfer.setData("application/category-id", category_id);
     toggleDraggingCategory(true);
   };
 
@@ -63,17 +52,11 @@ export const Category = ({
   };
 
   const newCategoryPos = (e) => {
-    e.stopPropagation();
-
+    e.preventDefault();
+    const id = e.dataTransfer.getData("application/category-id");
+    if (!id || id === category_id) return;
+    moveCategory(id, category_id, true);
     toggleMoveIndicator(false);
-
-    if (draggingCategory) {
-      const id = e.dataTransfer.getData("text");
-
-      if (!id) return;
-
-      moveCategory(id, category_id, true);
-    }
   };
 
   React.useEffect(() => {
@@ -96,9 +79,11 @@ export const Category = ({
 
   return (
     <div
+      draggable={false}
         className={styles.categoryWrapper}
         data-context={category_id === 'channels' ? null : JSON.stringify({...category, type: 'category'})}
         id={category_id}
+        onDragOver={(e) => {e.preventDefault()}}
     >
       <div
 

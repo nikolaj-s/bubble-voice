@@ -15,7 +15,9 @@ import TextButton from '../../../../components/ui/Buttons/TextButton/TextButton'
 import { updateServerDetails } from '../../../../features/ServerDetails/Thunks/updateServerDetails';
 
 import { LoadingErrorFormWrapper } from '../../../../components/ui/Wrappers/LoadingErrorFormWrapper/LoadingErrorFormWrapper';
+
 import { NotAuthorized } from '../../../../components/Error/NotAuthorized/NotAuthorized';
+
 import TextArea from '../../../../components/ui/Inputs/TextArea/TextArea';
 
 export const EditServerDetailsForm = ({permissions}) => {
@@ -72,7 +74,7 @@ export const EditServerDetailsForm = ({permissions}) => {
         : null}
         {permissions.user_can_edit_server_welcome_message && (
         <>
-        <Label label='Edit Welcome Message' />
+        <Label label='Edit Description:' />
         <TextArea 
          text={welcomeMessage}
         setText={(value) => {setWelcomeMessage(value)}}

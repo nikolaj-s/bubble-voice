@@ -42,7 +42,7 @@
     z-index: 999;
     overflow: hidden;
     text-transform: capitalize;
-    max-height: 500px;
+    max-height: 380px;
     overflow-y: auto;
   }
 

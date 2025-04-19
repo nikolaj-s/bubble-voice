@@ -4,7 +4,7 @@ import axios from "axios";
 import { API_URL } from "../../../lib/Validation";
 
 
-export const fetchServerContentSettings = createAsyncThunk('fetchServerContentSettings/serverContentDataSlice', async (__, {rejectWithValue, getState}) => {
+export const fetchServerSettings = createAsyncThunk('fetchServerSettings/serverSettingsSlice', async (__, {rejectWithValue, getState}) => {
     try {
 
         const {token} = getState().authSlice;
@@ -15,8 +15,12 @@ export const fetchServerContentSettings = createAsyncThunk('fetchServerContentSe
 
         const response = await axios({
             method: "GET",
-            url: `${API_URL}`
+            url: `${API_URL}/server-settings/`,
+            headers: {TOKEN: token},
+            params: {server_id: server_id}
         })
+       
+        return response.data;
 
     } catch (error) {
         return APIErrorHandler(rejectWithValue, error);

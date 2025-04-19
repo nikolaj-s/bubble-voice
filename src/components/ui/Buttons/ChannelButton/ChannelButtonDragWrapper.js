@@ -12,127 +12,76 @@ export const ChannelButtonDragWrapper = ({
   draggingCategory,
 }) => {
   const { channelID } = useParams();
-
   const [moveIndicator, toggleMoveIndicator] = React.useState(false);
 
-  const onDrop = (event) => {
-    try {
-      toggleDraggingChannel(false);
-
-      event.target.style.zIndex = "atuo";
-
-      document.getElementById(
-        `channel-wrapper-button-${channel._id}`
-      ).style.backgroundColor = "rgba(0, 0, 0, 0)";
-
-      if (channel.text_only) return;
-
-      const id = event.dataTransfer.getData("text");
-
-      if (!id) return;
-
-      const split_id = id.split(" ");
-
-      const selected_username =
-        split_id.length > 2 ? `${split_id[1]} ${split_id[2]}` : split_id[1];
-
-      const channel_id = split_id[0];
-
-      if (channel_id === channel._id) return;
-
-      toggleDraggingChannel(false);
-    } catch (error) {
-      console.log(error);
-      return;
-    }
-  };
-
-  const handleNewChannelPosition = (e) => {
-    try {
-      e.target.style.zIndex = "atuo";
-
-      toggleMoveIndicator(false);
-
-      const id = e.dataTransfer.getData("text");
-
-      if (!id || id.split(" ").length > 1) return;
-
-      move(id, channel.channel_id, category_id);
-
-      toggleDraggingChannel(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const handleDragStart = (e) => {
-    console.log(e);
     e.stopPropagation();
-
-    e.dataTransfer.setData("text/plain", `${channel.channel_id}`);
-
+    e.dataTransfer.setData("application/channel-id", channel.channel_id);
     toggleDraggingChannel(true);
-
-    console.log("channel drag start");
+    console.log('dragging', category_id, channel)
   };
 
   const handleDragEnd = (e) => {
-    e.target.style.zIndex = "atuo";
+   toggleDraggingChannel(false);
+  };
 
+  const handleDrop = (e) => {
+    e.preventDefault();
     toggleDraggingChannel(false);
+    const sourceId = e.dataTransfer.getData("application/channel-id");
+    if (!sourceId || sourceId === channel.channel_id) return;
+  console.log(sourceId, category_id)
+    move(sourceId, channel.channel_id, category_id); // ensure this category_id is valid
   };
 
   return (
-    <>
+    <div
+      id={`channel-wrapper-button-${channel.channnel_id}`}
+      draggable={true}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      onDrop={handleDrop}
+      onDragOver={(e) => e.preventDefault()}
+      style={{
+        display: collapse && channel?.channel_id !== channelID ? "none" : undefined,
+        position: 'relative'
+      }}
+    >
+      {children}
       <div
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
-        id={`channel-wrapper-button-${channel._id}`}
-        draggable={true}
-        onDrop={onDrop}
-        onDragOver={(e) => {
-          e.preventDefault();
-        }}
-        style={{
-          display: collapse && channel?.channel_id !== channelID ? "none" : null,
-        }}
-      >
-        {children}
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={handleDrop}
+      onDragEnter={() => toggleMoveIndicator(true)}
+      onDragLeave={() => toggleMoveIndicator(false)}
+      style={{
+        width: "100%",
+        height: "5px",
+        position: "absolute",
+        pointerEvents: draggingChannel ? "all" : "none",
+        zIndex: draggingChannel ? 10 : null,
+        backgroundColor: "transparent", // don't use background directly
+      }}
+    >
+      {draggingChannel && (
         <div
-          onDragOver={(e) => {
-            e.preventDefault();
-          }}
           style={{
-            width: "100%",
-            flexShrink: 0,
-            height:
-              draggingChannel && !moveIndicator
-                ? 3
-                : draggingChannel && moveIndicator
-                ? 5
-                : 0,
-            backgroundColor: draggingChannel
-              ? "var(--success-color)"
-              : "transparent",
-            opacity:
-              draggingChannel && !moveIndicator
-                ? 0.5
-                : draggingChannel && moveIndicator
-                ? 1
-                : 0,
-            pointerEvents: "all",
-            position: "relative",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
             bottom: 0,
-          }}
-          onDrop={handleNewChannelPosition}
-          onDragEnter={() => {
-            toggleMoveIndicator(true);
-          }}
-          onDragLeave={() => {
-            toggleMoveIndicator(false);
+            zIndex: 10,
+            backgroundColor: "var(--success-color)",
+            opacity: moveIndicator ? 1 : 0.4,
+            borderRadius: 2,
+            transition: "opacity 0.15s ease, transform 0.2s ease",
+            transform: moveIndicator ? "scaleY(1)" : "scaleY(0.6)",
+            pointerEvents: "none",
           }}
         />
-      </div>
-    </>
+      )}
+    </div>
+
+    </div>
   );
 };

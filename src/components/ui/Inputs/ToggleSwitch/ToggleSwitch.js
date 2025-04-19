@@ -11,6 +11,10 @@ const ToggleSwitch = ({ initialState = false, onToggle }) => {
         if (onToggle) onToggle(!isChecked);
     };
 
+    React.useEffect(() => {
+      setIsChecked(initialState);
+    }, [initialState])
+
   return (
     <div onClick={handleToggle} className={`${styles.toggleContainer} ${isChecked ? styles.activeContainer : ''}`}>
       <div

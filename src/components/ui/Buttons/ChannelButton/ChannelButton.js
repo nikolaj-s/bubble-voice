@@ -11,118 +11,106 @@ import { setCurrentTextChannel } from "../../../../features/TextChannel/textChan
 import { triggerContext } from "../../../../lib/services/helperFunctions";
 import { toggleMobileMenu } from "../../../../features/Mobile/mobileSlice";
 
-const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, channel_type, server_id, channel}) => {
-
+const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, channel_type, server_id, channel }) => {
     const dispatch = useDispatch();
-
-    const [active, toggleActive] = React.useState(false);
-
-    const {currentChannel} = useSelector(state => state.channelsSlice);
-
-    const {currentTextChannel} = useSelector(state => state.textChannelSlice);
-
-    const {isChannelMenuOpen} = useSelector(state => state.mobileSlice);
-
-    const {hideCustomChannelIcons} = useSelector(state => state.appearanceSlice);
-
     const navigate = useNavigate();
-
     const { channelID } = useParams();
-
+  
+    const { currentChannel } = useSelector(state => state.channelsSlice);
+    const { currentTextChannel } = useSelector(state => state.textChannelSlice);
+    const { isChannelMenuOpen } = useSelector(state => state.mobileSlice);
+    const { hideCustomChannelIcons } = useSelector(state => state.appearanceSlice);
+  
+    const [active, toggleActive] = React.useState(false);
+  
     const openChannel = () => {
-
-        if (isChannelMenuOpen) dispatch(toggleMobileMenu('isChannelMenuOpen'));
-
-        if (currentChannel?.channel_type === 'voice' && channel_type === 'text') {
-
-            if (channel_id === currentTextChannel) {
-                dispatch(setCurrentTextChannel(null))
-            } else {
-                dispatch(setCurrentTextChannel(channel_id))
-            }
-        
+      if (isChannelMenuOpen) dispatch(toggleMobileMenu('isChannelMenuOpen'));
+  
+      if (currentChannel?.channel_type === 'voice' && channel_type === 'text') {
+        if (channel_id === currentTextChannel) {
+          dispatch(setCurrentTextChannel(null));
         } else {
-            if (active) {
-
-                if (channel_type === 'text') {
-                    navigate(`/dashboard/server/${server_id}`);
-                }
-    
-            } else {
-                navigate(`/dashboard/server/${server_id}/channel/${channel_id}`);
-            }
+          dispatch(setCurrentTextChannel(channel_id));
         }
-
-       
-        
-    }
-
+      } else {
+        if (active && channel_type === 'text') {
+          navigate(`/dashboard/server/${server_id}`);
+        } else {
+          navigate(`/dashboard/server/${server_id}/channel/${channel_id}`);
+        }
+      }
+    };
+  
     React.useEffect(() => {
-
-        if (channelID === channel_id || channel_id === currentTextChannel) {
-            toggleActive(true);
-        } else {
-            toggleActive(false);
-        }
-
-    }, [channelID, channel_id, currentTextChannel])
-
+      toggleActive(channelID === channel_id || channel_id === currentTextChannel);
+    }, [channelID, channel_id, currentTextChannel]);
+  
     const openContext = (e) => {
-        
-        triggerContext(e, channel_id);
-
-    }
-
+      e.stopPropagation();
+      triggerContext(e, channel_id);
+    };
+  
     return (
-        <div 
-        data-context={JSON.stringify({...channel, type: 'channel', active})}
-        id={channel_id} 
-        style={{
-            backgroundColor: users.length > 0 ? 'var(--card-background-color)' : 'transparent'
-        }}
-        className={`${styles.channelContainer} ${active ? styles.active : ''}`}>
-            <button
-            onClick={openChannel}
-            className={`${styles.channelButton}`} 
-            >
-                <span className={styles.icon}>
-                    {channel_icon && !hideCustomChannelIcons ?
-                    <ImageComponent src={channel_icon} />
-                    : channel_type === 'text' ?
-                    <Hash color="var(--text-color)" style={{marginLeft: '-5px'}} width={'100%'} height={'100%'} />
-                    : channel_type === 'thread' ?
-                    <TextQuote />
-                    :
-                    <Volume1 width={'100%'} height={'100%'} />}
-                </span>
-                <span className={styles.channelName}>{channel_name}</span>
-                
-            </button>
-            <div className={styles.subButtonWrapper}>
-                <IconButton 
-                onClick={openContext}
-                Icon={<Ellipsis color="var(--text-color)"/>}
-                title={"more"}
-                position="left"
-                width={25}
-                height={25}
-                backgroundHover="var(--background-color)"
-                />
-            </div>
-            {users.length > 0 && (
-                <motion.div 
-                    className={styles.userList} 
-                    initial={{ opacity: 0, height: 0 }} 
-                    animate={{ opacity: 1, height: "auto" }} 
-                    exit={{ opacity: 0, height: 0 }}
-                >
-                    {users.map((user) => (
-                       <ChannelUserButton active={active} key={user} user_id={user} />
-                    ))}
-                </motion.div>
+      <div
+        data-context={JSON.stringify({ ...channel, type: 'channel', active })}
+        id={channel_id}
+        style={{ backgroundColor: users.length > 0 ? 'var(--card-background-color)' : 'transparent' }}
+        className={`${styles.channelContainer} ${active ? styles.active : ''}`}
+      >
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={openChannel}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') openChannel();
+          }}
+          className={styles.channelButton}
+          style={{
+            touchAction: 'manipulation',
+            userSelect: 'none',
+            WebkitUserDrag: 'none'
+          }}
+        >
+          <span className={styles.icon} draggable={false}>
+            {channel_icon && !hideCustomChannelIcons ? (
+              <ImageComponent src={channel_icon} draggable={false} />
+            ) : channel_type === 'text' ? (
+              <Hash color="var(--text-color)" style={{ marginLeft: '-5px' }} width="100%" height="100%" draggable={false} />
+            ) : channel_type === 'thread' ? (
+              <TextQuote />
+            ) : (
+              <Volume1 width="100%" height="100%" draggable={false} />
             )}
+          </span>
+          <span draggable={false} className={styles.channelName}>{channel_name}</span>
         </div>
+  
+        <div className={styles.subButtonWrapper}>
+          <IconButton
+            onClick={openContext}
+            Icon={<Ellipsis color="var(--text-color)"/>}
+            title="more"
+            position="left"
+            width={25}
+            height={25}
+            backgroundHover="var(--background-color)"
+          />
+        </div>
+  
+        {users.length > 0 && (
+          <motion.div
+            className={styles.userList}
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+          >
+            {users.map((user) => (
+              <ChannelUserButton active={active} key={user} user_id={user} />
+            ))}
+          </motion.div>
+        )}
+      </div>
     );
-};
-
-export default ChannelButton;
+  };
+  
+  export default ChannelButton

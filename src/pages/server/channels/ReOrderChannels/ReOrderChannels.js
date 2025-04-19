@@ -34,41 +34,38 @@ export const ReOrderChannels = ({ onDrop }) => {
     }, [channels])
 
     const handleReorder = async (id, moveTo, category) => {
-
         if (reordering) return;
-
         toggleReordering(true);
-
-        let id_array = localChannels.map(c => c.channel_id)
-
-        const originatingPos = id_array.findIndex(c => c === id);
-
-        const newPos = id_array.findIndex(c => c === moveTo);
-        
+      
+        let id_array = localChannels
+          .map(c => c.channel_id);
+      
+        const originatingPos = id_array.indexOf(id);
+        const newPos = id_array.indexOf(moveTo);
+      
+        if (originatingPos === -1 || newPos === -1) {
+          console.warn('Invalid reorder indices:', { id, moveTo });
+          toggleReordering(false);
+          return;
+        }
+      
         const element = id_array[originatingPos];
-
         let move_to_pos = newPos < originatingPos ? newPos + 1 : newPos;
-
+      
         id_array.splice(originatingPos, 1);
-
         id_array.splice(move_to_pos, 0, element);
-
-        const data = {newOrder: id_array, category: category, channel_id: id}
-        
-        await socket.request('reorder channels', data)
-        .then(res => {
-
-            dispatch(reorderChannels(res));
-            return;
-        }).catch(err => {
-            console.log(err);
-            return;
-        })
-
-       
+      
+        try {
+          const data = { newOrder: id_array, category, channel_id: id };
+          const res = await socket.request('reorder channels', data);
+          dispatch(reorderChannels(res));
+        } catch (err) {
+          console.error(err);
+        }
+      
         toggleReordering(false);
-    
-    }
+    };
+      
 
     const handleReOrderCategories = async (category_id, move_to, below) => {
     
@@ -133,7 +130,9 @@ export const ReOrderChannels = ({ onDrop }) => {
             toggleDraggingCategory={() => {}}
             catagoryName={'Channels'}
             category_id={'channels'}
-            channels={channels.filter(channel => !channel.category || channel.category === 'channels')}
+            channels={channels.map(c => ({ ...c, category: c.category || 'channels' }))
+              .filter(c => c.category === 'channels')}
+
             draggingChannel={draggingChannel}
             toggleDraggingChannel={toggleDraggingChannel}
             />

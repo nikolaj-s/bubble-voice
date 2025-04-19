@@ -2,7 +2,7 @@
   .linkPreview {
     display: flex;
     align-items: center;
-    background: var(--card-background-color);
+    background: var(--secondary-color);
     color: var(--text-color);
     text-decoration: none;
     border-radius: 10px;
@@ -33,6 +33,7 @@
     height: 100px;
     flex-shrink: 0;
     border-right: 3px solid var(--accent-color);
+    background-color: black;
   }
 
   .redditImage {

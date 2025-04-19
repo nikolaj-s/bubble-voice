@@ -133,7 +133,8 @@ const Dropdown = ({ selected, options, setSelected, selector = "label" }) => {
                   selected && getLabel(selected) === getLabel(option) ? styles.selectedOption : ""
                 }`}
                 onClick={() => handleSelect(option)}
-                transition={{ type: "spring", stiffness: 300 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
                 {getLabel(option)}
               </motion.li>
