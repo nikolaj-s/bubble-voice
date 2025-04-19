@@ -33,9 +33,10 @@ const ImageDropZone = ({
       const file = acceptedFiles[0];
       const maxSize = dimensions;
       const options = {
-        maxSizeMB: 0.75,
+        maxSizeMB: 0.2,
         maxWidthOrHeight: maxSize,
         useWebWorker: true,
+        fileType: 'image/webp'
       };
 
       try {

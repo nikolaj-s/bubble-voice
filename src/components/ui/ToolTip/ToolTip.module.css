@@ -13,10 +13,13 @@
   font-size: 0.75rem;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
-  white-space: nowrap;
+  text-align: center;
   opacity: 0;
   transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
   pointer-events: none;
+  max-width: 150px;
+  
+  z-index: 10;
 }
 
 /* Top tooltip */

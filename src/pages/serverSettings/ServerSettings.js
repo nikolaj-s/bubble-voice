@@ -10,6 +10,7 @@ import { EditPermissionGroupForm } from '../../layout/Forms/ServerSettings/EditP
 import { EditChannelForm } from '../../layout/Forms/ServerSettings/EditChannelForm/EditChannelForm'
 import { UserManagementForm } from '../../layout/Forms/ServerSettings/UserManagementForm/UserManagementForm'
 import { EditCategoryForm } from '../../layout/Forms/ServerSettings/EditCategoryForm/EditCategoryForm'
+import { ContentDataForm } from '../../layout/Forms/ServerSettings/ContentDataForm/ContentDataForm'
 
 export const ServerSettings = ({close}) => {
 
@@ -20,6 +21,7 @@ export const ServerSettings = ({close}) => {
         {key: "permissions", label: "Edit Permissions"},
         {key: "manageUsers", label: "Manage Users"},
         {key: "security", label: "Security"},
+        {key: "contentData", label: "Content & Data"}
     ]
 
     const content = {
@@ -31,7 +33,8 @@ export const ServerSettings = ({close}) => {
         editPermissionGroup: <EditPermissionGroupForm />,
         editChannel: <EditChannelForm />,
         manageUsers: <UserManagementForm />,
-        editCategory: <EditCategoryForm />
+        editCategory: <EditCategoryForm />,
+        contentData: <ContentDataForm />
     }
 
     return (

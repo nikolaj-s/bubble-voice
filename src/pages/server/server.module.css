@@ -14,6 +14,7 @@
 .sectionTwo {
     height: calc(100svh);
     position: relative;
+    display: flex;
 }
 
 .hideUsers {
@@ -33,8 +34,9 @@
         border-top-left-radius: 0px;
             /* Set starting transform for animation */
         transform: translateX(-100%);
-        transition: transform 0.3s ease-in-out;
+        transition: 0.3s ease-in-out;
         grid-template-rows: 80px minmax(0px, 1fr) 85px;
+        opacity: 0;
     }
 
     .inVoiceChannel {
@@ -43,6 +45,7 @@
 
     .sectionOneMobile {
         transform: translateX(0%);
+        opacity: 1;
     }
     .sectionTwo {
         height: calc(100svh - 55px) !important;
@@ -57,11 +60,13 @@
         max-width: 250px;
         height: 100svh !important;
         transform: translateX(100%);
-        transition: transform 0.3s ease-in-out;
+        transition: 0.3s ease-in-out;
+        opacity: 0;
     }
 
     .sectionThreeMobile {
         transform: translateX(0%);
+        opacity: 1;
     }
 
     

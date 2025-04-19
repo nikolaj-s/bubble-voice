@@ -17,7 +17,7 @@ export const MediaControlsProvider = ({ children }) => {
     // Get state from Redux
     const { loading } = useSelector((state) => state.accountSlice);
 
-    const { isMicrophoneMuted, isAudioMuted, isWebcamOn, isScreenSharing } = useSelector(
+    const { isMicrophoneMuted, isAudioMuted, isWebcamOn, isScreenSharing, microphoneError, webcamError } = useSelector(
         (state) => state.mediaControlSlice
     );
 
@@ -59,6 +59,8 @@ export const MediaControlsProvider = ({ children }) => {
                 isAudioMuted,
                 isWebcamOn,
                 isScreenSharing,
+                webcamError,
+                microphoneError,
                 handleToggleMicrophone,
                 handleToggleAudio,
                 handleToggleWebcam,

@@ -110,7 +110,7 @@ export const useContextMenuOptions = () => {
                 
             }
 
-            if (data.channelList) {
+            if (data.channelList || data.mobileMenu) {
                 if (permissions.user_can_create_channels) {
                     options.push({
                         label: "Create Channel",

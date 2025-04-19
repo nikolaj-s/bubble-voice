@@ -111,6 +111,7 @@
     display: block;
     overflow: hidden;
     cursor: pointer;
+    min-width: 50px;
   }
 
   .imageSkeleton {

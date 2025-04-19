@@ -18,7 +18,7 @@ export const RoomOverlay = () => {
 
     const navigate = useNavigate();
 
-    const {isWebcamOn, isMicrophoneMuted, isAudioMuted, isScreenSharing, handleToggleAudio, handleToggleMicrophone, handleToggleWebCam } = useMediaControls();
+    const {isWebcamOn, isMicrophoneMuted, isAudioMuted, isScreenSharing, handleToggleAudio, handleToggleMicrophone, handleToggleWebCam, webcamError, microphoneError } = useMediaControls();
 
     const {keybinds} = useSelector(state => state.keybindsSlice);
     

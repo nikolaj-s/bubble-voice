@@ -7,7 +7,7 @@
     height: 20px;
     opacity: 0.5;
     cursor: pointer;
-    transition: 0.05s;
+    transition: opacity 0.2s ease-in-out;
 }
 
 .channel-list-collapse-button svg {
@@ -15,7 +15,7 @@
     height: 20px;
 }
 
-.channel-list-collapse-button:hover {
+.categoryWrapper:hover .channel-list-collapse-button {
     opacity: 1;
 }
 

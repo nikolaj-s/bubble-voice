@@ -12,7 +12,7 @@ const initialState = () => {
         isScreenSharing: false,
         isMicrophoneMuted: false,
         microphoneError: false,
-        cameraError: false,
+        webcamError: false,
         screenShareError: false,
         loading: false,
         usingPushToTalk: usingPushToTalk || false,
@@ -20,7 +20,6 @@ const initialState = () => {
         voiceThreshold: voiceThreshold || 25
     }
 }
-
 
 const mediaControlSlice = createSlice({
     name: "mediaControlSlice",
@@ -48,10 +47,14 @@ const mediaControlSlice = createSlice({
         toggleWebcam: (state, action) => {
             if (state.loading) return;
 
+            state.webcamError = false;
+
             state.isWebcamOn = !state.isWebcamOn;
         },
         toggleMicrophone: (state, action) => {
             if (state.loading) return;
+
+            state.microphoneError = false;
 
             state.isMicrophoneMuted = !state.isMicrophoneMuted;
 
@@ -62,6 +65,8 @@ const mediaControlSlice = createSlice({
         },
         toggleAudioMute: (state, action) => {
             if (state.loading) return;
+
+            state.microphoneError = false;
 
             state.isAudioMuted = !state.isAudioMuted;
 
@@ -74,7 +79,15 @@ const mediaControlSlice = createSlice({
         toggleMediaControlLoading: (state,action) => {
             state.loading = action.payload;
         },
-
+        throwMicrophoneError: (state, action) => {
+            state.microphoneError = action.payload;
+        },
+        throwWebcamError: (state, action) => {
+            state.webcamError = action.payload
+        },
+        clearMediaControlError: (state,action) => {
+            state[action.payload] = false;
+        }
     }
 })
 
@@ -86,7 +99,10 @@ export const {
     toggleMediaControlLoading,
     togglePushToTalkActive,
     toggleUsingPushToTalk,
-    setVoiceThreshold
+    setVoiceThreshold,
+    throwMicrophoneError,
+    throwWebcamError,
+    clearMediaControlError
 } = mediaControlSlice.actions;
 
 export default mediaControlSlice.reducer;

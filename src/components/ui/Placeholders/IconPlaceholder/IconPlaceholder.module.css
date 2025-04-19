@@ -1,0 +1,18 @@
+.iconWrapper {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    padding: 10px;
+    overflow: hidden;
+    background-color: var(--accent-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon {
+    color: var(--text-color);
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
+}

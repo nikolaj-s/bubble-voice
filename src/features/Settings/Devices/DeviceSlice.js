@@ -44,9 +44,9 @@ const deviceSlice = createSlice({
       state.speakers = action.payload.filter((d) => d.kind === "audiooutput");
 
       // Load saved devices or set default
-      state.selectedWebcam = JSON.parse(localStorage.getItem("selectedWebcam")) || state.webcams[0] || null;
-      state.selectedMicrophone = JSON.parse(localStorage.getItem("selectedMicrophone")) || state.microphones[0] || null;
-      state.selectedSpeaker = JSON.parse(localStorage.getItem("selectedSpeaker")) || state.speakers[0] || null;
+      if (!state.selectedWebcam) state.selectedWebcam = JSON.parse(localStorage.getItem("selectedWebcam")) || state.webcams[0] || null;
+      if (!state.selectedMicrophone) state.selectedMicrophone = JSON.parse(localStorage.getItem("selectedMicrophone")) || state.microphones[0] || null;
+      if (!state.selectedSpeaker) state.selectedSpeaker = JSON.parse(localStorage.getItem("selectedSpeaker")) || state.speakers[0] || null;
     });
   },
 });

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import imageCompression from "browser-image-compression";
 import styles from "./MessageInput.module.css";
 import IconButton from "../../ui/Buttons/IconButton/IconButton";
-import { ImageUp, Plus, Search, SearchIcon } from "lucide-react";
+import { ImageUp, Pencil, Plus, SearchIcon } from "lucide-react";
 import { MediaPreview } from "../MediaPreview/MediaPreview";
 import { useDispatch } from "react-redux";
 import { setFilter } from "../../../features/Search/searchSlice";
@@ -133,7 +133,7 @@ export const MessageInput = ({ value, setValue, setImage = () => {}, error, send
                 borderRadius={'50%'}
                 height={50}
                 width={50}
-                title={"Add Media"}
+                title={"Add"}
                 Icon={<Plus color="var(--text-color)" />}
                 onClick={toggleMenu}
                 backgroundColor="var(--card-background-color)"
@@ -147,8 +147,9 @@ export const MessageInput = ({ value, setValue, setImage = () => {}, error, send
                         animate={{ opacity: 1, y: -5 }}
                         exit={{ opacity: 0, y: -10 }}
                     >
-                        <button onClick={() => fileInputRef.current.click()}>Upload Image <ImageUp color="var(--text-color)" size={20} /></button>
-                        <button onClick={handleOpenSearchMedia}>Search Media <SearchIcon color="var(--text-color)" size={20} /></button>
+                        <button onClick={() => {dispatch(setOverlay('createDrawing'))}}>Create <Pencil color="var(--text-color)" size={20} /></button>
+                        <button onClick={() => fileInputRef.current.click()}>Upload <ImageUp color="var(--text-color)" size={20} /></button>
+                        <button onClick={handleOpenSearchMedia}>Search <SearchIcon color="var(--text-color)" size={20} /></button>
                     </motion.div>
                 )}
             </AnimatePresence>

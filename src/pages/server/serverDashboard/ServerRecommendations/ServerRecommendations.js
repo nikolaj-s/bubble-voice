@@ -6,6 +6,7 @@ import MediaOfTheDaySkeleton from '../../../../components/MediaOfTheDayCard/Medi
 import { fetchServerRecommendations } from '../../../../features/ServerRecommendations/Thunks/fetchServerRecommendations';
 import RandomMediaGallery from '../../../../components/RandomMediaGallery/RandomMediaGallery';
 import NoRecommendationsPlaceholder from '../../../../components/Placeholders/NoRecommendationsPlaceholder/NoRecommendationsPlaceholder';
+import { setOverlay } from '../../../../features/Overlay/overlaySlice';
 
 export const ServerRecommendations = () => {
 
@@ -24,6 +25,8 @@ export const ServerRecommendations = () => {
 
     }, [server_id, dispatch])
 
+    const viewAllRecommendations = () => dispatch(setOverlay('serverRecommendations'));
+
     if (loading) return <MediaOfTheDaySkeleton />;
 
     if (error === 'No recommendation data available') return <NoRecommendationsPlaceholder />
@@ -32,6 +35,6 @@ export const ServerRecommendations = () => {
 
     return [
         <MediaOfTheDayCard key={'media-of-the-day'} {...media?.mediaOfTheDay} media={media?.mediaOfTheDay} />,
-        <RandomMediaGallery key={'media-recommendations'} title='Media Recommendations' media={media?.media} />
+        <RandomMediaGallery action={viewAllRecommendations} key={'media-recommendations'} title='Media Recommendations' media={media?.media} />
     ]
 }

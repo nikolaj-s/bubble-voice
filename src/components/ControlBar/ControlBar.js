@@ -22,7 +22,7 @@ export const ControlBar = ({inChannel = false}) => {
 
     const dispatch = useDispatch();
 
-    const {isWebcamOn, isMicrophoneMuted, isAudioMuted, isScreenSharing, handleToggleAudio, handleToggleMicrophone, handleToggleWebcam } = useMediaControls();
+    const {isWebcamOn, isMicrophoneMuted, isAudioMuted, isScreenSharing, handleToggleAudio, handleToggleMicrophone, handleToggleWebcam, webcamError, microphoneError } = useMediaControls();
 
     const {keybinds} = useSelector(state => state.keybindsSlice);
 
@@ -48,12 +48,12 @@ export const ControlBar = ({inChannel = false}) => {
             {inChannel ?
             <div className={styles.channelControlWrapper}>
                 <IconButton 
-                backgroundColor={isWebcamOn ? 'var(--success-color)' : 'var(--primary-color)'}
+                backgroundColor={webcamError ? 'var(--error-color)' : isWebcamOn ? 'var(--success-color)' : 'var(--primary-color)'}
                 width={65}
                 height={30}
                 onClick={handleToggleWebcam}
-                title={isWebcamOn ? "Turn off Webcam" : "Turn on Webcam"}
-                Icon={isWebcamOn ? <VideoOff  color={'var(--text-color)'} /> : <Video height={50} width={50} color={'var(--text-color)'} />}
+                title={webcamError ? webcamError : isWebcamOn ? "Turn off Webcam" : "Turn on Webcam"}
+                Icon={isWebcamOn || webcamError ? <VideoOff  color={'var(--text-color)'} /> : <Video height={50} width={50} color={'var(--text-color)'} />}
                 />
                 <IconButton 
                 backgroundColor='var(--primary-color)'
@@ -83,13 +83,17 @@ export const ControlBar = ({inChannel = false}) => {
                     onClick={handleToggleMicrophone}
                     position='top'
                     Icon={
-                    isMicrophoneMuted ?
-                    <MicOff color='var(--text-color)' />
+                    isMicrophoneMuted || microphoneError ?
+                    <MicOff color={microphoneError ? 'var(--error-color)' :'var(--text-color)'} />
                     :
                     <Mic color='var(--text-color)' />
                     }
-                    title={<KeybindToolTip 
-                        label={`${isMicrophoneMuted ? 'Un-Mute' : 'Mute'}`}
+                    title={ 
+                        microphoneError ?
+                        microphoneError
+                        :
+                        <KeybindToolTip 
+                        label={`${isMicrophoneMuted ? 'Unmute' : 'Mute'}`}
                         binds={[keybinds['muteMicrophone']?.key]}
                         />}
                     />
@@ -99,7 +103,7 @@ export const ControlBar = ({inChannel = false}) => {
                     position='top' 
                     title={
                         <KeybindToolTip 
-                        label={`${isAudioMuted ? 'Un-Deafen' : 'Deafen'}`}
+                        label={`${isAudioMuted ? 'Undeafen' : 'Deafen'}`}
                         binds={[keybinds['deafen']?.key]}
                         />
                     }

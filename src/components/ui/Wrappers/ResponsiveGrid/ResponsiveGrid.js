@@ -4,7 +4,7 @@ import styles from './ResponsiveGrid.module.css';
 
 const ResponsiveGrid = ({ children }) => {
   const flattened = React.Children.toArray(children).flat();
-  console.log(flattened)
+
   return (
     <div className={styles.grid}>
       {flattened.map((child, index) => (

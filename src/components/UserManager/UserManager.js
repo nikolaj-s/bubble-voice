@@ -7,6 +7,7 @@ import Header from "../ui/Titles/Header/Header";
 import IconButton from "../ui/Buttons/IconButton/IconButton";
 import { Ban } from "lucide-react";
 import TextInput from "../ui/Inputs/TextInput/TextInput";
+import { LineSpacer } from "../ui/Spacers/LineSpacer/LineSpacer";
 
 const UserManager = ({ users, serverGroups, onChangeUserGroup, permissions, handleBan = () => {} }) => {
 
@@ -18,6 +19,7 @@ const UserManager = ({ users, serverGroups, onChangeUserGroup, permissions, hand
         <div className={styles.container}>
             <Header text="Manage Users" />
             <TextInput placeholder={"Filter"} value={query} onChange={setQuery} />
+            <LineSpacer />
             {sortedGroups.map((group) => (
                 <div key={group._id} className={styles.groupContainer}>
                     {/* Group Header */}
@@ -45,6 +47,8 @@ const UserManager = ({ users, serverGroups, onChangeUserGroup, permissions, hand
                             title={`Ban ${user.display_name}`}
                             Icon={<Ban color="var(--error-color)" />}
                             onClick={() => {handleBan(user)}}
+                            width={30}
+                            height={30}
                             />
                             )}
                         </div>

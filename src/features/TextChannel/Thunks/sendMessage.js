@@ -18,9 +18,9 @@ export const sendMessage = createAsyncThunk(
      
             if (!params.channel_id) return rejectWithValue("Invalid Channel");
 
-            if (params.text.trim().length === 0 && !params.image) return rejectWithValue("Cannot send an empty message")
+            if (params.text?.trim().length === 0 && !params.image) return rejectWithValue("Cannot send an empty message")
 
-            if (params.text.length > 1024) return rejectWithValue("Message exceeds the character limit");
+            if (params?.text?.length > 1024) return rejectWithValue("Message exceeds the character limit");
 
             const data = generateFormData({...params, channel_id: params.channel_id, server_id: server_id})
 
@@ -37,6 +37,7 @@ export const sendMessage = createAsyncThunk(
 
             return rejectWithValue("Fatal Error Sending Message");
         } catch (error) {
+            console.log(error)
             return APIErrorHandler(rejectWithValue, error, "Internal Server Error");
         }
     }

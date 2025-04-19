@@ -15,6 +15,9 @@ import { Ellipsis } from 'lucide-react';
 import { triggerContext } from '../../../lib/services/helperFunctions';
 import VideoPlayer from '../../ui/Video/VideoPlayer/VideoPlayer';
 import { LongPressGestureWrapper } from '../../ui/Gestures/LongPressGestureWrapper';
+import { ImageBlock } from './ImageBlock/ImageBlock';
+import { VideoBlock } from './VideoBlock/VideoBlock';
+import { TextBlock } from './TextBlock/TextBlock';
 
 export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inSearch = false}) => {
 
@@ -24,29 +27,9 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
 
     const isDifferentDay = prevMessage?.formattedDate !== message?.formattedDate;
 
-    const expandImage = () => {
-
-        dispatch(setExpandedImage({image: message.image}));
-
-        dispatch(setOverlay("expandImage"));
-
-    }
-
     const openCtx = (e) => {
-        console.log(e)
         triggerContext(e, `message-id-${message._id}`)
     }
-
-    const handleTouchStart = (e) => {
-        timeoutRef.current = setTimeout(() => {
-          openCtx(e);
-        }, 600); // long press delay (ms)
-      };
-    
-      const handleTouchEnd = () => {
-        clearTimeout(timeoutRef.current);
-      };
-    
 
     return (
         <>
@@ -80,28 +63,9 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
                         <h3>{users[message.user_id]?.display_name}</h3>
                         <TimeDisplay time={message.formattedTime} margin={0} />
                     </div>}
-                    {message.text && (
-                    <p className={styles.textBlock}>{message.text}</p>
-                    )}
-                    {message.image && loading ?
-                    <div className={`${styles.imageSkeleton} ${styles.skeleton}`} />
-                    : message.image ?
-                    <div 
-                    onClick={expandImage}
-                    className={styles.imageBlock}>
-                        <NsfwWrapper nsfw={message}>
-                            <ImageComponent src={message.image} />
-                        </NsfwWrapper>
-                    </div>
-                    : 
-                    message.video ?
-                    <div className={styles.imageBlock}>
-                        <NsfwWrapper nsfw={message}>
-                            <VideoPlayer src={message.video} />
-                        </NsfwWrapper>
-                    </div>
-                    :
-                    null}
+                    <TextBlock {...message} styles={styles} />
+                    <ImageBlock {...message} styles={styles} loading={loading} />
+                    <VideoBlock {...message} styles={styles} />
                     {!message.image  && !message.video && !message.link_preview && (<LinkComponent link={message.link} />)}
                     <LinkPreview preview={message.link_preview} /> 
                 </div>

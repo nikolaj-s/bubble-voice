@@ -7,4 +7,5 @@
     grid-template-rows: 1fr minmax(80px, auto);
     z-index: 2;
     position: relative;
+    gap: 5px;
 }

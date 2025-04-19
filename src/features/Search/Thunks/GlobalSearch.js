@@ -13,6 +13,8 @@ export const globalSearch = createAsyncThunk(
 
             const {query, filter, similarImageSrc, isPinned, hasImage, hasVideo, hasLink, fromDate, selectedChannel} = getState().searchSlice;
 
+            const {disableSafeSearch} = getState().searchSettingsSlice;
+
             const {server_id} = getState().serverDetailsSlice;
 
             if (!filter) return rejectWithValue("Invalid Filter");
@@ -32,6 +34,7 @@ export const globalSearch = createAsyncThunk(
                     hasLink,
                     server_id,
                     fromDate,
+                    disableSafeSearch,
                     channel: selectedChannel?.channel_id === '*' ? null : selectedChannel.channel_id
                 }
             }).then(res => {

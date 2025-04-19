@@ -3,7 +3,7 @@ import React from 'react';
 import styles from './Room.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMediasoup } from '../../context/MediasoupContext';
-import { toggleMediaControlLoading } from '../../features/MediaControl/mediaControlSlice';
+import { throwMicrophoneError, throwWebcamError, toggleMediaControlLoading, toggleWebcam } from '../../features/MediaControl/mediaControlSlice';
 import { getMicrophoneMedia, getWebcamMedia } from '../../lib/services/getUserMedia';
 import { RoomUserWrapper } from './RoomUserWrapper/RoomUserWrapper';
 import { useDetectSpeech } from '../../hooks/useDetectSpeech';
@@ -23,21 +23,32 @@ export const Room = () => {
 
     const { user_id: account_id} = useSelector(state => state.accountSlice.account);
 
+    const {selectedMicrophone, selectedWebcam} = useSelector(state => state.deviceSlice);
+
     const consumers = getConsumers();
 
     const producers = getProducers();
 
+    const isTextChannelOpen = useSelector(state => state.textChannelSlice.currentTextChannel);
+
     // microphoneMuteState effect
     React.useEffect(() => {
         const handleMicrophone = async (state) => {
+
+            dispatch(throwMicrophoneError(false));
+
             dispatch(toggleMediaControlLoading(true));
 
             if (state) {
                 await closeProducer('microphone');
             } else {
-                const track = await getMicrophoneMedia();
-                
-                if (track.error) return;
+                const track = await getMicrophoneMedia(selectedMicrophone?.deviceId);
+               
+                if (track.error) {
+                    dispatch(throwMicrophoneError(track.errorMessage));
+
+                    return dispatch(toggleMediaControlLoading(false));
+                }
 
                 await produce('microphone', track);
 
@@ -48,18 +59,34 @@ export const Room = () => {
         };
         
         handleMicrophone(isMicrophoneMuted);
-    }, [isMicrophoneMuted]);
+
+    }, [isMicrophoneMuted, selectedMicrophone]);
 
     // handle webcam
     React.useEffect(() => {
 
         const handleWebcam = async (state) => {
+
+            dispatch(throwWebcamError(false));
+
             dispatch(toggleMediaControlLoading(true));
 
             if (state) {
-                const track = await getWebcamMedia();
+                const track = await getWebcamMedia(selectedWebcam?.deviceId);
 
-                if (track.error) return;
+                if (track.error) {
+
+                    dispatch(throwWebcamError(track.errorMessage));
+
+                    return dispatch(toggleMediaControlLoading(false));
+
+                }
+
+                track.onended = (isWebcamOn) => {
+                    if (isWebcamOn) {
+                        dispatch(toggleWebcam());
+                    }
+                } 
 
                 await produce('webcam', track);
             } else {
@@ -70,7 +97,8 @@ export const Room = () => {
         }
 
         handleWebcam(isWebcamOn);
-    }, [isWebcamOn])
+        
+    }, [isWebcamOn, selectedWebcam])
 
     // Hook for detecting speech
     useDetectSpeech(isMicrophoneMuted, pauseProducer, resumeProducer, voiceThreshold, usingPushToTalk);
@@ -93,9 +121,9 @@ export const Room = () => {
         return updatedUsers;
         
     }, [users, consumers, producers]);
-console.log(users)
+
     return (
-        <div className={styles.container}>
+        <div className={`${styles.container} ${isTextChannelOpen ? styles.textChannelOpen : ''}`}>
     
             <RoomUserWrapper users={combinedUsers} />
             <ChannelBackground channel_background={channel_background} />

@@ -89,6 +89,8 @@ const searchSlice = createSlice({
                 results = action.payload.results;
             }
 
+            if (action.payload.isFiltered) state.error = 'Some results were filtered out due to Safe Search being enabled.'
+
             state.results[action.payload.filter] = results;
         })
 

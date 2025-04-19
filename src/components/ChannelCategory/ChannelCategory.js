@@ -96,6 +96,7 @@ export const Category = ({
 
   return (
     <div
+        className={styles.categoryWrapper}
         data-context={category_id === 'channels' ? null : JSON.stringify({...category, type: 'category'})}
         id={category_id}
     >

@@ -1,0 +1,9 @@
+.header {
+    font-size: 1.4rem;
+    color: var(--text-color);
+    font-weight: 600;
+    margin-bottom: 12px;
+    text-align: start;
+    font-family: var(--font-family);
+  }
+  

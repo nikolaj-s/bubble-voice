@@ -8,6 +8,8 @@ export const RoomUserWrapper = ({ users }) => {
 
     const { hideUsers } = useSelector(state => state.appearanceSlice);
 
+    const textChannelOpen = useSelector(state => state.textChannelSlice.currentTextChannel);
+
     const [expanded, setExpanded] = React.useState("");
 
     const hidingNonVideoMembers = false;
@@ -72,7 +74,7 @@ export const RoomUserWrapper = ({ users }) => {
             handleScaling();
         }
     // eslint-disable-next-line   
-    }, [expanded, hidingNonVideoMembers, hideUsers]);
+    }, [expanded, hidingNonVideoMembers, hideUsers, textChannelOpen]);
 
     React.useEffect(() => {
         let observer;

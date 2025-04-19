@@ -90,11 +90,7 @@ const MessageList = ({position = 0, messages = [], loadMoreMessages = () => {}, 
     <div 
     className={styles.messageListContainer} ref={listRef} onScroll={handleScroll}>
       <AnimatePresence>
-        {loadingMore && (
-          <div className={styles.loadingIndicator}>
-            <div className={styles.spinner}></div>
-          </div>
-        )}
+        
         {sending && (
           <motion.div
           key="sending"
@@ -114,6 +110,11 @@ const MessageList = ({position = 0, messages = [], loadMoreMessages = () => {}, 
         : messages.map((msg, index) => (
            <MessageItem users={users} prevMessage={index === messages.length - 1 ? {} : messages[index + 1]} message={msg} key={msg.message_id} />
         ))}
+        {loadingMore && (
+          <div className={styles.loadingIndicator}>
+            <div className={styles.spinner}></div>
+          </div>
+        )}
       </AnimatePresence>
     </div>
   );

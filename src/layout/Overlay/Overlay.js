@@ -4,7 +4,7 @@ import React from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { selectActiveOverlay, closeOverlay, setOverlay } from "../../features/Overlay/overlaySlice";
+import { closeOverlay, setOverlay } from "../../features/Overlay/overlaySlice";
 
 import { Search } from "../Overlays/Search/Search";
 
@@ -26,6 +26,8 @@ import { UserQuickMenu } from "../Overlays/UserQuickMenu/UserQuickMenu";
 import useKeyupListener from "../../hooks/useKeyupListener";
 import { SettingsQuickMenu } from "../Overlays/SettingsQuickMenu/SettingsQuickMenu";
 import { WebcamOverlay } from "../Overlays/WebcamOverlay/WebcamOverlay";
+import { CreateDrawing } from "../Overlays/CreateDrawing/CreateDrawing";
+import { ServerRecommendations } from "../Overlays/ServerRecommendations/ServerRecommendations";
 
 const overlayComponents = {
   search: Search,
@@ -36,7 +38,9 @@ const overlayComponents = {
   expandImage: ExpandedImage,
   userQuickMenu: UserQuickMenu,
   settingsQuickMenu: SettingsQuickMenu,
-  webcamOverlay: WebcamOverlay
+  webcamOverlay: WebcamOverlay,
+  createDrawing: CreateDrawing,
+  serverRecommendations: ServerRecommendations
 };
 
 export const Overlay = ({ children }) => {

@@ -1,0 +1,137 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-family);
+    width: 100%;
+  }
+  
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+    justify-content: center;
+    background-color: var(--primary-color);
+    padding: 5px;
+    border-radius: 5px;
+  }
+  
+  .toolButton {
+    background: var(--button-background);
+    border: none;
+    padding: 6px 10px;
+    border-radius: 8px;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: background 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .toolButton:hover {
+    background: var(--button-hover);
+  }
+  
+  .toolButton.active {
+    background: var(--accent-color) !important;
+  }
+  
+  .brushSize {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-color);
+  }
+  
+  .colorPalette {
+    display: flex;
+    gap: 6px;
+  }
+  
+  .colorSwatch {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+  }
+  
+  .colorSwatch.selected {
+    border-color: var(--text-color);
+  }
+  
+  .canvas {
+    border: 2px solid var(--card-background-color);
+    background-color: white;
+    cursor: crosshair;
+    border-radius: 8px;
+    touch-action: none;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+    max-width: calc(100% - 4px);
+  }
+  
+  .actionButtons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  
+  .submitBtn,
+  .downloadBtn,
+  .clearBtn {
+    background-color: var(--button-background);
+    color: var(--text-color);
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  
+  .submitBtn:hover,
+  .downloadBtn:hover {
+    background-color: var(--button-hover);
+  }
+  
+  .canvasWrapper {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .brushCursor {
+    position: absolute;
+    pointer-events: none;
+    border: 2px solid;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+  }
+  
+  .shake {
+    animation: shake 0.4s;
+  }
+  
+  @keyframes shake {
+    0% { transform: translate(0px, 0px); }
+    20% { transform: translate(-5px, 2px); }
+    40% { transform: translate(4px, -3px); }
+    60% { transform: translate(-3px, 4px); }
+    80% { transform: translate(3px, -2px); }
+    100% { transform: translate(0px, 0px); }
+  }
+  
+  .clearBtn {
+    background-color: var(--error-color);
+    color: #fff;
+  }
+  
+  .clearBtn:hover {
+    background-color: #c14040;
+  }
+  

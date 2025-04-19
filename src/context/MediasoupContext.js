@@ -1,13 +1,20 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import * as mediasoupClient from "mediasoup-client";
 import { useSocket } from "./SocketContext"; // Adjust this import path
+import { useDispatch } from "react-redux";
 
 const MediasoupContext = createContext(null);
 
 export const MediasoupProvider = ({ children }) => {
+
+  const dispatch = useDispatch();
+
   const socket = useSocket();
+
   const [loading, toggleLoading] = useState(true);
+
   const [error, setError] = useState(false);
+
   const [updateSignal, setUpdateSignal] = useState(0); // This will trigger re-renders
 
   const deviceRef = useRef(null);

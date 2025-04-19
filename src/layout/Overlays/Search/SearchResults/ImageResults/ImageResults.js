@@ -16,9 +16,8 @@ export const ImageResults = ({images, id = 'image-grid', send = () => {}}) => {
         <ImageMasonryWrapper>
             {images.map(image => {
                 return (
-                <LongPressGestureWrapper width={'100%'} height={'100%'} onTouchContext={(e) => {triggerContext(e, image.src)}}>   
+                <LongPressGestureWrapper key={image.src}  width={'100%'} height={'100%'} onTouchContext={(e) => {triggerContext(e, image.src)}}>   
                     <ImageTooltipWrapper 
-                        key={image.src} 
                         image={image}>
                         <NsfwWrapper 
                         nsfw={{...image}} >

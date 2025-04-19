@@ -20,7 +20,7 @@ export const updateServerDetails = createAsyncThunk(
 
             const data = generateFormData({...params, server_id});
 
-            const response = await Axios.post(`${API_URL}/update-server/details`, data, {
+            const response = await Axios.post(`${API_URL}/server-settings/details`, data, {
                 headers: {TOKEN: token}
             });
 

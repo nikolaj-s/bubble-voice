@@ -92,6 +92,8 @@
     align-items: center;
     text-align: left;
     gap: 5px;
+    min-width: 100px;
+    flex-shrink: 0;
 }
 
 .menu button:hover {

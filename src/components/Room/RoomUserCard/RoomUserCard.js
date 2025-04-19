@@ -75,11 +75,11 @@ export const RoomUserCard = ({ user_id, consumers, action }) => {
                         webcamContainerRef.current.appendChild(videoElement);
                     }
 
-                    track.onended = () => {
-                        removeWebcamElement(consumer.id);
+                    // track.onended = () => {
+                    //     removeWebcamElement(consumer.id);
 
-                        webcamContainerRef.current?.removeChild(videoElement);
-                    };
+                    //     webcamContainerRef.current?.removeChild(videoElement);
+                    // };
                 }
             }
 
