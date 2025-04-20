@@ -1,10 +1,10 @@
 import PropTypes from "prop-types";
 import styles from "./Header.module.css";
 
-const Header = ({ text, level = 1, className = "" }) => {
+const Header = ({ text, level = 1, className = "", margin }) => {
   const Tag = `h${level}`; // Dynamically choose the HTML heading tag (h1, h2, h3, etc.)
 
-  return <Tag className={`${styles.title} ${className}`}>{text}</Tag>;
+  return <Tag style={{margin}} className={`${styles.title} ${className}`}>{text}</Tag>;
 };
 
 Header.propTypes = {

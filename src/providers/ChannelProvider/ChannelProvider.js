@@ -1,7 +1,7 @@
 import React from 'react'
 import LoadingSpinnerCard from '../../components/ui/Loading/LoadingSpinnerCard/LoadingSpinnerCard';
 import { useNavigate, useParams } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useSocket } from '../../context/SocketContext';
 import ErrorCard from '../../components/Error/ErrorCard/ErrorCard';
 import { clearCurrentChannel, setCurrentChannel } from '../../features/Channels/channelsSlice';
@@ -21,31 +21,37 @@ export const ChannelProvider = ({children, overlay = false, channel_id_prop}) =>
 
     const [showSpinner, setShowSpinner] = React.useState(false);
 
-    const {channelID: channel_id_param, serverID} = useParams();
+    const {channelID: channel_id_param, serverID: server_id_param} = useParams();
 
     const [channelID, setChannelID] = React.useState(null);
 
-    React.useEffect(() => {
+    const [serverID, setServerID] = React.useState(null);
 
+    React.useEffect(() => {
+        
         if (overlay) {
             setChannelID(channel_id_prop)
         } else {
             setChannelID(channel_id_param)
         }
 
-    }, [channel_id_prop, overlay, channel_id_param])
+        setServerID(server_id_param);
+
+    }, [channel_id_prop, overlay, channel_id_param, server_id_param])
 
     React.useEffect(() => {
 
         if (!channelID) return;
 
-        if (!serverID);
+        if (!serverID) return;
 
         if (!socket) return;
 
       //  if (channelsStatus !== 'complete') return;
-
+       
         const handleFetchChannelDetails = async () => {
+            
+            toggleError(false);
 
             toggleLoading(true);
 
@@ -61,11 +67,14 @@ export const ChannelProvider = ({children, overlay = false, channel_id_prop}) =>
                         dispatch(setCurrentTextChannel(res.channel_id));
                     }
 
+                } else {
+                    toggleError("404 No Channel Found");
                 }
                 toggleLoading(false);
                 return;
             })
             .catch(error => {
+                console.log(error);
                 toggleError(error);
                 toggleLoading(false);
                 return;

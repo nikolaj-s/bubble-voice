@@ -53,7 +53,7 @@
     display: grid;
     height: calc(100% - 20px);
     overflow-x: hidden;
-
+    overflow: hidden;
     position: relative;
   }
 

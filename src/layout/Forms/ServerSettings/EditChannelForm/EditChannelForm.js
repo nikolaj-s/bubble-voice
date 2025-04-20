@@ -16,10 +16,13 @@ import { BoxLabel } from "../../../../components/ui/Titles/BoxLabel/BoxLabel"
 import { LineSpacer } from "../../../../components/ui/Spacers/LineSpacer/LineSpacer"
 import { deleteChannel } from "../../../../features/editChannel/Thunks/deleteChannel"
 import ConfirmationPopup from "../../../../components/ui/Menus/ConfirmationPopup/ConfirmationPopup"
+import Dropdown from "../../../../components/ui/Inputs/DropDown/DropDown"
 
 export const EditChannelForm = ({permissions}) => {
 
     const dispatch = useDispatch();
+
+    const defaultCategory = {category_name: 'Channels', category_id: 'channels'};
 
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -37,6 +40,10 @@ export const EditChannelForm = ({permissions}) => {
 
     const [confirmDeleteChannel, toggleConfirmDeleteChannel] = React.useState(false);
 
+    const {categories} = useSelector(state => state.categoriesSlice);
+
+    const [category, setCategory] = React.useState(defaultCategory);
+
     React.useEffect(() => {
 
         if (!channel?.channel_id) {
@@ -47,6 +54,8 @@ export const EditChannelForm = ({permissions}) => {
 
         setChannelDescription(channel.channel_description || "");
 
+        setCategory(categories.find(c => c.category_id === channel.category) || defaultCategory);
+
     }, [channel])
 
     const handleApplyChanges = () => {
@@ -55,7 +64,7 @@ export const EditChannelForm = ({permissions}) => {
 
         if (channelName.trim().length < 3) return;
 
-        dispatch(updateChannel({channelIcon, channelBackground, channelName, channelDescription, channel_id: channel.channel_id}));
+        dispatch(updateChannel({channelIcon, channelBackground, channelName, channelDescription, channel_id: channel.channel_id, category: category.category_id}));
     }
 
     const handleDeleteChannel = () => {
@@ -76,7 +85,7 @@ export const EditChannelForm = ({permissions}) => {
                 <ImageDropZone 
                 height={50} 
                 width={50}
-                dimensions={50}
+                dimensions={100}
                 existingImage={channel.channel_icon}
                 onImageChange={setChannelIcon}
                 borderRadius="50%"
@@ -90,13 +99,15 @@ export const EditChannelForm = ({permissions}) => {
                 maxLength={28}
                 
                 />
+                <Label label="Change Category:" />
+                <Dropdown selected={category.category_name} options={[defaultCategory, ...categories]} selector="category_name" setSelected={setCategory} />
                 <Label label="Edit Channel Background" />
                 <ImageDropZone 
                 width={450}
                 height={450}
                 existingImage={channel.channel_background}
                 onImageChange={setChannelBackground}
-                dimensions={900}
+                dimensions={1000}
                 />
                 <Header level={3} text="Details" />
                 <Label label="Channel Description" />
@@ -110,7 +121,7 @@ export const EditChannelForm = ({permissions}) => {
                 <TextButton 
                 action={handleApplyChanges}
                 title="Apply Changes"
-                disabled={(!channelIcon && !channelBackground) && (channel.channel_name === channelName || channelName.trim().length < 3) && (channel.channel_description === channelDescription)} />
+                disabled={(!channelIcon && !channelBackground) && (channel.channel_name === channelName || channelName.trim().length < 3) && (channel.channel_description === channelDescription) && (channel.category === category.category_id)} />
                 
                 {permissions?.user_can_delete_channels &&
                 <>

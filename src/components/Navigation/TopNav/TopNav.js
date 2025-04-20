@@ -17,6 +17,7 @@ import { Logo } from "../../Icons/Bubble/Logo";
 import { triggerContext } from "../../../lib/services/helperFunctions";
 import { toggleAppearanceSetting } from "../../../features/Settings/Appearance/appearanceSlice";
 import MetaTags from "../../MetaTags/MetaTags";
+import { setChannelDescription } from "../../../features/ChannelDescription/channelDescriptionSlice";
 
 const TopNav = () => {
   
@@ -75,6 +76,15 @@ const TopNav = () => {
 
   }
 
+  const expandChannelDescription = () => {
+    if (channelDetails) {
+
+      dispatch(setChannelDescription(channelDetails));
+
+      dispatch(setOverlay('channelDescription'));
+    }
+  }
+
   return (
     <nav className={styles.navbar}>
       <div className={styles.buttonGroup}>
@@ -93,7 +103,7 @@ const TopNav = () => {
         <div className={`${styles.header} ${styles.hideOnMobile}`}>
           <h2>{serverName}</h2>
           {isServerRoute ?
-          <IconButton Icon={<Settings2 color={"var(--text-color)"} />} position="bottom" title={`${serverName} Settings`} onClick={() => {dispatch(setOverlay('serverSettings'))}} />
+          <IconButton Icon={<Settings2 color={"var(--text-color)"} />} position="bottom" title={`Settings`} onClick={() => {dispatch(setOverlay('serverSettings'))}} />
           : null}
         </div>
       </div>
@@ -103,8 +113,7 @@ const TopNav = () => {
         <Routes>
           <Route path="/server/:serverID/channel/:channelID" element={
             <>
-            <ChannelHeader {...channelDetails} />
-            
+            <ChannelHeader {...channelDetails} expandDescription={expandChannelDescription} />
             </>
           } />
         </Routes>

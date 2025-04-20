@@ -28,6 +28,7 @@ import { SettingsQuickMenu } from "../Overlays/SettingsQuickMenu/SettingsQuickMe
 import { WebcamOverlay } from "../Overlays/WebcamOverlay/WebcamOverlay";
 import { CreateDrawing } from "../Overlays/CreateDrawing/CreateDrawing";
 import { ServerRecommendations } from "../Overlays/ServerRecommendations/ServerRecommendations";
+import { ChannelDescription } from "../Overlays/ChannelDescription/ChannelDescription";
 
 const overlayComponents = {
   search: Search,
@@ -40,7 +41,8 @@ const overlayComponents = {
   settingsQuickMenu: SettingsQuickMenu,
   webcamOverlay: WebcamOverlay,
   createDrawing: CreateDrawing,
-  serverRecommendations: ServerRecommendations
+  serverRecommendations: ServerRecommendations,
+  channelDescription: ChannelDescription
 };
 
 export const Overlay = ({ children }) => {

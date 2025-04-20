@@ -26,11 +26,35 @@ export const SideNav = () => {
 
     const servers = useSelector(selectServers);
 
+    const {server_id: currentServer} = useSelector(state => state.serverDetailsSlice);
+
+    const [history, setHistory] = React.useState({});
+
     const {isServerMenuOpen} = useSelector(state => state.mobileSlice);
 
     const handleSwitchServer = (server_id) => {
+
+        if (currentServer) {
+            setHistory(prev => ({
+                ...prev,
+                [currentServer]: window.location.pathname
+            }))
+
+            console.log(window.location.pathname)
+        }
+
         handleCloseMobileMenu();
-        navigate(`/dashboard/server/${server_id}`)
+
+        if (history[server_id]) {
+
+            navigate(history[server_id]);
+
+        } else {
+
+            navigate(`/dashboard/server/${server_id}`);
+
+        }
+
     }
 
     const handleReturnToDashBoard = () => {
