@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCurrentTextChannel } from "../../../../features/TextChannel/textChannelSlice";
 import { triggerContext } from "../../../../lib/services/helperFunctions";
 import { toggleMobileMenu } from "../../../../features/Mobile/mobileSlice";
+import { setUserProfile } from "../../../../features/UserProfile/userProfileSlice";
+import { setOverlay } from "../../../../features/Overlay/overlaySlice";
 
 const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, channel_type, server_id, channel }) => {
     const dispatch = useDispatch();
@@ -49,6 +51,12 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
       e.stopPropagation();
       triggerContext(e, channel_id);
     };
+
+    const viewUserProfile = (user) => {
+      dispatch(setUserProfile(user));
+
+      dispatch(setOverlay('userProfile'));
+    }
   
     return (
       <div
@@ -105,7 +113,7 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
             exit={{ opacity: 0, height: 0 }}
           >
             {users.map((user) => (
-              <ChannelUserButton active={active} key={user} user_id={user} />
+              <ChannelUserButton action={viewUserProfile} active={active} key={user} user_id={user} />
             ))}
           </motion.div>
         )}

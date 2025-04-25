@@ -12,6 +12,7 @@ import { SearchHistory } from '../SearchHistory/SearchHistory';
 
 import { ServerResults } from './ServerResults/ServerResults';
 import { TextChannelResults } from './TextChannelResults/TextChannelResults';
+import { VideoResults } from './VideoResults/VideoResults';
 
 export const SearchResults = ({results = [], loading = false, filter, searchHistory, handleDeleteSearchHistoryItem, handleSearchFromHistory}) => {
 
@@ -34,21 +35,25 @@ export const SearchResults = ({results = [], loading = false, filter, searchHist
             <div 
             onScroll={(e) => {dispatch(setSearchResultsScrollPos(e.target.scrollTop))}}
             ref={scrollRef} className={styles.wrapper}>
-                
+                {(filter === 'images' || filter === 'videos') &&
+                <SearchHistory 
+                search={handleSearchFromHistory}
+                deleteItem={handleDeleteSearchHistoryItem} 
+                searchHistory={searchHistory} />
+                }
 
                 {filter === 'servers' ?
                 <ServerResults servers={results} />
                 :
                 filter === 'images' ?
                 <>
-                <SearchHistory 
-                search={handleSearchFromHistory}
-                deleteItem={handleDeleteSearchHistoryItem} 
-                searchHistory={searchHistory} />
+                
                 <ImageResults images={results} />
                 </>
                 : filter === 'text-channel' ?
                 <TextChannelResults results={results} />
+                : filter === 'videos' ?
+                <VideoResults results={results} />
                 : null}
             </div>
         </div>

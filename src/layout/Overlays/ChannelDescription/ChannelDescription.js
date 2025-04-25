@@ -20,9 +20,11 @@ export const ChannelDescription = ({close}) => {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '10px',
-                alignItems: 'flex-start'
+                alignItems: 'flex-start',
+                position: 'relative',
+                padding: 5
             }}>
-                <BoxLabel label={channel.channel_type} />
+                <BoxLabel label={`${channel.channel_type} channel`} />
                 {channel.channel_icon ?
                 <div style={{
                     width: 50,

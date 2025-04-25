@@ -83,6 +83,11 @@
   .userName h3 {
     margin: 0px;
     font-size: 16px;
+    cursor: pointer;
+  }
+
+  .userName h3:hover {
+    text-decoration: underline;
   }
   
   .textBlock {

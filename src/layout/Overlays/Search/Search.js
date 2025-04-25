@@ -9,7 +9,6 @@ import { globalSearch } from '../../../features/Search/Thunks/globalSearch'
 import { fetchSearchHistory } from '../../../features/Search/Thunks/fetchSearchHistory'
 import { deleteSearchHistoryItem } from '../../../features/Search/Thunks/deleteSearchHistoryItem'
 import SpinnerLoading from '../../../components/ui/Loading/Spinner/SpinnerLoading'
-import NoImageResults from '../../../components/Misc/NoImageResults/NoImageResults'
 import SocialFilter from './SocialFilter/SocialFilter'
 
 export const Search = ({close}) => {

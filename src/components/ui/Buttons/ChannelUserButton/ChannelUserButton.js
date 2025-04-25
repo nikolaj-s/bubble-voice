@@ -8,14 +8,14 @@ import { ImageComponent } from '../../../ui/Image/Image';
 
 import MediaStatusIcons from '../../../MediaStatusIcons/MediaStatusIcons';
 
-export const ChannelUserButton = ({user_id, active}) => {
+export const ChannelUserButton = ({user_id, active, action = () => {}}) => {
     
     try {
         
         const user = useSelector(state => state.serverUsersSlice.users[user_id]);
 
         return (
-            <div className={styles.container}>
+            <div onClick={() => {action(user_id)}} className={styles.container}>
                 <span 
                 style={{
                     border: `solid 2px ${user.voiceActive && active ? 'var(--success-color)' : 'transparent'}`

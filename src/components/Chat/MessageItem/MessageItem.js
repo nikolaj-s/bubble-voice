@@ -3,27 +3,20 @@ import React from 'react';
 import styles from './MessageItem.module.css';
 import { ImageComponent } from '../../ui/Image/Image';
 import LinkPreview from '../../LinkPreview/LinkPreview';
-import { NsfwWrapper } from '../../ui/Wrappers/NsfwWrapper/NsfwWrapper';
 import LinkComponent from '../../LinkComponent/LinkComponent';
 import { TimeDisplay } from '../../TimeDisplay/TimeDisplay';
 import Spacer from './Spacer/Spacer';
-import { useDispatch } from 'react-redux';
-import { setOverlay } from '../../../features/Overlay/overlaySlice';
-import { setExpandedImage } from '../../../features/Media/ExpandedImage/expandedImageSlice';
 import IconButton from '../../ui/Buttons/IconButton/IconButton';
 import { Ellipsis } from 'lucide-react';
 import { triggerContext } from '../../../lib/services/helperFunctions';
-import VideoPlayer from '../../ui/Video/VideoPlayer/VideoPlayer';
+
 import { LongPressGestureWrapper } from '../../ui/Gestures/LongPressGestureWrapper';
 import { ImageBlock } from './ImageBlock/ImageBlock';
 import { VideoBlock } from './VideoBlock/VideoBlock';
 import { TextBlock } from './TextBlock/TextBlock';
+import { UserBlock } from './UserBlock/UserBlock';
 
 export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inSearch = false}) => {
-
-    const timeoutRef = React.useRef();
-
-    const dispatch = useDispatch();
 
     const isDifferentDay = prevMessage?.formattedDate !== message?.formattedDate;
 
@@ -35,41 +28,37 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
         <>
             {isDifferentDay && inSearch && (<Spacer date={message.formattedDate} />)}
             <LongPressGestureWrapper onTouchContext={openCtx}>
-            <div 
-            id={`message-id-${message._id}`}
-            data-context={JSON.stringify({...message, type: 'message', inSearch})}
-            style={{
-                borderColor: users[message.user_id]?.color
-            }}
-            className={styles.messageItem}>
-                <div className={styles.buttons}>
-                    <IconButton 
-                    Icon={<Ellipsis color='var(--text-color)' />}
-                    onClick={openCtx}
-                    title={'Options'}
-                    position='left'
-                    />
+                <div 
+                id={`message-id-${message._id}`}
+                data-context={JSON.stringify({...message, type: 'message', inSearch})}
+                style={{
+                    borderColor: users[message.user_id]?.color
+                }}
+                className={styles.messageItem}>
+                    <div className={styles.buttons}>
+                        <IconButton 
+                        Icon={<Ellipsis color='var(--text-color)' />}
+                        onClick={openCtx}
+                        title={'Options'}
+                        position='left'
+                        />
+                    </div>
+                    <div className={styles.userImageWrapper}>
+                        {(message.user_id !== prevMessage.user_id || isDifferentDay) &&
+                        <div className={styles.userImage}>
+                            <ImageComponent src={users[message.user_id]?.user_image} />
+                        </div>}
+                    {message.user_id !== prevMessage.user_id || isDifferentDay ? null : <TimeDisplay time={message.formattedTime} />}
+                    </div>
+                    <div className={`${styles.messageContent} ${loading ? styles.sending : ''}`}>
+                        <UserBlock users={users} message={message} prevMessage={prevMessage} isDifferentDay={isDifferentDay} styles={styles} />
+                        <TextBlock {...message} styles={styles} />
+                        <ImageBlock {...message} styles={styles} loading={loading} />
+                        <VideoBlock {...message} styles={styles} />
+                        {!message.image  && !message.video && !message.link_preview && (<LinkComponent link={message.link} />)}
+                        <LinkPreview preview={message.link_preview} /> 
+                    </div>
                 </div>
-                <div className={styles.userImageWrapper}>
-                    {message.user_id !== prevMessage.user_id &&
-                    <div className={styles.userImage}>
-                        <ImageComponent src={users[message.user_id]?.user_image} />
-                    </div>}
-                   {message.user_id !== prevMessage.user_id ? null : <TimeDisplay time={message.formattedTime} />}
-                </div>
-                <div className={`${styles.messageContent} ${loading ? styles.sending : ''}`}>
-                    {message.user_id !== prevMessage.user_id && 
-                    <div className={styles.userName}>
-                        <h3>{users[message.user_id]?.display_name}</h3>
-                        <TimeDisplay time={message.formattedTime} margin={0} />
-                    </div>}
-                    <TextBlock {...message} styles={styles} />
-                    <ImageBlock {...message} styles={styles} loading={loading} />
-                    <VideoBlock {...message} styles={styles} />
-                    {!message.image  && !message.video && !message.link_preview && (<LinkComponent link={message.link} />)}
-                    <LinkPreview preview={message.link_preview} /> 
-                </div>
-            </div>
             </LongPressGestureWrapper>
             {isDifferentDay && !inSearch && (<Spacer date={message.formattedDate} />)}
         </>

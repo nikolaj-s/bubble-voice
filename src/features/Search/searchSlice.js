@@ -11,7 +11,7 @@ const searchSlice = createSlice({
         results: {},
         error: false,
         filter: {label: "Bubbles", path: "servers"},
-        filters: [{label: "Bubbles", path: "servers"}, {label: "Images", path: "images"}, {label: "Text Channels", path: "text-channel"}],
+        filters: [{label: "Bubbles", path: "servers"}, {label: "Images", path: "images"}, {label: "Videos", path: "videos"}, {label: "Text Channels", path: "text-channel"}],
         searchHistory: [],
         similarImageSrc: false,
         open: false,

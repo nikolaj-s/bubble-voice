@@ -29,6 +29,8 @@ import { WebcamOverlay } from "../Overlays/WebcamOverlay/WebcamOverlay";
 import { CreateDrawing } from "../Overlays/CreateDrawing/CreateDrawing";
 import { ServerRecommendations } from "../Overlays/ServerRecommendations/ServerRecommendations";
 import { ChannelDescription } from "../Overlays/ChannelDescription/ChannelDescription";
+import { UserProfile } from "../Overlays/UserProfile/UserProfile";
+import { ExpandedVideo } from "../Overlays/ExpandedVideo/ExpandedVideo";
 
 const overlayComponents = {
   search: Search,
@@ -37,12 +39,14 @@ const overlayComponents = {
   settings:Settings,
   joinServer: JoinServer,
   expandImage: ExpandedImage,
+  expandVideo: ExpandedVideo,
   userQuickMenu: UserQuickMenu,
   settingsQuickMenu: SettingsQuickMenu,
   webcamOverlay: WebcamOverlay,
   createDrawing: CreateDrawing,
   serverRecommendations: ServerRecommendations,
-  channelDescription: ChannelDescription
+  channelDescription: ChannelDescription,
+  userProfile: UserProfile
 };
 
 export const Overlay = ({ children }) => {

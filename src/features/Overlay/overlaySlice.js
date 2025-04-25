@@ -23,13 +23,13 @@ const overlaySlice = createSlice({
 
       // Special behavior: restore "search" if we just closed "expandImage"
       if (
-        lastOverlay === 'expandImage' &&
+        (lastOverlay === 'expandImage' || lastOverlay === 'expandVideo') &&
         state.history.length > 0
       ) {
         const previous = [...state.history][state.history.length - 2]
           
-        if (previous?.type === 'search' && previous?.closed === false) {
-          state.currentOverlay = 'search';
+        if ((previous?.type === 'search' || previous?.type === 'serverRecommendations' || previous?.type === 'userProfile') && previous?.closed === false) {
+          state.currentOverlay = previous?.type;
           return;
         }
       }

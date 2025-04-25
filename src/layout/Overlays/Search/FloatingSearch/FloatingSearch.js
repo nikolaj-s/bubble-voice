@@ -5,6 +5,7 @@ import styles from './FloatingSearch.module.css';
 import Dropdown from '../../../../components/ui/Inputs/DropDown/DropDown';
 
 import SimilarImageButton from '../../../../components/ui/Buttons/SimilarImageButton/SimilarImageButton';
+import { Search } from 'lucide-react';
 
 const FloatingSearch = ({filter, filters = [], loading, setFilter = () => {}, search = () => {}, value = "", setValue = () => {}, similarImageSrc, clearSimilarImage}) => {
 
@@ -68,6 +69,7 @@ const FloatingSearch = ({filter, filters = [], loading, setFilter = () => {}, se
       }}
       className={`${styles.searchBox}`}
     >
+      <Search color='var(--text-color)' size={30} style={{marginLeft: 5}} />
       {similarImageSrc && filter.path === 'images' && (<SimilarImageButton src={similarImageSrc} onRemove={clearSimilarImage} />)}
       <input
          id="global-search"

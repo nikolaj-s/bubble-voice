@@ -48,6 +48,7 @@ const SocialFilter = ({ onFilterChange = () => {} }) => {
 
   return (
     <div className={styles.filterContainer}>
+      
       <button
         className={`${styles.filterButton} ${filters.hasImage ? styles.active : ""}`}
         onClick={() => toggleFilter("hasImage")}

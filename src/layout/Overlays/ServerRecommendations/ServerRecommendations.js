@@ -11,6 +11,7 @@ import { NsfwWrapper } from '../../../components/ui/Wrappers/NsfwWrapper/NsfwWra
 import { ImageComponent } from '../../../components/ui/Image/Image';
 import { IconPlaceholder } from '../../../components/ui/Placeholders/IconPlaceholder/IconPlaceholder';
 import { Images } from 'lucide-react';
+import { BoxLabel } from '../../../components/ui/Titles/BoxLabel/BoxLabel';
 
 export const ServerRecommendations = ({close}) => {
 
@@ -33,8 +34,17 @@ export const ServerRecommendations = ({close}) => {
     return (
         <FullScreenWrapper onClose={close}>
             <div style={{maxHeight: 'calc(100svh - 10px)', overflowY: 'auto', width: 'calc(100% - 10px)', margin: '0 auto'}}>
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 5,
+                    alignItems: 'flex-start'
+                }}>
+                <BoxLabel label={'Recommendations'}  />
                 <IconPlaceholder icon={Images} />
                 <RandomHeader titles={galleryHeaders} />
+                </div>
+                
                 <LineSpacer />
                 <ImageMasonryWrapper>
                     {media?.media?.map(media => {

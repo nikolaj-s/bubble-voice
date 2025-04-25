@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: 3px;
     background-color: var(--card-background-color);
     margin-top: 2px;
     padding: 5px;
@@ -10,17 +10,18 @@
   
   .filterButton {
     border: none;
-    padding: 5px;
+    padding: 10px;
     border-radius: 5px;
     gap: 5px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--card-background-color);
-    transition: background 0.3s;
+    background-color: var(--background-color);
+    transition: 0.3s ease;
     color: var(--text-color);
     opacity: 0.75;
+    height: 38px;
   }
 
   .filterButton p {
@@ -28,8 +29,13 @@
     padding: 0px;
   }
 
+  .filterButton:active {
+    scale: 0.98;
+  }
+
   .filterButton:hover {
     opacity: 1;
+    background-color: var(--button-hover);
   }
   
   .filterButton.active {
