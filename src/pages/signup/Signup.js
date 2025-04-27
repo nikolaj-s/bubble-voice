@@ -15,6 +15,7 @@ import { signupThunk } from '../../features/Auth/Thunks/SignupThunk';
 import { IsAuthenticated } from '../../components/Auth/IsAuthenticated/IsAuthenticated';
 import Label from '../../components/ui/Titles/Label/Label';
 import { useNavigate } from 'react-router';
+import PasswordRequirements from '../../components/ui/PasswordRequirements/PasswordRequirements';
 
 const Signup = () => {
 
@@ -60,6 +61,7 @@ const Signup = () => {
                     <Label label="Create a Bubble Account" />
                     <TextInput autoComplete="username" error={usernameError} onChange={(v) => {setUsername(v)}} value={username} placeholder={"Username"} />
                     <TextInput autoComplete="email" error={emailError} onChange={(v) => {setEmail(v)}} value={email} placeholder={"Email"} />
+                    <PasswordRequirements password={password} />
                     <TextInput autoComplete="new-password" error={passwordError} onChange={(v) => {setPassword(v)}} value={password} placeholder={"Password"} type='password' /> 
                     <TextInput autoComplete="new-password" error={confirmPasswordError} onChange={(v) => {setConfirmPassword(v)}} placeholder={"Confirm password"} value={confirmPassword} type='password' />
                     <TextButton title='Create Account' />

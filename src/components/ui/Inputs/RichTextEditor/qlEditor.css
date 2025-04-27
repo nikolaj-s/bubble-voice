@@ -1,0 +1,4 @@
+.ql-editor::before {
+    color: var(--text-color) !important;
+    opacity: 0.75;
+}

@@ -4,6 +4,9 @@ import styles from './Embed.module.css';
 import { Loader2, AlertTriangle } from 'lucide-react';
 
 export const Embed = ({ url, height = 400 }) => {
+
+  const iframeRef = React.useRef();
+
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
@@ -16,6 +19,16 @@ export const Embed = ({ url, height = 400 }) => {
     setIsLoading(false);
     setHasError(true);
   };
+
+  React.useEffect(() => {
+
+    if (!isLoading && !hasError) {
+      if (iframeRef.current) {
+        console.log(iframeRef?.current?.contentWindow?.focus())
+      }
+    }
+
+  }, [isLoading, hasError])
 
   if (!url) {
     return (
@@ -42,6 +55,7 @@ export const Embed = ({ url, height = 400 }) => {
         </div>
       ) : (
         <iframe
+          ref={iframeRef}
           src={url}
           className={styles.iframe}
           onLoad={handleLoad}

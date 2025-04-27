@@ -29,6 +29,9 @@ export const createWidget = createAsyncThunk('createWidget/manageWidgetsSlice', 
             case "rich_text":
                 data.append('text', params.text);
                 break;
+            case "dynamic_media":
+                data.append('query', params.query);
+                break;
             default:
                 return rejectWithValue("Invalid Widget Type");
         }

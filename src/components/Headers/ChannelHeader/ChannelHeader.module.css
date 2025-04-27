@@ -46,7 +46,7 @@
 
 .channelDescription {
   margin: 0;
-  color: var(--secondary-color);
+  color: var(--accent-color);
   font-size: 0.9rem;
   white-space: nowrap;
   overflow: hidden;

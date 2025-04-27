@@ -33,7 +33,7 @@ export const AddRichTextWidget = () => {
         <>
         <Label label='Mark up some text!' />
         <RichTextEditor value={text} onChange={setText} />
-        <ApplyChangesPopup onClearChanges={() => {setText('')}} onApply={handleCreate} disabled={text.trim().length < 20} />
+        <ApplyChangesPopup onClearChanges={() => {setText('')}} onApply={handleCreate} name='Create' disabled={text.trim().length < 20} />
         </>
     )
 }

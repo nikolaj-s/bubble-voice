@@ -7,6 +7,9 @@ import { Widgets } from '../../../../components/Widgets/Widgets'
 import Header from '../../../../components/ui/Titles/Header/Header'
 import { useSearchParams } from 'react-router-dom'
 import { reorderWidgets } from '../../../../features/Widgets/Thunks/reorderWidgets'
+import { ToolBar } from '../../../../components/ui/Wrappers/ToolBar/ToolBar'
+import IconButton from '../../../../components/ui/Buttons/IconButton/IconButton'
+import { Plus } from 'lucide-react'
 
 export const ManageWidgetsForm = ({permissions}) => {
 
@@ -44,6 +47,13 @@ export const ManageWidgetsForm = ({permissions}) => {
         <NotAuthorized permission={permissions.user_can_edit_channels}>
             <LoadingErrorFormWrapper sliceName='manageWidgetsSlice'>
                 <Header text={`Manage Widgets For ${channel.channel_name}`} />
+                <ToolBar >
+                    <IconButton 
+                    Icon={<Plus color='var(--text-color)' />}
+                    title={'Add Widget'}
+                    onClick={() => {setSearchParams({section: 'addWidget'})}}
+                    />
+                </ToolBar>
                 <Widgets onReorder={handleReorderWidgets} openAddWidgets={openAddWdigets} widgets={widgets} editing={true} />
             </LoadingErrorFormWrapper>
         </NotAuthorized>

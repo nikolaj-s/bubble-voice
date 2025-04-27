@@ -6,6 +6,7 @@ import ProfileName from './ProfileName/ProfileName';
 import ProfileBio from './ProfileBio/ProfileBio';
 
 export const Profile = ({account = {}}) => {
+    console.log(account)
     return (
         <div 
         style={{

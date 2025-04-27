@@ -12,6 +12,7 @@ import { NoWidgetsPlaceholder } from './NoWidgetsPlaceholder/NoWidgetsPlaceholde
 import { EmbedWidget } from './EmbedWidget/EmbedWidget';
 import { RichTextWidget } from './RichTextWidget/RichTextWidget';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import { DynamicMediaWidget } from './DynamicMediaWidget/DynamicMediaWidget';
 
 const SortableWidget = ({ id, children, editing, widget }) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
@@ -21,7 +22,8 @@ const SortableWidget = ({ id, children, editing, widget }) => {
     transition,
     touchAction: 'none',
     marginRight: editing ? 40 : null,
-    
+    overflow: editing ? null : 'hidden',
+    borderRadius: 8
      // smooth mobile drag
   };
 
@@ -87,6 +89,7 @@ export const Widgets = ({ widgets, editing, onReorder = () => {}, openAddWidgets
                       gallery:      <GalleryWidget {...widget.config} />,
                       embed:        <EmbedWidget {...widget.config} />,
                       rich_text:    <RichTextWidget {...widget.config} />,
+                      dynamic_media:<DynamicMediaWidget {...widget.config} timeout={0} />
                     }[widget.widget_type] || null}
                 </SortableWidget>
             ))}

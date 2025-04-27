@@ -13,21 +13,23 @@ import {
 import 'react-quill/dist/quill.core.css';
 import styles from './RichTextEditor.module.css';
 
+import './qlEditor.css';
+import Dropdown from '../DropDown/DropDown';
+
 const COLORS = ['#000000', '#1e3a5f', '#4e8e8b', '#3b7a6e', '#e16b6b', '#76c7a5'];
 
-const CustomToolbar = ({ formats, applyFormat, openImageModal, openLinkModal }) => (
-  <div className={styles.toolbar}>
-    <select
-      className={styles.customSelect}
-      value={formats.header || ''}
-      onChange={(e) => applyFormat('header', e.target.value ? +e.target.value : false)}
-    >
-      <option value="">Normal</option>
-      <option value="1">H1</option>
-      <option value="2">H2</option>
-      <option value="3">H3</option>
-    </select>
+const HEADERS =  [{label: 'Normal', value: ""}, {label: "H1", value: 1}, {label: 'H2', value: 2}, {label: "H3", value: 3}];
 
+const CustomToolbar = ({ formats, applyFormat, openImageModal, openLinkModal }) => (
+
+  <div className={styles.toolbar}>
+    <Dropdown 
+    options={HEADERS} 
+    selected={HEADERS.find(h => h.value === formats.header) || HEADERS[0]}
+    selector='label'
+    setSelected={(header) => {applyFormat('header', header.value); console.log(formats.header)}}
+
+    />
     {['bold', 'italic', 'underline', 'strike'].map((fmt, i) => {
       const Icon = [Bold, Italic, Underline, Strikethrough][i];
       return (
@@ -57,7 +59,7 @@ const CustomToolbar = ({ formats, applyFormat, openImageModal, openLinkModal }) 
       <List size={18} />
     </button>
 
-    <div className={styles.colorPickerWrapper}>
+    {/* <div className={styles.colorPickerWrapper}>
       <Paintbrush size={18} />
       <div className={styles.colorOptions}>
         {COLORS.map((c) => (
@@ -69,11 +71,12 @@ const CustomToolbar = ({ formats, applyFormat, openImageModal, openLinkModal }) 
           />
         ))}
       </div>
-    </div>
+    </div> */}
+    
   </div>
 );
 
-const RichTextEditor = ({ value, onChange }) => {
+const RichTextEditor = ({ value, onChange, placeholder = "Enter some text..." }) => {
   const quillRef = useRef(null);
   const [formats, setFormats] = useState({});
   const [showImageModal, setShowImageModal] = useState(false);
@@ -183,11 +186,13 @@ const RichTextEditor = ({ value, onChange }) => {
       <ReactQuill
         ref={quillRef}
         theme={null}
+        style={{color: 'var(--text-color)'}}
         value={value}
         onChange={handleChange}
         modules={modules}
         formats={formatsList}
         className={styles.editor}
+        placeholder={placeholder}
       />
 
       {showImageModal && (

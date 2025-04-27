@@ -11,12 +11,28 @@ const ImageDropZone = ({
   width = 200, 
   height = 200,
   dimensions = 800,
-  objectFit = 'cover'
+  objectFit = 'cover',
+  parentFileSrc,
 }) => {
   
   const [preview, setPreview] = useState(existingImage || "");
 
   const [imageFile, setImageFile] = useState(null);
+
+  useEffect(() => {
+
+    if (!parentFileSrc) {
+      if (preview && preview.startsWith("blob:")) {
+        URL.revokeObjectURL(preview);
+      }
+
+      setPreview(existingImage);
+
+      setImageFile(null);
+
+    }
+
+  }, [parentFileSrc, existingImage, preview])
 
   // Cleanup previous object URLs
   useEffect(() => {

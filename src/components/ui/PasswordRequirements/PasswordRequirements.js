@@ -1,5 +1,6 @@
 
 import Label from "../Titles/Label/Label";
+
 import styles from "./PasswordRequirements.module.css";
 
 const PasswordRequirements = ({ password }) => {
@@ -10,7 +11,7 @@ const PasswordRequirements = ({ password }) => {
     { label: "At least 1 uppercase letter", test: (pw) => /[A-Z]/.test(pw) },
     { label: "At least 1 lowercase letter", test: (pw) => /[a-z]/.test(pw) },
   ];
-
+console.log(password)
   return (
     <div className={styles.requirementsContainer}>
     <Label label="Password Must Contain:" />

@@ -20,7 +20,7 @@
   
   .username {
     font-size: 14px;
-    color: var(--secondary-color);
+    color: var(--accent-color);
     opacity: 0.8;
     text-align: center;
   }

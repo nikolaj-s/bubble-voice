@@ -13,7 +13,6 @@ const ListenToMicrophone = ({onChange = () => {}, deviceId, voiceThreshold}) => 
     const volume = useTestMicrophone(voiceThreshold, deviceId);
 
     React.useEffect(() => {
-        console.log(volume);
         onChange(volume);
 
     }, [volume, onChange])

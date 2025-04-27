@@ -12,6 +12,7 @@ import { updateAccount } from '../../../../features/Account/Thunks/updateAccount
 import TextArea from '../../../../components/ui/Inputs/TextArea/TextArea'
 import ColorPicker from '../../../../components/ui/Inputs/ColorPicker/ColorPicker'
 import { LineSpacer } from '../../../../components/ui/Spacers/LineSpacer/LineSpacer'
+import { ApplyChangesPopup } from '../../../../components/ApplyChangesPopup/ApplyChangesPopup'
 
 export const AccountSettingsForm = () => {
 
@@ -53,26 +54,40 @@ export const AccountSettingsForm = () => {
 
   }
 
+  const clearChanges = () => {
+    setUserImage(null);
+
+    setUserBanner(null);
+
+    setBio(user_bio);
+
+    setDisplayName(display_name);
+
+    setColor(user_color);
+  }
+
   return (
     <>
     <Header text='Account Settings' />
     <Label label='Edit Display Name' />
     <TextInput value={displayName} onChange={setDisplayName} />
     <Label label='Edit Profile Image' />
-    <ImageDropZone width={150} height={150} dimensions={300} borderRadius='50%' existingImage={user_image} onImageChange={setUserImage} />
+    <ImageDropZone parentFileSrc={userImage} width={150} height={150} dimensions={300} borderRadius='50%' existingImage={user_image} onImageChange={setUserImage} />
     <Label label='Edit Profile Banner' />
-    <ImageDropZone width={320} height={200} dimensions={800} existingImage={user_banner} onImageChange={setUserBanner} />
+    <ImageDropZone parentFileSrc={userBanner} width={320} height={200} dimensions={800} existingImage={user_banner} onImageChange={setUserBanner} />
     <Label label='Bio' />
     <TextArea text={bio} setText={setBio} limit={512} placeholder='Enter a bio...' />
     <Label label='Choose An Accent Color' />
-    <ColorPicker onColorChange={setColor} selectedColor={color} />
+    <ColorPicker onChange={setColor} value={color} />
     {updateError ? <TextLabelError label='Error:' error={updateError} /> : null}
-    <TextButton 
-    disabled={color === user_color && display_name === displayName && userImage === null && userBanner === null && user_bio === bio}
-    action={handleUpdateAccount} title='Update Account' />
     {updateLoading ? <SpinnerLoading /> : null}
     <LineSpacer />
     <TextButton title='Log out' maxWidth={150} backgroundColor={'var(--error-color)'} />
+    <ApplyChangesPopup 
+    onClearChanges={clearChanges}
+    disabled={color === user_color && display_name === displayName && userImage === null && userBanner === null && user_bio === bio}
+    onApply={handleUpdateAccount}
+    />
     </>
   )
 }

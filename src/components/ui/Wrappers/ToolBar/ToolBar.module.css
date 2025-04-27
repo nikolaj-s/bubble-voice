@@ -1,0 +1,10 @@
+
+.toolBar {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 5px;
+    gap: 5px;
+    border-radius: 8px;
+    background-color: var(--background-color);
+    width: calc(100% - 10px);
+}

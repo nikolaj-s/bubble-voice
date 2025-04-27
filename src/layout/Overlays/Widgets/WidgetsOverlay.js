@@ -14,6 +14,7 @@ import { triggerContext } from '../../../lib/services/helperFunctions';
 import { useSearchParams } from 'react-router-dom';
 import { setManageWidgetsForChannel } from '../../../features/Widgets/manageWidgetsSlice';
 import { setOverlay } from '../../../features/Overlay/overlaySlice';
+import { ToolBar } from '../../../components/ui/Wrappers/ToolBar/ToolBar';
 
 export const WidgetsOverlay = ({close}) => {
 
@@ -68,7 +69,7 @@ export const WidgetsOverlay = ({close}) => {
         <FixedSideMenuWrapper close={close} >
             <IconPlaceholder icon={LayoutDashboard} />
             <Header text='Widgets' />
-            <div id={'widgets-overlay-nav'} data-context={JSON.stringify({type: 'widgetsOverlay', channel_id: channel})} style={{display: 'flex', alignItems: 'center', gap: 5, width: '100%'}}>
+            <ToolBar id={'widgets-overlay-nav'} data-context={JSON.stringify({type: 'widgetsOverlay', channel_id: channel})}>
                 <IconButton 
                 Icon={<RefreshCcw color='var(--text-color' />}
                 title={"Refresh"}
@@ -79,7 +80,7 @@ export const WidgetsOverlay = ({close}) => {
                 title={'More'} 
                 onClick={(e) => {triggerContext(e, 'widgets-overlay-nav')}}
                 />
-            </div>
+            </ToolBar>
             <LineSpacer />
             {loading ?
             <SkeletonCards />
