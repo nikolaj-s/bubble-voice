@@ -4,14 +4,14 @@ import { ChatContainer } from '../../../../components/Chat/ChatContainer'
 import { useDispatch, useSelector } from 'react-redux'
 import { sendMessage } from '../../../../features/TextChannel/Thunks/sendMessage'
 import { fetchMessages } from '../../../../features/TextChannel/Thunks/fetchMessages'
-import { setTextChannelPos } from '../../../../features/TextChannel/textChannelSlice'
+import { setReplyTo, setTextChannelPos } from '../../../../features/TextChannel/textChannelSlice'
 import { ChannelBackground } from '../../../../components/ChannelBackground/ChannelBackground'
 
 export const TextChannel = ({channel}) => {
 
     const dispatch = useDispatch();
 
-    const {messages, loading, loadingMore, error, sending, noMoreMessages} = useSelector(state => state.textChannelSlice);
+    const {messages, loading, loadingMore, error, sending, noMoreMessages, replyTo} = useSelector(state => state.textChannelSlice);
 
     const [showBackground, toggeShowBackground] = React.useState(false);
 
@@ -33,7 +33,7 @@ export const TextChannel = ({channel}) => {
 
         if (!image && text.length === 0) return;
 
-        dispatch(sendMessage({text, user_id, image, channel_id: channel}));
+        dispatch(sendMessage({text, user_id, image, channel_id: channel, reply_to: replyTo}));
         
         setImage(null);
 
@@ -63,10 +63,26 @@ export const TextChannel = ({channel}) => {
         })
 
     }, [])
+
+    const clearReplyTo = () => {
+        dispatch(setReplyTo(null));
+    }
    
     return (
         <TextChannelProvider channel={channel} >
-            <ChatContainer position={position?.position} returnPos={saveTextChannelPos} key={channel} users={users} loadingMore={loadingMore} loadMoreMessages={loadMoreMessages} sending={sending} send={handleSend} messages={messages} error={error} loading={loading}  setImage={setImage} setValue={setText} value={text} />
+            <ChatContainer 
+            position={position?.position} 
+            returnPos={saveTextChannelPos} 
+            key={channel} 
+            users={users} 
+            loadingMore={loadingMore} 
+            loadMoreMessages={loadMoreMessages} 
+            sending={sending} send={handleSend} 
+            messages={messages} error={error} 
+            loading={loading}  setImage={setImage} 
+            setValue={setText} value={text} 
+            replyTo={replyTo} clearReplyTo={clearReplyTo}
+            />
             {showBackground ? <ChannelBackground {...channel_details} /> : null}
         </TextChannelProvider>
     )

@@ -7,8 +7,9 @@ import { MessageInput } from './MessageInput/MessageInput';
 import MessageList from './MessageList/MessageList';
 
 import {motion} from 'framer-motion'
+import { ReplyTo } from './ReplyTo/ReplyTo';
 
-export const ChatContainer = ({messages = [], send  = () => {}, loadMoreMessages = () => {}, users, loading, error, value, setValue, setImage, sending, loadingMore, returnPos, position}) => {
+export const ChatContainer = ({messages = [], send  = () => {}, loadMoreMessages = () => {}, users, loading, error, value, setValue, setImage, sending, loadingMore, returnPos, position, replyTo, clearReplyTo}) => {
     
     return (
         <motion.div 
@@ -16,7 +17,8 @@ export const ChatContainer = ({messages = [], send  = () => {}, loadMoreMessages
         animate={{opacity: 1}}
         className={styles.container} >
             <MessageList position={position} returnPos={returnPos} users={users} loading={loading}  messages={messages} sending={sending} loadingMore={loadingMore} loadMoreMessages={loadMoreMessages} />
-            <MessageInput value={value} setValue={setValue} send={send} error={error} setImage={setImage} />
+            <ReplyTo replyTo={replyTo} users={users} clearReplyTo={clearReplyTo} />
+            <MessageInput replyTo={replyTo} value={value} setValue={setValue} send={send} error={error} setImage={setImage} />
         </motion.div>
     )
 }

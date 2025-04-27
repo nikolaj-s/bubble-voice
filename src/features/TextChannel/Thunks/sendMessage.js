@@ -22,7 +22,7 @@ export const sendMessage = createAsyncThunk(
 
             if (params?.text?.length > 1024) return rejectWithValue("Message exceeds the character limit");
 
-            const data = generateFormData({...params, channel_id: params.channel_id, server_id: server_id})
+            const data = generateFormData({...params, channel_id: params.channel_id, server_id: server_id, reply_to: params?.reply_to?._id})
 
             const response = await axios({
                 method: "POST",

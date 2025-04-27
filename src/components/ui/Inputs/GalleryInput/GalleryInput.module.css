@@ -1,0 +1,63 @@
+.galleryWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 5px;
+    align-items: start;
+  }
+  
+  .addButton {
+    justify-content: center;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .addButton:hover {
+    background-color: var(--button-hover);
+  }
+  
+  .sortableItem {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--card-background-color);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .dragHandle {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 25px;
+    height: 25px;
+    padding: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: grab;
+    background: var(--overlay-color);
+    border-bottom-left-radius: 5px;
+  }
+  
+  .dragHandle:active {
+    cursor: grabbing;
+  }
+  
+  .content {
+    flex: 1;
+  }

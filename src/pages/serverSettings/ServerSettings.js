@@ -11,6 +11,8 @@ import { EditChannelForm } from '../../layout/Forms/ServerSettings/EditChannelFo
 import { UserManagementForm } from '../../layout/Forms/ServerSettings/UserManagementForm/UserManagementForm'
 import { EditCategoryForm } from '../../layout/Forms/ServerSettings/EditCategoryForm/EditCategoryForm'
 import { ContentDataForm } from '../../layout/Forms/ServerSettings/ContentDataForm/ContentDataForm'
+import { AddWidgetForm } from '../../layout/Forms/ServerSettings/AddWidgetForm/AddWidgetForm'
+import { ManageWidgetsForm } from '../../layout/Forms/ServerSettings/ManageWidgetsForm/ManageWidgetsForm'
 
 export const ServerSettings = ({close}) => {
 
@@ -34,7 +36,9 @@ export const ServerSettings = ({close}) => {
         editChannel: <EditChannelForm />,
         manageUsers: <UserManagementForm />,
         editCategory: <EditCategoryForm />,
-        contentData: <ContentDataForm />
+        contentData: <ContentDataForm />,
+        addWidget: <AddWidgetForm />,
+        manageWidgets: <ManageWidgetsForm />
     }
 
     return (

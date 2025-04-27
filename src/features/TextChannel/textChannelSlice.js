@@ -16,12 +16,16 @@ const initialState = {
     deleting: false,
     currentTextChannel: null,
     textChannelPos: {},
+    replyTo: null
 }
 
 const textChannelSlice = createSlice({
     name: "textChannelSlice",
     initialState,
     reducers: {
+        setReplyTo: (state, action) => {
+            state.replyTo = action.payload;
+        },
         addMessage: (state, action) => {
             console.log(action.payload)
             if (action.payload.message_id) {
@@ -116,11 +120,13 @@ const textChannelSlice = createSlice({
         builder.addCase(sendMessage.pending, (state, action) => {
             const params = action.meta.arg;
 
-            const message = {user_id: params.user_id, text: params.text, image: !!params.image};
+            const message = {user_id: params.user_id, text: params.text, image: !!params.image, reply_to: params.reply_to};
 
             state.sending = message;
 
             state.error = false;
+
+            state.replyTo = null;
         })
         builder.addCase(sendMessage.rejected, (state, action) => {
 
@@ -159,7 +165,8 @@ export const {
     clearTextChannelState, 
     setCurrentTextChannel, 
     setTextChannelPos,
-    updateMessage
+    updateMessage,
+    setReplyTo
 } = textChannelSlice.actions;
 
 export default textChannelSlice.reducer;

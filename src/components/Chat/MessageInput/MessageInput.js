@@ -10,7 +10,7 @@ import { setFilter } from "../../../features/Search/searchSlice";
 import { setOverlay } from "../../../features/Overlay/overlaySlice";
 import TextLabelError from "../../Error/TextLabelError/TextLabelError";
 
-export const MessageInput = ({ value, setValue, setImage = () => {}, error, send = () => {} }) => {
+export const MessageInput = ({ value, setValue, setImage = () => {}, error, send = () => {}, replyTo }) => {
 
     const textAreaRef = useRef(null);
 
@@ -69,6 +69,12 @@ export const MessageInput = ({ value, setValue, setImage = () => {}, error, send
         }
 
     }, [])
+
+    useEffect(() => {
+
+        if (replyTo) document.getElementById('chat-input').focus();
+
+    }, [replyTo])
 
     const handleOpenSearchMedia = () => {
         

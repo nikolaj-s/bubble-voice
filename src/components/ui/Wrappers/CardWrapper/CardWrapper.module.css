@@ -2,12 +2,11 @@
 .cardWrapper {
     background-color: var(--card-background-color);
     color: var(--text-color);
-    padding: 20px;
+    padding: 10px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    width: calc((100% - 80px));
+    width: calc(100% - 20px);
     max-width: 500px;
-    margin: 20px;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
     display: grid;
     gap: 10px;

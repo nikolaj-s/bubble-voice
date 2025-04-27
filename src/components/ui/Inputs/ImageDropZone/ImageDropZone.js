@@ -10,7 +10,8 @@ const ImageDropZone = ({
   borderRadius = "8px", 
   width = 200, 
   height = 200,
-  dimensions = 800 
+  dimensions = 800,
+  objectFit = 'cover'
 }) => {
   
   const [preview, setPreview] = useState(existingImage || "");
@@ -62,21 +63,23 @@ const ImageDropZone = ({
     },
     onDrop,
     multiple: false,
+    
   });
 
   return (
     <div 
       {...getRootProps()} 
       className={styles.dropzone} 
-      style={{ width, height, borderRadius, flexShrink: 0, maxWidth: "calc(100% - 10px)" }}
+      style={{ width, height, borderRadius, flexShrink: 0 }}
     >
       <input {...getInputProps()} />
       {preview ? (
         <img 
+          draggable={false}
           src={preview} 
           alt="Preview" 
           className={styles.image} 
-          style={{ width: "100%", height: "100%", borderRadius }}
+          style={{ width: "100%", height: "100%", borderRadius, objectFit }}
         />
       ) : (
         <ImageUp color="var(--text-color)" />

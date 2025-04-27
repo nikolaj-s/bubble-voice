@@ -5,6 +5,7 @@
     width: 100%;
     position: relative;
     flex-shrink: 0;
+    margin-bottom: 20px;
 }
 
 .inputButtonWrapper {
@@ -43,7 +44,7 @@
     line-height: 1; /* Exact height matching */
     height: auto; /* Allows dynamic resizing */
     min-height: auto; /* Prevent forced height */
-    max-height: 200px; /* Prevent excessive growth */
+    max-height: 300px; /* Prevent excessive growth */
     resize: none;
     font-family: var(--font-family);
     box-sizing: content-box;

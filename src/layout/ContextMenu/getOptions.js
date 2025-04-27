@@ -1,4 +1,4 @@
-import { Edit2, FilePenLine, FolderPen, FolderPlus, ImageDown, Link, Pin, PinOff, Plus, Reply, Send, Settings, Settings2, Trash2, Unplug, User2, UserPen, Users, Video } from "lucide-react";
+import { Edit2, FilePenLine, FolderPen, FolderPlus, ImageDown, Link, Pencil, Pin, PinOff, Plus, Reply, Send, Settings, Settings2, Trash2, Unplug, User2, UserPen, Users, Video } from "lucide-react";
 import { useCallback } from "react";
 import { useDispatch,} from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -6,7 +6,7 @@ import { copyToClipboard, downloadImage } from "../../lib/services/helperFunctio
 import { deleteMessage } from "../../features/TextChannel/Thunks/deleteMessage";
 import { closeOverlay, setOverlay } from "../../features/Overlay/overlaySlice";
 import { sendMessage } from "../../features/TextChannel/Thunks/sendMessage";
-import { setCurrentTextChannel } from "../../features/TextChannel/textChannelSlice";
+import { setCurrentTextChannel, setReplyTo } from "../../features/TextChannel/textChannelSlice";
 import { setFilter, setQuery, setSimilarImageSrc } from "../../features/Search/searchSlice";
 import { globalSearch } from "../../features/Search/Thunks/globalSearch";
 import { setChannelToEdit } from "../../features/editChannel/editChannelSlice";
@@ -14,6 +14,8 @@ import { pinMessage } from "../../features/TextChannel/Thunks/pinMessage";
 import { toggleMobileMenu } from "../../features/Mobile/mobileSlice";
 import { setSelectedCategory } from "../../features/Categories/categoriesSlice";
 import { triggerAlert } from "../../features/Alerts/alertsSlice";
+import { deleteWidget } from "../../features/Widgets/Thunks/deleteWidget";
+import { setManageWidgetsForChannel } from "../../features/Widgets/manageWidgetsSlice";
 
 export const useContextMenuOptions = () => {
 
@@ -42,6 +44,57 @@ export const useContextMenuOptions = () => {
             } catch (error) {
                 continue;
             }
+            }
+
+            if (data.widgetsOverlay) {
+                if (permissions.user_can_edit_channels) {
+                    options.push({
+                        label: "Add Widget",
+                        type: "button",
+                        onClick: () => {
+                            dispatch(setManageWidgetsForChannel(data.widgetsOverlay.channel_id));
+
+                            setSearchParams({section: 'addWidget'});
+
+                            dispatch(setOverlay('serverSettings'))
+                        },
+                    })
+                    options.push({
+                        label: "Manage Widgets",
+                        type: "button",
+                        onClick: () => {
+                            dispatch(setManageWidgetsForChannel(data.widgetsOverlay.channel_id));
+
+                            setSearchParams({section: "manageWidgets"});
+
+                            dispatch(setOverlay('serverSettings'));
+                        },
+                    })
+                }
+
+                options.push({
+                    label: "Close Widgets",
+                    onClick: () => {dispatch(closeOverlay())},
+                    type: "button"
+                })
+            }
+
+            if (data.widget) {
+                if (permissions.user_can_edit_channels) {
+                    options.push({
+                        label: "Edit Widget",
+                        onClick: () => {},
+                        type: "button",
+                        icon: <Pencil color="var(--text-color)" />
+                    })
+
+                    options.push({
+                        label: "Delete Widget",
+                        onClick: () => dispatch(deleteWidget(data.widget._id)),
+                        type: 'button',
+                        icon: <Trash2 color="var(--error-color)" />
+                    })
+                }
             }
 
             if (data.channel) {
@@ -137,7 +190,14 @@ export const useContextMenuOptions = () => {
 
                 options.push({
                     label: "Reply",
-                    onClick: () => {},
+                    onClick: () => {
+
+                        if (currentTextChannel !== data.message.channel_id) navigate(`/dashboard/server/${data.message.server_id}/channel/${data.message.channel_id}`);
+
+                        dispatch(setReplyTo(data.message));
+
+                        dispatch(closeOverlay());
+                    },
                     type: 'button',
                     icon: <Reply color="var(--text-color)" />
                 })

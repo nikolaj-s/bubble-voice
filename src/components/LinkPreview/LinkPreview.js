@@ -4,7 +4,7 @@ import { ImageComponent } from "../ui/Image/Image";
 import HoverVideoPreview from "../ui/Video/HoverVideoPreview/HoverVideoPreview";
 import { NsfwWrapper } from "../ui/Wrappers/NsfwWrapper/NsfwWrapper";
 
-const LinkPreview = ({ preview }) => {
+const LinkPreview = ({ link_preview: preview, nsfw }) => {
 
   if (!preview) return null;
 
@@ -15,7 +15,7 @@ const LinkPreview = ({ preview }) => {
   return (
     <div onClick={openLink} className={`${styles.linkPreview} ${preview.type === 'reddit' || preview.video ? styles.reddit : null}`}>
       <div className={`${styles.previewImage} ${preview.type === 'reddit' || preview.video ? styles.redditImage : null}`} >
-          <NsfwWrapper nsfw={preview} >
+          <NsfwWrapper nsfw={nsfw ? {nsfw} : preview} >
             <div className={`${styles.mediaWrapper} ${preview.type === 'reddit' ? styles.redditMediaWrapper : null}`} >
               {
               preview.video ?

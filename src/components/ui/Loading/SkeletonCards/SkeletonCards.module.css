@@ -1,0 +1,29 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  .skeleton {
+    width: 100%;
+    background: linear-gradient(
+      90deg,
+      var(--background-color) 25%,
+      var(--card-background-color) 50%,
+      var(--background-color) 75%
+    );
+    background-size: 400% 100%;
+    animation: pulse 1.4s ease infinite;
+    border-radius: 8px;
+  }
+  
+  @keyframes pulse {
+    0% {
+      background-position: 100% 0;
+    }
+    100% {
+      background-position: 0 0;
+    }
+  }
+  

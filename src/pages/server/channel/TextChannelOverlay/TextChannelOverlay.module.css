@@ -15,5 +15,6 @@
         width: calc(50% - 1px);
         position: relative;
         border-left: 1px solid var(--background-color);
+        z-index: 1;
     }
 }

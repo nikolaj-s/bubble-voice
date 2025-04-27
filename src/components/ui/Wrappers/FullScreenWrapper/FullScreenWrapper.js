@@ -11,7 +11,7 @@ const FullScreenWrapper = ({ children, onClose, maxContentWidth = 800, backgroun
     <motion.div
       className={styles.wrapper}
       initial={{backgroundColor: 'rgba(0,0,0,0)'}}
-      animate={{backgroundColor: 'rgba(0,0,0,0.4)'}}
+      animate={{backgroundColor: 'var(--overlay-color)'}}
       exit={{backgroundColor: 'rgba(0,0,0,0)'}}
       // Attach the click handler
     >

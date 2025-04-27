@@ -15,8 +15,9 @@ import { ImageBlock } from './ImageBlock/ImageBlock';
 import { VideoBlock } from './VideoBlock/VideoBlock';
 import { TextBlock } from './TextBlock/TextBlock';
 import { UserBlock } from './UserBlock/UserBlock';
+import { ReplyBlock } from './ReplyBlock/ReplyBlock';
 
-export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inSearch = false}) => {
+export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inSearch = false, isReply}) => {
 
     const isDifferentDay = prevMessage?.formattedDate !== message?.formattedDate;
 
@@ -30,11 +31,12 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
             <LongPressGestureWrapper onTouchContext={openCtx}>
                 <div 
                 id={`message-id-${message._id}`}
-                data-context={JSON.stringify({...message, type: 'message', inSearch})}
+                data-context={JSON.stringify({...message, type: isReply ? 'reply-message' : 'message', inSearch})}
                 style={{
                     borderColor: users[message.user_id]?.color
                 }}
                 className={styles.messageItem}>
+                    {!isReply && 
                     <div className={styles.buttons}>
                         <IconButton 
                         Icon={<Ellipsis color='var(--text-color)' />}
@@ -42,7 +44,7 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
                         title={'Options'}
                         position='left'
                         />
-                    </div>
+                    </div>}
                     <div className={styles.userImageWrapper}>
                         {(message.user_id !== prevMessage.user_id || isDifferentDay) &&
                         <div className={styles.userImage}>
@@ -52,11 +54,12 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
                     </div>
                     <div className={`${styles.messageContent} ${loading ? styles.sending : ''}`}>
                         <UserBlock users={users} message={message} prevMessage={prevMessage} isDifferentDay={isDifferentDay} styles={styles} />
+                        <ReplyBlock {...message} users={users} />
                         <TextBlock {...message} styles={styles} />
                         <ImageBlock {...message} styles={styles} loading={loading} />
                         <VideoBlock {...message} styles={styles} />
                         {!message.image  && !message.video && !message.link_preview && (<LinkComponent link={message.link} />)}
-                        <LinkPreview preview={message.link_preview} /> 
+                        <LinkPreview {...message} /> 
                     </div>
                 </div>
             </LongPressGestureWrapper>

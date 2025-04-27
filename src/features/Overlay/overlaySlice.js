@@ -28,7 +28,7 @@ const overlaySlice = createSlice({
       ) {
         const previous = [...state.history][state.history.length - 2]
           
-        if ((previous?.type === 'search' || previous?.type === 'serverRecommendations' || previous?.type === 'userProfile') && previous?.closed === false) {
+        if ((previous?.type === 'search' || previous?.type === 'serverRecommendations' || previous?.type === 'userProfile' || previous?.type === 'widgets') && previous?.closed === false) {
           state.currentOverlay = previous?.type;
           return;
         }

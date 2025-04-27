@@ -10,13 +10,15 @@ import TextInput from "../../../../components/ui/Inputs/TextInput/TextInput"
 import ImageDropZone from "../../../../components/ui/Inputs/ImageDropZone/ImageDropZone"
 import TextButton from "../../../../components/ui/Buttons/TextButton/TextButton"
 import TextArea from "../../../../components/ui/Inputs/TextArea/TextArea"
-import ToggleSwitch from "../../../../components/ui/Inputs/ToggleSwitch/ToggleSwitch"
 import { updateChannel } from "../../../../features/editChannel/Thunks/updateChannel"
 import { BoxLabel } from "../../../../components/ui/Titles/BoxLabel/BoxLabel"
 import { LineSpacer } from "../../../../components/ui/Spacers/LineSpacer/LineSpacer"
 import { deleteChannel } from "../../../../features/editChannel/Thunks/deleteChannel"
 import ConfirmationPopup from "../../../../components/ui/Menus/ConfirmationPopup/ConfirmationPopup"
 import Dropdown from "../../../../components/ui/Inputs/DropDown/DropDown"
+import { Trash2 } from "lucide-react"
+import { ApplyChangesPopup } from "../../../../components/ApplyChangesPopup/ApplyChangesPopup"
+import { setManageWidgetsForChannel } from "../../../../features/Widgets/manageWidgetsSlice"
 
 export const EditChannelForm = ({permissions}) => {
 
@@ -73,6 +75,20 @@ export const EditChannelForm = ({permissions}) => {
         dispatch(deleteChannel(channel));
     }
 
+    const openAddWidget = () => {
+
+        dispatch(setManageWidgetsForChannel(channel.channel_id));
+
+        setSearchParams({section: 'addWidget'});
+    }
+
+    const openManageWidgets = () => {
+
+        dispatch(setManageWidgetsForChannel(channel.channel_id));
+
+        setSearchParams({section: 'manageWidgets'});
+    }
+
     return (
         <NotAuthorized permission={permissions.user_can_edit_channels}>
             <LoadingErrorFormWrapper sliceName="editChannelSlice">
@@ -80,16 +96,8 @@ export const EditChannelForm = ({permissions}) => {
                     <BoxLabel label={`Channel Type: ${channel.channel_type}`} />
                 </div>
                 <Header text={`Edit The ${channel.channel_name} Channel`} />
-                
-                <Label label="Edit Channel Icon" />
-                <ImageDropZone 
-                height={50} 
-                width={50}
-                dimensions={100}
-                existingImage={channel.channel_icon}
-                onImageChange={setChannelIcon}
-                borderRadius="50%"
-                />
+                <LineSpacer />
+                <Header level={3} text="Details" />
                 <Label label="Edit Channel Name" />
                 <TextInput 
                 error={channelName?.trim()?.length < 3 ? "Channel name must be longer than 3 characters" : null} 
@@ -101,6 +109,25 @@ export const EditChannelForm = ({permissions}) => {
                 />
                 <Label label="Change Category:" />
                 <Dropdown selected={category.category_name} options={[defaultCategory, ...categories]} selector="category_name" setSelected={setCategory} />
+                <Label label="Channel Description" />
+                <TextArea 
+                limit={800}
+                placeholder="Description"
+                text={channelDescription}
+                setText={setChannelDescription}
+                />
+                <LineSpacer />
+                <Header level={3} text="Appearance" />
+                <Label label="Edit Channel Icon" />
+                <ImageDropZone 
+                height={50} 
+                width={50}
+                dimensions={100}
+                existingImage={channel.channel_icon}
+                onImageChange={setChannelIcon}
+                borderRadius="50%"
+                />
+                
                 <Label label="Edit Channel Background" />
                 <ImageDropZone 
                 width={450}
@@ -109,25 +136,22 @@ export const EditChannelForm = ({permissions}) => {
                 onImageChange={setChannelBackground}
                 dimensions={1000}
                 />
-                <Header level={3} text="Details" />
-                <Label label="Channel Description" />
-                <TextArea 
-                limit={800}
-                placeholder="Description"
-                text={channelDescription}
-                setText={setChannelDescription}
-                />
-                
-                <TextButton 
-                action={handleApplyChanges}
-                title="Apply Changes"
-                disabled={(!channelIcon && !channelBackground) && (channel.channel_name === channelName || channelName.trim().length < 3) && (channel.channel_description === channelDescription) && (channel.category === category.category_id)} />
+                <LineSpacer />
+                <Header level={3} text="Widgets" />
+                <Label label="add a widget to this channel" />
+                <TextButton action={openAddWidget} maxWidth={150} title="Add Widget" />
+                <Label label="Manage Existing Widgets" />
+                <TextButton action={openManageWidgets} maxWidth={150} title="Manage" />
                 
                 {permissions?.user_can_delete_channels &&
                 <>
                 <LineSpacer />
                 <Label label="Delete Channel" />
-                <TextButton action={() => {toggleConfirmDeleteChannel(true)}} maxWidth={100} backgroundColor={'var(--error-color)'} title="Delete" />
+                <TextButton 
+                icon={<Trash2 size={20} color="var(--text-color)" />}
+                action={() => {toggleConfirmDeleteChannel(true)}} 
+                maxWidth={150} backgroundColor={'var(--error-color)'} 
+                title="Delete" />
                 </>
                 }
                 {confirmDeleteChannel && 
@@ -136,6 +160,10 @@ export const EditChannelForm = ({permissions}) => {
                 onConfirm={() => {handleDeleteChannel()}}
                 message={"Are you sure you want to delete this channel, this will permananetly remove all content"}
                 />}
+                <ApplyChangesPopup 
+                onApply={handleApplyChanges}
+                disabled={(!channelIcon && !channelBackground) && (channel.channel_name === channelName || channelName.trim().length < 3) && (channel.channel_description === channelDescription) && (channel.category === category.category_id)}
+                />
             </LoadingErrorFormWrapper>
         </NotAuthorized>
     )

@@ -31,6 +31,7 @@ import { ServerRecommendations } from "../Overlays/ServerRecommendations/ServerR
 import { ChannelDescription } from "../Overlays/ChannelDescription/ChannelDescription";
 import { UserProfile } from "../Overlays/UserProfile/UserProfile";
 import { ExpandedVideo } from "../Overlays/ExpandedVideo/ExpandedVideo";
+import { WidgetsOverlay } from "../Overlays/Widgets/WidgetsOverlay";
 
 const overlayComponents = {
   search: Search,
@@ -46,7 +47,8 @@ const overlayComponents = {
   createDrawing: CreateDrawing,
   serverRecommendations: ServerRecommendations,
   channelDescription: ChannelDescription,
-  userProfile: UserProfile
+  userProfile: UserProfile,
+  widgets: WidgetsOverlay
 };
 
 export const Overlay = ({ children }) => {

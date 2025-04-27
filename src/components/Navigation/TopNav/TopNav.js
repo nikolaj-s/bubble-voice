@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setOverlay } from "../../../features/Overlay/overlaySlice";
 import { selectServerName } from "../../../features/ServerDetails/serverDetailsSlice";
 
-import { Bell, Ellipsis, Menu, Settings2, UsersRound, UserX, X } from "lucide-react";
+import { Bell, Ellipsis, LayoutDashboard, Menu, Settings2, UsersRound, UserX, X } from "lucide-react";
 import { Route, Routes } from "react-router";
 import { SearchButton } from "./SearchButton/SearchButton";
 import ChannelHeader from "../../Headers/ChannelHeader/ChannelHeader";
@@ -85,6 +85,10 @@ const TopNav = () => {
     }
   }
 
+  const openWidgets = () => {
+    dispatch(setOverlay('widgets'));
+  }
+
   return (
     <nav className={styles.navbar}>
       <div className={styles.buttonGroup}>
@@ -114,13 +118,21 @@ const TopNav = () => {
           <Route path="/server/:serverID/channel/:channelID" element={
             <>
             <ChannelHeader {...channelDetails} expandDescription={expandChannelDescription} />
+            
             </>
           } />
         </Routes>
       )}
       </div>
       <div className={`${styles.buttonGroup} ${styles.navButtons} ${styles.hideOnMobile}`}>
-        
+        {channelDetails && (
+        <IconButton 
+        Icon={<LayoutDashboard color="var(--text-color)" />}
+        title={"Widgets"}
+        position="bottom"
+        onClick={openWidgets}
+        />
+        )}
         <IconButton
           Icon={<Bell color="var(--text-color)" />}
           position="bottom"

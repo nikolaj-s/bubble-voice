@@ -1,0 +1,26 @@
+.wrapper {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+  }
+  
+  .icon {
+    color: var(--accent-color);
+  }
+  
+  .tooltip {
+    position: absolute;
+    left: 100%;
+    background: var(--card-background-color);
+    border: 1px solid var(--accent-color);
+    color: var(--text-color);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    z-index: 50;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    width: 300px;
+  }
+  
