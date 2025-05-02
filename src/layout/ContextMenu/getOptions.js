@@ -1,4 +1,4 @@
-import { Edit2, FilePenLine, FolderPen, FolderPlus, ImageDown, Link, Pencil, Pin, PinOff, Plus, Reply, Send, Settings, Settings2, Trash2, Unplug, User2, UserPen, Users, Video } from "lucide-react";
+import { Download, Edit2, FilePenLine, FolderPen, FolderPlus, ImageDown, Link, Pencil, Pin, PinOff, Plus, Reply, Send, Settings, Settings2, Trash2, Unplug, User2, UserPen, Users, Video } from "lucide-react";
 import { useCallback } from "react";
 import { useDispatch,} from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -346,6 +346,21 @@ export const useContextMenuOptions = () => {
                     onClick: () => {downloadImage(data.imageSearchResult?.src || data.image?.src)},
                     type: "button",
                     icon: <ImageDown color="var(--text-color)" />
+                })
+            }
+
+            if (data.video) {
+                options.push({
+                    label: "Copy Link",
+                    onClick: () => {copyToClipboard(data.video.src); dispatch(triggerAlert("Link Copied"))},
+                    type: 'button',
+                    icon: <Link color="var(--text-color)" />
+                })
+                options.push({
+                    label: "Download Video",
+                    onClick: () => {downloadImage(data.video.src)},
+                    type: "button",
+                    icon: <Download color="var(--text-color)" />
                 })
             }
 

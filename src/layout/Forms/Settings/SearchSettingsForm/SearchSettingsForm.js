@@ -4,6 +4,7 @@ import ToggleSwitch from '../../../../components/ui/Inputs/ToggleSwitch/ToggleSw
 import Label from '../../../../components/ui/Titles/Label/Label'
 import { useDispatch, useSelector } from 'react-redux'
 import { toggleSearchSetting } from '../../../../features/Settings/SearchSettings/searchSettingsSlice'
+import { LineSpacer } from '../../../../components/ui/Spacers/LineSpacer/LineSpacer'
 
 export const SearchSettingsForm = () => {
 
@@ -17,6 +18,10 @@ export const SearchSettingsForm = () => {
         <Label label='Disable Safe Search' />
         <ToggleSwitch initialState={disableSafeSearch} onToggle={() => {dispatch(toggleSearchSetting('disableSafeSearch'))}} />
         <Label label='Show Full Resolution Previews' />
+        <ToggleSwitch />
+        <LineSpacer />
+        <Header level={4} text='Handle Interacting With Images From Search' />
+        <Label label='While in a text channel, clicking on an image result automatically sends it to your current channel' />
         <ToggleSwitch />
         </>
     )

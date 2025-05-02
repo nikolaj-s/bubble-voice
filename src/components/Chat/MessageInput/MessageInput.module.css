@@ -26,11 +26,11 @@
 .input-wrapper {
     display: flex;
     align-items: center;
-    background: var(--card-background-color);
+    background: var(--background-color);
     border-radius: 8px;
-    border: 1px solid var(--accent-color);
+    border: 2px solid var(--accent-color);
     padding: 15px;
-    width: 100%;
+    width: calc(100% - 4px);
     border-radius: 20px;
 }
 

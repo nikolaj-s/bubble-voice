@@ -142,7 +142,7 @@ export const MessageInput = ({ value, setValue, setImage = () => {}, error, send
                 title={"Add"}
                 Icon={<Plus color="var(--text-color)" />}
                 onClick={toggleMenu}
-                backgroundColor="var(--card-background-color)"
+                backgroundColor="var(--background-color)"
                 />
             </div>
             <AnimatePresence>
