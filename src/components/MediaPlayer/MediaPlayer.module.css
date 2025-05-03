@@ -1,0 +1,151 @@
+.mediaPlayer {
+  background-color: var(--background-color);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 600px;
+  padding: 10px;
+}
+
+.searchMediaButton {
+  display: flex;
+  padding: 5px;
+  background-color: var(--primary-color);
+  opacity: 0.75;
+  align-items: center;
+  justify-content: space-between;
+  height: 45px;
+  border-radius: 20px;
+  font-size: 1rem;
+  color: var(--text-color);
+  border: none;
+  font-weight: 300;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.searchMediaTitle {
+  margin-left: 10px;
+}
+
+.searchMediaWrapper {
+  display: flex;
+  align-items: center;
+  height: 100%;
+
+}
+.saves {
+  height: 100%;
+  width: 45px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  transition: 0.2s ease-in-out;
+}
+
+.saves:hover {
+  background-color: var(--secondary-color);
+}
+
+.searchMediaButton:hover {
+  opacity: 1;
+  background-color: var(--button-hover);
+}
+
+.queue {
+  max-height: 200px;
+  overflow-y: auto;
+  padding-bottom: 0.5rem;
+}
+
+.empty {
+  color: var(--text-color);
+  text-align: center;
+  padding: 1rem;
+  font-style: italic;
+}
+
+.controls {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+
+.controlsLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.controlBtn {
+  background-color: var(--button-background);
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s ease;
+}
+
+.controlBtn:hover {
+  background-color: var(--button-hover);
+}
+
+.currentlyPlaying {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-color);
+}
+
+.thumbnail {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.title {
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.progressBarWrapper {
+  height: 10px;
+  width: 100%;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  position: relative;
+}
+
+.progressTrack {
+  height: 10px;
+  width: 100%;
+  background-color: var(--primary-color);
+  border-radius: 2px;
+  position: relative;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: var(--button-background);
+  border-radius: 2px;
+  transition: width 0.2s ease;
+}
+
+.progressBarWrapper:hover .progressTrack::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background-color: var(--text-color);
+  left: calc(var(--progress-fill-percent, 0%) - 6px);
+}

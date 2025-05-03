@@ -7,7 +7,7 @@ import { useNavigate, useParams } from "react-router";
 import { ChannelUserButton } from "../ChannelUserButton/ChannelUserButton";
 import IconButton from "../IconButton/IconButton";
 import { useDispatch, useSelector } from "react-redux";
-import { setCurrentTextChannel } from "../../../../features/TextChannel/textChannelSlice";
+import { setCurrentTextChannel } from "../../../../features/Channel/TextChannel/textChannelSlice";
 import { triggerContext } from "../../../../lib/services/helperFunctions";
 import { toggleMobileMenu } from "../../../../features/Mobile/mobileSlice";
 import { setUserProfile } from "../../../../features/UserProfile/userProfileSlice";

@@ -7,7 +7,7 @@ import { DeviceSelector } from '../../../../components/ui/Inputs/DeviceSelector/
 import Label from '../../../../components/ui/Titles/Label/Label'
 import RadioToggle from '../../../../components/ui/Inputs/RadioToggle/RadioToggle'
 import { useDispatch, useSelector } from 'react-redux'
-import { setVoiceThreshold, toggleUsingPushToTalk } from '../../../../features/MediaControl/mediaControlSlice'
+import { setVoiceThreshold, toggleUsingPushToTalk } from '../../../../features/Channel/MediaControl/mediaControlSlice'
 import { setKeybind } from '../../../../features/Settings/Keybinds/keybindsSlice'
 import KeybindInput from '../../../../components/ui/Inputs/KeybindInput/KeybindInput'
 import { TestMicrophone } from '../../../../components/TestMicrophone/TestMicrophone'

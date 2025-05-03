@@ -8,7 +8,7 @@ import { NotAuthorized } from '../../../../components/Error/NotAuthorized/NotAut
 import ImageDropZone from '../../../../components/ui/Inputs/ImageDropZone/ImageDropZone'
 import { LoadingErrorFormWrapper } from '../../../../components/ui/Wrappers/LoadingErrorFormWrapper/LoadingErrorFormWrapper'
 import { useDispatch, useSelector } from 'react-redux'
-import { createChannel } from '../../../../features/Channels/Thunks/createChannel'
+import { createChannel } from '../../../../features/Channel/Channels/Thunks/createChannel'
 import Dropdown from '../../../../components/ui/Inputs/DropDown/DropDown'
 
 export const CreateChannelForm = ({permissions}) => {

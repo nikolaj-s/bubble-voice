@@ -2,9 +2,9 @@ import React from 'react'
 import { TextChannelProvider } from '../../../../providers/TextChannelProvider/TextChannelProvider'
 import { ChatContainer } from '../../../../components/Chat/ChatContainer'
 import { useDispatch, useSelector } from 'react-redux'
-import { sendMessage } from '../../../../features/TextChannel/Thunks/sendMessage'
-import { fetchMessages } from '../../../../features/TextChannel/Thunks/fetchMessages'
-import { setReplyTo, setTextChannelPos } from '../../../../features/TextChannel/textChannelSlice'
+import { sendMessage } from '../../../../features/Channel/TextChannel/Thunks/sendMessage'
+import { fetchMessages } from '../../../../features/Channel/TextChannel/Thunks/fetchMessages'
+import { setReplyTo, setTextChannelPos } from '../../../../features/Channel/TextChannel/textChannelSlice'
 import { ChannelBackground } from '../../../../components/ChannelBackground/ChannelBackground'
 
 export const TextChannel = ({channel}) => {

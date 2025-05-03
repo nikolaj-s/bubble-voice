@@ -5,6 +5,8 @@ import styles from "./TextArea.module.css";
 const TextArea = ({ limit = 200, placeholder = "Type something...", text = "", setText = () => {}}) => {
 
   const handleChange = (e) => {
+    e.stopPropagation();
+
     if (e.target.value.length <= limit) {
       setText(e.target.value);
     }
@@ -28,6 +30,8 @@ const TextArea = ({ limit = 200, placeholder = "Type something...", text = "", s
         value={text}
         onChange={handleChange}
         placeholder={placeholder}
+        onKeyUp={(e) => {e.stopPropagation()}}
+        onKeyDown={(e) => {e.stopPropagation()}}
       />
       <motion.span
         className={`${styles.counter} ${getCounterColor()}`}

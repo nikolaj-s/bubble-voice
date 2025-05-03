@@ -1,14 +1,14 @@
 /* SearchButton.module.css */
 .searchButton {
     width: 100px !important;
+    border-radius: 10px;
 }
 .searchWrapper {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border: solid 1px var(--accent-color);
     width: 98px;
-    border-radius: 5px;
+    border-radius: 15px;
     padding: 0 5px;
     height: 28px;
     gap: 10px;

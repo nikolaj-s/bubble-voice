@@ -10,10 +10,10 @@ import TextInput from "../../../../components/ui/Inputs/TextInput/TextInput"
 import ImageDropZone from "../../../../components/ui/Inputs/ImageDropZone/ImageDropZone"
 import TextButton from "../../../../components/ui/Buttons/TextButton/TextButton"
 import TextArea from "../../../../components/ui/Inputs/TextArea/TextArea"
-import { updateChannel } from "../../../../features/editChannel/Thunks/updateChannel"
+import { updateChannel } from "../../../../features/Channel/editChannel/Thunks/updateChannel"
 import { BoxLabel } from "../../../../components/ui/Titles/BoxLabel/BoxLabel"
 import { LineSpacer } from "../../../../components/ui/Spacers/LineSpacer/LineSpacer"
-import { deleteChannel } from "../../../../features/editChannel/Thunks/deleteChannel"
+import { deleteChannel } from "../../../../features/Channel/editChannel/Thunks/deleteChannel"
 import ConfirmationPopup from "../../../../components/ui/Menus/ConfirmationPopup/ConfirmationPopup"
 import Dropdown from "../../../../components/ui/Inputs/DropDown/DropDown"
 import { Trash2 } from "lucide-react"
@@ -46,17 +46,25 @@ export const EditChannelForm = ({permissions}) => {
 
     const [category, setCategory] = React.useState(defaultCategory);
 
+    const setDefaultState = () => {
+        setChannelName(channel.channel_name);
+
+        setChannelDescription(channel.channel_description || "");
+
+        setCategory(categories.find(c => c.category_id === channel.category) || defaultCategory);
+
+        setChannelBackground(null);
+
+        setChannelIcon(null);
+    }
+
     React.useEffect(() => {
 
         if (!channel?.channel_id) {
             setSearchParams({section: ""});
         }
 
-        setChannelName(channel.channel_name);
-
-        setChannelDescription(channel.channel_description || "");
-
-        setCategory(categories.find(c => c.category_id === channel.category) || defaultCategory);
+        setDefaultState();
 
     }, [channel])
 
@@ -67,6 +75,8 @@ export const EditChannelForm = ({permissions}) => {
         if (channelName.trim().length < 3) return;
 
         dispatch(updateChannel({channelIcon, channelBackground, channelName, channelDescription, channel_id: channel.channel_id, category: category.category_id}));
+
+
     }
 
     const handleDeleteChannel = () => {
@@ -87,6 +97,10 @@ export const EditChannelForm = ({permissions}) => {
         dispatch(setManageWidgetsForChannel(channel.channel_id));
 
         setSearchParams({section: 'manageWidgets'});
+    }
+
+    const discardChanges = () => {
+        setDefaultState();
     }
 
     return (
@@ -125,6 +139,7 @@ export const EditChannelForm = ({permissions}) => {
                 dimensions={100}
                 existingImage={channel.channel_icon}
                 onImageChange={setChannelIcon}
+                parentFileSrc={channelIcon}
                 borderRadius="50%"
                 />
                 
@@ -134,6 +149,7 @@ export const EditChannelForm = ({permissions}) => {
                 height={450}
                 existingImage={channel.channel_background}
                 onImageChange={setChannelBackground}
+                parentFileSrc={channelBackground}
                 dimensions={1000}
                 />
                 <LineSpacer />
@@ -161,6 +177,7 @@ export const EditChannelForm = ({permissions}) => {
                 message={"Are you sure you want to delete this channel, this will permananetly remove all content"}
                 />}
                 <ApplyChangesPopup 
+                onClearChanges={discardChanges}
                 onApply={handleApplyChanges}
                 disabled={(!channelIcon && !channelBackground) && (channel.channel_name === channelName || channelName.trim().length < 3) && (channel.channel_description === channelDescription) && (channel.category === category.category_id)}
                 />

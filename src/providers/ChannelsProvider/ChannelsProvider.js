@@ -2,7 +2,7 @@ import React from 'react'
 import { useSocket } from '../../context/SocketContext';
 import { useDispatch, useSelector } from 'react-redux';
 import ChannelButtonSkeleton from '../../components/ui/Loading/ChannelButtonSkeleton/ChannelButtonSkeleton';
-import { addChannel, removeChannel, reorderChannels, setChannels, setChannelsStatus, updateCategoryofChannels, updateChannelDetails, userJoinsChannel, userLeavesChannel } from '../../features/Channels/channelsSlice';
+import { addChannel, removeChannel, reorderChannels, setChannels, setChannelsStatus, updateCategoryofChannels, updateChannelDetails, userJoinsChannel, userLeavesChannel } from '../../features/Channel/Channels/channelsSlice';
 import { removeCategory, reorderCategories, setCategories, updateCategoryDetails, addCategory } from '../../features/Categories/categoriesSlice';
 
 export const ChannelsProvider = ({children}) => {

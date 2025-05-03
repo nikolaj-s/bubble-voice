@@ -8,7 +8,9 @@ const TextInput = ({ type = "text", placeholder, value, onChange, error, autoCom
         type={type}
         placeholder={placeholder}
         value={value}
-        onChange={(e) => {onChange(e.target.value)}}
+        onChange={(e) => {e.stopPropagation(); onChange(e.target.value)}}
+        onKeyDown={(e) => {e.stopPropagation()}}
+        onKeyUp={(e) => {e.stopPropagation()}}
         className={styles.input}
         autoComplete={autoComplete}
         maxLength={maxLength}

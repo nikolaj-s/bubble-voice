@@ -1,0 +1,120 @@
+.wrapper {
+    background-color: var(--card-background-color);
+    color: var(--text-color);
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    width: 100%;
+    font-family: var(--font-family);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .queueSection {
+    flex-grow: 1;
+  }
+  
+  .queueTitle {
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+  }
+  
+  .queueList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .queueItem {
+    background-color: var(--background-color);
+    border-radius: 8px;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .title {
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  
+  .author {
+    font-size: 0.75rem;
+    color: var(--secondary-color);
+  }
+  
+  .bottomSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .controls {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .iconButton {
+    background-color: var(--button-background);
+    color: var(--text-color);
+    border: none;
+    border-radius: 10px;
+    padding: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .iconButton:hover {
+    background-color: var(--button-hover);
+  }
+  
+  .nowPlaying {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex-grow: 1;
+    min-width: 0;
+  }
+  
+  .nowPlaying .title {
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  .nowPlaying .author {
+    font-size: 0.75rem;
+    color: var(--secondary-color);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  .progressBar {
+    height: 6px;
+    background-color: #2a3c50;
+    border-radius: 4px;
+    overflow: hidden;
+    width: 100%;
+  }
+  
+  .progress {
+    width: 40%;
+    height: 100%;
+    background-color: var(--accent-color);
+    transition: width 0.3s ease;
+  }
+  

@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { APIErrorHandler } from "../../../lib/handlers/APIErrorHandler/APIErrorHandler";
-import { generateFormData } from "../../../lib/services/generateFormData";
+import { APIErrorHandler } from "../../../../lib/handlers/APIErrorHandler/APIErrorHandler";
+import { generateFormData } from "../../../../lib/services/generateFormData";
 import axios from "axios";
-import { API_URL } from "../../../lib/Validation";
+import { API_URL } from "../../../../lib/Validation";
 
 
 export const updateChannel = createAsyncThunk(

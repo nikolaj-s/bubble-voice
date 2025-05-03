@@ -1,10 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-import { APIErrorHandler } from "../../../lib/handlers/APIErrorHandler/APIErrorHandler";
-import { generateFormData } from "../../../lib/services/generateFormData";
-import { API_URL } from "../../../lib/Validation";
+import { APIErrorHandler } from "../../../../lib/handlers/APIErrorHandler/APIErrorHandler";
+import { generateFormData } from "../../../../lib/services/generateFormData";
+import { API_URL } from "../../../../lib/Validation";
 import axios from "axios";
-import { closeOverlay } from "../../Overlay/overlaySlice";
+import { closeOverlay } from "../../../Overlay/overlaySlice";
 
 export const createChannel = createAsyncThunk(
     'createChannel/channelsSlice',

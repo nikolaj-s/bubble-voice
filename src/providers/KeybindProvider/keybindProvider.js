@@ -1,10 +1,13 @@
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleAudioMute, toggleMicrophone, togglePushToTalkActive, toggleWebcam } from "../../features/MediaControl/mediaControlSlice"; // Update with correct path
+import { toggleAudioMute, toggleMicrophone, togglePushToTalkActive, toggleWebcam } from "../../features/Channel/MediaControl/mediaControlSlice"; // Update with correct path
 
 const KeybindProvider = ({ children }) => {
+  
   const dispatch = useDispatch();
+
   const keybinds = useSelector((state) => state.keybindsSlice.keybinds);
+
   const activeKeysRef = useRef(new Set()); // Persistent state
 
   const handleActionTrigger = (action) => {

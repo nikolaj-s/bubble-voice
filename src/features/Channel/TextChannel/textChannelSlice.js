@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { fetchMessages } from "./Thunks/fetchMessages";
 import { sendMessage } from "./Thunks/sendMessage";
 import { deleteMessage } from "./Thunks/deleteMessage";
-import { getFormattedDate } from "../../lib/services/helperFunctions";
+import { getFormattedDate } from "../../../lib/services/helperFunctions";
 import { pinMessage } from "./Thunks/pinMessage";
 
 const initialState = {

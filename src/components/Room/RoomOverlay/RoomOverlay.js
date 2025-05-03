@@ -3,12 +3,14 @@ import React from 'react';
 
 import styles from '../Room.module.css';
 import IconButton from '../../ui/Buttons/IconButton/IconButton';
-import { Ellipsis, ImageMinus, VideoOff, Mic, MicOff, ScreenShare, ScreenShareOff, Unplug, Video, Volume2, VolumeX } from 'lucide-react';
+import { Ellipsis, ImageMinus, VideoOff, Mic, MicOff, ScreenShare, ScreenShareOff, Unplug, Video, Volume2, VolumeX, ImagePlus } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import { PillSpacer } from '../../ui/Spacers/PillSpacer/PillSpacer';
 import { useMediaControls } from '../../../context/MediaControlsContext';
 import { KeybindToolTip } from '../../ui/Titles/KeybindToolTip/KeybindToolTip';
+import { MediaPlayerControls } from './MediaPlayerControls/MediaPlayerControls';
+import { toggleAppearanceSetting } from '../../../features/Settings/Appearance/appearanceSlice';
 
 export const RoomOverlay = () => {
 
@@ -21,6 +23,8 @@ export const RoomOverlay = () => {
     const {isWebcamOn, isMicrophoneMuted, isAudioMuted, isScreenSharing, handleToggleAudio, handleToggleMicrophone, handleToggleWebCam, webcamError, microphoneError } = useMediaControls();
 
     const {keybinds} = useSelector(state => state.keybindsSlice);
+
+    const {hideChannelBackgrounds} = useSelector(state => state.appearanceSlice);
     
     const handleDisconnect = () => {
         navigate(`/dashboard/server/${serverID}`)
@@ -35,9 +39,10 @@ export const RoomOverlay = () => {
                 position='bottom'
                 />
                 <IconButton
-                title={"Hide Channel Background"}
-                Icon={<ImageMinus color='var(--text-color)' />}
+                title={hideChannelBackgrounds ? "Show Channel Background" : "Hide Channel Background"}
+                Icon={hideChannelBackgrounds ? <ImagePlus color='var(--text-color)' /> : <ImageMinus color='var(--text-color)' />}
                 position='bottom'
+                onClick={() => {dispatch(toggleAppearanceSetting('hideChannelBackgrounds'))}}
                 />
                 <IconButton
                 title={"Room Options"}
@@ -59,7 +64,7 @@ export const RoomOverlay = () => {
                     <Mic color='var(--text-color)' />
                     }
                     title={<KeybindToolTip 
-                        label={`${isMicrophoneMuted ? 'Un-Mute' : 'Mute'}`}
+                        label={`${isMicrophoneMuted ? 'Unmute' : 'Mute'}`}
                         binds={[keybinds['muteMicrophone']?.key]}
                         />}
                     />
@@ -71,7 +76,7 @@ export const RoomOverlay = () => {
                     onClick={handleToggleAudio}
                     position='top' title={
                         <KeybindToolTip 
-                        label={`${isAudioMuted ? 'Un-Deafen' : 'Deafen'}`}
+                        label={`${isAudioMuted ? 'Undeafen' : 'Deafen'}`}
                         binds={[keybinds['deafen']?.key]}
                         />
                     } Icon={
@@ -80,6 +85,7 @@ export const RoomOverlay = () => {
                     :
                     <Volume2 color='var(--text-color)' />
                     } />
+                    <MediaPlayerControls />
                     <PillSpacer verticle={true} />
                     <IconButton 
                     onClick={handleDisconnect}

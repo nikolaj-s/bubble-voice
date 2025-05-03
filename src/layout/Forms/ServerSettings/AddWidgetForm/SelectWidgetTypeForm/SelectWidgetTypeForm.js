@@ -5,7 +5,9 @@ import Label from '../../../../../components/ui/Titles/Label/Label'
 import { useSearchParams } from 'react-router-dom'
 import Header from '../../../../../components/ui/Titles/Header/Header'
 
-export const SelectWidgetTypeForm = () => {
+export const SelectWidgetTypeForm = ({channel}) => {
+
+    const [options, setOptions] = React.useState([]);
 
     const [searchParams, setSearchParams] = useSearchParams();
     
@@ -14,11 +16,25 @@ export const SelectWidgetTypeForm = () => {
         setSearchParams({section: 'addWidget', widget: option});
     }
 
+    React.useEffect(() => {
+
+        setOptions(widgetOptions.filter(widget => {
+            if (channel.channel_type !== 'voice' && widget.type === 'media_player') {
+                return false;
+            }
+            if (channel.channel_type === 'voice' && widget.type === 'featured_posts') {
+                return false;
+            }
+            return true;
+        }))
+
+    }, [channel])
+
     return (
        <>
        <Header level={3} text='Choose a Widget Type' />
        <Label label='options:' />
-       <TypeInput types={widgetOptions} onSelect={navigate} />
+       <TypeInput types={options} onSelect={navigate} />
        </>
     )
 }

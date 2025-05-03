@@ -17,7 +17,7 @@ import { Logo } from "../../Icons/Bubble/Logo";
 import { triggerContext } from "../../../lib/services/helperFunctions";
 import { toggleAppearanceSetting } from "../../../features/Settings/Appearance/appearanceSlice";
 import MetaTags from "../../MetaTags/MetaTags";
-import { setChannelDescription } from "../../../features/ChannelDescription/channelDescriptionSlice";
+import { setChannelDescription } from "../../../features/Channel/ChannelDescription/channelDescriptionSlice";
 
 const TopNav = () => {
   

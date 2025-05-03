@@ -12,6 +12,7 @@ import { AddEmbedWidgetForm } from './AddEmbedWidgetForm/AddEmbedWidgetForm'
 import { AnimatePresence, motion } from 'framer-motion'
 import { AddRichTextWidget } from './AddRichTextWidget/AddRichTextWidget'
 import { AddDynamicMediaGallery } from './AddDynamicMediaGalleryWidgetForm/AddDynamicMediaGallery'
+import { AddMediaPlayerWidgetForm } from './AddMediaPlayerWidgetForm/AddMediaPlayerWidgetForm'
 
 export const AddWidgetForm = ({permissions}) => {
 
@@ -35,7 +36,8 @@ export const AddWidgetForm = ({permissions}) => {
         gallery: AddGalleryWidgetForm,
         embed: AddEmbedWidgetForm,
         "rich_text": AddRichTextWidget,
-        "dynamic_media": AddDynamicMediaGallery
+        "dynamic_media": AddDynamicMediaGallery,
+        "media_player": AddMediaPlayerWidgetForm
     }
 
     const activeSection = content[searchParams.get('widget')] ? searchParams.get('widget') : 'selectWidgetType'

@@ -109,7 +109,7 @@
   }
   
   .imageBlock {
-    height: 350px;
+    max-height: 350px;
     max-width: calc(100%);
     width: auto;
     border-radius: 10px;

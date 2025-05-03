@@ -10,7 +10,8 @@ export const SearchButton = ({ onClick }) => {
     <IconButton  
       className={styles.searchButton}
       onClick={onClick}
-      padding={"5px 0px"}
+      padding={"5px"}
+      backgroundColor='var(--primary-color)'
       Icon={
         <div className={styles.searchWrapper}>
           <p className={styles.searchText}>Search</p>

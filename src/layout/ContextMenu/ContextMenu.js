@@ -24,6 +24,8 @@ const ContextMenu = ({ children }) => {
 
     const {currentChannel} = useSelector((state) => state.channelsSlice);
 
+    const mediaPlayerState = useSelector(state => state.mediaPlayerSlice.currentChannel);
+
     const channels = useSelector((state) => state.channelsSlice.channels);
 
     const permissions = useSelector(
@@ -39,12 +41,12 @@ const ContextMenu = ({ children }) => {
     const handleClick = () => {
         setContextMenu(null);
     };
-
+    
     useEffect(() => {
         const handleContextMenu = (event) => {
             event.preventDefault();
     
-            const options = getOptions(event, permissions[user?.server_group], currentTextChannel, channels, currentChannel, user);
+            const options = getOptions(event, permissions[user?.server_group], currentTextChannel, channels, currentChannel, user, mediaPlayerState);
             if (!options || options.length === 0) return;
     
             let clickX = event.clientX;
@@ -82,7 +84,7 @@ const ContextMenu = ({ children }) => {
             document.removeEventListener("click", handleClick);
             window.removeEventListener("click", handleClick);
         };
-    }, [getOptions, permissions, user, currentTextChannel, channels, currentChannel]);
+    }, [getOptions, permissions, user, currentTextChannel, channels, currentChannel, mediaPlayerState]);
     
 
     return (

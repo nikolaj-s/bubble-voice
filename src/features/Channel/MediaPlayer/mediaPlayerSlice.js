@@ -1,0 +1,144 @@
+import { createSlice } from "@reduxjs/toolkit";
+import { addMediaToPlayer } from "./Thunks/addMediaToPlayer";
+
+const initialState = {
+  currentTime: 0,
+  currentlyPlaying: null, // { id, title, url, type, duration, etc. }
+  isPlaying: false,
+  isMuted: false,
+  volume: 1,
+  queue: [],
+  currentChannel: null, // e.g. channel id if this is per channel
+  savedMedia: [],
+  loading: false,
+  error: false,
+};
+
+const mediaPlayerSlice = createSlice({
+  name: "mediaPlayerSlice",
+  initialState,
+  reducers: {
+    addMediaToQueue: (state, action) => {
+
+        if (state.queue.length > 0) {
+            state.queue.push(action.payload);
+        } else {
+            state.currentlyPlaying = action.payload;
+            state.currentTime = 0;
+            state.isPlaying = true;
+        }
+
+    },
+    addMultipleToQueue: (state, action) => {
+      state.queue = [...state.queue, ...action.payload];
+    },
+    removeMediaFromQueue: (state, action) => {
+      state.queue = state.queue.filter(media => media.id !== action.payload);
+    },
+    clearQueue: (state) => {
+      state.queue = [];
+      state.currentlyPlaying = null;
+      state.isPlaying = false;
+    },
+    playNextInQueue: (state) => {
+
+        const nextMedia = state.queue.shift();
+
+        if (nextMedia) {
+            
+            state.currentlyPlaying = nextMedia;
+            state.isPlaying = true;
+            state.currentTime = 0;
+
+        } else {
+
+            state.currentlyPlaying = null;
+            state.isPlaying = false;
+            state.currentTime = 0;
+            
+        }
+    },
+    skipToPreviousMedia: (state, action) => {
+      const { previousMedia } = action.payload; // optional: store last played?
+      if (previousMedia) {
+        state.currentlyPlaying = previousMedia;
+        state.isPlaying = true;
+        state.currentTime = 0;
+      }
+    },
+    setCurrentlyPlaying: (state, action) => {
+      state.currentlyPlaying = action.payload;
+      state.currentTime = 0;
+    },
+    toggleMediaPlaying: (state, action) => {
+      state.isPlaying = action.payload;
+    },
+    incrementCurrentTime: (state, action) => {
+      state.currentTime = action.payload;
+    },
+    resetCurrentTime: (state) => {
+      state.currentTime = 0;
+    },
+    setMediaPlayerVolume: (state, action) => {
+      state.volume = action.payload;
+    },
+    toggleMediaPlayerMuted: (state, action) => {
+      state.isMuted = action.payload;
+    },
+    setCurrentChannel: (state, action) => {
+      state.currentChannel = action.payload;
+    },
+    addMediaToSaved: (state, action) => {
+      if (!state.savedMedia.find(m => m.id === action.payload.id)) {
+        state.savedMedia.push(action.payload);
+      }
+    },
+    removeMediaFromSaved: (state, action) => {
+      state.savedMedia = state.savedMedia.filter(m => m.id !== action.payload);
+    },
+    setMediaPlayerLoadingState: (state, action) => {
+      state.loading = action.payload;
+    },
+    setErrorState: (state, action) => {
+      state.error = action.payload;
+    },
+    resetMediaPlayer: () => initialState
+  },
+  extraReducers: (builder) => {
+    builder.addCase(addMediaToPlayer.pending, (state) => {
+        state.loading = false;
+        state.error = false;
+    })
+    builder.addCase(addMediaToPlayer.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+    })
+    builder.addCase(addMediaToPlayer.fulfilled, (state) => {
+        state.loading = false;
+        state.error = false;
+    })
+  }
+});
+
+export const {
+  addMediaToQueue,
+  addMultipleToQueue,
+  removeMediaFromQueue,
+  clearQueue,
+  playNextInQueue,
+  skipToPreviousMedia,
+  setCurrentlyPlaying,
+  toggleMediaPlaying,
+  incrementCurrentTime,
+  resetCurrentTime,
+  setMediaPlayerVolume,
+  toggleMediaPlayerMuted,
+  setCurrentChannel,
+  addMediaToSaved,
+  removeMediaFromSaved,
+  setMediaPlayerLoadingState,
+  setErrorState,
+  resetMediaPlayer,
+} = mediaPlayerSlice.actions;
+
+export default mediaPlayerSlice.reducer;

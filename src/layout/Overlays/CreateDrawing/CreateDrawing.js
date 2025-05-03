@@ -4,7 +4,7 @@ import DrawingCanvas from '../../../components/DrawingCanvas/DrawingCanvas'
 import { useDispatch, useSelector } from 'react-redux'
 import Header from '../../../components/ui/Titles/Header/Header'
 import { triggerAlert } from '../../../features/Alerts/alertsSlice'
-import { sendMessage } from '../../../features/TextChannel/Thunks/sendMessage'
+import { sendMessage } from '../../../features/Channel/TextChannel/Thunks/sendMessage'
 
 export const CreateDrawing = ({close}) => {
 

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { Category } from "../../../../components/ChannelCategory/ChannelCategory";
 
-import { reorderChannels } from "../../../../features/Channels/channelsSlice";
+import { reorderChannels } from "../../../../features/Channel/Channels/channelsSlice";
 
 import { reorderCategories } from "../../../../features/Categories/categoriesSlice";
 

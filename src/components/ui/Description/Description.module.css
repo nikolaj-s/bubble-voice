@@ -1,9 +1,9 @@
 
 .container {
-    padding: 10px;
-    width: calc(100% - 20px);
+    width: 100%;
     height: auto;
-    background-color: var(--secondary-color);
+    opacity: 0.75;
+
     border-radius: 10px;
 }
 
@@ -11,5 +11,6 @@
     margin: 0px;
     padding: 0px;
     color: var(--text-color);
+    font-style: italic;
 }
 

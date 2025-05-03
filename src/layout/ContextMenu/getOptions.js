@@ -3,19 +3,20 @@ import { useCallback } from "react";
 import { useDispatch,} from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { copyToClipboard, downloadImage } from "../../lib/services/helperFunctions";
-import { deleteMessage } from "../../features/TextChannel/Thunks/deleteMessage";
+import { deleteMessage } from "../../features/Channel/TextChannel/Thunks/deleteMessage";
 import { closeOverlay, setOverlay } from "../../features/Overlay/overlaySlice";
-import { sendMessage } from "../../features/TextChannel/Thunks/sendMessage";
-import { setCurrentTextChannel, setReplyTo } from "../../features/TextChannel/textChannelSlice";
+import { sendMessage } from "../../features/Channel/TextChannel/Thunks/sendMessage";
+import { setCurrentTextChannel, setReplyTo } from "../../features/Channel/TextChannel/textChannelSlice";
 import { setFilter, setQuery, setSimilarImageSrc } from "../../features/Search/searchSlice";
 import { globalSearch } from "../../features/Search/Thunks/globalSearch";
-import { setChannelToEdit } from "../../features/editChannel/editChannelSlice";
-import { pinMessage } from "../../features/TextChannel/Thunks/pinMessage";
+import { setChannelToEdit } from "../../features/Channel/editChannel/editChannelSlice";
+import { pinMessage } from "../../features/Channel/TextChannel/Thunks/pinMessage";
 import { toggleMobileMenu } from "../../features/Mobile/mobileSlice";
 import { setSelectedCategory } from "../../features/Categories/categoriesSlice";
 import { triggerAlert } from "../../features/Alerts/alertsSlice";
 import { deleteWidget } from "../../features/Widgets/Thunks/deleteWidget";
 import { setManageWidgetsForChannel } from "../../features/Widgets/manageWidgetsSlice";
+import { addMediaToPlayer } from "../../features/Channel/MediaPlayer/Thunks/addMediaToPlayer";
 
 export const useContextMenuOptions = () => {
 
@@ -26,7 +27,7 @@ export const useContextMenuOptions = () => {
     const navigate = useNavigate();
 
     const getOptions = useCallback(
-        (e, permissions, currentTextChannel, channels, currentChannel, user) => {
+        (e, permissions, currentTextChannel, channels, currentChannel, user, mediaPlayerState) => {
         try {
             const options = [];
 
@@ -350,6 +351,20 @@ export const useContextMenuOptions = () => {
             }
 
             if (data.video) {
+
+                if ((data.video?.src?.includes('.mp4') || data?.video?.url.includes('youtu')) && data.video.duration && mediaPlayerState) {
+                    options.push({
+                        label: "Play In Channel",
+                        onClick: () => {
+                            dispatch(closeOverlay());
+
+                            dispatch(addMediaToPlayer(data.video))
+                        },
+                        type: 'button',
+
+                    })
+                }
+
                 options.push({
                     label: "Copy Link",
                     onClick: () => {copyToClipboard(data.video.src); dispatch(triggerAlert("Link Copied"))},

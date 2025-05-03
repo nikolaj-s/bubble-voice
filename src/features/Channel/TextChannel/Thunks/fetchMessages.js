@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { APIErrorHandler } from "../../../lib/handlers/APIErrorHandler/APIErrorHandler";
+import { APIErrorHandler } from "../../../../lib/handlers/APIErrorHandler/APIErrorHandler";
 import axios from "axios";
-import { API_URL } from "../../../lib/Validation";
+import { API_URL } from "../../../../lib/Validation";
 
 
 export const fetchMessages = createAsyncThunk(

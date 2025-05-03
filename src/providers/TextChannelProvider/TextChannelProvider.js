@@ -4,8 +4,8 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { useSocket } from "../../context/SocketContext"
-import { fetchMessages } from "../../features/TextChannel/Thunks/fetchMessages";
-import { addMessage, clearTextChannelState, removeMessage, setCurrentTextChannel, updateMessage } from "../../features/TextChannel/textChannelSlice";
+import { fetchMessages } from "../../features/Channel/TextChannel/Thunks/fetchMessages";
+import { addMessage, clearTextChannelState, removeMessage, setCurrentTextChannel, updateMessage } from "../../features/Channel/TextChannel/textChannelSlice";
 
 export const TextChannelProvider = ({children, channel}) => {
 

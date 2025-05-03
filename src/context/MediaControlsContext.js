@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { toggleMicrophone, toggleAudioMute, toggleWebcam } from "../features/MediaControl/mediaControlSlice"; 
+import { toggleMicrophone, toggleAudioMute, toggleWebcam } from "../features/Channel/MediaControl/mediaControlSlice"; 
 import { useSocket } from "./SocketContext";
 // Import actions
 

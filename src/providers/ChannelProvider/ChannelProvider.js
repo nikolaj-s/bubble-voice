@@ -4,8 +4,8 @@ import { useNavigate, useParams } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { useSocket } from '../../context/SocketContext';
 import ErrorCard from '../../components/Error/ErrorCard/ErrorCard';
-import { clearCurrentChannel, setCurrentChannel } from '../../features/Channels/channelsSlice';
-import { setCurrentTextChannel } from '../../features/TextChannel/textChannelSlice';
+import { clearCurrentChannel, setCurrentChannel } from '../../features/Channel/Channels/channelsSlice';
+import { setCurrentTextChannel } from '../../features/Channel/TextChannel/textChannelSlice';
 
 export const ChannelProvider = ({children, overlay = false, channel_id_prop}) => {
 

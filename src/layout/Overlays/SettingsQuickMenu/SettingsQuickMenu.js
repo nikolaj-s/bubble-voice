@@ -13,7 +13,7 @@ import { setOverlay } from '../../../features/Overlay/overlaySlice'
 
 import BoolInput from '../../../components/ui/Inputs/BoolInput/BoolInput'
 
-import { toggleUsingPushToTalk } from '../../../features/MediaControl/mediaControlSlice'
+import { toggleUsingPushToTalk } from '../../../features/Channel/MediaControl/mediaControlSlice'
 
 import { LineSpacer } from '../../../components/ui/Spacers/LineSpacer/LineSpacer'
 

@@ -3,19 +3,20 @@ import React from 'react';
 import styles from './Room.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMediasoup } from '../../context/MediasoupContext';
-import { throwMicrophoneError, throwWebcamError, toggleMediaControlLoading, toggleWebcam } from '../../features/MediaControl/mediaControlSlice';
+import { throwMicrophoneError, throwWebcamError, toggleMediaControlLoading, toggleWebcam } from '../../features/Channel/MediaControl/mediaControlSlice';
 import { getMicrophoneMedia, getWebcamMedia } from '../../lib/services/getUserMedia';
 import { RoomUserWrapper } from './RoomUserWrapper/RoomUserWrapper';
 import { useDetectSpeech } from '../../hooks/useDetectSpeech';
 import { ChannelBackground } from '../ChannelBackground/ChannelBackground';
 import { RoomOverlay } from './RoomOverlay/RoomOverlay';
 import { usePushToTalk } from '../../hooks/usePushToTalk';
+import { MediaPlayerProvider } from '../../context/MediaPlayerContext';
 
 export const Room = () => {
     
     const dispatch = useDispatch();
 
-    const { users, channel_background } = useSelector(state => state.channelsSlice.currentChannel);
+    const { users, channel_background, channel_id } = useSelector(state => state.channelsSlice.currentChannel);
 
     const { produce, resumeProducer, pauseProducer, closeProducer, getConsumers, getProducers } = useMediasoup();
 
@@ -124,11 +125,11 @@ export const Room = () => {
 
     return (
         <div className={`${styles.container} ${isTextChannelOpen ? styles.textChannelOpen : ''}`}>
-    
-            <RoomUserWrapper users={combinedUsers} />
-            <ChannelBackground channel_background={channel_background} />
-            <RoomOverlay />
-        
+            <MediaPlayerProvider channelId={channel_id}>
+                <RoomUserWrapper users={combinedUsers} />
+                <ChannelBackground channel_background={channel_background} />
+                <RoomOverlay />
+            </MediaPlayerProvider>
         </div>
     );
 };
