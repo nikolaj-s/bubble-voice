@@ -14,21 +14,28 @@ import { setUserProfile } from "../../../../features/UserProfile/userProfileSlic
 import { setOverlay } from "../../../../features/Overlay/overlaySlice";
 
 const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, channel_type, server_id, channel }) => {
+
     const dispatch = useDispatch();
+
     const navigate = useNavigate();
+
     const { channelID } = useParams();
   
-    const { currentChannel } = useSelector(state => state.channelsSlice);
+    const { currentVoiceChannel } = useSelector(state => state.voiceChannelSlice);
+
     const { currentTextChannel } = useSelector(state => state.textChannelSlice);
+
     const { isChannelMenuOpen } = useSelector(state => state.mobileSlice);
+
     const { hideCustomChannelIcons } = useSelector(state => state.appearanceSlice);
   
     const [active, toggleActive] = React.useState(false);
   
     const openChannel = () => {
+
       if (isChannelMenuOpen) dispatch(toggleMobileMenu('isChannelMenuOpen'));
   
-      if (currentChannel?.channel_type === 'voice' && channel_type === 'text') {
+      if (currentVoiceChannel && channel_type === 'text') {
         if (channel_id === currentTextChannel) {
           dispatch(setCurrentTextChannel(null));
         } else {
@@ -41,11 +48,14 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
           navigate(`/dashboard/server/${server_id}/channel/${channel_id}`);
         }
       }
+
     };
   
     React.useEffect(() => {
-      toggleActive(channelID === channel_id || channel_id === currentTextChannel);
-    }, [channelID, channel_id, currentTextChannel]);
+
+      toggleActive(currentVoiceChannel === channel_id || currentTextChannel === channel_id);
+      
+    }, [channel_id, currentTextChannel, currentVoiceChannel]);
   
     const openContext = (e) => {
       e.stopPropagation();

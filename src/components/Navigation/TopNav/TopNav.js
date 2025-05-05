@@ -33,11 +33,11 @@ const TopNav = () => {
 
   const hideUsers = useSelector(state => state.appearanceSlice.hideUsers);
 
-  const {currentChannel} = useSelector(state => state.channelsSlice);
+  const {currentVoiceChannel} = useSelector(state => state.voiceChannelSlice);
 
   const {currentTextChannel} = useSelector(state => state.textChannelSlice);
 
-  const channelDetails = useSelector(state => state.channelsSlice.channels.find(channel => channel?.channel_id === (currentTextChannel || currentChannel?.channel_id)));
+  const channelDetails = useSelector(state => state.channelsSlice.channels[currentTextChannel || currentVoiceChannel]);
 
   const handleOpenSearch = () => {
 

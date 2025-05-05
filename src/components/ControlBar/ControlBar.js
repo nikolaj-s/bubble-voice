@@ -18,7 +18,7 @@ import { KeybindToolTip } from '../ui/Titles/KeybindToolTip/KeybindToolTip';
 
 import { setOverlay } from '../../features/Overlay/overlaySlice';
 
-export const ControlBar = ({inChannel = false}) => {
+export const ControlBar = () => {
 
     const dispatch = useDispatch();
 
@@ -29,6 +29,8 @@ export const ControlBar = ({inChannel = false}) => {
     const {account} = useSelector(state => state.accountSlice);
 
     const {serverID} = useParams();
+
+    const inChannel = useSelector(state => state.voiceChannelSlice.currentVoiceChannel);
 
     const navigate = useNavigate();
 

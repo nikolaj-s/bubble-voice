@@ -9,7 +9,7 @@ import KeybindProvider from '../../../../providers/KeybindProvider/keybindProvid
 
 export const VoiceChannel = ({channel}) => {
     return (
-    <VoiceChannelProvider key={channel?.channel_id} channel={channel}>
+    <VoiceChannelProvider key={channel} channel={channel}>
         <KeybindProvider>
             <MediasoupProvider>
                 <Room />

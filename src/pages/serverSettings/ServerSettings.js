@@ -13,6 +13,7 @@ import { EditCategoryForm } from '../../layout/Forms/ServerSettings/EditCategory
 import { ContentDataForm } from '../../layout/Forms/ServerSettings/ContentDataForm/ContentDataForm'
 import { AddWidgetForm } from '../../layout/Forms/ServerSettings/AddWidgetForm/AddWidgetForm'
 import { ManageWidgetsForm } from '../../layout/Forms/ServerSettings/ManageWidgetsForm/ManageWidgetsForm'
+import { ManageChannelsForm } from '../../layout/Forms/ServerSettings/ManageChannelsForm/ManageChannelsForm'
 
 export const ServerSettings = ({close}) => {
 
@@ -22,6 +23,7 @@ export const ServerSettings = ({close}) => {
         {key: "createCategory", label: "Create Category"},
         {key: "permissions", label: "Edit Permissions"},
         {key: "manageUsers", label: "Manage Users"},
+        {key: "manageChannels", label: "Manage Channels"},
         {key: "security", label: "Security"},
         {key: "contentData", label: "Content & Data"}
     ]
@@ -38,7 +40,8 @@ export const ServerSettings = ({close}) => {
         editCategory: <EditCategoryForm />,
         contentData: <ContentDataForm />,
         addWidget: <AddWidgetForm />,
-        manageWidgets: <ManageWidgetsForm />
+        manageWidgets: <ManageWidgetsForm />,
+        manageChannels: <ManageChannelsForm />
     }
 
     return (

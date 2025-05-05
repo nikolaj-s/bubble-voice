@@ -6,6 +6,7 @@ import { useSocket } from '../../context/SocketContext';
 import ErrorCard from '../../components/Error/ErrorCard/ErrorCard';
 import { clearCurrentChannel, setCurrentChannel } from '../../features/Channel/Channels/channelsSlice';
 import { setCurrentTextChannel } from '../../features/Channel/TextChannel/textChannelSlice';
+import { setCurrentVoiceChannel } from '../../features/Channel/VoiceChannel/voiceChannelSlice';
 
 export const ChannelProvider = ({children, overlay = false, channel_id_prop}) => {
 
@@ -59,8 +60,8 @@ export const ChannelProvider = ({children, overlay = false, channel_id_prop}) =>
             .then(res => {
                 if (res.channel_id) {
 
-                    if (!overlay) {
-                        dispatch(setCurrentChannel(res));
+                    if (res.channel_type === 'voice') {
+                        dispatch(setCurrentVoiceChannel(res.channel_id));
                     }
                     
                     if (res.channel_type === 'text') {

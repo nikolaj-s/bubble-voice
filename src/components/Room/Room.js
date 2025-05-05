@@ -16,7 +16,9 @@ export const Room = () => {
     
     const dispatch = useDispatch();
 
-    const { users, channel_background, channel_id } = useSelector(state => state.channelsSlice.currentChannel);
+    const { currentVoiceChannel } = useSelector(state => state.voiceChannelSlice);
+
+    const { users, channel_background, channel_id } = useSelector(state => state.channelsSlice.channels[currentVoiceChannel]);
 
     const { produce, resumeProducer, pauseProducer, closeProducer, getConsumers, getProducers } = useMediasoup();
 

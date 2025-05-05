@@ -134,7 +134,7 @@ export const useContextMenuOptions = () => {
 
                             dispatch(setChannelToEdit(channel));
 
-                            setSearchParams({section: 'editChannel'});
+                            setSearchParams({section: 'editChannel', channel: channel._id});
                             
                             dispatch(setOverlay('serverSettings'));
                         },

@@ -47,6 +47,7 @@ export const EditChannelForm = ({permissions}) => {
     const [category, setCategory] = React.useState(defaultCategory);
 
     const setDefaultState = () => {
+
         setChannelName(channel.channel_name);
 
         setChannelDescription(channel.channel_description || "");
@@ -56,6 +57,7 @@ export const EditChannelForm = ({permissions}) => {
         setChannelBackground(null);
 
         setChannelIcon(null);
+        
     }
 
     React.useEffect(() => {

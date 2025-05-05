@@ -25,7 +25,7 @@ export const TextChannel = ({channel}) => {
 
     const [text, setText] = React.useState("");
 
-    const channel_details = useSelector(state => state.channelsSlice.channels.find(c => c.channel_id === channel));
+    const channel_details = useSelector(state => state.channelsSlice.channels[channel]);
 
     const handleSend = () => {
 

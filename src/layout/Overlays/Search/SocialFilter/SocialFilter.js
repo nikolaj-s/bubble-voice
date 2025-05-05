@@ -18,13 +18,10 @@ const SocialFilter = ({ onFilterChange = () => {} }) => {
   const channels = useSelector((state) => {
     const {channels} = state.channelsSlice;
 
-    return [{channel_name: "All", channel_id: "*"}, ...channels.filter(channel => channel.channel_type === 'text')];
+    return [{channel_name: "All", channel_id: "*"}, ...Object.values(channels).filter(channel => channel.channel_type === 'text')];
   })
 
-  const filters = useSelector((state) => {
-    const { isPinned, hasImage, hasVideo, hasLink, fromDate } = state.searchSlice;
-    return { isPinned, hasImage, hasVideo, hasLink, fromDate };
-  });
+  const filters = useSelector((state) => state.searchSlice);
 
   const toggleFilter = (filter) => {
     const updatedFilters = { ...filters, [filter]: !filters[filter] };

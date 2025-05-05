@@ -15,8 +15,11 @@ import { Channels } from './channels/Channels';
 import { Outlet } from 'react-router';
 
 import { ControlBar } from '../../components/ControlBar/ControlBar';
+
 import { TextChannelOverlay } from './channel/TextChannelOverlay/TextChannelOverlay';
+
 import { Users } from './users/Users';
+
 import { ServerLayoutWrapper } from '../../components/ui/Wrappers/ServerlayoutWrapper/ServerLayoutWrapper';
 
 import { CloseMobileMenu } from '../../components/CloseMobileMenu/CloseMobileMenu';
@@ -26,6 +29,8 @@ export const Server = () => {
     const banner = useSelector(selectServerBanner);
     
     const {currentChannel} = useSelector(state => state.channelsSlice);
+
+    const {currentVoiceChannel} = useSelector(state => state.voiceChannelSlice);
 
     const {currentTextChannel} = useSelector(state => state.textChannelSlice);
 
@@ -38,16 +43,16 @@ export const Server = () => {
             <ServerDetailsProvider>
                     <CloseMobileMenu />
                     <section 
-                    className={`${styles.sectionOne} ${isChannelMenuOpen ? styles.sectionOneMobile : ''} ${currentChannel?.channel_type === 'voice' ? styles.inVoiceChannel : ''}`}
+                    className={`${styles.sectionOne} ${isChannelMenuOpen ? styles.sectionOneMobile : ''} ${currentVoiceChannel ? styles.inVoiceChannel : ''}`}
                     >
                         <Banner image={banner} />
                         <Channels currentChannel={currentChannel} />
-                        <ControlBar key={'control-bar'} inChannel={currentChannel?.channel_type === 'voice'} />
+                        <ControlBar key={'control-bar'} />
                     </section>
                     <section 
                     className={`${styles.sectionTwo}`}>
                     <Outlet  />
-                    {currentTextChannel && currentChannel?.channel_type === 'voice' && currentChannel.channel_id !== currentTextChannel && (
+                    {currentTextChannel && currentVoiceChannel && (
                         <TextChannelOverlay />
                     )}
                     </section>

@@ -9,18 +9,17 @@ import { TextChannel } from './TextChannel/TextChannel';
 
 export const Channel = () => {
 
-    const channel = useSelector(state => state.channelsSlice.currentChannel);
+    const voiceChannel = useSelector(state => state.voiceChannelSlice.currentVoiceChannel);
 
     const textChannel = useSelector(state => state.textChannelSlice.currentTextChannel);
    
     return (
         <ChannelProvider>
-            {channel ?
-            channel?.channel_type === 'voice' ?
-            <VoiceChannel channel={channel} />
-            : channel?.channel_type === 'text' ?
+            {voiceChannel ?
+            <VoiceChannel channel={voiceChannel} />
+            : textChannel ?
             <TextChannel channel={textChannel} />
-            : null : null}
+            : null}
         </ChannelProvider>
     )
 }

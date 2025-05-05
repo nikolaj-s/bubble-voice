@@ -5,6 +5,7 @@ import { useSocket } from "../../context/SocketContext";
 
 import React from 'react';
 import { updateVoiceActivation } from "../../features/ServerUsers/serverUsersSlice";
+import { clearVoiceChannelState } from "../../features/Channel/VoiceChannel/voiceChannelSlice";
 
 export const VoiceChannelProvider = ({channel, children}) => {
 
@@ -16,23 +17,25 @@ export const VoiceChannelProvider = ({channel, children}) => {
 
     const [error, toggleError] = React.useState(false);
 
-    const channelsStatus = useSelector(state => state.channelsSlice.status)
+    const channelsStatus = useSelector(state => state.channelsSlice.status);
+
+    const {server_id} = useSelector(state => state.serverDetailsSlice);
 
     React.useEffect(() => {
 
         if (!socket) return;
 
-        if (!channel?.channel_id) return;
+        if (!channel) return;
+
+        if (!server_id) return;
 
         if (channelsStatus !== 'complete') return;
- 
-        if (channel?.channel_type !== 'voice') return toggleError("Invalid Channel Error");
 
         const handleJoinChannel = async () => {
 
             toggleLoading(true);
 
-            await socket.request('join channel', channel)
+            await socket.request('join channel', {channel_id: channel, server_id})
             .then(res => {
 
                 toggleError(false);
@@ -73,9 +76,11 @@ export const VoiceChannelProvider = ({channel, children}) => {
 
             socket.off('voice activation', handleVoiceActivation);
 
+            dispatch(clearVoiceChannelState());
+
         }
 
-    }, [socket, channel?.channel_id, dispatch, channelsStatus]);
+    }, [socket, channel, dispatch, channelsStatus, server_id]);
 
     if (loading || channelsStatus !== 'complete') return <></>
 

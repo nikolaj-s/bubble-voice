@@ -30,7 +30,9 @@ export const ReOrderChannels = ({ onDrop }) => {
     const [localChannels, setLocalChannels] = React.useState([]);
 
     React.useEffect(() => {
-        setLocalChannels(channels);
+
+      setLocalChannels(Object.values(channels).sort((a, b) => a.sort_order - b.sort_order));
+
     }, [channels])
 
     const handleReorder = async (id, moveTo, category) => {
@@ -39,11 +41,12 @@ export const ReOrderChannels = ({ onDrop }) => {
       
         let id_array = localChannels
           .map(c => c.channel_id);
-      
+      console.log(id, moveTo, category)
         const originatingPos = id_array.indexOf(id);
+
         const newPos = id_array.indexOf(moveTo);
       
-        if (originatingPos === -1 || newPos === -1) {
+        if (originatingPos === -1) {
           console.warn('Invalid reorder indices:', { id, moveTo });
           toggleReordering(false);
           return;
@@ -57,8 +60,13 @@ export const ReOrderChannels = ({ onDrop }) => {
       
         try {
           const data = { newOrder: id_array, category, channel_id: id };
+          
           const res = await socket.request('reorder channels', data);
-          dispatch(reorderChannels(res));
+
+          if (res.newOrder) {
+            dispatch(reorderChannels(res));
+          }
+          
         } catch (err) {
           console.error(err);
         }
@@ -106,7 +114,7 @@ export const ReOrderChannels = ({ onDrop }) => {
         toggleReordering(false);
 
     }
-
+console.log(categories)
     return (
         <>
             {categories.map(category => {
@@ -130,7 +138,7 @@ export const ReOrderChannels = ({ onDrop }) => {
             toggleDraggingCategory={() => {}}
             catagoryName={'Channels'}
             category_id={'channels'}
-            channels={channels.map(c => ({ ...c, category: c.category || 'channels' }))
+            channels={localChannels.map(c => ({ ...c, category: c.category || 'channels' }))
               .filter(c => c.category === 'channels')}
 
             draggingChannel={draggingChannel}
