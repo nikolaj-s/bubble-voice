@@ -32,7 +32,7 @@ export const SelectWidgetTypeForm = ({channel}) => {
 
     return (
        <>
-       <Header level={3} text='Choose a Widget Type' />
+       <Header level={3} text='Choose a Widget' />
        <Label label='options:' />
        <TypeInput types={options} onSelect={navigate} />
        </>

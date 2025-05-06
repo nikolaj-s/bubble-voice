@@ -274,7 +274,7 @@ export const useContextMenuOptions = () => {
 
                     let sendToOptions = [];
 
-                    channels.forEach(channel => {
+                    Object.values(channels).forEach(channel => {
                     
                         if (channel.channel_type === 'text' && !channel.locked_channel) {
                             sendToOptions.push({

@@ -28,17 +28,17 @@ export const WidgetsOverlay = ({close}) => {
 
     const textChannel = useSelector(state => state.textChannelSlice.currentTextChannel);
 
-    const currentChannel = useSelector(state => state.channelsSlice.currentChannel);
+    const voiceChannel = useSelector(state => state.voiceChannelSlice.currentVoiceChannel);
 
     React.useEffect(() => {
 
         if (textChannel) {
             setChannel(textChannel)
-        } else if (currentChannel?.channel_id) {
-            setChannel(currentChannel?.channel_id);
+        } else if (voiceChannel) {
+            setChannel(voiceChannel);
         }
 
-    }, [textChannel, currentChannel?.channel_id])
+    }, [textChannel, voiceChannel])
 
     React.useEffect(() => {
 
@@ -53,7 +53,7 @@ export const WidgetsOverlay = ({close}) => {
     const refreshWidgets = () => {
         if (loading) return;
 
-        dispatch(fetchWidgets(textChannel || currentChannel?.channel_id));
+        dispatch(fetchWidgets(textChannel || voiceChannel));
     }
 
     const openAddMoreWidgets = () => {

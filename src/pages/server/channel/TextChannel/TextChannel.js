@@ -82,6 +82,7 @@ export const TextChannel = ({channel}) => {
             loading={loading}  setImage={setImage} 
             setValue={setText} value={text} 
             replyTo={replyTo} clearReplyTo={clearReplyTo}
+            placeholder={`Post in ${channel_details?.channel_name}`}
             />
             {showBackground ? <ChannelBackground {...channel_details} /> : null}
         </TextChannelProvider>

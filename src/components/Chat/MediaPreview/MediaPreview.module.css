@@ -3,7 +3,8 @@
 .container {
     position: absolute;
     left: 10px;
-    bottom: 90px;
+    bottom: 100%;
+    margin-bottom: 10px;
     width: auto;
     height: 200px;
     border-radius: 10px;

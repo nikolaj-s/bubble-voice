@@ -5,11 +5,13 @@ import { useDispatch } from 'react-redux';
 import { setExpandedImage } from '../../../../features/Media/ExpandedImage/expandedImageSlice';
 import { setOverlay } from '../../../../features/Overlay/overlaySlice';
 
-export const ImageTooltipWrapper = ({image, children, style = {width: '100%', height: '100%', borderRadius: '5px', overflow: 'hidden'}}) => {
+export const ImageTooltipWrapper = ({image, children, style = {width: '100%', height: '100%', borderRadius: '5px', overflow: 'hidden'}, disableDefaultBehaviour = false}) => {
 
     const dispatch = useDispatch();
 
     const expand = () => {
+
+        if (disableDefaultBehaviour) return;
 
         dispatch(setExpandedImage({data: image, image: image.src}));
 

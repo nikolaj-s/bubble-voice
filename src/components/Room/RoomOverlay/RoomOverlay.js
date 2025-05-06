@@ -3,7 +3,7 @@ import React from 'react';
 
 import styles from '../Room.module.css';
 import IconButton from '../../ui/Buttons/IconButton/IconButton';
-import { Ellipsis, ImageMinus, VideoOff, Mic, MicOff, ScreenShare, ScreenShareOff, Unplug, Video, Volume2, VolumeX, ImagePlus } from 'lucide-react';
+import { Ellipsis, ImageMinus, VideoOff, Mic, MicOff, Unplug, Video, Volume2, VolumeX, ImagePlus } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import { PillSpacer } from '../../ui/Spacers/PillSpacer/PillSpacer';
@@ -11,6 +11,7 @@ import { useMediaControls } from '../../../context/MediaControlsContext';
 import { KeybindToolTip } from '../../ui/Titles/KeybindToolTip/KeybindToolTip';
 import { MediaPlayerControls } from './MediaPlayerControls/MediaPlayerControls';
 import { toggleAppearanceSetting } from '../../../features/Settings/Appearance/appearanceSlice';
+import { toggleVoiceChannelOptions } from '../../../features/Channel/VoiceChannel/voiceChannelSlice';
 
 export const RoomOverlay = () => {
 
@@ -20,11 +21,13 @@ export const RoomOverlay = () => {
 
     const navigate = useNavigate();
 
-    const {isWebcamOn, isMicrophoneMuted, isAudioMuted, isScreenSharing, handleToggleAudio, handleToggleMicrophone, handleToggleWebCam, webcamError, microphoneError } = useMediaControls();
+    const {isWebcamOn, isMicrophoneMuted, isAudioMuted, isScreenSharing, handleToggleAudio, handleToggleMicrophone, handleToggleWebcam, webcamError, microphoneError } = useMediaControls();
 
     const {keybinds} = useSelector(state => state.keybindsSlice);
 
     const {hideChannelBackgrounds} = useSelector(state => state.appearanceSlice);
+
+    const {hideNonVideoUsers} = useSelector(state => state.voiceChannelSlice);
     
     const handleDisconnect = () => {
         navigate(`/dashboard/server/${serverID}`)
@@ -34,9 +37,11 @@ export const RoomOverlay = () => {
         <div className={styles.overlay}>
             <div className={styles.topButtons}>
                 <IconButton 
-                title={"Hide Non Video Users"}
+                title={`${hideNonVideoUsers ? 'Show' : 'Hide'} non video users`}
                 Icon={<VideoOff color='var(--text-color)' />}
                 position='bottom'
+                backgroundColor={hideNonVideoUsers ? 'var(--success-color)': null}
+                onClick={() => {dispatch(toggleVoiceChannelOptions('hideNonVideoUsers'))}}
                 />
                 <IconButton
                 title={hideChannelBackgrounds ? "Show Channel Background" : "Hide Channel Background"}
@@ -85,6 +90,25 @@ export const RoomOverlay = () => {
                     :
                     <Volume2 color='var(--text-color)' />
                     } />
+                    <IconButton 
+                    padding={15}
+                    width={50}
+                    height={50}
+                    borderRadius={"50%"}
+                    onClick={handleToggleWebcam}
+                    position='top' title={
+                        <KeybindToolTip 
+                        label={`${isWebcamOn ? 'Turn off camera'.replace(/(\\s{2,})/g, '$1\u200B') : 'Turn on camera'.replace(/(\\s{2,})/g, '$1\u200B')}`}
+                        binds={[keybinds['enableWebcam']?.key]}
+                        />
+                    } Icon={
+                    isWebcamOn || webcamError ?
+                    <VideoOff color={'var(--text-color)'} />
+                    :
+                    <Video color='var(--text-color)' />
+                    } 
+                    backgroundColor={isWebcamOn ? 'var(--success-color)' : 'var(--background-color)'}
+                    />
                     <MediaPlayerControls />
                     <PillSpacer verticle={true} />
                     <IconButton 

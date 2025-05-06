@@ -6,7 +6,8 @@
   width: calc(100% - 10px);
   padding: 0px 5px 0px 5px;       /* Ensure header takes full available width */
   overflow: hidden;  /* Hide any overflow */
-  min-width: 0;      /* Allow flex children to shrink */
+  min-width: 0; 
+  cursor: pointer;     /* Allow flex children to shrink */
 }
 
 .iconWrapper {
@@ -47,9 +48,10 @@
 .channelDescription {
   margin: 0;
   color: var(--accent-color);
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   white-space: nowrap;
   overflow: hidden;
+  font-style: italic;
   text-overflow: ellipsis;
   cursor: pointer;
   transition: color 0.2s ease;

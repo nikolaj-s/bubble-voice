@@ -20,7 +20,7 @@ export const AddWidgetForm = ({permissions}) => {
 
     const {channel_id} = useSelector(state => state.manageWidgetsSlice);
 
-    const channel = useSelector(state => state.channelsSlice.channels.find(c => c.channel_id === channel_id));
+    const channel = useSelector(state => state.channelsSlice.channels[channel_id]);
 
     const [options, setOptions] = React.useState([]);
 

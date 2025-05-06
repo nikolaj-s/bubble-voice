@@ -19,6 +19,7 @@ import { LoadingErrorFormWrapper } from '../../../../components/ui/Wrappers/Load
 import { NotAuthorized } from '../../../../components/Error/NotAuthorized/NotAuthorized';
 
 import TextArea from '../../../../components/ui/Inputs/TextArea/TextArea';
+import { LineSpacer } from '../../../../components/ui/Spacers/LineSpacer/LineSpacer';
 
 export const EditServerDetailsForm = ({permissions}) => {
 
@@ -82,12 +83,16 @@ export const EditServerDetailsForm = ({permissions}) => {
         />
         </>
         )}
+         <LineSpacer />
+         <Header text='Dashboard' />
+         
         {permissions.user_can_edit_server_banner || permissions.user_can_edit_server_name || permissions.user_can_edit_server_welcome_message ?
         serverName !== server_name || serverBanner || welcomeMessage !== welcome_message ?
         <TextButton action={handleUpdate} title='Submit' />
         : null :
         null
         }
+        
       </LoadingErrorFormWrapper>
     </NotAuthorized>
   )

@@ -10,16 +10,19 @@ export const RoomUserWrapper = ({ users }) => {
 
     const textChannelOpen = useSelector(state => state.textChannelSlice.currentTextChannel);
 
+
     const [expanded, setExpanded] = React.useState("");
 
-    const hidingNonVideoMembers = false;
+    const hideNonVideoUsers = useSelector(state => state.voiceChannelSlice.hideNonVideoUsers)
 
     let margin = 8;
 
     const ratio = 9 / 16;
 
     React.useEffect(() => {
+        
         const parent = document.getElementById('user-streams-wrapper');
+
         const c_count = Array.from(parent.children);
 
         if (expanded !== "") {
@@ -74,7 +77,7 @@ export const RoomUserWrapper = ({ users }) => {
             handleScaling();
         }
     // eslint-disable-next-line   
-    }, [expanded, hidingNonVideoMembers, hideUsers, textChannelOpen]);
+    }, [expanded, hideNonVideoUsers, hideUsers, textChannelOpen]);
 
     React.useEffect(() => {
         let observer;

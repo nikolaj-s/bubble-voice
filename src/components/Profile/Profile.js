@@ -5,8 +5,8 @@ import ProfileBanner from './ProfileBanner/ProfileBanner';
 import ProfileName from './ProfileName/ProfileName';
 import ProfileBio from './ProfileBio/ProfileBio';
 
-export const Profile = ({account = {}}) => {
-    console.log(account)
+export const Profile = ({account = {}, options = false}) => {
+
     return (
         <div 
         style={{
@@ -15,7 +15,12 @@ export const Profile = ({account = {}}) => {
         className={styles.container}>
             <ProfileBanner {...account} />
             <ProfileName {...account} />
-            <ProfileBio {...account} />
+            {!options && (
+                <>
+                <ProfileBio {...account} />
+                </>
+            )}
+            
         </div>
     )
 }

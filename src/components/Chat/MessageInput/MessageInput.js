@@ -10,7 +10,7 @@ import { setFilter } from "../../../features/Search/searchSlice";
 import { setOverlay } from "../../../features/Overlay/overlaySlice";
 import TextLabelError from "../../Error/TextLabelError/TextLabelError";
 
-export const MessageInput = ({ value, setValue, setImage = () => {}, error, send = () => {}, replyTo }) => {
+export const MessageInput = ({ value, setValue, setImage = () => {}, error, send = () => {}, replyTo, placeholder }) => {
 
     const textAreaRef = useRef(null);
 
@@ -115,13 +115,23 @@ export const MessageInput = ({ value, setValue, setImage = () => {}, error, send
             }
             {preview && <MediaPreview clear={() => {setPreview(null); setImage(null)}} preview={preview} />}
             <div className={styles.inputButtonWrapper}>
+                <IconButton 
+                padding={12}
+                borderRadius={'50%'}
+                height={50}
+                width={50}
+                title={"Add"}
+                Icon={<Plus color="var(--text-color)" />}
+                onClick={toggleMenu}
+                backgroundColor="var(--background-color)"
+                />
                 <div className={styles["input-wrapper"]}>
                     <textarea
                         ref={textAreaRef}
                         id="chat-input"
                         type="text"
                         className={styles["message-input"]}
-                        placeholder="Type a message..."
+                        placeholder={placeholder}
                         value={value}
                         onChange={(e) => handleSetValue(e.target.value)}
                         onKeyUp={handleSend}
@@ -134,16 +144,7 @@ export const MessageInput = ({ value, setValue, setImage = () => {}, error, send
                     />
                     
                 </div>
-                <IconButton 
-                padding={12}
-                borderRadius={'50%'}
-                height={50}
-                width={50}
-                title={"Add"}
-                Icon={<Plus color="var(--text-color)" />}
-                onClick={toggleMenu}
-                backgroundColor="var(--background-color)"
-                />
+                
             </div>
             <AnimatePresence>
                 {menuOpen && (

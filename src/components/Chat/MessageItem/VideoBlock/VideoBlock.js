@@ -6,7 +6,7 @@ export const VideoBlock = ({video, nsfw, styles}) => {
     return (
         <>
         {video ?
-            <div className={styles.imageBlock}>
+            <div className={styles.imageBlock} style={{height: 350}}>
                 <NsfwWrapper nsfw={{nsfw}}>
                     <VideoPlayer src={video} />
                 </NsfwWrapper>

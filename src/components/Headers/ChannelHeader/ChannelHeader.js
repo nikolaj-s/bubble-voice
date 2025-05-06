@@ -16,7 +16,7 @@ const ChannelHeader = ({ channel_name, channel_description, channel_type, channe
   };
 
   return (
-    <header className={styles.header}>
+    <header onClick={expandDescription} className={styles.header}>
       <div className={styles.iconWrapper}>
         {channel_icon ? (
           <img
@@ -33,7 +33,7 @@ const ChannelHeader = ({ channel_name, channel_description, channel_type, channe
       <PillSpacer verticle={true} />
       <p
         className={styles.channelDescription}
-        onClick={expandDescription}
+        
       >
         {channel_description}
       </p>

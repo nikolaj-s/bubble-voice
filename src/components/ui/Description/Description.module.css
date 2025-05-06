@@ -12,5 +12,7 @@
     padding: 0px;
     color: var(--text-color);
     font-style: italic;
+    font-weight: 200;
+    font-size: 14px;
 }
 

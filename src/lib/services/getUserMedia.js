@@ -38,41 +38,63 @@ export const getMicrophoneMedia = async (device_id, echoCancellation = false, au
   
 
   export const getWebcamMedia = async (device_id) => {
-    try {
-      const constraints = {
-        video: {
-          deviceId: device_id ? { exact: device_id } : undefined,
-          width: { ideal: 960 },
-          height: { ideal: 540 },
-          facingMode: "user",
-        },
-      };
+    const buildConstraints = (id) => ({
+      video: {
+        deviceId: id ? { exact: id } : undefined,
+        width: { ideal: 960 },
+        height: { ideal: 540 },
+        facingMode: "user",
+      },
+    });
   
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
-      const track = stream.getVideoTracks()[0];
-  
-      return track;
-  
-    } catch (error) {
-      let friendlyMessage = "An unknown error occurred while accessing the webcam.";
-  
+    const getFriendlyError = (error) => {
       if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
-        friendlyMessage = "Webcam access was denied. Please enable it in your browser settings.";
+        return "Webcam access was denied. Please enable it in your browser settings.";
       } else if (error.name === "NotFoundError" || error.name === "DevicesNotFoundError") {
-        friendlyMessage = "No webcam was found. Please connect one and try again.";
+        return "No webcam was found. Please connect one and try again.";
       } else if (error.name === "NotReadableError" || error.name === "TrackStartError") {
-        friendlyMessage = "Your webcam is currently being used by another application.";
+        return "Your webcam is currently being used by another application.";
       } else if (error.name === "OverconstrainedError") {
-        friendlyMessage = `The selected webcam is not available or does not meet the required resolution.`;
+        return "The selected webcam is not available or does not meet the required resolution.";
       } else if (error.name === "SecurityError") {
-        friendlyMessage = "Access to the webcam is not allowed due to insecure context (e.g., not HTTPS).";
+        return "Access to the webcam is not allowed due to insecure context (e.g., not HTTPS).";
+      }
+      return "An unknown error occurred while accessing the webcam.";
+    };
+  
+    try {
+      // Try using selected device ID
+      const stream = await navigator.mediaDevices.getUserMedia(buildConstraints(device_id));
+      return stream.getVideoTracks()[0];
+    } catch (error) {
+      // If error is OverconstrainedError or NotFoundError, try fallback
+      if (["OverconstrainedError", "NotFoundError", "DevicesNotFoundError"].includes(error.name)) {
+        try {
+          const devices = await navigator.mediaDevices.enumerateDevices();
+          const webcams = devices.filter(d => d.kind === "videoinput");
+  
+          if (webcams.length === 0) {
+            throw new Error("No webcam found");
+          }
+  
+          const fallbackId = webcams[0].deviceId;
+          const fallbackStream = await navigator.mediaDevices.getUserMedia(buildConstraints(fallbackId));
+          return fallbackStream.getVideoTracks()[0];
+        } catch (fallbackError) {
+          return {
+            error: true,
+            errorMessage: getFriendlyError(fallbackError),
+            rawError: fallbackError.message
+          };
+        }
       }
   
       return {
         error: true,
-        errorMessage: friendlyMessage,
+        errorMessage: getFriendlyError(error),
         rawError: error.message
       };
     }
   };
+  
   

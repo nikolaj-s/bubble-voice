@@ -2,12 +2,14 @@ import React from 'react'
 import FullScreenWrapper from '../../../components/ui/Wrappers/FullScreenWrapper/FullScreenWrapper'
 import { useSelector } from 'react-redux'
 import { IconPlaceholder } from '../../../components/ui/Placeholders/IconPlaceholder/IconPlaceholder';
-import { Hash, Volume1 } from 'lucide-react';
+import { Hash, Pencil, Pin, Volume1 } from 'lucide-react';
 import { ImageComponent } from '../../../components/ui/Image/Image';
 import Header from '../../../components/ui/Titles/Header/Header';
 import { LineSpacer } from '../../../components/ui/Spacers/LineSpacer/LineSpacer';
 import { Description } from '../../../components/ui/Description/Description';
 import { BoxLabel } from '../../../components/ui/Titles/BoxLabel/BoxLabel';
+import { ToolBar } from '../../../components/ui/Wrappers/ToolBar/ToolBar';
+import IconButton from '../../../components/ui/Buttons/IconButton/IconButton';
 
 export const ChannelDescription = ({close}) => {
 
@@ -41,6 +43,16 @@ export const ChannelDescription = ({close}) => {
                 <IconPlaceholder icon={Hash} />
                 }
                 <Header margin={0} text={channel.channel_name} />
+                <ToolBar>
+                    <IconButton 
+                    title={'Edit Channel'}
+                    Icon={<Pencil size={15} color='var(--text-color)' />}
+                    />
+                    <IconButton
+                    title={'See Pinned Content'}
+                    Icon={<Pin size={15} color='var(--text-color)' />}
+                    />
+                </ToolBar>
                 <LineSpacer />
                 <Description description={channel.channel_description} />
             </div>

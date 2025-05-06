@@ -126,7 +126,9 @@ export const Room = () => {
     }, [users, consumers, producers]);
 
     return (
-        <div className={`${styles.container} ${isTextChannelOpen ? styles.textChannelOpen : ''}`}>
+        <div 
+        data-context={JSON.stringify({type: 'room'})}
+        className={`${styles.container} ${isTextChannelOpen ? styles.textChannelOpen : ''}`}>
             <MediaPlayerProvider channelId={channel_id}>
                 <RoomUserWrapper users={combinedUsers} />
                 <ChannelBackground channel_background={channel_background} />

@@ -19,7 +19,7 @@ export const ImageBlock = ({image, loading, nsfw, styles, width, height = 350}) 
 
     }
     
-    const aspectRatio = width && height ? width / height : undefined
+    const aspectRatio = width && height ? width / height : undefined;
 
     return (
         <>
@@ -30,7 +30,7 @@ export const ImageBlock = ({image, loading, nsfw, styles, width, height = 350}) 
         style={{
             aspectRatio: aspectRatio,
             width: aspectRatio ? '100%' : null,
-            height: height
+            height: height > 350 ? 350 : height
         }}
         onClick={expandImage}
         className={styles.imageBlock}>

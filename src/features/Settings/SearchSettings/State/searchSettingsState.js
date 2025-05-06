@@ -6,9 +6,12 @@ const searchSettingsSlice = () => {
 
     const showFullResolutionPreviews = JSON.parse(localStorage.getItem('showFullResolutionPreviews')) || false;
 
+    const autoSendOnClick = JSON.parse(localStorage.getItem('autoSendOnClick')) || false;
+
     return {
         disableSafeSearch,
-        showFullResolutionPreviews
+        showFullResolutionPreviews,
+        autoSendOnClick
     }
 }
 

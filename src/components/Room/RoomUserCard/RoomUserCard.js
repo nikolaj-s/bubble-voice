@@ -10,6 +10,8 @@ export const RoomUserCard = ({ user_id, consumers, action }) => {
     const user = useSelector(state => state.serverUsersSlice.users[user_id]);
 
     const { isAudioMuted } = useSelector(state => state.mediaControlSlice);
+
+    const {hideNonVideoUsers} = useSelector(state => state.voiceChannelSlice);
  
     const audioElementsRef = useRef({});  // Store references to audio elements by consumer ID
 
@@ -18,6 +20,8 @@ export const RoomUserCard = ({ user_id, consumers, action }) => {
     const webcamContainerRef = useRef()
 
     const webcamElementRef = useRef({});
+
+    const channel_status = user?.channel_status;
 
     // 🔹 Function to remove video elements for webcam
     const removeWebcamElement = (consumerId) => {
@@ -153,7 +157,14 @@ export const RoomUserCard = ({ user_id, consumers, action }) => {
     }
 
     return (
-        <div onClick={(e) => { action(`room-user-card-${user_id}`) }} id={`room-user-card-${user_id}`} className={styles.container}>
+        <div 
+        data-context={JSON.stringify({...user, type: 'user'})}
+        onClick={(e) => { action(`room-user-card-${user_id}`) }} 
+        id={`room-user-card-${user_id}`} 
+        style={{
+            display: hideNonVideoUsers && !channel_status?.isWebcamOn ? 'none' : null
+        }}
+        className={styles.container}>
             <div className={styles.userBanner}>
                 <ImageComponent src={user.user_banner} />
             </div>

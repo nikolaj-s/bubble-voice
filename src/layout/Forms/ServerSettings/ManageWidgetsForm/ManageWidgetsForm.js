@@ -19,7 +19,7 @@ export const ManageWidgetsForm = ({permissions}) => {
 
     const {widgets, loading, channel_id} = useSelector(state => state.manageWidgetsSlice);
 
-    const channel = useSelector(state => state.channelsSlice.channels.find(c => c._id === channel_id))
+    const channel = useSelector(state => state.channelsSlice.channels[channel_id])
 
     React.useEffect(() => {
 

@@ -19,6 +19,7 @@
   pointer-events: none;
   max-width: 150px;
   z-index: 10;
+  white-space: nowrap;
 }
 
 /* Top tooltip */

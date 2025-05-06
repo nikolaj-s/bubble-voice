@@ -6,6 +6,7 @@ const voiceChannelSlice = createSlice({
     initialState: {
         loading: false,
         error: false,
+        hideNonVideoUsers: false,
         currentVoiceChannel: null
     },
     reducers: {
@@ -20,10 +21,13 @@ const voiceChannelSlice = createSlice({
         },
         clearVoiceChannelState: (state,action) => {
             state.currentVoiceChannel = null;
+        },
+        toggleVoiceChannelOptions: (state, action) => {
+            state[action.payload] = !state[action.payload];
         }
     }
 })
 
-export const {setCurrentVoiceChannel, toggleVoiceChannelLoading, setVoiceChannelError, clearVoiceChannelState} = voiceChannelSlice.actions;
+export const {setCurrentVoiceChannel, toggleVoiceChannelLoading, setVoiceChannelError, clearVoiceChannelState, toggleVoiceChannelOptions} = voiceChannelSlice.actions;
 
 export default voiceChannelSlice.reducer;

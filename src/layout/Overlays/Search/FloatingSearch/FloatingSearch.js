@@ -5,7 +5,7 @@ import styles from './FloatingSearch.module.css';
 import Dropdown from '../../../../components/ui/Inputs/DropDown/DropDown';
 
 import SimilarImageButton from '../../../../components/ui/Buttons/SimilarImageButton/SimilarImageButton';
-import { Search } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 
 const FloatingSearch = ({filter, filters = [], loading, setFilter = () => {}, search = () => {}, value = "", setValue = () => {}, similarImageSrc, clearSimilarImage}) => {
 
@@ -80,6 +80,10 @@ const FloatingSearch = ({filter, filters = [], loading, setFilter = () => {}, se
         value={value}
         onKeyUp={handleSearch} // Expand on focus
       />
+      {value.length > 0 && 
+      <div onClick={() => {setValue(""); focusInput()}} className={styles.clearInput}>
+        <X color='var(--text-color)' />
+      </div>}
       <div className={styles.filterWrapper}>
         <Dropdown setSelected={handleSetFilter} selected={filter} options={filters}/>
       </div>

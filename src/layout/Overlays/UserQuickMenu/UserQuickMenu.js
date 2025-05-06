@@ -33,12 +33,12 @@ export const UserQuickMenu = ({close}) => {
         if (updateLoading) return;
 
         dispatch(updateAccountStatus(status));
-        console.log(status)
+      
     }
 
     return (
         <QuickMenuWrapper close={close}>
-            <Profile account={account} />
+            <Profile account={account} options={true} />
             <Label label='Status:' margin={'5px 0px 0px 5px'} />
             <StatusSwitcher onChange={handleUpdateStatus} {...account} />
             
