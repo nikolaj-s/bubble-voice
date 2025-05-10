@@ -77,8 +77,10 @@ const FloatingSearch = ({filter, filters = [], loading, setFilter = () => {}, se
         placeholder="Search..."
         className={styles.searchInput}
         onChange={(e) => {setValue(e.target.value)}}
+        
         value={value}
-        onKeyUp={handleSearch} // Expand on focus
+        onKeyDown={(e) => {e.stopPropagation()}}
+        onKeyUp={(e) => {e.stopPropagation(); handleSearch(e);}}// Expand on focus
       />
       {value.length > 0 && 
       <div onClick={() => {setValue(""); focusInput()}} className={styles.clearInput}>

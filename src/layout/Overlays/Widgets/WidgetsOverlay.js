@@ -81,7 +81,7 @@ export const WidgetsOverlay = ({close}) => {
                 onClick={(e) => {triggerContext(e, 'widgets-overlay-nav')}}
                 />
             </ToolBar>
-            <LineSpacer />
+            <LineSpacer margin={'20px 0px'} />
             {loading ?
             <SkeletonCards />
             : error ?

@@ -6,6 +6,7 @@ import { NsfwWrapper } from '../../../ui/Wrappers/NsfwWrapper/NsfwWrapper';
 import { useDispatch } from 'react-redux';
 import { setExpandedImage } from '../../../../features/Media/ExpandedImage/expandedImageSlice';
 import { setOverlay } from '../../../../features/Overlay/overlaySlice';
+import LazyImageWrapper from '../../../ui/Wrappers/LazyImageWrapper/LazyImageWrapper';
 
 export const ImageBlock = ({image, loading, nsfw, styles, width, height = 350}) => {
 
@@ -27,15 +28,16 @@ export const ImageBlock = ({image, loading, nsfw, styles, width, height = 350}) 
         <div className={`${styles.imageSkeleton} ${styles.skeleton}`} />
         : image ?
         <div 
-        style={{
-            aspectRatio: aspectRatio,
-            width: aspectRatio ? '100%' : null,
-            height: height > 350 ? 350 : height
-        }}
         onClick={expandImage}
         className={styles.imageBlock}>
             <NsfwWrapper nsfw={{nsfw}}>
-                <ImageComponent src={image} />
+                <LazyImageWrapper 
+                aspectRatio={aspectRatio} 
+                width={aspectRatio ? '100%' : null}
+                height={height > 350 ? 350 : height}
+                >
+                    <ImageComponent src={image} />
+                </LazyImageWrapper>
             </NsfwWrapper>
         </div>
         : null}

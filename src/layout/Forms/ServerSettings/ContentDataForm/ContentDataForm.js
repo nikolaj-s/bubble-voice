@@ -9,6 +9,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchServerSettings } from '../../../../features/ServerSettings/Thunks/fetchServerSettings'
 import TextButton from '../../../../components/ui/Buttons/TextButton/TextButton'
 import { updateServerSettings } from '../../../../features/ServerSettings/Thunks/updateServerSettings'
+import { ApplyChangesPopup } from '../../../../components/ApplyChangesPopup/ApplyChangesPopup'
+import ConfirmationPopup from '../../../../components/ui/Menus/ConfirmationPopup/ConfirmationPopup'
+import { Trash2 } from 'lucide-react'
+import { deleteServerRecommendations } from '../../../../features/ServerSettings/Thunks/deleteServerRecommendations'
 
 export const ContentDataForm = ({permissions}) => {
 
@@ -21,6 +25,10 @@ export const ContentDataForm = ({permissions}) => {
     const [changeMade, setChangeMade] = React.useState(false);
 
     const [initLoading, toggleInitLoading] = React.useState(true);
+
+    const [confirmDelete, toggleConfirmDelete] = React.useState(false);
+
+    const [confirmationDataDeleted, toggleConfirmationDataDeleted] = React.useState(false);
 
     // Fetch settings if user has permission
     React.useEffect(() => {
@@ -75,6 +83,17 @@ export const ContentDataForm = ({permissions}) => {
 
     }
 
+    const handleDeleteRecommendationData = () => {
+        toggleConfirmDelete(false);
+
+        if (confirmationDataDeleted) return;
+
+        toggleConfirmationDataDeleted(true);
+
+        dispatch(deleteServerRecommendations());
+
+    }
+
     return (
         <NotAuthorized permission={permissions?.user_can_manage_data_settings}>
             <LoadingErrorFormWrapper sliceName='serverSettingsSlice' initialLoading={initLoading} >
@@ -87,7 +106,15 @@ export const ContentDataForm = ({permissions}) => {
                 <Header level={4} text='Content' />
                 <Label label='Block the ability of directly posting sensitive content within text channels from search' />
                 <ToggleSwitch initialState={newSettings.content_filtering_for_text_channels} onToggle={(state) => {handleSettingChange('content_filtering_for_text_channels', state)}} />
-                <TextButton disabled={!changeMade} action={handleApplyChanges} title='Apply Changes' />
+                <LineSpacer />
+                <Label label='Clear Recommendation Data' />
+                <TextButton title='Delete' maxWidth={200} backgroundColor={'var(--error-color)'} action={() => {toggleConfirmDelete(true)}} icon={<Trash2 color='var(--text-color)' />} />
+                <ApplyChangesPopup disabled={!changeMade} onApply={handleApplyChanges} />
+                {confirmDelete && (<ConfirmationPopup 
+                message={'Are you sure you want to delete recommendations data'} 
+                onCancel={() => {toggleConfirmDelete(false)}}
+                onConfirm={handleDeleteRecommendationData}
+                />)}
             </LoadingErrorFormWrapper>
         </NotAuthorized>
     )

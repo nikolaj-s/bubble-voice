@@ -167,13 +167,34 @@ const VideoPlayer = ({ src }) => {
         </div>
       )}
       <div className={styles.videoControls}>
-        <button onClick={togglePlay} className={styles.controlButton}>
-          {isPlaying ? (
-            <PauseCircle size={24} />
-          ) : (
-            <PlayCircle size={24} />
-          )}
-        </button>
+        <div className={styles.controlWrapper}>
+          <div className={styles.timeDisplay}>
+            {formatTime(currentTime)}
+          </div>
+          <div className={styles.volumeControl}>
+            <div 
+            onMouseEnter={() => {toggleVolumeHover(true)}}
+            className={styles.volumeWrapper}>
+              <button onClick={toggleMute} className={styles.controlButton}>
+                {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
+              </button>
+              {volumeHover && <div 
+              onMouseEnter={() => {toggleVolumeHover(true)}}
+              onMouseLeave={() => {toggleVolumeHover(false)}}
+              className={styles.volumeSlider}>
+                <VolumeSlider
+                  min={0}
+                  max={100}
+                  step={1}
+                  value={volume}
+                  onChange={handleVolumeChange}
+                />
+              </div>}
+            </div>
+          
+          </div>
+        </div>
+        
         <div className={styles.progressBar} onClick={handleProgressClick}>
           <div
             className={styles.progress}
@@ -182,33 +203,6 @@ const VideoPlayer = ({ src }) => {
             }}
           />
         </div>
-        <div className={styles.timeDisplay}>
-          {formatTime(currentTime)}
-        </div>
-        <div className={styles.volumeControl}>
-        <div 
-        onMouseEnter={() => {toggleVolumeHover(true)}}
-        className={styles.volumeWrapper}>
-          <button onClick={toggleMute} className={styles.controlButton}>
-            {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
-          </button>
-          {volumeHover && <div 
-          onMouseEnter={() => {toggleVolumeHover(true)}}
-          onMouseLeave={() => {toggleVolumeHover(false)}}
-          className={styles.volumeSlider}>
-            <VolumeSlider
-              min={0}
-              max={100}
-              step={1}
-              value={volume}
-              onChange={handleVolumeChange}
-            />
-          </div>}
-        </div>
-      </div>
-        <button onClick={toggleFullScreen} className={styles.controlButton}>
-          <Maximize2 size={24} />
-        </button>
       </div>
     </div>
   );

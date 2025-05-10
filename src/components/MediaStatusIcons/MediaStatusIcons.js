@@ -3,9 +3,9 @@ import React from 'react';
 
 import {
   MicOff,
-  VolumeX,
   Video,
-  Monitor
+  Monitor,
+  HeadphoneOff
 } from 'lucide-react';
 import styles from './MediaStatusIcons.module.css';
 
@@ -17,8 +17,8 @@ const MediaStatusIcons = ({
 }) => {
   return (
     <div className={styles.statusRow}>
-      {isMicrophoneMuted ? <MicOff className={styles.icon} /> : null}
-      {isAudioMuted ? <VolumeX className={styles.icon} /> : null}
+      {isMicrophoneMuted && !isAudioMuted ? <MicOff className={styles.icon} /> : null}
+      {isAudioMuted ? <HeadphoneOff className={styles.icon} /> : null}
       {isWebcamOn ? <Video className={styles.icon} /> : null}
       {isScreenSharing ? <Monitor className={styles.icon} /> : null}
     </div>

@@ -12,6 +12,7 @@ import { triggerContext } from "../../../../lib/services/helperFunctions";
 import { toggleMobileMenu } from "../../../../features/Mobile/mobileSlice";
 import { setUserProfile } from "../../../../features/UserProfile/userProfileSlice";
 import { setOverlay } from "../../../../features/Overlay/overlaySlice";
+import { ChannelStatus } from "./ChannelStatus/ChannelStatus";
 
 const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, channel_type, server_id, channel }) => {
 
@@ -34,7 +35,9 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
     const openChannel = () => {
 
       if (isChannelMenuOpen) dispatch(toggleMobileMenu('isChannelMenuOpen'));
-  
+      
+      if (channel_type === 'voice' && currentTextChannel && active) dispatch(setCurrentTextChannel(null));
+
       if (currentVoiceChannel && channel_type === 'text') {
         if (channel_id === currentTextChannel) {
           dispatch(setCurrentTextChannel(null));
@@ -114,7 +117,7 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
             backgroundHover="var(--background-color)"
           />
         </div>
-  
+        
         {users.length > 0 && (
           <motion.div
             className={styles.userList}
@@ -122,6 +125,7 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
           >
+            <ChannelStatus channel={channel} />
             {users.map((user) => (
               <ChannelUserButton action={viewUserProfile} active={active} key={user} user_id={user} />
             ))}

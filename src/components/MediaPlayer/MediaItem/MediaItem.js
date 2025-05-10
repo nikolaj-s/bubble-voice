@@ -1,10 +1,14 @@
 import React from 'react';
 import styles from './MediaItem.module.css';
-import { Music2 } from 'lucide-react';
+import { Ellipsis, Music2 } from 'lucide-react';
+import IconButton from '../../ui/Buttons/IconButton/IconButton';
+import { triggerContext } from '../../../lib/services/helperFunctions';
 
-export const MediaItem = ({ title, duration, thumbnail, src }) => {
+export const MediaItem = ({ title, duration, thumbnail, src, url, inQueue, status, action = () => {} }) => {
   return (
-    <div className={styles.mediaItem}>
+    <div 
+    onClick={action}
+    id={src} data-context={JSON.stringify({title, duration, thumbnail, src, url, type: 'media-item', inQueue})} className={styles.mediaItem}>
       {thumbnail ? (
         <img src={thumbnail} alt="" className={styles.thumbnail} />
       ) : (
@@ -14,6 +18,14 @@ export const MediaItem = ({ title, duration, thumbnail, src }) => {
         <div className={styles.title}>{title}</div>
         <div className={styles.duration}>{formatDuration(duration)}</div>
       </div>
+      {!status && 
+      <div className={styles.mediaItemButtons}>
+        <IconButton 
+        Icon={<Ellipsis color='var(--text-color)' />}
+        title={'More'}
+        onClick={(e) => {triggerContext(e, src)}}
+        />
+      </div>}
     </div>
   );
 };

@@ -4,7 +4,7 @@ import styles from  "./ControlBar.module.css";
 
 import IconButton from '../ui/Buttons/IconButton/IconButton';
 
-import { Mic, MicOff, ScreenShare, ScreenShareOff, Settings2, Unplug, Video, VideoOff, Volume2, VolumeX } from 'lucide-react';
+import { HeadphoneOff, Headphones, Mic, MicOff, ScreenShare, ScreenShareOff, Settings2, Unplug, Video, VideoOff, Volume2, VolumeX } from 'lucide-react';
 
 import UserButton from '../ui/Buttons/UserButton/UserButton';
 
@@ -111,9 +111,9 @@ export const ControlBar = () => {
                     }
                     Icon={
                     isAudioMuted ?
-                    <VolumeX color='var(--text-color)' />
+                    <HeadphoneOff color='var(--text-color)' />
                     :
-                    <Volume2 color='var(--text-color)' />
+                    <Headphones color='var(--text-color)' />
                     } />
                     <IconButton 
                     title={"Quick Options"}

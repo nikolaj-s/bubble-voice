@@ -20,7 +20,7 @@ const mediaPlayerSlice = createSlice({
   reducers: {
     addMediaToQueue: (state, action) => {
 
-        if (state.queue.length > 0) {
+        if (state.currentlyPlaying) {
             state.queue.push(action.payload);
         } else {
             state.currentlyPlaying = action.payload;
@@ -83,7 +83,7 @@ const mediaPlayerSlice = createSlice({
       state.volume = action.payload;
     },
     toggleMediaPlayerMuted: (state, action) => {
-      state.isMuted = action.payload;
+      state.isMuted = !state.isMuted;
     },
     setCurrentChannel: (state, action) => {
       state.currentChannel = action.payload;

@@ -5,9 +5,8 @@ import Header from '../../../../components/ui/Titles/Header/Header'
 
 import { DeviceSelector } from '../../../../components/ui/Inputs/DeviceSelector/DeviceSelector'
 import Label from '../../../../components/ui/Titles/Label/Label'
-import RadioToggle from '../../../../components/ui/Inputs/RadioToggle/RadioToggle'
 import { useDispatch, useSelector } from 'react-redux'
-import { setVoiceThreshold, toggleUsingPushToTalk } from '../../../../features/Channel/MediaControl/mediaControlSlice'
+import { setVoiceThreshold, toggleMicrophoneAttribute, toggleUsingPushToTalk } from '../../../../features/Channel/MediaControl/mediaControlSlice'
 import { setKeybind } from '../../../../features/Settings/Keybinds/keybindsSlice'
 import KeybindInput from '../../../../components/ui/Inputs/KeybindInput/KeybindInput'
 import { TestMicrophone } from '../../../../components/TestMicrophone/TestMicrophone'
@@ -42,6 +41,8 @@ export const VoiceVideoSettingsForm = () => {
 
     const keybinds = useSelector((state) => state.keybindsSlice.keybinds);
     
+    const {echoCancellation, noiseSuppression, autoGainControl} = useSelector(state => state.mediaControlSlice);
+
     const handleKeybindChange = (actionType, keybind) => {
         // Dispatch an action to update the keybind
         dispatch(setKeybind({ actionType, keybind }));
@@ -79,6 +80,7 @@ export const VoiceVideoSettingsForm = () => {
         voiceThreshold={voiceThreshold}
         usingPushToTalk={usingPushToTalk}
         />
+        <LineSpacer />
         <Label label='Voice Input Mode' />
         <TypeInput 
         types={options}
@@ -99,13 +101,14 @@ export const VoiceVideoSettingsForm = () => {
         
         </>
         }
+        <LineSpacer />
         <Header text='Voice Processing' level={2} />
         <Label label='Echo Cancellation' />
-        <ToggleSwitch />
+        <ToggleSwitch initialState={echoCancellation} onToggle={() => {dispatch(toggleMicrophoneAttribute('echoCancellation'))}} />
         <Label label='Noise Supression' />
-        <ToggleSwitch />
+        <ToggleSwitch initialState={noiseSuppression} onToggle={() => {dispatch(toggleMicrophoneAttribute('noiseSuppression'))}} />
         <Label label='Auto Gain Control' />
-        <ToggleSwitch />
+        <ToggleSwitch initialState={autoGainControl} onToggle={() => {dispatch(toggleMicrophoneAttribute('autoGainControl'))}} />
         </>
     )
 }

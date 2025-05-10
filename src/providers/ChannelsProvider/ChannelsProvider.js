@@ -2,7 +2,7 @@ import React from 'react'
 import { useSocket } from '../../context/SocketContext';
 import { useDispatch, useSelector } from 'react-redux';
 import ChannelButtonSkeleton from '../../components/ui/Loading/ChannelButtonSkeleton/ChannelButtonSkeleton';
-import { addChannel, removeChannel, reorderChannels, setChannels, setChannelsStatus, updateCategoryofChannels, updateChannelDetails, userJoinsChannel, userLeavesChannel } from '../../features/Channel/Channels/channelsSlice';
+import { addChannel, removeChannel, reorderChannels, setChannels, setChannelsStatus, updateCategoryofChannels, updateChannelDetails, updateChannelStatus, userJoinsChannel, userLeavesChannel } from '../../features/Channel/Channels/channelsSlice';
 import { removeCategory, reorderCategories, setCategories, updateCategoryDetails, addCategory } from '../../features/Categories/categoriesSlice';
 
 export const ChannelsProvider = ({children}) => {
@@ -102,6 +102,8 @@ export const ChannelsProvider = ({children}) => {
             dispatch(updateCategoryofChannels(data));
         }
 
+        const handleUpdateChannelStatus = data => dispatch(updateChannelStatus(data));
+
         const handleRemoveChannel = data => dispatch(removeChannel(data));
 
         socket.on('connect', handleFetchChannels);
@@ -119,6 +121,8 @@ export const ChannelsProvider = ({children}) => {
         socket.on(`update category order for ${server_id}`, handleReOrderCategories);
 
         socket.on(`update channel in ${server_id}`, handleUpdateChannelDetails);
+
+        socket.on(`update channel status in ${server_id}`, handleUpdateChannelStatus);
 
         socket.on(`delete channel in ${server_id}`, handleRemoveChannel);
 
@@ -142,6 +146,8 @@ export const ChannelsProvider = ({children}) => {
             socket.off(`update category order for ${server_id}`, handleReOrderCategories);
 
             socket.off(`update channel in ${server_id}`, handleUpdateChannelDetails);
+
+            socket.off(`update channel status in ${server_id}`, handleUpdateChannelStatus);
 
             socket.off(`delete channel in ${server_id}`, handleRemoveChannel);
 

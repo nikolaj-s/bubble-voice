@@ -6,6 +6,12 @@ const initialState = () => {
 
     const voiceThreshold = JSON.parse(localStorage.getItem('voiceThreshold'));
 
+    const echoCancellation = JSON.parse(localStorage.getItem('echoCancellation')) || false;
+
+    const autoGainControl = JSON.parse(localStorage.getItem('autoGainControl')) || false;
+
+    const noiseSuppression = JSON.parse(localStorage.getItem('noiseSuppression')) || false;
+
     return {
         isAudioMuted: false,
         isWebcamOn: false,
@@ -17,7 +23,10 @@ const initialState = () => {
         loading: false,
         usingPushToTalk: usingPushToTalk || false,
         isPushToTalkActive: false,
-        voiceThreshold: voiceThreshold || 25
+        voiceThreshold: voiceThreshold || 25,
+        echoCancellation,
+        autoGainControl,
+        noiseSuppression
     }
 }
 
@@ -87,6 +96,11 @@ const mediaControlSlice = createSlice({
         },
         clearMediaControlError: (state,action) => {
             state[action.payload] = false;
+        },
+        toggleMicrophoneAttribute: (state, action) => {
+            state[action.payload] = !state[action.payload];
+
+            localStorage.setItem(action.payload, JSON.stringify(state[action.payload]));
         }
     }
 })
@@ -102,7 +116,8 @@ export const {
     setVoiceThreshold,
     throwMicrophoneError,
     throwWebcamError,
-    clearMediaControlError
+    clearMediaControlError,
+    toggleMicrophoneAttribute
 } = mediaControlSlice.actions;
 
 export default mediaControlSlice.reducer;

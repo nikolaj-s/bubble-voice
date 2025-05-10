@@ -46,7 +46,7 @@ export const useContextMenuOptions = () => {
                 continue;
             }
             }
-
+            console.log(data)
             if (data.widgetsOverlay) {
                 if (permissions.user_can_edit_channels) {
                     options.push({
@@ -352,7 +352,7 @@ export const useContextMenuOptions = () => {
 
             if (data.video) {
 
-                if ((data.video?.src?.includes('.mp4') || data?.video?.url.includes('youtu')) && data.video.duration && mediaPlayerState) {
+                if ((data.video?.src?.includes('.mp4') || data?.video?.url?.includes('youtu')) && data.video.duration && mediaPlayerState) {
                     options.push({
                         label: "Play In Channel",
                         onClick: () => {

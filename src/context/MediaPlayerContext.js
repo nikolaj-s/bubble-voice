@@ -16,11 +16,13 @@ import React, {
     clearQueue,
     resetMediaPlayer,
     setCurrentChannel,
+    incrementCurrentTime
   } from '../features/Channel/MediaPlayer/mediaPlayerSlice';
 
   import { useSocket } from './SocketContext';
     
   import { setMediaPlayerLoadingState } from '../features/Channel/MediaPlayer/mediaPlayerSlice';
+import { triggerAlert } from '../features/Alerts/alertsSlice';
   
   const MediaPlayerContext = createContext(null);
   
@@ -45,7 +47,7 @@ import React, {
 
         dispatch(setMediaPlayerLoadingState(true));
         
-        await socket.request('media-widget/toggle-playing');
+        await socket.request('media-widget/toggle-playing', !playerState.isPlaying);
 
         dispatch(setMediaPlayerLoadingState(false));
         return;
@@ -54,7 +56,7 @@ import React, {
       }
 
       dispatch(setMediaPlayerLoadingState(false));
-    }, [socket, loading, dispatch]);
+    }, [socket, loading, dispatch, playerState]);
 
     const next = useCallback(async () => {
         try {
@@ -63,7 +65,7 @@ import React, {
 
             dispatch(setMediaPlayerLoadingState(true));
 
-            await socket.request('media-widget/skip');
+            await socket.request('media-widget/skip-media');
 
             dispatch(setMediaPlayerLoadingState(false));
 
@@ -85,7 +87,7 @@ import React, {
         dispatch(setMediaPlayerLoadingState(true));
 
         const res = await socket.request('media-widget/details', { channel_id: channelId });
-        
+        console.log(res)
         if (res) {
           dispatch(setCurrentlyPlaying(res.currentlyPlaying));
           dispatch(addMultipleToQueue(res.queue || []));
@@ -100,6 +102,22 @@ import React, {
       dispatch(setMediaPlayerLoadingState(false));
 
     }, [socket, dispatch, channelId, loading]);
+
+    const seek = useCallback(async (value) => {
+      try {
+
+        if (loading) return;
+
+        dispatch(setMediaPlayerLoadingState(true));
+
+        await socket.request('media-widget/seek', value);
+
+      } catch (err) {
+        dispatch(triggerAlert("Error Seeking Media", 'error'))
+      }
+
+      dispatch(setMediaPlayerLoadingState(false));
+    }, [socket, dispatch, loading])  
   
     // === Initialization: only if channel has media widget ===
     useEffect(() => {
@@ -107,7 +125,7 @@ import React, {
         if (!socket || !channelId) return;
 
         const handleTogglePlaying = (data) => {
-            console.log(data);
+            dispatch(toggleMediaPlaying(data?.playing));
         }
 
         const handleNewMedia = (data) => {
@@ -119,7 +137,7 @@ import React, {
         }
 
         const handleSeek = (data) => {
-            console.log(data);
+            dispatch(incrementCurrentTime(data.new_time));
         }
 
         const handleSkip = (data) => {
@@ -164,9 +182,11 @@ import React, {
 
             socket.off(`media-widget/seek/${channelId}`, handleSeek);
 
-            socket.off(`media-widget/skipped-media/${channelId}`, handleSkip)
+            socket.off(`media-widget/skipped-media/${channelId}`, handleSkip);
 
-        //  dispatch(resetMediaPlayer());
+            socket.off(`media-widget/seek/${channelId}`, handleSeek);
+
+            dispatch(resetMediaPlayer());
 
         };
     }, [socket, channelId, dispatch]);
@@ -179,6 +199,7 @@ import React, {
           toggleIsPlaying,
           setMedia,
           next,
+          seek
         }}
       >
         {children}

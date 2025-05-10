@@ -3,7 +3,7 @@ import React from 'react';
 
 import styles from '../Room.module.css';
 import IconButton from '../../ui/Buttons/IconButton/IconButton';
-import { Ellipsis, ImageMinus, VideoOff, Mic, MicOff, Unplug, Video, Volume2, VolumeX, ImagePlus } from 'lucide-react';
+import { Ellipsis, ImageMinus, VideoOff, Mic, MicOff, Unplug, Video, Volume2, VolumeX, ImagePlus, HeadphoneOff, Headphones } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import { PillSpacer } from '../../ui/Spacers/PillSpacer/PillSpacer';
@@ -12,6 +12,7 @@ import { KeybindToolTip } from '../../ui/Titles/KeybindToolTip/KeybindToolTip';
 import { MediaPlayerControls } from './MediaPlayerControls/MediaPlayerControls';
 import { toggleAppearanceSetting } from '../../../features/Settings/Appearance/appearanceSlice';
 import { toggleVoiceChannelOptions } from '../../../features/Channel/VoiceChannel/voiceChannelSlice';
+import { MediaPlayerInlineControls } from './MediaPlayerInlineControls/MediaPlayerInlineControls';
 
 export const RoomOverlay = () => {
 
@@ -86,9 +87,9 @@ export const RoomOverlay = () => {
                         />
                     } Icon={
                     isAudioMuted ?
-                    <VolumeX color='var(--text-color)' />
+                    <HeadphoneOff color='var(--text-color)' />
                     :
-                    <Volume2 color='var(--text-color)' />
+                    <Headphones color='var(--text-color)' />
                     } />
                     <IconButton 
                     padding={15}
@@ -110,6 +111,7 @@ export const RoomOverlay = () => {
                     backgroundColor={isWebcamOn ? 'var(--success-color)' : 'var(--background-color)'}
                     />
                     <MediaPlayerControls />
+                    <MediaPlayerInlineControls />
                     <PillSpacer verticle={true} />
                     <IconButton 
                     onClick={handleDisconnect}

@@ -68,6 +68,13 @@ console.log(action.payload);
         },
         removeChannel: (state, action) => {
             delete state.channels[action.payload._id];
+        },
+        updateChannelStatus: (state, action) => {
+            console.log(action.payload);
+            if (action.payload.channel_id) {
+                state.channels[action.payload.channel_id].status = action.payload.status;
+            }
+           
         }
     },
     extraReducers: (builder) => {
@@ -97,7 +104,8 @@ export const {
     updateChannelDetails,
     setChannelsStatus,
     updateCategoryofChannels,
-    removeChannel
+    removeChannel,
+    updateChannelStatus
 } = channelsSlice.actions;
 
 export default channelsSlice.reducer;

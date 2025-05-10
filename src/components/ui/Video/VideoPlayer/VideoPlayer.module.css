@@ -40,9 +40,20 @@
     right: 0;
     background: rgba(0, 0, 0, 0.6);
     display: flex;
-    align-items: center;
-    padding: 8px 10px;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
     gap: 10px;
+    width: calc(100%);
+  }
+
+  .controlWrapper {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    justify-content: space-between;
+    width: calc(100% - 20px);
+    padding: 0px 10px;
   }
   
   .controlButton {
@@ -56,12 +67,12 @@
   }
   
   .progressBar {
-    flex: 1;
-    height: 5px;
-    background: var(--card-background-color);
+    flex-shrink: 0;
+    height: 10px;
+    background: var(--overlay-color);
     cursor: pointer;
-    border-radius: 3px;
     overflow: hidden;
+    width: 100%;
   }
   
   .progress {

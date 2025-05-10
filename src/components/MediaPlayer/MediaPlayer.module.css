@@ -3,9 +3,10 @@
   border-radius: 16px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 10px;
   width: 600px;
   padding: 10px;
+  overflow: hidden;
 }
 
 .searchMediaButton {
@@ -56,9 +57,12 @@
 }
 
 .queue {
-  max-height: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-height: 500px;
   overflow-y: auto;
-  padding-bottom: 0.5rem;
+  overflow-x: hidden;
 }
 
 .empty {
@@ -66,6 +70,7 @@
   text-align: center;
   padding: 1rem;
   font-style: italic;
+  opacity: 0.75;
 }
 
 .controls {
@@ -73,12 +78,14 @@
   justify-content: flex-start;
   align-items: center;
   gap: 10px;
+  max-width: 100%;
 }
 
 .controlsLeft {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-shrink: 0;
 }
 
 .controlBtn {
@@ -101,6 +108,8 @@
   align-items: center;
   gap: 0.5rem;
   color: var(--text-color);
+  flex: 1;
+  max-width: calc(100% - 100px);
 }
 
 .thumbnail {
@@ -119,7 +128,6 @@
   height: 10px;
   width: 100%;
   cursor: pointer;
-  margin-top: 0.5rem;
   position: relative;
 }
 
@@ -138,14 +146,3 @@
   transition: width 0.2s ease;
 }
 
-.progressBarWrapper:hover .progressTrack::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  height: 12px;
-  width: 12px;
-  border-radius: 50%;
-  background-color: var(--text-color);
-  left: calc(var(--progress-fill-percent, 0%) - 6px);
-}

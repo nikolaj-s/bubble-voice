@@ -88,6 +88,7 @@ export const useRedditMedia = (query, debounceDelay = 1500) => {
                 alt_links: [],
                 width: post.media.reddit_video.width || 0,
                 height: post.media.reddit_video.height || 0,
+                duration: post.media.reddit_video.duration || null,
                 snippet,
               });
             }

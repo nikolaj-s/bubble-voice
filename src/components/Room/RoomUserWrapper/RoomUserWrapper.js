@@ -3,6 +3,7 @@ import { RoomUserCard } from '../RoomUserCard/RoomUserCard';
 
 import styles from './RoomUserWrapper.module.css';
 import { useSelector } from 'react-redux';
+import { MediaPlayerStreamSource } from '../MediaPlayerStreamSource/MediaPlayerStreamSource';
 
 export const RoomUserWrapper = ({ users }) => {
 
@@ -198,6 +199,7 @@ export const RoomUserWrapper = ({ users }) => {
                         return <RoomUserCard action={handleStreamExpansion} key={user.user_id} {...user} />
                     })
                 }
+                <MediaPlayerStreamSource expand={handleStreamExpansion} />
             </div>
         </>
     );

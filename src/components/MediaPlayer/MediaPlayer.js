@@ -6,17 +6,21 @@ import IconButton from '../ui/Buttons/IconButton/IconButton';
 import { LineSpacer } from '../ui/Spacers/LineSpacer/LineSpacer';
 import { ToolBar } from '../ui/Wrappers/ToolBar/ToolBar';
 import { PillSpacer } from '../ui/Spacers/PillSpacer/PillSpacer';
+import EmptyListPlaceholder from '../ui/Placeholders/EmptyListPlaceholder/EmptyListPlaceholder';
+import SpinnerLoading from '../ui/Loading/Spinner/SpinnerLoading';
+import TextLabelError from '../Error/TextLabelError/TextLabelError';
 
 export const MediaPlayer = ({
   queue = [],
   currentlyPlaying,
   playing,
   currentTime = 0,
-  onTogglePlay,
+  onTogglePlay = () => {},
   onSkip,
   onSeek,
   loading,
-  openSearchMedia
+  openSearchMedia,
+  error
 }) => {
 
   const duration = currentlyPlaying?.duration || 0;
@@ -42,17 +46,17 @@ export const MediaPlayer = ({
                 </div>
             </span>
         </button>
-        <LineSpacer />
+        {error && (<TextLabelError error={error} label='Error:' />)}
         <div className={styles.queue}>
             {queue.length > 0 ? (
-            queue.map((media, index) => (
-                <MediaItem key={media._id || index} {...media} />
+            queue.slice().reverse().map((media, index) => (
+                <MediaItem key={media._id || index} {...media} inQueue={true} />
             ))
             ) : (
-            <div className={styles.empty}>Queue is empty</div>
+            <EmptyListPlaceholder message='No Media In The Queue' />
             )}
         </div>
-        <LineSpacer />
+     
         <div className={styles.controls}>
             <div className={styles.controlsLeft}>
                 <IconButton 
@@ -73,17 +77,7 @@ export const MediaPlayer = ({
             </div>
             <div className={styles.currentlyPlaying}>
             {currentlyPlaying ? (
-                <>
-                {currentlyPlaying.thumbnail && (
-                    <img
-                    src={currentlyPlaying.thumbnail}
-                    alt=""
-                    className={styles.thumbnail}
-                    onError={(e) => (e.currentTarget.style.display = 'none')}
-                    />
-                )}
-                <span className={styles.title}>{currentlyPlaying.title}</span>
-                </>
+                <MediaItem {...currentlyPlaying} />
             ) : (
                 <span className={styles.title}><Music2 size={16} /> No media playing</span>
             )}
@@ -95,6 +89,7 @@ export const MediaPlayer = ({
                 <div className={styles.progressFill} style={{ width: `${progressPercent}%` }} />
             </div>
         </div>
+        {loading && (<SpinnerLoading />)}
     </div>
   );
 };

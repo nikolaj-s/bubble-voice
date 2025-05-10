@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchServerSettings } from "./Thunks/fetchServerSettings";
 import { updateServerSettings } from "./Thunks/updateServerSettings";
+import { deleteServerRecommendations } from "./Thunks/deleteServerRecommendations";
 
 const serverSettingsSlice = createSlice({
     name: "serverSettingsSlice",
@@ -43,6 +44,20 @@ const serverSettingsSlice = createSlice({
             state.loading = false;
             state.error = false;
             state.settings = action.payload;
+        })
+
+        // delete recommendation data
+        builder.addCase(deleteServerRecommendations.pending, (state) => {
+            state.loading = true;
+            state.error = false;
+        })
+        builder.addCase(deleteServerRecommendations.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        })
+        builder.addCase(deleteServerRecommendations.fulfilled, (state, action) => {
+            state.loading = false;
+            state.error = false;
         })
     }
 })

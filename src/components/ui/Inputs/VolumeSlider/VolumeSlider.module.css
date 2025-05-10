@@ -1,25 +1,30 @@
 .volumeSlider {
   display: flex;
   align-items: center;
+  position: relative;
 }
+
+.sliderWrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
 .slider {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
   height: 6px;
-  background: linear-gradient(to right, var(--accent-color) 0%, var(--accent-color) calc(100% * var(--slider-value)), var(--background-color) calc(100% * var(--slider-value)), var(--background-color) 100%);
+  background: linear-gradient(to right, var(--accent-color) 0%, var(--accent-color) calc(100% * var(--slider-percent)), var(--background-color) calc(100% * var(--slider-percent)), var(--background-color) 100%);
   border-radius: 5px;
   outline: none;
-  transition: 0.2s;
   cursor: pointer;
-  display: flex;
-  align-items: center;
 }
 
-/* For webkit browsers like Chrome, Safari */
 .slider::-webkit-slider-runnable-track {
   height: 6px;
-  background: transparent;  /* Don't overwrite the background in the track */
+  background: transparent;
 }
 
 .slider::-webkit-slider-thumb {
@@ -30,23 +35,30 @@
   background: var(--accent-color);
   border-radius: 50%;
   cursor: pointer;
-  transition: transform 0.2s;
   margin-top: -4px;
+  transition: transform 0.2s;
+  position: relative;
+  z-index: 2;
 }
 
-.slider::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
+.sliderWrapper:hover .volumeLabel {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .volumeLabel {
+  position: absolute;
+  bottom: 20px;
+  left: calc(var(--slider-percent) * 100%);
+  transform: translateX(-50%);
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--text-color);
   background: var(--background-color);
   padding: 4px 8px;
   border-radius: 5px;
-  width: 50px;
-  text-align: center;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
 }
-
-
