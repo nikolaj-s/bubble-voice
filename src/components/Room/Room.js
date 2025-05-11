@@ -11,10 +11,13 @@ import { ChannelBackground } from '../ChannelBackground/ChannelBackground';
 import { RoomOverlay } from './RoomOverlay/RoomOverlay';
 import { usePushToTalk } from '../../hooks/usePushToTalk';
 import { MediaPlayerProvider } from '../../context/MediaPlayerContext';
+import NativeFullScreenWrapper from '../ui/Wrappers/NativeFullScreenWrapper/NativeFullScreenWrapper';
 
 export const Room = () => {
     
     const dispatch = useDispatch();
+
+    const {useBlackVoiceChannelBackground} = useSelector(state => state.appearanceSlice)
 
     const { currentVoiceChannel } = useSelector(state => state.voiceChannelSlice);
 
@@ -126,14 +129,20 @@ export const Room = () => {
     }, [users, consumers, producers]);
 
     return (
-        <div 
-        data-context={JSON.stringify({type: 'room'})}
-        className={`${styles.container} ${isTextChannelOpen ? styles.textChannelOpen : ''}`}>
-            <MediaPlayerProvider channelId={channel_id}>
-                <RoomUserWrapper users={combinedUsers} />
-                <ChannelBackground channel_background={channel_background} />
-                <RoomOverlay />
-            </MediaPlayerProvider>
-        </div>
+        <NativeFullScreenWrapper>
+            <div 
+            style={{
+                backgroundColor: useBlackVoiceChannelBackground ? 'black' : null
+            }}
+            id='voice-channel'
+            data-context={JSON.stringify({type: 'room'})}
+            className={`${styles.container} ${isTextChannelOpen ? styles.textChannelOpen : ''}`}>
+                <MediaPlayerProvider channelId={channel_id}>
+                    <RoomUserWrapper users={combinedUsers} />
+                    <ChannelBackground channel_background={channel_background} />
+                    <RoomOverlay />
+                </MediaPlayerProvider>
+            </div>
+        </NativeFullScreenWrapper>
     );
 };

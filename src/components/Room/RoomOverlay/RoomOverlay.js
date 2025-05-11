@@ -3,7 +3,7 @@ import React from 'react';
 
 import styles from '../Room.module.css';
 import IconButton from '../../ui/Buttons/IconButton/IconButton';
-import { Ellipsis, ImageMinus, VideoOff, Mic, MicOff, Unplug, Video, Volume2, VolumeX, ImagePlus, HeadphoneOff, Headphones } from 'lucide-react';
+import { Ellipsis, ImageMinus, VideoOff, Mic, MicOff, Unplug, Video, Volume2, VolumeX, ImagePlus, HeadphoneOff, Headphones, Maximize } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import { PillSpacer } from '../../ui/Spacers/PillSpacer/PillSpacer';
@@ -13,6 +13,8 @@ import { MediaPlayerControls } from './MediaPlayerControls/MediaPlayerControls';
 import { toggleAppearanceSetting } from '../../../features/Settings/Appearance/appearanceSlice';
 import { toggleVoiceChannelOptions } from '../../../features/Channel/VoiceChannel/voiceChannelSlice';
 import { MediaPlayerInlineControls } from './MediaPlayerInlineControls/MediaPlayerInlineControls';
+import { triggerContext } from '../../../lib/services/helperFunctions';
+import { setFullscreen } from '../../../features/Ui/uiSlice';
 
 export const RoomOverlay = () => {
 
@@ -23,6 +25,10 @@ export const RoomOverlay = () => {
     const navigate = useNavigate();
 
     const {isWebcamOn, isMicrophoneMuted, isAudioMuted, isScreenSharing, handleToggleAudio, handleToggleMicrophone, handleToggleWebcam, webcamError, microphoneError } = useMediaControls();
+
+    const {fullscreen} = useSelector(state => state.uiSlice);
+
+    const {isPlayerOpen} = useSelector(state => state.mediaPlayerSlice);
 
     const {keybinds} = useSelector(state => state.keybindsSlice);
 
@@ -35,25 +41,21 @@ export const RoomOverlay = () => {
     }
 
     return (
-        <div className={styles.overlay}>
+        <div className={styles.overlay} style={{opacity: isPlayerOpen? 1 : null}}>
             <div className={styles.topButtons}>
-                <IconButton 
-                title={`${hideNonVideoUsers ? 'Show' : 'Hide'} non video users`}
-                Icon={<VideoOff color='var(--text-color)' />}
-                position='bottom'
-                backgroundColor={hideNonVideoUsers ? 'var(--success-color)': null}
-                onClick={() => {dispatch(toggleVoiceChannelOptions('hideNonVideoUsers'))}}
-                />
-                <IconButton
-                title={hideChannelBackgrounds ? "Show Channel Background" : "Hide Channel Background"}
-                Icon={hideChannelBackgrounds ? <ImagePlus color='var(--text-color)' /> : <ImageMinus color='var(--text-color)' />}
-                position='bottom'
-                onClick={() => {dispatch(toggleAppearanceSetting('hideChannelBackgrounds'))}}
-                />
+                
                 <IconButton
                 title={"Room Options"}
                 Icon={<Ellipsis color="var(--text-color)" />}
-                position='bottom' />
+                position='bottom' 
+                onClick={(e) => {triggerContext(e, 'voice-channel')}}
+                />
+                <IconButton 
+                title={'Maximize'}
+                Icon={<Maximize color='var(--text-color)' />}
+                position='bottom'
+                onClick={() => {dispatch(setFullscreen(!fullscreen))}}
+                />
             </div>
             <div className={styles.bottomButtons}>
                     <IconButton 

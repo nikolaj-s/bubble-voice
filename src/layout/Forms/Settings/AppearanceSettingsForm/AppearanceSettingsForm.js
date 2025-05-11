@@ -5,23 +5,29 @@ import ToggleSwitch from '../../../../components/ui/Inputs/ToggleSwitch/ToggleSw
 import { useDispatch, useSelector } from 'react-redux'
 import { toggleAppearanceSetting } from '../../../../features/Settings/Appearance/appearanceSlice'
 import ThemePicker from '../../../../components/ThemePicker/ThemePicker'
+import { LineSpacer } from '../../../../components/ui/Spacers/LineSpacer/LineSpacer'
 
 export const AppearanceSettingsForm = () => {
 
     const dispatch = useDispatch();
 
-    const {hideCustomChannelIcons, hideChannelBackgrounds} = useSelector(state => state.appearanceSlice);
+    const {hideCustomChannelIcons, hideChannelBackgrounds, useBlackVoiceChannelBackground} = useSelector(state => state.appearanceSlice);
 
     return (
         <>
-        <Header text='Appearance Settings' />
+        <Header text='Application' />
         <Label label='Select Theme' />
         <ThemePicker />
-        <Header level={3} text='Channels' />
+        <LineSpacer />
+        <Header text='Channels' />
         <Label label='Hide Custom Channel Icons' />
         <ToggleSwitch initialState={hideCustomChannelIcons} onToggle={() => {dispatch(toggleAppearanceSetting('hideCustomChannelIcons'))}} />
         <Label label='Hide Channel Backgrounds' />
         <ToggleSwitch initialState={hideChannelBackgrounds} onToggle={() => {dispatch(toggleAppearanceSetting('hideChannelBackgrounds'))}} />
+        <LineSpacer />
+        <Header text='Voice Channel' />
+        <Label label='Use Black Background' />
+        <ToggleSwitch initialState={useBlackVoiceChannelBackground} onToggle={() => {dispatch(toggleAppearanceSetting('useBlackVoiceChannelBackground'))}}/>
         </>
     )
 }

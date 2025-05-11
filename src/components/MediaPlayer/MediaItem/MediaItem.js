@@ -4,13 +4,17 @@ import { Ellipsis, Music2 } from 'lucide-react';
 import IconButton from '../../ui/Buttons/IconButton/IconButton';
 import { triggerContext } from '../../../lib/services/helperFunctions';
 
-export const MediaItem = ({ title, duration, thumbnail, src, url, inQueue, status, action = () => {} }) => {
+export const MediaItem = ({ title, duration, thumbnail, src, url, inQueue, status, action = () => {}, position }) => {
+
+  const [thumbnailError, toggleThumbnailError] = React.useState(false);
+
   return (
     <div 
     onClick={action}
     id={src} data-context={JSON.stringify({title, duration, thumbnail, src, url, type: 'media-item', inQueue})} className={styles.mediaItem}>
-      {thumbnail ? (
-        <img src={thumbnail} alt="" className={styles.thumbnail} />
+      {position >= 0 ? <div className={styles.queueIndication}>{position + 1}</div> : null}
+      {thumbnail && !thumbnailError ? (
+        <img src={thumbnail} alt="" className={styles.thumbnail} onError={() => {toggleThumbnailError(true)}} />
       ) : (
         <div className={styles.fallbackIcon}><Music2 size={20} /></div>
       )}

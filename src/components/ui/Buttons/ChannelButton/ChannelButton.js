@@ -125,7 +125,7 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
           >
-            <ChannelStatus channel={channel} />
+            <ChannelStatus channel={channel} active={active} />
             {users.map((user) => (
               <ChannelUserButton action={viewUserProfile} active={active} key={user} user_id={user} />
             ))}

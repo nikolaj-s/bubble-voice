@@ -105,7 +105,7 @@ export const ChannelProvider = ({children, overlay = false, channel_id_prop}) =>
 
             socket.off(`delete channel ${channelID}`, onChannelDelete);
 
-            if (!overlay) dispatch(clearCurrentChannel());
+            if (!overlay) dispatch(setCurrentVoiceChannel(null));
 
         }
 

@@ -135,8 +135,8 @@ export const RoomUserWrapper = ({ users }) => {
 
             const children = parent.children;
 
-            const c_count = Array.from(children);
-
+            const c_count = Array.from(children).filter(c => !c.hidden);
+      
             let wDimension = parent.offsetWidth;
             let hDimension = parent.offsetHeight;
 

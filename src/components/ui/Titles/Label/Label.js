@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
 import styles from "./Label.module.css";
 
-const Label = ({ label, margin }) => {
+const Label = ({ label, margin, fontSize }) => {
   return (
-    <label style={{margin}} className={styles.label}>
+    <label style={{margin, fontSize}} className={styles.label}>
       {label}
     </label>
   );

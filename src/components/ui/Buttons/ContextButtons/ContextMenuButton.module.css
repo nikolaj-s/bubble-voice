@@ -20,6 +20,7 @@
     padding: 0;
     font-weight: 600;
     font-size: 0.8rem;
+    white-space: nowrap;
 }
 
 .contextButton:hover {
@@ -59,10 +60,12 @@
 /* RANGE INPUT */
 .rangeContainer {
     display: flex;
-    align-items: center;
-    gap: 8px;
+    flex-direction: column;
+    gap: 5px;
     font-family: var(--font-family);
     color: var(--text-color);
+    width: calc(100% - 10px);
+    padding: 10px 5px;
 }
 
 .rangeLabel {

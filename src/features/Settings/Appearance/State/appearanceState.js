@@ -7,13 +7,16 @@ export const initialState = () => {
 
     const hideChannelBackgrounds = JSON.parse(localStorage.getItem('hideChannelBackgrounds')) || false;
     
+    const useBlackVoiceChannelBackground = JSON.parse(localStorage.getItem('useBlackVoiceChannelBackground')) || false;
+
     const theme = localStorage.getItem('theme') || 'default'; // 'default' = your dark theme
   
     return {
       hideUsers,
       hideCustomChannelIcons,
       hideChannelBackgrounds,
-      theme
+      theme,
+      useBlackVoiceChannelBackground
     };
   };
   

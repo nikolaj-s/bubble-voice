@@ -4,6 +4,7 @@ import { PlayCircle, PauseCircle, Maximize2, Volume2, VolumeX } from 'lucide-rea
 import styles from './VideoPlayer.module.css';
 import VolumeSlider from '../../Inputs/VolumeSlider/VolumeSlider';
 import { useSelector } from 'react-redux';
+import ProgressBar from '../../ProgressBar/ProgressBar';
 
 const VideoPlayer = ({ src }) => {
 
@@ -195,14 +196,7 @@ const VideoPlayer = ({ src }) => {
           </div>
         </div>
         
-        <div className={styles.progressBar} onClick={handleProgressClick}>
-          <div
-            className={styles.progress}
-            style={{
-              width: duration ? `${(currentTime / duration) * 100}%` : '0%',
-            }}
-          />
-        </div>
+       <ProgressBar duration={duration} currentTime={currentTime} onSeek={handleProgressClick} />
       </div>
     </div>
   );

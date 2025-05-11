@@ -3,10 +3,18 @@ import React, { useRef, useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 import styles from './UniversalVideoPlayer.module.css';
 import { Play, Pause, Volume2, VolumeX } from 'lucide-react';
+import ProgressBar from '../../ProgressBar/ProgressBar';
+import VolumeSlider from '../../Inputs/VolumeSlider/VolumeSlider';
+import IconButton from '../../Buttons/IconButton/IconButton';
+import PlayPauseFlash from '../../PlayPauseFlash/PlayPauseFlash';
+import RedditAudioSrc from '../../../RedditAudioSrc/RedditAudioSrc';
+import { useDispatch, useSelector } from 'react-redux';
+import { setVideoVolume } from '../../../../features/Settings/Sound/soundSlice';
 
 const getFormattedEmbedURL = (src) => {
   try {
     const url = new URL(src);
+
     const host = url.hostname.replace('www.', '');
 
     if (host.includes('pornhub.com')) {
@@ -29,13 +37,23 @@ const getFormattedEmbedURL = (src) => {
 };
 
 export const UniversalVideoPlayer = ({ src, autoplay = false }) => {
+
+  const dispatch = useDispatch();
+
   const playerRef = useRef(null);
+
   const [playing, setPlaying] = useState(autoplay);
+
   const [muted, setMuted] = useState(false);
-  const [volume, setVolume] = useState(0.8);
+
+  const volume = useSelector(state => state.soundSlice.videoVolume)
+
   const [progress, setProgress] = useState(0);
+
   const [showControls, setShowControls] = useState(true);
+
   const [hovering, setHovering] = useState(false);
+
   const timeoutRef = useRef(null);
 
   const isControllable = ReactPlayer.canPlay(src);
@@ -47,18 +65,19 @@ export const UniversalVideoPlayer = ({ src, autoplay = false }) => {
   const toggleMute = () => setMuted((prev) => !prev);
 
   const handleProgress = (state) => {
-    setProgress(state.played); // Sync internal play state
+    setProgress(state.playedSeconds); // Sync internal play state
   };
 
-  const handleSeek = (e) => {
-    const newProgress = parseFloat(e.target.value);
+  const handleSeek = (newProgress) => {
+    
     setProgress(newProgress);
+
     playerRef.current.seekTo(newProgress);
+
   };
 
-  const handleVolumeChange = (e) => {
-    const newVolume = parseFloat(e.target.value);
-    setVolume(newVolume);
+  const handleVolumeChange = (newVolume) => {
+    dispatch(setVideoVolume(newVolume));
     setMuted(newVolume === 0);
   };
 
@@ -75,6 +94,14 @@ export const UniversalVideoPlayer = ({ src, autoplay = false }) => {
     return () => clearTimeout(timeoutRef.current);
   }, [hovering, playing]);
 
+  const onPlayerReady = () => {
+    const internal = playerRef.current?.getInternalPlayer();
+    console.log(internal)
+    if (internal) {
+      internal.volume = volume;
+    }
+  };
+
   return (
     <div
       className={styles.playerWrapper}
@@ -87,49 +114,52 @@ export const UniversalVideoPlayer = ({ src, autoplay = false }) => {
     >
       {isControllable ? (
         <>
+          <PlayPauseFlash isPlaying={playing} />
           <ReactPlayer
             ref={playerRef}
             url={formattedSrc}
             playing={playing}
             muted={muted}
             volume={volume}
+            onReady={onPlayerReady}
+            playsinline
             onProgress={handleProgress}
             onPlay={() => setPlaying(true)}
             onPause={() => setPlaying(false)}
             controls={false}
+            
             width="100%"
             height="100%"
             className={styles.reactPlayer}
           />
+          <RedditAudioSrc currentTime={progress} isPlaying={playing} muted={muted} url={src} volume={volume} />
+          <div className={styles.playerOverlay} onClick={togglePlay} />
           {showControls && (
-            <div className={styles.controls}>
-              <button onClick={togglePlay} className={styles.controlBtn}>
-                {playing ? <Pause /> : <Play />}
-              </button>
-              <div className={styles.volumeWrapper}>
-                
-                <button onClick={toggleMute} className={styles.controlBtn}>
-                  {muted ? <VolumeX /> : <Volume2 />}
-                </button>
-                <input
-                  type="range"
+            <div className={styles.controls}> 
+              <ProgressBar duration={playerRef.current?.getDuration()} currentTime={progress} onSeek={handleSeek} />
+              <div className={styles.buttonsWrapper}>
+                <IconButton 
+                onClick={togglePlay}
+                title={playing ? 'Pause' : 'Play'}
+                Icon={playing ? <Pause color='var(--text-color)' /> : <Play color='var(--text-color)'/>}
+                />
+                <div className={styles.volumeWrapper}>
+                  <IconButton
+                  title={muted ? 'Unmute' : 'Mute'}
+                  Icon={muted ? <VolumeX color='var(--text-color)' /> : <Volume2 color='var(--text-color)' />}
+                  onClick={toggleMute}
+                  />
+                  <VolumeSlider
+                  label={volume * 100}
+                  width={80}
                   min={0}
                   max={1}
                   step={0.01}
                   value={volume}
                   onChange={handleVolumeChange}
-                  className={styles.volumeBar}
-                />
+                  />
+                </div>
               </div>
-              <input
-                type="range"
-                min={0}
-                max={1}
-                step={0.01}
-                value={progress}
-                onChange={handleSeek}
-                className={styles.progressBar}
-              />
             </div>
           )}
         </>

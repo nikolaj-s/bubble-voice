@@ -3,6 +3,7 @@
 import React from 'react';
 import styles from './VideoPreview.module.css';
 import { Play } from 'lucide-react';
+import { ImageComponent } from '../../Image/Image';
 
 export const VideoPreview = ({ title, src, thumbnail, query, tags, nsfw, width, height, duration, snippet, url, action }) => {
   const formatDuration = (sec) => {
@@ -10,8 +11,6 @@ export const VideoPreview = ({ title, src, thumbnail, query, tags, nsfw, width, 
     const secs = sec % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
-
-  const isMp4 = src?.includes('.mp4');
 
   const getSiteName = (url) => {
     try {
@@ -29,21 +28,7 @@ export const VideoPreview = ({ title, src, thumbnail, query, tags, nsfw, width, 
     data-context={JSON.stringify({title, src, thumbnail, url, query, tags, nsfw, width, height, duration, type: 'video'})}
     onClick={() => {action({title, src, thumbnail, tags, nsfw, url, duration})}} className={styles.card}>
       <div className={styles.thumbnailWrapper}>
-        {isMp4 ? (
-          <video 
-            className={styles.video} 
-            poster={thumbnail} 
-            muted 
-            preload="metadata"
-            onMouseOver={(e) => e.currentTarget.play()} 
-            onMouseOut={(e) => e.currentTarget.pause()}
-          >
-            <source src={src} type="video/mp4" />
-          </video>
-        ) : (
-          <img className={styles.video} src={thumbnail} alt={title} />
-        )}
-
+        <ImageComponent src={thumbnail} />
         <div className={styles.overlay}>
           <Play className={styles.playIcon} />
           <span className={styles.duration}>{formatDuration(duration)}</span>

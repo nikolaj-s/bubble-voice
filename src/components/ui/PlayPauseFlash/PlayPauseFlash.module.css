@@ -1,0 +1,13 @@
+.flashIcon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: white;
+    translate: -50% -50%;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 50%;
+    padding: 0.75rem;
+    z-index: 100;
+    pointer-events: none;
+  }
+  

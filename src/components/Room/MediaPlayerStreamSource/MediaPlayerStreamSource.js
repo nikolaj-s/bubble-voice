@@ -3,9 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import styles from './MediaPlayerStreamSource.module.css';
 import ReactPlayer from 'react-player';
-import { incrementCurrentTime } from '../../../features/Channel/MediaPlayer/mediaPlayerSlice';
+import { incrementCurrentTime, setMediaHasAudio, toggleIsMediaPlayerOpen } from '../../../features/Channel/MediaPlayer/mediaPlayerSlice';
 import SpinnerLoading from '../../ui/Loading/Spinner/SpinnerLoading';
 import ErrorCard from '../../Error/ErrorCard/ErrorCard';
+import { VolumeX } from 'lucide-react';
+import { BoxLabel } from '../../ui/Titles/BoxLabel/BoxLabel';
+import DoubleTapWrapper from '../../ui/Wrappers/DoubleTapWrapper/DoubleTapWrapper';
+import RedditAudioSrc from '../../RedditAudioSrc/RedditAudioSrc';
 
 export const MediaPlayerStreamSource = ({expand}) => {
 
@@ -15,7 +19,9 @@ export const MediaPlayerStreamSource = ({expand}) => {
 
     const [localTime, setLocalTime] = React.useState(0);
 
-    const {currentlyPlaying, currentTime, isPlaying, volume, loading, error, isMuted} = useSelector(state => state.mediaPlayerSlice);
+    const hasSeekedInitially = React.useRef(false);
+
+    const {currentlyPlaying, currentTime, isPlaying, volume, loading, error, isMuted, hasAudio, hideMediaPlayer} = useSelector(state => state.mediaPlayerSlice);
 
     const handleProgress = (value) => {
 
@@ -25,39 +31,52 @@ export const MediaPlayerStreamSource = ({expand}) => {
     }
 
     React.useEffect(() => {
-
-        if (playerRef.current) {
-            
-            const current = playerRef.current.getCurrentTime();
-
-            if (Math.abs(currentTime - current) > 0.5) {
+        if (!playerRef.current) return;
+    
+        const current = playerRef.current.getCurrentTime();
+        
+        // prevent redundant seeks and feedback loops
+        if (!hasSeekedInitially.current || Math.abs(currentTime - current) > 0.5) {
             playerRef.current.seekTo(currentTime, 'seconds');
-            }
-
+            hasSeekedInitially.current = true;
         }
-    }, [currentTime])
+      }, [currentTime]);
+      
 
     if (!currentlyPlaying) return null;
 
     return (
-        <div id='media-player-stream-source' onClick={() => {expand('media-player-stream-source')}} className={styles.container}>
-            <ReactPlayer 
-            ref={playerRef}
-            controls={false}
-            playsinline
-            autoPlay
-            volume={volume}
-            onProgress={handleProgress}
-            width={'100%'}
-            height={'100%'}
-            url={currentlyPlaying?.src || currentlyPlaying?.url}
-            playing={isPlaying}
-            muted={isMuted}
-            />
-            <div className={styles.overlay} data-context={JSON.stringify({type: 'mediaplayer'})} >
-                {error && (<ErrorCard message={error} />)}
-            </div>
-            {loading && (<SpinnerLoading />)}
+        <div style={{display: hideMediaPlayer ? 'none' : null}} hidden={hideMediaPlayer} id='media-player-stream-source' onClick={() => {expand('media-player-stream-source')}} className={styles.container}>
+            <DoubleTapWrapper onDoubleTap={() => {dispatch(toggleIsMediaPlayerOpen(true))}}>
+                <ReactPlayer 
+                ref={playerRef}
+                controls={false}
+                playsinline
+                autoPlay
+                volume={volume}
+                onProgress={handleProgress}
+                width={'100%'}
+                height={'100%'}
+                url={currentlyPlaying?.src || currentlyPlaying?.url}
+                playing={isPlaying}
+                muted={isMuted}
+                />
+                <div className={styles.overlay} data-context={JSON.stringify({...currentlyPlaying, type: 'mediaplayer' })} >
+                    {error && (<ErrorCard message={error} />)}
+                </div>
+                {loading && (<SpinnerLoading />)}
+                {!hasAudio && (
+                <div className={styles.noAudio}>
+                    <BoxLabel label={'no audio'} />
+                </div>
+                )}
+                <RedditAudioSrc 
+                url={currentlyPlaying?.src} currentTime={currentTime} 
+                isPlaying={isPlaying} volume={volume} 
+                muted={isMuted} hasAudioFunction={() => {dispatch(setMediaHasAudio(true))}} 
+                
+                />
+            </DoubleTapWrapper>
         </div>
     )
 }

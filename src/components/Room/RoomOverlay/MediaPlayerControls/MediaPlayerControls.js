@@ -8,12 +8,13 @@ import { MediaPlayer } from '../../../MediaPlayer/MediaPlayer';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFilter } from '../../../../features/Search/searchSlice';
 import { setOverlay } from '../../../../features/Overlay/overlaySlice';
+import { toggleIsMediaPlayerOpen } from '../../../../features/Channel/MediaPlayer/mediaPlayerSlice';
 
 export const MediaPlayerControls = () => {
 
     const dispatch = useDispatch();
 
-    const [overlay, toggleOverlay] = React.useState(false);
+    const {isPlayerOpen: overlay} = useSelector(state => state.mediaPlayerSlice);
 
     const {enabled, isPlaying, currentlyPlaying, queue, loading, next, toggleIsPlaying, currentTime, seek} = useMediaPlayer();
 
@@ -38,7 +39,7 @@ export const MediaPlayerControls = () => {
     return (
         <>
         {overlay && (
-            <AbsoluteContentWrapper onClose={() => {toggleOverlay(false)}}>
+            <AbsoluteContentWrapper onClose={() => {dispatch(toggleIsMediaPlayerOpen(false))}}>
                 <MediaPlayer 
                 queue={queue} 
                 loading={loading} 
@@ -61,7 +62,7 @@ export const MediaPlayerControls = () => {
         borderRadius={'50%'}
         title={'Media Player'}
         Icon={<AudioLines color='var(--text-color)' />}
-        onClick={() => {toggleOverlay(!overlay)}}
+        onClick={() => {dispatch(toggleIsMediaPlayerOpen(true))}}
         />
         </>
     )

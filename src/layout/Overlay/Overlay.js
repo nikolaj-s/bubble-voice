@@ -48,7 +48,7 @@ const overlayComponents = {
   serverRecommendations: ServerRecommendations,
   channelDescription: ChannelDescription,
   userProfile: UserProfile,
-  widgets: WidgetsOverlay
+  widgets: WidgetsOverlay,
 };
 
 export const Overlay = ({ children }) => {

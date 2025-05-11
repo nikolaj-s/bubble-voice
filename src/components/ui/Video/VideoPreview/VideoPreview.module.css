@@ -19,9 +19,10 @@
   
   .thumbnailWrapper {
     position: relative;
-    width: 100%;
-    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    width: 100%;/* 16:9 Aspect Ratio */
     background-color: black;
+    aspect-ratio: 16 / 9;
+    height: auto;
   }
   
   .video {

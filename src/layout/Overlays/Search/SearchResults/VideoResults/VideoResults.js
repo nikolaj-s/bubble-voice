@@ -18,8 +18,8 @@ export const VideoResults = ({results = []}) => {
 
     return (
         <div className={styles.container}>
-            {results.map(video => (
-                <VideoPreview action={handleExpandVideo} {...video} key={video.src} />
+            {results.map((video, index) => (
+                <VideoPreview action={handleExpandVideo} {...video} key={video.src + index} />
             ))}
         </div>
     )

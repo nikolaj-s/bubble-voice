@@ -9,6 +9,7 @@ import { PillSpacer } from '../ui/Spacers/PillSpacer/PillSpacer';
 import EmptyListPlaceholder from '../ui/Placeholders/EmptyListPlaceholder/EmptyListPlaceholder';
 import SpinnerLoading from '../ui/Loading/Spinner/SpinnerLoading';
 import TextLabelError from '../Error/TextLabelError/TextLabelError';
+import ProgressBar from '../ui/ProgressBar/ProgressBar';
 
 export const MediaPlayer = ({
   queue = [],
@@ -25,13 +26,10 @@ export const MediaPlayer = ({
 
   const duration = currentlyPlaying?.duration || 0;
 
-  const progressPercent = duration ? Math.min((currentTime / duration) * 100, 100) : 0;
-
-  const handleSeek = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const offsetX = e.clientX - rect.left;
-    const newTime = (offsetX / rect.width) * duration;
-    onSeek(Math.min(newTime, duration));
+  const handleSeek = (value) => {
+    if (value >= 0 && value <= duration) {
+        onSeek(Math.floor(value))
+    }
   };
 
   return (
@@ -50,7 +48,7 @@ export const MediaPlayer = ({
         <div className={styles.queue}>
             {queue.length > 0 ? (
             queue.slice().reverse().map((media, index) => (
-                <MediaItem key={media._id || index} {...media} inQueue={true} />
+                <MediaItem key={index} position={index} {...media} inQueue={true} />
             ))
             ) : (
             <EmptyListPlaceholder message='No Media In The Queue' />
@@ -79,16 +77,13 @@ export const MediaPlayer = ({
             {currentlyPlaying ? (
                 <MediaItem {...currentlyPlaying} />
             ) : (
-                <span className={styles.title}><Music2 size={16} /> No media playing</span>
+            <div className={styles.nothingPlaying}>
+                <Music2 width={48} /> No media playing
+            </div>
             )}
             </div>
         </div>
-
-        <div className={styles.progressBarWrapper} onClick={handleSeek}>
-            <div className={styles.progressTrack}>
-                <div className={styles.progressFill} style={{ width: `${progressPercent}%` }} />
-            </div>
-        </div>
+        <ProgressBar currentTime={currentTime} duration={duration} onSeek={handleSeek} />
         {loading && (<SpinnerLoading />)}
     </div>
   );

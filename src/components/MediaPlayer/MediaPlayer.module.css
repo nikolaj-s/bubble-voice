@@ -7,6 +7,7 @@
   width: 600px;
   padding: 10px;
   overflow: hidden;
+  max-width: calc(100vw - 20px);
 }
 
 .searchMediaButton {
@@ -17,7 +18,7 @@
   align-items: center;
   justify-content: space-between;
   height: 45px;
-  border-radius: 20px;
+  border-radius: 12px;
   font-size: 1rem;
   color: var(--text-color);
   border: none;
@@ -119,30 +120,14 @@
   object-fit: cover;
 }
 
-.title {
-  font-weight: 500;
-  font-size: 0.95rem;
-}
-
-.progressBarWrapper {
-  height: 10px;
+.nothingPlaying {
+  height: 35px;
+  display: flex;
+  align-items: center;
+  padding: 10px 5px;
+  background-color: var(--card-background-color);
+  border-radius: 12px;
   width: 100%;
-  cursor: pointer;
-  position: relative;
-}
-
-.progressTrack {
-  height: 10px;
-  width: 100%;
-  background-color: var(--primary-color);
-  border-radius: 2px;
-  position: relative;
-}
-
-.progressFill {
-  height: 100%;
-  background-color: var(--button-background);
-  border-radius: 2px;
-  transition: width 0.2s ease;
+  gap: 10px;
 }
 

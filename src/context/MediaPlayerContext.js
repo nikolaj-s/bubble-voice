@@ -31,8 +31,6 @@ import { triggerAlert } from '../features/Alerts/alertsSlice';
 
     const socket = useSocket();
 
-    const initialized = useRef(false);
-
     const [enabled, setEnabled] = useState(false);
   
     const playerState = useSelector((state) => state.mediaPlayerSlice);
@@ -91,6 +89,8 @@ import { triggerAlert } from '../features/Alerts/alertsSlice';
         if (res) {
           dispatch(setCurrentlyPlaying(res.currentlyPlaying));
           dispatch(addMultipleToQueue(res.queue || []));
+          dispatch(toggleMediaPlaying(res.playing));
+          dispatch(incrementCurrentTime(res.currentTime))
         }
 
         dispatch(setMediaPlayerLoadingState(false));
@@ -125,6 +125,7 @@ import { triggerAlert } from '../features/Alerts/alertsSlice';
         if (!socket || !channelId) return;
 
         const handleTogglePlaying = (data) => {
+          console.log(data)
             dispatch(toggleMediaPlaying(data?.playing));
         }
 

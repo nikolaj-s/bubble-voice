@@ -1,6 +1,6 @@
-import { Download, Edit2, FilePenLine, FolderPen, FolderPlus, ImageDown, Link, Pencil, Pin, PinOff, Plus, Reply, Send, Settings, Settings2, Trash2, Unplug, User2, UserPen, Users, Video } from "lucide-react";
+import { Download, Edit2, FilePenLine, FolderPen, FolderPlus, ImageDown, Link, ListPlus, Pause, Pencil, Pin, PinOff, Play, PlaySquare, Plus, Reply, Send, Settings, Settings2, SkipForward, Trash2, Unplug, User2, UserPen, Users, Video } from "lucide-react";
 import { useCallback } from "react";
-import { useDispatch,} from "react-redux";
+import { useDispatch, useSelector,} from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { copyToClipboard, downloadImage } from "../../lib/services/helperFunctions";
 import { deleteMessage } from "../../features/Channel/TextChannel/Thunks/deleteMessage";
@@ -17,6 +17,9 @@ import { triggerAlert } from "../../features/Alerts/alertsSlice";
 import { deleteWidget } from "../../features/Widgets/Thunks/deleteWidget";
 import { setManageWidgetsForChannel } from "../../features/Widgets/manageWidgetsSlice";
 import { addMediaToPlayer } from "../../features/Channel/MediaPlayer/Thunks/addMediaToPlayer";
+import { setMediaPlayerVolume, toggleHideMediaPlayer, toggleIsMediaPlayerOpen } from "../../features/Channel/MediaPlayer/mediaPlayerSlice";
+import { toggleVoiceChannelOptions } from "../../features/Channel/VoiceChannel/voiceChannelSlice";
+import { toggleAppearanceSetting } from "../../features/Settings/Appearance/appearanceSlice";
 
 export const useContextMenuOptions = () => {
 
@@ -26,8 +29,14 @@ export const useContextMenuOptions = () => {
 
     const navigate = useNavigate();
 
+    const mediaPlayerState = useSelector(state => state.mediaPlayerSlice);
+
+    const {hideNonVideoUsers} = useSelector(state => state.voiceChannelSlice);
+
+    const {hideChannelBackgrounds} = useSelector(state => state.appearanceSlice);
+
     const getOptions = useCallback(
-        (e, permissions, currentTextChannel, channels, currentChannel, user, mediaPlayerState) => {
+        (e, permissions, currentTextChannel, channels, currentChannel, user) => {
         try {
             const options = [];
 
@@ -46,7 +55,9 @@ export const useContextMenuOptions = () => {
                 continue;
             }
             }
-            console.log(data)
+            
+           
+
             if (data.widgetsOverlay) {
                 if (permissions.user_can_edit_channels) {
                     options.push({
@@ -354,14 +365,16 @@ export const useContextMenuOptions = () => {
 
                 if ((data.video?.src?.includes('.mp4') || data?.video?.url?.includes('youtu')) && data.video.duration && mediaPlayerState) {
                     options.push({
-                        label: "Play In Channel",
+                        label: mediaPlayerState.currentlyPlaying ? "Add To Queue" : "Play In Channel",
                         onClick: () => {
                             dispatch(closeOverlay());
 
-                            dispatch(addMediaToPlayer(data.video))
+                            dispatch(addMediaToPlayer(data.video));
+
+                            dispatch(toggleIsMediaPlayerOpen(false));
                         },
                         type: 'button',
-
+                        icon: mediaPlayerState.currentlyPlaying ? <ListPlus color="var(--text-color)" /> : <PlaySquare color="var(--text-color)" />
                     })
                 }
 
@@ -448,8 +461,52 @@ export const useContextMenuOptions = () => {
 
             }
 
+            if (data.mediaplayer) {
+               
+                options.push({
+                    label: mediaPlayerState.isPlaying ? 'Pause' : 'Play',
+                    type: 'button',
+                    icon: mediaPlayerState.isPlaying ? <Pause color="var(--text-color)"  /> : <Play color="var(--text-color)" />
+                })
+                options.push({
+                    label: 'Skip',
+                    type: 'button',
+                    icon: <SkipForward  color="var(--text-color)" />
+                })
+                if (mediaPlayerState.hasAudio) {
+                    options.push({
+                        type: 'range',
+                        label: "Change Media Player Volume",
+                        onChange: (value) => {
+                            dispatch(setMediaPlayerVolume(value));
+                        },
+                        value: mediaPlayerState.volume,
+                        min: 0,
+                        max: 1,
+                        step: 0.01
+                    })
+                }
+            }
 
-
+            if (data.room) {
+                options.push({
+                    label: hideNonVideoUsers ? 'Show Non Video Users' : 'Hide Non Video Users',
+                    type: 'button',
+                    onClick: () => {dispatch(toggleVoiceChannelOptions('hideNonVideoUsers'))}
+                })
+                options.push({
+                    label: hideChannelBackgrounds ? 'Show Channel Background' : "Hide Channel Background",
+                    type: 'button',
+                    onClick: () => {
+                        dispatch(toggleAppearanceSetting('hideChannelBackgrounds'))
+                    }
+                })
+                options.push({
+                    label: mediaPlayerState.hideMediaPlayer ? 'Show Media Player' : "Hide Media Player",
+                    type: 'button',
+                    onClick: () => {dispatch(toggleHideMediaPlayer())}
+                })
+            }
 
             return options;
         } catch (error) {
@@ -457,7 +514,7 @@ export const useContextMenuOptions = () => {
             return [];
         }
         },
-        [navigate, dispatch]
+        [navigate, dispatch, setSearchParams, hideNonVideoUsers, mediaPlayerState, hideChannelBackgrounds]
     );
 
   return getOptions;

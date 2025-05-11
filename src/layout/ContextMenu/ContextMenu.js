@@ -130,7 +130,7 @@ const ContextMenu = ({ children }) => {
                             : option.type === 'radio' ?
                                 <ContextRadioButton zIndex={12} top={index === 0} bottom={index === contextMenu.options.length - 1}  label={option.label} checked={option.state} onChange={(value) => {option.action(value)}} />
                             : option.type === 'range' ?
-                                <ContextRangeInput zIndex={12} top={index === 0} bottom={index=== contextMenu.options.length - 1}  label={option.label} onChange={(value) => {option.action(value)}} value={option.value} max={option.max} min={option.min} />
+                                <ContextRangeInput zIndex={12} top={index === 0} bottom={index=== contextMenu.options.length - 1}  label={option.label} onChange={option.onChange} value={option.value} max={option.max} min={option.min} step={option.step} />
                             : 
                             null
                             }

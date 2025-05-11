@@ -12,6 +12,9 @@ const initialState = {
   savedMedia: [],
   loading: false,
   error: false,
+  isPlayerOpen: false,
+  hasAudio: false,
+  hideMediaPlayer: false
 };
 
 const mediaPlayerSlice = createSlice({
@@ -102,6 +105,15 @@ const mediaPlayerSlice = createSlice({
     setErrorState: (state, action) => {
       state.error = action.payload;
     },
+    toggleIsMediaPlayerOpen: (state, action) => {
+      state.isPlayerOpen = action.payload;
+    },
+    setMediaHasAudio: (state, action) => {
+      state.hasAudio = action.payload;
+    },
+    toggleHideMediaPlayer: (state, action) => {
+      state.hideMediaPlayer = !state.hideMediaPlayer
+    },
     resetMediaPlayer: () => initialState
   },
   extraReducers: (builder) => {
@@ -139,6 +151,9 @@ export const {
   setMediaPlayerLoadingState,
   setErrorState,
   resetMediaPlayer,
+  toggleIsMediaPlayerOpen,
+  setMediaHasAudio,
+  toggleHideMediaPlayer
 } = mediaPlayerSlice.actions;
 
 export default mediaPlayerSlice.reducer;

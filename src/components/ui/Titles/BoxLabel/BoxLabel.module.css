@@ -8,14 +8,7 @@
     border-radius: 5px;
     opacity: 0.75;
     width: auto;
+    font-size: 12px;
 }
 
-.container p {
-    padding: 0px;
-    text-align: center;
-    width: 100%;
-    font-size: 12px;
-    margin: 0px;
-    font-size: 600;
-}
 

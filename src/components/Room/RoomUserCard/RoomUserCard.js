@@ -164,6 +164,7 @@ export const RoomUserCard = ({ user_id, consumers, action }) => {
         style={{
             display: hideNonVideoUsers && !channel_status?.isWebcamOn ? 'none' : null
         }}
+        hidden={hideNonVideoUsers && !channel_status?.isWebcamOn}
         className={styles.container}>
             <div className={styles.userBanner}>
                 <ImageComponent src={user.user_banner} />

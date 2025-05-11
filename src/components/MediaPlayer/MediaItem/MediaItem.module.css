@@ -13,6 +13,15 @@
   width: calc(100% - 10px);
 }
 
+.queueIndication {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .mediaItem:active {
   scale: 0.98;
 }
