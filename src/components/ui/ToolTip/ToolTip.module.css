@@ -2,7 +2,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  z-index: 2;
+  z-index: 11;
 }
 
 .tooltip {
@@ -20,6 +20,8 @@
   max-width: 150px;
   z-index: 10;
   white-space: nowrap;
+  text-overflow: ellipsis;
+  word-wrap: normal;
 }
 
 /* Top tooltip */

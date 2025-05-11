@@ -24,7 +24,7 @@ const ContextMenu = ({ children }) => {
 
     const {currentChannel} = useSelector((state) => state.channelsSlice);
 
-    const mediaPlayerState = useSelector(state => state.mediaPlayerSlice.currentChannel);
+    const mediaPlayerState = useSelector(state => state.mediaPlayerSlice);
 
     const channels = useSelector((state) => state.channelsSlice.channels);
 
@@ -46,7 +46,7 @@ const ContextMenu = ({ children }) => {
         const handleContextMenu = (event) => {
             event.preventDefault();
     
-            const options = getOptions(event, permissions[user?.server_group], currentTextChannel, channels, currentChannel, user, mediaPlayerState);
+            const options = getOptions(event, permissions[user?.server_group], currentTextChannel, channels, currentChannel, user);
             if (!options || options.length === 0) return;
     
             let clickX = event.clientX;

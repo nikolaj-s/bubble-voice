@@ -31,7 +31,12 @@ export const ChannelStatus = ({channel = {}, active}) => {
     return (
         <div className={styles.status}>
             {status.type === 'video' ?
-            <MediaItem action={handleOpenMedia} {...status} status={true} duration={active ? Math.floor(currentTime) : status.duration} />
+            <MediaItem 
+            context={{...status, type: active ? 'mediaplayer' : 'video'}}
+            action={handleOpenMedia} 
+            {...status} status={true} 
+            duration={active ? Math.floor(currentTime) : status.duration} 
+            />
             : 
             null
             }

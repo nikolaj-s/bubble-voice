@@ -13,7 +13,7 @@ export const KeybindToolTip = ({binds, label, width}) => {
         }}>
         {label}
         </p>
-        <div
+        {binds.length > 0 && <div
         style={{
             display: 'flex',
             alignItems: 'center',
@@ -23,7 +23,7 @@ export const KeybindToolTip = ({binds, label, width}) => {
         }}
         >
         {
-            binds.map((bind, key) => {
+         binds.map((bind, key) => {
                 return (
                     <>
                     <p
@@ -44,7 +44,7 @@ export const KeybindToolTip = ({binds, label, width}) => {
                 )
             })
         }
-        </div>
+        </div>}
         </>
     )
 }

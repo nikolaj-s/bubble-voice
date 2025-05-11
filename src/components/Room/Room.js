@@ -10,7 +10,6 @@ import { useDetectSpeech } from '../../hooks/useDetectSpeech';
 import { ChannelBackground } from '../ChannelBackground/ChannelBackground';
 import { RoomOverlay } from './RoomOverlay/RoomOverlay';
 import { usePushToTalk } from '../../hooks/usePushToTalk';
-import { MediaPlayerProvider } from '../../context/MediaPlayerContext';
 import NativeFullScreenWrapper from '../ui/Wrappers/NativeFullScreenWrapper/NativeFullScreenWrapper';
 
 export const Room = () => {
@@ -129,7 +128,7 @@ export const Room = () => {
     }, [users, consumers, producers]);
 
     return (
-        <NativeFullScreenWrapper>
+        
             <div 
             style={{
                 backgroundColor: useBlackVoiceChannelBackground ? 'black' : null
@@ -137,12 +136,11 @@ export const Room = () => {
             id='voice-channel'
             data-context={JSON.stringify({type: 'room'})}
             className={`${styles.container} ${isTextChannelOpen ? styles.textChannelOpen : ''}`}>
-                <MediaPlayerProvider channelId={channel_id}>
-                    <RoomUserWrapper users={combinedUsers} />
-                    <ChannelBackground channel_background={channel_background} />
-                    <RoomOverlay />
-                </MediaPlayerProvider>
+                <NativeFullScreenWrapper>
+                <RoomUserWrapper users={combinedUsers} />
+                <ChannelBackground channel_background={channel_background} />
+                <RoomOverlay />
+                </NativeFullScreenWrapper>
             </div>
-        </NativeFullScreenWrapper>
     );
 };

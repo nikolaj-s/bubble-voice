@@ -31,7 +31,7 @@ const VideoPlayer = ({ src }) => {
         if (isPlaying) {
           videoRef.current?.pause();
         } else {
-          videoRef.current?.play();
+          videoRef.current?.play().catch(() => {});
         }
       }
     } catch (error) {

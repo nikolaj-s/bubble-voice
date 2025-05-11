@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import styles from "./RoomUserCard.module.css";
 import {ImageComponent }from "../../ui/Image/Image";  // Assuming this is a valid component
+import { LongPressGestureWrapper } from "../../ui/Gestures/LongPressGestureWrapper";
+import { triggerContext } from "../../../lib/services/helperFunctions";
 
 export const RoomUserCard = ({ user_id, consumers, action }) => {
 
@@ -166,22 +168,26 @@ export const RoomUserCard = ({ user_id, consumers, action }) => {
         }}
         hidden={hideNonVideoUsers && !channel_status?.isWebcamOn}
         className={styles.container}>
-            <div className={styles.userBanner}>
-                <ImageComponent src={user.user_banner} />
-            </div>
-            <div className={styles.userImage}>
-                <ImageComponent src={user.user_image} />
-            </div>
-            
-            <div  
-            style={{
-                borderColor: user.voiceActive ? 'var(--success-color)' : 'transparent'
-            }}
-            className={styles.overlay} />
+            <LongPressGestureWrapper width={'100%'} height={'100%'} onTouchContext={(e) => {triggerContext(e, `room-user-card-${user_id}`)}}>
+                <div className={styles.userInnerContainer}>
+                    <div className={styles.userBanner}>
+                        <ImageComponent src={user.user_banner} />
+                    </div>
+                    <div className={styles.userImage}>
+                        <ImageComponent src={user.user_image} />
+                    </div>
+                    
+                    <div  
+                    style={{
+                        borderColor: user.voiceActive ? 'var(--success-color)' : 'transparent'
+                    }}
+                    className={styles.overlay} />
 
-            {/* Audio elements will be appended here */}
-            <div ref={audioContainerRef} className={styles.audioContainer}></div>
-            <div ref={webcamContainerRef} className={styles.webcamSource} ></div>
+                    {/* Audio elements will be appended here */}
+                    <div ref={audioContainerRef} className={styles.audioContainer}></div>
+                    <div ref={webcamContainerRef} className={styles.webcamSource} ></div>
+                </div>
+            </LongPressGestureWrapper>
         </div>
     );
 };

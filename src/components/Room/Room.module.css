@@ -44,6 +44,12 @@
     opacity: 1;
 }
 
+.hideOverlay {
+    opacity: 0 !important;
+    pointer-events: all !important;
+    cursor: none !important;
+}
+
 @media screen and (min-width: 1280px) {
     .textChannelOpen {
         width: 50%;

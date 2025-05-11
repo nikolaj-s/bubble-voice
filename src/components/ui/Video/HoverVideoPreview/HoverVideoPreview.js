@@ -9,7 +9,7 @@ const HoverVideoPreview = ({ src }) => {
 
   const handleMouseEnter = () => {
     setIsHovered(true);
-    videoRef.current?.play();
+    videoRef.current?.play().catch(err => {});
   };
 
   const handleMouseLeave = () => {

@@ -15,7 +15,7 @@ export const ChannelUserButton = ({user_id, active, action = () => {}}) => {
         const user = useSelector(state => state.serverUsersSlice.users[user_id]);
 
         return (
-            <div onClick={() => {action(user_id)}} className={styles.container}>
+            <div data-context={JSON.stringify({...user, type: 'user'})} onClick={() => {action(user_id)}} className={styles.container}>
                 <span 
                 style={{
                     border: `solid 2px ${user.voiceActive && active ? 'var(--success-color)' : 'transparent'}`

@@ -55,6 +55,10 @@ console.log(action.payload);
 
             state.channels[action.payload.channel_id].users = state.channels[action.payload.channel_id].users.filter(user => user !== action.payload.user_id)
 
+            if (state.channels[action.payload.channel_id].users.length === 0) {
+                state.channels[action.payload.channel_id].status = null;
+            }
+
         },
         setCurrentChannel: (state, action) => {
             state.currentChannel = action.payload;

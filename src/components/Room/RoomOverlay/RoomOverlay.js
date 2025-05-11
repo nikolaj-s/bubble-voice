@@ -3,18 +3,17 @@ import React from 'react';
 
 import styles from '../Room.module.css';
 import IconButton from '../../ui/Buttons/IconButton/IconButton';
-import { Ellipsis, ImageMinus, VideoOff, Mic, MicOff, Unplug, Video, Volume2, VolumeX, ImagePlus, HeadphoneOff, Headphones, Maximize } from 'lucide-react';
+import { Ellipsis, ImageMinus, VideoOff, Mic, MicOff, Unplug, Video, HeadphoneOff, Headphones, Maximize } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import { PillSpacer } from '../../ui/Spacers/PillSpacer/PillSpacer';
 import { useMediaControls } from '../../../context/MediaControlsContext';
 import { KeybindToolTip } from '../../ui/Titles/KeybindToolTip/KeybindToolTip';
 import { MediaPlayerControls } from './MediaPlayerControls/MediaPlayerControls';
-import { toggleAppearanceSetting } from '../../../features/Settings/Appearance/appearanceSlice';
-import { toggleVoiceChannelOptions } from '../../../features/Channel/VoiceChannel/voiceChannelSlice';
 import { MediaPlayerInlineControls } from './MediaPlayerInlineControls/MediaPlayerInlineControls';
 import { triggerContext } from '../../../lib/services/helperFunctions';
 import { setFullscreen } from '../../../features/Ui/uiSlice';
+import { ErrorToolTip } from '../../ui/ErrorToolTip/ErrorToolTip';
 
 export const RoomOverlay = () => {
 
@@ -28,20 +27,49 @@ export const RoomOverlay = () => {
 
     const {fullscreen} = useSelector(state => state.uiSlice);
 
-    const {isPlayerOpen} = useSelector(state => state.mediaPlayerSlice);
-
     const {keybinds} = useSelector(state => state.keybindsSlice);
 
-    const {hideChannelBackgrounds} = useSelector(state => state.appearanceSlice);
+    const [isIdle, setIsIdle] = React.useState(false);
 
-    const {hideNonVideoUsers} = useSelector(state => state.voiceChannelSlice);
-    
+    const idleTimer = React.useRef(null);
+
+    const lastInteractionTime = React.useRef(Date.now());
+
+    React.useEffect(() => {
+        const idleDelay = 3000; // 3 seconds
+      
+        const handleUserActivity = () => {
+          lastInteractionTime.current = Date.now();
+      
+          // Only update if previously idle
+          if (isIdle) setIsIdle(false);
+      
+          // Reset timer
+          clearTimeout(idleTimer.current);
+          idleTimer.current = setTimeout(() => {
+            const now = Date.now();
+            if (now - lastInteractionTime.current >= idleDelay) {
+              setIsIdle(true);
+            }
+          }, idleDelay);
+        };
+      
+        window.addEventListener('mousemove', handleUserActivity);
+        window.addEventListener('click', handleUserActivity);
+      
+        return () => {
+          clearTimeout(idleTimer.current);
+          window.removeEventListener('mousemove', handleUserActivity);
+          window.removeEventListener('click', handleUserActivity);
+        };
+    }, [isIdle]);
+      
     const handleDisconnect = () => {
         navigate(`/dashboard/server/${serverID}`)
     }
 
     return (
-        <div className={styles.overlay} style={{opacity: isPlayerOpen? 1 : null}}>
+        <div className={`${styles.overlay} ${isIdle ? styles.hideOverlay : ''}`}>
             <div className={styles.topButtons}>
                 
                 <IconButton
@@ -66,15 +94,23 @@ export const RoomOverlay = () => {
                     onClick={handleToggleMicrophone}
                     position='top'
                     Icon={
-                    isMicrophoneMuted ?
-                    <MicOff color='var(--text-color)' />
+                    isMicrophoneMuted || microphoneError ?
+                    <MicOff color={microphoneError ? 'var(--error-color)' : 'var(--text-color)'} />
                     :
                     <Mic color='var(--text-color)' />
                     }
-                    title={<KeybindToolTip 
+                    title={
+                    microphoneError ?
+                    <ErrorToolTip error={microphoneError} />
+                    :
+                    keybinds['muteMicrophone'] ?
+                    <KeybindToolTip 
                         label={`${isMicrophoneMuted ? 'Unmute' : 'Mute'}`}
                         binds={[keybinds['muteMicrophone']?.key]}
-                        />}
+                        />
+                    :
+                    `${isMicrophoneMuted ? 'Unmute' : 'Mute'}`
+                    }
                     />
                     <IconButton 
                     padding={15}

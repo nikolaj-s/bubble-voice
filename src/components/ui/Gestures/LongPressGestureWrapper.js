@@ -4,7 +4,7 @@ import { motion, useAnimation } from 'framer-motion';
 const LONG_PRESS_DURATION = 500; // ms
 const MOVE_CANCEL_THRESHOLD = 10; // px
 
-export const LongPressGestureWrapper = ({ children, onTouchContext, width, height }) => {
+export const LongPressGestureWrapper = ({ children, onTouchContext, width, height, display }) => {
   const timeoutRef = useRef(null);
   const startYRef = useRef(null);
   const movedRef = useRef(false);
@@ -49,7 +49,7 @@ export const LongPressGestureWrapper = ({ children, onTouchContext, width, heigh
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      style={{ touchAction: 'manipulation', position: 'relative', width, height }} // allows scroll & tap
+      style={{ touchAction: 'manipulation', position: 'relative', width, height, display }} // allows scroll & tap
     >
       {children}
     </motion.div>

@@ -5,6 +5,8 @@ import { VideoPreview } from '../../../../../components/ui/Video/VideoPreview/Vi
 import { useDispatch } from 'react-redux';
 import { expandVideo } from '../../../../../features/Media/ExpandedVideo/expandedVideoSlice';
 import { setOverlay } from '../../../../../features/Overlay/overlaySlice';
+import { LongPressGestureWrapper } from '../../../../../components/ui/Gestures/LongPressGestureWrapper';
+import { triggerContext } from '../../../../../lib/services/helperFunctions';
 
 export const VideoResults = ({results = []}) => {
    
@@ -19,7 +21,15 @@ export const VideoResults = ({results = []}) => {
     return (
         <div className={styles.container}>
             {results.map((video, index) => (
-                <VideoPreview action={handleExpandVideo} {...video} key={video.src + index} />
+                <div key={video.src + index} style={{
+                    width: '100%',
+                    maxWidth: 350,
+                    display: 'flex'
+                }}>
+                <LongPressGestureWrapper display={'flex'} width={'100%'} height={'100%'} onTouchContext={(e) => {triggerContext(e, video.src)}} >
+                    <VideoPreview action={handleExpandVideo} {...video}  />
+                </LongPressGestureWrapper>
+                </div>
             ))}
         </div>
     )

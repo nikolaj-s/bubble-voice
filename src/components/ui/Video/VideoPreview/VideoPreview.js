@@ -25,6 +25,7 @@ export const VideoPreview = ({ title, src, thumbnail, query, tags, nsfw, width, 
 
   return (
     <div 
+    id={src}
     data-context={JSON.stringify({title, src, thumbnail, url, query, tags, nsfw, width, height, duration, type: 'video'})}
     onClick={() => {action({title, src, thumbnail, tags, nsfw, url, duration})}} className={styles.card}>
       <div className={styles.thumbnailWrapper}>

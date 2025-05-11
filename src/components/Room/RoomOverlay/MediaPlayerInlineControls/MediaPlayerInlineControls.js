@@ -1,5 +1,4 @@
 import React from 'react'
-import { useMediaPlayer } from '../../../../context/MediaPlayerContext'
 import { ToolBar } from '../../../ui/Wrappers/ToolBar/ToolBar';
 import IconButton from '../../../ui/Buttons/IconButton/IconButton';
 import { Pause, Play, SkipForward, Volume, Volume2, VolumeOff } from 'lucide-react';
@@ -7,14 +6,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import VolumeSlider from '../../../ui/Inputs/VolumeSlider/VolumeSlider';
 import { setMediaPlayerVolume, toggleMediaPlayerMuted } from '../../../../features/Channel/MediaPlayer/mediaPlayerSlice';
 import { BoxLabel } from '../../../ui/Titles/BoxLabel/BoxLabel';
+import { useMediaPlayer } from '../../../../hooks/useMediaPlayer';
 
 export const MediaPlayerInlineControls = () => {
 
     const dispatch = useDispatch();
 
-    const {enabled, currentlyPlaying, next, loading, toggleIsPlaying, isPlaying} = useMediaPlayer();
-
-    const {isMuted, volume, hasAudio} = useSelector(state => state.mediaPlayerSlice);
+    const { 
+        enabled, 
+        currentlyPlaying, 
+        next, 
+        toggleIsPlaying, 
+        isPlaying,
+        isMuted,
+        volume,
+    } = useMediaPlayer();
 
     const handleVolume = (value) => {
 
@@ -46,18 +52,12 @@ export const MediaPlayerInlineControls = () => {
             onClick={next}
             title={"Skip"}
             />
-            {hasAudio ?
-            <>
             <IconButton 
             Icon={isMuted ? <VolumeOff color='var(--text-color)' /> : <Volume2 color='var(--text-color)' />}
             onClick={handleMute}
             title={isMuted ? "Unmute" : "Mute"}
             />
             <VolumeSlider width={80} min={0} max={1} step={0.01} value={volume} label={volume * 100} onChange={handleVolume}  />
-            </>
-            :
-            <BoxLabel label='no audio' />
-            }
         </ToolBar>
     )
 }

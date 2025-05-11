@@ -1,0 +1,132 @@
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useSocket } from '../../context/SocketContext';
+import { 
+    setMediaPlayerLoadingState,
+    toggleMediaPlaying,
+    addMediaToQueue,
+    playNextInQueue,
+    resetMediaPlayer,
+    setCurrentChannel,
+    incrementCurrentTime,
+    setCurrentlyPlaying,
+    addMultipleToQueue,
+    enableMediaPlayer
+
+} from '../../features/Channel/MediaPlayer/mediaPlayerSlice';
+
+export const MediaPlayerProvider = ({children}) => {
+
+    const dispatch = useDispatch();
+
+    const socket = useSocket();
+
+    const {loading} = useSelector(state => state.mediaPlayerSlice);
+
+    const {currentVoiceChannel: channelId} = useSelector(state => state.voiceChannelSlice);
+
+    const setMedia = React.useCallback(async () => {
+          try {
+    
+            if (loading) return;
+    
+            dispatch(setMediaPlayerLoadingState(true));
+    
+            const res = await socket.request('media-widget/details', { channel_id: channelId });
+            console.log(res)
+            if (res) {
+              dispatch(setCurrentlyPlaying(res.currentlyPlaying));
+              dispatch(addMultipleToQueue(res.queue || []));
+              dispatch(toggleMediaPlaying(res.playing));
+              dispatch(incrementCurrentTime(res.currentTime))
+            }
+    
+            dispatch(setMediaPlayerLoadingState(false));
+    
+          } catch (err) {
+            console.warn('Failed to fetch media state:', err);
+          }
+    
+          dispatch(setMediaPlayerLoadingState(false));
+    
+    }, [socket, dispatch, channelId, loading]);
+
+    React.useEffect(() => {
+    
+            if (!socket || !channelId) return;
+    
+            const handleTogglePlaying = (data) => {
+              console.log(data)
+                dispatch(toggleMediaPlaying(data?.playing));
+            }
+    
+            const handleNewMedia = (data) => {
+                dispatch(addMediaToQueue(data.media));
+            }
+    
+            const handleRemoveMediaFromQueue = (data) => {
+                console.log(data);
+            }
+    
+            const handleSeek = (data) => {
+                dispatch(incrementCurrentTime(data.new_time));
+            }
+    
+            const handleSkip = (data) => {
+                dispatch(playNextInQueue());
+            }
+    
+            socket
+            .request('media-widget/check', { channel_id: channelId })
+            .then((res) => {
+              if (res?.enabled) {
+                
+                dispatch(enableMediaPlayer(true));
+            
+                // Setup listeners
+                socket.on(`media-widget/toggle-playing/${channelId}`, handleTogglePlaying);
+                
+                socket.on(`media-widget/new-media/${channelId}`, handleNewMedia);
+        
+                socket.on(`media-widget/remove-from-queue/${channelId}`, handleRemoveMediaFromQueue);
+        
+                socket.on(`media-widget/seek/${channelId}`, handleSeek);
+    
+                socket.on(`media-widget/skipped-media/${channelId}`, handleSkip);
+        
+                dispatch(setCurrentChannel(channelId));
+            
+                setMedia();
+    
+              }
+            })
+            .catch((err) => {
+              console.warn('Media widget check failed:', err);
+            });
+    
+            return () => {
+    
+                socket.off(`media-widget/toggle-playing/${channelId}`, handleTogglePlaying);
+    
+                socket.off(`media-widget/new-media/${channelId}`, handleNewMedia);
+    
+                socket.off(`media-widget/remove-from-queue/${channelId}`, handleRemoveMediaFromQueue);
+    
+                socket.off(`media-widget/seek/${channelId}`, handleSeek);
+    
+                socket.off(`media-widget/skipped-media/${channelId}`, handleSkip);
+    
+                socket.off(`media-widget/seek/${channelId}`, handleSeek);
+    
+                dispatch(resetMediaPlayer());
+    
+            };
+
+        }, [socket, channelId, dispatch]);
+
+    return (
+        <>
+        {children}
+        </>
+    )
+}

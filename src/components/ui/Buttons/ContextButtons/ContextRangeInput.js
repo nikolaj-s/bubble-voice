@@ -9,7 +9,7 @@ const ContextRangeInput = ({ label, value = 0, onChange, min = 0, max = 100 }) =
 
     return (
         <div className={styles.rangeContainer}>
-            <Label fontSize={12} label={label} />
+            <Label fontSize={'0.8rem'} label={label} />
             <VolumeSlider width={'100%'} value={localValue} onChange={(value) => {setLocalValue(value); onChange(value)}} label={localValue * 100} min={min} max={max} />
         </div>
     );

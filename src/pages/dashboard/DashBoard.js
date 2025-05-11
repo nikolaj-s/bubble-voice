@@ -31,9 +31,10 @@ const Dashboard = () => {
   useApplyTheme();
 
   return (
-    <ContextMenu>
+   
       <FetchAccountProvider>
         <SocketProvider>
+          <ContextMenu>
           <Overlay>
             <MediaControlsProvider>
               <div className={styles.layout}>
@@ -53,11 +54,12 @@ const Dashboard = () => {
               </div>
               </MediaControlsProvider>
           </Overlay>
+          </ContextMenu>
         </SocketProvider>
         <AlertToast />
         <ConnectionStatusNotice />
       </FetchAccountProvider>
-    </ContextMenu>
+  
   );
 };
 

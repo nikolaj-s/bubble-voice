@@ -1,59 +1,22 @@
 import React from 'react'
-import { useMediaPlayer } from '../../../../context/MediaPlayerContext'
 import { PillSpacer } from '../../../ui/Spacers/PillSpacer/PillSpacer';
 import IconButton from '../../../ui/Buttons/IconButton/IconButton';
 import { AudioLines } from 'lucide-react';
-import { AbsoluteContentWrapper } from '../../../ui/Wrappers/AbsoluteContentWrapper/AbsoluteContentWrapper';
-import { MediaPlayer } from '../../../MediaPlayer/MediaPlayer';
-import { useDispatch, useSelector } from 'react-redux';
-import { setFilter } from '../../../../features/Search/searchSlice';
-import { setOverlay } from '../../../../features/Overlay/overlaySlice';
+import { useDispatch } from 'react-redux';
 import { toggleIsMediaPlayerOpen } from '../../../../features/Channel/MediaPlayer/mediaPlayerSlice';
+import { useMediaPlayer } from '../../../../hooks/useMediaPlayer';
+import { setOverlay } from '../../../../features/Overlay/overlaySlice';
 
 export const MediaPlayerControls = () => {
 
     const dispatch = useDispatch();
 
-    const {isPlayerOpen: overlay} = useSelector(state => state.mediaPlayerSlice);
-
-    const {enabled, isPlaying, currentlyPlaying, queue, loading, next, toggleIsPlaying, currentTime, seek} = useMediaPlayer();
-
-    const {error} = useSelector(state => state.mediaPlayerSlice);
-
-    const handleOpenSearchMedia = () => {
-        
-        dispatch(setFilter({path: "videos"}));
-
-        dispatch(setOverlay('search'));
-    }
-
-    const handleSeek = (value) => {
-        
-        if (!currentlyPlaying) return;
-
-        seek(Math.floor(value));
-    }
+    const {enabled } = useMediaPlayer();
 
     if (!enabled) return null;
 
     return (
         <>
-        {overlay && (
-            <AbsoluteContentWrapper onClose={() => {dispatch(toggleIsMediaPlayerOpen(false))}}>
-                <MediaPlayer 
-                queue={queue} 
-                loading={loading} 
-                currentlyPlaying={currentlyPlaying} 
-                playing={isPlaying} 
-                openSearchMedia={handleOpenSearchMedia}
-                currentTime={currentTime}
-                onSkip={next}
-                onTogglePlay={toggleIsPlaying}
-                onSeek={handleSeek}
-                error={error}
-                />
-            </AbsoluteContentWrapper>
-        )}
         <PillSpacer verticle={true} />
         <IconButton 
         padding={15}
@@ -62,7 +25,7 @@ export const MediaPlayerControls = () => {
         borderRadius={'50%'}
         title={'Media Player'}
         Icon={<AudioLines color='var(--text-color)' />}
-        onClick={() => {dispatch(toggleIsMediaPlayerOpen(true))}}
+        onClick={() => {dispatch(setOverlay('mediaPlayer'))}}
         />
         </>
     )

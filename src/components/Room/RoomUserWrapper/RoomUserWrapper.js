@@ -3,7 +3,7 @@ import { RoomUserCard } from '../RoomUserCard/RoomUserCard';
 
 import styles from './RoomUserWrapper.module.css';
 import { useSelector } from 'react-redux';
-import { MediaPlayerStreamSource } from '../MediaPlayerStreamSource/MediaPlayerStreamSource';
+import { MediaPlayerStreamSource } from '../../MediaPlayer/MediaPlayerStreamSource/MediaPlayerStreamSource';
 
 export const RoomUserWrapper = ({ users }) => {
 

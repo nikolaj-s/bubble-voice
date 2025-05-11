@@ -4,14 +4,14 @@ import { Ellipsis, Music2 } from 'lucide-react';
 import IconButton from '../../ui/Buttons/IconButton/IconButton';
 import { triggerContext } from '../../../lib/services/helperFunctions';
 
-export const MediaItem = ({ title, duration, thumbnail, src, url, inQueue, status, action = () => {}, position }) => {
+export const MediaItem = ({ title, duration, thumbnail, src, url, inQueue, status, action = () => {}, position, context = {} }) => {
 
   const [thumbnailError, toggleThumbnailError] = React.useState(false);
 
   return (
     <div 
     onClick={action}
-    id={src} data-context={JSON.stringify({title, duration, thumbnail, src, url, type: 'media-item', inQueue})} className={styles.mediaItem}>
+    id={src} data-context={JSON.stringify(context)} className={styles.mediaItem}>
       {position >= 0 ? <div className={styles.queueIndication}>{position + 1}</div> : null}
       {thumbnail && !thumbnailError ? (
         <img src={thumbnail} alt="" className={styles.thumbnail} onError={() => {toggleThumbnailError(true)}} />

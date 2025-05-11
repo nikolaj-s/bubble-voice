@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { KeybindToolTip } from '../ui/Titles/KeybindToolTip/KeybindToolTip';
 
 import { setOverlay } from '../../features/Overlay/overlaySlice';
+import { ErrorToolTip } from '../ui/ErrorToolTip/ErrorToolTip';
 
 export const ControlBar = () => {
 
@@ -54,7 +55,7 @@ export const ControlBar = () => {
                 width={68}
                 height={30}
                 onClick={handleToggleWebcam}
-                title={webcamError ? webcamError : isWebcamOn ? "Turn off Webcam" : "Turn on Webcam"}
+                title={webcamError ? <ErrorToolTip error={webcamError} /> : isWebcamOn ? "Turn off Webcam" : "Turn on Webcam"}
                 Icon={isWebcamOn || webcamError ? <VideoOff  color={'var(--text-color)'} /> : <Video height={50} width={50} color={'var(--text-color)'} />}
                 />
                 <IconButton 
@@ -92,12 +93,16 @@ export const ControlBar = () => {
                     }
                     title={ 
                         microphoneError ?
-                        microphoneError
+                        <ErrorToolTip error={microphoneError} /> 
                         :
+                        keybinds['muteMicrophone'] ?
                         <KeybindToolTip 
                         label={`${isMicrophoneMuted ? 'Unmute' : 'Mute'}`}
                         binds={[keybinds['muteMicrophone']?.key]}
-                        />}
+                        />
+                        :
+                        `${isMicrophoneMuted ? 'Unmute' : 'Mute'}`
+                        }
                     />
                     
                     <IconButton 
