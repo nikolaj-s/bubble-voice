@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router";
 
 export const ChannelButtonDragWrapper = ({
@@ -11,7 +12,10 @@ export const ChannelButtonDragWrapper = ({
   collapse,
   draggingCategory,
 }) => {
-  const { channelID } = useParams();
+  const {currentTextChannel} = useSelector(state => state.textChannelSlice);
+
+  const {currentVoiceChannel} = useSelector(state => state.voiceChannelSlice);
+
   const [moveIndicator, toggleMoveIndicator] = React.useState(false);
 
   const handleDragStart = (e) => {
@@ -43,7 +47,7 @@ export const ChannelButtonDragWrapper = ({
       onDrop={handleDrop}
       onDragOver={(e) => e.preventDefault()}
       style={{
-        display: collapse && channel?.channel_id !== channelID ? "none" : undefined,
+        display: collapse && channel?.channel_id !== currentTextChannel && channel?.channel_id !== currentVoiceChannel ? "none" : undefined,
         position: 'relative'
       }}
     >

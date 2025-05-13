@@ -13,6 +13,8 @@ export const MediasoupProvider = ({ children }) => {
 
   const [loading, toggleLoading] = useState(true);
 
+  const [showLoading, toggleShowLoading] = useState(false);
+
   const [error, setError] = useState(false);
 
   const [updateSignal, setUpdateSignal] = useState(0); // This will trigger re-renders
@@ -237,7 +239,7 @@ export const MediasoupProvider = ({ children }) => {
 
   const getProducers = () => new Map(producersRef.current);
   const getConsumers = () => new Map(consumersRef.current);
-
+  
   if (loading) return null;
 
   return (

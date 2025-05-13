@@ -11,12 +11,15 @@ export const SearchHistoryButton = ({action, query, deleteItem, index}) => {
         onClick={() => {action(query)}}
       >
         <span>
-        <History color='var(--text-color)' />
+        <History size={18} color='var(--text-color)' />
         {query}
         </span>
         <IconButton 
+        height={25}
+        width={25}
+        padding={4}
         title={'Delete'}
-        Icon={<X color='var(--text-color)' />}
+        Icon={<X color='var(--text-color)' size={15} />}
         onClick={() => {deleteItem(query)}}
         position={index === 0 ? 'bottom' : 'top'}
         />

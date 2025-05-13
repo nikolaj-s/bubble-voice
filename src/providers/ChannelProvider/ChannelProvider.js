@@ -4,7 +4,6 @@ import { useNavigate, useParams } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { useSocket } from '../../context/SocketContext';
 import ErrorCard from '../../components/Error/ErrorCard/ErrorCard';
-import { clearCurrentChannel, setCurrentChannel } from '../../features/Channel/Channels/channelsSlice';
 import { setCurrentTextChannel } from '../../features/Channel/TextChannel/textChannelSlice';
 import { setCurrentVoiceChannel } from '../../features/Channel/VoiceChannel/voiceChannelSlice';
 
@@ -128,7 +127,7 @@ export const ChannelProvider = ({children, overlay = false, channel_id_prop}) =>
 
     }, [loading]);
 
-    if ((loading && showSpinner) || error) return (
+    if ((showSpinner) || error) return (
         <div style={{
             width: '100%',
             height: '100%',

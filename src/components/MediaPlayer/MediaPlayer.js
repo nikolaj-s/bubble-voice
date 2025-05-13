@@ -21,7 +21,8 @@ export const MediaPlayer = ({
   onSeek,
   loading,
   openSearchMedia,
-  error
+  error,
+  openSaves = () => {}
 }) => {
 
   const duration = currentlyPlaying?.duration || 0;
@@ -39,7 +40,7 @@ export const MediaPlayer = ({
             <span className={styles.searchMediaWrapper}>
                 <Search style={{marginRight: 10}} color='var(--text-color)' />
                 <PillSpacer  verticle={true} />
-                <div className={styles.saves}>
+                <div onClick={(e) => {e.stopPropagation(); openSaves()}} className={styles.saves}>
                     <Bookmark color='var(--text-color)' />
                 </div>
             </span>

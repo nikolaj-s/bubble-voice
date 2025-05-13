@@ -12,7 +12,7 @@ import { MediaTooltipWrapper } from '../../ui/Wrappers/MediaTooltipWrapper/Media
 export const DynamicMediaWidget = ({query = "", timeout = 1500}) => {
 
     const {loading, media} = useRedditMedia(query, timeout);
-    console.log(media)
+  
     return (
         <div style={{position: 'relative', overflow: 'hidden', borderRadius: 8}}>
             <MediaTitle icon={Image} title={query} />

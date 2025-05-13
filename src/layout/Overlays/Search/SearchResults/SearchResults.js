@@ -13,8 +13,11 @@ import { SearchHistory } from '../SearchHistory/SearchHistory';
 import { ServerResults } from './ServerResults/ServerResults';
 import { TextChannelResults } from './TextChannelResults/TextChannelResults';
 import { VideoResults } from './VideoResults/VideoResults';
+import { SearchRecommendations } from './SearchRecommendations/SearchRecommendations';
+import { LineSpacer } from '../../../../components/ui/Spacers/LineSpacer/LineSpacer';
+import SectionDivider from '../../../../components/ui/SectionDivider/SectionDivider';
 
-export const SearchResults = ({results = [], loading = false, filter, searchHistory, handleDeleteSearchHistoryItem, handleSearchFromHistory}) => {
+export const SearchResults = ({results = [], loading = false, filter, searchHistory, handleDeleteSearchHistoryItem, handleSearchFromHistory, title}) => {
 
     const dispatch = useDispatch();
 
@@ -32,14 +35,21 @@ export const SearchResults = ({results = [], loading = false, filter, searchHist
 
     return (
         <div className={styles.container}>
+            
             <div 
             onScroll={(e) => {dispatch(setSearchResultsScrollPos(e.target.scrollTop))}}
             ref={scrollRef} className={styles.wrapper}>
+                
                 {(filter === 'images' || filter === 'videos') &&
+                <>
                 <SearchHistory 
                 search={handleSearchFromHistory}
                 deleteItem={handleDeleteSearchHistoryItem} 
                 searchHistory={searchHistory} />
+                <SectionDivider label='Your Recommendations' margin={'10px 0px 15px 0px'} />
+                <SearchRecommendations filter={filter} />
+                {results.length ? <SectionDivider label='Results' margin={'15px 0px 20px 0px'} /> : null}
+                </>
                 }
 
                 {filter === 'servers' ?

@@ -1,4 +1,4 @@
-import { Download, FilePenLine, FolderPen, FolderPlus, ImageDown, Link, ListPlus, Pause, Pencil, Pin, PinOff, Play, PlaySquare, Plus, Reply, Send, Settings, Settings2, SkipForward, Trash2, Unplug, UserPen, Users, Video } from "lucide-react";
+import { Bookmark, Download, FilePenLine, FolderPen, FolderPlus, ImageDown, Link, ListPlus, Pause, Pencil, Pin, PinOff, Play, PlaySquare, Plus, Reply, Send, Settings, Settings2, SkipForward, Trash2, Unplug, UserPen, Users, Video } from "lucide-react";
 import { useCallback } from "react";
 import { useDispatch, useSelector,} from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -21,6 +21,8 @@ import { setMediaPlayerVolume, toggleHideMediaPlayer, toggleIsMediaPlayerOpen } 
 import { toggleVoiceChannelOptions } from "../../features/Channel/VoiceChannel/voiceChannelSlice";
 import { toggleAppearanceSetting } from "../../features/Settings/Appearance/appearanceSlice";
 import { useMediaPlayer } from "../../hooks/useMediaPlayer";
+import { saveMediaToPlayer } from "../../features/Channel/MediaPlayer/Thunks/saveMediaToPlayer";
+import { removeSavedMediaFromPlayer } from "../../features/Channel/MediaPlayer/Thunks/removeSavedMediaFromPlayer";
 
 export const useContextMenuOptions = () => {
 
@@ -393,7 +395,7 @@ export const useContextMenuOptions = () => {
 
             if (data.video) {
 
-                if ((data.video?.src?.includes('.mp4') || data?.video?.url?.includes('youtu')) && data.video.duration && mediaPlayerState) {
+                if ((data.video?.src?.includes('.mp4') || data?.video?.url?.includes('youtu')) && data.video.duration && mediaPlayerState.enabled) {
                     options.push({
                         label: mediaPlayerState.currentlyPlaying ? "Add To Queue" : "Play In Channel",
                         onClick: () => {
@@ -406,11 +408,25 @@ export const useContextMenuOptions = () => {
                         type: 'button',
                         icon: mediaPlayerState.currentlyPlaying ? <ListPlus color="var(--text-color)" /> : <PlaySquare color="var(--text-color)" />
                     })
+
+                    options.push({
+                        label: data.video.saved ? 'Unsave' : 'Save',
+                        onClick: () => {
+                            if (data.video.saved) {
+                                dispatch(removeSavedMediaFromPlayer(data.video._id));
+                            } else {
+                                dispatch(saveMediaToPlayer(data.video));
+                            }
+                            
+                        },
+                        type: 'button',
+                        icon: <Bookmark fill={data.video.saved ? 'var(--text-color)' : 'transparent'} color="var(--text-color)" /> 
+                    })
                 }
 
                 options.push({
                     label: "Copy Link",
-                    onClick: () => {copyToClipboard(data.video.src); dispatch(triggerAlert("Link Copied"))},
+                    onClick: () => {copyToClipboard(data.video.url || data.video.src); dispatch(triggerAlert("Link Copied"))},
                     type: 'button',
                     icon: <Link color="var(--text-color)" />
                 })

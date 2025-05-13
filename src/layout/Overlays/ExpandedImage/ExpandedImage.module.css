@@ -1,6 +1,5 @@
 .container {
     object-fit: contain;
-    max-width: 800px;
     height: calc(100% - 20px);
     display: flex;
     align-items: center;

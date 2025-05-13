@@ -10,7 +10,7 @@ export const MediaItem = ({ title, duration, thumbnail, src, url, inQueue, statu
 
   return (
     <div 
-    onClick={action}
+    onClick={() => {action(context)}}
     id={src} data-context={JSON.stringify(context)} className={styles.mediaItem}>
       {position >= 0 ? <div className={styles.queueIndication}>{position + 1}</div> : null}
       {thumbnail && !thumbnailError ? (

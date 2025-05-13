@@ -69,7 +69,7 @@ const FloatingSearch = ({filter, filters = [], loading, setFilter = () => {}, se
       }}
       className={`${styles.searchBox}`}
     >
-      <Search color='var(--text-color)' size={30} style={{marginLeft: 5}} />
+      <Search color='var(--text-color)' size={25} style={{marginLeft: 5, flexShrink: 0}} />
       {similarImageSrc && filter.path === 'images' && (<SimilarImageButton src={similarImageSrc} onRemove={clearSimilarImage} />)}
       <input
          id="global-search"

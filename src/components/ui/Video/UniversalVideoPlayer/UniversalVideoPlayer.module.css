@@ -29,7 +29,6 @@
   gap: 12px;
   background: rgba(0, 0, 0, 0.6);
   padding: 8px 12px;
-  border-radius: 8px;
   z-index: 10;
   transition: opacity 0.3s ease;
   width: calc(100% - 24px);

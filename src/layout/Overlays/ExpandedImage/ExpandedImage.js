@@ -14,6 +14,7 @@ import { SwipeGestureWrapper } from '../../../components/ui/Gestures/SwipeGestur
 import { LongPressGestureWrapper } from '../../../components/ui/Gestures/LongPressGestureWrapper';
 import { triggerContext } from '../../../lib/services/helperFunctions';
 import { enqueueMediaDeletion } from '../../../features/MediaDeletion/mediaDeletionSlice';
+import ZoomableImage from '../../../components/ui/ZoomableImage/ZoomableImage';
 
 
 export const ExpandedImage = ({ close = () => {} }) => {
@@ -36,7 +37,7 @@ export const ExpandedImage = ({ close = () => {} }) => {
     }
    
     return (
-      <FullScreenWrapper onClose={handleClose} backgroundColor="none" width="auto">
+      <FullScreenWrapper onClose={handleClose} backgroundColor="none" width="auto" maxContentWidth={'100%'}>
         <SwipeGestureWrapper onSwipeUp={close} onSwipeDown={handleClose}>
           <LongPressGestureWrapper onTouchContext={(e) => triggerContext(e, 'expanded-image')}>
             <div
@@ -69,17 +70,15 @@ export const ExpandedImage = ({ close = () => {} }) => {
                     draggable={false}
                   />
                 )}
-                {!error && <img
+                {!error && 
+                <ZoomableImage 
                 src={image}
-                alt="expanded-image"
-                className={styles.image}
-                onLoad={() => setLoading(false)}
+                onLoad={() => {setLoading(false)}}
                 onError={() => {
-                    setLoading(false);
-                    setError(true);
-                    handleError();
+                  setLoading(false);
+                  setError(true)
+                  handleError()
                 }}
-                draggable={false}
                 />}
               </motion.div>
               {error && !data?.thumbnail && (

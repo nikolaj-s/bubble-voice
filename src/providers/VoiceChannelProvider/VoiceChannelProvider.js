@@ -69,18 +69,25 @@ export const VoiceChannelProvider = ({channel, children}) => {
         handleJoinChannel();
 
         return () => {
-
+            console.log('connection lost')
             socket.emit('leave channel');
 
             socket.off('connect', handleJoinChannel);
 
             socket.off('voice activation', handleVoiceActivation);
 
-            dispatch(clearVoiceChannelState());
-
         }
 
     }, [socket, channel, dispatch, channelsStatus, server_id]);
+
+    React.useEffect(() => {
+
+        return () => {
+            console.log('clearing voice channel state');
+            dispatch(clearVoiceChannelState());
+        }
+
+    }, [dispatch])
 
     if (loading || channelsStatus !== 'complete') return <></>
 

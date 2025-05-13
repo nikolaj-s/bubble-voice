@@ -28,6 +28,18 @@ export const MediaPlayerOverlay = ({close}) => {
         seek(Math.floor(value));
     }
 
+    const openSaves = () => {
+
+        dispatch(setOverlay('widgets'));
+
+        setTimeout(() => {
+
+            document.getElementById('media-player-widget-saves')?.scrollIntoView({behavior: 'instant'});
+          
+        }, 100)
+
+    }
+
     if (!enabled) return null;
 
     return (
@@ -38,11 +50,12 @@ export const MediaPlayerOverlay = ({close}) => {
             playing={isPlaying}
             currentTime={currentTime}
             onTogglePlay={toggleIsPlaying}
-            onSeek={seek}
+            onSeek={handleSeek}
             loading={loading}
             onSkip={next}
             error={error}
             openSearchMedia={handleOpenSearchMedia}
+            openSaves={openSaves}
             />
         </FullScreenWrapper>
     )

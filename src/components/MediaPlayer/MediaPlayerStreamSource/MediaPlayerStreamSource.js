@@ -23,6 +23,7 @@ import { LongPressGestureWrapper } from '../../ui/Gestures/LongPressGestureWrapp
 import { triggerContext } from '../../../lib/services/helperFunctions';
 
 import styles from './MediaPlayerStreamSource.module.css';
+import TextLabelError from '../../Error/TextLabelError/TextLabelError';
 
 export const MediaPlayerStreamSource = ({expand}) => {
 
@@ -76,7 +77,7 @@ export const MediaPlayerStreamSource = ({expand}) => {
                     muted={isMuted}
                     />
                     <div className={styles.overlay}  >
-                        {error && (<ErrorCard message={error} />)}
+                        {error && (<TextLabelError error={error} />)}
                     </div>
                     {loading && (<SpinnerLoading />)}
                     {!hasAudio && (

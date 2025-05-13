@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addMediaToPlayer } from "./Thunks/addMediaToPlayer";
+import { saveMediaToPlayer } from "./Thunks/saveMediaToPlayer";
 
 const initialState = {
   currentTime: 0,
@@ -121,6 +122,7 @@ const mediaPlayerSlice = createSlice({
     resetMediaPlayer: () => initialState
   },
   extraReducers: (builder) => {
+    // adding media to player to play
     builder.addCase(addMediaToPlayer.pending, (state) => {
         state.loading = false;
         state.error = false;
@@ -132,6 +134,20 @@ const mediaPlayerSlice = createSlice({
     builder.addCase(addMediaToPlayer.fulfilled, (state) => {
         state.loading = false;
         state.error = false;
+    })
+
+    // saving media to player
+    builder.addCase(saveMediaToPlayer.pending, (state) => {
+      state.loading = true;
+      state.error = false;
+    })
+    builder.addCase(saveMediaToPlayer.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+    builder.addCase(saveMediaToPlayer.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = false;
     })
   }
 });

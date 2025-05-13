@@ -2,6 +2,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { setExpandedImage } from '../../../../features/Media/ExpandedImage/expandedImageSlice';
 import { setOverlay } from '../../../../features/Overlay/overlaySlice';
+import { expandVideo } from '../../../../features/Media/ExpandedVideo/expandedVideoSlice';
 
 export const MediaTooltipWrapper = ({media = {}, children}) => {
 
@@ -12,6 +13,10 @@ export const MediaTooltipWrapper = ({media = {}, children}) => {
             dispatch(setExpandedImage({data: media, image: media.src}));
 
             dispatch(setOverlay("expandImage"));
+        } else if (media.type === 'video') {
+            dispatch(expandVideo(media));
+
+            dispatch(setOverlay('expandVideo'));
         }
     }
 

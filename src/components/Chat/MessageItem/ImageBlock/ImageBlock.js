@@ -34,7 +34,7 @@ export const ImageBlock = ({image, loading, nsfw, styles, width, height = 350}) 
                 <LazyImageWrapper 
                 aspectRatio={aspectRatio} 
                 width={aspectRatio ? '100%' : null}
-                height={height > 350 ? 350 : height}
+                height={height > 350 || !height ? 350 : height}
                 >
                     <ImageComponent src={image} />
                 </LazyImageWrapper>

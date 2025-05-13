@@ -1,0 +1,94 @@
+.wrapper {
+    position: relative;
+    border-radius: 8px;
+  }
+  
+  .scroller {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+    padding: 5px 0px;
+
+    gap: 5px;
+    height: 200px;
+  }
+  
+  .scroller::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+  }
+  
+  .card {
+    height: 100%;
+    flex-shrink: 0;
+    cursor: pointer;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  
+  .seeMore {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 200px;
+    background: var(--background-color);
+    color: var(--text-color);
+    border-radius: 6px;
+    flex-shrink: 0;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s ease;
+  }
+  
+  .seeMore:hover {
+    background: var(--button-hover);
+  }
+  
+  .rightFade {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30px;
+    height: 100%;
+    background-color: var(--overlay-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 8px;
+    cursor: pointer;
+  }
+
+  .rightFade:hover {
+    background-color: var(--background-color);
+  }
+  
+  .arrowIcon {
+    color: var(--text-color);
+    opacity: 0.7;
+  }
+  
+  .error {
+    padding: 1rem;
+    color: var(--error-color);
+    font-weight: bold;
+  }
+  
+  .skeletonCard {
+    width: 120px;
+    height: 100%;
+    border-radius: 6px;
+    background: var(--background-color);
+    animation: pulse 1.2s infinite ease-in-out;
+    flex-shrink: 0;
+  }
+  
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+  
