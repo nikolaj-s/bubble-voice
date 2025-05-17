@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSocket } from '../context/SocketContext';
-import { setMediaPlayerLoadingState } from '../features/Channel/MediaPlayer/mediaPlayerSlice';
+import { setMediaPlayerLoadingState } from '../features/MediaPlayer/mediaPlayerSlice';
 import { triggerAlert } from '../features/Alerts/alertsSlice';
 
 /**

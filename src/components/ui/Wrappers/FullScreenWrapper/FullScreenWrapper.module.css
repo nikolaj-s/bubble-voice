@@ -8,6 +8,7 @@
     justify-content: center; /* Center children horizontally */
     align-items: center; /* Center children vertically */
     z-index: 50; /* Ensure it's on top of other content */
+     -webkit-app-region: no-drag;
   }
 
   .closeListener {

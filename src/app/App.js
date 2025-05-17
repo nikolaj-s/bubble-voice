@@ -17,6 +17,8 @@ import BackSplash from '../components/Misc/BackSplash/BackSplash';
 import "./App.css";
 import Dashboard from '../pages/dashboard/DashBoard';
 import FatalErrorPage from '../pages/FatalErrorPage/FatalErrorPage';
+import { useDetectOS } from '../hooks/useDetectOs';
+import AppTitleBar from '../components/AppTitleBar/AppTitleBar';
 
 function App() {
 
@@ -37,30 +39,12 @@ function App() {
   
 
   // application specific
-
-  React.useEffect(() => {
-
-    try {
-
-      const { ipcRenderer } = window.require('electron');
-  
-      ipcRenderer.on('platform-info', (event, platform) => {
-        // Add platform-specific class to the body tag
-       
-        document.body.classList.add(platform);
-      });    
-  
-    } catch (error) {
-      return;
-    }
-
-  }, [])
-
-  
+  useDetectOS();
 
   return (
     <Router>
       <div className={`App`}>
+        <AppTitleBar />
         <Routes>
           <Route path="/login" element={<BackSplash><Login /></BackSplash>} />
           <Route path="/signup" element={<BackSplash><Signup /></BackSplash>} />

@@ -6,6 +6,8 @@ import { useSocket } from "../../context/SocketContext";
 import React from 'react';
 import { updateVoiceActivation } from "../../features/ServerUsers/serverUsersSlice";
 import { clearVoiceChannelState } from "../../features/Channel/VoiceChannel/voiceChannelSlice";
+import ConnectingIndicator from "../../components/Indicators/ConnectingIndicator/ConnectingIndicator";
+import ErrorIndicator from "../../components/Indicators/ErrorIndicator/ErrorIndicator";
 
 export const VoiceChannelProvider = ({channel, children}) => {
 
@@ -89,9 +91,9 @@ export const VoiceChannelProvider = ({channel, children}) => {
 
     }, [dispatch])
 
-    if (loading || channelsStatus !== 'complete') return <></>
+    if (loading || channelsStatus !== 'complete') return <ConnectingIndicator />
 
-    if (error) return <ErrorCard message={error} />
+    if (error) return <ErrorIndicator message={error} />
 
     return (
         <>

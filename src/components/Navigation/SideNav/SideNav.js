@@ -107,7 +107,11 @@ export const SideNav = () => {
 
     return (
         <>
-        <div className={`${styles.container} side-navigation-global ${isServerMenuOpen ? styles.sideNavVisible : ''}`}>
+        <div 
+        style={{
+            height: window?.electron?.ipcRenderer ? 'calc(100svh - 45px)' : null
+        }}
+        className={`${styles.container} side-navigation-global ${isServerMenuOpen ? styles.sideNavVisible : ''}`}>
             <div className={styles.logo}>
                 <IconButton 
                 onClick={handleReturnToDashBoard}

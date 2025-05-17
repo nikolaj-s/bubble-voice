@@ -56,15 +56,6 @@
   background-color: var(--button-hover);
 }
 
-.queue {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  max-height: 500px;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
 .empty {
   color: var(--text-color);
   text-align: center;

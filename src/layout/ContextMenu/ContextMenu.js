@@ -106,7 +106,7 @@ const ContextMenu = ({ children }) => {
                         zIndex: 1000,
                         minWidth: 155,
                         padding: 5,
-                        backgroundColor: 'var(--button-background)'
+                        backgroundColor: 'var(--card-background-color)'
                         
                     }}
                 >

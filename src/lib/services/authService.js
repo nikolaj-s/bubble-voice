@@ -1,7 +1,7 @@
 
 export const getToken = () => {
     try {
-        const keytar = window.require('keytar');
+        const keytar = window.electron.ipcRenderer;;
 
         const token = localStorage.getItem("TOKEN");
         
@@ -20,7 +20,7 @@ export const setToken = (jwt) => {
     if (jwt.split('.').length !== 3) return;
 
     try {
-        const keytar = window.require('keytar');
+        const keytar = window.electron.ipcRenderer;
 
         localStorage.setItem("TOKEN", jwt);
 
@@ -32,7 +32,7 @@ export const setToken = (jwt) => {
 
 export const clearToken = () => {
     try {
-        const keytar = window.require('keytar');
+        const keytar = window.electron.ipcRenderer;;
 
         localStorage.removeItem("TOKEN");
 

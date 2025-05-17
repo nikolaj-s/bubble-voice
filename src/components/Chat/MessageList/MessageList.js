@@ -4,8 +4,14 @@ import styles from "./MessageList.module.css";
 import { MessageItem } from "../MessageItem/MessageItem";
 import MessageItemSkeleton from "../MessageItem/MessageItemSkeleton";
 import { AnimatePresence, motion } from "framer-motion";
+import FeedStartMessage from "../FeedStartMessage/FeedStartMessage";
 
-const MessageList = ({position = 0, messages = [], loadMoreMessages = () => {}, loading, loadingMore, sending, users = {}, returnPos = () => {} }) => {
+const MessageList = ({
+  position = 0, messages = [], loadMoreMessages = () => {}, 
+  loading, loadingMore, sending, users = {}, 
+  returnPos = () => {}, name,
+  noMoreMessages
+}) => {
 
   const listRef = useRef(null);
 
@@ -85,7 +91,7 @@ const MessageList = ({position = 0, messages = [], loadMoreMessages = () => {}, 
     }
 
   }, [messages])
-
+console.log(messages)
   return (
     <div 
     className={styles.messageListContainer} ref={listRef} onScroll={handleScroll}>
@@ -110,6 +116,7 @@ const MessageList = ({position = 0, messages = [], loadMoreMessages = () => {}, 
         : messages.map((msg, index) => (
            <MessageItem users={users} prevMessage={index === messages.length - 1 ? {} : messages[index + 1]} message={msg} key={msg.message_id} />
         ))}
+        {noMoreMessages && (<FeedStartMessage channelName={name}  />)}
         {loadingMore && (
           <div className={styles.loadingIndicator}>
             <div className={styles.spinner}></div>

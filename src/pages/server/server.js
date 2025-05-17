@@ -43,6 +43,9 @@ export const Server = () => {
             <ServerDetailsProvider>
                     <CloseMobileMenu />
                     <section 
+                    style={{
+                        height: window?.electron?.ipcRenderer ? 'calc(100svh - 70px)' : null
+                    }}
                     className={`${styles.sectionOne} ${isChannelMenuOpen ? styles.sectionOneMobile : ''} ${currentVoiceChannel ? styles.inVoiceChannel : ''}`}
                     >
                         <Banner image={banner} />
@@ -50,6 +53,9 @@ export const Server = () => {
                         <ControlBar key={'control-bar'} />
                     </section>
                     <section 
+                    style={{
+                        height: window?.electron?.ipcRenderer ? 'calc(100svh - 70px)' : null
+                    }}
                     className={`${styles.sectionTwo}`}>
                     <Outlet  />
                     {currentTextChannel && currentVoiceChannel && (
@@ -57,6 +63,9 @@ export const Server = () => {
                     )}
                     </section>
                     <section 
+                    style={{
+                        height: window?.electron?.ipcRenderer ? 'calc(100svh - 70px)' : null
+                    }}
                     className={`${styles.sectionThree} ${isUserMenuOpen ? styles.sectionThreeMobile : ''} ${hideUsers ? styles.hideUsers : ''}`}>
                         <Users />
                     </section>

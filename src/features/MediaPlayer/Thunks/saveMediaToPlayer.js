@@ -1,11 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { APIErrorHandler } from "../../../../lib/handlers/APIErrorHandler/APIErrorHandler";
-import { triggerAlert } from "../../../Alerts/alertsSlice";
+import { APIErrorHandler } from "../../../lib/handlers/APIErrorHandler/APIErrorHandler";
+import { triggerAlert } from "../../Alerts/alertsSlice";
 import axios from "axios";
-import { API_URL } from "../../../../lib/Validation";
-import { generateFormData } from "../../../../lib/services/generateFormData";
-import { addSavedMedia } from "../../../Widgets/widgetsSlice";
-
+import { API_URL } from "../../../lib/Validation";
+import { generateFormData } from "../../../lib/services/generateFormData";
 
 export const saveMediaToPlayer = createAsyncThunk('saveMediaToPlayer/mediaPlayerSlice', async (params, {getState, rejectWithValue, dispatch}) => {
     try {
@@ -28,8 +26,6 @@ export const saveMediaToPlayer = createAsyncThunk('saveMediaToPlayer/mediaPlayer
         })
 
         dispatch(triggerAlert("Media Added To Saved"));
-
-        dispatch(addSavedMedia(response.data));
 
         return response.data;
 

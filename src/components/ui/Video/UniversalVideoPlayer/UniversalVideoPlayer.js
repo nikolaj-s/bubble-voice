@@ -54,6 +54,8 @@ export const UniversalVideoPlayer = ({ src, autoplay = false }) => {
 
   const [hovering, setHovering] = useState(false);
 
+  const [isIdle, setIsIdle] = useState(false);
+
   const timeoutRef = useRef(null);
 
   const isControllable = ReactPlayer.canPlay(src);
@@ -84,19 +86,25 @@ export const UniversalVideoPlayer = ({ src, autoplay = false }) => {
   const resetHideTimeout = () => {
     clearTimeout(timeoutRef.current);
     setShowControls(true);
+    setIsIdle(false);
+  
     timeoutRef.current = setTimeout(() => {
-      if (!hovering) setShowControls(false);
+      if (!hovering && playing) {
+        setShowControls(false);
+        setIsIdle(true);
+      }
     }, 2000);
-  };
+  };  
 
   useEffect(() => {
-    resetHideTimeout();
+    if (playing) resetHideTimeout();
     return () => clearTimeout(timeoutRef.current);
   }, [hovering, playing]);
+  
 
   const onPlayerReady = () => {
     const internal = playerRef.current?.getInternalPlayer();
-    console.log(internal)
+    
     if (internal) {
       internal.volume = volume;
     }
@@ -104,12 +112,15 @@ export const UniversalVideoPlayer = ({ src, autoplay = false }) => {
 
   return (
     <div
-      className={styles.playerWrapper}
+    className={`${styles.playerWrapper} ${isIdle ? styles.idle : ''}`}
       onMouseMove={resetHideTimeout}
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => {
         setHovering(false);
-        timeoutRef.current = setTimeout(() => setShowControls(false), 1500);
+        timeoutRef.current = setTimeout(() => {
+          setShowControls(false);
+          setIsIdle(true);
+        }, 500);
       }}
     >
       {isControllable ? (
@@ -132,7 +143,7 @@ export const UniversalVideoPlayer = ({ src, autoplay = false }) => {
             height="100%"
             className={styles.reactPlayer}
           />
-          <RedditAudioSrc currentTime={progress} isPlaying={playing} muted={muted} url={src} volume={volume} />
+          <RedditAudioSrc currentTime={Math.floor(progress)} isPlaying={playing} muted={muted} url={src} volume={volume} />
           <div className={styles.playerOverlay} onClick={togglePlay} />
           {showControls && (
             <div className={styles.controls}> 

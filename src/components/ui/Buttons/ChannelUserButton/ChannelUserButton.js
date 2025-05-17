@@ -9,13 +9,21 @@ import { ImageComponent } from '../../../ui/Image/Image';
 import MediaStatusIcons from '../../../MediaStatusIcons/MediaStatusIcons';
 
 export const ChannelUserButton = ({user_id, active, action = () => {}}) => {
-    
+
+    const onDragStart = (e) => {
+        
+    }
+
     try {
         
         const user = useSelector(state => state.serverUsersSlice.users[user_id]);
 
         return (
-            <div data-context={JSON.stringify({...user, type: 'user'})} onClick={() => {action(user_id)}} className={styles.container}>
+            <div 
+            onDragStart={onDragStart}
+            draggable={true} 
+            data-context={JSON.stringify({...user, type: 'user'})} 
+            onClick={() => {action(user_id)}} className={styles.container}>
                 <span 
                 style={{
                     border: `solid 2px ${user.voiceActive && active ? 'var(--success-color)' : 'transparent'}`

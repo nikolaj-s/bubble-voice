@@ -27,7 +27,7 @@
 }
 
 .mediaItem:hover {
-  background-color: var(--accent-color);
+  background-color: var(--button-hover);
 }
 
 .mediaItem.playing {

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 import { addMediaToPlayer } from "./Thunks/addMediaToPlayer";
-import { saveMediaToPlayer } from "./Thunks/saveMediaToPlayer";
 
 const initialState = {
   currentTime: 0,
@@ -93,14 +93,6 @@ const mediaPlayerSlice = createSlice({
     setCurrentChannel: (state, action) => {
       state.currentChannel = action.payload;
     },
-    addMediaToSaved: (state, action) => {
-      if (!state.savedMedia.find(m => m.id === action.payload.id)) {
-        state.savedMedia.push(action.payload);
-      }
-    },
-    removeMediaFromSaved: (state, action) => {
-      state.savedMedia = state.savedMedia.filter(m => m.id !== action.payload);
-    },
     setMediaPlayerLoadingState: (state, action) => {
       state.loading = action.payload;
     },
@@ -135,20 +127,6 @@ const mediaPlayerSlice = createSlice({
         state.loading = false;
         state.error = false;
     })
-
-    // saving media to player
-    builder.addCase(saveMediaToPlayer.pending, (state) => {
-      state.loading = true;
-      state.error = false;
-    })
-    builder.addCase(saveMediaToPlayer.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    })
-    builder.addCase(saveMediaToPlayer.fulfilled, (state, action) => {
-      state.loading = false;
-      state.error = false;
-    })
   }
 });
 
@@ -166,8 +144,6 @@ export const {
   setMediaPlayerVolume,
   toggleMediaPlayerMuted,
   setCurrentChannel,
-  addMediaToSaved,
-  removeMediaFromSaved,
   setMediaPlayerLoadingState,
   setErrorState,
   resetMediaPlayer,

@@ -1,57 +1,66 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-const RedditAudioSrc = ({ url, hasAudioFunction = () => {}, currentTime, isPlaying, volume = 1, muted}) => {
-        
-    const audioRef = useRef(null);
+const RedditAudioSrc = ({ url, hasAudioFunction = () => {}, currentTime, isPlaying, volume = 1, muted }) => {
+  const audioRef = useRef(null);
+  const [audioUrl, setAudioUrl] = useState(null);
 
-    const [audioUrl, setAudioUrl] = useState(null);
+  useEffect(() => {
+    if (!url || !url.includes('v.redd.it')) return;
 
-    // 1. Check if it's a Reddit video URL
-    useEffect(() => {
+    const match = url.match(/^https:\/\/v\.redd\.it\/([^/]+)/);
+    if (!match) return;
 
-        if (!url || !url.includes('v.redd.it')) return;
+    const id = match[1];
+    const newAudio = `https://v.redd.it/${id}/DASH_AUDIO_128.mp4`;
+    setAudioUrl(newAudio);
+  }, [url]);
 
-        const match = url.match(/^https:\/\/v\.redd\.it\/([^/]+)/);
+  // Sync play/pause
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
 
-        if (!match) return;
+    if (isPlaying) {
+      audio.play().catch(() => {});
+    } else {
+      audio.pause();
+    }
+  }, [isPlaying]);
 
-        const id = match[1];
+  // Drift correction: sync currentTime only if out of sync
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !isFinite(currentTime)) return;
 
-        const newAudio = `https://v.redd.it/${id}/DASH_AUDIO_128.mp4`;
+    const drift = Math.abs(audio.currentTime - currentTime);
+    if (drift > 0.3) { // 300ms tolerance
+      audio.currentTime = currentTime;
+    }
+  }, [currentTime]);
 
-        setAudioUrl(newAudio);
+  // Sync volume/mute
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+      audioRef.current.muted = muted;
+    }
+  }, [volume, muted]);
 
-    }, [url, hasAudioFunction]);
-
-    // 3. Sync play/pause
-    useEffect(() => {
-        const audio = audioRef.current;
-        if (!audio) return;
-
-        if (isPlaying) {
-        audio.play().catch(() => {}); // silence autoplay errors
-        } else {
-        audio.pause();
-        }
-    }, [isPlaying]);
-
-    // 4. Sync current time
-    useEffect(() => {
-        const audio = audioRef.current;
-        if (!audio || !isFinite(currentTime)) return;
-
-        audio.currentTime = currentTime;
-
-    }, [currentTime]);
-
-    // 5. Sync volume
-    useEffect(() => {
-        if (audioRef.current) {
-        audioRef.current.volume = volume;
-        }
-    }, [volume]);
-
-    return <audio key={audioUrl} autoPlay onLoadedData={(e) => {hasAudioFunction(); e.target.volume = volume}} ref={audioRef} src={audioUrl} preload="auto" muted={muted} playsInline style={{display: 'none'}} hidden={true} />;
+  return (
+    <audio
+      key={audioUrl}
+      autoPlay
+      playsInline
+      preload="auto"
+      ref={audioRef}
+      src={audioUrl}
+      style={{ display: 'none' }}
+      onLoadedData={(e) => {
+        hasAudioFunction(true);
+        e.target.volume = volume;
+      }}
+    />
+  );
 };
 
 export default RedditAudioSrc;

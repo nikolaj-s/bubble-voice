@@ -19,6 +19,8 @@ export const TextChannel = ({channel}) => {
 
     const users = useSelector(state => state.serverUsersSlice.users);
 
+    const permissions = useSelector(state => state.serverPermissionsSlice?.permissions[users[user_id]?.server_group]);
+
     const position = useSelector(state => state.textChannelSlice.textChannelPos[channel]);
 
     const [image, setImage] = React.useState(null);
@@ -83,6 +85,9 @@ export const TextChannel = ({channel}) => {
             setValue={setText} value={text} 
             replyTo={replyTo} clearReplyTo={clearReplyTo}
             placeholder={`Post in ${channel_details?.channel_name}`}
+            noMoreMessages={noMoreMessages}
+            name={channel_details?.channel_name}
+            disableInput={!permissions?.user_can_post_in_text_channels}
             />
             {showBackground ? <ChannelBackground {...channel_details} /> : null}
         </TextChannelProvider>

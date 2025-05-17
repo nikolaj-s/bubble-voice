@@ -1,11 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { APIErrorHandler } from "../../../../lib/handlers/APIErrorHandler/APIErrorHandler";
-import { triggerAlert } from "../../../Alerts/alertsSlice";
-import axios from "axios";
-import { API_URL } from "../../../../lib/Validation";
-import { generateFormData } from "../../../../lib/services/generateFormData";
-import { removeSavedMedia } from "../../../Widgets/widgetsSlice";
+import { APIErrorHandler } from "../../../lib/handlers/APIErrorHandler/APIErrorHandler";
+import { triggerAlert } from "../../Alerts/alertsSlice";
 
+import axios from "axios";
+
+import { API_URL } from "../../../lib/Validation";
+
+import { generateFormData } from "../../../lib/services/generateFormData";
 
 export const removeSavedMediaFromPlayer = createAsyncThunk('removeSavedMediaFromPlayer/mediaPlayerSlice', async (media_id, {rejectWithValue, getState, dispatch}) => {
     try {
@@ -33,11 +34,9 @@ export const removeSavedMediaFromPlayer = createAsyncThunk('removeSavedMediaFrom
             data
         })
 
-        dispatch(triggerAlert("Removed From Saves"));
+        dispatch(triggerAlert("Removed From Saves"))
 
-        dispatch(removeSavedMedia(response.data));
-
-        return;
+        return response.data;
 
     } catch (error) {
         console.log(error);

@@ -1,5 +1,5 @@
 .contextButton {
-    background: var(--button-background);
+    background: var(--primary-color);
     color: var(--text-color);
     border: none;
     height: 40px;

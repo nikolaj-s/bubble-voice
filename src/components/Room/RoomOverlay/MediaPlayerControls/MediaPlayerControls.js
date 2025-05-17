@@ -3,7 +3,6 @@ import { PillSpacer } from '../../../ui/Spacers/PillSpacer/PillSpacer';
 import IconButton from '../../../ui/Buttons/IconButton/IconButton';
 import { AudioLines } from 'lucide-react';
 import { useDispatch } from 'react-redux';
-import { toggleIsMediaPlayerOpen } from '../../../../features/Channel/MediaPlayer/mediaPlayerSlice';
 import { useMediaPlayer } from '../../../../hooks/useMediaPlayer';
 import { setOverlay } from '../../../../features/Overlay/overlaySlice';
 

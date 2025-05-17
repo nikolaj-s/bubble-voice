@@ -1,4 +1,4 @@
-import { Bookmark, Download, FilePenLine, FolderPen, FolderPlus, ImageDown, Link, ListPlus, Pause, Pencil, Pin, PinOff, Play, PlaySquare, Plus, Reply, Send, Settings, Settings2, SkipForward, Trash2, Unplug, UserPen, Users, Video } from "lucide-react";
+import { Bookmark, Copy, Download, FilePenLine, FolderPen, FolderPlus, ImageDown, Link, ListPlus, Pause, Pencil, Pin, PinOff, Play, PlaySquare, Plus, Reply, Send, Settings, Settings2, SkipForward, Trash2, Unplug, UserPen, Users, Video } from "lucide-react";
 import { useCallback } from "react";
 import { useDispatch, useSelector,} from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -16,13 +16,14 @@ import { setSelectedCategory } from "../../features/Categories/categoriesSlice";
 import { triggerAlert } from "../../features/Alerts/alertsSlice";
 import { deleteWidget } from "../../features/Widgets/Thunks/deleteWidget";
 import { setManageWidgetsForChannel } from "../../features/Widgets/manageWidgetsSlice";
-import { addMediaToPlayer } from "../../features/Channel/MediaPlayer/Thunks/addMediaToPlayer";
-import { setMediaPlayerVolume, toggleHideMediaPlayer, toggleIsMediaPlayerOpen } from "../../features/Channel/MediaPlayer/mediaPlayerSlice";
+import { addMediaToPlayer } from "../../features/MediaPlayer/Thunks/addMediaToPlayer";
+import { setMediaPlayerVolume, toggleHideMediaPlayer, toggleIsMediaPlayerOpen } from "../../features/MediaPlayer/mediaPlayerSlice";
 import { toggleVoiceChannelOptions } from "../../features/Channel/VoiceChannel/voiceChannelSlice";
 import { toggleAppearanceSetting } from "../../features/Settings/Appearance/appearanceSlice";
 import { useMediaPlayer } from "../../hooks/useMediaPlayer";
-import { saveMediaToPlayer } from "../../features/Channel/MediaPlayer/Thunks/saveMediaToPlayer";
-import { removeSavedMediaFromPlayer } from "../../features/Channel/MediaPlayer/Thunks/removeSavedMediaFromPlayer";
+import { saveMediaToPlayer } from "../../features/MediaPlayer/Thunks/saveMediaToPlayer";
+import { removeSavedMediaFromPlayer } from "../../features/MediaPlayer/Thunks/removeSavedMediaFromPlayer";
+import { isMediaSaved } from "../../features/MediaPlayer/Helpers/isMediaSaved";
 
 export const useContextMenuOptions = () => {
 
@@ -34,7 +35,9 @@ export const useContextMenuOptions = () => {
 
     const mediaPlayerState = useSelector(state => state.mediaPlayerSlice);
 
-    const {hideNonVideoUsers} = useSelector(state => state.voiceChannelSlice);
+    const savedMediaState = useSelector(state => state.savedMediaSlice);
+
+    const {hideNonVideoUsers, currentVoiceChannel} = useSelector(state => state.voiceChannelSlice);
 
     const {hideChannelBackgrounds} = useSelector(state => state.appearanceSlice);
 
@@ -88,6 +91,32 @@ export const useContextMenuOptions = () => {
                         step: 0.01
                     })
                 }
+            }
+
+
+            if (data.user) {
+
+                if (data.user.user_id !== user.user_id) {
+                    options.push({
+                        label: "Change User Volume",
+                        min: 0,
+                        max: 2,
+                        step: 0.01,
+                        onChange: (value) => {},
+                        type: 'range'
+                    })
+                }
+
+                if (permissions.user_can_assign_server_groups) {
+                    options.push({
+                        label: "Manage User",
+                        onClick: () => {
+
+                        },
+                        type: "button"
+                    })
+                }
+
             }
 
             if (data.widgetsOverlay) {
@@ -262,6 +291,15 @@ export const useContextMenuOptions = () => {
                     })
                 }
 
+                if (data.message.text) {
+                    options.push({
+                        label: "Copy Text",
+                        onClick: () => {copyToClipboard(data.message.text); dispatch(triggerAlert('Text Copied'))},
+                        type: 'button',
+                        icon: <Copy color="var(--text-color)" />
+                    })
+                }
+
                 if (data.message.image) {
                     options.push({
                         label: "Download Image",
@@ -293,7 +331,8 @@ export const useContextMenuOptions = () => {
                         label: "Delete Message",
                         onClick: () => {dispatch(deleteMessage({message_id: data.message.message_id}))},
                         type: "button",
-                        icon: <Trash2 color="var(--error-color)" />
+                        icon: <Trash2 color="var(--error-color)" />,
+                        color: 'var(--error-color)'
                     })
                 }
             }
@@ -399,7 +438,7 @@ export const useContextMenuOptions = () => {
                     options.push({
                         label: mediaPlayerState.currentlyPlaying ? "Add To Queue" : "Play In Channel",
                         onClick: () => {
-                            dispatch(closeOverlay());
+                            dispatch(setOverlay('mediaPlayer'));
 
                             dispatch(addMediaToPlayer(data.video));
 
@@ -409,10 +448,12 @@ export const useContextMenuOptions = () => {
                         icon: mediaPlayerState.currentlyPlaying ? <ListPlus color="var(--text-color)" /> : <PlaySquare color="var(--text-color)" />
                     })
 
+                    const saved = isMediaSaved(savedMediaState, currentVoiceChannel, data.video.src);
+
                     options.push({
-                        label: data.video.saved ? 'Unsave' : 'Save',
+                        label: saved ? 'Unsave' : 'Save',
                         onClick: () => {
-                            if (data.video.saved) {
+                            if (saved) {
                                 dispatch(removeSavedMediaFromPlayer(data.video._id));
                             } else {
                                 dispatch(saveMediaToPlayer(data.video));
@@ -420,7 +461,7 @@ export const useContextMenuOptions = () => {
                             
                         },
                         type: 'button',
-                        icon: <Bookmark fill={data.video.saved ? 'var(--text-color)' : 'transparent'} color="var(--text-color)" /> 
+                        icon: <Bookmark fill={saved ? 'var(--text-color)' : 'transparent'} color="var(--text-color)" /> 
                     })
                 }
 
@@ -430,38 +471,18 @@ export const useContextMenuOptions = () => {
                     type: 'button',
                     icon: <Link color="var(--text-color)" />
                 })
-                options.push({
-                    label: "Download Video",
-                    onClick: () => {downloadImage(data.video.src)},
-                    type: "button",
-                    icon: <Download color="var(--text-color)" />
-                })
-            }
-
-            if (data.user) {
-
-                if (data.user.user_id !== user.user_id) {
+                
+                if (data.video?.src?.includes('.mp4')) {
                     options.push({
-                        label: "Change Volume",
-                        min: 0,
-                        max: 2,
-                        step: 0.01,
-                        onChange: (value) => {},
-                        type: 'range'
+                        label: "Download Video",
+                        onClick: () => {downloadImage(data.video.src)},
+                        type: "button",
+                        icon: <Download color="var(--text-color)" />
                     })
                 }
-
-                if (permissions.user_can_assign_server_groups) {
-                    options.push({
-                        label: "Manage User",
-                        onClick: () => {
-
-                        },
-                        type: "button"
-                    })
-                }
-
+               
             }
+
 
             if (data.controlBar) {
 
@@ -481,6 +502,15 @@ export const useContextMenuOptions = () => {
                     onClick: () => {
                         setSearchParams({section: 'account'});
                         dispatch(setOverlay("settings"));
+                    }
+                })
+
+                options.push({
+                    label: "Manage Keybinds",
+                    type: 'button',
+                    onClick: () => {
+                        setSearchParams({section: 'keybinds'});
+                        dispatch(setOverlay('settings'))
                     }
                 })
             }
@@ -544,7 +574,7 @@ export const useContextMenuOptions = () => {
             return [];
         }
         },
-        [navigate, dispatch, setSearchParams, hideNonVideoUsers, mediaPlayerState, hideChannelBackgrounds]
+        [navigate, dispatch, setSearchParams, hideNonVideoUsers, mediaPlayerState, hideChannelBackgrounds, savedMediaState, currentVoiceChannel]
     );
 
   return getOptions;

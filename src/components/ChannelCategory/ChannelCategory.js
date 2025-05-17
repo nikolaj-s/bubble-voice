@@ -75,7 +75,7 @@ export const Category = ({
 
     localStorage.setItem(category_id, JSON.stringify(data));
 
-  }, [collapse]);
+  }, [collapse, category_id]);
 
   return (
     <div
@@ -113,8 +113,9 @@ export const Category = ({
         }}
         className={styles["channel-list-collapse-button"]}
       >
-        <ChevronDown style={{rotate: collapse ? '180deg' : '0deg', transition: '0.2s'}} />
+       
         <p style={{ color: "var(--text-color)" }}>{catagoryName}</p>
+        <ChevronDown style={{rotate: collapse ? '-90deg' : '0deg', transition: '0.2s'}} />
       </div>
       <div onDragOver={(e) => {e.preventDefault()}} draggable={false} className={styles["channel-list-button-wrapper"]}>
         <>

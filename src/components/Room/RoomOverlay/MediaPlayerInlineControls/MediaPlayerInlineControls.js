@@ -1,11 +1,16 @@
-import React from 'react'
+
 import { ToolBar } from '../../../ui/Wrappers/ToolBar/ToolBar';
+
 import IconButton from '../../../ui/Buttons/IconButton/IconButton';
+
 import { Pause, Play, SkipForward, Volume, Volume2, VolumeOff } from 'lucide-react';
+
 import { useDispatch, useSelector } from 'react-redux';
+
 import VolumeSlider from '../../../ui/Inputs/VolumeSlider/VolumeSlider';
-import { setMediaPlayerVolume, toggleMediaPlayerMuted } from '../../../../features/Channel/MediaPlayer/mediaPlayerSlice';
-import { BoxLabel } from '../../../ui/Titles/BoxLabel/BoxLabel';
+
+import { setMediaPlayerVolume, toggleMediaPlayerMuted } from '../../../../features/MediaPlayer/mediaPlayerSlice';
+
 import { useMediaPlayer } from '../../../../hooks/useMediaPlayer';
 
 export const MediaPlayerInlineControls = () => {

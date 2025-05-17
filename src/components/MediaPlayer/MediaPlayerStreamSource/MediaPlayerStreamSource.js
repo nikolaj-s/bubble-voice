@@ -4,11 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import ReactPlayer from 'react-player';
 
-import { incrementCurrentTime, setMediaHasAudio, toggleIsMediaPlayerOpen } from '../../../features/Channel/MediaPlayer/mediaPlayerSlice';
+import { incrementCurrentTime, setMediaHasAudio, toggleIsMediaPlayerOpen } from '../../../features/MediaPlayer/mediaPlayerSlice';
 
 import SpinnerLoading from '../../ui/Loading/Spinner/SpinnerLoading';
-
-import ErrorCard from '../../Error/ErrorCard/ErrorCard';
 
 import { BoxLabel } from '../../ui/Titles/BoxLabel/BoxLabel';
 
@@ -22,8 +20,9 @@ import { LongPressGestureWrapper } from '../../ui/Gestures/LongPressGestureWrapp
 
 import { triggerContext } from '../../../lib/services/helperFunctions';
 
-import styles from './MediaPlayerStreamSource.module.css';
 import TextLabelError from '../../Error/TextLabelError/TextLabelError';
+
+import styles from './MediaPlayerStreamSource.module.css';
 
 export const MediaPlayerStreamSource = ({expand}) => {
 

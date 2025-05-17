@@ -8,16 +8,15 @@
   
   .label {
     font-size: 0.75rem;
-    opacity: 0.75;
     white-space: nowrap;
     font-size: 14px;
     font-weight: 300;
+    color: var(--text-color);
   }
   
   .line {
     flex-grow: 1;
-    height: 1px;
-    background: var(--text-color);
-    opacity: 0.25;
+    height: 2px;
+    background: var(--background-color);
   }
   

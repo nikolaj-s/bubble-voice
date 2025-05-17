@@ -5,8 +5,10 @@ import { Bookmark } from 'lucide-react';
 import { MediaItem } from '../MediaItem/MediaItem'; // Your existing media component
 
 import styles from './SavedMedia.module.css';
+import TextLabelError from '../../Error/TextLabelError/TextLabelError';
+import SpinnerLoading from '../../ui/Loading/Spinner/SpinnerLoading';
 
-const SavedMedia = ({ media = [], savedItemAction = () => {} }) => {
+const SavedMedia = ({ media = [], savedItemAction = () => {}, loading, error }) => {
 
     const hasMedia = media && media.length > 0;
 
@@ -16,7 +18,7 @@ const SavedMedia = ({ media = [], savedItemAction = () => {} }) => {
                 <Bookmark className={styles.icon} size={20} />
                 <span className={styles.title}>Saved Media</span>
             </div>
-
+            {error && (<TextLabelError error={error} />)}
             {hasMedia ? (
                 <div className={styles.grid}>
                 {media.map((item, index) => (
@@ -29,6 +31,7 @@ const SavedMedia = ({ media = [], savedItemAction = () => {} }) => {
                 <p className={styles.placeholderText}>No saved media yet. Go tag something worth keeping!</p>
                 </div>
             )}
+            {loading && <SpinnerLoading />}
         </div>
     );
 };

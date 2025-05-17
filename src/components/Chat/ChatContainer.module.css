@@ -4,8 +4,6 @@
     flex-direction: column;
     width: 100%;
     height: 100%;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr minmax(80px, auto);
     z-index: 2;
     position: relative;
     gap: 5px;

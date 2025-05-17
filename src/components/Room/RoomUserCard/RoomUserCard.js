@@ -4,6 +4,7 @@ import styles from "./RoomUserCard.module.css";
 import {ImageComponent }from "../../ui/Image/Image";  // Assuming this is a valid component
 import { LongPressGestureWrapper } from "../../ui/Gestures/LongPressGestureWrapper";
 import { triggerContext } from "../../../lib/services/helperFunctions";
+import MediaStatusIcons from "../../MediaStatusIcons/MediaStatusIcons";
 
 export const RoomUserCard = ({ user_id, consumers, action }) => {
 
@@ -182,7 +183,9 @@ export const RoomUserCard = ({ user_id, consumers, action }) => {
                         borderColor: user.voiceActive ? 'var(--success-color)' : 'transparent'
                     }}
                     className={styles.overlay} />
-
+                    <div className={styles.userStatus}>
+                        <MediaStatusIcons {...channel_status} />
+                    </div>
                     {/* Audio elements will be appended here */}
                     <div ref={audioContainerRef} className={styles.audioContainer}></div>
                     <div ref={webcamContainerRef} className={styles.webcamSource} ></div>

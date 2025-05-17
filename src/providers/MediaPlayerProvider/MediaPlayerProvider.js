@@ -13,7 +13,8 @@ import {
     addMultipleToQueue,
     enableMediaPlayer
 
-} from '../../features/Channel/MediaPlayer/mediaPlayerSlice';
+} from '../../features/MediaPlayer/mediaPlayerSlice';
+import { fetchSavedMedia } from '../../features/MediaPlayer/Thunks/fetchSavedMedia';
 
 export const MediaPlayerProvider = ({children}) => {
 
@@ -28,18 +29,20 @@ export const MediaPlayerProvider = ({children}) => {
     const setMedia = React.useCallback(async () => {
           try {
     
-            if (loading) return;
+            if (loading || !channelId) return;
     
             dispatch(setMediaPlayerLoadingState(true));
     
             const res = await socket.request('media-widget/details', { channel_id: channelId });
-            console.log(res)
+            
             if (res) {
               dispatch(setCurrentlyPlaying(res.currentlyPlaying));
               dispatch(addMultipleToQueue(res.queue || []));
               dispatch(toggleMediaPlaying(res.playing));
               dispatch(incrementCurrentTime(res.currentTime))
             }
+
+            dispatch(fetchSavedMedia(channelId));
     
             dispatch(setMediaPlayerLoadingState(false));
     

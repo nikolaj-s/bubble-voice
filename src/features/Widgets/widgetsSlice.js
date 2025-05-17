@@ -10,42 +10,7 @@ const widgetsSlice = createSlice({
         error: false,
     },
     reducers: {
-        addSavedMedia: (state, action) => {
-            
-            if (state.widgets[action.payload.channel_id]) {
-                
-                state.widgets[action.payload.channel_id] = state.widgets[action.payload.channel_id].map(w => {
-
-                    if (w.widget_type === 'media_player') {
-
-                        const saves = w.config.saves || [];
-                        console.log('updated saves')
-                        return {...w, config: {saves: [action.payload.media, ...saves]}}
-
-                    }
-
-                    return w;
-                })
-
-            }
-        },
-        removeSavedMedia: (state, action) => {
-
-            if (state.widgets[action.payload.channel_id]) {
-                state.widgets[action.payload.channel_id] = state.widgets[action.payload.channel_id].map(w => {
-                    if (w.widget_type === 'media_player') {
-
-                        const saves = w.config.saves || [];
-
-                        return {...w, config: {saves: saves.filter(s => s._id !== action.payload.media_id)}}
-
-                    } 
-
-                    return w;
-                })
-            }
-
-        }
+        
     },
     extraReducers: (builder) => {
         builder.addCase(fetchWidgets.pending, (state) =>{
@@ -66,10 +31,5 @@ const widgetsSlice = createSlice({
         })
     }
 })
-
-export const {
-    addSavedMedia,
-    removeSavedMedia
-} = widgetsSlice.actions;
 
 export default widgetsSlice.reducer;

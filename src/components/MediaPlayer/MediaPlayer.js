@@ -10,6 +10,7 @@ import EmptyListPlaceholder from '../ui/Placeholders/EmptyListPlaceholder/EmptyL
 import SpinnerLoading from '../ui/Loading/Spinner/SpinnerLoading';
 import TextLabelError from '../Error/TextLabelError/TextLabelError';
 import ProgressBar from '../ui/ProgressBar/ProgressBar';
+import { MediaPlayerQueue } from './MediaPlayerQueue/MediaPlayerQueue';
 
 export const MediaPlayer = ({
   queue = [],
@@ -46,16 +47,7 @@ export const MediaPlayer = ({
             </span>
         </button>
         {error && (<TextLabelError error={error} label='Error:' />)}
-        <div className={styles.queue}>
-            {queue.length > 0 ? (
-            queue.slice().reverse().map((media, index) => (
-                <MediaItem key={index} position={index} {...media} inQueue={true} />
-            ))
-            ) : (
-            <EmptyListPlaceholder message='No Media In The Queue' />
-            )}
-        </div>
-     
+        <MediaPlayerQueue queue={queue} />
         <div className={styles.controls}>
             <div className={styles.controlsLeft}>
                 <IconButton 
@@ -76,7 +68,7 @@ export const MediaPlayer = ({
             </div>
             <div className={styles.currentlyPlaying}>
             {currentlyPlaying ? (
-                <MediaItem {...currentlyPlaying} />
+                <MediaItem {...currentlyPlaying} context={currentlyPlaying} />
             ) : (
             <div className={styles.nothingPlaying}>
                 <Music2 width={48} /> No media playing
@@ -84,7 +76,9 @@ export const MediaPlayer = ({
             )}
             </div>
         </div>
-        <ProgressBar currentTime={currentTime} duration={duration} onSeek={handleSeek} />
+        <div style={{position: 'relative', zIndex: 15}}>
+            <ProgressBar currentTime={currentTime} duration={duration} onSeek={handleSeek} />
+        </div>
         {loading && (<SpinnerLoading />)}
     </div>
   );

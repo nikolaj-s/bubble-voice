@@ -2,6 +2,8 @@ import React, { createContext, useContext, useEffect, useRef, useState } from "r
 import * as mediasoupClient from "mediasoup-client";
 import { useSocket } from "./SocketContext"; // Adjust this import path
 import { useDispatch } from "react-redux";
+import ConnectingIndicator from "../components/Indicators/ConnectingIndicator/ConnectingIndicator";
+import ErrorIndicator from "../components/Indicators/ErrorIndicator/ErrorIndicator";
 
 const MediasoupContext = createContext(null);
 
@@ -240,7 +242,9 @@ export const MediasoupProvider = ({ children }) => {
   const getProducers = () => new Map(producersRef.current);
   const getConsumers = () => new Map(consumersRef.current);
   
-  if (loading) return null;
+  if (error) return <ErrorIndicator message={error} />
+
+  if (loading) return <ConnectingIndicator />
 
   return (
     <MediasoupContext.Provider value={{ 

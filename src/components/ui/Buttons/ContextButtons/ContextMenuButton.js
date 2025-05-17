@@ -1,11 +1,12 @@
 import React from "react";
 import styles from "./ContextMenuButton.module.css";
 
-const ContextMenuButton = ({ label, onClick, icon, top, bottom, zIndex }) => {
+const ContextMenuButton = ({ label, onClick, icon, top, bottom, zIndex, color }) => {
     return (
         <button
         style={{
-            style: zIndex
+            style: zIndex,
+            color
         }}
         className={styles.contextButton} onClick={onClick}>
             <p>

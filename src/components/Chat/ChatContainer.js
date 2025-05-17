@@ -8,17 +8,37 @@ import MessageList from './MessageList/MessageList';
 
 import {motion} from 'framer-motion'
 import { ReplyTo } from './ReplyTo/ReplyTo';
+import PostDisabledPlaceholder from './PostDisabledPlaceholder/PostDisabledPlaceholder';
 
-export const ChatContainer = ({messages = [], send  = () => {}, loadMoreMessages = () => {}, users, loading, error, value, setValue, setImage, sending, loadingMore, returnPos, position, replyTo, clearReplyTo, placeholder = 'Type a message...'}) => {
-    
+export const ChatContainer = ({
+    messages = [], 
+    send  = () => {}, 
+    loadMoreMessages = () => {}, 
+    users, loading, error, value, 
+    setValue, setImage, sending, loadingMore, 
+    returnPos, position, replyTo, clearReplyTo, 
+    placeholder = 'Type a message...',
+    name, noMoreMessages,
+    disableInput
+}) => {
+
     return (
         <motion.div 
         initial={{opacity: 0}}
         animate={{opacity: 1}}
         className={styles.container} >
-            <MessageList position={position} returnPos={returnPos} users={users} loading={loading}  messages={messages} sending={sending} loadingMore={loadingMore} loadMoreMessages={loadMoreMessages} />
+
+            <MessageList 
+            position={position} returnPos={returnPos} 
+            users={users} loading={loading}  
+            messages={messages} sending={sending} 
+            loadingMore={loadingMore} loadMoreMessages={loadMoreMessages} 
+            noMoreMessages={noMoreMessages} name={name}
+            />
             <ReplyTo replyTo={replyTo} users={users} clearReplyTo={clearReplyTo} />
-            <MessageInput replyTo={replyTo} value={value} setValue={setValue} send={send} error={error} setImage={setImage} placeholder={placeholder} />
+            {disableInput ? 
+            <PostDisabledPlaceholder channelName={name} />
+            : <MessageInput replyTo={replyTo} value={value} setValue={setValue} send={send} error={error} setImage={setImage} placeholder={placeholder} />}
         </motion.div>
     )
 }

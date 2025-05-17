@@ -84,6 +84,8 @@ export const MessageInput = ({ value, setValue, setImage = () => {}, error, send
     }
 
     const handleSend = (e) => {
+        e.stopPropagation();
+
         if (value.trim().length === 0 && !preview) return;
 
         if (e.keyCode === 13) {
@@ -133,10 +135,11 @@ export const MessageInput = ({ value, setValue, setImage = () => {}, error, send
                         className={styles["message-input"]}
                         placeholder={placeholder}
                         value={value}
-                        onChange={(e) => handleSetValue(e.target.value)}
+                        onChange={(e) => {e.stopPropagation(); handleSetValue(e.target.value)}}
                         onKeyUp={handleSend}
                         maxLength={1024}
                         onKeyDown={(e) => {
+                            e.stopPropagation();
                             if (e.key === "Enter") {
                                 e.preventDefault();
                             } 

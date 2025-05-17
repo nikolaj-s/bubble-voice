@@ -73,7 +73,7 @@ export const HorizontalMediaScroller = ({ media = [], loading = false, error = n
     <div className={styles.wrapper}>
       <div onScroll={handleScroll} ref={containerRef} className={styles.scroller}>
         {visibleMedia.map((item, idx) => (
-            <div className={styles.card}>
+            <div className={styles.card} key={idx}>
                 <MediaTooltipWrapper media={item}>
                     {item.type === 'video' ? (
                         <VideoThumbnail {...item} />
