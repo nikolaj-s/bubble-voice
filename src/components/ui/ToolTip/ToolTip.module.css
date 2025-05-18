@@ -17,7 +17,6 @@
   opacity: 0;
   transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
   pointer-events: none;
-  max-width: 150px;
   z-index: 10;
   white-space: nowrap;
   text-overflow: ellipsis;

@@ -11,7 +11,7 @@ const UserButton = ({ user_id, user_image, display_name, status, onClick = () =>
         className={styles.userButton}
         onClick={() => onClick(user_id)}
         whileHover={{ scale: 1.05, opacity: 1 }}
-        whileTap={{ scale: 0.95 }}
+        whileTap={{ scale: 0.98, filter: 'brightness(0.95)', translateY: 2, boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.2)' }}
         style={{maxWidth: maxWidth, opacity: status === 'offline' ? 0.6 : 1}}
         >
         <div className={styles.avatar}>

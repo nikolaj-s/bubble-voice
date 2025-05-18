@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import styles from "./ChannelButton.module.css";
-import { Ellipsis, Hash, TextQuote, Volume1 } from "lucide-react";
+import { Ellipsis, Hash, TextQuote, Volume1, VolumeX } from "lucide-react";
 import { ImageComponent } from "../../../ui/Image/Image";
 import { useNavigate, useParams } from "react-router";
 import { ChannelUserButton } from "../ChannelUserButton/ChannelUserButton";
@@ -99,8 +99,12 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
               <Hash color="var(--text-color)" style={{ marginLeft: '-5px' }} width="100%" height="100%" draggable={false} />
             ) : channel_type === 'thread' ? (
               <TextQuote />
-            ) : (
-              <Volume1 width="100%" height="100%" draggable={false} />
+            ) : channel?.disable_streams ?
+            (
+              <VolumeX color="var(--text-color)" />
+            )
+            : (
+              <Volume1 color="var(--text-color)" width="100%" height="100%" draggable={false} />
             )}
           </span>
           <span draggable={false} className={styles.channelName}>{channel_name}</span>

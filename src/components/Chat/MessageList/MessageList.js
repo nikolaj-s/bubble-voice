@@ -17,6 +17,10 @@ const MessageList = ({
 
   const [showSkeleton, setShowSkeleton] = React.useState(false);
 
+  const [isScrolling, toggleIsScrolling] = React.useState(false);
+
+  const scrollTimeout = useRef(null);
+
   const scrollPosRef = React.useRef(0);
 
   React.useEffect(() => {
@@ -40,6 +44,14 @@ const MessageList = ({
     if (Math.abs(e.target.scrollTop) + e.target.clientHeight + 10 >= (e.target.scrollHeight)) {
       loadMoreMessages();
     }
+
+        // Enable scroll overlay
+    toggleIsScrolling(true);
+
+    clearTimeout(scrollTimeout.current);
+    scrollTimeout.current = setTimeout(() => {
+      toggleIsScrolling(false);
+    }, 300); // Adjust delay as needed
   };
 
   React.useEffect(() => {
@@ -91,9 +103,10 @@ const MessageList = ({
     }
 
   }, [messages])
-console.log(messages)
+
   return (
     <div 
+    
     className={styles.messageListContainer} ref={listRef} onScroll={handleScroll}>
       <AnimatePresence>
         
@@ -122,7 +135,9 @@ console.log(messages)
             <div className={styles.spinner}></div>
           </div>
         )}
+
       </AnimatePresence>
+     
     </div>
   );
 };

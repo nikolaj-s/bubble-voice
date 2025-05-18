@@ -1,6 +1,6 @@
 import { Images, Megaphone, User } from 'lucide-react'
 import React from 'react'
-import { SubNav } from '../../../../components/Navigation/SubNav/SubNav'
+import { SubNav } from '../../../../layout/Navigation/SubNav/SubNav'
 
 import styles from './UserDashboardMenu.module.css'
 

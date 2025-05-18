@@ -1,6 +1,6 @@
 
 import styles from "./TopNav.module.css";
-import IconButton from "../../ui/Buttons/IconButton/IconButton";
+import IconButton from "../../../components/ui/Buttons/IconButton/IconButton";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setOverlay } from "../../../features/Overlay/overlaySlice";
@@ -9,14 +9,14 @@ import { selectServerName } from "../../../features/ServerDetails/serverDetailsS
 import { Bell, Ellipsis, LayoutDashboard, Menu, Settings2, UsersRound, UserX, X } from "lucide-react";
 import { Route, Routes } from "react-router";
 import { SearchButton } from "./SearchButton/SearchButton";
-import ChannelHeader from "../../Headers/ChannelHeader/ChannelHeader";
+import ChannelHeader from "../../../components/Headers/ChannelHeader/ChannelHeader";
 import { setFilter, setFromDate, setSelectedChannelToFilter, setTextChannelFilter } from "../../../features/Search/searchSlice";
 import { globalSearch } from "../../../features/Search/Thunks/globalSearch";
 import { toggleMobileMenu } from "../../../features/Mobile/mobileSlice";
-import { Logo } from "../../Icons/Bubble/Logo";
+import { Logo } from "../../../components/Icons/Bubble/Logo";
 import { triggerContext } from "../../../lib/services/helperFunctions";
 import { toggleAppearanceSetting } from "../../../features/Settings/Appearance/appearanceSlice";
-import MetaTags from "../../MetaTags/MetaTags";
+import MetaTags from "../../../components/MetaTags/MetaTags";
 import { setChannelDescription } from "../../../features/Channel/ChannelDescription/channelDescriptionSlice";
 
 const TopNav = () => {

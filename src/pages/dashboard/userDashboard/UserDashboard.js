@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { UserDashboardLayoutWrapper } from '../../../components/ui/Wrappers/UserDashboardLayoutWrapper/UserDashboardLayoutWrapper'
 import { Route, Routes } from 'react-router'
 
@@ -20,7 +20,9 @@ export const UserDashboard = () => {
     return (
         <UserDashboardLayoutWrapper>
             <CloseMobileMenu />
-            <section className={`${styles.sectionOne} ${isChannelMenuOpen ? styles.sectionOneMobile : ''}`}>
+            <section 
+            style={{height: window?.electron?.ipcRenderer ? 'calc(100svh - 70px)' : null}}
+            className={`${styles.sectionOne} ${isChannelMenuOpen ? styles.sectionOneMobile : ''}`}>
                 <Banner image={user_banner} />
                 <UserDashboardMenu />
                 <ControlBar key={'control-bar'} inChannel={false} />

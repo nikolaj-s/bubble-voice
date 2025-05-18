@@ -1,12 +1,13 @@
 
 
-export const getMicrophoneMedia = async (device_id, echoCancellation = false, autoGainControl) => {
+export const getMicrophoneMedia = async (device_id, echoCancellation = false, autoGainControl, noiseSuppression) => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           deviceId: device_id ? { exact: device_id } : undefined,
           echoCancellation,
           autoGainControl,
+          noiseSuppression
         }
       });
   

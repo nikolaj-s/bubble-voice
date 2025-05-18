@@ -72,7 +72,7 @@
   }
 
   .mobileMenuButton {
-    display: none;
+    display: none !important;
   }
   
   @media screen and (max-width: 730px) {

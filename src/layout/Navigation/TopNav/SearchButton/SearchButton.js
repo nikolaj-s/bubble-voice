@@ -1,7 +1,7 @@
 import React from 'react'
-import IconButton from '../../../ui/Buttons/IconButton/IconButton'
+import IconButton from '../../../../components/ui/Buttons/IconButton/IconButton'
 import { Search } from 'lucide-react'
-import { KeybindToolTip } from '../../../ui/Titles/KeybindToolTip/KeybindToolTip'
+import { KeybindToolTip } from '../../../../components/ui/Titles/KeybindToolTip/KeybindToolTip'
 
 import styles from './SearchButton.module.css'
 

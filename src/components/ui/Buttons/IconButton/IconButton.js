@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 
 import styles from "./IconButton.module.css";
 
@@ -25,15 +24,13 @@ const IconButton = ({
   }
   return (
     <Tooltip content={title} position={position}>
-      <motion.button
+      <button
         style={{width, height, backgroundColor, padding, borderRadius, margin }}
         onClick={handleClick}
         className={`${styles.button} ${className}`}
-        whileHover={{ backgroundColor: backgroundHover}}
-        whileTap={{ scale: 0.9 }}
-      >
+     >
         {Icon}
-      </motion.button>
+      </button>
     </Tooltip>
   );
 };

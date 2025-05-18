@@ -3,7 +3,7 @@ import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { API_URL } from "../../../lib/Validation";
-import { setServers } from "../../Servers/serversSlice";
+
 import { APIErrorHandler } from "../../../lib/handlers/APIErrorHandler/APIErrorHandler";
 
 // Async thunk to fetch account details
@@ -18,16 +18,6 @@ export const fetchAccount = createAsyncThunk(
               method: 'GET',
               headers: {"TOKEN": token},
           })
-
-          const data = response.data;
-
-          if (data.success) {
-
-            const account = data.account;
-
-            dispatch(setServers(account.servers));
-
-          }
 
           if (response.status === 200) {
               return response.data;

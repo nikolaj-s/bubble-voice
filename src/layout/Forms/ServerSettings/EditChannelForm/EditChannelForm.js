@@ -19,6 +19,8 @@ import Dropdown from "../../../../components/ui/Inputs/DropDown/DropDown"
 import { Trash2 } from "lucide-react"
 import { ApplyChangesPopup } from "../../../../components/ApplyChangesPopup/ApplyChangesPopup"
 import { setManageWidgetsForChannel } from "../../../../features/Widgets/manageWidgetsSlice"
+import { Description } from "../../../../components/ui/Description/Description"
+import ToggleSwitch from "../../../../components/ui/Inputs/ToggleSwitch/ToggleSwitch"
 
 export const EditChannelForm = ({permissions}) => {
 
@@ -42,6 +44,12 @@ export const EditChannelForm = ({permissions}) => {
 
     const [confirmDeleteChannel, toggleConfirmDeleteChannel] = React.useState(false);
 
+    const [disableStreams, toggleDisableStreams] = React.useState(false);
+
+    const [privateChannel, togglePrivateChannel] = React.useState(false);
+
+    const [authUsers, setAuthUsers] = React.useState([]);
+
     const {categories} = useSelector(state => state.categoriesSlice);
 
     const [category, setCategory] = React.useState(defaultCategory);
@@ -53,6 +61,12 @@ export const EditChannelForm = ({permissions}) => {
         setChannelDescription(channel.channel_description || "");
 
         setCategory(categories.find(c => c.category_id === channel.category) || defaultCategory);
+
+        toggleDisableStreams(channel.disable_streams);
+
+        togglePrivateChannel(channel.locked_channel);
+
+        setAuthUsers(channel.auth_users);
 
         setChannelBackground(null);
 
@@ -76,8 +90,7 @@ export const EditChannelForm = ({permissions}) => {
 
         if (channelName.trim().length < 3) return;
 
-        dispatch(updateChannel({channelIcon, channelBackground, channelName, channelDescription, channel_id: channel.channel_id, category: category.category_id}));
-
+        dispatch(updateChannel({channelIcon, channelBackground, channelName, channelDescription, channel_id: channel.channel_id, category: category.category_id, locked_channel: privateChannel, disable_streams: disableStreams}));
 
     }
 
@@ -160,10 +173,23 @@ export const EditChannelForm = ({permissions}) => {
                 <TextButton action={openAddWidget} maxWidth={150} title="Add Widget" />
                 <Label label="Manage Existing Widgets" />
                 <TextButton action={openManageWidgets} maxWidth={150} title="Manage" />
-                
+                {channel.channel_type === 'voice' && (
+                <>
+                <LineSpacer />
+                <Header level={3} text="Disable Audio / Video Streams" />
+                <Description description={"If audio and video streams are disabled for a specific channel, it becomes eligible to be set as the Inactive User Channel. This channel acts as a quiet holding area where users are automatically moved when they're inactive. You can assign the Inactive User Channel from the Server → General Settings page."} />
+                <ToggleSwitch initialState={disableStreams} onToggle={() => {toggleDisableStreams(!disableStreams)}} />
+                </>
+                )}
+                <LineSpacer />
+                <Header level={3} text="Lock This Channel" />
+                <Description description={"You can lock channels to specific users by setting a whitelist. Only users on the whitelist can join or view the channel. However, users with the Manage Channels privilege can always view the channel’s contents — even if they aren’t on the whitelist — for moderation and administrative purposes."} />
+                <ToggleSwitch initialState={privateChannel} onToggle={() => {togglePrivateChannel(!privateChannel)}} />
                 {permissions?.user_can_delete_channels &&
                 <>
                 <LineSpacer />
+                
+                
                 <Label label="Delete Channel" />
                 <TextButton 
                 icon={<Trash2 size={20} color="var(--text-color)" />}
@@ -181,7 +207,7 @@ export const EditChannelForm = ({permissions}) => {
                 <ApplyChangesPopup 
                 onClearChanges={discardChanges}
                 onApply={handleApplyChanges}
-                disabled={(!channelIcon && !channelBackground) && (channel.channel_name === channelName || channelName.trim().length < 3) && (channel.channel_description === channelDescription) && (channel.category === category.category_id)}
+                disabled={(!channelIcon && !channelBackground) && (channel.channel_name === channelName || channelName.trim().length < 3) && (channel.channel_description === channelDescription) && (channel.category === category.category_id) && (channel.disable_streams === disableStreams) && (channel.locked_channel === privateChannel)}
                 />
             </LoadingErrorFormWrapper>
         </NotAuthorized>

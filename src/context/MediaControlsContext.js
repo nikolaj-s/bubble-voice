@@ -14,6 +14,10 @@ export const MediaControlsProvider = ({ children }) => {
 
     const socket = useSocket();
 
+    const {currentVoiceChannel} = useSelector(state => state.voiceChannelSlice);
+
+    const details = useSelector(state => state.channelsSlice.channels[currentVoiceChannel]);
+
     // Get state from Redux
     const { loading } = useSelector((state) => state.accountSlice);
 
@@ -41,14 +45,17 @@ export const MediaControlsProvider = ({ children }) => {
 
     // Actions
     const handleToggleMicrophone = () => {
+        if (details?.disable_streams) return;
         if (!loading) dispatch(toggleMicrophone(!isMicrophoneMuted));
     };
 
     const handleToggleAudio = () => {
+        if (details?.disable_streams) return;
         if (!loading) dispatch(toggleAudioMute(!isAudioMuted));
     };
 
     const handleToggleWebcam = () => {
+        if (details?.disable_streams) return;
         if (!loading) dispatch(toggleWebcam(!isWebcamOn));
     };
 
@@ -59,8 +66,9 @@ export const MediaControlsProvider = ({ children }) => {
                 isAudioMuted,
                 isWebcamOn,
                 isScreenSharing,
-                webcamError,
-                microphoneError,
+                webcamError: details?.disable_streams ? 'Streams Are Disabled In This Channel' : webcamError,
+                audioError: details?.disable_streams ? "Streams Are Disabled In This Channel" : null,
+                microphoneError: details?.disable_streams ? "Streams Are Disabled In This Channel" : microphoneError,
                 handleToggleMicrophone,
                 handleToggleAudio,
                 handleToggleWebcam,

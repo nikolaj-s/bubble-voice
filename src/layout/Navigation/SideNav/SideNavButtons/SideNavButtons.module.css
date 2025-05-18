@@ -1,0 +1,10 @@
+
+  .navButtons {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 5px;
+    z-index: 3;
+    position: relative;
+  }
+  

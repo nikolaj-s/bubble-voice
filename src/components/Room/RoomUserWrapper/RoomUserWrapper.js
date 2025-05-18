@@ -4,8 +4,9 @@ import { RoomUserCard } from '../RoomUserCard/RoomUserCard';
 import styles from './RoomUserWrapper.module.css';
 import { useSelector } from 'react-redux';
 import { MediaPlayerStreamSource } from '../../MediaPlayer/MediaPlayerStreamSource/MediaPlayerStreamSource';
+import RoomPlaceholder from '../RoomPlaceholder/RoomPlaceholder';
 
-export const RoomUserWrapper = ({ users }) => {
+export const RoomUserWrapper = ({ users, disable_streams }) => {
 
     const { hideUsers } = useSelector(state => state.appearanceSlice);
 
@@ -200,6 +201,7 @@ export const RoomUserWrapper = ({ users }) => {
                     })
                 }
                 <MediaPlayerStreamSource expand={handleStreamExpansion} />
+                {disable_streams && (<RoomPlaceholder />)}
             </div>
         </>
     );

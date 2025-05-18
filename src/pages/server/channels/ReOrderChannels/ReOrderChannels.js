@@ -9,6 +9,7 @@ import { reorderChannels } from "../../../../features/Channel/Channels/channelsS
 import { reorderCategories } from "../../../../features/Categories/categoriesSlice";
 
 import { useSocket } from "../../../../context/SocketContext";
+import { triggerAlert } from "../../../../features/Alerts/alertsSlice";
 
 // 🔹 Main Channels Component
 export const ReOrderChannels = ({ onDrop }) => {
@@ -69,6 +70,7 @@ export const ReOrderChannels = ({ onDrop }) => {
           
         } catch (err) {
           console.error(err);
+          dispatch(triggerAlert(err, 'error'))
         }
       
         toggleReordering(false);

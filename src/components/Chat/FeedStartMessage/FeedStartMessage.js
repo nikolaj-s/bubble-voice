@@ -21,7 +21,7 @@ const FeedStartMessage = ({ channelName = "this channel", editChannel }) => {
         </h2>
 
         <p className={styles.message}>
-            This is the beginning of the bubble — start floating thoughts, sharing media, or just say hi! ☁️
+            This is the beginning of the feed — start floating thoughts, sharing media, or just say hi! ☁️
         </p>
 
         {editChannel && (

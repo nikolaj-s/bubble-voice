@@ -30,6 +30,12 @@ const serversSlice = createSlice({
             
             })
 
+        },
+        toggleServersLoading: (state, action) => {
+            state.loading = action.payload;
+        },
+        setServersError: (state, action) => {
+            state.error = action.payload;
         }
     }
 })

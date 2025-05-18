@@ -39,6 +39,8 @@ export const useContextMenuOptions = () => {
 
     const {hideNonVideoUsers, currentVoiceChannel} = useSelector(state => state.voiceChannelSlice);
 
+    const {server_id} = useSelector(state => state.serverDetailsSlice);
+
     const {hideChannelBackgrounds} = useSelector(state => state.appearanceSlice);
 
     const {toggleIsPlaying, next} = useMediaPlayer();
@@ -176,20 +178,7 @@ export const useContextMenuOptions = () => {
                 const root = `/dashboard/server/${channel.server_id}`;
 
                 if (channel.channel_type === "voice") {
-                    if (channel.active) {
-                    options.push({
-                        label: "Disconnect",
-                        onClick: () => navigate(root),
-                        type: "button",
-                        icon: <Unplug color="var(--text-color)" />
-                    });
-                    } else {
-                    options.push({
-                        label: "Join Channel",
-                        onClick: () => navigate(`${root}/channel/${channel.channel_id}`),
-                        type: "button",
-                    });
-                    }
+                    
                 } else {
                     options.push({
                     label: "Open Channel",
@@ -471,7 +460,7 @@ export const useContextMenuOptions = () => {
                     type: 'button',
                     icon: <Link color="var(--text-color)" />
                 })
-                
+
                 if (data.video?.src?.includes('.mp4')) {
                     options.push({
                         label: "Download Video",
@@ -568,13 +557,28 @@ export const useContextMenuOptions = () => {
                 })
             }
 
+            if (data.channel || data.room || data.controlBar) {
+
+                const root = `/dashboard/server/${server_id}`;
+
+                if (currentVoiceChannel) {
+                    options.push({
+                        label: "Disconnect",
+                        onClick: () => navigate(root),
+                        type: "button",
+                        icon: <Unplug color="var(--error-color)" />,
+                        color: 'var(--error-color)'
+                    });
+                } 
+            }
+
             return options;
         } catch (error) {
             console.log(error);
             return [];
         }
         },
-        [navigate, dispatch, setSearchParams, hideNonVideoUsers, mediaPlayerState, hideChannelBackgrounds, savedMediaState, currentVoiceChannel]
+        [navigate, dispatch, setSearchParams, hideNonVideoUsers, mediaPlayerState, hideChannelBackgrounds, savedMediaState, currentVoiceChannel, server_id]
     );
 
   return getOptions;

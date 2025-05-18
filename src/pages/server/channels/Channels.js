@@ -5,7 +5,7 @@ import { ChannelsProvider } from '../../../providers/ChannelsProvider/ChannelsPr
 import { ReOrderChannels } from './ReOrderChannels/ReOrderChannels';
 import { Calendar, Home, Newspaper } from 'lucide-react';
 import { useSelector } from 'react-redux';
-import { SubNav } from '../../../components/Navigation/SubNav/SubNav';
+import { SubNav } from '../../../layout/Navigation/SubNav/SubNav';
 
 export const Channels = ({currentChannel}) => {
 

@@ -66,6 +66,7 @@
 
 .channelButton:active {
     scale: 0.98;
+    translate: 0px 2px;
 }
 
 

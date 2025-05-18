@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation, } from 'react-router-dom';
 import styles from './SubNav.module.css';
-import { LineSpacer } from '../../ui/Spacers/LineSpacer/LineSpacer';
+import { LineSpacer } from '../../../components/ui/Spacers/LineSpacer/LineSpacer';
 import { useDispatch } from 'react-redux';
 import { toggleMobileMenu } from '../../../features/Mobile/mobileSlice';
 

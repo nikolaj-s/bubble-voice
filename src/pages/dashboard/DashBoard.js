@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./DashBoard.module.css";
-import { SideNav } from "../../components/Navigation/SideNav/SideNav";
-import TopNav from "../../components/Navigation/TopNav/TopNav";
+import { SideNav } from "../../layout/Navigation/SideNav/SideNav";
+import TopNav from "../../layout/Navigation/TopNav/TopNav";
 import { SocketProvider } from "../../context/SocketContext";
 import { Route, Routes } from "react-router";
 import { Overlay } from "../../layout/Overlay/Overlay";

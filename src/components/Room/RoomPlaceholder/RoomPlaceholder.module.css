@@ -1,0 +1,38 @@
+.wrapper {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content {
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background-color: var(--background-color);
+  border-radius: 16px;
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font-family);
+}
+
+.title {
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+}
+
+.blurb {
+  font-size: 1rem;
+  margin-bottom: 6px;
+  color: #ccc;
+}
+
+.suggestion {
+  font-size: 0.95rem;
+  color: #aaa;
+}

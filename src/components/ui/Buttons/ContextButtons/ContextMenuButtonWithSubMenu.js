@@ -36,7 +36,7 @@ const ContextMenuButtonWithSubmenu = ({ label, submenuOptions, top, bottom}) => 
                     ref={submenuRef}
                     style={{
                         position: "absolute",
-                        backgroundColor: 'var(--button-background)',
+                        backgroundColor: 'var(--background-color)',
                         top: -5,
                         [submenuPosition]: "100%", // Either 'left' or 'right'
                         color: "var(--text-color)",

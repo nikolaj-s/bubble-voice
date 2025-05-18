@@ -21,6 +21,25 @@
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
   }
+
+  .scrollOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  background: transparent;
+  pointer-events: none; /* Let scroll through */
+}
+
+.scrollOverlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 51;
+  pointer-events: auto; /* Block only clicks */
+}
   
   @keyframes spin {
     from {

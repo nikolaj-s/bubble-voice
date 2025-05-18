@@ -4,6 +4,7 @@ import { useSocket } from "./SocketContext"; // Adjust this import path
 import { useDispatch } from "react-redux";
 import ConnectingIndicator from "../components/Indicators/ConnectingIndicator/ConnectingIndicator";
 import ErrorIndicator from "../components/Indicators/ErrorIndicator/ErrorIndicator";
+import { throwMicrophoneError } from "../features/Channel/MediaControl/mediaControlSlice";
 
 const MediasoupContext = createContext(null);
 
@@ -14,8 +15,6 @@ export const MediasoupProvider = ({ children }) => {
   const socket = useSocket();
 
   const [loading, toggleLoading] = useState(true);
-
-  const [showLoading, toggleShowLoading] = useState(false);
 
   const [error, setError] = useState(false);
 
@@ -69,20 +68,43 @@ export const MediasoupProvider = ({ children }) => {
     return () => {
       console.log("Cleaning up MediasoupProvider...");
 
-      producersRef.current.forEach((producer) => producer.close());
-      consumersRef.current.forEach((consumer) => consumer.close());
+      producersRef.current?.forEach?.((producer) => {
+        try {
+          producer?.close?.();
+        } catch (e) {
+          console.warn("Failed to close producer:", e);
+        }
+      });
 
-      if (producerTransportRef.current) producerTransportRef.current.close();
-      if (consumerTransportRef.current) consumerTransportRef.current.close();
+      consumersRef.current?.forEach?.((consumer) => {
+        try {
+          consumer?.close?.();
+        } catch (e) {
+          console.warn("Failed to close consumer:", e);
+        }
+      });
 
-      socket.off("newProducers", handleNewProducers);
-      socket.off("consumerclosed", handleConsumerClosed);
+      try {
+        producerTransportRef.current?.close?.();
+      } catch (e) {
+        console.warn("Failed to close producerTransport:", e);
+      }
+
+      try {
+        consumerTransportRef.current?.close?.();
+      } catch (e) {
+        console.warn("Failed to close consumerTransport:", e);
+      }
+
+      socket?.off?.("newProducers", handleNewProducers);
+      socket?.off?.("consumerclosed", handleConsumerClosed);
 
       deviceRef.current = null;
       producersRef.current = new Map();
       consumersRef.current = new Map();
-      forceUpdate(); // Ensure components see the empty state
+      forceUpdate();
     };
+
   }, [socket]);
 
   const handleConsumerClosed = ({ consumer_id }) => {
@@ -196,22 +218,24 @@ export const MediasoupProvider = ({ children }) => {
   };
 
   const closeProducer = async (type) => {
-    const producer = producersRef.current.get(type);
-    if (producer) {
-      await socket.request('producerClosed', { producer_id: producer.id });
-      producer.close();
-      producersRef.current.delete(type);
-      forceUpdate();
-      if (type === 'microphone') {
-        socket.emit('voice activation', {voiceActive: false})
+
+      const producer = producersRef.current.get(type);
+
+      if (producer) {
+        await socket.request('producerClosed', { producer_id: producer.id });
+        producer?.close();
+        producersRef?.current?.delete(type);
+        forceUpdate();
+        if (type === 'microphone') {
+          socket.emit('voice activation', {voiceActive: false})
+        }
       }
-    }
   };
 
   const closeConsumer = (consumerId) => {
     const consumer = consumersRef.current.get(consumerId);
     if (consumer) {
-      consumer.close();
+      consumer?.close();
       consumersRef.current.delete(consumerId);
       forceUpdate();
     }
@@ -229,13 +253,22 @@ export const MediasoupProvider = ({ children }) => {
   };
 
   const resumeProducer = (type) => {
+
     const producer = producersRef.current.get(type);
+
     if (producer) {
       producer.resume();
       if (type === 'microphone') {
         socket.emit('voice activation', { voiceActive: true });
       }
       forceUpdate();
+    } else {
+
+      if (type === 'microphone') {
+        dispatch(throwMicrophoneError('No Microphone Producer Present, You may need to rejoin the channel'))
+        
+      }
+
     }
   };
 

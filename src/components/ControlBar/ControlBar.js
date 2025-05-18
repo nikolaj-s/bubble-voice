@@ -23,7 +23,7 @@ export const ControlBar = () => {
 
     const dispatch = useDispatch();
 
-    const {isWebcamOn, isMicrophoneMuted, isAudioMuted, isScreenSharing, handleToggleAudio, handleToggleMicrophone, handleToggleWebcam, webcamError, microphoneError } = useMediaControls();
+    const {isWebcamOn, isMicrophoneMuted, isAudioMuted, isScreenSharing, handleToggleAudio, handleToggleMicrophone, handleToggleWebcam, webcamError, microphoneError, audioError } = useMediaControls();
 
     const {keybinds} = useSelector(state => state.keybindsSlice);
 
@@ -109,14 +109,17 @@ export const ControlBar = () => {
                     onClick={handleToggleAudio}
                     position='top' 
                     title={
+                        audioError ?
+                        <ErrorToolTip error={audioError} /> 
+                        :
                         <KeybindToolTip 
                         label={`${isAudioMuted ? 'Undeafen' : 'Deafen'}`}
                         binds={[keybinds['deafen']?.key]}
                         />
                     }
                     Icon={
-                    isAudioMuted ?
-                    <HeadphoneOff color='var(--text-color)' />
+                    isAudioMuted || audioError ?
+                    <HeadphoneOff color={audioError ? 'var(--error-color)' : 'var(--text-color)' }/>
                     :
                     <Headphones color='var(--text-color)' />
                     } />

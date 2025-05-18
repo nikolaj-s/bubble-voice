@@ -23,7 +23,7 @@ export const RoomOverlay = () => {
 
     const navigate = useNavigate();
 
-    const {isWebcamOn, isMicrophoneMuted, isAudioMuted, isScreenSharing, handleToggleAudio, handleToggleMicrophone, handleToggleWebcam, webcamError, microphoneError } = useMediaControls();
+    const {isWebcamOn, isMicrophoneMuted, isAudioMuted, isScreenSharing, handleToggleAudio, handleToggleMicrophone, handleToggleWebcam, webcamError, microphoneError, audioError } = useMediaControls();
 
     const {fullscreen} = useSelector(state => state.uiSlice);
 
@@ -119,13 +119,16 @@ export const RoomOverlay = () => {
                     borderRadius={"50%"}
                     onClick={handleToggleAudio}
                     position='top' title={
+                        audioError ?
+                        <ErrorToolTip error={audioError} />
+                        :
                         <KeybindToolTip 
                         label={`${isAudioMuted ? 'Undeafen' : 'Deafen'}`}
                         binds={[keybinds['deafen']?.key]}
                         />
                     } Icon={
-                    isAudioMuted ?
-                    <HeadphoneOff color='var(--text-color)' />
+                    isAudioMuted || audioError ?
+                    <HeadphoneOff color={audioError ? 'var(--error-color)' : 'var(--text-color)'} />
                     :
                     <Headphones color='var(--text-color)' />
                     } />
@@ -136,13 +139,15 @@ export const RoomOverlay = () => {
                     borderRadius={"50%"}
                     onClick={handleToggleWebcam}
                     position='top' title={
+                        webcamError ?
+                        <ErrorToolTip error={webcamError} /> :
                         <KeybindToolTip 
                         label={`${isWebcamOn ? 'Turn off camera'.replace(/(\\s{2,})/g, '$1\u200B') : 'Turn on camera'.replace(/(\\s{2,})/g, '$1\u200B')}`}
                         binds={[keybinds['enableWebcam']?.key]}
                         />
                     } Icon={
                     isWebcamOn || webcamError ?
-                    <VideoOff color={'var(--text-color)'} />
+                    <VideoOff color={webcamError ? 'var(--error-color)' : 'var(--text-color)'} />
                     :
                     <Video color='var(--text-color)' />
                     } 

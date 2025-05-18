@@ -12,6 +12,18 @@
     cursor: pointer;
     border-radius: 5px;
     -webkit-app-region: no-drag;
+    transition: 0.2s ease-in-out;
+}
+
+.button:hover {
+    background-color: var(--button-hover) !important;
+}
+
+.button:active {
+    scale: 0.98;
+    translate: 0px 2px;
+    filter: brightness(0.95);
+    box-shadow: inset 0px 1px 3px rgba(0,0,0,0.2);
 }
 
 .button svg {

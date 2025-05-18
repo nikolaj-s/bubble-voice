@@ -8,6 +8,7 @@ import { updateVoiceActivation } from "../../features/ServerUsers/serverUsersSli
 import { clearVoiceChannelState } from "../../features/Channel/VoiceChannel/voiceChannelSlice";
 import ConnectingIndicator from "../../components/Indicators/ConnectingIndicator/ConnectingIndicator";
 import ErrorIndicator from "../../components/Indicators/ErrorIndicator/ErrorIndicator";
+import RoomPlaceholder from "../../components/Room/RoomPlaceholder/RoomPlaceholder";
 
 export const VoiceChannelProvider = ({channel, children}) => {
 

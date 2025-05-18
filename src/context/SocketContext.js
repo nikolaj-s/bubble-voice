@@ -3,7 +3,7 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 
 import io from 'socket.io-client';
 
-import { API_URL } from '../lib/Validation';
+import { API_URL, SOCKET_URL } from '../lib/Validation';
 
 import DashboardSkeleton from '../components/ui/Loading/DashBoardSkeleton/DashBoardSkeleton';
 
@@ -34,7 +34,7 @@ export const SocketProvider = ({ children }) => {
         
         }
 
-        const socket = io(API_URL,{query: {
+        const socket = io(SOCKET_URL, {query: {
             "TOKEN": token
         }});
 

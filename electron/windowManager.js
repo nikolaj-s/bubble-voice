@@ -63,7 +63,9 @@ function createMainWindow(settings) {
   });
 
   const startUrl = process.env.ELECTRON_START_URL || 'http://localhost:3000/';
+
   mainWindow.loadURL(startUrl);
+
   mainWindow.hide();
 
   mainWindow.webContents.on('dom-ready', () => {

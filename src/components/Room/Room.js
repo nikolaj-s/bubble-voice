@@ -20,11 +20,11 @@ export const Room = () => {
 
     const { currentVoiceChannel } = useSelector(state => state.voiceChannelSlice);
 
-    const { users, channel_background, channel_id } = useSelector(state => state.channelsSlice.channels[currentVoiceChannel]);
+    const { users, channel_background, channel_id, disable_streams } = useSelector(state => state.channelsSlice.channels[currentVoiceChannel]);
 
     const { produce, resumeProducer, pauseProducer, closeProducer, getConsumers, getProducers } = useMediasoup();
 
-    const { isMicrophoneMuted, isWebcamOn, voiceThreshold, usingPushToTalk, isPushToTalkActive } = useSelector(state => state.mediaControlSlice);
+    const { isMicrophoneMuted, isWebcamOn, voiceThreshold, usingPushToTalk, isPushToTalkActive, echoCancellation, noiseSuppression, autoGainControl } = useSelector(state => state.mediaControlSlice);
 
     const { user_id: account_id} = useSelector(state => state.accountSlice.account);
 
@@ -36,39 +36,58 @@ export const Room = () => {
 
     const isTextChannelOpen = useSelector(state => state.textChannelSlice.currentTextChannel);
 
-    // microphoneMuteState effect
-    React.useEffect(() => {
-        const handleMicrophone = async (state) => {
+    const handleMicrophone = React.useCallback(async (state) => {
 
-            dispatch(throwMicrophoneError(false));
+        dispatch(throwMicrophoneError(false));
 
-            dispatch(toggleMediaControlLoading(true));
+        dispatch(toggleMediaControlLoading(true));
 
-            if (state) {
-                await closeProducer('microphone');
-            } else {
-                const track = await getMicrophoneMedia(selectedMicrophone?.deviceId);
-               
-                if (track.error) {
-                    dispatch(throwMicrophoneError(track.errorMessage));
+        if (state) {
+            await closeProducer('microphone');
+        } else {
+            const track = await getMicrophoneMedia(selectedMicrophone?.deviceId, echoCancellation, autoGainControl, noiseSuppression);
+            
+            if (track.error) {
+                dispatch(throwMicrophoneError(track.errorMessage));
 
-                    return dispatch(toggleMediaControlLoading(false));
-                }
-
-                await produce('microphone', track);
-
-                await pauseProducer('microphone');
+                return dispatch(toggleMediaControlLoading(false));
             }
 
-            dispatch(toggleMediaControlLoading(false));
-        };
+            await produce('microphone', track);
+
+            await pauseProducer('microphone');
+        }
+
+        dispatch(toggleMediaControlLoading(false));
+
+    }, [dispatch, selectedMicrophone, autoGainControl, noiseSuppression, echoCancellation]);
+
+    // microphoneMuteState effect
+    React.useEffect(() => {
+
+        if (typeof closeProducer !== 'function') return;
+
+        if (disable_streams) {
+            closeProducer('microphone');
+
+            return;
+        }
         
         handleMicrophone(isMicrophoneMuted);
 
-    }, [isMicrophoneMuted, selectedMicrophone]);
+    }, [isMicrophoneMuted, disable_streams]);
 
     // handle webcam
     React.useEffect(() => {
+
+        if (typeof closeProducer !== 'function') return;
+
+        if (disable_streams) {
+
+            closeProducer('webcam');
+
+            return;
+        }
 
         const handleWebcam = async (state) => {
 
@@ -103,17 +122,17 @@ export const Room = () => {
 
         handleWebcam(isWebcamOn);
         
-    }, [isWebcamOn, selectedWebcam])
+    }, [isWebcamOn, selectedWebcam, disable_streams])
 
     // Hook for detecting speech
-    useDetectSpeech(isMicrophoneMuted, pauseProducer, resumeProducer, voiceThreshold, usingPushToTalk);
+    useDetectSpeech((disable_streams || isMicrophoneMuted), pauseProducer, resumeProducer, voiceThreshold, usingPushToTalk);
 
-    usePushToTalk(isMicrophoneMuted, usingPushToTalk, isPushToTalkActive, resumeProducer, pauseProducer);
+    usePushToTalk((disable_streams || isMicrophoneMuted), usingPushToTalk, isPushToTalkActive, resumeProducer, pauseProducer);
 
     // Memoizing combinedUsers to update only when the length of consumers changes
     const combinedUsers = React.useMemo(() => {
         // If the length of consumers has changed, recalculate combinedUsers
-        if (!users) return;
+        if (!users || disable_streams) return [];
 
         const updatedUsers = users.map(user => {
             // Find all consumers that match the current user's user_id
@@ -125,7 +144,7 @@ export const Room = () => {
 
         return updatedUsers;
         
-    }, [users, consumers, producers]);
+    }, [users, consumers, producers, disable_streams]);
 
     return (
         
@@ -137,7 +156,7 @@ export const Room = () => {
             data-context={JSON.stringify({type: 'room'})}
             className={`${styles.container} ${isTextChannelOpen ? styles.textChannelOpen : ''}`}>
                 <NativeFullScreenWrapper>
-                <RoomUserWrapper users={combinedUsers} />
+                <RoomUserWrapper users={combinedUsers} disable_streams={disable_streams} />
                 <ChannelBackground channel_background={channel_background} />
                 <RoomOverlay />
                 </NativeFullScreenWrapper>
