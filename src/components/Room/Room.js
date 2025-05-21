@@ -150,11 +150,11 @@ export const Room = () => {
         
             <div 
             style={{
-                backgroundColor: useBlackVoiceChannelBackground ? 'black' : null
+                backgroundColor: useBlackVoiceChannelBackground ? 'black' : null,
             }}
             id='voice-channel'
             data-context={JSON.stringify({type: 'room'})}
-            className={`${styles.container} ${isTextChannelOpen ? styles.textChannelOpen : ''}`}>
+            className={`${styles.container}`}>
                 <NativeFullScreenWrapper>
                 <RoomUserWrapper users={combinedUsers} disable_streams={disable_streams} />
                 <ChannelBackground channel_background={channel_background} />

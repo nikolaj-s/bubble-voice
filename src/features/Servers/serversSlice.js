@@ -31,6 +31,17 @@ const serversSlice = createSlice({
             })
 
         },
+        setServerStatus: (state, action) => {
+
+            state.servers = state.servers.map(server => {
+                if (action.payload[server.server_id]) {
+                    return {...server, ...action.payload[server.server_id]}
+                } else {
+                    return server;
+                }
+            })
+
+        },
         toggleServersLoading: (state, action) => {
             state.loading = action.payload;
         },
@@ -42,6 +53,6 @@ const serversSlice = createSlice({
 
 export const selectServers = state => state.serversSlice.servers;
 
-export const {setServers, addServer, updateServerButton} = serversSlice.actions;
+export const {setServers, addServer, updateServerButton, setServerStatus} = serversSlice.actions;
 
 export default serversSlice.reducer;

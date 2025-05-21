@@ -75,6 +75,7 @@ export const TextChannelProvider = ({children, channel}) => {
 
             socket.off(`update message in ${channel}`, handleUpdateMessage);
             
+            dispatch(setCurrentTextChannel(null));
         }
 
 

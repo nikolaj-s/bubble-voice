@@ -113,7 +113,9 @@ const TopNav = () => {
       </div>
       {/* Dynamic Buttons */}
       <div className={styles.serverButtons}>
-      {isServerRoute && (
+      {currentVoiceChannel ?
+      <ChannelHeader {...channelDetails} expandDescription={expandChannelDescription} /> :
+      isServerRoute ? (
         <Routes>
           <Route path="/server/:serverID/channel/:channelID" element={
             <>
@@ -122,7 +124,7 @@ const TopNav = () => {
             </>
           } />
         </Routes>
-      )}
+      ): null}
       </div>
       <div className={`${styles.buttonGroup} ${styles.navButtons} ${styles.hideOnMobile}`}>
         {channelDetails && (

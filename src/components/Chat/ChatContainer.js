@@ -6,8 +6,10 @@ import { MessageInput } from './MessageInput/MessageInput';
 
 import MessageList from './MessageList/MessageList';
 
-import {motion} from 'framer-motion'
+import {motion} from 'framer-motion';
+
 import { ReplyTo } from './ReplyTo/ReplyTo';
+
 import PostDisabledPlaceholder from './PostDisabledPlaceholder/PostDisabledPlaceholder';
 
 export const ChatContainer = ({
@@ -22,11 +24,15 @@ export const ChatContainer = ({
     disableInput
 }) => {
 
+    const [isDraggingImage, setIsDraggingImage] = React.useState();
+
     return (
         <motion.div 
         initial={{opacity: 0}}
         animate={{opacity: 1}}
-        className={styles.container} >
+        className={styles.container} 
+        onDragEnter={() => {setIsDraggingImage(true)}}
+        >
 
             <MessageList 
             position={position} returnPos={returnPos} 
@@ -38,7 +44,14 @@ export const ChatContainer = ({
             <ReplyTo replyTo={replyTo} users={users} clearReplyTo={clearReplyTo} />
             {disableInput ? 
             <PostDisabledPlaceholder channelName={name} />
-            : <MessageInput replyTo={replyTo} value={value} setValue={setValue} send={send} error={error} setImage={setImage} placeholder={placeholder} />}
+            : 
+            <MessageInput 
+            replyTo={replyTo} value={value} 
+            setValue={setValue} send={send} error={error} 
+            setImage={setImage} placeholder={placeholder} 
+            setIsDraggingImage={setIsDraggingImage}
+            isDraggingImage={isDraggingImage}
+            />}
         </motion.div>
     )
 }

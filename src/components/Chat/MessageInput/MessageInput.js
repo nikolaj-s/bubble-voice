@@ -9,8 +9,9 @@ import { useDispatch } from "react-redux";
 import { setFilter } from "../../../features/Search/searchSlice";
 import { setOverlay } from "../../../features/Overlay/overlaySlice";
 import TextLabelError from "../../Error/TextLabelError/TextLabelError";
+import { ImageDropOverlay } from "../../ui/Inputs/ImageDropOverlay/ImageDropOverlay";
 
-export const MessageInput = ({ value, setValue, setImage = () => {}, error, send = () => {}, replyTo, placeholder }) => {
+export const MessageInput = ({ value, setValue, setImage = () => {}, error, send = () => {}, replyTo, placeholder, setIsDraggingImage, isDraggingImage }) => {
 
     const textAreaRef = useRef(null);
 
@@ -111,6 +112,7 @@ export const MessageInput = ({ value, setValue, setImage = () => {}, error, send
     }
 
     return (
+        <>
         <div className={styles["message-input-container"]}>
             {error && 
                     (<TextLabelError label="Error:" error={error} />) 
@@ -172,5 +174,11 @@ export const MessageInput = ({ value, setValue, setImage = () => {}, error, send
                 onChange={handleFileUpload}
             />
         </div>
+        <ImageDropOverlay 
+        isDraggingImage={isDraggingImage}
+        setIsDraggingImage={setIsDraggingImage}
+        onDropEvent={handleFileUpload} 
+        />
+        </>
     );
 };

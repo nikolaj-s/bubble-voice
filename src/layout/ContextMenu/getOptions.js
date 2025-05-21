@@ -1,4 +1,4 @@
-import { Bookmark, Copy, Download, FilePenLine, FolderPen, FolderPlus, ImageDown, Link, ListPlus, Pause, Pencil, Pin, PinOff, Play, PlaySquare, Plus, Reply, Send, Settings, Settings2, SkipForward, Trash2, Unplug, UserPen, Users, Video } from "lucide-react";
+import { Bookmark, ChevronRight, Copy, Download, FilePenLine, FolderPen, FolderPlus, Hash, ImageDown, Link, ListPlus, Pause, Pencil, Pin, PinOff, Play, PlaySquare, Plus, Reply, Search, Send, Settings, Settings2, SkipForward, Trash2, Unplug, UserPen, Users, Video } from "lucide-react";
 import { useCallback } from "react";
 import { useDispatch, useSelector,} from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -67,6 +67,17 @@ export const useContextMenuOptions = () => {
             }
             
             if (data.mediaplayer) {
+
+                options.push({
+                    label: 'Search',
+                    type: 'button',
+                    icon: <Search color="var(--text-color)" />,
+                    onClick: () => {
+                        dispatch(setFilter({path: 'videos'}));
+
+                        dispatch(setOverlay('search'));
+                    }
+                })
                
                 options.push({
                     label: mediaPlayerState.isPlaying ? 'Pause' : 'Play',
@@ -367,6 +378,7 @@ export const useContextMenuOptions = () => {
                                     dispatch(sendMessage({channel_id: channel.channel_id, text: data.imageSearchResult.src, ...data.imageSearchResult}));
                                     
                                 },
+                                icon: <Hash color="var(--text-color)" />,
                                 type: "button",
                             })
                         } 
@@ -377,6 +389,7 @@ export const useContextMenuOptions = () => {
                         options.push({
                             label: "Send To",
                             submenuOptions: sendToOptions,
+                            icon: <ChevronRight color="var(--text-color)" />
                         })
                     }
                 

@@ -15,9 +15,9 @@ export const SideNavButtons = () => {
             <IconButton 
             onClick={() => {dispatch(setOverlay('createServer'))}}
             Icon={<Plus color='var(--text-color)' />}
-            width={45}
-            height={45}
-            padding={10}
+            width={50}
+            height={50}
+            padding={15}
             position='right'
             title={<p style={{
             padding: 5,
@@ -29,9 +29,9 @@ export const SideNavButtons = () => {
             />
             <IconButton 
             Icon={<Settings color='var(--text-color)' />}
-            width={45}
-            height={45}
-            padding={10}
+            width={50}
+            height={50}
+            padding={15}
             position='right'
             onClick={() => {dispatch(setOverlay("settings"))}}
             title={<p style={{

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { fetchServerSettings } from "./Thunks/fetchServerSettings";
 import { updateServerSettings } from "./Thunks/updateServerSettings";
 import { deleteServerRecommendations } from "./Thunks/deleteServerRecommendations";
+import { refreshMediaOfTheDay } from "./Thunks/refreshMediaOfTheDay";
 
 const serverSettingsSlice = createSlice({
     name: "serverSettingsSlice",
@@ -58,6 +59,20 @@ const serverSettingsSlice = createSlice({
         builder.addCase(deleteServerRecommendations.fulfilled, (state, action) => {
             state.loading = false;
             state.error = false;
+        })
+
+        // refresh media of the day
+        builder.addCase(refreshMediaOfTheDay.pending, (state) => {
+            state.loading = true;
+            state.error = false;
+        })
+        builder.addCase(refreshMediaOfTheDay.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        })
+        builder.addCase(refreshMediaOfTheDay.fulfilled, (state) => {
+                state.loading = false;
+                state.error = false;
         })
     }
 })

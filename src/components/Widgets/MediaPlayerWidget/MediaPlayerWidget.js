@@ -3,7 +3,7 @@ import React from 'react'
 import SavedMedia from '../../MediaPlayer/SavedMedia/SavedMedia'
 import { useDispatch, useSelector } from 'react-redux'
 import { addMediaToPlayer } from '../../../features/MediaPlayer/Thunks/addMediaToPlayer';
-import { closeOverlay } from '../../../features/Overlay/overlaySlice';
+import { setOverlay } from '../../../features/Overlay/overlaySlice';
 import { fetchSavedMedia } from '../../../features/MediaPlayer/Thunks/fetchSavedMedia';
 
 export const MediaPlayerWidget = ({editing}) => {
@@ -26,7 +26,7 @@ export const MediaPlayerWidget = ({editing}) => {
 
         dispatch(addMediaToPlayer(media));
 
-        dispatch(closeOverlay());
+        dispatch(setOverlay('mediaPlayer'));
 
     }
 

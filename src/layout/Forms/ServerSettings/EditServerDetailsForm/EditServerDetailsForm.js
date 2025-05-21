@@ -20,6 +20,7 @@ import { NotAuthorized } from '../../../../components/Error/NotAuthorized/NotAut
 
 import TextArea from '../../../../components/ui/Inputs/TextArea/TextArea';
 import { LineSpacer } from '../../../../components/ui/Spacers/LineSpacer/LineSpacer';
+import { ApplyChangesPopup } from '../../../../components/ApplyChangesPopup/ApplyChangesPopup';
 
 export const EditServerDetailsForm = ({permissions}) => {
 
@@ -37,11 +38,9 @@ export const EditServerDetailsForm = ({permissions}) => {
 
   React.useEffect(() => {
 
-    setServerName(server_name);
+    setDefaults();
 
-    setWelcomeMessage(welcome_message);
-
-  }, [server_name, welcome_message])
+  }, [])
   
   const handleUpdate = () => {
 
@@ -57,6 +56,16 @@ export const EditServerDetailsForm = ({permissions}) => {
     
   }
 
+  const setDefaults = () => {
+
+    setServerName(server_name);
+
+    setWelcomeMessage(welcome_message);
+
+    setServerBanner(null);
+
+  }
+
   return (
     <NotAuthorized permission={permissions.user_can_edit_server_name && permissions.user_can_edit_server_banner}>
       <LoadingErrorFormWrapper sliceName='serverDetailsSlice'>
@@ -70,7 +79,7 @@ export const EditServerDetailsForm = ({permissions}) => {
         {permissions.user_can_edit_server_banner ?
         <>
         <Label label='Update Banner:' />
-        <ImageDropZone width={320} height={200} existingImage={server_banner} onImageChange={setServerBanner}  />
+        <ImageDropZone parentFileSrc={serverBanner} width={320} height={200} existingImage={server_banner} onImageChange={setServerBanner}  />
         </>
         : null}
         {permissions.user_can_edit_server_welcome_message && (
@@ -85,13 +94,10 @@ export const EditServerDetailsForm = ({permissions}) => {
         )}
          <LineSpacer />
          <Header text='Dashboard' />
-         
-        {permissions.user_can_edit_server_banner || permissions.user_can_edit_server_name || permissions.user_can_edit_server_welcome_message ?
-        serverName !== server_name || serverBanner || welcomeMessage !== welcome_message ?
-        <TextButton action={handleUpdate} title='Submit' />
-        : null :
-        null
-        }
+         <ApplyChangesPopup 
+         onApply={handleUpdate}
+         onClearChanges={setDefaults}
+         disabled={(serverName === server_name || serverName.trim().length < 3) && welcomeMessage === welcome_message && !serverBanner} />
         
       </LoadingErrorFormWrapper>
     </NotAuthorized>

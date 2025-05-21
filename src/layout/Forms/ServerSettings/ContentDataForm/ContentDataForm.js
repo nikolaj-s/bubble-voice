@@ -11,8 +11,10 @@ import TextButton from '../../../../components/ui/Buttons/TextButton/TextButton'
 import { updateServerSettings } from '../../../../features/ServerSettings/Thunks/updateServerSettings'
 import { ApplyChangesPopup } from '../../../../components/ApplyChangesPopup/ApplyChangesPopup'
 import ConfirmationPopup from '../../../../components/ui/Menus/ConfirmationPopup/ConfirmationPopup'
-import { Trash2 } from 'lucide-react'
+import { RefreshCcw, Trash2 } from 'lucide-react'
 import { deleteServerRecommendations } from '../../../../features/ServerSettings/Thunks/deleteServerRecommendations'
+import { Description } from '../../../../components/ui/Description/Description'
+import { refreshMediaOfTheDay } from '../../../../features/ServerSettings/Thunks/refreshMediaOfTheDay'
 
 export const ContentDataForm = ({permissions}) => {
 
@@ -29,6 +31,8 @@ export const ContentDataForm = ({permissions}) => {
     const [confirmDelete, toggleConfirmDelete] = React.useState(false);
 
     const [confirmationDataDeleted, toggleConfirmationDataDeleted] = React.useState(false);
+
+    const [confirmRefresh, toggleConfirmRefresh] = React.useState(false);
 
     // Fetch settings if user has permission
     React.useEffect(() => {
@@ -94,16 +98,27 @@ export const ContentDataForm = ({permissions}) => {
 
     }
 
+    const handleRefreshMediaOfTheDay = () => {
+        if (loading) return;
+        
+        toggleConfirmRefresh(false);
+
+        dispatch(refreshMediaOfTheDay());
+    }
+
     return (
         <NotAuthorized permission={permissions?.user_can_manage_data_settings}>
             <LoadingErrorFormWrapper sliceName='serverSettingsSlice' initialLoading={initLoading} >
                 <Header text='Content & Data' />
                 <LineSpacer />
-                <Header level={4} text='Recommendation Data' />
+                <Header level={3} text='Recommendation Data' />
+                <Label label='Refresh Media of The Day' />
+                <TextButton maxWidth={200} title='Refresh' icon={<RefreshCcw color='var(--text-color)' />} action={() => {toggleConfirmRefresh(true)}} />
                 <Label label='Disable sensitive content filter for recommendations' />
+                <Description description={"Warning: Disabling the sensitive content filter may expose you to explicit or potentially disturbing material. Viewer discretion is advised — recommended media may include adult, violent, or otherwise sensitive content."} />
                 <ToggleSwitch initialState={newSettings.disable_content_filter_for_recommendations} onToggle={(state) => {handleSettingChange('disable_content_filter_for_recommendations', state)}} />
                 <LineSpacer />
-                <Header level={4} text='Content' />
+                <Header level={3} text='Content' />
                 <Label label='Block the ability of directly posting sensitive content within text channels from search' />
                 <ToggleSwitch initialState={newSettings.content_filtering_for_text_channels} onToggle={(state) => {handleSettingChange('content_filtering_for_text_channels', state)}} />
                 <LineSpacer />
@@ -115,6 +130,13 @@ export const ContentDataForm = ({permissions}) => {
                 onCancel={() => {toggleConfirmDelete(false)}}
                 onConfirm={handleDeleteRecommendationData}
                 />)}
+                {confirmRefresh && (
+                <ConfirmationPopup 
+                message={"Are you sure you want to refresh media of the day"}
+                onCancel={() => {toggleConfirmRefresh(false)}}
+                onConfirm={() => {handleRefreshMediaOfTheDay()}}
+                />
+                )}
             </LoadingErrorFormWrapper>
         </NotAuthorized>
     )

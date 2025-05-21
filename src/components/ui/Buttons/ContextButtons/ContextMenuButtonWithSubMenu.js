@@ -2,7 +2,7 @@ import ContextMenuButton from "./ContextMenuButton";
 
 import React, {useState, useRef, useEffect } from "react";
 
-const ContextMenuButtonWithSubmenu = ({ label, submenuOptions, top, bottom}) => {
+const ContextMenuButtonWithSubmenu = ({ label, submenuOptions, top, bottom, icon}) => {
     const [hovered, setHovered] = useState(false);
     const buttonRef = useRef(null);
     const submenuRef = useRef(null);
@@ -30,13 +30,13 @@ const ContextMenuButtonWithSubmenu = ({ label, submenuOptions, top, bottom}) => 
             onMouseLeave={() => setHovered(false)}
             style={{ position: "relative", cursor: "pointer",  }}
         >
-            <ContextMenuButton label={label} top={top} bottom={bottom} />
+            <ContextMenuButton icon={icon} label={label} top={top} bottom={bottom} />
             {hovered && (
                 <div
                     ref={submenuRef}
                     style={{
                         position: "absolute",
-                        backgroundColor: 'var(--background-color)',
+                        backgroundColor: 'var(--card-background-color)',
                         top: -5,
                         [submenuPosition]: "100%", // Either 'left' or 'right'
                         color: "var(--text-color)",

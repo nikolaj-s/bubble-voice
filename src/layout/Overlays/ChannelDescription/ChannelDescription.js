@@ -1,6 +1,6 @@
-import React from 'react'
+
 import FullScreenWrapper from '../../../components/ui/Wrappers/FullScreenWrapper/FullScreenWrapper'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { IconPlaceholder } from '../../../components/ui/Placeholders/IconPlaceholder/IconPlaceholder';
 import { Hash, Pencil, Pin, Volume1 } from 'lucide-react';
 import { ImageComponent } from '../../../components/ui/Image/Image';
@@ -10,10 +10,49 @@ import { Description } from '../../../components/ui/Description/Description';
 import { BoxLabel } from '../../../components/ui/Titles/BoxLabel/BoxLabel';
 import { ToolBar } from '../../../components/ui/Wrappers/ToolBar/ToolBar';
 import IconButton from '../../../components/ui/Buttons/IconButton/IconButton';
+import { useSearchParams } from 'react-router-dom';
+import { setChannelToEdit } from '../../../features/Channel/editChannel/editChannelSlice';
+import { setOverlay } from '../../../features/Overlay/overlaySlice';
+import { setFilter, setFromDate, setSelectedChannelToFilter, setTextChannelFilter } from '../../../features/Search/searchSlice';
+import { globalSearch } from '../../../features/Search/Thunks/globalSearch';
 
 export const ChannelDescription = ({close}) => {
 
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const dispatch = useDispatch();
+
+    const {user_id} = useSelector(state => state.accountSlice.account);
+
+    const user = useSelector(state => state.serverUsersSlice.users[user_id]);
+
+    const permissions = useSelector(state => state.serverPermissionsSlice.permissions[user?.server_group]);
+
     const channel = useSelector(state => state.channelDescriptionSlice.selectedChannel);
+
+    const openEditChannel = () => {
+        dispatch(setChannelToEdit(channel));
+
+        setSearchParams({section: 'editChannel', channel: channel._id});
+
+        dispatch(setOverlay('serverSettings'));
+    }
+
+    const handleOpenPins = () => {
+
+        dispatch(setSelectedChannelToFilter(channel));
+
+        dispatch(setFilter({path: 'text-channel'}));
+
+        dispatch(setTextChannelFilter({isPinned: true, hasImage: false, hasVideo: false, hasLink: false}));
+
+        dispatch(setFromDate(null));
+
+        dispatch(globalSearch());
+
+        dispatch(setOverlay('search'));
+
+    }
 
     return (
         <FullScreenWrapper maxContentWidth={450} onClose={close}>
@@ -24,7 +63,9 @@ export const ChannelDescription = ({close}) => {
                 gap: '10px',
                 alignItems: 'flex-start',
                 position: 'relative',
-                padding: 5
+                padding: 5,
+                backgroundColor: 'var(--card-background-color)',
+                borderRadius: 10
             }}>
                 <BoxLabel label={`${channel.channel_type} channel`} />
                 {channel.channel_icon ?
@@ -44,14 +85,17 @@ export const ChannelDescription = ({close}) => {
                 }
                 <Header margin={0} text={channel.channel_name} />
                 <ToolBar>
-                    <IconButton 
+                    {permissions?.user_can_edit_channels && 
+                    (<IconButton 
                     title={'Edit Channel'}
                     Icon={<Pencil size={15} color='var(--text-color)' />}
-                    />
-                    <IconButton
+                    onClick={openEditChannel}
+                    />)}
+                   {channel?.channel_type === 'text' && <IconButton
+                    onClick={handleOpenPins}
                     title={'See Pinned Content'}
                     Icon={<Pin size={15} color='var(--text-color)' />}
-                    />
+                    />}
                 </ToolBar>
                 <LineSpacer />
                 <Description description={channel.channel_description} />

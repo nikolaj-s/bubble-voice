@@ -79,6 +79,11 @@ console.log(action.payload);
                 state.channels[action.payload.channel_id].status = action.payload.status;
             }
            
+        },
+        updateLatestMessageAt: (state, action) => {
+            if (state.channels[action.payload.channel_id]) {
+                state.channels[action.payload.channel_id].latest_message_at = action.payload.latest_message_at;
+            }
         }
     },
     extraReducers: (builder) => {
@@ -109,7 +114,8 @@ export const {
     setChannelsStatus,
     updateCategoryofChannels,
     removeChannel,
-    updateChannelStatus
+    updateChannelStatus,
+    updateLatestMessageAt
 } = channelsSlice.actions;
 
 export default channelsSlice.reducer;

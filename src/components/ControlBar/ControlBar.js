@@ -4,7 +4,7 @@ import styles from  "./ControlBar.module.css";
 
 import IconButton from '../ui/Buttons/IconButton/IconButton';
 
-import { HeadphoneOff, Headphones, Mic, MicOff, ScreenShare, ScreenShareOff, Settings2, Unplug, Video, VideoOff, Volume2, VolumeX } from 'lucide-react';
+import { HeadphoneOff, Headphones, Mic, MicOff, MonitorOff, MonitorUp, Settings2, Unplug, Video, VideoOff } from 'lucide-react';
 
 import UserButton from '../ui/Buttons/UserButton/UserButton';
 
@@ -18,6 +18,8 @@ import { KeybindToolTip } from '../ui/Titles/KeybindToolTip/KeybindToolTip';
 
 import { setOverlay } from '../../features/Overlay/overlaySlice';
 import { ErrorToolTip } from '../ui/ErrorToolTip/ErrorToolTip';
+import { ConnectionIndicator } from '../ConnectionIndicator/ConnectionIndicator';
+import { setCurrentVoiceChannel } from '../../features/Channel/VoiceChannel/voiceChannelSlice';
 
 export const ControlBar = () => {
 
@@ -36,7 +38,7 @@ export const ControlBar = () => {
     const navigate = useNavigate();
 
     const handleDisconnect = () => {
-        navigate(`/dashboard/server/${serverID}`)
+        dispatch(setCurrentVoiceChannel(null));
     }
 
     const openQuickSettings = () => {
@@ -52,27 +54,32 @@ export const ControlBar = () => {
             <div className={styles.channelControlWrapper}>
                 <IconButton 
                 backgroundColor={webcamError ? 'var(--error-color)' : isWebcamOn ? 'var(--success-color)' : 'var(--primary-color)'}
-                width={68}
-                height={30}
+                width={50}
+                height={35}
+                padding={8}
                 onClick={handleToggleWebcam}
                 title={webcamError ? <ErrorToolTip error={webcamError} /> : isWebcamOn ? "Turn off Webcam" : "Turn on Webcam"}
-                Icon={isWebcamOn || webcamError ? <VideoOff  color={'var(--text-color)'} /> : <Video height={50} width={50} color={'var(--text-color)'} />}
+                Icon={isWebcamOn || webcamError ? <VideoOff strokeWidth={2.5} color={'var(--text-color)'} /> : <Video strokeWidth={2.5} color={'var(--text-color)'} />}
                 />
                 <IconButton 
                 backgroundColor='var(--primary-color)'
-                width={68}
-                height={30}
+                width={50}
+                height={35}
+                padding={8}
                 title={isScreenSharing ? "Stop Sharing Screen" : "Share Screen"}
-                Icon={isScreenSharing ? <ScreenShareOff height={20} width={20} color={'var(--text-color)'} /> : <ScreenShare height={'20px'} width={'20px'} color={'var(--text-color)'} />}
+                Icon={isScreenSharing ? <MonitorOff strokeWidth={2.5} color='var(--text-color)' /> : <MonitorUp strokeWidth={2.5} color='var(--text-color)' />}
                 />
+                <ConnectionIndicator />
                 <IconButton 
                 onClick={handleDisconnect}
-                width={68}
-                height={30}
+                width={50}
+                height={35}
+                padding={8}
                 title={"Disconnect"}
                 backgroundColor='var(--error-color)'
-                Icon={<Unplug color='var(--text-color)' />}
+                Icon={<Unplug strokeWidth={2.5} color='var(--text-color)' />}
                 />
+               
             </div>
             : null}
             <div className={styles.container} >

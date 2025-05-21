@@ -10,6 +10,7 @@ import { reorderCategories } from "../../../../features/Categories/categoriesSli
 
 import { useSocket } from "../../../../context/SocketContext";
 import { triggerAlert } from "../../../../features/Alerts/alertsSlice";
+import { NoChannelsPlaceholder } from "../../../../components/Placeholders/NoChannelsPlaceholder/NoChannelsPlaceholder";
 
 // 🔹 Main Channels Component
 export const ReOrderChannels = ({ onDrop }) => {
@@ -116,7 +117,9 @@ export const ReOrderChannels = ({ onDrop }) => {
         toggleReordering(false);
 
     }
-console.log(categories)
+
+    if (localChannels.length === 0) return <NoChannelsPlaceholder />
+
     return (
         <>
             {categories.map(category => {

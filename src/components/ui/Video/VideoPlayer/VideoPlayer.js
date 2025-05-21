@@ -93,13 +93,9 @@ const VideoPlayer = ({ src }) => {
   }, [muteVideo])
 
   // Handle progress bar click (seeking)
-  const handleProgressClick = (e) => {
-    const progressBar = e.currentTarget;
-    const rect = progressBar.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const newTime = (clickX / rect.width) * duration;
+  const handleProgressClick = (value) => {
     if (videoRef.current) {
-      videoRef.current.currentTime = newTime;
+      videoRef.current.currentTime = value;
     }
   };
 
@@ -149,17 +145,17 @@ const VideoPlayer = ({ src }) => {
     }
   };
 
-
-
   return (
     <div onMouseLeave={() => {toggleVolumeHover(false)}} className={styles.customVideoContainer}>
       <video
+        data-context={JSON.stringify({type: 'video', src: src, title: src, duration: Math.floor(duration), query: src})}
         onClick={togglePlay}
         ref={videoRef}
         src={src}
         className={styles.customVideo}
         controls={false}
         playsInline
+        onLoadedMetadata={(e) => {setDuration(e.target.duration)}}
       />
       {/* Overlay play button when video is not playing */}
       {!isPlaying && (

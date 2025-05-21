@@ -1,6 +1,8 @@
 import React from "react";
+
 import { useSelector } from "react-redux";
-import { useParams } from "react-router";
+import useUnreadStatus from "../../../../hooks/useUnreadStatus";
+import { UnreadChannelStatus } from "./UnreadChannelStatus/UnreadChannelStatus";
 
 export const ChannelButtonDragWrapper = ({
   children,
@@ -18,6 +20,8 @@ export const ChannelButtonDragWrapper = ({
 
   const [moveIndicator, toggleMoveIndicator] = React.useState(false);
 
+  const unread = useUnreadStatus({...channel})
+
   const handleDragStart = (e) => {
     e.stopPropagation();
     e.dataTransfer.setData("application/channel-id", channel.channel_id);
@@ -34,7 +38,7 @@ export const ChannelButtonDragWrapper = ({
     toggleDraggingChannel(false);
     const sourceId = e.dataTransfer.getData("application/channel-id");
     if (!sourceId || sourceId === channel.channel_id) return;
-  console.log(sourceId, category_id)
+    console.log(sourceId, category_id)
     move(sourceId, channel.channel_id, category_id); // ensure this category_id is valid
   };
 
@@ -47,10 +51,11 @@ export const ChannelButtonDragWrapper = ({
       onDrop={handleDrop}
       onDragOver={(e) => e.preventDefault()}
       style={{
-        display: collapse && channel?.channel_id !== currentTextChannel && channel?.channel_id !== currentVoiceChannel ? "none" : undefined,
+        display: unread ? null : collapse && channel?.channel_id !== currentTextChannel && channel?.channel_id !== currentVoiceChannel ? "none" : undefined,
         position: 'relative'
       }}
     >
+      {unread && (<UnreadChannelStatus />)}
       {children}
       <div
       onDragOver={(e) => e.preventDefault()}

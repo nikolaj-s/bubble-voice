@@ -17,15 +17,23 @@ const keybindsSlice = createSlice({
   name: 'keybindsSlice',
   initialState,
   reducers: {
-    setKeybind: (state, action) => {
+   setKeybind: (state, action) => {
       const { actionType, keybind } = action.payload;
 
+      // Remove the keybind from any other actionType that currently uses it
+      for (const [existingAction, existingKey] of Object.entries(state.keybinds)) {
+        if (existingAction !== actionType && existingKey === keybind) {
+          delete state.keybinds[existingAction];
+        }
+      }
+
+      // Assign the new keybind
       state.keybinds[actionType] = keybind;
 
-      // Save the updated keybinds to localStorage
+      // Save to localStorage
       localStorage.setItem('keybinds', JSON.stringify(state.keybinds));
-      
     },
+
     loadSavedKeybinds: (state) => {
       state.keybinds = loadSavedKeybinds();
     },

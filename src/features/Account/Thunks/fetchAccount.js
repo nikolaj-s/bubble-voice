@@ -5,6 +5,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { API_URL } from "../../../lib/Validation";
 
 import { APIErrorHandler } from "../../../lib/handlers/APIErrorHandler/APIErrorHandler";
+import { fetchLastReadStatus } from "../../Notifications/Thunks/fetchLastReadStatus";
 
 // Async thunk to fetch account details
 export const fetchAccount = createAsyncThunk(
@@ -20,9 +21,12 @@ export const fetchAccount = createAsyncThunk(
           })
 
           if (response.status === 200) {
-              return response.data;
+
+            dispatch(fetchLastReadStatus());
+
+            return response.data;
           } else {
-              return rejectWithValue("Not Authroized")
+            return rejectWithValue("Not Authroized")
           }
   
       } catch (error) {

@@ -1,4 +1,3 @@
-import React from 'react';
 
 import styles from './MediaPreview.module.css';
 import { ImageComponent } from '../../ui/Image/Image';

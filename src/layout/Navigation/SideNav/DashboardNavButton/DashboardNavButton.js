@@ -14,6 +14,8 @@ export const DashboardNavButton = () => {
 
     const {isServerMenuOpen} = useSelector(state => state.mobileSlice);
 
+    const {server_id} = useSelector(state => state.serverDetailsSlice);
+
     const handleCloseMobileMenu = () => {
         if (isServerMenuOpen) {
             dispatch(toggleMobileMenu('isServerMenuOpen'));
@@ -28,11 +30,12 @@ export const DashboardNavButton = () => {
 
     return (
         <IconButton 
+        backgroundColor={server_id ? null : 'var(--accent-color)'}
         onClick={handleReturnToDashBoard}
         Icon={<Logo />}
-        padding={0}
-        width={45}
-        height={45}
+        padding={2}
+        width={50}
+        height={50}
         title={
         <p style={{
             padding: 5,

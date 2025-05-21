@@ -14,7 +14,7 @@ export const ChannelBackground = ({channel_background}) => {
     return (
         <motion.div 
         initial={{opacity: 0}}
-        animate={{opacity: 0.5}}
+        animate={{opacity: 0.75}}
         className={styles.background}>
             <img src={channel_background} alt='channel-background' />
         </motion.div>

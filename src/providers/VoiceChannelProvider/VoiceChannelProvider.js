@@ -1,105 +1,63 @@
 import { useDispatch, useSelector } from "react-redux";
-import ErrorCard from "../../components/Error/ErrorCard/ErrorCard";
-
 import { useSocket } from "../../context/SocketContext";
-
 import React from 'react';
 import { updateVoiceActivation } from "../../features/ServerUsers/serverUsersSlice";
-import { clearVoiceChannelState } from "../../features/Channel/VoiceChannel/voiceChannelSlice";
 import ConnectingIndicator from "../../components/Indicators/ConnectingIndicator/ConnectingIndicator";
 import ErrorIndicator from "../../components/Indicators/ErrorIndicator/ErrorIndicator";
-import RoomPlaceholder from "../../components/Room/RoomPlaceholder/RoomPlaceholder";
 
-export const VoiceChannelProvider = ({channel, children}) => {
+export const VoiceChannelProvider = ({ channel, children }) => {
+  const dispatch = useDispatch();
+  const socket = useSocket();
 
-    const dispatch = useDispatch();
+  const [loading, toggleLoading] = React.useState(true);
+  const [error, toggleError] = React.useState(false);
 
-    const socket = useSocket();
+  const channelsStatus = useSelector(state => state.channelsSlice.status);
+  const { server_id } = useSelector(state => state.serverDetailsSlice);
 
-    const [loading, toggleLoading] = React.useState(true);
+  React.useEffect(() => {
+    if (!socket || !channel || !server_id || channelsStatus !== 'complete') return;
 
-    const [error, toggleError] = React.useState(false);
+    let debounceTimeout;
 
-    const channelsStatus = useSelector(state => state.channelsSlice.status);
+    const handleJoinChannel = async () => {
+      toggleLoading(true);
 
-    const {server_id} = useSelector(state => state.serverDetailsSlice);
+      try {
+        await socket.request('join channel', { channel_id: channel, server_id });
+        toggleError(false);
+      } catch (err) {
+        toggleError(err);
+      }
 
-    React.useEffect(() => {
+      toggleLoading(false);
+    };
 
-        if (!socket) return;
+    const handleVoiceActivation = (data) => {
+      if (data.user_id) {
+        dispatch(updateVoiceActivation(data));
+      }
+    };
 
-        if (!channel) return;
+    socket.on('voice activation', handleVoiceActivation);
+    socket.on('connect', handleJoinChannel);
 
-        if (!server_id) return;
+    // Debounce join
+    debounceTimeout = setTimeout(() => {
+      handleJoinChannel();
+    }, 250); // 250ms debounce window
 
-        if (channelsStatus !== 'complete') return;
+    return () => {
+      socket.emit('leave channel');
+      socket.off('connect', handleJoinChannel);
+      socket.off('voice activation', handleVoiceActivation);
+      clearTimeout(debounceTimeout);
+    };
 
-        const handleJoinChannel = async () => {
+  }, [socket, channel, dispatch, channelsStatus, server_id]);
 
-            toggleLoading(true);
+  if (loading || channelsStatus !== 'complete') return <ConnectingIndicator />;
+  if (error) return <ErrorIndicator message={error} />;
 
-            await socket.request('join channel', {channel_id: channel, server_id})
-            .then(res => {
-
-                toggleError(false);
-
-                return;
-
-            })
-            .catch(error => {
-
-                toggleError(error);
-
-                return;
-            })
-
-            toggleLoading(false);
-
-            return;
-        }
-
-        const handleVoiceActivation = (data) => {
-
-            if (data.user_id) {
-                dispatch(updateVoiceActivation(data));
-            }
-        }
-
-        socket.on('voice activation', handleVoiceActivation);
-
-        socket.on('connect', handleJoinChannel);
-
-        handleJoinChannel();
-
-        return () => {
-            console.log('connection lost')
-            socket.emit('leave channel');
-
-            socket.off('connect', handleJoinChannel);
-
-            socket.off('voice activation', handleVoiceActivation);
-
-        }
-
-    }, [socket, channel, dispatch, channelsStatus, server_id]);
-
-    React.useEffect(() => {
-
-        return () => {
-            console.log('clearing voice channel state');
-            dispatch(clearVoiceChannelState());
-        }
-
-    }, [dispatch])
-
-    if (loading || channelsStatus !== 'complete') return <ConnectingIndicator />
-
-    if (error) return <ErrorIndicator message={error} />
-
-    return (
-        <>
-        {children}
-        </>
-    )
-}
-
+  return <>{children}</>;
+};

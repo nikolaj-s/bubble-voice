@@ -5,11 +5,11 @@ import ImageDropZone from '../../../components/ui/Inputs/ImageDropZone/ImageDrop
 import { useDispatch, useSelector } from 'react-redux'
 import { selectCreateServerError, selectCreateServerLoading } from '../../../features/CreateServer/createServerSlice'
 import SpinnerLoading from '../../../components/ui/Loading/Spinner/SpinnerLoading'
-import TextButton from '../../../components/ui/Buttons/TextButton/TextButton'
 import { CreateServerThunk } from '../../../features/CreateServer/Thunks/CreateServerThunk'
 import TextLabelError from '../../../components/Error/TextLabelError/TextLabelError'
 import PasswordRequirements from '../../../components/ui/PasswordRequirements/PasswordRequirements'
 import CreateBubbleSplash from '../../../components/Headers/CreateBubbleSplash/CreateBubbleSplash'
+import { ApplyChangesPopup } from '../../../components/ApplyChangesPopup/ApplyChangesPopup'
 
 export const CreateServerForm = () => {
 
@@ -21,7 +21,9 @@ export const CreateServerForm = () => {
 
     const [confirmPassword, setConfirmPassword] = React.useState("");
 
-    const [banner, setBanner] = React.useState({});
+    const [validPassword, toggleValidPassword] = React.useState(false); 
+
+    const [banner, setBanner] = React.useState(null);
 
     const loading = useSelector(selectCreateServerLoading);
 
@@ -37,18 +39,20 @@ export const CreateServerForm = () => {
         <>
             <CreateBubbleSplash />
             <Label label='Upload A Banner' />
-            <ImageDropZone width={320} height={200} onImageChange={setBanner}/>
+            <ImageDropZone parentFileSrc={banner}  width={320} height={200} onImageChange={setBanner}/>
             <Label label='Bubble Name:' />
             <TextInput placeholder={"Name"} type='text' value={name} onChange={setName} />
-            <PasswordRequirements password={password} />
+            <PasswordRequirements isValid={toggleValidPassword} password={password} />
             <TextInput placeholder={"Password"}  value={password} onChange={setPassword} type='password' />
             
             <Label label="Confirm Password" />
+            {password !== confirmPassword && (<TextLabelError error={'Passwords do not match'} />)}
             <TextInput placeholder={'Confirm Password'} value={confirmPassword} onChange={setConfirmPassword} type='password' />
             
             {loading ? <SpinnerLoading /> : null}
             {error ? <TextLabelError label='Error:' error={error} /> : null}
-            <TextButton action={handleCreateServer} title='Create'  />
+            <ApplyChangesPopup onApply={handleCreateServer} name='Create Bubble' disabled={(name.trim().length < 3) || !banner || !validPassword || (confirmPassword !== password)} />
+           
          </>
     )
 }

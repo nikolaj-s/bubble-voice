@@ -14,6 +14,7 @@ import { MediaPlayerInlineControls } from './MediaPlayerInlineControls/MediaPlay
 import { triggerContext } from '../../../lib/services/helperFunctions';
 import { setFullscreen } from '../../../features/Ui/uiSlice';
 import { ErrorToolTip } from '../../ui/ErrorToolTip/ErrorToolTip';
+import { setCurrentVoiceChannel } from '../../../features/Channel/VoiceChannel/voiceChannelSlice';
 
 export const RoomOverlay = () => {
 
@@ -65,7 +66,7 @@ export const RoomOverlay = () => {
     }, [isIdle]);
       
     const handleDisconnect = () => {
-        navigate(`/dashboard/server/${serverID}`)
+        dispatch(setCurrentVoiceChannel(null));
     }
 
     return (
@@ -151,7 +152,7 @@ export const RoomOverlay = () => {
                     :
                     <Video color='var(--text-color)' />
                     } 
-                    backgroundColor={isWebcamOn ? 'var(--success-color)' : 'var(--background-color)'}
+                    backgroundColor={isWebcamOn && !webcamError ? 'var(--success-color)' : 'var(--background-color)'}
                     />
                     <MediaPlayerControls />
                     <MediaPlayerInlineControls />

@@ -1,9 +1,9 @@
 .container {
     height: calc(100svh - 16px);
-    padding: 8px;
+    padding: 8px 5px;
     display: grid;
     grid-template-rows: 1fr 100px;
-    gap: 15px;
+    gap: 5px;
     z-index: 5;
   }
 

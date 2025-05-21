@@ -6,7 +6,7 @@ import { Banner } from '../../components/Banner/Banner';
 
 import styles from './server.module.css';
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { selectServerBanner } from '../../features/ServerDetails/serverDetailsSlice';
 
@@ -23,20 +23,32 @@ import { Users } from './users/Users';
 import { ServerLayoutWrapper } from '../../components/ui/Wrappers/ServerlayoutWrapper/ServerLayoutWrapper';
 
 import { CloseMobileMenu } from '../../components/CloseMobileMenu/CloseMobileMenu';
+import { VoiceChannel } from './channel/VoiceChannel/VoiceChannel';
+import { setCurrentVoiceChannel } from '../../features/Channel/VoiceChannel/voiceChannelSlice';
 
 export const Server = () => {
+
+    const dispatch = useDispatch();
 
     const banner = useSelector(selectServerBanner);
     
     const {currentChannel} = useSelector(state => state.channelsSlice);
 
-    const {currentVoiceChannel} = useSelector(state => state.voiceChannelSlice);
+    const {currentVoiceChannel, focused} = useSelector(state => state.voiceChannelSlice);
 
-    const {currentTextChannel} = useSelector(state => state.textChannelSlice);
+    const {server_id} = useSelector(state => state.serverDetailsSlice);
 
     const {isUserMenuOpen, isChannelMenuOpen} = useSelector(state => state.mobileSlice);
 
     const hideUsers = useSelector(state => state.appearanceSlice.hideUsers);
+
+    React.useEffect(() => {
+
+        return () => {
+            console.log('changing server')
+            dispatch(setCurrentVoiceChannel(null));
+        }
+    }, [dispatch, server_id])
 
     return (
         <ServerLayoutWrapper hideUsers={hideUsers}>
@@ -57,10 +69,12 @@ export const Server = () => {
                         height: window?.electron?.ipcRenderer ? 'calc(100svh - 70px)' : null
                     }}
                     className={`${styles.sectionTwo}`}>
-                    <Outlet  />
-                    {currentTextChannel && currentVoiceChannel && (
-                        <TextChannelOverlay />
-                    )}
+                        <div className={styles.routeWrapper}>
+                            <Outlet  />
+                        </div>
+                        {currentVoiceChannel && (
+                        <VoiceChannel focused={focused} channel={currentVoiceChannel} />
+                        )}
                     </section>
                     <section 
                     style={{

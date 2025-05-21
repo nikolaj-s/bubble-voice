@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { initialState } from "../../Settings/Appearance/State/appearanceState";
 
 const voiceChannelSlice = createSlice({
     name: "voiceChannelSlice",
@@ -7,10 +6,15 @@ const voiceChannelSlice = createSlice({
         loading: false,
         error: false,
         hideNonVideoUsers: false,
-        currentVoiceChannel: null
+        currentVoiceChannel: null,
+        focused: false
     },
     reducers: {
+        setVoiceChannelFocused: (state, action) => {
+            state.focused = action.payload;
+        },
         setCurrentVoiceChannel: (state, action) => {
+            console.log(action.payload);
             state.currentVoiceChannel = action.payload;
         },
         toggleVoiceChannelLoading: (state, action) => {
@@ -28,6 +32,6 @@ const voiceChannelSlice = createSlice({
     }
 })
 
-export const {setCurrentVoiceChannel, toggleVoiceChannelLoading, setVoiceChannelError, clearVoiceChannelState, toggleVoiceChannelOptions} = voiceChannelSlice.actions;
+export const {setCurrentVoiceChannel, toggleVoiceChannelLoading, setVoiceChannelError, clearVoiceChannelState, toggleVoiceChannelOptions, setVoiceChannelFocused} = voiceChannelSlice.actions;
 
 export default voiceChannelSlice.reducer;

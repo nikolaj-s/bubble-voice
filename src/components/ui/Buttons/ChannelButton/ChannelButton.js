@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import styles from "./ChannelButton.module.css";
 import { Ellipsis, Hash, TextQuote, Volume1, VolumeX } from "lucide-react";
 import { ImageComponent } from "../../../ui/Image/Image";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import { ChannelUserButton } from "../ChannelUserButton/ChannelUserButton";
 import IconButton from "../IconButton/IconButton";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,14 +13,13 @@ import { toggleMobileMenu } from "../../../../features/Mobile/mobileSlice";
 import { setUserProfile } from "../../../../features/UserProfile/userProfileSlice";
 import { setOverlay } from "../../../../features/Overlay/overlaySlice";
 import { ChannelStatus } from "./ChannelStatus/ChannelStatus";
+import { setCurrentVoiceChannel, setVoiceChannelFocused } from "../../../../features/Channel/VoiceChannel/voiceChannelSlice";
 
 const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, channel_type, server_id, channel }) => {
 
     const dispatch = useDispatch();
 
     const navigate = useNavigate();
-
-    const { channelID } = useParams();
   
     const { currentVoiceChannel } = useSelector(state => state.voiceChannelSlice);
 
@@ -36,24 +35,34 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
 
       if (isChannelMenuOpen) dispatch(toggleMobileMenu('isChannelMenuOpen'));
       
-      if (channel_type === 'voice' && currentTextChannel && active) dispatch(setCurrentTextChannel(null));
+      dispatch(setVoiceChannelFocused((channel_id === currentVoiceChannel)));
 
-      if (currentVoiceChannel && channel_type === 'text') {
-        if (channel_id === currentTextChannel) {
-          dispatch(setCurrentTextChannel(null));
-        } else {
-          dispatch(setCurrentTextChannel(channel_id));
-        }
+      if (active && channel_type === 'text') {
+
+        navigate(`/dashboard/server/${server_id}`);
+
+        if (currentVoiceChannel) dispatch(setVoiceChannelFocused(true));
+
+      } else if (channel_type === 'voice') {
+        
+          if (currentVoiceChannel !== channel_id) dispatch(setCurrentVoiceChannel(null));
+
+          if (active) {
+
+            navigate(`/dashboard/server/${server_id}`);
+
+          } else {
+
+            if (!currentTextChannel) dispatch(setVoiceChannelFocused(true));
+
+            dispatch(setCurrentVoiceChannel(channel_id));
+          }
       } else {
-        if (active && channel_type === 'text') {
-          navigate(`/dashboard/server/${server_id}`);
-        } else {
-          navigate(`/dashboard/server/${server_id}/channel/${channel_id}`);
-        }
+        navigate(`/dashboard/server/${server_id}/channel/${channel_id}`);
       }
-
+      
     };
-  
+
     React.useEffect(() => {
 
       toggleActive(currentVoiceChannel === channel_id || currentTextChannel === channel_id);

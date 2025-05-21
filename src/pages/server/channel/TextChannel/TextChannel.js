@@ -6,6 +6,8 @@ import { sendMessage } from '../../../../features/Channel/TextChannel/Thunks/sen
 import { fetchMessages } from '../../../../features/Channel/TextChannel/Thunks/fetchMessages'
 import { setReplyTo, setTextChannelPos } from '../../../../features/Channel/TextChannel/textChannelSlice'
 import { ChannelBackground } from '../../../../components/ChannelBackground/ChannelBackground'
+import { setLastReadStatus } from '../../../../features/Notifications/notificationsSlice'
+import { updateLastReadStatus } from '../../../../features/Notifications/Thunks/updateLastReadStatus'
 
 export const TextChannel = ({channel}) => {
 
@@ -69,6 +71,22 @@ export const TextChannel = ({channel}) => {
     const clearReplyTo = () => {
         dispatch(setReplyTo(null));
     }
+
+    React.useEffect(() => {
+
+        dispatch(setLastReadStatus(channel))
+
+    }, [dispatch, messages, channel])
+
+    React.useEffect(() => {
+
+        return () => {
+            if (!channel) return;
+
+            dispatch(updateLastReadStatus(channel));
+        }
+
+    }, [channel, dispatch])
    
     return (
         <TextChannelProvider channel={channel} >

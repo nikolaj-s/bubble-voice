@@ -17,6 +17,7 @@ import { Pencil, Plus, Trash2 } from "lucide-react";
 import { ImageComponent } from "../../ui/Image/Image";
 
 import { BoxLabel } from "../../ui/Titles/BoxLabel/BoxLabel";
+import { MiniUserPreview } from "../../ui/MiniUserPreview/MiniUserPreview";
 
 const PermissionsMenu = ({ permissions, users = [], handleDelete = () => {} }) => {
 
@@ -38,23 +39,7 @@ const PermissionsMenu = ({ permissions, users = [], handleDelete = () => {} }) =
         <Label label={permissions.server_group_name} />
       </div>
       <div className={styles.buttonWrapper}>
-        <div className={styles.usersWrapper}>
-          {users.map((user, key) => {
-
-            if (key > 6) return null;
-
-            if (key === 6) {
-              return (
-                <Plus color="var(--text-color)" />
-              )
-            }
-            return (
-              <div key={user._id} className={styles.userImage}>
-                <ImageComponent src={user.user_image} />
-              </div>
-            )
-          })}
-        </div>
+        <MiniUserPreview users={users} />
         {permissions.default_permissions && (
           <BoxLabel label={"Default"} />
         )}

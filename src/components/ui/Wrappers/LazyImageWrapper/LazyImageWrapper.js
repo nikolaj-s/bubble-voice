@@ -19,11 +19,7 @@ const LazyImageWrapper = ({
         if (entry.isIntersecting) {
           clearTimeout(timeoutRef.current);
           setIsVisible(true);
-        } else {
-          timeoutRef.current = setTimeout(() => {
-            setIsVisible(false);
-          }, unmountDelay);
-        }
+        } 
       },
       {
         threshold: 0,

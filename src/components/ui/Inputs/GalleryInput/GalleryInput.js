@@ -87,7 +87,7 @@ export const GalleryInput = ({
               dragHandle={<Move color='var(--text-color)' size={20} />}
               key={img.id} id={img.id} index={index}>
                 <ImageDropZone
-                  
+                  parentFileSrc={img.file}
                   image={img}
                   onImageChange={(file) => handleImageChange(index, file)}
                   width={'100%'}

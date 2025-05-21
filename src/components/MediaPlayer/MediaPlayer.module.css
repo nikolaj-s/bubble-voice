@@ -11,12 +11,11 @@
 
 .searchMediaButton {
   display: flex;
-  padding: 5px;
-  background-color: var(--primary-color);
-  opacity: 0.75;
+  padding: 10px 5px;
+  background-color: var(--card-background-color);
   align-items: center;
   justify-content: space-between;
-  height: 45px;
+  height: 55px;
   border-radius: 12px;
   font-size: 1rem;
   color: var(--text-color);
@@ -28,6 +27,7 @@
 
 .searchMediaTitle {
   margin-left: 10px;
+  opacity: 0.75;
 }
 
 .searchMediaWrapper {

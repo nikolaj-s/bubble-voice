@@ -1,0 +1,14 @@
+
+
+.unread {
+    position: absolute;
+    left: 2px;
+    top: 4px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background-color: var(--error-color);
+    z-index: 10;
+}
+

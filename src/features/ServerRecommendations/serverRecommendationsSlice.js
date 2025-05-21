@@ -16,6 +16,11 @@ const serverRecommendationsSlice = createSlice({
         state.mediaByServer = {};
         state.loading = false;
         state.error = null;
+      },
+      setMediaOfTheDay: (state, action) => {
+        if (state.mediaByServer[action.payload.server_id]) {
+          state.mediaByServer[action.payload.server_id].mediaOfTheDay = action.payload.mediaOfTheDay;
+        }
       }
     },
     extraReducers: (builder) => {
@@ -43,6 +48,6 @@ const serverRecommendationsSlice = createSlice({
     }
   });
 
-export const { clearRecommendations } = serverRecommendationsSlice.actions;
+export const { clearRecommendations, setMediaOfTheDay } = serverRecommendationsSlice.actions;
 
 export default serverRecommendationsSlice.reducer;

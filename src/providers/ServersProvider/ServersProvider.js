@@ -1,7 +1,8 @@
 import React from 'react'
 import { useSocket } from '../../context/SocketContext'
 import { useDispatch } from 'react-redux';
-import { setServers, updateServerButton } from '../../features/Servers/serversSlice';
+import { setServers, setServerStatus, updateServerButton } from '../../features/Servers/serversSlice';
+import ServerSkeletonLoader from '../../components/ui/Loading/ServerSkeletonLoader/ServerSkeletonLoader';
 
 export const ServersProvider = ({children}) => {
 
@@ -37,23 +38,29 @@ export const ServersProvider = ({children}) => {
                 dispatch(updateServerButton(data));
             }
 
-            handleJoinServers();
+            const handleSetServerStatuses = (data) => dispatch(setServerStatus(data));
 
             socket.on('connect', handleJoinServers);
 
             socket.on('update server button', handleUpdateServerButton);
 
+            socket.on('set server status', handleSetServerStatuses);
+
+            handleJoinServers();
+
             return () => {
                 socket.off('connect', handleJoinServers);
 
                 socket.off('update server button', handleUpdateServerButton);
+
+                socket.off('set server status', handleSetServerStatuses);
             }
 
         }
 
     }, [socket, dispatch]);
 
-    if (loading) return null;
+    if (loading) return <ServerSkeletonLoader />;
 
     return (
         <>

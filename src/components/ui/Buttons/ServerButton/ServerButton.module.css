@@ -1,10 +1,25 @@
 
 .server-button-image-container {
-  width: 45px;
-  height: 45px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
   cursor: pointer;
   pointer-events: auto;
+}
+
+.activeUsersIndicator {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  background-color: var(--accent-color);
+  width: 15px;
+  height: 15px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 12;
+  padding: 2px;
 }

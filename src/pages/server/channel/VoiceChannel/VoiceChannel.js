@@ -8,16 +8,23 @@ import { Room } from '../../../../components/Room/Room'
 import KeybindProvider from '../../../../providers/KeybindProvider/keybindProvider'
 import { MediaPlayerProvider } from '../../../../providers/MediaPlayerProvider/MediaPlayerProvider'
 
-export const VoiceChannel = ({channel}) => {
+import styles from './VoiceChannel.module.css'
+
+export const VoiceChannel = ({channel, focused}) => {
+
     return (
-    <VoiceChannelProvider key={channel} channel={channel}>
-        <KeybindProvider>
-            <MediasoupProvider>
-                <MediaPlayerProvider>
-                    <Room />
-                </MediaPlayerProvider>
-            </MediasoupProvider>
-        </KeybindProvider>
-    </VoiceChannelProvider>
+        <div className={styles.container} style={{zIndex: focused ? 2 : null}}>
+            <KeybindProvider>
+                <VoiceChannelProvider key={channel} channel={channel}>
+                    
+                    <MediasoupProvider>
+                        <MediaPlayerProvider>
+                            <Room />
+                        </MediaPlayerProvider>
+                    </MediasoupProvider>
+                    
+                </VoiceChannelProvider>
+            </KeybindProvider>
+        </div>
     )
 }

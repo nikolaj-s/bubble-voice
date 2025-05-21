@@ -7,6 +7,7 @@
     max-height: calc(100vh - 195px); /* Ensures it respects the viewport */
     overflow-y: auto;
     overflow-x: clip;
+    scrollbar-width: thin;
     flex-grow: 1; /* Allows it to expand */
     flex-shrink: 1; /* Ensures it shrinks when needed */
     min-height: 0; /* Prevents overflow issues */
