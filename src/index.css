@@ -2,6 +2,9 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+
+
 #root {
   
   animation: fadein 0.420s;
@@ -55,22 +58,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
-::-webkit-scrollbar {
-  width: 5px;
+/* Global Bubble Scrollbar Theme */
+body,
+* {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: var(--button-background) transparent; /* Firefox */
 }
 
-::-webkit-scrollbar-track {
-  margin: 2px;
-  background: rgba(0, 0, 0, 0.472);
-  border-radius: 2px;
-}
 
-::-webkit-scrollbar-thumb {
-  background: var(--range-background);
-  border-radius: 2px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(159, 159, 159, 0.7);
-}

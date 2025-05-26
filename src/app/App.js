@@ -19,6 +19,7 @@ import Dashboard from '../pages/dashboard/DashBoard';
 import FatalErrorPage from '../pages/FatalErrorPage/FatalErrorPage';
 import { useDetectOS } from '../hooks/useDetectOs';
 import AppTitleBar from '../components/AppTitleBar/AppTitleBar';
+import { useDisableNavigation } from '../hooks/useDisableNavigation';
 
 function App() {
 
@@ -40,6 +41,8 @@ function App() {
 
   // application specific
   useDetectOS();
+
+  useDisableNavigation();
 
   return (
     <Router>

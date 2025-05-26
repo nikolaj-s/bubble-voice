@@ -45,6 +45,7 @@ const KeybindProvider = ({ children }) => {
   };
 
   const handleDomKeyDown = (event) => {
+    console.log(event)
     const key = event.code;
     if (!key) return;
     if (event.button === 3 || event.button === 4) event.preventDefault();
@@ -60,6 +61,7 @@ const KeybindProvider = ({ children }) => {
   };
 
   const handleDomKeyUp = (event) => {
+    console.log(event)
     const key = event.code;
     if (!key) return;
 
@@ -110,7 +112,7 @@ const KeybindProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (!window?.electron?.ipcRenderer?.on) return;
+    if (!window?.electron?.ipcRenderer) return;
 
     const ipc = window.electron.ipcRenderer;
 
@@ -137,9 +139,10 @@ const KeybindProvider = ({ children }) => {
 
 
   useEffect(() => {
+    console.log(keybinds)
     if (isElectron) {
       window.electron.ipcRenderer.send("REG_KEYBINDS", keybinds);
-      return;
+  
     }
     console.log('using dom key events listener');
 

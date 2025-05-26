@@ -62,7 +62,7 @@ function createMainWindow(settings) {
     icon: path.join(__dirname, 'logo.png'),
   });
 
-  const startUrl = process.env.ELECTRON_START_URL || 'http://localhost:3000/';
+  const startUrl = process.env.ELECTRON_START_URL || 'http://localhost:3001/';
 
   mainWindow.loadURL(startUrl);
 

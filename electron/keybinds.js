@@ -28,7 +28,7 @@ function matchesKeyOrMouse(input, target) {
     typeof input.button !== 'undefined' &&
     typeof target.keyCode === 'string' &&
     target.keyCode.startsWith('Mouse') &&
-    `Mouse${input.button}` === target.keyCode;
+    (`Mouse${input.button}` === target.keyCode || target.key.includes(input.button));
 
   return isKeyboardMatch || isMouseMatch;
 }
@@ -60,7 +60,7 @@ function setupKeybinds(eventSender, binds) {
 
     for (const action of Object.keys(keybinds)) {
       if (action === 'pushToTalk') continue;
-      if (matchesKeyOrMouse(key, keybinds[action]) && !shouldThrottle(action)) {
+      if (matchesKeyOrMouse(key, keybinds[action])) {
         eventSender.send(action, { toggle: true });
       }
     }
@@ -86,7 +86,7 @@ function setupKeybinds(eventSender, binds) {
 
     for (const action of Object.keys(keybinds)) {
       if (action === 'pushToTalk') continue;
-      if (matchesKeyOrMouse(mouse, keybinds[action]) && !shouldThrottle(action)) {
+      if (matchesKeyOrMouse(mouse, keybinds[action])) {
         eventSender.send(action, { toggle: true });
       }
     }

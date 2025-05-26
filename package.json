@@ -52,7 +52,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron-dev": "set ELECTRON_START_URL=http://localhost:3000 && electron .",
+    "electron-dev": "set ELECTRON_START_URL=http://localhost:3001 && electron .",
     "mac-electron-dev": "export ELECTRON_START_URL=http://localhost:3000 && electron .",
     "build-electron": "robocopy electron build/electron /S",
     "package": "electron-builder build -w -c.extraMetadata.main=build/electron/main.js --publish always",

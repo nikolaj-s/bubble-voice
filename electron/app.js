@@ -13,7 +13,7 @@ function initAppLifecycle(app) {
 
   const gotLock = app.requestSingleInstanceLock();
   if (!gotLock) return app.quit();
-
+  
   app.whenReady().then(() => {
     const mainWindow = createMainWindow(userSettings);
     setupTray(mainWindow);

@@ -36,18 +36,18 @@ export const UserAudioProvider = ({ children }) => {
     const removeTrack = (userId) => {
         try {
             const entry = tracksRef.current.get(userId);
-
+console.log('removing track')
             if (!entry) return;
-            console.log('removing track')
+            
             // disconnect WebAudio nodes
-            entry.sourceNode.disconnect();
+            entry.sourceNode?.disconnect();
 
-            entry.gainNode.disconnect();
+            entry.gainNode?.disconnect();
 
             entry.el?.remove();
 
             entry.mediaStream.getTracks().forEach(t => t.stop());
-
+            console.log(entry.el)
             tracksRef.current.delete(userId);
         } catch (err) {
             console.warn(err);
@@ -95,6 +95,10 @@ export const UserAudioProvider = ({ children }) => {
                 ? streamOrTrack
                 : new MediaStream([streamOrTrack]);
 
+            let exists = document.getElementById(`user-audio-stream-src-${userId}`);
+
+            if (exists) exists.remove();
+
             let el = document.createElement('audio');
 
             el.hidden = true;
@@ -107,7 +111,7 @@ export const UserAudioProvider = ({ children }) => {
 
             el.muted = true;
 
-            el.id = `user-stream-src-${userId}`;
+            el.id = `user-audio-stream-src-${userId}`;
 
             document.body.appendChild(el);
 
