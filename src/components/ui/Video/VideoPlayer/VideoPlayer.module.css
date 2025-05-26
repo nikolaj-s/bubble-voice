@@ -38,12 +38,12 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: var(--overlay-color);
     display: flex;
     flex-direction: column;
     gap: 5px;
-    gap: 10px;
-    width: calc(100%);
+    width: calc(100% - 10px);
+    padding: 5px 5px;
   }
 
   .controlWrapper {
@@ -112,4 +112,17 @@
     transition: opacity 0.2s ease;
   }
 
-  
+  .hideCursor {
+  cursor: none;
+}
+
+.hideCursor .videoControls {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.videoControls {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}

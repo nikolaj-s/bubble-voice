@@ -28,7 +28,7 @@ export const AddGalleryWidgetForm = ({channel}) => {
         <>
         <Label label='Create a gallery fitting for this channel' />
         <GalleryInput onImageChange={setImages} />
-        <ApplyChangesPopup onApply={create} name='Create Widget' disabled={(images.length < 1)} />
+        <ApplyChangesPopup onClearChanges={() => {setImages([])}} onApply={create} name='Create Widget' disabled={(images.length < 1)} />
         </>
     )
 }

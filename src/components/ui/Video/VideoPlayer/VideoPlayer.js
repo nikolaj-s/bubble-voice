@@ -6,193 +6,158 @@ import VolumeSlider from '../../Inputs/VolumeSlider/VolumeSlider';
 import { useSelector } from 'react-redux';
 import ProgressBar from '../../ProgressBar/ProgressBar';
 
-const VideoPlayer = ({ src }) => {
+const INACTIVITY_TIMEOUT = 2500;
 
+const VideoPlayer = ({ src }) => {
   const videoRef = useRef(null);
+  const hideControlsTimeoutRef = useRef(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
-
   const [isMuted, setIsMuted] = useState(false);
-
   const [currentTime, setCurrentTime] = useState(0);
-
   const [duration, setDuration] = useState(0);
-
   const [volume, setVolume] = useState(100);
-   // volume from 0 to 100
   const [volumeHover, toggleVolumeHover] = useState(false);
+  const [showControls, setShowControls] = useState(true);
 
-  const {muteVideo} = useSelector(state => state.contentSettingsSlice);
+  const { muteVideo } = useSelector(state => state.contentSettingsSlice);
 
-  // Toggle play/pause
   const togglePlay = () => {
-    try {
-      if (videoRef.current) {
-        if (isPlaying) {
-          videoRef.current?.pause();
-        } else {
-          videoRef.current?.play().catch(() => {});
-        }
-      }
-    } catch (error) {
-      console.log(error);
-      return;
-    }
-    
+    if (!videoRef.current) return;
+    isPlaying ? videoRef.current.pause() : videoRef.current.play().catch(() => {});
   };
 
-  // Update current time and duration on video events
   useEffect(() => {
     const video = videoRef.current;
-
     if (!video) return;
 
-    const handleTimeUpdate = () => setCurrentTime(video.currentTime);
-    const handleLoadedMetadata = () => {
+    const updateTime = () => setCurrentTime(video.currentTime);
+    const loadMetadata = () => {
       setDuration(video.duration);
       setVolume(video.volume * 100);
     };
 
-    video.addEventListener('timeupdate', handleTimeUpdate);
-    video.addEventListener('loadedmetadata', handleLoadedMetadata);
+    video.addEventListener('timeupdate', updateTime);
+    video.addEventListener('loadedmetadata', loadMetadata);
+
     return () => {
-      video.removeEventListener('timeupdate', handleTimeUpdate);
-      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      video.removeEventListener('timeupdate', updateTime);
+      video.removeEventListener('loadedmetadata', loadMetadata);
     };
   }, []);
 
-  // Update playing state when video plays or pauses
   useEffect(() => {
     const video = videoRef.current;
-
     if (!video) return;
 
-    const handlePlay = () => setIsPlaying(true);
-    const handlePause = () => setIsPlaying(false);
+    const onPlay = () => setIsPlaying(true);
+    const onPause = () => setIsPlaying(false);
 
-    video.addEventListener('play', handlePlay);
-    video.addEventListener('pause', handlePause);
+    video.addEventListener('play', onPlay);
+    video.addEventListener('pause', onPause);
+
     return () => {
-      video.removeEventListener('play', handlePlay);
-      video.removeEventListener('pause', handlePause);
+      video.removeEventListener('play', onPlay);
+      video.removeEventListener('pause', onPause);
     };
   }, []);
 
   useEffect(() => {
-
     if (videoRef.current && muteVideo) {
-
-      const newMuted = true;
-
-      setIsMuted(newMuted);
-      
-      videoRef.current.muted = newMuted;
-     
+      setIsMuted(true);
+      videoRef.current.muted = true;
     }
+  }, [muteVideo]);
 
-  }, [muteVideo])
-
-  // Handle progress bar click (seeking)
   const handleProgressClick = (value) => {
     if (videoRef.current) {
       videoRef.current.currentTime = value;
     }
   };
 
-  // Format time as mm:ss
-  const formatTime = (time) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-  };
-
-  // Toggle fullscreen mode
-  const toggleFullScreen = () => {
-    if (videoRef.current) {
-      if (!document.fullscreenElement) {
-        videoRef.current.requestFullscreen?.();
-      } else {
-        document.exitFullscreen?.();
-      }
-    }
-  };
-
-  // Handle volume changes via slider
   const handleVolumeChange = (newVolume) => {
-
     setVolume(newVolume);
     if (videoRef.current) {
       videoRef.current.volume = newVolume / 100;
-      if (newVolume === 0) {
-        setIsMuted(true);
-      } else {
-        setIsMuted(false);
-      }
+      setIsMuted(newVolume === 0);
     }
   };
 
-  // Toggle mute/unmute
   const toggleMute = () => {
-    if (videoRef.current) {
-      const newMuted = !isMuted;
-      setIsMuted(newMuted);
-      videoRef.current.muted = newMuted;
-      if (!newMuted && volume === 0) {
-        // if unmuting and volume is 0, reset to 50%
-        setVolume(50);
-        videoRef.current.volume = 0.5;
-      }
+    if (!videoRef.current) return;
+    const newMuted = !isMuted;
+    setIsMuted(newMuted);
+    videoRef.current.muted = newMuted;
+    if (!newMuted && volume === 0) {
+      setVolume(50);
+      videoRef.current.volume = 0.5;
     }
+  };
+
+  useEffect(() => {
+    return () => clearTimeout(hideControlsTimeoutRef.current);
+  }, []);
+
+  const handleMouseMove = () => {
+    setShowControls(true);
+    clearTimeout(hideControlsTimeoutRef.current);
+    hideControlsTimeoutRef.current = setTimeout(() => {
+      setShowControls(false);
+    }, INACTIVITY_TIMEOUT);
   };
 
   return (
-    <div onMouseLeave={() => {toggleVolumeHover(false)}} className={styles.customVideoContainer}>
+    <div
+      onMouseMove={handleMouseMove}
+      onMouseLeave={() => {
+        setShowControls(false);
+        clearTimeout(hideControlsTimeoutRef.current);
+      }}
+      className={`${styles.customVideoContainer} ${!showControls ? styles.hideCursor : ''}`}
+    >
       <video
-        data-context={JSON.stringify({type: 'video', src: src, title: src, duration: Math.floor(duration), query: src})}
+        data-context={JSON.stringify({ type: 'video', src, title: src, duration: Math.floor(duration), query: src })}
         onClick={togglePlay}
         ref={videoRef}
         src={src}
         className={styles.customVideo}
         controls={false}
         playsInline
-        onLoadedMetadata={(e) => {setDuration(e.target.duration)}}
       />
-      {/* Overlay play button when video is not playing */}
+
       {!isPlaying && (
         <div className={styles.overlay} onClick={togglePlay}>
           <PlayCircle size={64} className={styles.overlayPlayIcon} />
         </div>
       )}
+
       <div className={styles.videoControls}>
         <div className={styles.controlWrapper}>
-          <div className={styles.timeDisplay}>
-            {formatTime(currentTime)}
-          </div>
+          <ProgressBar width="100%" duration={duration} currentTime={currentTime} onSeek={handleProgressClick} />
           <div className={styles.volumeControl}>
-            <div 
-            onMouseEnter={() => {toggleVolumeHover(true)}}
-            className={styles.volumeWrapper}>
+            <div onMouseEnter={() => toggleVolumeHover(true)} className={styles.volumeWrapper}>
               <button onClick={toggleMute} className={styles.controlButton}>
                 {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
               </button>
-              {volumeHover && <div 
-              onMouseEnter={() => {toggleVolumeHover(true)}}
-              onMouseLeave={() => {toggleVolumeHover(false)}}
-              className={styles.volumeSlider}>
-                <VolumeSlider
-                  min={0}
-                  max={100}
-                  step={1}
-                  value={volume}
-                  onChange={handleVolumeChange}
-                />
-              </div>}
+              {volumeHover && (
+                <div
+                  onMouseEnter={() => toggleVolumeHover(true)}
+                  onMouseLeave={() => toggleVolumeHover(false)}
+                  className={styles.volumeSlider}
+                >
+                  <VolumeSlider
+                    min={0}
+                    max={100}
+                    step={1}
+                    value={volume}
+                    onChange={handleVolumeChange}
+                  />
+                </div>
+              )}
             </div>
-          
           </div>
         </div>
-        
-       <ProgressBar duration={duration} currentTime={currentTime} onSeek={handleProgressClick} />
+     
       </div>
     </div>
   );
@@ -203,4 +168,5 @@ VideoPlayer.propTypes = {
 };
 
 export default VideoPlayer;
+
 

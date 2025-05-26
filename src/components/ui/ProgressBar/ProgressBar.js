@@ -9,7 +9,7 @@ const formatTime = (seconds) => {
   return `${mins}:${secs}`;
 };
 
-const ProgressBar = ({ currentTime, duration, onSeek }) => {
+const ProgressBar = ({ currentTime, duration, onSeek, width }) => {
   const [hoverTime, setHoverTime] = useState(null);
   const [hoverX, setHoverX] = useState(0);
   const wrapperRef = useRef(null);
@@ -38,8 +38,6 @@ const ProgressBar = ({ currentTime, duration, onSeek }) => {
     onSeek(seekTime);
   };
 
-  if (!currentTime) return null;
-
   return (
     <div
       ref={wrapperRef}
@@ -47,6 +45,7 @@ const ProgressBar = ({ currentTime, duration, onSeek }) => {
       onClick={handleSeek}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      style={{width}}
     >
       {/* Hover Preview Tooltip */}
       {hoverTime !== null && (

@@ -6,7 +6,8 @@
     overflow-y: auto;
     position: fixed;
     width: 100%;
-    top: 65px;
+    top: 35px;
+    padding-top: 30px;
     pointer-events: none;
     height: calc(100% - 175px);
 }

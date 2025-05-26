@@ -1,25 +1,20 @@
+.leftBlock {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .mediaItem {
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 10px 5px;
-  background-color: var(--card-background-color);
-  border-radius: 12px;
+  gap: 12px;
+  padding: 5px;
+  background-color: transparent;
+  border-radius: 10px;
   transition: background-color 0.2s ease, box-shadow 0.2s ease, scale 0.2s ease;
   cursor: pointer;
-  flex-shrink: 0;
-  max-width: 100%;
-  height: 35px;
   width: calc(100% - 10px);
-}
-
-.queueIndication {
-  width: 48px;
-  height: 48px;
-  flex-shrink: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  height: 50px;
 }
 
 .mediaItem:active {
@@ -27,59 +22,56 @@
 }
 
 .mediaItem:hover {
-  background-color: var(--button-hover);
+  background-color: var(--primary-color);
 }
 
-.mediaItem.playing {
-  background-color: var(--button-background);
-  box-shadow: 0 0 0 2px var(--button-hover);
+.queueIndication {
+  font-size: 0.85rem;
+  width: 24px;
+  text-align: center;
+  opacity: 0.6;
 }
 
-.thumbnail {
-  width: 48px;
-  height: 48px;
-  object-fit: cover;
-  border-radius: 8px;
-  flex-shrink: 0;
-}
-
-.mediaItemButtons {
-  flex-shrink: 0;
-}
-
+.thumbnail,
 .fallbackIcon {
   width: 48px;
   height: 48px;
-  border-radius: 8px;
-  background-color: var(--secondary-color);
+  border-radius: 5px;
+  flex-shrink: 0;
+  object-fit: cover;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-color);
-  flex-shrink: 0;
 }
 
 .details {
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
-  max-width: calc(100% - 53px);
-  margin-right: auto;
+  min-width: 0;
 }
 
 .title {
   font-weight: 600;
-  color: var(--text-color);
   font-size: 1rem;
+  color: var(--text-color);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.duration {
+.detailsWrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 0.85rem;
   color: var(--text-color);
-  opacity: 0.6;
-  margin-top: 2px;
+  opacity: 0.75;
+}
+
+.mediaItemButtons {
+  margin-left: auto;
+  flex-shrink: 0;
 }

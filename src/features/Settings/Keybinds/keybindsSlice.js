@@ -19,10 +19,11 @@ const keybindsSlice = createSlice({
   reducers: {
    setKeybind: (state, action) => {
       const { actionType, keybind } = action.payload;
-
+      console.log(actionType, keybind)
       // Remove the keybind from any other actionType that currently uses it
       for (const [existingAction, existingKey] of Object.entries(state.keybinds)) {
-        if (existingAction !== actionType && existingKey === keybind) {
+        console.log(existingAction, actionType)
+        if (existingAction !== actionType && existingKey?.keyCode === keybind?.keyCode) {
           delete state.keybinds[existingAction];
         }
       }

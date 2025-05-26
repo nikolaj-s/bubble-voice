@@ -84,6 +84,8 @@ export const ChannelDescription = ({close}) => {
                 <IconPlaceholder icon={Hash} />
                 }
                 <Header margin={0} text={channel.channel_name} />
+
+                <Description description={channel.channel_description} />
                 <ToolBar>
                     {permissions?.user_can_edit_channels && 
                     (<IconButton 
@@ -96,9 +98,8 @@ export const ChannelDescription = ({close}) => {
                     title={'See Pinned Content'}
                     Icon={<Pin size={15} color='var(--text-color)' />}
                     />}
+
                 </ToolBar>
-                <LineSpacer />
-                <Description description={channel.channel_description} />
             </div>
 
         </FullScreenWrapper>

@@ -34,7 +34,19 @@ const mediaPlayerSlice = createSlice({
         }
 
     },
-    addMultipleToQueue: (state, action) => {
+    reorderQueue: (state, action) => {
+      const newOrder = action.payload.newOrder;
+
+      if (!newOrder) return;
+
+      const map = new Map(state.queue.map(item => [item._id, item]));
+
+      const ordered = newOrder.map(id => map.get(id)).filter(Boolean);
+      const remaining = state.queue.filter(item => !newOrder.includes(item._id));
+
+      state.queue = [...ordered, ...remaining];
+    },
+     addMultipleToQueue: (state, action) => {
       state.queue = [...state.queue, ...action.payload];
     },
     removeMediaFromQueue: (state, action) => {
@@ -150,7 +162,8 @@ export const {
   toggleIsMediaPlayerOpen,
   setMediaHasAudio,
   toggleHideMediaPlayer,
-  enableMediaPlayer
+  enableMediaPlayer,
+  reorderQueue
 } = mediaPlayerSlice.actions;
 
 export default mediaPlayerSlice.reducer;

@@ -15,7 +15,7 @@ export const KeybindSettingsForm = () => {
     // Dispatch an action to update the keybind
     dispatch(setKeybind({ actionType, keybind }));
   };
-
+  console.log(keybinds)
   return (
     <>
       <Header text="Keybind Settings" />

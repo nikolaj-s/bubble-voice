@@ -1,15 +1,25 @@
-import React from "react";
+
 import styles from "./DashBoard.module.css";
+
 import { SideNav } from "../../layout/Navigation/SideNav/SideNav";
+
 import TopNav from "../../layout/Navigation/TopNav/TopNav";
+
 import { SocketProvider } from "../../context/SocketContext";
+
 import { Route, Routes } from "react-router";
+
 import { Overlay } from "../../layout/Overlay/Overlay";
+
 import { Server } from "../server/server";
+
 import ServerNotFound from "../../components/Error/ServerNotFound/ServerNotFound";
+
 import FetchAccountProvider from "../../providers/FetchAccountProvider/FetchAccountProvider";
 import { Channel } from "../server/channel/channel";
+
 import { MediaControlsProvider } from "../../context/MediaControlsContext";
+
 import ContextMenu from "../../layout/ContextMenu/ContextMenu";
 
 import { ServerDashboard } from "../server/serverDashboard/ServerDashboard";
@@ -24,6 +34,10 @@ import AlertToast from "../../components/AlertToast/AlertToast";
 
 import { useApplyTheme } from "../../hooks/useApplyTheme";
 
+import { NotificationProvider } from "../../providers/NotificationProvider/NotificationProvider";
+import { GlobalVolumeProvider } from "../../context/GlobalVolumeContext";
+import NativeFullScreenWrapper from "../../components/ui/Wrappers/NativeFullScreenWrapper/NativeFullScreenWrapper";
+
 const Dashboard = () => {
 
   useDeviceWatcher();
@@ -34,29 +48,37 @@ const Dashboard = () => {
    
       <FetchAccountProvider>
         <SocketProvider>
-          <ContextMenu>
-          <Overlay>
-            <MediaControlsProvider>
-              <div className={styles.layout}>
-                <SideNav />
-                <div className={styles.wrapper}>
-                  <TopNav />
-                  <Routes>
-                    <Route path="/*" element={<UserDashboard />} >
-                    </Route>
-                    <Route path="/server/:serverID/*" element={<Server />} >
-                      <Route path="" element={<ServerDashboard />} />
-                      <Route path="channel/:channelID" element={<Channel />} />
-                    </Route>
-                    <Route path="/not-found" element={<ServerNotFound />} />
-                  </Routes>
-                </div>
-              </div>
-              </MediaControlsProvider>
-          </Overlay>
-          </ContextMenu>
-        </SocketProvider>
-        <AlertToast />
+          <NotificationProvider>
+            <GlobalVolumeProvider>
+              <NativeFullScreenWrapper>
+                <ContextMenu>
+                  <Overlay>
+                    <MediaControlsProvider>
+                      
+                      <div className={styles.layout}>
+                        <SideNav />
+                        <div className={styles.wrapper}>
+                          <TopNav />
+                          <Routes>
+                            <Route path="/*" element={<UserDashboard />} >
+                            </Route>
+                            <Route path="/server/:serverID/*" element={<Server />} >
+                              <Route path="" element={<ServerDashboard />} />
+                              <Route path="channel/:channelID" element={<Channel />} />
+                            </Route>
+                            <Route path="/not-found" element={<ServerNotFound />} />
+                          </Routes>
+                        </div>
+                      </div>
+                      
+                    </MediaControlsProvider>
+                  </Overlay>
+                </ContextMenu>
+                </NativeFullScreenWrapper>
+             </GlobalVolumeProvider>
+            </NotificationProvider>
+          </SocketProvider>
+          <AlertToast />
         <ConnectionStatusNotice />
       </FetchAccountProvider>
   

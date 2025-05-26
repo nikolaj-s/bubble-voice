@@ -90,5 +90,20 @@ export const useMediaPlayer = () => {
 
     }, [socket, dispatch, loading, playerState])  
 
-    return {...playerState, toggleIsPlaying, seek, next}
+    const reorder = useCallback(async (value) => {
+      try {
+        
+        if (!value || loading || !playerState.enabled) return;
+
+        const newOrder = value.map(item => item._id);
+
+        await socket.request('media-widget/re-order', {newOrder});
+
+      } catch (error) {
+        console.log(error);
+        dispatch(triggerAlert("Error Reordering Queue", 'error'));
+      }
+    }, [dispatch, socket, loading, playerState])
+
+    return {...playerState, toggleIsPlaying, seek, next, reorder}
 }

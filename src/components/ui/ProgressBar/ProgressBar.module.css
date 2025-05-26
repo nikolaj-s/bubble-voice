@@ -3,6 +3,7 @@
     height: 12px;
     cursor: pointer;
     transition: 0.2s ease-in-out;
+    width: 100%;
   }
 
   .progressTrack {
@@ -12,8 +13,6 @@
     border-radius: 4px;
     overflow: hidden;
   }
-
- 
   
   .progressFill {
     height: 100%;

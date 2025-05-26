@@ -1,4 +1,3 @@
-// components/GalleryDisplay/GalleryDisplay.jsx
 import React from "react";
 import styles from "./GalleryDisplay.module.css";
 import { ImageComponent } from "../Image/Image";
@@ -10,19 +9,23 @@ export const GalleryDisplay = ({
   height = 200,
   objectFit = "cover"
 }) => {
-  if (!images.length) return <p className={styles.emptyText}>No images to display.</p>;
+  const MAX_IMAGES = 9;
+  const paddedImages = [...images.slice(0, MAX_IMAGES)];
+
+  // Add empty placeholders if less than 9
+  while (paddedImages.length < MAX_IMAGES) {
+    paddedImages.push(null);
+  }
 
   return (
     <div className={styles.gallery}>
-      {images.map((img, index) => (
-        <div
-          key={index}
-          className={styles.imageWrapper}
-        > 
-        <ImageTooltipWrapper image={{src: img}}>
-          <ImageComponent src={img} />
-        </ImageTooltipWrapper>
-          
+      {paddedImages.map((img, index) => (
+        <div key={index} className={styles.imageWrapper}>
+          {img ? (
+            <ImageTooltipWrapper image={{ src: img }}>
+              <ImageComponent src={img} />
+            </ImageTooltipWrapper>
+          ) : null}
         </div>
       ))}
     </div>

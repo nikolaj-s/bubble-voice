@@ -1,4 +1,4 @@
-import { Bookmark, ChevronRight, Copy, Download, FilePenLine, FolderPen, FolderPlus, Hash, ImageDown, Link, ListPlus, Pause, Pencil, Pin, PinOff, Play, PlaySquare, Plus, Reply, Search, Send, Settings, Settings2, SkipForward, Trash2, Unplug, UserPen, Users, Video } from "lucide-react";
+import { Bookmark, ChevronRight, Copy, Download, FilePenLine, FolderPen, FolderPlus, Hash, ImageDown, Link, ListPlus, Music2, Pause, Pencil, Pin, PinOff, Play, PlaySquare, Plus, Reply, Search, Send, Settings, Settings2, SkipForward, Trash2, Unplug, UserPen, Users, Video } from "lucide-react";
 import { useCallback } from "react";
 import { useDispatch, useSelector,} from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -18,16 +18,19 @@ import { deleteWidget } from "../../features/Widgets/Thunks/deleteWidget";
 import { setManageWidgetsForChannel } from "../../features/Widgets/manageWidgetsSlice";
 import { addMediaToPlayer } from "../../features/MediaPlayer/Thunks/addMediaToPlayer";
 import { setMediaPlayerVolume, toggleHideMediaPlayer, toggleIsMediaPlayerOpen } from "../../features/MediaPlayer/mediaPlayerSlice";
-import { toggleVoiceChannelOptions } from "../../features/Channel/VoiceChannel/voiceChannelSlice";
+import { setCurrentVoiceChannel, toggleVoiceChannelOptions } from "../../features/Channel/VoiceChannel/voiceChannelSlice";
 import { toggleAppearanceSetting } from "../../features/Settings/Appearance/appearanceSlice";
 import { useMediaPlayer } from "../../hooks/useMediaPlayer";
 import { saveMediaToPlayer } from "../../features/MediaPlayer/Thunks/saveMediaToPlayer";
 import { removeSavedMediaFromPlayer } from "../../features/MediaPlayer/Thunks/removeSavedMediaFromPlayer";
 import { isMediaSaved } from "../../features/MediaPlayer/Helpers/isMediaSaved";
+import { useGlobalVolume } from "../../context/GlobalVolumeContext";
 
 export const useContextMenuOptions = () => {
 
     const [searchParams, setSearchParams] = useSearchParams();
+
+    const {volumes, changeVolume} = useGlobalVolume();
 
     const dispatch = useDispatch();
 
@@ -110,16 +113,18 @@ export const useContextMenuOptions = () => {
             if (data.user) {
 
                 if (data.user.user_id !== user.user_id) {
+                    console.log(volumes[data.user.user_id])
                     options.push({
                         label: "Change User Volume",
                         min: 0,
-                        max: 2,
+                        max: 2.5,
                         step: 0.01,
-                        onChange: (value) => {},
+                        value: typeof volumes[data.user.user_id] === 'number' ? volumes[data.user.user_id] : 0.5,
+                        onChange: (value) => {changeVolume(data?.user?.user_id, value)},
                         type: 'range'
                     })
                 }
-
+console.log(options)
                 if (permissions.user_can_assign_server_groups) {
                     options.push({
                         label: "Manage User",
@@ -326,15 +331,7 @@ export const useContextMenuOptions = () => {
                     })
                 }
                 console.log(data.message.user_id, user.user_id)
-                if (data.message.user_id === user.user_id || permissions.user_can_delete_other_users_messages) {
-                    options.push({
-                        label: "Delete Message",
-                        onClick: () => {dispatch(deleteMessage({message_id: data.message.message_id}))},
-                        type: "button",
-                        icon: <Trash2 color="var(--error-color)" />,
-                        color: 'var(--error-color)'
-                    })
-                }
+                
             }
 
             if (data.imageSearchResult) {
@@ -566,23 +563,34 @@ export const useContextMenuOptions = () => {
                 options.push({
                     label: mediaPlayerState.hideMediaPlayer ? 'Show Media Player' : "Hide Media Player",
                     type: 'button',
-                    onClick: () => {dispatch(toggleHideMediaPlayer())}
+                    onClick: () => {dispatch(toggleHideMediaPlayer())},
+                    icon: <Music2 color="var(--text-color)" />
                 })
             }
 
             if (data.channel || data.room || data.controlBar) {
 
-                const root = `/dashboard/server/${server_id}`;
-
                 if (currentVoiceChannel) {
                     options.push({
                         label: "Disconnect",
-                        onClick: () => navigate(root),
+                        onClick: () => {dispatch(setCurrentVoiceChannel(null))},
                         type: "button",
                         icon: <Unplug color="var(--error-color)" />,
                         color: 'var(--error-color)'
                     });
                 } 
+            }
+
+            if (data.message) {
+                if (data.message.user_id === user.user_id || permissions.user_can_delete_other_users_messages) {
+                    options.push({
+                        label: "Delete Message",
+                        onClick: () => {dispatch(deleteMessage({message_id: data.message.message_id}))},
+                        type: "button",
+                        icon: <Trash2 color="var(--error-color)" />,
+                        color: 'var(--error-color)'
+                    })
+                }
             }
 
             return options;
@@ -591,7 +599,7 @@ export const useContextMenuOptions = () => {
             return [];
         }
         },
-        [navigate, dispatch, setSearchParams, hideNonVideoUsers, mediaPlayerState, hideChannelBackgrounds, savedMediaState, currentVoiceChannel, server_id]
+        [navigate, dispatch, setSearchParams, hideNonVideoUsers, mediaPlayerState, hideChannelBackgrounds, savedMediaState, currentVoiceChannel, server_id, volumes]
     );
 
   return getOptions;

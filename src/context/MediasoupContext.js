@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import ConnectingIndicator from "../components/Indicators/ConnectingIndicator/ConnectingIndicator";
 import ErrorIndicator from "../components/Indicators/ErrorIndicator/ErrorIndicator";
 import { throwMicrophoneError } from "../features/Channel/MediaControl/mediaControlSlice";
+import { useUserAudio } from "./UserAudioContext";
 
 const MediasoupContext = createContext(null);
 
@@ -14,6 +15,8 @@ export const MediasoupProvider = ({ children }) => {
 
   const socket = useSocket();
 
+  const {addTrack, removeTrack} = useUserAudio();
+
   const [loading, toggleLoading] = useState(true);
 
   const [error, setError] = useState(false);
@@ -21,9 +24,13 @@ export const MediasoupProvider = ({ children }) => {
   const [updateSignal, setUpdateSignal] = useState(0); // This will trigger re-renders
 
   const deviceRef = useRef(null);
+
   const producerTransportRef = useRef(null);
+
   const consumerTransportRef = useRef(null);
+
   const producersRef = useRef(new Map()); // Store producers in useRef
+
   const consumersRef = useRef(new Map()); // Store consumers in useRef
 
   const forceUpdate = () => setUpdateSignal(prev => prev + 1); // Force re-render when refs change
@@ -203,17 +210,47 @@ export const MediasoupProvider = ({ children }) => {
     if (!consumerParams || consumerParams.error) return;
 
     const consumer = await consumerTransportRef.current.consume(consumerParams);
+
     consumer.user_id = user;
+
     consumer.appData = data;
-
-    consumer.on("trackended", () => document.getElementById(consumer.id)?.remove());
-
-    consumer.on("close", () => document.getElementById(consumer.id)?.remove()); 
     
-    consumer.on("transportclose", () => document.getElementById(consumer.id)?.remove());    
+    if (data.type === 'microphone') {
+      addTrack(user, consumer.track)
+    }
+
+    consumer.on("trackended", () => {
+
+      document.getElementById(consumer.id)?.remove();
+
+      if (consumer.appData.type === 'microphone') {
+        removeTrack(consumer.user_id);
+      }
+    });
+
+    consumer.on("close", () => {
+
+      document.getElementById(consumer.id)?.remove();
+
+       if (consumer.appData.type === 'microphone') {
+        removeTrack(consumer.user_id);
+      }
+
+    }); 
+    
+    consumer.on("transportclose", () => {
+
+      document.getElementById(consumer.id)?.remove()
+
+      if (consumer.appData.type === 'microphone') {
+        removeTrack(consumer.user_id);
+      }
+
+      closeConsumer(consumer.id)
+    });    
 
     consumersRef.current.set(consumer.id, consumer);
-    consumer.on("transportclose", () => closeConsumer(consumer.id));
+
     forceUpdate();
   };
 
@@ -248,7 +285,7 @@ export const MediasoupProvider = ({ children }) => {
       if (type === 'microphone') {
         socket.emit('voice activation', { voiceActive: false });
       }
-      forceUpdate();
+     // forceUpdate();
     }
   };
 
@@ -261,7 +298,7 @@ export const MediasoupProvider = ({ children }) => {
       if (type === 'microphone') {
         socket.emit('voice activation', { voiceActive: true });
       }
-      forceUpdate();
+    //  forceUpdate();
     } else {
 
       if (type === 'microphone') {

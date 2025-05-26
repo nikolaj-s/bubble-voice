@@ -11,7 +11,7 @@
 
 .searchMediaButton {
   display: flex;
-  padding: 10px 5px;
+  padding: 0px 0px;
   background-color: var(--card-background-color);
   align-items: center;
   justify-content: space-between;
@@ -23,10 +23,11 @@
   font-weight: 300;
   cursor: pointer;
   transition: 0.2s ease-in-out;
+  overflow: hidden;
 }
 
 .searchMediaTitle {
-  margin-left: 10px;
+  margin-left: 15px;
   opacity: 0.75;
 }
 
@@ -43,8 +44,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 10px;
   transition: 0.2s ease-in-out;
+  padding-right: 5px;
+
 }
 
 .saves:hover {

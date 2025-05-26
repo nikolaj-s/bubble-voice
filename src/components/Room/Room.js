@@ -10,7 +10,6 @@ import { useDetectSpeech } from '../../hooks/useDetectSpeech';
 import { ChannelBackground } from '../ChannelBackground/ChannelBackground';
 import { RoomOverlay } from './RoomOverlay/RoomOverlay';
 import { usePushToTalk } from '../../hooks/usePushToTalk';
-import NativeFullScreenWrapper from '../ui/Wrappers/NativeFullScreenWrapper/NativeFullScreenWrapper';
 
 export const Room = () => {
     
@@ -33,8 +32,6 @@ export const Room = () => {
     const consumers = getConsumers();
 
     const producers = getProducers();
-
-    const isTextChannelOpen = useSelector(state => state.textChannelSlice.currentTextChannel);
 
     const handleMicrophone = React.useCallback(async (state) => {
 
@@ -136,16 +133,16 @@ export const Room = () => {
 
         const updatedUsers = users.map(user => {
             // Find all consumers that match the current user's user_id
-            const userConsumers = user === account_id ? producers.get('webcam') ? [producers.get('webcam')] : [] : Array.from(consumers.values()).filter(consumer => consumer.user_id === user);
-        
+            const webcam = user === account_id ? producers.get('webcam') : Array.from(consumers.values()).filter(consumer => consumer.user_id === user && consumer.appData.type === 'webcam')[0];
+            
             // Return user with the matched consumers
-            return { user_id: user, consumers: userConsumers };
+            return { user_id: user, webcam };
         });
 
         return updatedUsers;
         
     }, [users, consumers, producers, disable_streams]);
-
+   
     return (
         
             <div 
@@ -155,11 +152,9 @@ export const Room = () => {
             id='voice-channel'
             data-context={JSON.stringify({type: 'room'})}
             className={`${styles.container}`}>
-                <NativeFullScreenWrapper>
                 <RoomUserWrapper users={combinedUsers} disable_streams={disable_streams} />
                 <ChannelBackground channel_background={channel_background} />
                 <RoomOverlay />
-                </NativeFullScreenWrapper>
             </div>
     );
 };

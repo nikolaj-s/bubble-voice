@@ -21,6 +21,8 @@ export const MessageInput = ({ value, setValue, setImage = () => {}, error, send
 
     const [preview, setPreview] = useState(null);
 
+    const [focused, toggleFocused] = useState(false);
+
     const fileInputRef = useRef(null);
 
     const toggleMenu = () => setMenuOpen((prev) => !prev);
@@ -129,8 +131,12 @@ export const MessageInput = ({ value, setValue, setImage = () => {}, error, send
                 onClick={toggleMenu}
                 backgroundColor="var(--background-color)"
                 />
-                <div className={styles["input-wrapper"]}>
+                <div 
+                onClick={() => {document.getElementById('chat-input').focus()}}
+                className={`${styles["input-wrapper"]} ${focused && (styles.focused)}`}>
                     <textarea
+                        onFocus={() => {toggleFocused(true)}}
+                        onBlur={() => {toggleFocused(false)}}
                         ref={textAreaRef}
                         id="chat-input"
                         type="text"

@@ -56,7 +56,7 @@ export const Servers = () => {
     return (
         <div 
         style={{
-            top: window?.electron?.ipcRenderer ? 92 : null,
+            top: window?.electron?.ipcRenderer ? 62 : null,
             height: window?.electron?.ipcRenderer ? 'calc(100% - 205px)' : null
         }}
         className={styles.serverButtons}>

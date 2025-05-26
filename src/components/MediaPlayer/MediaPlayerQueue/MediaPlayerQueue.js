@@ -3,15 +3,18 @@ import EmptyListPlaceholder from '../../ui/Placeholders/EmptyListPlaceholder/Emp
 import { MediaItem } from '../MediaItem/MediaItem';
 
 import styles from './MediaPlayerQueue.module.css';
+import { VerticalReorderWrapper } from '../../ui/Wrappers/VerticalReorderWrapper/VerticalReorderWrapper';
 
-export const MediaPlayerQueue = ({queue}) => {
+export const MediaPlayerQueue = ({queue, onReorder = () => {}}) => {
     return (
          <div className={styles.queue}>
             
             {queue.length > 0 ? (
-            queue.slice().map((media, index) => (
-                <MediaItem key={index} position={index} {...media} inQueue={true} context={media} />
-            ))
+            <VerticalReorderWrapper items={queue} onReorder={onReorder} >
+                {queue.slice().map((media, index) => (
+                    <MediaItem key={index} position={queue.findIndex(m => m._id === media._id)} {...media} inQueue={true} context={media} />
+                ))}
+            </VerticalReorderWrapper>
             ) : (
             <EmptyListPlaceholder message='No Media In The Queue' />
             )}

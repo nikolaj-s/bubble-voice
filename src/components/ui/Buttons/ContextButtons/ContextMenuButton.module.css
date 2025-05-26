@@ -72,6 +72,8 @@
     color: var(--text-color);
     width: calc(100% - 10px);
     padding: 10px 5px;
+    background-color: var(--primary-color);
+    border-radius: 5px;
 }
 
 

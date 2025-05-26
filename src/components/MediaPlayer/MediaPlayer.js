@@ -20,7 +20,8 @@ export const MediaPlayer = ({
   loading,
   openSearchMedia,
   error,
-  openSaves = () => {}
+  openSaves = () => {},
+  onReorder = () => {}
 }) => {
 
   const duration = currentlyPlaying?.duration || 0;
@@ -37,14 +38,14 @@ export const MediaPlayer = ({
             <span className={styles.searchMediaTitle}>What do you want to play?</span>
             <span className={styles.searchMediaWrapper}>
                 <Search style={{marginRight: 10}} color='var(--text-color)' />
-                <PillSpacer  verticle={true} />
+                <PillSpacer height={'calc(100% - 20px)'}  verticle={true} />
                 <div onClick={(e) => {e.stopPropagation(); openSaves()}} className={styles.saves}>
                     <Bookmark color='var(--text-color)' />
                 </div>
             </span>
         </button>
         {error && (<TextLabelError error={error} label='Error:' />)}
-        <MediaPlayerQueue queue={queue} />
+        <MediaPlayerQueue queue={queue} onReorder={onReorder} />
         <div className={styles.controls}>
             <div className={styles.controlsLeft}>
                 <IconButton 

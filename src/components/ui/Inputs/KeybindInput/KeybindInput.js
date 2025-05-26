@@ -1,61 +1,72 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { X } from "lucide-react";
 import styles from "./KeybindInput.module.css";
 
 const KeybindInput = ({ currentKeybind, onChange }) => {
   const [keybind, setKeybind] = useState("None");
   const [listening, setListening] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    setKeybind(currentKeybind?.key || "None");
+  }, [currentKeybind]);
 
-    setKeybind(currentKeybind?.key || "None")
+  // Clean event listener management
+  useEffect(() => {
+    if (!listening) return;
 
-  }, [])
+    const handleKeyDown = (event) => {
+      event.preventDefault();
+      if (["Control", "Alt", "Meta"].includes(event.key)) return;
+      const newKey = event.key.toUpperCase();
+      setKeybind(newKey);
+      onChange({ key: newKey, keyCode: event.code });
+      setListening(false);
+    };
 
-  const handleKeyDown = (event) => {
-    event.preventDefault(); // Prevent default browser actions
-    if (["Control", "Alt", "Meta"].includes(event.key)) return;
+    const handleMouseDown = (event) => {
+      if (event.button < 3) return;
+      const mouseButton =
+        event.button === 3 ? "Mouse Button 4" : "Mouse Button 5";
+      setKeybind(mouseButton);
+      onChange({ key: mouseButton, keyCode: `Mouse${event.button}` });
+      setListening(false);
+    };
 
-    const newKey = event.key.toUpperCase();
-    setKeybind(newKey);
-    onChange({ key: newKey, keyCode: event.code });
-    stopListening();
-  };
-
-  const handleMouseDown = (event) => {
-    // Ignore Left (0) & Right (2) Clicks
-    if (event.button === 0 || event.button === 2) return;
-
-    const mouseButton = event.button === 3 ? "Mouse Button 4" : "Mouse Button 5";
-    setKeybind(mouseButton);
-    onChange({ key: mouseButton, keyCode: `Mouse${event.button}` });
-    stopListening();
-  };
-
-  const startListening = () => {
-    setListening(true);
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("mousedown", handleMouseDown);
-  };
 
-  const stopListening = () => {
+    // Clean up listeners on stop listening or unmount
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("mousedown", handleMouseDown);
+    };
+  }, [listening, onChange]);
+
+  const startListening = () => setListening(true);
+
+  const handleClear = (e) => {
+    e.stopPropagation();
     setListening(false);
-    window.removeEventListener("keydown", handleKeyDown);
-    window.removeEventListener("mousedown", handleMouseDown);
+    setKeybind("None");
+    onChange(null);
   };
 
   return (
     <button
-      style={{
-        width: listening ? 150 : 80
-      }}
+      type="button"
       onClick={startListening}
-      onBlur={stopListening}
-      className={styles["keybind-button"]}
+      onBlur={() => setListening(false)}
+      className={`${styles["keybind-button"]} ${listening ? styles.listening : ""}`}
+      style={{ width: listening ? 150 : 120 }}
     >
-      {listening ? "Press a key..." : keybind}
+      <span className={styles.label}>
+        {listening ? "Press a key..." : keybind}
+      </span>
+      {!listening && keybind !== "None" && (
+        <X className={styles.clearIcon} onClick={handleClear} />
+      )}
     </button>
   );
 };
 
 export default KeybindInput;
-

@@ -11,7 +11,8 @@ import {
     incrementCurrentTime,
     setCurrentlyPlaying,
     addMultipleToQueue,
-    enableMediaPlayer
+    enableMediaPlayer,
+    reorderQueue
 
 } from '../../features/MediaPlayer/mediaPlayerSlice';
 import { fetchSavedMedia } from '../../features/MediaPlayer/Thunks/fetchSavedMedia';
@@ -78,6 +79,10 @@ export const MediaPlayerProvider = ({children}) => {
             const handleSkip = (data) => {
                 dispatch(playNextInQueue());
             }
+
+            const handleReorder = (data) => {
+              dispatch(reorderQueue(data));
+            }
     
             socket
             .request('media-widget/check', { channel_id: channelId })
@@ -96,6 +101,8 @@ export const MediaPlayerProvider = ({children}) => {
                 socket.on(`media-widget/seek/${channelId}`, handleSeek);
     
                 socket.on(`media-widget/skipped-media/${channelId}`, handleSkip);
+
+                socket.on(`media-widget/re-order/${channelId}`, handleReorder)
         
                 dispatch(setCurrentChannel(channelId));
             
@@ -120,6 +127,8 @@ export const MediaPlayerProvider = ({children}) => {
                 socket.off(`media-widget/skipped-media/${channelId}`, handleSkip);
     
                 socket.off(`media-widget/seek/${channelId}`, handleSeek);
+
+                socket.off(`media-widget/re-order/${channelId}`, handleReorder);
     
                 dispatch(resetMediaPlayer());
     

@@ -71,7 +71,7 @@ export const MediaPlayerStreamSource = ({expand}) => {
                     onProgress={handleProgress}
                     width={'100%'}
                     height={'100%'}
-                    url={currentlyPlaying?.src || currentlyPlaying?.url}
+                    url={currentlyPlaying?.url?.includes('youtu') ? currentlyPlaying?.url : currentlyPlaying?.src || currentlyPlaying?.url}
                     playing={isPlaying}
                     muted={isMuted}
                     />

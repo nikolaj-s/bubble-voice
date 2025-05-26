@@ -4,6 +4,7 @@ import styles from "./ChannelCategory.module.css";
 import ChannelButton from "../ui/Buttons/ChannelButton/ChannelButton";
 import { ChevronDown } from "lucide-react";
 import { ChannelButtonDragWrapper } from "../ui/Buttons/ChannelButton/ChannelButtonDragWrapper";
+import { Subtitle } from "../ui/Titles/Subtitle/Subtitle";
 
 export const Category = ({
   category_id,
@@ -113,8 +114,7 @@ export const Category = ({
         }}
         className={styles["channel-list-collapse-button"]}
       >
-       
-        <p style={{ color: "var(--text-color)" }}>{catagoryName}</p>
+        <Subtitle>{catagoryName}</Subtitle>
         <ChevronDown style={{rotate: collapse ? '-90deg' : '0deg', transition: '0.2s'}} />
       </div>
       <div onDragOver={(e) => {e.preventDefault()}} draggable={false} className={styles["channel-list-button-wrapper"]}>

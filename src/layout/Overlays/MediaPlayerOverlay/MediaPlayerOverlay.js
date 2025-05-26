@@ -1,5 +1,4 @@
-import React from 'react'
-import NativeFullScreenWrapper from '../../../components/ui/Wrappers/NativeFullScreenWrapper/NativeFullScreenWrapper'
+
 import { useMediaPlayer } from '../../../hooks/useMediaPlayer'
 import { useDispatch } from 'react-redux'
 import { setFilter } from '../../../features/Search/searchSlice'
@@ -12,7 +11,7 @@ export const MediaPlayerOverlay = ({close}) => {
 
     const dispatch = useDispatch();
     
-    const {enabled, isPlaying, currentlyPlaying, queue, loading, next, toggleIsPlaying, currentTime, seek, error} = useMediaPlayer();
+    const {enabled, isPlaying, currentlyPlaying, queue, loading, next, toggleIsPlaying, currentTime, seek, error, reorder} = useMediaPlayer();
 
     const handleOpenSearchMedia = () => {
         
@@ -56,6 +55,7 @@ export const MediaPlayerOverlay = ({close}) => {
             error={error}
             openSearchMedia={handleOpenSearchMedia}
             openSaves={openSaves}
+            onReorder={reorder}
             />
         </FullScreenWrapper>
     )

@@ -25,7 +25,7 @@
     display: flex;
     align-items: flex-start;
     padding: 5px;
-    border-left: 5px solid var(--accent-color);
+    border-left: 2px solid var(--accent-color);
     position: relative;
     flex-shrink: 0;
     min-height: 25px;
