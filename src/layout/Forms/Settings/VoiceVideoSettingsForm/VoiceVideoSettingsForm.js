@@ -20,6 +20,8 @@ export const VoiceVideoSettingsForm = () => {
 
     const [voiceThreshold, setThreshold] = React.useState(25);
 
+    const {platform} = useSelector(state => state.osSlice);
+
     const options= [
         {
             title: "Voice Activation Detection",
@@ -41,7 +43,7 @@ export const VoiceVideoSettingsForm = () => {
 
     const keybinds = useSelector((state) => state.keybindsSlice.keybinds);
     
-    const {echoCancellation, noiseSuppression, autoGainControl} = useSelector(state => state.mediaControlSlice);
+    const {echoCancellation, noiseSuppression, autoGainControl, captureDesktopAudio} = useSelector(state => state.mediaControlSlice);
 
     const handleKeybindChange = (actionType, keybind) => {
         // Dispatch an action to update the keybind
@@ -109,6 +111,13 @@ export const VoiceVideoSettingsForm = () => {
         <ToggleSwitch initialState={noiseSuppression} onToggle={() => {dispatch(toggleMicrophoneAttribute('noiseSuppression'))}} />
         <Label label='Auto Gain Control' />
         <ToggleSwitch initialState={autoGainControl} onToggle={() => {dispatch(toggleMicrophoneAttribute('autoGainControl'))}} />
+        <LineSpacer />
+        {platform === 'win32' && (
+        <>
+        <Header text='Screen Capture' />
+        <Label label='Enable Desktop Audio Capture' />
+        <ToggleSwitch initialState={captureDesktopAudio} onToggle={() => {dispatch(toggleMicrophoneAttribute('captureDesktopAudio'))}} />
+        </>)}
         </>
     )
 }

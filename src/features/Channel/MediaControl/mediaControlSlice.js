@@ -12,6 +12,8 @@ const initialState = () => {
 
     const noiseSuppression = JSON.parse(localStorage.getItem('noiseSuppression')) || false;
 
+    const captureDesktopAudio = JSON.parse(localStorage.getItem('captureDesktopAudio')) || false;
+
     return {
         isAudioMuted: false,
         isWebcamOn: false,
@@ -26,7 +28,8 @@ const initialState = () => {
         voiceThreshold: voiceThreshold || 25,
         echoCancellation,
         autoGainControl,
-        noiseSuppression
+        noiseSuppression,
+        captureDesktopAudio
     }
 }
 

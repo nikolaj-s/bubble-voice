@@ -26,6 +26,8 @@ export const useScreenShare = ({produce, closeProducer}) => {
     }
     if (typeof closeProducer === "function") {
       await closeProducer("screen");
+
+      await closeProducer("screenAudio");
     }
     dispatch(clearScreenState());
 
@@ -54,6 +56,12 @@ export const useScreenShare = ({produce, closeProducer}) => {
           try {
 
             const mediaStream = await navigator.mediaDevices.getUserMedia({
+              // audio: {
+              //   mandatory: {
+              //     chromeMediaSource: "desktop",
+              //     chromeMediaSourceId: source.id
+              //   }
+              // },
               audio: false,
               video: {
                 mandatory: {
@@ -65,12 +73,16 @@ export const useScreenShare = ({produce, closeProducer}) => {
                   cursor: 'never'
                 },
               },
-            });
+            }).catch(err => {console.log(err)})
 
             streamRef.current = mediaStream;
 
             if (typeof produce === "function") {
               await produce("screen", mediaStream.getVideoTracks()[0]);
+
+              if (mediaStream.getAudioTracks()[0]) {
+           //     await produce("screenAudio", mediaStream.getAudioTracks()[0]);
+              }
             }
 
             dispatch(setScreenSharing(true));
@@ -84,6 +96,7 @@ export const useScreenShare = ({produce, closeProducer}) => {
             mediaStream.getVideoTracks().forEach((track) => {
               track.onended = stopHandler;
             });
+
             resolve(mediaStream);
           } catch (err) {
             dispatch(setScreenError("Failed to get screen stream"));
