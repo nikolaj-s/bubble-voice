@@ -53,9 +53,19 @@ function setupKeybinds(eventSender, binds) {
   // Key down
   uIOhook.on('keydown', (key) => {
     if (matchesKeyOrMouse(key, keybinds.pushToTalk) && !pushToTalkActive) {
-      eventSender.send('push to talk', { active: true });
+      eventSender.send('pushToTalk', { active: true });
       pushToTalkActive = true;
       return;
+    }
+
+   
+  });
+
+  // Key up
+  uIOhook.on('keyup', (key) => {
+    if (matchesKeyOrMouse(key, keybinds.pushToTalk) && pushToTalkActive) {
+      eventSender.send('pushToTalk', { active: false });
+      pushToTalkActive = false;
     }
 
     for (const action of Object.keys(keybinds)) {
@@ -64,14 +74,6 @@ function setupKeybinds(eventSender, binds) {
         eventSender.send(action, { toggle: true });
       }
     }
-  });
-
-  // Key up
-  uIOhook.on('keyup', (key) => {
-    if (matchesKeyOrMouse(key, keybinds.pushToTalk) && pushToTalkActive) {
-      eventSender.send('push to talk', { active: false });
-      pushToTalkActive = false;
-    }
 
     handleInactivity();
   });
@@ -79,7 +81,7 @@ function setupKeybinds(eventSender, binds) {
   // Mouse down
   uIOhook.on('mousedown', (mouse) => {
     if (matchesKeyOrMouse(mouse, keybinds.pushToTalk) && !pushToTalkActive) {
-      eventSender.send('push to talk', { active: true });
+      eventSender.send('pushToTalk', { active: true });
       pushToTalkActive = true;
       return;
     }
@@ -95,7 +97,7 @@ function setupKeybinds(eventSender, binds) {
   // Mouse up
   uIOhook.on('mouseup', (mouse) => {
     if (matchesKeyOrMouse(mouse, keybinds.pushToTalk) && pushToTalkActive) {
-      eventSender.send('push to talk', { active: false });
+      eventSender.send('pushToTalk', { active: false });
       pushToTalkActive = false;
     }
 

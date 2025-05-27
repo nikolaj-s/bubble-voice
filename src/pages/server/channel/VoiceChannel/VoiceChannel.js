@@ -10,23 +10,22 @@ import { MediaPlayerProvider } from '../../../../providers/MediaPlayerProvider/M
 
 import styles from './VoiceChannel.module.css'
 import { UserAudioProvider } from '../../../../context/UserAudioContext'
+import { ChannelStatusProvider } from '../../../../providers/ChannelStatusProvider/ChannelStatusProvider'
 
 export const VoiceChannel = ({channel, focused}) => {
 
     return (
-        
-        <div className={styles.container} style={{zIndex: focused ? 2 : null}}>
-
+        <div className={styles.container} style={{zIndex: focused ? 2 : null}}>  
             <UserAudioProvider>
                 <KeybindProvider>
                     <VoiceChannelProvider key={channel} channel={channel}>
-                        
-                        <MediasoupProvider>
-                            <MediaPlayerProvider>
-                                <Room />
-                            </MediaPlayerProvider>
-                        </MediasoupProvider>
-                        
+                        <ChannelStatusProvider>
+                            <MediasoupProvider>
+                                <MediaPlayerProvider>
+                                    <Room />
+                                </MediaPlayerProvider>
+                            </MediasoupProvider>
+                        </ChannelStatusProvider>
                     </VoiceChannelProvider>
                 </KeybindProvider>
             </UserAudioProvider>

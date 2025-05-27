@@ -68,6 +68,27 @@ export const useContextMenuOptions = () => {
                 continue;
             }
             }
+
+            if (data.userStreamSource) {
+                if (data.userStreamSource.user_id !== user.user_id) {
+                    options.push({
+                        label: "Disable Stream",
+                        type: 'button',
+                        onClick: () => {
+
+                        }
+                    })
+                    options.push({
+                        label: "Change Stream Volume",
+                        type: 'range',
+                        min: 0,
+                        max: 2.5,
+                        step: 0.01,
+                        value: 0.5,
+                        onChange: (value) => {}
+                    })
+                }
+            }
             
             if (data.mediaplayer) {
 

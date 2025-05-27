@@ -1,10 +1,9 @@
 // src/contexts/UserAudioContext.jsx
-import React, {
+import {
   createContext,
   useRef,
   useCallback,
   useEffect,
-  useMemo,
   useContext
 } from 'react';
 import { useGlobalVolume } from './GlobalVolumeContext';
@@ -36,7 +35,7 @@ export const UserAudioProvider = ({ children }) => {
     const removeTrack = (userId) => {
         try {
             const entry = tracksRef.current.get(userId);
-console.log('removing track')
+
             if (!entry) return;
             
             // disconnect WebAudio nodes
@@ -88,7 +87,7 @@ console.log('removing track')
             if (tracksRef.current.has(userId)) {
                 removeTrack(userId);
             }
-            console.log(isAudioMuted)
+
             // 2) Wrap a lone track into a MediaStream
             const mediaStream =
             streamOrTrack instanceof MediaStream
@@ -172,6 +171,7 @@ console.log('removing track')
 
         });
 
+    // eslint-disable-next-line
     }, [isAudioMuted])
 
     /**

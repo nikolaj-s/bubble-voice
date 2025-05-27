@@ -3,15 +3,17 @@ import { ToolBar } from '../../../ui/Wrappers/ToolBar/ToolBar';
 
 import IconButton from '../../../ui/Buttons/IconButton/IconButton';
 
-import { Pause, Play, SkipForward, Volume, Volume2, VolumeOff } from 'lucide-react';
+import { Pause, Play, SkipForward, Volume2, VolumeOff } from 'lucide-react';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import VolumeSlider from '../../../ui/Inputs/VolumeSlider/VolumeSlider';
 
 import { setMediaPlayerVolume, toggleMediaPlayerMuted } from '../../../../features/MediaPlayer/mediaPlayerSlice';
 
 import { useMediaPlayer } from '../../../../hooks/useMediaPlayer';
+
+import styles from './MediaPlayerInlineControls.module.css';
 
 export const MediaPlayerInlineControls = () => {
 
@@ -40,7 +42,7 @@ export const MediaPlayerInlineControls = () => {
     if (!enabled || !currentlyPlaying) return null;
 
     return (
-        <ToolBar className='hideOnMobile' style={{backgroundColor: 'var(--card-background-color)', marginLeft: 5}}>
+        <ToolBar className={`hideOnMobile ${styles.container}`} style={{backgroundColor: 'var(--card-background-color)', marginLeft: 5}}>
 
             <IconButton 
             Icon={
@@ -62,7 +64,7 @@ export const MediaPlayerInlineControls = () => {
             onClick={handleMute}
             title={isMuted ? "Unmute" : "Mute"}
             />
-            <VolumeSlider width={80} min={0} max={1} step={0.01} value={volume} label={volume * 100} onChange={handleVolume}  />
+            <VolumeSlider  min={0} max={1} step={0.01} value={volume} label={volume * 100} onChange={handleVolume}  />
         </ToolBar>
     )
 }

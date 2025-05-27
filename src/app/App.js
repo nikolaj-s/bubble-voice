@@ -20,6 +20,7 @@ import FatalErrorPage from '../pages/FatalErrorPage/FatalErrorPage';
 import { useDetectOS } from '../hooks/useDetectOs';
 import AppTitleBar from '../components/AppTitleBar/AppTitleBar';
 import { useDisableNavigation } from '../hooks/useDisableNavigation';
+import { useGlobalWindowFocusListener } from '../hooks/useGlobalWindowFocusListener';
 
 function App() {
 
@@ -43,6 +44,8 @@ function App() {
   useDetectOS();
 
   useDisableNavigation();
+
+  useGlobalWindowFocusListener();
 
   return (
     <Router>

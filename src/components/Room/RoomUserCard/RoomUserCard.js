@@ -5,6 +5,7 @@ import {ImageComponent }from "../../ui/Image/Image";  // Assuming this is a vali
 import { LongPressGestureWrapper } from "../../ui/Gestures/LongPressGestureWrapper";
 import { triggerContext } from "../../../lib/services/helperFunctions";
 import MediaStatusIcons from "../../MediaStatusIcons/MediaStatusIcons";
+import MiniStreamIndicator from "../../ui/MiniStreamIndicator/MiniStreamIndicator";
 
 export const RoomUserCard = ({ user_id, webcam, action }) => {
 
@@ -97,6 +98,10 @@ export const RoomUserCard = ({ user_id, webcam, action }) => {
                     className={styles.overlay} />
                     <div className={styles.userStatus}>
                         <MediaStatusIcons {...channel_status} />
+                       
+                    </div>
+                    <div className={styles.streamStatus}>
+                         {channel_status?.streamDetails && (<MiniStreamIndicator hide_title={true} {...channel_status?.streamDetails} />)}
                     </div>
                     {/* Audio elements will be appended here */}
                     <div ref={webcamContainerRef} className={styles.webcamSource} ></div>

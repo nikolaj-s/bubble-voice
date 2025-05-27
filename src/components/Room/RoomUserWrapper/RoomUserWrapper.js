@@ -1,17 +1,22 @@
 import React from 'react';
+
 import { RoomUserCard } from '../RoomUserCard/RoomUserCard';
 
 import styles from './RoomUserWrapper.module.css';
+
 import { useSelector } from 'react-redux';
+
 import { MediaPlayerStreamSource } from '../../MediaPlayer/MediaPlayerStreamSource/MediaPlayerStreamSource';
+
 import RoomPlaceholder from '../RoomPlaceholder/RoomPlaceholder';
+
+import UserStreamSource from '../UserStreamSource/UserStreamSource';
 
 export const RoomUserWrapper = ({ users, disable_streams }) => {
 
     const { hideUsers } = useSelector(state => state.appearanceSlice);
 
     const textChannelOpen = useSelector(state => state.textChannelSlice.currentTextChannel);
-
 
     const [expanded, setExpanded] = React.useState("");
 
@@ -69,8 +74,6 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
 
                     child.style.borderRadius = null;
                     child.style.margin = '0px';
-                    child.style.maxHeight = '540px';
-                    child.style.maxWidth = '960px';
                     child.style.width = '100px';
                     child.style.height = '100px';
                 }
@@ -196,9 +199,9 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
                 }}
             >
                 {!users ? null :
-                    users.map(user => {
-                        return <RoomUserCard action={handleStreamExpansion} key={user.user_id} {...user} />
-                    })
+                    users.flatMap(user => (
+                        [<RoomUserCard action={handleStreamExpansion} key={user.user_id} {...user} />, user.stream ? <UserStreamSource action={handleStreamExpansion}  key={`stream-src-for-${user.user_id}`} stream={user.stream} user_id={user.user_id} /> : null]
+                    ))
                 }
                 <MediaPlayerStreamSource expand={handleStreamExpansion} />
                 {disable_streams && (<RoomPlaceholder />)}

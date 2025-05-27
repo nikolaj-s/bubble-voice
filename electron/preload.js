@@ -7,7 +7,10 @@ contextBridge.exposeInMainWorld('electron', {
     invoke: (channel, data) => ipcRenderer.invoke(channel, data),
     on: (channel, listener) => ipcRenderer.on(channel, listener),
     removeListener: (channel, listener) => ipcRenderer.removeListener(channel, listener),
-  }
+    
+  },
+  getSources: () => ipcRenderer.invoke("GET_SCREEN_SOURCES"),
+ 
 });
 
 console.log('Pre Load Script running')

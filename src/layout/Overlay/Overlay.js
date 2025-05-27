@@ -33,6 +33,7 @@ import { UserProfile } from "../Overlays/UserProfile/UserProfile";
 import { ExpandedVideo } from "../Overlays/ExpandedVideo/ExpandedVideo";
 import { WidgetsOverlay } from "../Overlays/Widgets/WidgetsOverlay";
 import { MediaPlayerOverlay } from "../Overlays/MediaPlayerOverlay/MediaPlayerOverlay";
+import { ScreenPickerOverlay } from "../Overlays/ScreenPickerOverlay/ScreenPickerOverlay";
 
 const overlayComponents = {
   search: Search,
@@ -50,7 +51,8 @@ const overlayComponents = {
   channelDescription: ChannelDescription,
   userProfile: UserProfile,
   widgets: WidgetsOverlay,
-  mediaPlayer: MediaPlayerOverlay
+  mediaPlayer: MediaPlayerOverlay,
+  screenPicker: ScreenPickerOverlay
 };
 
 export const Overlay = ({ children }) => {

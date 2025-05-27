@@ -1,4 +1,3 @@
-import React from 'react';
 
 import styles from  "./ControlBar.module.css";
 
@@ -7,8 +6,6 @@ import IconButton from '../ui/Buttons/IconButton/IconButton';
 import { HeadphoneOff, Headphones, Mic, MicOff, MonitorOff, MonitorUp, Settings2, Unplug, Video, VideoOff } from 'lucide-react';
 
 import UserButton from '../ui/Buttons/UserButton/UserButton';
-
-import { useNavigate, useParams } from 'react-router';
 
 import { useMediaControls } from '../../context/MediaControlsContext';
 
@@ -25,17 +22,13 @@ export const ControlBar = () => {
 
     const dispatch = useDispatch();
 
-    const {isWebcamOn, isMicrophoneMuted, isAudioMuted, isScreenSharing, handleToggleAudio, handleToggleMicrophone, handleToggleWebcam, webcamError, microphoneError, audioError } = useMediaControls();
+    const {isWebcamOn, isMicrophoneMuted, isAudioMuted, isScreenSharing, handleToggleAudio, handleToggleMicrophone, handleToggleWebcam, webcamError, microphoneError, audioError, isSharing, handleShareScreen } = useMediaControls();
 
     const {keybinds} = useSelector(state => state.keybindsSlice);
 
     const {account} = useSelector(state => state.accountSlice);
 
-    const {serverID} = useParams();
-
     const inChannel = useSelector(state => state.voiceChannelSlice.currentVoiceChannel);
-
-    const navigate = useNavigate();
 
     const handleDisconnect = () => {
         dispatch(setCurrentVoiceChannel(null));
@@ -62,12 +55,13 @@ export const ControlBar = () => {
                 Icon={isWebcamOn || webcamError ? <VideoOff strokeWidth={2.5} color={'var(--text-color)'} /> : <Video strokeWidth={2.5} color={'var(--text-color)'} />}
                 />
                 <IconButton 
-                backgroundColor='var(--primary-color)'
+                backgroundColor={isSharing ? 'var(--success-color)' : 'var(--primary-color)'}
                 width={50}
                 height={35}
                 padding={8}
-                title={isScreenSharing ? "Stop Sharing Screen" : "Share Screen"}
-                Icon={isScreenSharing ? <MonitorOff strokeWidth={2.5} color='var(--text-color)' /> : <MonitorUp strokeWidth={2.5} color='var(--text-color)' />}
+                onClick={handleShareScreen}
+                title={isSharing ? "Stop Sharing Screen" : "Share Screen"}
+                Icon={isSharing ? <MonitorOff strokeWidth={2.5} color='var(--text-color)' /> : <MonitorUp strokeWidth={2.5} color='var(--text-color)' />}
                 />
                 <ConnectionIndicator />
                 <IconButton 

@@ -34,7 +34,7 @@ function registerIPCHandlers(win) {
     return sources.map(s => ({ id: s.id, name: s.name }));
   });
 
-  ipcMain.handle('GET_SOURCES', async () => {
+  ipcMain.handle('GET_SCREEN_SOURCES', async () => {
     const sources = await desktopCapturer.getSources({ types: ['window', 'screen', 'audio'], thumbnailSize: { width: 200, height: 200 }, fetchWindowIcons: true });
     return sources.map(s => ({
       id: s.id,
@@ -43,6 +43,22 @@ function registerIPCHandlers(win) {
       icon: s.appIcon?.toDataURL(),
     }));
   });
+
+  ipcMain.handle("GET_SCREEN_STREAM", async (event, sourceId) => {
+    return await navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: {
+        mandatory: {
+          chromeMediaSource: "desktop",
+          chromeMediaSourceId: sourceId,
+          maxWidth: 960,      // 540p width (16:9)
+          maxHeight: 540,     // 540p height
+          maxFrameRate: 30
+        }
+      }
+    });
+  });
+
 
   ipcMain.on('RESET_INAC_TIMEOUT', (event) => {
     clearTimeout(timeout);

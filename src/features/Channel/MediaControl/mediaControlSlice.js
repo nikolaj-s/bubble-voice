@@ -101,6 +101,9 @@ const mediaControlSlice = createSlice({
             state[action.payload] = !state[action.payload];
 
             localStorage.setItem(action.payload, JSON.stringify(state[action.payload]));
+        },
+        stopSharingScreen: (state, action) => {
+            state.isScreenSharing = false;
         }
     }
 })
@@ -117,7 +120,8 @@ export const {
     throwMicrophoneError,
     throwWebcamError,
     clearMediaControlError,
-    toggleMicrophoneAttribute
+    toggleMicrophoneAttribute,
+    stopSharingScreen
 } = mediaControlSlice.actions;
 
 export default mediaControlSlice.reducer;

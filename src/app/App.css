@@ -12,7 +12,8 @@
     --font-family: "Inter", sans-serif;
     --mobile-width: 730px;
     --link-color: #11ffff;
-    --overlay-color: rgba(18, 26, 34, 0.7),
+    --overlay-color: rgba(18, 26, 34, 0.7);
+    --border-radius: 8px;
   }
 
 .App {

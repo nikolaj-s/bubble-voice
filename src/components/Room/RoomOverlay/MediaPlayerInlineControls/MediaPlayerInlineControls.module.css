@@ -1,0 +1,6 @@
+
+.container {
+    justify-content: space-between;
+    max-width: 100px;
+    row-gap: 10px;
+}

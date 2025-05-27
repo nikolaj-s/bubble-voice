@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   toggleAudioMute,
@@ -6,17 +6,29 @@ import {
   togglePushToTalkActive,
   toggleWebcam,
 } from "../../features/Channel/MediaControl/mediaControlSlice";
+import { toggleMediaPlayerMuted } from "../../features/MediaPlayer/mediaPlayerSlice";
 
 const KeybindProvider = ({ children }) => {
   const dispatch = useDispatch();
   const keybinds = useSelector((state) => state.keybindsSlice.keybinds);
+
+  const focused = useSelector(state => state.uiSlice.focused);
 
   const activeKeysRef = useRef(new Set());
   const cooldownRef = useRef({});
   const COOLDOWN_MS = 300;
   const isElectron = !!window?.electron?.ipcRenderer;
 
+  const handlers = useRef({
+      muteMicrophone: () => dispatch(toggleMicrophone()),
+      deafen: () => dispatch(toggleAudioMute()),
+      enableWebcam: () => dispatch(toggleWebcam()),
+      pushToTalk: (_, payload) => dispatch(togglePushToTalkActive(payload?.active)),
+      muteMediaPlayer: () => dispatch(toggleMediaPlayerMuted())
+  })
+
   const handleActionTrigger = (action) => {
+    console.log(action)
     const now = Date.now();
     const lastUsed = cooldownRef.current[action] || 0;
 
@@ -24,20 +36,7 @@ const KeybindProvider = ({ children }) => {
 
     cooldownRef.current[action] = now;
 
-    switch (action) {
-      case "muteMicrophone":
-        dispatch(toggleMicrophone());
-        break;
-      case "deafen":
-        dispatch(toggleAudioMute());
-        break;
-      case "enableWebcam":
-        dispatch(toggleWebcam());
-        break;
-      default:
-        console.log(action);
-        return;
-    }
+    handlers.current[action]?.()
   };
 
   const handlePushToTalk = (state) => {
@@ -45,7 +44,7 @@ const KeybindProvider = ({ children }) => {
   };
 
   const handleDomKeyDown = (event) => {
-    console.log(event)
+      
     const key = event.code;
     if (!key) return;
     if (event.button === 3 || event.button === 4) event.preventDefault();
@@ -61,7 +60,7 @@ const KeybindProvider = ({ children }) => {
   };
 
   const handleDomKeyUp = (event) => {
-    console.log(event)
+
     const key = event.code;
     if (!key) return;
 
@@ -112,30 +111,30 @@ const KeybindProvider = ({ children }) => {
   };
 
   useEffect(() => {
+
     if (!window?.electron?.ipcRenderer) return;
 
     const ipc = window.electron.ipcRenderer;
 
-    const handlers = {
-      muteMicrophone: () => dispatch(toggleMicrophone()),
-      deafen: () => dispatch(toggleAudioMute()),
-      enableWebcam: () => dispatch(toggleWebcam()),
-      'push to talk': (_, payload) => dispatch(togglePushToTalkActive(payload?.active)),
-    };
-
-    // Attach listeners
-    Object.entries(handlers).forEach(([channel, fn]) => {
-      ipc.on(channel, fn);
-    });
+    if (focused) {
+      Object.entries(handlers.current).forEach(([channel, fn]) => {
+        ipc.removeListener(channel, fn);
+      });
+    } else {
+      // Attach listeners
+      Object.entries(handlers.current).forEach(([channel, fn]) => {
+        ipc.on(channel, fn);
+      });
+    }
 
     // Cleanup
     return () => {
-      Object.entries(handlers).forEach(([channel, fn]) => {
+      Object.entries(handlers.current).forEach(([channel, fn]) => {
         ipc.removeListener(channel, fn);
       });
     };
-  }, [dispatch]);
-
+  // eslint-disable-next-line
+  }, [dispatch, focused]);
 
 
   useEffect(() => {
@@ -157,6 +156,7 @@ const KeybindProvider = ({ children }) => {
       window.removeEventListener("mousedown", handleDomMouseDown);
       window.removeEventListener("mouseup", handleDomMouseUp);
     };
+  // eslint-disable-next-line
   }, [keybinds, dispatch, isElectron]);
 
   return <>{children}</>;

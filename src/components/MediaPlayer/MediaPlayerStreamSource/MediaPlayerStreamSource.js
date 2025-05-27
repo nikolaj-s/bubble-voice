@@ -30,6 +30,7 @@ export const MediaPlayerStreamSource = ({expand}) => {
 
     const playerRef = React.useRef();
 
+    // eslint-disable-next-line
     const [localTime, setLocalTime] = React.useState(0);
 
     const hasSeekedInitially = React.useRef(false);

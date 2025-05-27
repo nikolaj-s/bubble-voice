@@ -1,18 +1,14 @@
-import React, { createContext, useContext, useEffect } from "react";
+import { createContext, useContext, } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { toggleMicrophone, toggleAudioMute, toggleWebcam } from "../features/Channel/MediaControl/mediaControlSlice"; 
-import { useSocket } from "./SocketContext";
-// Import actions
+import { toggleMicrophone, toggleAudioMute, toggleWebcam, toggleScreenShare } from "../features/Channel/MediaControl/mediaControlSlice"; 
 
 const MediaControlsContext = createContext(null);
 
 export const MediaControlsProvider = ({ children }) => {
 
     const dispatch = useDispatch();
-
-    const socket = useSocket();
 
     const {currentVoiceChannel} = useSelector(state => state.voiceChannelSlice);
 
@@ -21,27 +17,11 @@ export const MediaControlsProvider = ({ children }) => {
     // Get state from Redux
     const { loading } = useSelector((state) => state.accountSlice);
 
-    const { isMicrophoneMuted, isAudioMuted, isWebcamOn, isScreenSharing, microphoneError, webcamError } = useSelector(
+    const { isMicrophoneMuted, isAudioMuted, isWebcamOn, isScreenSharing, microphoneError, webcamError, screenShareError } = useSelector(
         (state) => state.mediaControlSlice
     );
 
-    // Emit user status when changes occur
-    useEffect(() => {
-        if (!socket) return;
-
-        const updateStatus = () => {
-            socket.emit("user updates channel status", { isMicrophoneMuted, isAudioMuted, isWebcamOn, isScreenSharing });
-        };
-
-        updateStatus();
-
-        socket.on("connect", updateStatus);
-
-        return () => {
-            socket.off("connect", updateStatus);
-        };
-
-    }, [isMicrophoneMuted, isAudioMuted, isWebcamOn, isScreenSharing, socket]);
+    const {isSharing} = useSelector(state => state.screenShareSlice);
 
     // Actions
     const handleToggleMicrophone = () => {
@@ -59,6 +39,11 @@ export const MediaControlsProvider = ({ children }) => {
         if (!loading) dispatch(toggleWebcam(!isWebcamOn));
     };
 
+    const handleShareScreen = () => {
+        if (details?.disable_streams) return;
+        if (!loading) dispatch(toggleScreenShare(!isScreenSharing))
+    }
+
     return (
         <MediaControlsContext.Provider
             value={{
@@ -66,12 +51,15 @@ export const MediaControlsProvider = ({ children }) => {
                 isAudioMuted,
                 isWebcamOn,
                 isScreenSharing,
+                isSharing,
                 webcamError: details?.disable_streams ? 'Streams Are Disabled In This Channel' : webcamError,
                 audioError: details?.disable_streams ? "Streams Are Disabled In This Channel" : null,
                 microphoneError: details?.disable_streams ? "Streams Are Disabled In This Channel" : microphoneError,
+                screenShareError: details?.disable_streams ? "Streams Are Disabled In This Channel" :  screenShareError,
                 handleToggleMicrophone,
                 handleToggleAudio,
                 handleToggleWebcam,
+                handleShareScreen
             }}
         >
             {children}

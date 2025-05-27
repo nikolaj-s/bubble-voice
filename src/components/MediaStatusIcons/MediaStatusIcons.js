@@ -20,7 +20,6 @@ const MediaStatusIcons = ({
       {isMicrophoneMuted && !isAudioMuted ? <MicOff className={styles.icon} /> : null}
       {isAudioMuted ? <HeadphoneOff className={styles.icon} /> : null}
       {isWebcamOn ? <Video className={styles.icon} /> : null}
-      {isScreenSharing ? <Monitor className={styles.icon} /> : null}
     </div>
   );
 };

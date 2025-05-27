@@ -4,6 +4,7 @@ import Label from '../../../../components/ui/Titles/Label/Label'
 import KeybindInput from '../../../../components/ui/Inputs/KeybindInput/KeybindInput'
 import { useDispatch, useSelector } from 'react-redux';
 import { setKeybind } from '../../../../features/Settings/Keybinds/keybindsSlice';
+import { LineSpacer } from '../../../../components/ui/Spacers/LineSpacer/LineSpacer';
 
 export const KeybindSettingsForm = () => {
   const dispatch = useDispatch();
@@ -19,6 +20,8 @@ export const KeybindSettingsForm = () => {
   return (
     <>
       <Header text="Keybind Settings" />
+      <LineSpacer />
+      <Header level={3} text='Media Control Binds' />
       <Label label="Push To Talk" />
       <KeybindInput
         currentKeybind={keybinds['pushToTalk'] || ''}
@@ -43,6 +46,13 @@ export const KeybindSettingsForm = () => {
       <KeybindInput
         currentKeybind={keybinds['startStopScreen'] || ''}
         onChange={(keybind) => handleKeybindChange('startStopScreen', keybind)}
+      />
+      <LineSpacer />
+      <Header level={3} text='Misc Keybinds' />
+      <Label label='Mute / Unmute Media Player' />
+      <KeybindInput 
+      currentKeybind={keybinds['muteMediaPlayer'] || ''}
+      onChange={(keybind) => handleKeybindChange('muteMediaPlayer', keybind)}
       />
     </>
   );
