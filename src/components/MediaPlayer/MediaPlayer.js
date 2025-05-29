@@ -13,6 +13,7 @@ export const MediaPlayer = ({
   queue = [],
   currentlyPlaying,
   playing,
+  color,
   currentTime = 0,
   onTogglePlay = () => {},
   onSkip,
@@ -46,36 +47,41 @@ export const MediaPlayer = ({
         </button>
         {error && (<TextLabelError error={error} label='Error:' />)}
         <MediaPlayerQueue queue={queue} onReorder={onReorder} />
-        <div className={styles.controls}>
-            <div className={styles.controlsLeft}>
-                <IconButton 
-                width={50}
-                height={50}
-                padding={10}
-                borderRadius={'50%'}
-                backgroundColor='var(--button-background)'
-                Icon={playing ? <Pause color='var(--text-color)' /> : <Play color='var(--text-color)' />}
-                onClick={onTogglePlay}
-                title={playing ? 'Pause' : 'Play'}
-                />
-                <IconButton
-                    Icon={<SkipForward color='var(--text-color)' />}
-                    title={"Skip"}
-                    onClick={onSkip}
-                />
+        <div className={styles.controlsProgressWrapper} style={{backgroundColor: color}}>
+            <div
+            className={styles.controls}>
+                <div className={styles.controlsLeft}>
+                    <IconButton 
+                    width={50}
+                    height={50}
+                    padding={10}
+                    borderRadius={'50%'}
+                    backgroundColor='var(--button-background)'
+                    Icon={playing ? <Pause color='var(--text-color)' /> : <Play color='var(--text-color)' />}
+                    onClick={onTogglePlay}
+                    title={playing ? 'Pause' : 'Play'}
+                    />
+                    <IconButton
+                        Icon={<SkipForward color='var(--text-color)' />}
+                        title={"Skip"}
+                        onClick={onSkip}
+                    />
+                </div>
+                <div 
+                
+                className={styles.currentlyPlaying}>
+                {currentlyPlaying ? (
+                    <MediaItem inQueue={true} {...currentlyPlaying} context={currentlyPlaying} />
+                ) : (
+                <div className={styles.nothingPlaying}>
+                    <Music2 width={48} /> No media playing
+                </div>
+                )}
+                </div>
             </div>
-            <div className={styles.currentlyPlaying}>
-            {currentlyPlaying ? (
-                <MediaItem {...currentlyPlaying} context={currentlyPlaying} />
-            ) : (
-            <div className={styles.nothingPlaying}>
-                <Music2 width={48} /> No media playing
+            <div style={{position: 'relative', zIndex: 15}}>
+                <ProgressBar currentTime={currentTime} duration={duration} onSeek={handleSeek} />
             </div>
-            )}
-            </div>
-        </div>
-        <div style={{position: 'relative', zIndex: 15}}>
-            <ProgressBar currentTime={currentTime} duration={duration} onSeek={handleSeek} />
         </div>
         {loading && (<SpinnerLoading />)}
     </div>

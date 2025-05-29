@@ -139,6 +139,8 @@ export const UserAudioProvider = ({ children }) => {
 
             tracksRef.current.set(userId, audio_ref);
 
+            await audioCtx.resume();
+
             console.log(audioCtx)
         } catch (error) {
             console.log(error);

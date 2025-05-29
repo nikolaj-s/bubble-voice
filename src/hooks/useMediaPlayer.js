@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react'
+import React, {useCallback, useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSocket } from '../context/SocketContext';
 import { setMediaPlayerLoadingState } from '../features/MediaPlayer/mediaPlayerSlice';
@@ -33,7 +33,7 @@ export const useMediaPlayer = () => {
     const playerState = useSelector(state => state.mediaPlayerSlice);
 
     const {loading} = useSelector(state => state.mediaPlayerSlice);
-    
+
     const toggleIsPlaying = useCallback(async () => {
       try {
         

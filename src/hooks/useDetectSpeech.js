@@ -101,5 +101,6 @@ export const useDetectSpeech = (isMicrophoneMuted, pauseProducer, resumeProducer
                 clearTimeout(pauseTimeoutRef.current);
             }
         };
-    }, [isMicrophoneMuted, pauseProducer, resumeProducer, speechThreshold, usingPushToTalk]);
+    // eslint-disable-next-line
+    }, [isMicrophoneMuted, speechThreshold, usingPushToTalk]);
 };

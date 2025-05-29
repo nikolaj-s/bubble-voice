@@ -14,6 +14,10 @@ import { setMediaPlayerVolume, toggleMediaPlayerMuted } from '../../../../featur
 import { useMediaPlayer } from '../../../../hooks/useMediaPlayer';
 
 import styles from './MediaPlayerInlineControls.module.css';
+import { MediaItem } from '../../../MediaPlayer/MediaItem/MediaItem';
+import { setOverlay } from '../../../../features/Overlay/overlaySlice';
+import { useEffect, useState } from 'react';
+import { getImageColor } from '../../../../lib/services/getImageColor';
 
 export const MediaPlayerInlineControls = () => {
 
@@ -27,6 +31,8 @@ export const MediaPlayerInlineControls = () => {
         isPlaying,
         isMuted,
         volume,
+        currentTime,
+        color
     } = useMediaPlayer();
 
     const handleVolume = (value) => {
@@ -39,32 +45,40 @@ export const MediaPlayerInlineControls = () => {
         dispatch(toggleMediaPlayerMuted());
     }
 
+    const openOverlay = () => {
+        dispatch(setOverlay("mediaPlayer"));
+    }
+
     if (!enabled || !currentlyPlaying) return null;
 
     return (
-        <ToolBar className={`hideOnMobile ${styles.container}`} style={{backgroundColor: 'var(--card-background-color)', marginLeft: 5}}>
-
-            <IconButton 
-            Icon={
-                !isPlaying ?
-                <Play color='var(--text-color)' />
-                :
-                <Pause color='var(--text-color)' />
-            }
-            title={isPlaying ? "Pause" : "Play"}
-            onClick={toggleIsPlaying}
-            />
-            <IconButton 
-            Icon={<SkipForward color='var(--text-color)' />}
-            onClick={next}
-            title={"Skip"}
-            />
-            <IconButton 
-            Icon={isMuted ? <VolumeOff color='var(--text-color)' /> : <Volume2 color='var(--text-color)' />}
-            onClick={handleMute}
-            title={isMuted ? "Unmute" : "Mute"}
-            />
-            <VolumeSlider  min={0} max={1} step={0.01} value={volume} label={volume * 100} onChange={handleVolume}  />
+        <ToolBar className={`${styles.container}`} style={{backgroundColor: color}}>
+            <div className={styles.currentlyPlaying}>
+                <MediaItem status={true} action={openOverlay} {...currentlyPlaying} duration={currentTime} />
+            </div>
+            <div className={styles.buttonWrapper}>
+                <IconButton 
+                Icon={
+                    !isPlaying ?
+                    <Play color='var(--text-color)' />
+                    :
+                    <Pause color='var(--text-color)' />
+                }
+                title={isPlaying ? "Pause" : "Play"}
+                onClick={toggleIsPlaying}
+                />
+                <IconButton 
+                Icon={<SkipForward color='var(--text-color)' />}
+                onClick={next}
+                title={"Skip"}
+                />
+                <IconButton 
+                Icon={isMuted ? <VolumeOff color='var(--text-color)' /> : <Volume2 color='var(--text-color)' />}
+                onClick={handleMute}
+                title={isMuted ? "Unmute" : "Mute"}
+                />
+                <VolumeSlider maxWidth={80} min={0} max={1} step={0.01} value={volume} label={volume * 100} onChange={handleVolume}  />
+            </div>
         </ToolBar>
     )
 }

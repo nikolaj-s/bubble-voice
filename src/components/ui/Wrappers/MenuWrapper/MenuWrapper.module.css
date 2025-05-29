@@ -72,7 +72,7 @@
   }
 
   .mobileMenuButton {
-    display: none !important;
+    display: none;
   }
   
   @media screen and (max-width: 730px) {
@@ -83,6 +83,9 @@
 
     .cardWrapper {
       grid-template-columns: 45px 1fr;
+      height: 100svh;
+      max-height: 100svh;
+      border-radius: 0px;
     }
 
     .navButton {
@@ -96,5 +99,8 @@
 
     .menuOpen .navButton {
       display: flex;
+    }
+    .contentArea {
+      min-width: calc(100vw - 60px);
     }
   }

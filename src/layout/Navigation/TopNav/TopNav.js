@@ -105,7 +105,7 @@ const TopNav = () => {
         />
         </div>
         <div className={`${styles.header} ${styles.hideOnMobile}`}>
-          <h2>{serverName}</h2>
+          <h2>{serverName || "Dashboard"}</h2>
           {isServerRoute ?
           <IconButton Icon={<Settings2 color={"var(--text-color)"} />} position="bottom" title={`Settings`} onClick={() => {dispatch(setOverlay('serverSettings'))}} />
           : null}

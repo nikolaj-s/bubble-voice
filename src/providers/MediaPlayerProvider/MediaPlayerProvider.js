@@ -12,10 +12,12 @@ import {
     setCurrentlyPlaying,
     addMultipleToQueue,
     enableMediaPlayer,
-    reorderQueue
+    reorderQueue,
+    setColor
 
 } from '../../features/MediaPlayer/mediaPlayerSlice';
 import { fetchSavedMedia } from '../../features/MediaPlayer/Thunks/fetchSavedMedia';
+import { getImageColor } from '../../lib/services/getImageColor';
 
 export const MediaPlayerProvider = ({children}) => {
 
@@ -23,9 +25,31 @@ export const MediaPlayerProvider = ({children}) => {
 
     const socket = useSocket();
 
-    const {loading} = useSelector(state => state.mediaPlayerSlice);
+    const {loading, currentlyPlaying} = useSelector(state => state.mediaPlayerSlice);
 
     const {currentVoiceChannel: channelId} = useSelector(state => state.voiceChannelSlice);
+
+    React.useEffect(() => {
+    
+      if (currentlyPlaying?.thumbnail) {
+        try {
+          getImageColor(currentlyPlaying.thumbnail).then(res => {
+              if (res?.hex) {
+                  dispatch(setColor(res.hex));
+              } else {
+                  dispatch(setColor(null));
+              }
+              return;
+          })
+        } catch (err) {
+          dispatch(setColor(null));
+        }
+
+      } else {
+          dispatch(setColor(null));
+      }
+    
+    }, [currentlyPlaying, dispatch])
 
     const setMedia = React.useCallback(async () => {
           try {

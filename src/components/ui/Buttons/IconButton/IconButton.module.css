@@ -15,8 +15,10 @@
     transition: 0.2s ease-in-out;
 }
 
-.button:hover {
+@media (hover: hover) and (pointer: fine) {
+  .button:hover {
     background-color: var(--button-hover) !important;
+  }
 }
 
 .button:active {

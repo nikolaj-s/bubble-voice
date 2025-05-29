@@ -23,14 +23,19 @@ export const CarouselGallery = ({ children }) => {
   };
 
   const handleTouchStart = (e) => {
+    e.stopPropagation();
     touchStartX.current = e.touches[0].clientX;
   };
 
   const handleTouchMove = (e) => {
+    e.stopPropagation();
+    // Optional: uncomment if you want to block browser/parent horizontal scroll
+    // e.preventDefault();
     touchEndX.current = e.touches[0].clientX;
   };
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = (e) => {
+    e.stopPropagation();
     if (!touchStartX.current || !touchEndX.current) return;
     const distance = touchStartX.current - touchEndX.current;
     if (distance > 50) handleNext();
@@ -38,6 +43,7 @@ export const CarouselGallery = ({ children }) => {
     touchStartX.current = null;
     touchEndX.current = null;
   };
+
 
   const variants = {
     enter: (direction) => ({

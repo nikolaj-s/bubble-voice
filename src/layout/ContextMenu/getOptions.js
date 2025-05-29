@@ -1,4 +1,4 @@
-import { Bookmark, ChevronRight, Copy, Download, FilePenLine, FolderPen, FolderPlus, Hash, ImageDown, Link, ListPlus, Music2, Pause, Pencil, Pin, PinOff, Play, PlaySquare, Plus, Reply, Search, Send, Settings, Settings2, SkipForward, Trash2, Unplug, UserPen, Users, Video } from "lucide-react";
+import { Bookmark, ChevronRight, Copy, Download, FilePenLine, FolderPen, FolderPlus, Hash, ImageDown, LayoutDashboard, Link, ListPlus, Music2, Pause, Pencil, Pin, PinOff, Play, PlaySquare, Plus, Reply, Search, Send, Settings, Settings2, SkipForward, Trash2, Unplug, UserPen, Users, Video } from "lucide-react";
 import { useCallback } from "react";
 import { useDispatch, useSelector,} from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -18,7 +18,7 @@ import { deleteWidget } from "../../features/Widgets/Thunks/deleteWidget";
 import { setManageWidgetsForChannel } from "../../features/Widgets/manageWidgetsSlice";
 import { addMediaToPlayer } from "../../features/MediaPlayer/Thunks/addMediaToPlayer";
 import { setMediaPlayerVolume, toggleHideMediaPlayer, toggleIsMediaPlayerOpen } from "../../features/MediaPlayer/mediaPlayerSlice";
-import { setCurrentVoiceChannel, toggleVoiceChannelOptions } from "../../features/Channel/VoiceChannel/voiceChannelSlice";
+import { setCurrentVoiceChannel, setVoiceChannelFocused, toggleVoiceChannelOptions } from "../../features/Channel/VoiceChannel/voiceChannelSlice";
 import { toggleAppearanceSetting } from "../../features/Settings/Appearance/appearanceSlice";
 import { useMediaPlayer } from "../../hooks/useMediaPlayer";
 import { saveMediaToPlayer } from "../../features/MediaPlayer/Thunks/saveMediaToPlayer";
@@ -71,6 +71,9 @@ export const useContextMenuOptions = () => {
 
             if (data.userStreamSource) {
                 if (data.userStreamSource.user_id !== user.user_id) {
+
+                    const volume_source_key = `screen-audio-source-${data.userStreamSource.user_id}`;
+
                     options.push({
                         label: "Disable Stream",
                         type: 'button',
@@ -84,8 +87,8 @@ export const useContextMenuOptions = () => {
                         min: 0,
                         max: 2.5,
                         step: 0.01,
-                        value: 0.5,
-                        onChange: (value) => {}
+                        value: typeof volumes[volume_source_key] === 'number' ? volumes[volume_source_key] : 0.5,
+                        onChange: (value) => {changeVolume(volume_source_key, value)}
                     })
                 }
             }
@@ -134,7 +137,7 @@ export const useContextMenuOptions = () => {
             if (data.user) {
 
                 if (data.user.user_id !== user.user_id) {
-                    console.log(volumes[data.user.user_id])
+                   
                     options.push({
                         label: "Change User Volume",
                         min: 0,
@@ -145,7 +148,7 @@ export const useContextMenuOptions = () => {
                         type: 'range'
                     })
                 }
-console.log(options)
+
                 if (permissions.user_can_assign_server_groups) {
                     options.push({
                         label: "Manage User",
@@ -363,6 +366,7 @@ console.log(options)
                         onClick: () => {
                             dispatch(sendMessage({channel_id: currentTextChannel, text: data.imageSearchResult.src, ...data.imageSearchResult}));
                             dispatch(closeOverlay());
+                            dispatch(setVoiceChannelFocused(false));
                         },
                         type: "button",
                         icon: <Send color="var(--text-color)" />
@@ -395,6 +399,7 @@ console.log(options)
                                     
                                     dispatch(sendMessage({channel_id: channel.channel_id, text: data.imageSearchResult.src, ...data.imageSearchResult}));
                                     
+                                    dispatch(setVoiceChannelFocused(false));
                                 },
                                 icon: <Hash color="var(--text-color)" />,
                                 type: "button",
@@ -455,19 +460,22 @@ console.log(options)
             if (data.video) {
 
                 if ((data.video?.src?.includes('.mp4') || data?.video?.url?.includes('youtu')) && data.video.duration && mediaPlayerState.enabled) {
-                    options.push({
-                        label: mediaPlayerState.currentlyPlaying ? "Add To Queue" : "Play In Channel",
-                        onClick: () => {
-                            dispatch(setOverlay('mediaPlayer'));
+                    
+                    if (!data.video.inQueue) {
+                        options.push({
+                            label: mediaPlayerState.currentlyPlaying ? "Add To Queue" : "Play In Channel",
+                            onClick: () => {
+                                dispatch(setOverlay('mediaPlayer'));
 
-                            dispatch(addMediaToPlayer(data.video));
+                                dispatch(addMediaToPlayer(data.video));
 
-                            dispatch(toggleIsMediaPlayerOpen(false));
-                        },
-                        type: 'button',
-                        icon: mediaPlayerState.currentlyPlaying ? <ListPlus color="var(--text-color)" /> : <PlaySquare color="var(--text-color)" />
-                    })
-
+                                dispatch(toggleIsMediaPlayerOpen(false));
+                            },
+                            type: 'button',
+                            icon: mediaPlayerState.currentlyPlaying ? <ListPlus color="var(--text-color)" /> : <PlaySquare color="var(--text-color)" />
+                        })
+                    }
+                  
                     const saved = isMediaSaved(savedMediaState, currentVoiceChannel, data.video.src);
 
                     options.push({
@@ -538,6 +546,17 @@ console.log(options)
 
             // mobile menu
             if (data.mobileMenu) {
+console.log(data.mobileMenu)
+                if (currentTextChannel || currentVoiceChannel) {
+                    options.push({
+                        label: "Widgets",
+                        icon: <LayoutDashboard color="var(--text-color)"/>,
+                        type: 'button',
+                        onClick: () => {
+                            dispatch(setOverlay("widgets"))
+                        }
+                    })
+                }
 
                 options.push({
                     label: "Users",

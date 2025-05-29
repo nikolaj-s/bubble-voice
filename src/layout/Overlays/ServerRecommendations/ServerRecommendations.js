@@ -37,14 +37,14 @@ export const ServerRecommendations = ({close}) => {
                 <div style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: 5,
+                    gap: 20,
                     alignItems: 'flex-start'
                 }}>
-                <BoxLabel label={'Recommendations'}  />
+               
                 <IconPlaceholder icon={Images} />
+                <BoxLabel label={'Recommendations'}  />
                 <RandomHeader titles={galleryHeaders} />
                 </div>
-                
                 <LineSpacer />
                 <ImageMasonryWrapper>
                     {media?.media?.map(media => {

@@ -56,9 +56,9 @@ const UserStreamSource = ({ user_id, stream, action }) => {
 
     useEffect(() => {
         if (!focused && (user_id === userID)) {
-            videoRef.current?.pause()?.catch()
+            videoRef.current?.pause()?.catch(() => {})
         } else {
-            videoRef.current?.play()?.catch();
+            videoRef.current?.play()?.catch(() => {});
         }
     }, [focused, userID, user_id])
 

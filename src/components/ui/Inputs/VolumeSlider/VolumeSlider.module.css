@@ -36,7 +36,7 @@
   border-radius: 50%;
   cursor: pointer;
   margin-top: -4px;
-  transition: transform 0.2s;
+  transition: 0.2s;
   position: relative;
   z-index: 2;
 }

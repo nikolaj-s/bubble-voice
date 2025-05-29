@@ -1,6 +1,16 @@
 
 .container {
     justify-content: space-between;
-    max-width: 100px;
-    row-gap: 10px;
+    margin-bottom: 5px;
+    transition: 0.2s ease-in-out;
+    background-color: var(--card-background-color);
+}
+.buttonWrapper {
+    display: flex;
+    align-items: center;
+}
+
+.currentlyPlaying {
+    width: calc(100% - 175px);
+    max-width: 300px;
 }

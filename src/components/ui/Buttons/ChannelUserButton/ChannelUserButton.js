@@ -37,7 +37,8 @@ export const ChannelUserButton = ({user_id, active, action = () => {}}) => {
                     <MediaStatusIcons {...user?.channel_status} />
                 </div>
                 {user?.channel_status?.streamDetails && (
-                <div className={styles.streamStatus} style={{borderColor: user.color}}>
+                <div className={styles.streamStatus}>
+                    <div className={styles.arrowIndicator} />
                     <MiniStreamIndicator channel_bar={true} {...user?.channel_status?.streamDetails}/>
                 </div>
                 )}

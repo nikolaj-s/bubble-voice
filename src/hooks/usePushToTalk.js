@@ -13,6 +13,7 @@ export const usePushToTalk = (isMicrophoneMuted, usingPushToTalk, isPushToTalkAc
         return () => {
 
         }
+    // eslint-disable-next-line
     }, [isMicrophoneMuted, usingPushToTalk, isPushToTalkActive])
 
 }

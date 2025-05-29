@@ -77,3 +77,10 @@
 }
 
 
+@media screen and (max-width: 730px) {
+    .contextButton {
+        height: 50px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}

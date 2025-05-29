@@ -11,7 +11,7 @@ export const MediaPlayerOverlay = ({close}) => {
 
     const dispatch = useDispatch();
     
-    const {enabled, isPlaying, currentlyPlaying, queue, loading, next, toggleIsPlaying, currentTime, seek, error, reorder} = useMediaPlayer();
+    const {enabled, isPlaying, currentlyPlaying, queue, loading, next, toggleIsPlaying, currentTime, seek, error, reorder, color} = useMediaPlayer();
 
     const handleOpenSearchMedia = () => {
         
@@ -56,6 +56,7 @@ export const MediaPlayerOverlay = ({close}) => {
             openSearchMedia={handleOpenSearchMedia}
             openSaves={openSaves}
             onReorder={reorder}
+            color={color}
             />
         </FullScreenWrapper>
     )

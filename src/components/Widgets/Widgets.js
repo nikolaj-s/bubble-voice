@@ -21,7 +21,6 @@ const SortableWidget = ({ id, children, editing, widget }) => {
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    touchAction: 'none',
     marginRight: editing ? 40 : null,
     overflow: editing ? null : 'hidden',
     borderRadius: 8

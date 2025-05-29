@@ -16,7 +16,7 @@ export const MediaPlayerControls = () => {
 
     return (
         <>
-        <PillSpacer verticle={true} />
+        
         <IconButton 
         padding={15}
         width={50}
@@ -26,6 +26,7 @@ export const MediaPlayerControls = () => {
         Icon={<AudioLines color='var(--text-color)' />}
         onClick={() => {dispatch(setOverlay('mediaPlayer'))}}
         />
+        <PillSpacer verticle={true} />
         </>
     )
 }

@@ -87,6 +87,9 @@ export const RoomOverlay = () => {
                 />
             </div>
             <div className={styles.bottomButtons}>
+                <MediaPlayerInlineControls />
+                <div className={styles.wrapper}>
+                    <MediaPlayerControls />
                     <IconButton 
                     padding={15}
                     borderRadius={"50%"}
@@ -154,8 +157,6 @@ export const RoomOverlay = () => {
                     } 
                     backgroundColor={isWebcamOn && !webcamError ? 'var(--success-color)' : 'var(--background-color)'}
                     />
-                    <MediaPlayerControls />
-                    <MediaPlayerInlineControls />
                     <PillSpacer verticle={true} />
                     <IconButton 
                     onClick={handleDisconnect}
@@ -167,6 +168,7 @@ export const RoomOverlay = () => {
                     backgroundColor='var(--error-color)'
                     Icon={<Unplug color='var(--text-color)' />}
                     />
+                </div>
             </div>
         </div>
     )

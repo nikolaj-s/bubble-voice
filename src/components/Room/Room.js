@@ -105,6 +105,7 @@ export const Room = () => {
 
         handleWebcam(isWebcamOn);
         
+    // eslint-disable-next-line
     }, [isWebcamOn, selectedWebcam, disable_streams])
 
     // Hook for detecting speech

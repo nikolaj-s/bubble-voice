@@ -41,7 +41,8 @@ const ContextMenuButtonWithSubmenu = ({ label, submenuOptions, top, bottom, icon
                         [submenuPosition]: "100%", // Either 'left' or 'right'
                         color: "var(--text-color)",
                         borderRadius: "10px",
-                        overflow: 'hidden',
+                        maxHeight: '300px',
+                        overflowY: 'auto',
                         padding: '5px',
                         minWidth: 150,
                         zIndex:0

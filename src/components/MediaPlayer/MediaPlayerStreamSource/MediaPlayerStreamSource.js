@@ -35,7 +35,7 @@ export const MediaPlayerStreamSource = ({expand}) => {
 
     const hasSeekedInitially = React.useRef(false);
 
-    const {currentlyPlaying, currentTime, isPlaying, volume, loading, error, isMuted, hasAudio, hideMediaPlayer} = useSelector(state => state.mediaPlayerSlice);
+    const {currentlyPlaying, currentTime, isPlaying, volume, loading, error, isMuted, hasAudio, hideMediaPlayer, color} = useSelector(state => state.mediaPlayerSlice);
 
     const handleProgress = (value) => {
 
@@ -60,7 +60,8 @@ export const MediaPlayerStreamSource = ({expand}) => {
     if (!currentlyPlaying) return null;
 
     return (
-        <div data-context={JSON.stringify({...currentlyPlaying, type: 'mediaplayer' })} style={{display: hideMediaPlayer ? 'none' : null}} hidden={hideMediaPlayer} id='media-player-stream-source' onClick={() => {expand('media-player-stream-source')}} className={styles.container}>
+        <div data-context={JSON.stringify({...currentlyPlaying, type: 'mediaplayer' })} 
+        style={{display: hideMediaPlayer ? 'none' : null, backgroundColor: color,}} hidden={hideMediaPlayer} id='media-player-stream-source' onClick={() => {expand('media-player-stream-source')}} className={styles.container}>
             <LongPressGestureWrapper width={'100%'} height={'100%'} onTouchContext={(e) => {triggerContext(e, 'media-player-stream-source')}}>
                 <DoubleTapWrapper onDoubleTap={() => {dispatch(toggleIsMediaPlayerOpen(true))}}>
                     <ReactPlayer 
@@ -72,7 +73,7 @@ export const MediaPlayerStreamSource = ({expand}) => {
                     onProgress={handleProgress}
                     width={'100%'}
                     height={'100%'}
-                    url={currentlyPlaying?.url?.includes('youtu') ? currentlyPlaying?.url : currentlyPlaying?.src || currentlyPlaying?.url}
+                    url={currentlyPlaying?.url?.includes('youtu') || currentlyPlaying?.url?.includes('vimeo') ? currentlyPlaying?.url : currentlyPlaying?.src || currentlyPlaying?.url}
                     playing={isPlaying}
                     muted={isMuted}
                     />

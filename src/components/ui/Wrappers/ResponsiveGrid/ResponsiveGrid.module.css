@@ -7,23 +7,23 @@
   /* Default to a single column for narrow screens */
   grid-template-columns: 1fr;
   height: calc(100% - 20px);
-  grid-auto-rows: 500px;
+  grid-auto-rows: 1fr;
   overflow-y: auto;
 }
 
 .card {
   width: 100%;
-  max-width: 500px;  
   min-height: 500px;     /* Keep the card square */
   background-color: var(--card-background-color);
   border-radius: 8px;
   overflow: hidden;
   flex-shrink: 0;
   transition: 0.2s ease-in-out;
+  height: auto;
 }
 
 
-@media screen and (min-width: 1010px) {
+@media screen and (min-width: 1538px) {
   /* If the container is wide enough for two or more 500px cards (plus gap),
      switch to auto-fit columns that are up to 500px wide */
   .grid {

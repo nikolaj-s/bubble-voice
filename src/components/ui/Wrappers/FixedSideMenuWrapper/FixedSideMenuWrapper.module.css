@@ -15,9 +15,8 @@
     top: 0px;
     width: 500px;
     height: calc(100% - 20px);
-    max-width: 100%;
+    max-width: calc(100% - 20px);
     z-index: 11;
-    max-width: 100%;
     background-color: var(--primary-color);
     padding: 10px;
     overflow-y: auto;

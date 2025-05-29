@@ -2,6 +2,8 @@ import React from "react";
 import styles from "./GalleryDisplay.module.css";
 import { ImageComponent } from "../Image/Image";
 import { ImageTooltipWrapper } from "../Wrappers/ImageTooltipWrapper/ImageTooltipWrapper";
+import { LongPressGestureWrapper } from "../Gestures/LongPressGestureWrapper";
+import { triggerContext } from "../../../lib/services/helperFunctions";
 
 export const GalleryDisplay = ({
   images = [],
@@ -22,9 +24,11 @@ export const GalleryDisplay = ({
       {paddedImages.map((img, index) => (
         <div key={index} className={styles.imageWrapper}>
           {img ? (
-            <ImageTooltipWrapper image={{ src: img }}>
-              <ImageComponent src={img} />
-            </ImageTooltipWrapper>
+            <LongPressGestureWrapper onTouchContext={(e) => {triggerContext(e, img)}}>
+              <ImageTooltipWrapper image={{ src: img }}>
+                <ImageComponent src={img} />
+              </ImageTooltipWrapper>
+            </LongPressGestureWrapper>
           ) : null}
         </div>
       ))}

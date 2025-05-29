@@ -218,7 +218,7 @@ export const MediasoupProvider = ({ children }) => {
     if (data.type === 'microphone') {
       addTrack(user, consumer.track)
     } else if (data.type === 'screenAudio') {
-//      addTrack(`user-stream-source-${user}`, consumer.track);
+      addTrack(`screen-audio-source-${user}`, consumer.track);
     }
 
     consumer.on("trackended", () => {

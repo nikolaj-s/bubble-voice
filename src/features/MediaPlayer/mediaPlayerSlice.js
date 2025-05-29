@@ -16,7 +16,8 @@ const initialState = {
   isPlayerOpen: false,
   hasAudio: true,
   hideMediaPlayer: false,
-  enabled: false
+  enabled: false,
+  color: null
 };
 
 const mediaPlayerSlice = createSlice({
@@ -33,6 +34,9 @@ const mediaPlayerSlice = createSlice({
             state.isPlaying = true;
         }
 
+    },
+    setColor: (state, action) => {
+      state.color = action.payload;
     },
     reorderQueue: (state, action) => {
       const newOrder = action.payload.newOrder;
@@ -163,7 +167,8 @@ export const {
   setMediaHasAudio,
   toggleHideMediaPlayer,
   enableMediaPlayer,
-  reorderQueue
+  reorderQueue,
+  setColor
 } = mediaPlayerSlice.actions;
 
 export default mediaPlayerSlice.reducer;

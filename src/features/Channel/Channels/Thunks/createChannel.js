@@ -5,6 +5,7 @@ import { generateFormData } from "../../../../lib/services/generateFormData";
 import { API_URL } from "../../../../lib/Validation";
 import axios from "axios";
 import { closeOverlay } from "../../../Overlay/overlaySlice";
+import { setChannelToEdit } from "../../editChannel/editChannelSlice";
 
 export const createChannel = createAsyncThunk(
     'createChannel/channelsSlice',
@@ -30,7 +31,14 @@ export const createChannel = createAsyncThunk(
 
             if (response.data.success) {
 
-                dispatch(closeOverlay());
+                if (response.data.channel) {
+
+                    dispatch(setChannelToEdit(response.data.channel));
+
+                } else {
+                    dispatch(closeOverlay());
+                }
+               
 
                 return response.data
             

@@ -45,7 +45,7 @@ const ContextMenu = ({ children }) => {
     useEffect(() => {
         const handleContextMenu = (event) => {
             event.preventDefault();
-    
+
             const options = getOptions(event, permissions[user?.server_group], currentTextChannel, channels, currentChannel, user);
             if (!options || options.length === 0) return;
     
@@ -54,7 +54,7 @@ const ContextMenu = ({ children }) => {
     
             // First, set the menu at the raw click position
             setContextMenu({ visible: true, x: clickX, y: clickY, options });
-    
+   
             // Delay position adjustment to the next render cycle
             requestAnimationFrame(() => {
                 if (menuRef.current) {

@@ -2,13 +2,13 @@
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./VolumeSlider.module.css";
 
-const VolumeSlider = ({ value, onChange, step = 0.01, max = 1, min = 0, label, width }) => {
+const VolumeSlider = ({ value, onChange, step = 0.01, max = 1, min = 0, label, width, maxWidth }) => {
   const percent = (value - min) / (max - min);
 
   return (
     <div
       className={styles.volumeSlider}
-      style={{ "--slider-percent": percent , width}}
+      style={{ "--slider-percent": percent , width, maxWidth}}
     >
       <div className={styles.sliderWrapper}>
         <AnimatePresence>

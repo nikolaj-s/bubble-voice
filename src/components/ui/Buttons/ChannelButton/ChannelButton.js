@@ -87,10 +87,10 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
         style={{ backgroundColor: users.length > 0 ? 'var(--card-background-color)' : 'transparent' }}
         className={`${styles.channelContainer} ${active ? styles.active : ''}`}
       >
-        <div
-          role="button"
+        <button
           tabIndex={0}
           onClick={openChannel}
+          onTouchEnd={openChannel}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') openChannel();
           }}
@@ -117,7 +117,7 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
             )}
           </span>
           <span draggable={false} className={styles.channelName}>{channel_name}</span>
-        </div>
+        </button>
   
         <div className={styles.subButtonWrapper}>
           <IconButton

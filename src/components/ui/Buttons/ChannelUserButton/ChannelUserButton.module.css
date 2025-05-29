@@ -62,8 +62,16 @@
 }
 
 .streamStatus {
-    width: calc(100% - 20px);
+    width: calc(100% - 0px);
+    display: flex;
+}
+
+.arrowIndicator {
+    height: 20px;
+    width: 10px;
+    margin-left: 10px;
+    flex-shrink: 0;
     border-left: 2px solid var(--accent-color);
-    margin-left: 12px;
-    padding-left: 5px;
+    border-bottom: 2px solid var(--accent-color);
+    border-bottom-left-radius: var(--border-radius);
 }

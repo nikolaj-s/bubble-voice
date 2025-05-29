@@ -47,7 +47,7 @@ const channelsSlice = createSlice({
             state.channels = action.payload;
         },
         userJoinsChannel: (state, action) => {
-console.log(action.payload);
+
             state.channels[action.payload.channel_id].users = action.payload.users;
 
         },
