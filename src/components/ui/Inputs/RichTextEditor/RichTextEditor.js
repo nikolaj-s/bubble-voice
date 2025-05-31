@@ -8,15 +8,14 @@ import {
   Strikethrough,
   List,
   ListOrdered,
-  Paintbrush
 } from 'lucide-react';
+
 import 'react-quill/dist/quill.core.css';
+
 import styles from './RichTextEditor.module.css';
 
 import './qlEditor.css';
 import Dropdown from '../DropDown/DropDown';
-
-const COLORS = ['#000000', '#1e3a5f', '#4e8e8b', '#3b7a6e', '#e16b6b', '#76c7a5'];
 
 const HEADERS =  [{label: 'Normal', value: ""}, {label: "H1", value: 1}, {label: 'H2', value: 2}, {label: "H3", value: 3}];
 
@@ -58,21 +57,6 @@ const CustomToolbar = ({ formats, applyFormat, openImageModal, openLinkModal }) 
     >
       <List size={18} />
     </button>
-
-    {/* <div className={styles.colorPickerWrapper}>
-      <Paintbrush size={18} />
-      <div className={styles.colorOptions}>
-        {COLORS.map((c) => (
-          <div
-            key={c}
-            className={styles.colorDot}
-            style={{ backgroundColor: c }}
-            onClick={() => applyFormat('color', c)}
-          />
-        ))}
-      </div>
-    </div> */}
-    
   </div>
 );
 

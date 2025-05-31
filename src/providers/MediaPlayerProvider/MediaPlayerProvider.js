@@ -13,7 +13,8 @@ import {
     addMultipleToQueue,
     enableMediaPlayer,
     reorderQueue,
-    setColor
+    setColor,
+    removeMediaFromQueue
 
 } from '../../features/MediaPlayer/mediaPlayerSlice';
 import { fetchSavedMedia } from '../../features/MediaPlayer/Thunks/fetchSavedMedia';
@@ -25,7 +26,7 @@ export const MediaPlayerProvider = ({children}) => {
 
     const socket = useSocket();
 
-    const {loading, currentlyPlaying} = useSelector(state => state.mediaPlayerSlice);
+    const {loading, currentlyPlaying, enabled} = useSelector(state => state.mediaPlayerSlice);
 
     const {currentVoiceChannel: channelId} = useSelector(state => state.voiceChannelSlice);
 
@@ -49,7 +50,74 @@ export const MediaPlayerProvider = ({children}) => {
           dispatch(setColor(null));
       }
     
-    }, [currentlyPlaying, dispatch])
+    }, [currentlyPlaying, dispatch]);
+
+    React.useEffect(() => {
+
+      if (!socket || !channelId) return;
+
+      const handleTogglePlaying = (data) => {
+          dispatch(toggleMediaPlaying(data?.playing));
+      }
+
+      const handleNewMedia = (data) => {
+          dispatch(addMediaToQueue(data.media));
+      }
+
+      const handleRemoveMediaFromQueue = (data) => {
+          dispatch(removeMediaFromQueue(data));
+      }
+
+      const handleSeek = (data) => {
+          dispatch(incrementCurrentTime(data.new_time));
+      }
+
+      const handleSkip = (data) => {
+          dispatch(playNextInQueue());
+      }
+
+      const handleReorder = (data) => {
+        dispatch(reorderQueue(data));
+      }
+
+      if (enabled) {
+
+          // Setup listeners
+          socket.on(`media-widget/toggle-playing/${channelId}`, handleTogglePlaying);
+          
+          socket.on(`media-widget/new-media/${channelId}`, handleNewMedia);
+  
+          socket.on(`media-widget/remove-media/${channelId}`, handleRemoveMediaFromQueue);
+  
+          socket.on(`media-widget/seek/${channelId}`, handleSeek);
+
+          socket.on(`media-widget/skipped-media/${channelId}`, handleSkip);
+
+          socket.on(`media-widget/re-order/${channelId}`, handleReorder)
+  
+      }
+
+      return () => {
+    
+        socket.off(`media-widget/toggle-playing/${channelId}`, handleTogglePlaying);
+
+        socket.off(`media-widget/new-media/${channelId}`, handleNewMedia);
+
+        socket.off(`media-widget/remove-media/${channelId}`, handleRemoveMediaFromQueue);
+
+        socket.off(`media-widget/seek/${channelId}`, handleSeek);
+
+        socket.off(`media-widget/skipped-media/${channelId}`, handleSkip);
+
+        socket.off(`media-widget/seek/${channelId}`, handleSeek);
+
+        socket.off(`media-widget/re-order/${channelId}`, handleReorder);
+
+        dispatch(resetMediaPlayer());
+
+      };
+
+    }, [enabled, channelId, dispatch, socket]);
 
     const setMedia = React.useCallback(async () => {
           try {
@@ -83,31 +151,6 @@ export const MediaPlayerProvider = ({children}) => {
     
             if (!socket || !channelId) return;
     
-            const handleTogglePlaying = (data) => {
-              console.log(data)
-                dispatch(toggleMediaPlaying(data?.playing));
-            }
-    
-            const handleNewMedia = (data) => {
-                dispatch(addMediaToQueue(data.media));
-            }
-    
-            const handleRemoveMediaFromQueue = (data) => {
-                console.log(data);
-            }
-    
-            const handleSeek = (data) => {
-                dispatch(incrementCurrentTime(data.new_time));
-            }
-    
-            const handleSkip = (data) => {
-                dispatch(playNextInQueue());
-            }
-
-            const handleReorder = (data) => {
-              dispatch(reorderQueue(data));
-            }
-    
             socket
             .request('media-widget/check', { channel_id: channelId })
             .then((res) => {
@@ -115,21 +158,8 @@ export const MediaPlayerProvider = ({children}) => {
                 
                 dispatch(enableMediaPlayer(true));
             
-                // Setup listeners
-                socket.on(`media-widget/toggle-playing/${channelId}`, handleTogglePlaying);
-                
-                socket.on(`media-widget/new-media/${channelId}`, handleNewMedia);
-        
-                socket.on(`media-widget/remove-from-queue/${channelId}`, handleRemoveMediaFromQueue);
-        
-                socket.on(`media-widget/seek/${channelId}`, handleSeek);
-    
-                socket.on(`media-widget/skipped-media/${channelId}`, handleSkip);
-
-                socket.on(`media-widget/re-order/${channelId}`, handleReorder)
-        
                 dispatch(setCurrentChannel(channelId));
-            
+
                 setMedia();
     
               }
@@ -137,26 +167,6 @@ export const MediaPlayerProvider = ({children}) => {
             .catch((err) => {
               console.warn('Media widget check failed:', err);
             });
-    
-            return () => {
-    
-                socket.off(`media-widget/toggle-playing/${channelId}`, handleTogglePlaying);
-    
-                socket.off(`media-widget/new-media/${channelId}`, handleNewMedia);
-    
-                socket.off(`media-widget/remove-from-queue/${channelId}`, handleRemoveMediaFromQueue);
-    
-                socket.off(`media-widget/seek/${channelId}`, handleSeek);
-    
-                socket.off(`media-widget/skipped-media/${channelId}`, handleSkip);
-    
-                socket.off(`media-widget/seek/${channelId}`, handleSeek);
-
-                socket.off(`media-widget/re-order/${channelId}`, handleReorder);
-    
-                dispatch(resetMediaPlayer());
-    
-            };
 
         }, [socket, channelId, dispatch]);
 

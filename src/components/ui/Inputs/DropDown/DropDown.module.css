@@ -2,7 +2,6 @@
     position: relative;
     display: inline-block;
     color: var(--text-color);
-    z-index: 4;
   }
   
   .dropdownButton {
@@ -46,6 +45,7 @@
     text-transform: capitalize;
     max-height: 380px;
     overflow-y: auto;
+    max-width: 250px;
   }
 
   .bottom-left {
@@ -73,7 +73,7 @@
   }  
   
   .option {
-    padding: 10px 15px;
+    padding: 10px 5px;
     color: var(--text-color);
     cursor: pointer;
     transition: background-color 0.3s ease;

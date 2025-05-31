@@ -15,9 +15,6 @@ export const NotificationProvider = ({children}) => {
 
     }, [dispatch]);
 
-
-    
-
     return (
         <>
         {children}

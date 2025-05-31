@@ -5,7 +5,7 @@ import { useSocket } from '../../context/SocketContext'
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { resetServerDetails, selectServerDetailsStatus, setServerDetails, setServerDetailsStatus } from '../../features/ServerDetails/serverDetailsSlice';
+import { selectServerDetailsStatus, setServerDetails, setServerDetailsStatus } from '../../features/ServerDetails/serverDetailsSlice';
 
 import DashboardSkeleton from '../../components/ui/Loading/DashBoardSkeleton/DashBoardSkeleton';
 
@@ -122,6 +122,7 @@ export const ServerDetailsProvider = ({children}) => {
         
         }
 
+    // eslint-ignore-next-line
     }, [socket, serverID, dispatch])
 
 

@@ -7,12 +7,16 @@ import { useNavigate } from "react-router";
 import { ChannelUserButton } from "../ChannelUserButton/ChannelUserButton";
 import IconButton from "../IconButton/IconButton";
 import { useDispatch, useSelector } from "react-redux";
-import { setCurrentTextChannel } from "../../../../features/Channel/TextChannel/textChannelSlice";
 import { triggerContext } from "../../../../lib/services/helperFunctions";
+
 import { toggleMobileMenu } from "../../../../features/Mobile/mobileSlice";
+
 import { setUserProfile } from "../../../../features/UserProfile/userProfileSlice";
+
 import { setOverlay } from "../../../../features/Overlay/overlaySlice";
+
 import { ChannelStatus } from "./ChannelStatus/ChannelStatus";
+
 import { setCurrentVoiceChannel, setVoiceChannelFocused } from "../../../../features/Channel/VoiceChannel/voiceChannelSlice";
 
 const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, channel_type, server_id, channel }) => {

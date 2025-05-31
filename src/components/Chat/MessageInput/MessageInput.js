@@ -117,7 +117,10 @@ export const MessageInput = ({ value, setValue, setImage = () => {}, error, send
         <>
         <div className={styles["message-input-container"]}>
             {error && 
-                    (<TextLabelError label="Error:" error={error} />) 
+                (<div className={styles.errorWrapper}>
+                    <TextLabelError label="Error:" error={error} />
+                </div>
+                ) 
             }
             {preview && <MediaPreview clear={() => {setPreview(null); setImage(null)}} preview={preview} />}
             <div className={styles.inputButtonWrapper}>

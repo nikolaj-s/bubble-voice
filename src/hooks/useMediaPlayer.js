@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react'
+import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSocket } from '../context/SocketContext';
 import { setMediaPlayerLoadingState } from '../features/MediaPlayer/mediaPlayerSlice';
@@ -11,6 +11,7 @@ import { triggerAlert } from '../features/Alerts/alertsSlice';
 *   toggleIsPlaying: () => Promise<void>,
 *   next: () => Promise<void>,
 *   seek: (value: number) => Promise<void>,
+*   removeMedia: (value: Object) => Promise<void>,
 *   isPlaying: boolean,
 *   currentTime: number,
 *   volume: number,
@@ -82,11 +83,15 @@ export const useMediaPlayer = () => {
 
         await socket.request('media-widget/seek', value);
 
+        return;
+
         } catch (err) {
             dispatch(triggerAlert("Error Seeking Media", 'error'))
         }
 
         dispatch(setMediaPlayerLoadingState(false));
+
+        return;
 
     }, [socket, dispatch, loading, playerState])  
 
@@ -94,6 +99,8 @@ export const useMediaPlayer = () => {
       try {
         
         if (!value || loading || !playerState.enabled) return;
+
+        dispatch(setMediaPlayerLoadingState(true));
 
         const newOrder = value.map(item => item._id);
 
@@ -103,7 +110,31 @@ export const useMediaPlayer = () => {
         console.log(error);
         dispatch(triggerAlert("Error Reordering Queue", 'error'));
       }
+
+      dispatch(setMediaPlayerLoadingState(false));
+
+      return;
     }, [dispatch, socket, loading, playerState])
 
-    return {...playerState, toggleIsPlaying, seek, next, reorder}
+    const removeMedia = useCallback(async (media) => {
+
+      try {
+
+        if (!media?._id || loading) return;
+
+        dispatch(setMediaPlayerLoadingState(true));
+
+        await socket.request('media-widget/remove-media', {media});
+
+      } catch (error) {
+        console.log(error);
+        dispatch(triggerAlert("Error Removing Media From Queue", 'error'));
+      }
+
+      dispatch(setMediaPlayerLoadingState(true));
+
+      return;
+    }, [dispatch, socket, loading])
+
+    return {...playerState, toggleIsPlaying, seek, next, reorder, removeMedia}
 }

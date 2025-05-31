@@ -116,6 +116,11 @@
     margin-bottom: 0px;
 }
 
+.errorWrapper {
+    padding: 0px 5px 5px 5px;
+    width: calc(100% - 10px);
+}
+
 @media screen and (max-width: 730px) {
     .menu button {
         width: 160px;

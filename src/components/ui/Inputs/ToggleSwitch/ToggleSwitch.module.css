@@ -1,5 +1,6 @@
 .toggleContainer {
     cursor: pointer;
+    max-width: 50px;
   }
   
   .toggleBackground {

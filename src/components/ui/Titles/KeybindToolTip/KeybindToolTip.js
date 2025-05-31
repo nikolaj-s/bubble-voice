@@ -1,6 +1,7 @@
 import React from 'react'
 
 export const KeybindToolTip = ({binds, label, width}) => {
+
     return (
         <>
         <p 
@@ -13,7 +14,7 @@ export const KeybindToolTip = ({binds, label, width}) => {
         }}>
         {label}
         </p>
-        {binds.length > 0 && <div
+        {binds[0] && (<div
         style={{
             display: 'flex',
             alignItems: 'center',
@@ -44,7 +45,7 @@ export const KeybindToolTip = ({binds, label, width}) => {
                 )
             })
         }
-        </div>}
+        </div>)}
         </>
     )
 }

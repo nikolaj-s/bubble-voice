@@ -51,22 +51,7 @@ const TopNav = () => {
 
     dispatch(setOverlay('search'));
   }
-
-  const handleOpenPins = () => {
-
-    dispatch(setSelectedChannelToFilter(channelDetails));
-
-    dispatch(setFilter({path: 'text-channel'}));
-
-    dispatch(setTextChannelFilter({isPinned: true, hasImage: false, hasVideo: false, hasLink: false}));
-
-    dispatch(setFromDate(null));
-
-    dispatch(globalSearch());
-
-    dispatch(setOverlay('search'));
-  }
-
+  
   const openMobileMenu = (e) => {
     if (isUserMenuOpen) {
       dispatch(toggleMobileMenu('isUserMenuOpen'))
