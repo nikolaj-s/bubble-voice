@@ -38,7 +38,7 @@ const SortableItem = ({ id, children }) => {
 };
 
 export const VerticalReorderWrapper = ({ items, onReorder, children }) => {
-  const sensors = useSensors(useSensor(PointerSensor));
+  const sensors = useSensors(useSensor(PointerSensor, {activationConstraint: {delay: 200, tolerance: 4}}));
 
   const handleDragEnd = (event) => {
     const { active, over } = event;

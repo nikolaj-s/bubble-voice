@@ -11,8 +11,20 @@ import { MediaPlayerProvider } from '../../../../providers/MediaPlayerProvider/M
 import styles from './VoiceChannel.module.css'
 import { UserAudioProvider } from '../../../../context/UserAudioContext'
 import { ChannelStatusProvider } from '../../../../providers/ChannelStatusProvider/ChannelStatusProvider'
+import { useDispatch } from 'react-redux'
+import { setFullscreen } from '../../../../features/Ui/uiSlice'
 
 export const VoiceChannel = ({channel, focused}) => {
+
+    const dispatch = useDispatch();
+
+    React.useEffect(() => {
+
+        return () => {
+            dispatch(setFullscreen(false));
+        }
+        
+    }, [dispatch])
 
     return (
         <div className={styles.container} style={{zIndex: focused ? 2 : null}}>  

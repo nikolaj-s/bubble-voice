@@ -1,12 +1,9 @@
 import React from 'react'
-import { FixedSideMenuWrapper } from '../../../components/ui/Wrappers/FixedSideMenuWrapper/FixedSideMenuWrapper'
 import { useDispatch, useSelector } from 'react-redux'
 import { SkeletonCards } from '../../../components/ui/Loading/SkeletonCards/SkeletonCards';
 import { Widgets } from '../../../components/Widgets/Widgets';
 import ErrorCard from '../../../components/Error/ErrorCard/ErrorCard';
 import { fetchWidgets } from '../../../features/Widgets/Thunks/fetchWidgets';
-import Header from '../../../components/ui/Titles/Header/Header';
-import { IconPlaceholder } from '../../../components/ui/Placeholders/IconPlaceholder/IconPlaceholder';
 import { Ellipsis, LayoutDashboard, RefreshCcw } from 'lucide-react';
 import IconButton from '../../../components/ui/Buttons/IconButton/IconButton';
 import { LineSpacer } from '../../../components/ui/Spacers/LineSpacer/LineSpacer';
@@ -16,7 +13,8 @@ import { setManageWidgetsForChannel } from '../../../features/Widgets/manageWidg
 import { setOverlay } from '../../../features/Overlay/overlaySlice';
 import { ToolBar } from '../../../components/ui/Wrappers/ToolBar/ToolBar';
 
-import styles from './WidgetsOverlay.module.css'
+import ContentHeader from '../../../components/Headers/ContentHeader/ContentHeader';
+import ScrollLoadWrapper from '../../../components/ui/Wrappers/ScrollLoadWrapper/ScrollLoadWrapper';
 
 export const WidgetsOverlay = ({close}) => {
 
@@ -26,21 +24,29 @@ export const WidgetsOverlay = ({close}) => {
 
     const {widgets, loading, error} = useSelector(state => state.widgetsSlice);
 
-    const [channel, setChannel] = React.useState(null);
+    const channel = useSelector(state => state.widgetsSlice.channel);
 
     const textChannel = useSelector(state => state.textChannelSlice.currentTextChannel);
 
     const voiceChannel = useSelector(state => state.voiceChannelSlice.currentVoiceChannel);
 
-    React.useEffect(() => {
-
-        if (textChannel) {
-            setChannel(textChannel)
-        } else if (voiceChannel) {
-            setChannel(voiceChannel);
-        }
-
-    }, [textChannel, voiceChannel])
+    const subtitles = [
+        "Gadgets for days. Mischief for nights.",
+        "Welcome to the Bubbleverse toolkit—bring your own confetti!",
+        "Widgets: The secret sauce to your daily Bubble stew.",
+        "Don’t just press buttons. Summon mini-miracles.",
+        "Widgets? More like wish-granting gremlins.",
+        "Add a dash of chaos (the fun kind).",
+        "Welcome to Widget City: Population—you and your wild ideas.",
+        "These aren’t your grandma’s widgets. (Unless your grandma codes.)",
+        "Click, toggle, boom—magic unlocked.",
+        "Pet a virtual platypus. (Coming soon. Maybe.)",
+        "Release the kraken! (Or just a timer, your call.)",
+        "Tools so cool, they need a warning label.",
+        "Supercharge your Bubble—zero side effects, infinite possibilities.",
+        "From mood lighting to disco ducks—customize it all.",
+        "Curated for rebels, dreamers, and anyone bored of boring."
+    ]
 
     React.useEffect(() => {
 
@@ -70,9 +76,8 @@ export const WidgetsOverlay = ({close}) => {
     const channelDetails = useSelector(state => state.channelsSlice.channels[channel])
 
     return (
-        <div className={styles.container}>
-            <IconPlaceholder icon={LayoutDashboard} />
-            <Header text={`${channelDetails?.channel_name} / Widgets`}/>
+        <ScrollLoadWrapper noMoreItems={true} >
+            <ContentHeader Icon={LayoutDashboard} title={`${channelDetails?.channel_name} / Widgets`} subTitle={subtitles[Math.floor(Math.random() * subtitles.length)]} />
             <ToolBar id={'widgets-overlay-nav'} data-context={JSON.stringify({type: 'widgetsOverlay', channel_id: channel})}>
                 <IconButton 
                 Icon={<RefreshCcw color='var(--text-color' />}
@@ -85,7 +90,7 @@ export const WidgetsOverlay = ({close}) => {
                 onClick={(e) => {triggerContext(e, 'widgets-overlay-nav')}}
                 />
             </ToolBar>
-            <LineSpacer margin={'20px 0px'} />
+            <LineSpacer margin={'10px 0px'} />
             {loading ?
             <SkeletonCards />
             : error ?
@@ -93,6 +98,6 @@ export const WidgetsOverlay = ({close}) => {
             :
             <Widgets widgets={widgets[channel] ? widgets[channel] : []} openAddWidgets={openAddMoreWidgets} />
             }
-        </div>
+       </ScrollLoadWrapper>
     )
 }

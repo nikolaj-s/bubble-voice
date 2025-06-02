@@ -52,7 +52,7 @@ const savedMediaSlice = createSlice({
             state.loading = false;
             state.error = false;
             if (state.saves[action.payload.channel_id]) {
-                state.saves[action.payload.channel_id].push(action.payload.media);
+                state.saves[action.payload.channel_id].unshift(action.payload.media);
             }
         })
 

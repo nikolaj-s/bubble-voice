@@ -8,6 +8,8 @@ export const ServersProvider = ({children}) => {
 
     const [loading, toggleLoading] = React.useState(false);
 
+    const [showLoading, toggleShowLoading] = React.useState(false);
+
     const dispatch = useDispatch();
 
     const socket = useSocket();
@@ -60,7 +62,28 @@ export const ServersProvider = ({children}) => {
 
     }, [socket, dispatch]);
 
-    if (loading) return <ServerSkeletonLoader />;
+    React.useEffect(() => {
+
+        let timeout;
+
+        if (loading) {
+
+            timeout = setTimeout(() => {
+                toggleShowLoading(true);
+            }, 1000)
+
+        } else {
+            toggleShowLoading(false);
+        }
+
+        return () => {
+            clearTimeout(timeout);
+            toggleShowLoading(false);
+        }
+
+    }, [loading])
+
+    if (showLoading) return <ServerSkeletonLoader />;
 
     return (
         <>

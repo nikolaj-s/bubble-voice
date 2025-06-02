@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import ScrollLoadWrapper from '../../../components/ui/Wrappers/ScrollLoadWrapper/ScrollLoadWrapper';
 import { fetchMediaHistory } from '../../../features/MediaPlayer/Thunks/fetchMediaHistory';
 import { MediaItem } from '../../../components/MediaPlayer/MediaItem/MediaItem';
-import MediaHistoryHeader from './MediaHistoryHeader/MediaHistoryHeader';
-
 import styles from './MediaPlayerHistory.module.css';
 import TextInput from '../../../components/ui/Inputs/TextInput/TextInput';
 import StickyWrapper from '../../../components/ui/Wrappers/StickyWrapper/StickyWrapper';
@@ -12,6 +10,8 @@ import { addMediaToPlayer } from '../../../features/MediaPlayer/Thunks/addMediaT
 import { setOverlay } from '../../../features/Overlay/overlaySlice';
 import NoMediaHistoryPlaceholder from './NoMediaHistoryPlaceholder/NoMediaHistoryPlaceholder';
 import TextLabelError from '../../../components/Error/TextLabelError/TextLabelError';
+import ContentHeader from '../../../components/Headers/ContentHeader/ContentHeader';
+import { HistoryIcon } from 'lucide-react';
 
 export const MediaPlayerHistory = () => {
     const dispatch = useDispatch();
@@ -73,7 +73,7 @@ export const MediaPlayerHistory = () => {
             loadMore={() => loadMoreRef.current()}
             loading={loading || localLoading}
         >
-            <MediaHistoryHeader />
+            <ContentHeader title={"Media Time Machine"} subTitle={"Relive your channel’s greatest hits — from guilty pleasures to legendary jams!"} Icon={HistoryIcon} />
             <StickyWrapper stickyOffset={25} >
                 <TextInput value={query} onChange={setQuery} placeholder={'Search'} />
                 <TextLabelError error={error} />
@@ -82,7 +82,7 @@ export const MediaPlayerHistory = () => {
                 {history?.length === 0 && (!loading && !localLoading)
                     ? <NoMediaHistoryPlaceholder />
                     : history?.map((media, key) => (
-                        <MediaItem {...media} key={key} action={() => { handlePlay(media) }} context={media} inQueue={false} />
+                        <MediaItem position={key} {...media} key={key} action={() => { handlePlay(media) }} context={media} inQueue={false} />
                     ))}
             </div>
         </ScrollLoadWrapper>

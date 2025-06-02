@@ -7,6 +7,7 @@ import TextLabelError from '../Error/TextLabelError/TextLabelError';
 import { MediaPlayerQueue } from './MediaPlayerQueue/MediaPlayerQueue';
 import { CurrentlyPlaying } from './CurrentlyPlaying/CurrentlyPlaying';
 import { MediaPlayerControls } from './MediaPlayerControls/MediaPlayerControls';
+import { useEffect, useState } from 'react';
 
 export const MediaPlayer = ({
   queue = [],
@@ -31,6 +32,8 @@ export const MediaPlayer = ({
   viewHistory = () => {},
 }) => {
 
+  const [showLoading, toggleShowLoading] = useState(false);
+
   const duration = currentlyPlaying?.duration || 0;
 
   const handleSeek = (value) => {
@@ -38,6 +41,29 @@ export const MediaPlayer = ({
         onSeek(Math.floor(value))
     }
   };
+
+  useEffect(() => {
+
+    let timeout;
+
+    if (loading) {
+
+      timeout = setTimeout(() => {
+
+        toggleShowLoading(true);
+
+      }, 500)
+
+    } else {
+      toggleShowLoading(false);
+      clearTimeout(timeout);
+    }
+
+    return () => {
+      clearTimeout(timeout);
+    }
+
+  }, [loading])
 
   return (
     <div id={'media-player-overlay'} data-context={JSON.stringify({currentlyPlaying, type: 'mediaplayer'})} className={styles.mediaPlayer}>
@@ -68,7 +94,7 @@ export const MediaPlayer = ({
         viewHistory={viewHistory}
         />
         {!hideQueue && (<MediaPlayerQueue queue={queue} onReorder={onReorder} />)}
-        {loading && (<SpinnerLoading />)}
+        {showLoading && (<SpinnerLoading />)}
     </div>
   );
 };

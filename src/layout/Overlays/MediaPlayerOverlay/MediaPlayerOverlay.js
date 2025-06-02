@@ -1,14 +1,17 @@
 
 import { useMediaPlayer } from '../../../hooks/useMediaPlayer'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setFilter } from '../../../features/Search/searchSlice'
 import { setOverlay } from '../../../features/Overlay/overlaySlice'
 import { MediaPlayer } from '../../../components/MediaPlayer/MediaPlayer'
 import { setMediaPlayerVolume, toggleHideQueue, toggleMediaPlayerMuted } from '../../../features/MediaPlayer/mediaPlayerSlice'
+import { setChannelToViewWidgetsOf } from '../../../features/Widgets/widgetsSlice'
 
 export const MediaPlayerOverlay = ({close}) => {
 
     const dispatch = useDispatch();
+
+    const {currentVoiceChannel} = useSelector(state => state.voiceChannelSlice);
     
     const {enabled, isPlaying, currentlyPlaying, queue, loading, next, toggleIsPlaying, currentTime, seek, error, reorder, color, volume, isMuted, hideQueue} = useMediaPlayer();
 
@@ -27,6 +30,8 @@ export const MediaPlayerOverlay = ({close}) => {
     }
 
     const openSaves = () => {
+        
+        dispatch(setChannelToViewWidgetsOf(currentVoiceChannel));
 
         dispatch(setOverlay('widgets'));
 

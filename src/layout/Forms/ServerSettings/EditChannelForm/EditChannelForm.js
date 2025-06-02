@@ -165,7 +165,7 @@ export const EditChannelForm = ({permissions}) => {
                 existingImage={channel.channel_background}
                 onImageChange={setChannelBackground}
                 parentFileSrc={channelBackground}
-                dimensions={1000}
+                dimensions={1500}
                 />
                 <LineSpacer />
                 <Header level={3} text="Widgets" />

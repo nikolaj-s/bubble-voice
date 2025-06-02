@@ -45,34 +45,30 @@ const SocialFilter = ({ onFilterChange = () => {} }) => {
 
   return (
     <div className={styles.filterContainer}>
-      
+      <InlineLabel title={"Has / Is"} />
       <button
         className={`${styles.filterButton} ${filters.hasImage ? styles.active : ""}`}
         onClick={() => toggleFilter("hasImage")}
       >
-        <Image size={20} />
-        <p>Image</p>
+        Image
       </button>
       <button
         className={`${styles.filterButton} ${filters.hasVideo ? styles.active : ""}`}
         onClick={() => toggleFilter("hasVideo")}
       >
-        <Video size={20} />
-        <p>Video</p>
+        Video
       </button>
       <button
         className={`${styles.filterButton} ${filters.hasLink ? styles.active : ""}`}
         onClick={() => toggleFilter("hasLink")}
       >
-        <Link size={20} />
-        <p>Link</p>
+        Link
       </button>
       <button
         className={`${styles.filterButton} ${filters.isPinned ? styles.active : ""}`}
         onClick={() => toggleFilter("isPinned")}
       >
-        <Pin size={20} />
-        <p>Pinned</p>
+       Pinned
       </button>
       <PillSpacer height={15} verticle={true} />
       <InlineLabel title={'From'} />

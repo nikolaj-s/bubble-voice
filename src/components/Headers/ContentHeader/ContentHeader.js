@@ -1,16 +1,14 @@
-import React from "react";
-import { History } from "lucide-react";
-import styles from "./MediaHistoryHeader.module.css";
+import styles from "./ContentHeader.module.css";
 
-const MediaHistoryHeader = () => (
+const ContentHeader = ({Icon, title, subTitle}) => (
   <div className={styles.header}>
     <div className={styles.iconWrap}>
-      <History size={28} strokeWidth={2.2} className={styles.icon} />
+      {Icon && (<Icon size={38} strokeWidth={2.2} className={styles.icon} />)}
     </div>
-    <div>
-      <h2 className={styles.title}>Media Time Machine</h2>
+    <div className={styles.wrapper}>
+      <h2 className={styles.title}>{title}</h2>
       <p className={styles.subtitle}>
-        Relive your channel’s greatest hits — from guilty pleasures to legendary jams!
+       {subTitle}
       </p>
     </div>
     <div className={styles.bubbles}>
@@ -22,4 +20,4 @@ const MediaHistoryHeader = () => (
   </div>
 );
 
-export default MediaHistoryHeader;
+export default ContentHeader;

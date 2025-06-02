@@ -1,4 +1,4 @@
-import { Bookmark, ChevronRight, Cog, Copy, Download, FilePenLine, FolderPen, FolderPlus, Hash, History, ImageDown, LayoutDashboard, Link, ListPlus, ListX, Mic, Music2, Pause, Pencil, Pin, PinOff, Play, PlaySquare, Plus, Reply, Search, Send, Settings, Settings2, SkipForward, Trash2, Unplug, UserPen, Users, Video } from "lucide-react";
+import { Bookmark, BookmarkCheck, ChevronRight, Cog, Copy, Download, FilePenLine, FolderPen, FolderPlus, Hash, History, ImageDown, LayoutDashboard, LayoutDashboardIcon, Link, ListPlus, ListX, Mic, Music2, Pause, Pencil, Pin, PinOff, Play, PlaySquare, Plus, Reply, Search, Send, Settings, Settings2, SkipForward, Trash2, Unplug, UserPen, Users, Video } from "lucide-react";
 import { useCallback } from "react";
 import { useDispatch, useSelector,} from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -26,6 +26,8 @@ import { removeSavedMediaFromPlayer } from "../../features/MediaPlayer/Thunks/re
 import { isMediaSaved } from "../../features/MediaPlayer/Helpers/isMediaSaved";
 import { useGlobalVolume } from "../../context/GlobalVolumeContext";
 import { toggleUsingPushToTalk } from "../../features/Channel/MediaControl/mediaControlSlice";
+import { setChannelToViewWidgetsOf } from "../../features/Widgets/widgetsSlice";
+import { expandVideo } from "../../features/Media/ExpandedVideo/expandedVideoSlice";
 
 export const useContextMenuOptions = () => {
 
@@ -70,6 +72,37 @@ export const useContextMenuOptions = () => {
             } catch (error) {
                 continue;
             }
+            }
+
+            if (data.appSubmenu) {
+
+                if (server_id) {
+                    let widget_options = [];
+
+                    Object.values(channels).sort((a, b) => 
+                    a.channel_name.localeCompare(b.channel_name, undefined, { sensitivity: 'base' })
+                    ).forEach(channel => { 
+
+                        widget_options.push({
+                            label: channel.channel_name,
+                            type: 'button',
+                            icon: <LayoutDashboardIcon color="var(--text-color)" />,
+                            onClick: () => {
+                                dispatch(setChannelToViewWidgetsOf(channel._id));
+
+                                dispatch(setOverlay('widgets'));
+                            }
+                        })
+
+                    })
+
+                    options.push({
+                        label: "View Widgets From",
+                        submenuOptions: widget_options,
+                        icon: <ChevronRight color="var(--text-color)" />
+                    })
+                }
+
             }
 
             if (data.userStreamSource) {
@@ -130,8 +163,11 @@ export const useContextMenuOptions = () => {
                 options.push({
                     label: "View Saves",
                     type: 'button',
-                    icon: <Bookmark color="var(--text-color" />,
+                    icon: <BookmarkCheck color="var(--text-color" />,
                     onClick: () => {
+
+                        dispatch(setChannelToViewWidgetsOf(currentVoiceChannel));
+
                         dispatch(setOverlay('widgets'));
 
                          setTimeout(() => {
@@ -539,6 +575,17 @@ export const useContextMenuOptions = () => {
                 }
 
                 options.push({
+                    label: "Preview",
+                    onClick: () => {
+                        dispatch(expandVideo(data.video));
+
+                        dispatch(setOverlay("expandVideo"))
+                    },
+                    type: "button",
+                    icon: <Play color="var(--text-color)" />
+                })
+
+                options.push({
                     label: "Copy Link",
                     onClick: () => {copyToClipboard(data.video.url || data.video.src); dispatch(triggerAlert("Link Copied"))},
                     type: 'button',
@@ -618,6 +665,7 @@ export const useContextMenuOptions = () => {
                         icon: <LayoutDashboard color="var(--text-color)"/>,
                         type: 'button',
                         onClick: () => {
+                            dispatch(setChannelToViewWidgetsOf(currentTextChannel || currentVoiceChannel))
                             dispatch(setOverlay("widgets"))
                         }
                     })
@@ -652,28 +700,46 @@ export const useContextMenuOptions = () => {
 
             }
 
-            if (data.room) {
-                options.push({
-                    label: hideNonVideoUsers ? 'Show Non Video Users' : 'Hide Non Video Users',
-                    type: 'button',
-                    onClick: () => {dispatch(toggleVoiceChannelOptions('hideNonVideoUsers'))}
-                })
-                options.push({
-                    label: hideChannelBackgrounds ? 'Show Channel Background' : "Hide Channel Background",
-                    type: 'button',
-                    onClick: () => {
-                        dispatch(toggleAppearanceSetting('hideChannelBackgrounds'))
+            if (data.room || data.appSubmenu) {
+                if (currentVoiceChannel) {
+                    options.push({
+                        label: hideNonVideoUsers ? 'Show Non Video Users' : 'Hide Non Video Users',
+                        type: 'button',
+                        onClick: () => {dispatch(toggleVoiceChannelOptions('hideNonVideoUsers'))}
+                    })
+                    options.push({
+                        label: hideChannelBackgrounds ? 'Show Channel Background' : "Hide Channel Background",
+                        type: 'button',
+                        onClick: () => {
+                            dispatch(toggleAppearanceSetting('hideChannelBackgrounds'))
+                        }
+                    })
+                    options.push({
+                        label: mediaPlayerState.hideMediaPlayer ? 'Show Media Player' : "Hide Media Player",
+                        type: 'button',
+                        onClick: () => {dispatch(toggleHideMediaPlayer())},
+                        icon: <Music2 color="var(--text-color)" />
+                    })
+
+                    if (permissions.user_can_edit_channels) {
+                        options.push({
+                            label: "Edit Channel",
+                            type: 'button',
+                            onClick: () => {
+
+                                dispatch(setChannelToEdit(channels[currentVoiceChannel]));
+
+                                setSearchParams({section: 'editChannel', channel: currentVoiceChannel});
+
+                                dispatch(setOverlay('serverSettings'))
+                            },
+                            icon: <Pencil color="var(--text-color)" />
+                        })
                     }
-                })
-                options.push({
-                    label: mediaPlayerState.hideMediaPlayer ? 'Show Media Player' : "Hide Media Player",
-                    type: 'button',
-                    onClick: () => {dispatch(toggleHideMediaPlayer())},
-                    icon: <Music2 color="var(--text-color)" />
-                })
+                }
             }
 
-            if (data.channel || data.room || data.controlBar) {
+            if (data.channel || data.room || data.controlBar || data.appSubmenu) {
 
                 if (currentVoiceChannel) {
                     options.push({

@@ -74,7 +74,7 @@ export const AccountSettingsForm = () => {
     <Label label='Edit Profile Image' />
     <ImageDropZone parentFileSrc={userImage} width={150} height={150} dimensions={300} borderRadius='50%' existingImage={user_image} onImageChange={setUserImage} />
     <Label label='Edit Profile Banner' />
-    <ImageDropZone parentFileSrc={userBanner} width={320} height={200} dimensions={800} existingImage={user_banner} onImageChange={setUserBanner} />
+    <ImageDropZone parentFileSrc={userBanner} width={320} height={200} dimensions={1200} existingImage={user_banner} onImageChange={setUserBanner} />
     <Label label='Bio' />
     <TextArea text={bio} setText={setBio} limit={512} placeholder='Enter a bio...' />
     <Label label='Choose An Accent Color' />

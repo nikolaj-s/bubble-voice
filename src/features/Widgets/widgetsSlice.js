@@ -8,9 +8,12 @@ const widgetsSlice = createSlice({
         widgets: {},
         loading: false,
         error: false,
+        channel: null
     },
     reducers: {
-        
+        setChannelToViewWidgetsOf: (state, action) => {
+            state.channel = action.payload;
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchWidgets.pending, (state) =>{
@@ -31,5 +34,7 @@ const widgetsSlice = createSlice({
         })
     }
 })
+
+export const {setChannelToViewWidgetsOf} = widgetsSlice.actions;
 
 export default widgetsSlice.reducer;

@@ -50,7 +50,7 @@ export const MediaItem = ({ title, duration, thumbnail, src, url, inQueue, added
         </div>
          {added_by && (
           <div className={styles.addedBy} >
-            <div style={{marginLeft: inQueue ? 52 : null}} className={styles.addedByIndicator} />
+            <div style={{marginLeft: typeof position === 'number' ? 52 : null}} className={styles.addedByIndicator} />
             <Subtitle>added by:</Subtitle>
             <MicroUserDisplay user_id={added_by} />
             {at && (<DateTimeDisplay date={at} />)}

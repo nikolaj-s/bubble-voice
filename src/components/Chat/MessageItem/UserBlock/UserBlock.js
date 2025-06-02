@@ -1,8 +1,9 @@
-import React from 'react'
-import { TimeDisplay } from '../../../TimeDisplay/TimeDisplay'
-import { useDispatch } from 'react-redux'
+
+import { TimeDisplay } from '../../../TimeDisplay/TimeDisplay';
+
+import { useDispatch } from 'react-redux';
+
 import { setUserProfile } from '../../../../features/UserProfile/userProfileSlice';
-import { setOverlay } from '../../../../features/Overlay/overlaySlice';
 
 export const UserBlock = ({message, users, prevMessage, isDifferentDay, styles}) => {
 
@@ -10,8 +11,6 @@ export const UserBlock = ({message, users, prevMessage, isDifferentDay, styles})
 
     const showUserProfile = () => {
         dispatch(setUserProfile(message.user_id));
-
-        dispatch(setOverlay('userProfile'));
     }
   
     return (

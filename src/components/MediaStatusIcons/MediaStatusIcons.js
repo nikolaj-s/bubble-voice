@@ -4,7 +4,6 @@ import React from 'react';
 import {
   MicOff,
   Video,
-  Monitor,
   HeadphoneOff
 } from 'lucide-react';
 import styles from './MediaStatusIcons.module.css';

@@ -8,10 +8,13 @@ const searchSettingsSlice = () => {
 
     const autoSendOnClick = JSON.parse(localStorage.getItem('autoSendOnClick')) || false;
 
+    const addToMediaPlayerOnClick = JSON.parse(localStorage.getItem('addToMediaPlayerOnClick')) || false;
+
     return {
         disableSafeSearch,
         showFullResolutionPreviews,
-        autoSendOnClick
+        autoSendOnClick,
+        addToMediaPlayerOnClick
     }
 }
 

@@ -5,6 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ServerButton } from '../../../../components/ui/Buttons/ServerButton/ServerButton';
 import { useNavigate } from 'react-router';
 import { toggleMobileMenu } from '../../../../features/Mobile/mobileSlice';
+import { VerticalReorderWrapper } from '../../../../components/ui/Wrappers/VerticalReorderWrapper/VerticalReorderWrapper';
+import { reorderServers } from '../../../../features/Servers/Thunks/reorderServers';
+
 
 export const Servers = () => {
 
@@ -53,6 +56,12 @@ export const Servers = () => {
     
     }
 
+    const handleReorderServers = (newOrder) => {
+       
+        dispatch(reorderServers(newOrder))
+
+    }
+
     return (
         <div 
         style={{
@@ -60,9 +69,11 @@ export const Servers = () => {
             height: window?.electron?.ipcRenderer ? 'calc(100% - 205px)' : null
         }}
         className={styles.serverButtons}>
-            {servers.map(s => {
-                return <ServerButton action={handleSwitchServer} key={s.server_id} {...s} />
-            })}
+            <VerticalReorderWrapper items={servers} onReorder={handleReorderServers} >
+                {servers.map(s => {
+                    return <ServerButton action={handleSwitchServer} key={s.server_id} {...s} />
+                })}
+            </VerticalReorderWrapper>
         </div>
     )
 }

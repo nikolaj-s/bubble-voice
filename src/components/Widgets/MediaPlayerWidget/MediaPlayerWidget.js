@@ -14,9 +14,9 @@ export const MediaPlayerWidget = ({editing}) => {
 
     const {loading, error} = useSelector(state => state.savedMediaSlice);
 
-    const {currentVoiceChannel} = useSelector(state => state.voiceChannelSlice);
+    const {channel} = useSelector(state => state.widgetsSlice);
 
-    const saves = useSelector(state => state.savedMediaSlice.saves[currentVoiceChannel]);
+    const saves = useSelector(state => state.savedMediaSlice.saves[channel]);
 
     const playMediaInChannel = (media) => {
 
@@ -33,10 +33,10 @@ export const MediaPlayerWidget = ({editing}) => {
     React.useEffect(() => {
 
         if (!saves) {
-            dispatch(fetchSavedMedia(currentVoiceChannel))
+            dispatch(fetchSavedMedia(channel))
         }
 
-    }, [saves, dispatch, currentVoiceChannel]);
+    }, [saves, dispatch, channel]);
 
     return (
         <>

@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { CarouselGallery } from '../../ui/Wrappers/CarouselGallery/CarouselGallery';
 import { ImageComponent } from '../../ui/Image/Image';
 import VideoPlayer from '../../ui/Video/VideoPlayer/VideoPlayer';

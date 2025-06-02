@@ -1,7 +1,7 @@
 .header {
   display: flex;
   align-items: flex-start;
-  gap: var(--gap);
+  gap: 15px;
   background: var(--card-background-color);
   padding: 15px;
   border-radius: var(--border-radius);
@@ -24,8 +24,15 @@
   animation: popIn 0.5s cubic-bezier(.53,2.04,.55,.94);
 }
 
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 57px;
+}
+
 .icon {
-  color: var(--button-background);
+  color: var(--text-color);
   filter: drop-shadow(0 0 3px var(--button-hover));
 }
 

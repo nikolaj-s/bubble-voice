@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { reorderServers } from "./Thunks/reorderServers";
 
 const serversSlice = createSlice({
     name: 'serversSlice',
@@ -48,11 +49,20 @@ const serversSlice = createSlice({
         setServersError: (state, action) => {
             state.error = action.payload;
         }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(reorderServers.pending, (state, action) => {
+            
+            const new_order = action.meta.arg?.map(s => s._id);
+
+            state.servers.sort((a, b) => new_order.indexOf(a._id) - new_order.indexOf(b._id));
+
+        })
     }
 })
 
 export const selectServers = state => state.serversSlice.servers;
 
-export const {setServers, addServer, updateServerButton, setServerStatus} = serversSlice.actions;
+export const {setServers, addServer, updateServerButton, setServerStatus } = serversSlice.actions;
 
 export default serversSlice.reducer;

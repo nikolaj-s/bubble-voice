@@ -1,17 +1,15 @@
-import React from 'react'
-import FullScreenWrapper from '../../../components/ui/Wrappers/FullScreenWrapper/FullScreenWrapper'
-import RandomHeader from '../../../components/ui/Titles/RandomHeader/RandomHeader';
+
 import { useSelector } from 'react-redux';
-import { LineSpacer } from '../../../components/ui/Spacers/LineSpacer/LineSpacer';
 import { ImageMasonryWrapper } from '../../../components/ui/Wrappers/ImageMasonryWrapper/ImageMasonryWrapper';
 import { LongPressGestureWrapper } from '../../../components/ui/Gestures/LongPressGestureWrapper';
 import { triggerContext } from '../../../lib/services/helperFunctions';
 import { ImageTooltipWrapper } from '../../../components/ui/Wrappers/ImageTooltipWrapper/ImageTooltipWrapper';
 import { NsfwWrapper } from '../../../components/ui/Wrappers/NsfwWrapper/NsfwWrapper';
 import { ImageComponent } from '../../../components/ui/Image/Image';
-import { IconPlaceholder } from '../../../components/ui/Placeholders/IconPlaceholder/IconPlaceholder';
 import { Images } from 'lucide-react';
-import { BoxLabel } from '../../../components/ui/Titles/BoxLabel/BoxLabel';
+import ScrollLoadWrapper from '../../../components/ui/Wrappers/ScrollLoadWrapper/ScrollLoadWrapper';
+import TextLabelError from '../../../components/Error/TextLabelError/TextLabelError';
+import ContentHeader from '../../../components/Headers/ContentHeader/ContentHeader';
 
 export const ServerRecommendations = ({close}) => {
 
@@ -25,26 +23,16 @@ export const ServerRecommendations = ({close}) => {
         "Trending… but only within this server"
     ];
 
-    const {server_id } = useSelector(state => state.serverDetailsSlice);
+    const {server_id, name } = useSelector(state => state.serverDetailsSlice);
 
     const {loading, error, mediaByServer} = useSelector(state => state.serverRecommendationsSlice);
 
     const media = mediaByServer[server_id];
    
     return (
-    <div style={{maxHeight: 'calc(100svh - 10px)', overflowY: 'auto', width: 'calc(100% - 10px)', margin: '0 auto'}}>
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 20,
-            alignItems: 'flex-start'
-        }}>
-        
-        <IconPlaceholder icon={Images} />
-        <BoxLabel label={'Recommendations'}  />
-        <RandomHeader titles={galleryHeaders} />
-        </div>
-        <LineSpacer />
+    <ScrollLoadWrapper noMoreItems={true} loading={loading} >
+        <ContentHeader Icon={Images} title={`Media Recommendations For ${name}`} subTitle={galleryHeaders[Math.floor(Math.random() * galleryHeaders.length)]} />
+        <TextLabelError error={error} />
         <ImageMasonryWrapper>
             {media?.media?.map(media => {
                 return (
@@ -61,6 +49,6 @@ export const ServerRecommendations = ({close}) => {
                 )
             })}
         </ImageMasonryWrapper>
-    </div>
-)
+
+</ScrollLoadWrapper>)
 }

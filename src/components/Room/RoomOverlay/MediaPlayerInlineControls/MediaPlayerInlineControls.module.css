@@ -12,11 +12,5 @@
 }
 
 .currentlyPlaying {
-    max-width: calc(100% - 175px);
-}
-
-@media screen and (max-width: 730px) {
-   .currentlyPlaying {
-    max-width: calc(100% - 90px);
-    }
+    width: 100%;
 }

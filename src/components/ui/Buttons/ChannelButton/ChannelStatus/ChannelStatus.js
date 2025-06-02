@@ -35,6 +35,7 @@ export const ChannelStatus = ({channel = {}, active}) => {
         className={styles.status}>
             {status.type === 'video' ?
             <MediaItem 
+            key={status?.src}
             context={{...status, type: active ? 'mediaplayer' : 'video'}}
             action={handleOpenMedia} 
             {...status} status={true} 

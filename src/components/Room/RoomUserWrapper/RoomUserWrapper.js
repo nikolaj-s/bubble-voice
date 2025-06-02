@@ -20,7 +20,9 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
 
     const [expanded, setExpanded] = React.useState("");
 
-    const hideNonVideoUsers = useSelector(state => state.voiceChannelSlice.hideNonVideoUsers)
+    const hideNonVideoUsers = useSelector(state => state.voiceChannelSlice.hideNonVideoUsers);
+
+    const hideMediaPlayer = useSelector(state => state.mediaPlayerSlice.hideMediaPlayer);
 
     let margin = 8;
 
@@ -82,7 +84,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
             handleScaling();
         }
     // eslint-disable-next-line   
-    }, [expanded, hideNonVideoUsers, hideUsers, textChannelOpen]);
+    }, [expanded, hideNonVideoUsers, hideUsers, textChannelOpen, hideMediaPlayer]);
 
     React.useEffect(() => {
         let observer;

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setOverlay } from "../../../features/Overlay/overlaySlice";
 import { selectServerName } from "../../../features/ServerDetails/serverDetailsSlice";
 
-import { Bell, Ellipsis, LayoutDashboard, Menu, Settings2, UsersRound, UserX, X } from "lucide-react";
+import { Bell, Ellipsis, EllipsisVertical, Icon, LayoutDashboard, Menu, Settings2, UserRoundX, UsersRound, X } from "lucide-react";
 import { Route, Routes } from "react-router";
 import { SearchButton } from "./SearchButton/SearchButton";
 import ChannelHeader from "../../../components/Headers/ChannelHeader/ChannelHeader";
@@ -17,6 +17,7 @@ import { triggerContext } from "../../../lib/services/helperFunctions";
 import { toggleAppearanceSetting } from "../../../features/Settings/Appearance/appearanceSlice";
 import MetaTags from "../../../components/MetaTags/MetaTags";
 import { setChannelDescription } from "../../../features/Channel/ChannelDescription/channelDescriptionSlice";
+import { setChannelToViewWidgetsOf } from "../../../features/Widgets/widgetsSlice";
 
 const TopNav = () => {
   
@@ -70,6 +71,9 @@ const TopNav = () => {
   }
 
   const openWidgets = () => {
+
+    dispatch(setChannelToViewWidgetsOf(currentTextChannel || currentVoiceChannel))
+
     dispatch(setOverlay('widgets'));
   }
 
@@ -114,7 +118,7 @@ const TopNav = () => {
         </Routes>
       ): null}
       </div>
-      <div className={`${styles.buttonGroup} ${styles.navButtons} ${styles.hideOnMobile}`}>
+      <div id='application-sub-menu' data-context={JSON.stringify({type: "appSubmenu"})} className={`${styles.buttonGroup} ${styles.navButtons} ${styles.hideOnMobile}`}>
         {channelDetails && (
         <IconButton 
         Icon={<LayoutDashboard color="var(--text-color)" />}
@@ -127,9 +131,10 @@ const TopNav = () => {
           Icon={<Bell color="var(--text-color)" />}
           position="bottom"
           title={"Notifications"}
+          
         />
         <IconButton
-        Icon={hideUsers ? <UserX color="var(--text-color)" /> : <UsersRound color="var(--text-color)" />}
+        Icon={hideUsers ? <UserRoundX color="var(--text-color)" /> : <UsersRound color="var(--text-color)" />}
         position="bottom"
         title={hideUsers ? "Show Users" : "Hide Users"}
         className={styles.desktopUserButton}
@@ -137,6 +142,12 @@ const TopNav = () => {
         />
         <SearchButton onClick={handleOpenSearch} />
         {/* Notifications Button */}
+        <IconButton 
+        Icon={<Ellipsis color="var(--text-color)" />}
+        title={'More'}
+        onClick={(e) => {triggerContext(e, 'application-sub-menu')}}
+        position="bottom"
+        />
       </div>
       <div id="mobile-ctx-menu" data-context={JSON.stringify({type: 'mobileMenu'})} className={styles.mobileMenuOptions}>
           <SearchButton onClick={handleOpenSearch} />

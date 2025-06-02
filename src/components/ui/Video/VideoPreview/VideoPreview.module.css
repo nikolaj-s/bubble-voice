@@ -4,17 +4,23 @@
     background: var(--card-background-color);
     color: var(--text-color);
     border-radius: 8px;
-    overflow: hidden;
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     transition: transform 0.2s ease;
     display: flex;
     flex-direction: column;
     width: 100%;
     max-width: 350px;
+    position: relative;
   }
   
   .card:hover {
     transform: scale(1.01);
+  }
+
+  .contextButton {
+    position: absolute;
+    top: 5px;
+    right: 5px;
   }
   
   .thumbnailWrapper {
@@ -23,6 +29,9 @@
     background-color: black;
     aspect-ratio: 16 / 9;
     height: auto;
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+    overflow: hidden;
   }
   
   .video {

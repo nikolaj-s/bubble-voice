@@ -1,9 +1,9 @@
-// VideoPreview.jsx
-// VideoPreview.jsx
-import React from 'react';
+
 import styles from './VideoPreview.module.css';
-import { Play } from 'lucide-react';
+import { Ellipsis, Play } from 'lucide-react';
 import { ImageComponent } from '../../Image/Image';
+import IconButton from '../../Buttons/IconButton/IconButton';
+import { triggerContext } from '../../../../lib/services/helperFunctions';
 
 export const VideoPreview = ({ title, src, thumbnail, query, tags, nsfw, width, height, duration, snippet, url, action }) => {
   const formatDuration = (sec) => {
@@ -28,6 +28,14 @@ export const VideoPreview = ({ title, src, thumbnail, query, tags, nsfw, width, 
     id={src}
     data-context={JSON.stringify({title, src, thumbnail, url, query, tags, nsfw, width, height, duration, type: 'video'})}
     onClick={() => {action({title, src, thumbnail, tags, nsfw, url, duration})}} className={styles.card}>
+      <div className={styles.contextButton}>
+        <IconButton
+        Icon={<Ellipsis color='var(--text-color)' />}
+        onClick={(e) => {triggerContext(e, src)}}
+        title={'More'}
+        position='bottom'
+        />
+      </div>
       <div className={styles.thumbnailWrapper}>
         <ImageComponent src={thumbnail} />
         <div className={styles.overlay}>

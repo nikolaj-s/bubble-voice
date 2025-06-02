@@ -3,9 +3,9 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 3px;
-    background-color: var(--card-background-color);
     margin-top: 2px;
     padding: 5px;
+    background-color: var(--primary-color);
   }
   
   .filterButton {
@@ -22,11 +22,9 @@
     color: var(--text-color);
     opacity: 0.75;
     height: 38px;
-  }
-
-  .filterButton p {
-    margin: 0px;
-    padding: 0px;
+    font-weight: 500;
+    font-size: 14px;
+    font-family: var(--font-family);
   }
 
   .filterButton:active {

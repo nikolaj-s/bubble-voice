@@ -49,11 +49,11 @@ export const MediaPlayerInlineControls = () => {
     if (!enabled || !currentlyPlaying) return null;
 
     return (
-        <ToolBar className={`${styles.container}`} style={{backgroundColor: color}}>
-            <div className={styles.currentlyPlaying}>
-                <MediaItem status={true} action={openOverlay} {...currentlyPlaying} />
+        <ToolBar className={`${styles.container}`} style={{backgroundColor: color}} data-context={JSON.stringify({type: 'mediaplayer'})}>
+            <div key={currentlyPlaying?.src} className={styles.currentlyPlaying}>
+                <MediaItem action={openOverlay} {...currentlyPlaying} />
             </div>
-            <div className={styles.buttonWrapper}>
+            {/* <div className={`${styles.buttonWrapper} hideOnMobile`}>
                 <IconButton 
                 Icon={
                     !isPlaying ?
@@ -75,7 +75,7 @@ export const MediaPlayerInlineControls = () => {
                 title={isMuted ? "Unmute" : "Mute"}
                 />
                 <VolumeSlider className={'hideOnMobile'} maxWidth={80} min={0} max={1} step={0.01} value={volume} label={volume * 100} onChange={handleVolume}  />
-            </div>
+            </div> */}
         </ToolBar>
     )
 }

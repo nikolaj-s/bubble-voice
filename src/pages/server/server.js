@@ -42,6 +42,8 @@ export const Server = () => {
 
     const hideUsers = useSelector(state => state.appearanceSlice.hideUsers);
 
+    const {fullscreen} = useSelector(state => state.uiSlice);
+
     React.useEffect(() => {
 
         return () => {
@@ -51,7 +53,7 @@ export const Server = () => {
     }, [dispatch, server_id])
 
     return (
-        <ServerLayoutWrapper hideUsers={hideUsers}>
+        <ServerLayoutWrapper hideUsers={hideUsers} isFullscreen={fullscreen}>
             <ServerDetailsProvider>
                     <CloseMobileMenu />
                     <section 
@@ -68,7 +70,7 @@ export const Server = () => {
                     style={{
                         height: window?.electron?.ipcRenderer ? 'calc(100svh - 70px)' : null
                     }}
-                    className={`${styles.sectionTwo}`}>
+                    className={`${styles.sectionTwo} ${fullscreen ? styles.fullscreen : ''}`}>
                         <div className={styles.routeWrapper}>
                             <Outlet  />
                         </div>
