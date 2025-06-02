@@ -9,10 +9,8 @@ export const ExpandedVideo = ({close}) => {
     const {video} = useSelector(state => state.expandedVideoSlice)
 
     return (
-        <FullScreenWrapper onClose={close}>
-            <MediaTooltipWrapper media={{...video, type: 'video'}}>
-                <UniversalVideoPlayer autoplay={true} src={video.url || video.src} />
-            </MediaTooltipWrapper>
-        </FullScreenWrapper>
+        <MediaTooltipWrapper media={{...video, type: 'video'}}>
+            <UniversalVideoPlayer autoplay={true} src={video.url || video.src} />
+        </MediaTooltipWrapper>
     )
 }

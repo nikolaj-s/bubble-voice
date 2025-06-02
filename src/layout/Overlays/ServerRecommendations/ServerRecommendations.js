@@ -32,37 +32,35 @@ export const ServerRecommendations = ({close}) => {
     const media = mediaByServer[server_id];
    
     return (
-        <FullScreenWrapper onClose={close}>
-            <div style={{maxHeight: 'calc(100svh - 10px)', overflowY: 'auto', width: 'calc(100% - 10px)', margin: '0 auto'}}>
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 20,
-                    alignItems: 'flex-start'
-                }}>
-               
-                <IconPlaceholder icon={Images} />
-                <BoxLabel label={'Recommendations'}  />
-                <RandomHeader titles={galleryHeaders} />
-                </div>
-                <LineSpacer />
-                <ImageMasonryWrapper>
-                    {media?.media?.map(media => {
-                        return (
-                            <LongPressGestureWrapper key={media.src} width={'100%'} height={'100%'} onTouchContext={(e) => triggerContext(e, media.src)}>
-                                <ImageTooltipWrapper
-                                image={media}
+    <div style={{maxHeight: 'calc(100svh - 10px)', overflowY: 'auto', width: 'calc(100% - 10px)', margin: '0 auto'}}>
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 20,
+            alignItems: 'flex-start'
+        }}>
+        
+        <IconPlaceholder icon={Images} />
+        <BoxLabel label={'Recommendations'}  />
+        <RandomHeader titles={galleryHeaders} />
+        </div>
+        <LineSpacer />
+        <ImageMasonryWrapper>
+            {media?.media?.map(media => {
+                return (
+                    <LongPressGestureWrapper key={media.src} width={'100%'} height={'100%'} onTouchContext={(e) => triggerContext(e, media.src)}>
+                        <ImageTooltipWrapper
+                        image={media}
 
-                                >
-                                    <NsfwWrapper nsfw={media}>
-                                        <ImageComponent src={media?.src?.includes('.gif') ? media?.src : media?.thumbnail}/>
-                                    </NsfwWrapper>
-                                </ImageTooltipWrapper>
-                            </LongPressGestureWrapper>
-                        )
-                    })}
-                </ImageMasonryWrapper>
-            </div>
-        </FullScreenWrapper>
-    )
+                        >
+                            <NsfwWrapper nsfw={media}>
+                                <ImageComponent src={media?.src?.includes('.gif') ? media?.src : media?.thumbnail}/>
+                            </NsfwWrapper>
+                        </ImageTooltipWrapper>
+                    </LongPressGestureWrapper>
+                )
+            })}
+        </ImageMasonryWrapper>
+    </div>
+)
 }

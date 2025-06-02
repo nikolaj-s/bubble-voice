@@ -1,13 +1,12 @@
-import React from 'react';
+
 import styles from './MediaPlayer.module.css';
-import { MediaItem } from './MediaItem/MediaItem';
-import { Play, Pause, SkipForward, Music2, Search, Bookmark } from 'lucide-react';
-import IconButton from '../ui/Buttons/IconButton/IconButton';
+import { Search, Bookmark } from 'lucide-react';
 import { PillSpacer } from '../ui/Spacers/PillSpacer/PillSpacer';
 import SpinnerLoading from '../ui/Loading/Spinner/SpinnerLoading';
 import TextLabelError from '../Error/TextLabelError/TextLabelError';
-import ProgressBar from '../ui/ProgressBar/ProgressBar';
 import { MediaPlayerQueue } from './MediaPlayerQueue/MediaPlayerQueue';
+import { CurrentlyPlaying } from './CurrentlyPlaying/CurrentlyPlaying';
+import { MediaPlayerControls } from './MediaPlayerControls/MediaPlayerControls';
 
 export const MediaPlayer = ({
   queue = [],
@@ -21,8 +20,15 @@ export const MediaPlayer = ({
   loading,
   openSearchMedia,
   error,
+  volume,
+  muted,
+  hideQueue,
+  toggleHideQueue = () => {},
+  onVolumeChange = () => {},
+  toggleMuted = () => {},
   openSaves = () => {},
-  onReorder = () => {}
+  onReorder = () => {},
+  viewHistory = () => {},
 }) => {
 
   const duration = currentlyPlaying?.duration || 0;
@@ -34,7 +40,7 @@ export const MediaPlayer = ({
   };
 
   return (
-    <div className={styles.mediaPlayer}>
+    <div id={'media-player-overlay'} data-context={JSON.stringify({currentlyPlaying, type: 'mediaplayer'})} className={styles.mediaPlayer}>
         <button onClick={openSearchMedia} className={styles.searchMediaButton}>
             <span className={styles.searchMediaTitle}>What do you want to play?</span>
             <span className={styles.searchMediaWrapper}>
@@ -46,43 +52,22 @@ export const MediaPlayer = ({
             </span>
         </button>
         {error && (<TextLabelError error={error} label='Error:' />)}
-        <MediaPlayerQueue queue={queue} onReorder={onReorder} />
-        <div className={styles.controlsProgressWrapper} style={{backgroundColor: color}}>
-            <div
-            className={styles.controls}>
-                <div className={styles.controlsLeft}>
-                    <IconButton 
-                    width={50}
-                    height={50}
-                    padding={10}
-                    borderRadius={'50%'}
-                    backgroundColor='var(--button-background)'
-                    Icon={playing ? <Pause color='var(--text-color)' /> : <Play color='var(--text-color)' />}
-                    onClick={onTogglePlay}
-                    title={playing ? 'Pause' : 'Play'}
-                    />
-                    <IconButton
-                        Icon={<SkipForward color='var(--text-color)' />}
-                        title={"Skip"}
-                        onClick={onSkip}
-                    />
-                </div>
-                <div 
-                
-                className={styles.currentlyPlaying}>
-                {currentlyPlaying ? (
-                    <MediaItem inQueue={true} {...currentlyPlaying} context={currentlyPlaying} />
-                ) : (
-                <div className={styles.nothingPlaying}>
-                    <Music2 width={48} /> No media playing
-                </div>
-                )}
-                </div>
-            </div>
-            <div style={{position: 'relative', zIndex: 15}}>
-                <ProgressBar currentTime={currentTime} duration={duration} onSeek={handleSeek} />
-            </div>
-        </div>
+        <CurrentlyPlaying currentlyPlaying={currentlyPlaying} color={color} />
+        <MediaPlayerControls 
+        currentlyPlaying={currentlyPlaying}
+        queue={queue}
+        hideQueue={hideQueue}
+        toggleHideQueue={toggleHideQueue}
+        currentTime={currentTime} duration={duration} 
+        handleSeek={handleSeek} onSkip={onSkip} 
+        onTogglePlay={onTogglePlay} playing={playing} 
+        onVolumeChange={onVolumeChange}
+        volume={volume}
+        muted={muted}
+        toggleMuted={toggleMuted}
+        viewHistory={viewHistory}
+        />
+        {!hideQueue && (<MediaPlayerQueue queue={queue} onReorder={onReorder} />)}
         {loading && (<SpinnerLoading />)}
     </div>
   );

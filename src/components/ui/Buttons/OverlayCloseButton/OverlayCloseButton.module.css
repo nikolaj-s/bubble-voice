@@ -27,6 +27,7 @@
 
 @media screen and (max-width: 730px) {
     .button {
+        display: none;
         top: auto;
         bottom: 30px;
         left: 50%;

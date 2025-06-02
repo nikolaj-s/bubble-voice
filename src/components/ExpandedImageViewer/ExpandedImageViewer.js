@@ -1,5 +1,6 @@
 import React, { useRef, useState, useLayoutEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { AlertCircle } from "lucide-react";
 import styles from "./ExpandedImageViewer.module.css";
 
 const MIN_ZOOM = 1;
@@ -11,15 +12,26 @@ export const ExpandedImageViewer = ({ src, onClose }) => {
   const imgRef = useRef();
   const [zoom, setZoom] = useState(1);
   const [isClosing, setIsClosing] = useState(false);
-
-  // For centering scroll on zoom-in
   const [naturalSize, setNaturalSize] = useState({ width: 0, height: 0 });
 
-  // On mount, get natural image size
+  // NEW: Track image loading/error state
+  const [imgLoading, setImgLoading] = useState(true);
+  const [imgError, setImgError] = useState(false);
+
   useLayoutEffect(() => {
+    setImgLoading(true);
+    setImgError(false);
+
     const img = new window.Image();
-    img.onload = () =>
+    img.onload = () => {
       setNaturalSize({ width: img.width, height: img.height });
+      setImgLoading(false);
+      setImgError(false);
+    };
+    img.onerror = () => {
+      setImgError(true);
+      setImgLoading(false);
+    };
     img.src = src;
   }, [src]);
 
@@ -28,11 +40,10 @@ export const ExpandedImageViewer = ({ src, onClose }) => {
   const handleImageClick = e => {
     let nextZoom = zoom === 1 ? MAX_ZOOM : 1;
 
-    if (window.innerWidth < 800) { // treat as mobile
+    if (window.innerWidth < 800) {
       const now = Date.now();
       if (now - lastTap.current < 300) {
         setZoom(nextZoom);
-        // Center scroll on tap location
         if (containerRef.current && imgRef.current && nextZoom !== 1) {
           centerScroll(e);
         }
@@ -40,7 +51,6 @@ export const ExpandedImageViewer = ({ src, onClose }) => {
       lastTap.current = now;
     } else {
       setZoom(nextZoom);
-      // Center scroll on click location
       if (containerRef.current && imgRef.current && nextZoom !== 1) {
         centerScroll(e);
       }
@@ -52,24 +62,15 @@ export const ExpandedImageViewer = ({ src, onClose }) => {
     const container = containerRef.current;
     const img = imgRef.current;
     const rect = img.getBoundingClientRect();
-    // Click pos relative to image
     const clickX = (e.clientX - rect.left) / rect.width;
     const clickY = (e.clientY - rect.top) / rect.height;
-
-    // New scroll size
-    const scrollW = rect.width * (MAX_ZOOM - 1);
-    const scrollH = rect.height * (MAX_ZOOM - 1);
-
-    // Set scroll, clamp to edges
     container.scrollLeft = (img.offsetWidth * MAX_ZOOM - container.offsetWidth) * clickX;
     container.scrollTop = (img.offsetHeight * MAX_ZOOM - container.offsetHeight) * clickY;
   };
 
   // Swipe up to close
   const handleDragEnd = (event, info) => {
-    
     if (zoom > 1) return;
-
     if (info.offset.y < SWIPE_CLOSE_DISTANCE) {
       setIsClosing(true);
       setTimeout(() => onClose(), 140);
@@ -122,27 +123,52 @@ export const ExpandedImageViewer = ({ src, onClose }) => {
             exit={{ y: -180, opacity: 0 }}
             transition={{ type: "spring", stiffness: 330, damping: 35 }}
           >
-            <img
-              ref={imgRef}
-              src={src}
-              alt=""
-              className={styles.image}
-              style={{
-                width: zoom === 1 ? 'auto' : imgDisplayWidth * zoom,
-                height: imgDisplayHeight * zoom,
-                minHeight: "100%",
-                transition: "width 0.22s, height 0.22s, transform 0.2s cubic-bezier(.5,2,.5,1)",
-                cursor: zoom > 1 ? "grab" : "zoom-in",
-                objectFit: "contain",
-                display: "block",
-                userSelect: "none",
-                pointerEvents: "auto",
-                boxShadow: "0 6px 36px rgba(0,0,0,0.32)",
-                borderRadius: 12,
-              }}
-              draggable={false}
-              onClick={handleImageClick}
-            />
+            {imgLoading && (
+              <div className={styles.loaderBox}>
+                <div className={styles.spinner} />
+                <div className={styles.loadingText}>Loading image…</div>
+              </div>
+            )}
+            {imgError && !imgLoading && (
+              <div className={styles.errorBox}>
+                <AlertCircle size={38} strokeWidth={2.2} color="var(--error-color)" />
+                <div className={styles.errorText}>
+                  Couldn’t load image
+                  <div style={{ fontSize: "0.93em", marginTop: 4, opacity: 0.8 }}>
+                    Please check the image source or try again later.
+                  </div>
+                  <button
+                    className={styles.closeButton}
+                    onClick={onClose}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            )}
+            {!imgLoading && !imgError && (
+              <img
+                ref={imgRef}
+                src={src}
+                alt=""
+                className={styles.image}
+                style={{
+                  width: zoom === 1 ? 'auto' : imgDisplayWidth * zoom,
+                  height: imgDisplayHeight * zoom,
+                  minHeight: "100%",
+                  transition: "width 0.22s, height 0.22s, transform 0.2s cubic-bezier(.5,2,.5,1)",
+                  cursor: zoom > 1 ? "grab" : "zoom-in",
+                  objectFit: "contain",
+                  display: "block",
+                  userSelect: "none",
+                  pointerEvents: "auto",
+                  boxShadow: "0 6px 36px rgba(0,0,0,0.32)",
+                  borderRadius: 12,
+                }}
+                draggable={false}
+                onClick={handleImageClick}
+              />
+            )}
           </motion.div>
         </motion.div>
       )}

@@ -51,7 +51,7 @@ export const CreateChannelForm = ({permissions}) => {
 
     React.useEffect(() => {
 
-        if (selectedChannel._id) {
+        if (selectedChannel.channel_name === channelName) {
             setSearchParams({section: "editChannel", channel: selectedChannel._id});
         }
 
@@ -63,7 +63,7 @@ export const CreateChannelForm = ({permissions}) => {
             <LoadingErrorFormWrapper sliceName='channelsSlice'>
                 <Header text='Create Channel' />
                 <Label label='Choose a custom channel icon:' />
-                <ImageDropZone dimensions={100} width={50} height={50} borderRadius='50%' onImageChange={setChannelIcon} />
+                <ImageDropZone dimensions={100} width={50} height={50} parentFileSrc={channelIcon} borderRadius='50%' onImageChange={setChannelIcon} />
                 <Label label='Set your channel name:' />
                 <TextInput placeholder={'Enter Channel Name'} maxLength={28} value={channelName} onChange={setChannelName} />
                 <Label label='Select Category:' />

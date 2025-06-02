@@ -1,0 +1,15 @@
+.sticky {
+  position: sticky;
+  top: 0; /* Overridden by inline style if needed */
+  z-index: 12;
+  background: transparent;
+  transition: background 0.24s cubic-bezier(.77,0,.18,1), box-shadow 0.19s;
+  box-shadow: none;
+  width: 100%;
+}
+
+.stuck {
+  /* Use the --sticky-bg variable, fallback to card-background-color */
+  background: var(--card-background-color);
+  box-shadow: 0 2px 12px 0 rgba(18,26,34,0.07);
+}

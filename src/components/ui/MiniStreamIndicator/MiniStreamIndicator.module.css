@@ -49,11 +49,12 @@
 
 .text {
   overflow: hidden;
+  text-wrap: nowrap;
   text-overflow: ellipsis;
   white-space: nowrap;
   display: flex;
   align-items: center;
-  max-width: calc(100% - 72px);
+  max-width: calc(100% - 84px);
   min-width: 0; /* ← This line ensures flex items don't overflow */
 }
 

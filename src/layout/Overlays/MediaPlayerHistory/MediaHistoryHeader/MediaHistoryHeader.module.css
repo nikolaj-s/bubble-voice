@@ -1,0 +1,101 @@
+.header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap);
+  background: var(--card-background-color);
+  padding: 15px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 16px 0 rgba(18,26,34,0.22);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+.iconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary-color);
+  border-radius: 50%;
+  padding: 0.6rem;
+  margin-top: -0.1rem;
+  box-shadow: 0 0 0 3px var(--background-color);
+  animation: popIn 0.5s cubic-bezier(.53,2.04,.55,.94);
+}
+
+.icon {
+  color: var(--button-background);
+  filter: drop-shadow(0 0 3px var(--button-hover));
+}
+
+.title {
+  margin: 0 0 0.18rem 0;
+  font-size: 1.38rem;
+  font-family: var(--font-family), sans-serif;
+  color: var(--text-color);
+  letter-spacing: -1px;
+  font-weight: 700;
+  line-height: 1.1;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 1.06rem;
+  color: var(--accent-color);
+  opacity: 0.97;
+  font-family: var(--font-family), sans-serif;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.10);
+}
+
+/* BUBBLES */
+.bubbles {
+  position: absolute;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bubble {
+  position: absolute;
+  background: var(--button-background);
+  opacity: 0.19;
+  border-radius: 50%;
+  animation: float 8s infinite;
+  filter: blur(0.5px);
+}
+
+.bubble1 {
+  width: 32px; height: 32px;
+  left: 20px; bottom: 6px;
+  animation-delay: 0s;
+}
+.bubble2 {
+  width: 16px; height: 16px;
+  left: 85%; bottom: 22px;
+  animation-delay: 2.5s;
+}
+.bubble3 {
+  width: 24px; height: 24px;
+  left: 55%; top: 12px;
+  animation-delay: 1.2s;
+}
+.bubble4 {
+  width: 20px; height: 20px;
+  left: 75px; top: 38px;
+  animation-delay: 4.1s;
+}
+
+@keyframes float {
+  0%   { transform: translateY(0) scale(1);}
+  45%  { transform: translateY(-30px) scale(1.08);}
+  90%  { transform: translateY(0) scale(1);}
+  100% { transform: translateY(0) scale(1);}
+}
+
+@keyframes popIn {
+  from { transform: scale(0.7) rotate(-6deg); opacity: 0.1;}
+  to   { transform: scale(1) rotate(0deg); opacity: 1;}
+}

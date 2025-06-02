@@ -16,8 +16,6 @@ import { useMediaPlayer } from '../../../../hooks/useMediaPlayer';
 import styles from './MediaPlayerInlineControls.module.css';
 import { MediaItem } from '../../../MediaPlayer/MediaItem/MediaItem';
 import { setOverlay } from '../../../../features/Overlay/overlaySlice';
-import { useEffect, useState } from 'react';
-import { getImageColor } from '../../../../lib/services/getImageColor';
 
 export const MediaPlayerInlineControls = () => {
 
@@ -31,7 +29,6 @@ export const MediaPlayerInlineControls = () => {
         isPlaying,
         isMuted,
         volume,
-        currentTime,
         color
     } = useMediaPlayer();
 
@@ -54,7 +51,7 @@ export const MediaPlayerInlineControls = () => {
     return (
         <ToolBar className={`${styles.container}`} style={{backgroundColor: color}}>
             <div className={styles.currentlyPlaying}>
-                <MediaItem status={true} action={openOverlay} {...currentlyPlaying} duration={currentTime} />
+                <MediaItem status={true} action={openOverlay} {...currentlyPlaying} />
             </div>
             <div className={styles.buttonWrapper}>
                 <IconButton 
@@ -77,7 +74,7 @@ export const MediaPlayerInlineControls = () => {
                 onClick={handleMute}
                 title={isMuted ? "Unmute" : "Mute"}
                 />
-                <VolumeSlider maxWidth={80} min={0} max={1} step={0.01} value={volume} label={volume * 100} onChange={handleVolume}  />
+                <VolumeSlider className={'hideOnMobile'} maxWidth={80} min={0} max={1} step={0.01} value={volume} label={volume * 100} onChange={handleVolume}  />
             </div>
         </ToolBar>
     )

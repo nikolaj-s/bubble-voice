@@ -11,6 +11,7 @@ export const ImageComponent = ({src, objectFit = 'cover', alt = "Image"}) => {
 
     return (
         <div 
+        key={src}
         style={{
             minHeight: imageError ? 90 : loading ? 150 : null,
             backgroundColor: imageError || loading ? 'black' : null,

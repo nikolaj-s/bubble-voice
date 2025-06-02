@@ -16,6 +16,8 @@ import { setManageWidgetsForChannel } from '../../../features/Widgets/manageWidg
 import { setOverlay } from '../../../features/Overlay/overlaySlice';
 import { ToolBar } from '../../../components/ui/Wrappers/ToolBar/ToolBar';
 
+import styles from './WidgetsOverlay.module.css'
+
 export const WidgetsOverlay = ({close}) => {
 
     const dispatch = useDispatch();
@@ -65,10 +67,12 @@ export const WidgetsOverlay = ({close}) => {
         dispatch(setOverlay('serverSettings'));
     }
 
+    const channelDetails = useSelector(state => state.channelsSlice.channels[channel])
+
     return (
-        <FixedSideMenuWrapper close={close} >
+        <div className={styles.container}>
             <IconPlaceholder icon={LayoutDashboard} />
-            <Header text='Widgets' />
+            <Header text={`${channelDetails?.channel_name} / Widgets`}/>
             <ToolBar id={'widgets-overlay-nav'} data-context={JSON.stringify({type: 'widgetsOverlay', channel_id: channel})}>
                 <IconButton 
                 Icon={<RefreshCcw color='var(--text-color' />}
@@ -89,6 +93,6 @@ export const WidgetsOverlay = ({close}) => {
             :
             <Widgets widgets={widgets[channel] ? widgets[channel] : []} openAddWidgets={openAddMoreWidgets} />
             }
-        </FixedSideMenuWrapper>
+        </div>
     )
 }

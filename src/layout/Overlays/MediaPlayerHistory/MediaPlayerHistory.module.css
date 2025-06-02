@@ -1,0 +1,17 @@
+.searchWrapper {
+    position: sticky;
+    top: 10px;
+}
+.mediaWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    background-color: var(--card-background-color);
+    padding: var(--gap);
+    border-radius: var(--border-radius);
+}
+
+.mediaHistoryItem {
+    display: flex;
+    flex-direction: column;
+}

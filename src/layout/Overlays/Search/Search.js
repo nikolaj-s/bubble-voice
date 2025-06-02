@@ -1,5 +1,4 @@
 import React from 'react'
-import FullScreenWrapper from '../../../components/ui/Wrappers/FullScreenWrapper/FullScreenWrapper'
 import FloatingSearch from './FloatingSearch/FloatingSearch'
 import { SearchResults } from './SearchResults/SearchResults'
 import { useDispatch, useSelector } from 'react-redux'
@@ -10,6 +9,8 @@ import { fetchSearchHistory } from '../../../features/Search/Thunks/fetchSearchH
 import { deleteSearchHistoryItem } from '../../../features/Search/Thunks/deleteSearchHistoryItem'
 import SpinnerLoading from '../../../components/ui/Loading/Spinner/SpinnerLoading'
 import SocialFilter from './SocialFilter/SocialFilter'
+
+import styles from './Search.module.css'
 
 export const Search = ({close}) => {
 
@@ -59,33 +60,33 @@ export const Search = ({close}) => {
     }
 
     return (
-       <FullScreenWrapper maxContentWidth={800} onClose={close}>
-                <FloatingSearch 
-                value={query}
-                setValue={handleSetQuery}
-                filter={filter}
-                filters={filters.filter(item => server_id ? true : item.path !== 'text-channel')}
-                loading={loading}
-                setFilter={handleSetFilter}
-                search={handleSearch}
-                similarImageSrc={similarImageSrc}
-                clearSimilarImage={clearFindSimilarImage}
-                />
-                {filter.path === 'text-channel' &&
-                <SocialFilter onFilterChange={handleSearch} />
-                }
-                {error ? 
-                <TextLabelError error={error} /> 
-                : null}
-                <SearchResults 
-                loading={loading}
-                results={results[filter.path]} 
-                filter={filter.path} 
-                handleSearchFromHistory={handleSearchFromHistory}
-                handleDeleteSearchHistoryItem={handleDeleteSearchHistoryItem} 
-                searchHistory={searchHistory}
-                />
-                {loading && (<SpinnerLoading />)}
-       </FullScreenWrapper>
+       <div key='search' className={styles.container}>
+        <FloatingSearch 
+        value={query}
+        setValue={handleSetQuery}
+        filter={filter}
+        filters={filters.filter(item => server_id ? true : item.path !== 'text-channel')}
+        loading={loading}
+        setFilter={handleSetFilter}
+        search={handleSearch}
+        similarImageSrc={similarImageSrc}
+        clearSimilarImage={clearFindSimilarImage}
+        />
+        {filter.path === 'text-channel' &&
+        <SocialFilter onFilterChange={handleSearch} />
+        }
+        {error ? 
+        <TextLabelError error={error} /> 
+        : null}
+        <SearchResults 
+        loading={loading}
+        results={results[filter.path]} 
+        filter={filter.path} 
+        handleSearchFromHistory={handleSearchFromHistory}
+        handleDeleteSearchHistoryItem={handleDeleteSearchHistoryItem} 
+        searchHistory={searchHistory}
+        />
+        {loading && (<SpinnerLoading />)}
+        </div>
     )
 }

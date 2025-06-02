@@ -1,5 +1,4 @@
 import React from 'react'
-import Header from '../../../../../components/ui/Titles/Header/Header'
 import Label from '../../../../../components/ui/Titles/Label/Label'
 import ImageDropZone from '../../../../../components/ui/Inputs/ImageDropZone/ImageDropZone'
 import { ApplyChangesPopup } from '../../../../../components/ApplyChangesPopup/ApplyChangesPopup'
@@ -28,8 +27,8 @@ export const AddSingleImageWidgetForm = ({channel}) => {
     return (
         <>
         <Label label='Upload an image:' />
-        <ImageDropZone objectFit='contain' onImageChange={setImage} width={400} height={400} />
-        <ApplyChangesPopup onApply={create} disabled={!image} />
+        <ImageDropZone parentFileSrc={image} objectFit='contain' onImageChange={setImage} width={400} height={400} />
+        <ApplyChangesPopup name='Create' onApply={create} onClearChanges={() => {setImage(null)}} disabled={!image} />
         </>
     )
 }

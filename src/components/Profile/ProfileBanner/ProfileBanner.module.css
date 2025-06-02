@@ -3,17 +3,18 @@
     position: relative;
     width: 100%;
     height: 150px;
-    border-radius: 12px;
+    border-radius: var(--border-radius);
     overflow: hidden;
     text-align: center;
     padding-bottom: 50px;
+    overflow: hidden;
   }
   
   .bannerImage {
     width: 100%;
     height: 150px;
     object-fit: cover;
-    border-bottom: 4px solid var(--background-color);
+    border-radius: var(--border-radius);
   }
   
   .profileWrapper {
@@ -25,7 +26,7 @@
     height: 80px;
     border-radius: 50%;
     overflow: hidden;
-    border: 4px solid var(--background-color);
+    border: 10px solid var(--background-color);
     background: var(--secondary-color);
   }
   

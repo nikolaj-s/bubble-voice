@@ -4,24 +4,26 @@
     align-items: center;
     justify-content: center;
     width: calc(100% - 20px);
-    padding: 50px 5px 10px 5px;
+    padding: 50px 10px 20px 10px;
     margin: -50px auto 0px auto;
     gap: 4px;
     background: var(--card-background-color);
     border-radius: 8px;
-  }
-  
-  .displayName {
-    font-size: 18px;
-    font-weight: bold;
-    color: var(--text-color);
-    text-align: center;
-  }
-  
-  .username {
-    font-size: 14px;
-    color: var(--accent-color);
-    opacity: 0.8;
-    text-align: center;
-  }
+    height: 80px;
+
+}
+
+.displayName {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--text-color);
+  text-align: center;
+}
+
+.username {
+  font-size: 14px;
+  color: var(--accent-color);
+  opacity: 0.8;
+  text-align: center;
+}
   

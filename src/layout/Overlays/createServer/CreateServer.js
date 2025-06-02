@@ -14,10 +14,8 @@ export const CreateServer = ({close}) => {
     }
 
     return (
-        <FullScreenWrapper onClose={close}>
-            <MenuWrapper navItems={navItems} >
-                {content}
-            </MenuWrapper>
-        </FullScreenWrapper>
+        <MenuWrapper navItems={navItems} >
+            {content}
+        </MenuWrapper>
     )
 }

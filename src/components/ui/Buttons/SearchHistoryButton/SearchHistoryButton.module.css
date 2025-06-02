@@ -13,8 +13,9 @@
     outline: none;
     border-radius: 5px;
     background-color: transparent;
-    opacity: 0.6;
-    font-weight: 300;
+    opacity: 0.75;
+    font-weight: 400;
+    z-index: 0;
   }
 
   .button span {

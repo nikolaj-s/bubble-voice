@@ -23,6 +23,12 @@
     display: none;
 }
 
+@media screen and (min-width: 730px) {
+    .container {
+        max-width: 250px;
+    }
+}
+
 @media screen and (max-width: 730px) {
     .container {
         bottom: 0px !important;

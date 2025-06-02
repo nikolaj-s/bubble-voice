@@ -6,6 +6,9 @@ import { LongPressGestureWrapper } from "../../ui/Gestures/LongPressGestureWrapp
 import { triggerContext } from "../../../lib/services/helperFunctions";
 import MediaStatusIcons from "../../MediaStatusIcons/MediaStatusIcons";
 import MiniStreamIndicator from "../../ui/MiniStreamIndicator/MiniStreamIndicator";
+import StreamOverlay from "../../ui/StreamOverlay/StreamOverlay";
+import IconButton from "../../ui/Buttons/IconButton/IconButton";
+import { Ellipsis } from "lucide-react";
 
 export const RoomUserCard = ({ user_id, webcam, action }) => {
 
@@ -106,7 +109,16 @@ export const RoomUserCard = ({ user_id, webcam, action }) => {
                     {/* Audio elements will be appended here */}
                     <div ref={webcamContainerRef} className={styles.webcamSource} ></div>
                 </div>
+       
             </LongPressGestureWrapper>
+            <StreamOverlay name={user.display_name} button={
+            <IconButton
+            Icon={<Ellipsis color="var(--text-color)" />}
+            onClick={(e) => {triggerContext(e, `room-user-card-${user_id}`)}}
+            title={'More'}
+            position="bottom"
+            />
+        } />
         </div>
     );
 };

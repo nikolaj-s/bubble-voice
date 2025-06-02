@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './SectionDivider.module.css';
+import { Subtitle } from '../Titles/Subtitle/Subtitle';
 
 /**
  * SectionDivider component
@@ -9,7 +10,7 @@ import styles from './SectionDivider.module.css';
 const SectionDivider = ({ label, margin }) => {
   return (
     <div className={styles.wrapper} style={{margin}}>
-      <span className={styles.label}>{label}</span>
+      <Subtitle>{label}</Subtitle>
       <div className={styles.line} />
     </div>
   );

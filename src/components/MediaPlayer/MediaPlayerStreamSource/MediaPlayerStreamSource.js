@@ -23,6 +23,9 @@ import { triggerContext } from '../../../lib/services/helperFunctions';
 import TextLabelError from '../../Error/TextLabelError/TextLabelError';
 
 import styles from './MediaPlayerStreamSource.module.css';
+import StreamOverlay from '../../ui/StreamOverlay/StreamOverlay';
+import IconButton from '../../ui/Buttons/IconButton/IconButton';
+import { Ellipsis } from 'lucide-react';
 
 export const MediaPlayerStreamSource = ({expand}) => {
 
@@ -55,13 +58,14 @@ export const MediaPlayerStreamSource = ({expand}) => {
             hasSeekedInitially.current = true;
         }
       }, [currentTime]);
-      
 
     if (!currentlyPlaying) return null;
 
     return (
-        <div data-context={JSON.stringify({...currentlyPlaying, type: 'mediaplayer' })} 
-        style={{display: hideMediaPlayer ? 'none' : null, backgroundColor: color,}} hidden={hideMediaPlayer} id='media-player-stream-source' onClick={() => {expand('media-player-stream-source')}} className={styles.container}>
+        <div 
+        data-context={JSON.stringify({...currentlyPlaying, type: 'mediaplayer' })} 
+        style={{display: hideMediaPlayer ? 'none' : null, backgroundColor: color,}} 
+        hidden={hideMediaPlayer} id='media-player-stream-source' onClick={() => {expand('media-player-stream-source')}} className={styles.container}>
             <LongPressGestureWrapper width={'100%'} height={'100%'} onTouchContext={(e) => {triggerContext(e, 'media-player-stream-source')}}>
                 <DoubleTapWrapper onDoubleTap={() => {dispatch(toggleIsMediaPlayerOpen(true))}}>
                     <ReactPlayer 
@@ -95,6 +99,16 @@ export const MediaPlayerStreamSource = ({expand}) => {
                     <PlayPauseFlash isPlaying={isPlaying} />
                 </DoubleTapWrapper>
             </LongPressGestureWrapper>
+            <StreamOverlay name={currentlyPlaying?.title || "Media Player"}
+            button={
+                <IconButton 
+                Icon={<Ellipsis color='var(--text-color)' />}
+                title={'More'}
+                position='bottom'
+                onClick={(e) => {triggerContext(e, 'media-player-stream-source')}}
+                />
+            }
+            />
         </div>
     )
 }

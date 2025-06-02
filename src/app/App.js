@@ -21,6 +21,7 @@ import { useDetectOS } from '../hooks/useDetectOs';
 import AppTitleBar from '../components/AppTitleBar/AppTitleBar';
 import { useDisableNavigation } from '../hooks/useDisableNavigation';
 import { useGlobalWindowFocusListener } from '../hooks/useGlobalWindowFocusListener';
+import { useTrackMouseClick } from '../hooks/useTrackMouseClick';
 
 function App() {
 
@@ -46,6 +47,8 @@ function App() {
   useDisableNavigation();
 
   useGlobalWindowFocusListener();
+
+  useTrackMouseClick();
 
   return (
     <Router>

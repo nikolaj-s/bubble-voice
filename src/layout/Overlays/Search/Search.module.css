@@ -1,0 +1,5 @@
+.container {
+    background-color: var(--card-background-color);
+    border-radius: var(--border-radius);
+    position: relative;
+}

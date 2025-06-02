@@ -75,3 +75,7 @@
     border-bottom: 2px solid var(--accent-color);
     border-bottom-left-radius: var(--border-radius);
 }
+
+.indicatorWrapper {
+    width: calc(100% - 20px);
+}

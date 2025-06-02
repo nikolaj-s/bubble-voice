@@ -5,6 +5,11 @@
   font-size: 0.875rem;
   color: var(--text-color);
   font-weight: 500;
+  cursor: pointer;
+}
+
+.container:hover .name {
+  text-decoration: underline;
 }
 
 .avatar {

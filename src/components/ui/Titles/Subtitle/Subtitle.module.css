@@ -1,7 +1,7 @@
 .subtitle {
     font-size: 12px;
     font-weight: 800;
-    opacity: 0.5;
+    opacity: 0.75;
     color: var(--text-color);
     margin: 0px;
     white-space: nowrap;

@@ -1,9 +1,10 @@
 
 .container {
-    width: 100%;
-    background-color: var(--card-background-color);
+    width: calc(100% - 10px);
+    background-color: var(--primary-color);
     margin-top: 2px;
     border-radius: 0px 0px 10px 10px;
+    padding: 5px;
 }
 
 .wrapper {

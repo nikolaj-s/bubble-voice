@@ -1,7 +1,7 @@
 .grid {
   display: grid;
-  gap: 5px;
-  justify-content: center;
+  gap: var(--gap);
+  justify-content: space-evenly;
   width: calc(100% - 20px);
   padding: 10px;
   /* Default to a single column for narrow screens */

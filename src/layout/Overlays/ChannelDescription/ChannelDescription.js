@@ -15,6 +15,7 @@ import { setChannelToEdit } from '../../../features/Channel/editChannel/editChan
 import { setOverlay } from '../../../features/Overlay/overlaySlice';
 import { setFilter, setFromDate, setSelectedChannelToFilter, setTextChannelFilter } from '../../../features/Search/searchSlice';
 import { globalSearch } from '../../../features/Search/Thunks/globalSearch';
+import MobileSwipeToCloseWrapper from '../../../components/ui/Wrappers/MobileSwipeToCloseWrapper/MobileSwipteToCloseWrapper';
 
 export const ChannelDescription = ({close}) => {
 
@@ -55,8 +56,7 @@ export const ChannelDescription = ({close}) => {
     }
 
     return (
-        <FullScreenWrapper maxContentWidth={450} onClose={close}>
-            
+        <>
             <div style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -101,7 +101,6 @@ export const ChannelDescription = ({close}) => {
 
                 </ToolBar>
             </div>
-
-        </FullScreenWrapper>
+        </>
     )
 }

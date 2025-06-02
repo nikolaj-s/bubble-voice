@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import styles from "./DropDown.module.css";
 import { ChevronDown } from "lucide-react";
 
-const Dropdown = ({ selected, options, setSelected, selector = "label" }) => {
+const Dropdown = ({ selected, options, setSelected, selector = "label", minWidth }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const [menuStyle, setMenuStyle] = useState({});
@@ -113,8 +113,8 @@ const Dropdown = ({ selected, options, setSelected, selector = "label" }) => {
   }, [isOpen]);
 
   return (
-    <div className={styles.dropdown} ref={dropdownRef}>
-      <button className={styles.dropdownButton} onClick={toggleDropdown}>
+    <div className={styles.dropdown} ref={dropdownRef} style={{minWidth}}>
+      <button className={styles.dropdownButton} onClick={toggleDropdown} style={{minWidth}}>
         {selected ? getLabel(selected) : "Select an option"}
         <ChevronDown 
         style={{rotate: isOpen ? '-180deg' : '0deg', transition: '0.2s'}}

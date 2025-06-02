@@ -6,7 +6,9 @@
   gap: 10px;
   width: calc(100% - 20px);
   padding: 10px;
-  overflow: hidden;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .searchMediaButton {
@@ -24,6 +26,7 @@
   cursor: pointer;
   transition: 0.2s ease-in-out;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .searchMediaTitle {
@@ -66,45 +69,6 @@
   opacity: 0.75;
 }
 
-.controls {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 10px;
-  max-width: 100%;
-}
-
-.controlsLeft {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-shrink: 0;
-}
-
-.controlBtn {
-  background-color: var(--button-background);
-  border: none;
-  border-radius: 8px;
-  padding: 0.5rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  transition: background-color 0.2s ease;
-}
-
-.controlBtn:hover {
-  background-color: var(--button-hover);
-}
-
-.currentlyPlaying {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--text-color);
-  flex: 1;
-  max-width: calc(100% - 95px);
-}
-
 .thumbnail {
   width: 32px;
   height: 32px;
@@ -123,15 +87,6 @@
   gap: 10px;
 }
 
-.controlsProgressWrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  border-radius: 12px;
-  background-color: var(--card-background-color);
-  padding: 5px;
-  width: calc(100% - 10px);
-}
 
 @media screen and (max-width: 730px) {
   .currentlyPlaying {

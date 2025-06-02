@@ -37,6 +37,7 @@ export const ManageChannelsForm = ({permissions}) => {
                 <LineSpacer />
                 {Object.values(channels).sort((a,b) => a.channel_name.localeCompare(b.channel_name)).filter(c => c.channel_name.toLowerCase().includes(filter)).map(channel => (
                     <TextButton 
+                    backgroundColor={'var(--primary-color)'}
                     action={() => {handleOpenChannelToManage(channel)}}
                     icon={
                         <>

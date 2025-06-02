@@ -1,0 +1,35 @@
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100%);
+  height: calc(100%);
+  padding: var(--gap);
+  color: var(--text-color);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  box-sizing: border-box;
+  opacity: 0;
+  transition: opacity 0.18s cubic-bezier(.6,.3,0,1);
+  z-index: 20;
+}
+
+.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.name {
+  font-size: 1.02rem;
+  font-weight: 500;
+  color: var(--text-color);
+  letter-spacing: 0.2px;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+}

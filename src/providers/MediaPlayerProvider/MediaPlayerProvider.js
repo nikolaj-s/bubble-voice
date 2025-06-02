@@ -113,8 +113,6 @@ export const MediaPlayerProvider = ({children}) => {
 
         socket.off(`media-widget/re-order/${channelId}`, handleReorder);
 
-        dispatch(resetMediaPlayer());
-
       };
 
     }, [enabled, channelId, dispatch, socket]);
@@ -150,12 +148,14 @@ export const MediaPlayerProvider = ({children}) => {
     React.useEffect(() => {
     
             if (!socket || !channelId) return;
+
+            dispatch(resetMediaPlayer());
     
             socket
             .request('media-widget/check', { channel_id: channelId })
             .then((res) => {
               if (res?.enabled) {
-                
+                console.log(res)
                 dispatch(enableMediaPlayer(true));
             
                 dispatch(setCurrentChannel(channelId));

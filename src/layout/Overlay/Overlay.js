@@ -34,6 +34,9 @@ import { ExpandedVideo } from "../Overlays/ExpandedVideo/ExpandedVideo";
 import { WidgetsOverlay } from "../Overlays/Widgets/WidgetsOverlay";
 import { MediaPlayerOverlay } from "../Overlays/MediaPlayerOverlay/MediaPlayerOverlay";
 import { ScreenPickerOverlay } from "../Overlays/ScreenPickerOverlay/ScreenPickerOverlay";
+import MobileSwipeToCloseWrapper from "../../components/ui/Wrappers/MobileSwipeToCloseWrapper/MobileSwipteToCloseWrapper";
+import FullScreenWrapper from "../../components/ui/Wrappers/FullScreenWrapper/FullScreenWrapper";
+import { MediaPlayerHistory } from "../Overlays/MediaPlayerHistory/MediaPlayerHistory";
 
 const overlayComponents = {
   search: Search,
@@ -49,10 +52,10 @@ const overlayComponents = {
   createDrawing: CreateDrawing,
   serverRecommendations: ServerRecommendations,
   channelDescription: ChannelDescription,
-  userProfile: UserProfile,
   widgets: WidgetsOverlay,
   mediaPlayer: MediaPlayerOverlay,
-  screenPicker: ScreenPickerOverlay
+  screenPicker: ScreenPickerOverlay,
+  mediaPlayerHistory: MediaPlayerHistory
 };
 
 export const Overlay = ({ children }) => {
@@ -63,6 +66,8 @@ export const Overlay = ({ children }) => {
 
   const ActiveComponent = overlayComponents[activeOverlay];
 
+  const [currentY, setCurrentY] = React.useState(null);
+
   useKeyupListener(() => {dispatch(closeOverlay())}, 27, false);
 
   useKeyupListener(() => {dispatch(setOverlay('search'))}, 191, true);
@@ -71,13 +76,23 @@ export const Overlay = ({ children }) => {
     <>
       <AnimatePresence>
         {ActiveComponent ? 
+        activeOverlay === 'userQuickMenu' ?
+        <MobileSwipeToCloseWrapper onClose={() => {dispatch(closeOverlay())}}>
+          <ActiveComponent close={() => {dispatch(closeOverlay())}} />
+        </MobileSwipeToCloseWrapper>
+        :
         <>
         <OverlayCloseButton action={() => {dispatch(closeOverlay())}} />
-        <ActiveComponent close={() => dispatch(closeOverlay())} key={activeOverlay} /> 
-        </>  
+        <FullScreenWrapper maxContentWidth={activeOverlay === 'expandImage' ? '100%' : null} key={activeOverlay} exitFromY={currentY} onClose={() => {dispatch(closeOverlay())}}>
+          <MobileSwipeToCloseWrapper onClose={(y) => {setCurrentY(y); dispatch(closeOverlay())}}>
+            <ActiveComponent close={() => dispatch(closeOverlay())}  /> 
+          </MobileSwipeToCloseWrapper>  
+        </FullScreenWrapper>
+        </>
         : null}
       </AnimatePresence>
       {children}
+      <UserProfile />
     </>
   );
 };

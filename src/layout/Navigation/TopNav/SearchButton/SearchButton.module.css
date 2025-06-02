@@ -38,7 +38,8 @@
         display: none;
     }
     .searchButton {
-        width: auto !important;
+        width: 40px !important;
+        height: 40px;
         
     }
 

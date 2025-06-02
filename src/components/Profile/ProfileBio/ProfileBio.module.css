@@ -6,6 +6,7 @@
     width: calc(100% - 20px);
     margin: 0 auto;
     word-wrap: break-word;
+    padding: var(--gap);
     background-color: var(--card-background-color);
   }
   

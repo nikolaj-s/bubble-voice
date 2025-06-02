@@ -1,0 +1,72 @@
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+}
+
+.controlsLeft {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-shrink: 0;
+}
+
+.controlBtn {
+  background-color: var(--button-background);
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s ease;
+}
+
+.controlBtn:hover {
+  background-color: var(--button-hover);
+}
+
+
+.controlsProgressWrapper {
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  background-color: var(--card-background-color);
+  justify-content: space-between;
+  gap: 20px;
+  padding: 15px;
+  width: calc(100% - 30px);
+}
+
+.placeHolder {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 115px;
+}
+
+.audioControls {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.queueIndication {
+  position: absolute;
+  top: 4px;
+  left: 3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--error-color);
+  flex-shrink: 0;
+}
+
+@media screen and (max-width: 730px) {
+  .placeHolder {
+    width: auto;
+  }
+}

@@ -1,7 +1,5 @@
-
 import styles from "./IconButton.module.css";
-
-import Tooltip from '../../ToolTip/ToolTip'
+import Tooltip from '../../ToolTip/ToolTip';
 
 const IconButton = ({
   Icon,
@@ -15,20 +13,28 @@ const IconButton = ({
   backgroundHover = 'var(--button-hover)',
   padding = 5,
   borderRadius,
-  margin
+  margin,
+  disabled = false
 }) => {
-  
+
   const handleClick = (e) => {
     e.stopPropagation();
-    onClick(e);
-  }
+    if (!disabled) {
+      onClick?.(e);
+    }
+  };
+
   return (
-    <Tooltip content={title} position={position}>
+    <Tooltip content={title} position={position} disabled={disabled}>
       <button
-        style={{width, height, backgroundColor, padding, borderRadius, margin }}
+        type="button"
+        style={{ width, height, backgroundColor, padding, borderRadius, margin, cursor: disabled ? "not-allowed" : "pointer" }}
         onClick={handleClick}
-        className={`${styles.button} ${className}`}
-     >
+        className={`${styles.button} ${className} ${disabled ? styles.disabled : ""}`}
+        disabled={disabled}
+        tabIndex={disabled ? -1 : 0}
+        aria-disabled={disabled}
+      >
         {Icon}
       </button>
     </Tooltip>

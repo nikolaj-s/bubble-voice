@@ -77,13 +77,11 @@ export const useMediaPlayer = () => {
     const seek = useCallback(async (value) => {
         try {
 
-        if (loading || !playerState.enabled) return;
+          if (loading || !playerState.enabled) return;
 
-        dispatch(setMediaPlayerLoadingState(true));
+          dispatch(setMediaPlayerLoadingState(true));
 
-        await socket.request('media-widget/seek', value);
-
-        return;
+          await socket.request('media-widget/seek', value);
 
         } catch (err) {
             dispatch(triggerAlert("Error Seeking Media", 'error'))
@@ -119,7 +117,7 @@ export const useMediaPlayer = () => {
     const removeMedia = useCallback(async (media) => {
 
       try {
-
+console.log(media)
         if (!media?._id || loading) return;
 
         dispatch(setMediaPlayerLoadingState(true));
@@ -131,7 +129,7 @@ export const useMediaPlayer = () => {
         dispatch(triggerAlert("Error Removing Media From Queue", 'error'));
       }
 
-      dispatch(setMediaPlayerLoadingState(true));
+      dispatch(setMediaPlayerLoadingState(false));
 
       return;
     }, [dispatch, socket, loading])

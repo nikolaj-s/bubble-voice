@@ -1,0 +1,45 @@
+
+
+.container {
+    width: calc(100% - 20px);
+    height: 100%;
+    min-height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    border-radius: 15px;
+    padding: 10px;
+    flex-grow: 2;
+}
+
+.title {
+    margin: 0px;
+    padding: 0px;
+    text-align: center;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+}
+
+.thumbnail {
+    width: 200px;
+    height: 200px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.5);
+    aspect-ratio: 1 / 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--card-background-color);
+}
+
+.addedBy {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

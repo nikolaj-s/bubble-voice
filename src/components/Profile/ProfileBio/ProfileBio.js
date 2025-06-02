@@ -26,7 +26,7 @@ const ProfileBio = ({ bio = "" }) => {
   return (
     <div
       style={{
-        padding: bio.trim().length === 0 ? null : 5,
+        padding: bio.trim().length === 0 ? 0 : null,
       }}
       className={styles.userBio}
     >

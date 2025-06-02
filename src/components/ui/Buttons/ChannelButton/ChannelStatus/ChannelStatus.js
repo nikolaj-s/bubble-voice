@@ -13,7 +13,7 @@ export const ChannelStatus = ({channel = {}, active}) => {
 
     const status = channel.status;
 
-    const {currentlyPlaying, currentTime} = useSelector(state => state.mediaPlayerSlice);
+    const {currentTime, color} = useSelector(state => state.mediaPlayerSlice);
 
     const handleOpenMedia = () => {
         
@@ -29,7 +29,10 @@ export const ChannelStatus = ({channel = {}, active}) => {
     if (!status) return null;
 
     return (
-        <div className={styles.status}>
+        <>
+        <div 
+        style={{backgroundColor: color}}
+        className={styles.status}>
             {status.type === 'video' ?
             <MediaItem 
             context={{...status, type: active ? 'mediaplayer' : 'video'}}
@@ -40,7 +43,8 @@ export const ChannelStatus = ({channel = {}, active}) => {
             : 
             null
             }
-            <LineSpacer />
+           
         </div>
+        </>
     )
 }

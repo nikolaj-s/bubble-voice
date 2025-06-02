@@ -64,9 +64,7 @@ const FloatingSearch = ({filter, filters = [], loading, setFilter = () => {}, se
 
   return (
     <div
-      style={{
-        borderRadius: '10px 10px 0px 0px'
-      }}
+      onClick={focusInput}
       className={`${styles.searchBox}`}
     >
       <Search color='var(--text-color)' size={25} style={{marginLeft: 5, flexShrink: 0}} />
@@ -87,7 +85,7 @@ const FloatingSearch = ({filter, filters = [], loading, setFilter = () => {}, se
         <X color='var(--text-color)' />
       </div>}
       <div className={styles.filterWrapper}>
-        <Dropdown setSelected={handleSetFilter} selected={filter} options={filters}/>
+        <Dropdown minWidth={120} setSelected={handleSetFilter} selected={filter} options={filters}/>
       </div>
     </div>
   );

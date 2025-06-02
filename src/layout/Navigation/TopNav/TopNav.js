@@ -10,8 +10,7 @@ import { Bell, Ellipsis, LayoutDashboard, Menu, Settings2, UsersRound, UserX, X 
 import { Route, Routes } from "react-router";
 import { SearchButton } from "./SearchButton/SearchButton";
 import ChannelHeader from "../../../components/Headers/ChannelHeader/ChannelHeader";
-import { setFilter, setFromDate, setSelectedChannelToFilter, setTextChannelFilter } from "../../../features/Search/searchSlice";
-import { globalSearch } from "../../../features/Search/Thunks/globalSearch";
+import { setFilter, setSelectedChannelToFilter} from "../../../features/Search/searchSlice";
 import { toggleMobileMenu } from "../../../features/Mobile/mobileSlice";
 import { Logo } from "../../../components/Icons/Bubble/Logo";
 import { triggerContext } from "../../../lib/services/helperFunctions";
@@ -79,12 +78,16 @@ const TopNav = () => {
       <div className={styles.buttonGroup}>
         <div className={styles.mobileButton}>
           <IconButton 
+          width={40}
+          height={40}
           Icon={isServerMenuOpen ? <X color="var(--text-color)" /> : <Logo />}
           onClick={() => {dispatch(toggleMobileMenu('isServerMenuOpen'))}}
           />
         </div>
         <div className={styles.mobileButton}>
         <IconButton
+        width={40}
+        height={40}
         Icon={isChannelMenuOpen ? <X color="var(--text-color)" /> : <Menu color="var(--text-color)" />}
         onClick={() => {dispatch(toggleMobileMenu("isChannelMenuOpen"))}}
         />
@@ -137,7 +140,9 @@ const TopNav = () => {
       </div>
       <div id="mobile-ctx-menu" data-context={JSON.stringify({type: 'mobileMenu'})} className={styles.mobileMenuOptions}>
           <SearchButton onClick={handleOpenSearch} />
-          <IconButton 
+          <IconButton
+          height={40}
+          width={40} 
           Icon={isUserMenuOpen ? <X color="var(--text-color)" /> : <Ellipsis color="var(--text-color)" />}
           onClick={openMobileMenu}
           />

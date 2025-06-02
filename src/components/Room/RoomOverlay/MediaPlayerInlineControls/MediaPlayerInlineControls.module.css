@@ -4,6 +4,7 @@
     margin-bottom: 5px;
     transition: 0.2s ease-in-out;
     background-color: var(--card-background-color);
+    white-space: nowrap;
 }
 .buttonWrapper {
     display: flex;
@@ -11,6 +12,11 @@
 }
 
 .currentlyPlaying {
-    width: calc(100% - 175px);
-    max-width: 300px;
+    max-width: calc(100% - 175px);
+}
+
+@media screen and (max-width: 730px) {
+   .currentlyPlaying {
+    max-width: calc(100% - 90px);
+    }
 }

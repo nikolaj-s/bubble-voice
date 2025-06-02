@@ -7,6 +7,8 @@ import { NsfwWrapper } from '../../../../components/ui/Wrappers/NsfwWrapper/Nsfw
 import { ImageComponent } from '../../../../components/ui/Image/Image';
 import { fetchUserRecommendations } from '../../../../features/UserRecommendations/Thunks/fetchUserRecommendations';
 import ContentPlaceholder from '../../../../components/ui/Placeholders/ContentPlaceholder/ContentPlaceholder';
+import { MediaTooltipWrapper } from '../../../../components/ui/Wrappers/MediaTooltipWrapper/MediaTooltipWrapper';
+import VideoThumbnail from '../../../../components/ui/Video/VideoThumbnail/VideoThumbnail';
 
 export const UserRecommendations = () => {
 
@@ -33,13 +35,17 @@ export const UserRecommendations = () => {
             />)}
             <ImageMasonryWrapper>
                
-                {recommendations.map(image => {
+                {recommendations.map(media => {
                     return (
-                        <ImageTooltipWrapper image={image} key={image.src}>
-                            <NsfwWrapper nsfw={image}>
-                                <ImageComponent src={image?.src?.includes('gif') ? image.src : image.thumbnail} />
+                        <MediaTooltipWrapper media={media} key={media.src}>
+                            <NsfwWrapper nsfw={media}>
+                                {media.type === 'video' ?
+                                <VideoThumbnail {...media} width="100%" />
+                                :
+                                <ImageComponent src={media?.src?.includes('gif') ? media.src : media.thumbnail} />
+                                }
                             </NsfwWrapper>
-                        </ImageTooltipWrapper>
+                        </MediaTooltipWrapper>
                     )
                 })}
             </ImageMasonryWrapper>

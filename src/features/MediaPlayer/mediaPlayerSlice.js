@@ -17,7 +17,8 @@ const initialState = {
   hasAudio: true,
   hideMediaPlayer: false,
   enabled: false,
-  color: null
+  color: null,
+  hideQueue: true
 };
 
 const mediaPlayerSlice = createSlice({
@@ -54,6 +55,7 @@ const mediaPlayerSlice = createSlice({
       state.queue = [...state.queue, ...action.payload];
     },
     removeMediaFromQueue: (state, action) => {
+      console.log(action.payload)
       if (action.payload._id) {
 
         state.queue = state.queue.filter(media => media._id !== action.payload._id);
@@ -131,6 +133,9 @@ const mediaPlayerSlice = createSlice({
     enableMediaPlayer: (state, action) => {
       state.enabled = action.payload;
     },
+    toggleHideQueue: (state, action) => {
+      state.hideQueue = !state.hideQueue;
+    },
     resetMediaPlayer: () => initialState
   },
   extraReducers: (builder) => {
@@ -172,7 +177,8 @@ export const {
   toggleHideMediaPlayer,
   enableMediaPlayer,
   reorderQueue,
-  setColor
+  setColor,
+  toggleHideQueue
 } = mediaPlayerSlice.actions;
 
 export default mediaPlayerSlice.reducer;

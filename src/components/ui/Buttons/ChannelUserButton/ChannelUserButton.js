@@ -39,7 +39,10 @@ export const ChannelUserButton = ({user_id, active, action = () => {}}) => {
                 {user?.channel_status?.streamDetails && (
                 <div className={styles.streamStatus}>
                     <div className={styles.arrowIndicator} />
-                    <MiniStreamIndicator channel_bar={true} {...user?.channel_status?.streamDetails}/>
+                    <div className={styles.indicatorWrapper}>
+                        <MiniStreamIndicator channel_bar={true} {...user?.channel_status?.streamDetails}/>
+                    </div>
+
                 </div>
                 )}
             </div>

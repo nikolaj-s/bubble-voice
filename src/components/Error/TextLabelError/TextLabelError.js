@@ -14,7 +14,7 @@ const TextLabelError = ({ label, error }) => {
 };
 
 TextLabelError.propTypes = {
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   error: PropTypes.string, // Optional error message
 };
 

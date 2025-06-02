@@ -39,6 +39,7 @@
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.02);
     opacity: 0.75;
+    margin-top: 10px;
   }
   
   .placeholderIcon {

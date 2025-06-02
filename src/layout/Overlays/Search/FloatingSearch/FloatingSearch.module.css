@@ -2,14 +2,18 @@
   .searchBox {
     opacity: 1;
     height: auto;
-    background-color: var(--card-background-color);
+    background-color: var(--primary-color);
     border-radius: 10px 10px 0px 0px;
+    padding: 5px;
     position: relative;
     display: flex;
     align-items: center;
-    width: 100%;
+    width: calc(100% - 10px);
     z-index: 6;
     gap: 5px;
+    position: sticky;
+    top: 0;
+    cursor: text;
   }
   
   .searchInput {
@@ -44,4 +48,10 @@
   .filterWrapper {
     margin-right: 5px;
     z-index: 2;
+  }
+
+  @media screen and (max-width: 730px) {
+    .searchBox {
+      border-radius: 0px;
+    }
   }

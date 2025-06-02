@@ -19,6 +19,8 @@
     align-items: center;
     gap: 5px;
     white-space: nowrap;
+    display: flex;
+    justify-content: space-between;
   }
 
   .dropdownButton:active {
@@ -32,7 +34,6 @@
   .options {
     position: absolute;
     width: 100%;
-    min-width: 200px;
     background-color: var(--background-color);
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);

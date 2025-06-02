@@ -17,6 +17,7 @@ import { setOverlay } from '../../features/Overlay/overlaySlice';
 import { ErrorToolTip } from '../ui/ErrorToolTip/ErrorToolTip';
 import { ConnectionIndicator } from '../ConnectionIndicator/ConnectionIndicator';
 import { setCurrentVoiceChannel } from '../../features/Channel/VoiceChannel/voiceChannelSlice';
+import { triggerContext } from "../../lib/services/helperFunctions";
 
 export const ControlBar = () => {
 
@@ -41,6 +42,7 @@ export const ControlBar = () => {
     return (
         <>
         <div
+        id="main-control-bar"
         data-context={JSON.stringify({type: 'controlBar'})}
         className={styles.wrapper}>
             {inChannel ?
@@ -127,7 +129,7 @@ export const ControlBar = () => {
                     <IconButton 
                     title={"Quick Options"}
                     Icon={<Settings2 color='var(--text-color)' />}
-                    onClick={openQuickSettings}
+                    onClick={(e) => {triggerContext(e, 'main-control-bar')}}
                     />
                 </div>
             </div>

@@ -45,12 +45,10 @@ export const ServerSettings = ({close}) => {
     }
 
     return (
-        <FullScreenWrapper onClose={close}>
-            <ProtectedFormWrapper>
-                <MenuWrapper navItems={navItems}>
-                        {content}
-                </MenuWrapper>
-            </ProtectedFormWrapper>
-        </FullScreenWrapper>
+        <ProtectedFormWrapper>
+            <MenuWrapper navItems={navItems}>
+                    {content}
+            </MenuWrapper>
+        </ProtectedFormWrapper>
     )
 }

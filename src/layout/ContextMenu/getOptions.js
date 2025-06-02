@@ -1,4 +1,4 @@
-import { Bookmark, ChevronRight, Copy, Download, FilePenLine, FolderPen, FolderPlus, Hash, ImageDown, LayoutDashboard, Link, ListPlus, Music2, Pause, Pencil, Pin, PinOff, Play, PlaySquare, Plus, Reply, Search, Send, Settings, Settings2, SkipForward, Trash2, Unplug, UserPen, Users, Video } from "lucide-react";
+import { Bookmark, ChevronRight, Cog, Copy, Download, FilePenLine, FolderPen, FolderPlus, Hash, History, ImageDown, LayoutDashboard, Link, ListPlus, ListX, Mic, Music2, Pause, Pencil, Pin, PinOff, Play, PlaySquare, Plus, Reply, Search, Send, Settings, Settings2, SkipForward, Trash2, Unplug, UserPen, Users, Video } from "lucide-react";
 import { useCallback } from "react";
 import { useDispatch, useSelector,} from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -25,6 +25,7 @@ import { saveMediaToPlayer } from "../../features/MediaPlayer/Thunks/saveMediaTo
 import { removeSavedMediaFromPlayer } from "../../features/MediaPlayer/Thunks/removeSavedMediaFromPlayer";
 import { isMediaSaved } from "../../features/MediaPlayer/Helpers/isMediaSaved";
 import { useGlobalVolume } from "../../context/GlobalVolumeContext";
+import { toggleUsingPushToTalk } from "../../features/Channel/MediaControl/mediaControlSlice";
 
 export const useContextMenuOptions = () => {
 
@@ -42,11 +43,13 @@ export const useContextMenuOptions = () => {
 
     const {hideNonVideoUsers, currentVoiceChannel} = useSelector(state => state.voiceChannelSlice);
 
+    const {usingPushToTalk} = useSelector(state => state.mediaControlSlice);
+
     const {server_id} = useSelector(state => state.serverDetailsSlice);
 
     const {hideChannelBackgrounds} = useSelector(state => state.appearanceSlice);
 
-    const {toggleIsPlaying, next} = useMediaPlayer();
+    const {toggleIsPlaying, next, removeMedia} = useMediaPlayer();
 
     const getOptions = useCallback(
         (e, permissions, currentTextChannel, channels, currentChannel, user) => {
@@ -95,6 +98,24 @@ export const useContextMenuOptions = () => {
             
             if (data.mediaplayer) {
 
+                if (mediaPlayerState.currentlyPlaying) {
+                    const saved = isMediaSaved(savedMediaState, currentVoiceChannel, mediaPlayerState.currentlyPlaying.src);
+
+                    options.push({
+                        label: saved ? `Unsave ${mediaPlayerState.currentlyPlaying.title}` : `Save ${mediaPlayerState.currentlyPlaying.title}`,
+                        onClick: () => {
+                            if (saved) {
+                                dispatch(removeSavedMediaFromPlayer(mediaPlayerState.currentlyPlaying._id));
+                            } else {
+                                dispatch(saveMediaToPlayer(mediaPlayerState.currentlyPlaying));
+                            }
+                            
+                        },
+                        type: 'button',
+                        icon: <Bookmark fill={saved ? 'var(--text-color)' : 'transparent'} color="var(--text-color)" /> 
+                    })
+                }
+
                 options.push({
                     label: 'Search',
                     type: 'button',
@@ -103,6 +124,30 @@ export const useContextMenuOptions = () => {
                         dispatch(setFilter({path: 'videos'}));
 
                         dispatch(setOverlay('search'));
+                    }
+                })
+
+                options.push({
+                    label: "View Saves",
+                    type: 'button',
+                    icon: <Bookmark color="var(--text-color" />,
+                    onClick: () => {
+                        dispatch(setOverlay('widgets'));
+
+                         setTimeout(() => {
+
+                            document.getElementById('media-player-widget-saves')?.scrollIntoView({behavior: 'instant'});
+                        
+                        }, 100)
+                    }
+                })
+
+                options.push({
+                    label: "View History",
+                    type: 'button',
+                    icon: <History color="var(--text-color)" />,
+                    onClick: () => {
+                        dispatch(setOverlay('mediaPlayerHistory'));
                     }
                 })
                
@@ -479,7 +524,7 @@ export const useContextMenuOptions = () => {
                     const saved = isMediaSaved(savedMediaState, currentVoiceChannel, data.video.src);
 
                     options.push({
-                        label: saved ? 'Unsave' : 'Save',
+                        label: saved ? `Unsave ${data.video.title}` : `Save ${data.video.title}`,
                         onClick: () => {
                             if (saved) {
                                 dispatch(removeSavedMediaFromPlayer(data.video._id));
@@ -524,12 +569,32 @@ export const useContextMenuOptions = () => {
                 })
 
                 options.push({
+                    label: usingPushToTalk ? "Use Voice Detection" : "Use Push To Talk",
+                    icon: <Mic color="var(--text-color)" />,
+                    type: 'button',
+                    onClick: () => {
+                        dispatch(toggleUsingPushToTalk());
+                    }
+                })
+
+                options.push({
                     label: "Edit Account",
                     icon: <UserPen color="var(--text-color)" />,
                     type: "button",
                     onClick: () => {
                         setSearchParams({section: 'account'});
                         dispatch(setOverlay("settings"));
+                    }
+                })
+
+                options.push({
+                    label: "Voice / Video Settings",
+                    icon: <Settings color="var(--text-color)" />,
+                    type: "button",
+                    onClick: () => {
+                        setSearchParams({section: "voiceVideo"});
+
+                        dispatch(setOverlay('settings'));
                     }
                 })
 
@@ -546,7 +611,7 @@ export const useContextMenuOptions = () => {
 
             // mobile menu
             if (data.mobileMenu) {
-console.log(data.mobileMenu)
+
                 if (currentTextChannel || currentVoiceChannel) {
                     options.push({
                         label: "Widgets",
@@ -633,13 +698,25 @@ console.log(data.mobileMenu)
                 }
             }
 
+            if (data?.video?.inQueue) {
+                options.push({
+                    label: "Remove From Queue",
+                    onClick: () => {
+                        removeMedia(data.video)
+                    },
+                    type: 'button',
+                    icon: <ListX color="var(--error-color)" />,
+                    color: 'var(--error-color)'
+                })
+            }
+
             return options;
         } catch (error) {
             console.log(error);
             return [];
         }
         },
-        [navigate, dispatch, setSearchParams, hideNonVideoUsers, mediaPlayerState, hideChannelBackgrounds, savedMediaState, currentVoiceChannel, server_id, volumes]
+        [navigate, dispatch, setSearchParams, hideNonVideoUsers, mediaPlayerState, hideChannelBackgrounds, savedMediaState, currentVoiceChannel, server_id, volumes, usingPushToTalk]
     );
 
   return getOptions;

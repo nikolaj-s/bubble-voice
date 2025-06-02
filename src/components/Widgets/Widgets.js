@@ -22,8 +22,8 @@ const SortableWidget = ({ id, children, editing, widget }) => {
     transform: CSS.Transform.toString(transform),
     transition,
     marginRight: editing ? 40 : null,
-    overflow: editing ? null : 'hidden',
-    borderRadius: 8
+    borderRadius: 8,
+    maxHeight: editing ? 200 : null
      // smooth mobile drag
   };
 
@@ -41,7 +41,13 @@ const SortableWidget = ({ id, children, editing, widget }) => {
           </div>
         </div>
       )}
+      <div style={{
+        overflow: editing ? 'hidden' : null,
+        width: '100%',
+        height: '100%'
+      }}>
       {children}
+      </div>
     </div>
   );
 };
