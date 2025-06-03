@@ -1,11 +1,9 @@
-import React from 'react'
 
 import { ImageComponent } from '../../../ui/Image/Image'
 
 import { NsfwWrapper } from '../../../ui/Wrappers/NsfwWrapper/NsfwWrapper';
 import { useDispatch } from 'react-redux';
 import { setExpandedImage } from '../../../../features/Media/ExpandedImage/expandedImageSlice';
-import { setOverlay } from '../../../../features/Overlay/overlaySlice';
 import LazyImageWrapper from '../../../ui/Wrappers/LazyImageWrapper/LazyImageWrapper';
 
 export const ImageBlock = ({image, loading, nsfw, styles, width, height = 350}) => {
@@ -15,8 +13,6 @@ export const ImageBlock = ({image, loading, nsfw, styles, width, height = 350}) 
     const expandImage = () => {
 
         dispatch(setExpandedImage({image: image}));
-
-        dispatch(setOverlay("expandImage"));
 
     }
     

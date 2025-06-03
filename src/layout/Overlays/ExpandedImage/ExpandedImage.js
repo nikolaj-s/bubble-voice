@@ -2,17 +2,25 @@
 import { useDispatch, useSelector } from 'react-redux';
 
 import ExpandedImageViewer from '../../../components/ExpandedImageViewer/ExpandedImageViewer';
+import { clearExpandedImage } from '../../../features/Media/ExpandedImage/expandedImageSlice';
 
-export const ExpandedImage = ({ close = () => {} }) => {
+export const ExpandedImage = () => {
 
-    const image = useSelector(state => state.expandedImageSlice.expandedImage);
+  const dispatch = useDispatch();
 
-    const data = useSelector(state => state.expandedImageSlice.expandedImageData);
-   
-    return (
-      <div data-context={data ? JSON.stringify({...data, src: image, type: 'imageSearchResult'}) : JSON.stringify({src: image, type: 'image'})}>
-        <ExpandedImageViewer src={image} onClose={close} />
-      </div>
-    );
+  const image = useSelector(state => state.expandedImageSlice.expandedImage);
+
+  const data = useSelector(state => state.expandedImageSlice.expandedImageData);
+
+
+  const close = () => {
+    dispatch(clearExpandedImage());
+  }
+
+  return (
+    <>
+    {image && (<ExpandedImageViewer onClose={close} src={image} open={true} context={data ? data : {src: image, image: image, type: 'image'}} />)}
+    </>
+  );
   };
   

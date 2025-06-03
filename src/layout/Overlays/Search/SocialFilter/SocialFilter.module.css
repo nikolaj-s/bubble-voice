@@ -2,16 +2,16 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 3px;
+    gap: var(--gap);
     margin-top: 2px;
-    padding: 5px;
+    padding: var(--gap);
     background-color: var(--primary-color);
   }
   
   .filterButton {
     border: none;
     padding: 10px;
-    border-radius: 5px;
+    border-radius: var(--border-radius);
     gap: 5px;
     cursor: pointer;
     display: flex;
@@ -20,7 +20,6 @@
     background-color: var(--background-color);
     transition: 0.3s ease;
     color: var(--text-color);
-    opacity: 0.75;
     height: 38px;
     font-weight: 500;
     font-size: 14px;

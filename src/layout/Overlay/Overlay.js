@@ -44,7 +44,6 @@ const overlayComponents = {
   serverSettings: ServerSettings,
   settings:Settings,
   joinServer: JoinServer,
-  expandImage: ExpandedImage,
   expandVideo: ExpandedVideo,
   userQuickMenu: UserQuickMenu,
   settingsQuickMenu: SettingsQuickMenu,
@@ -93,6 +92,7 @@ export const Overlay = ({ children }) => {
       </AnimatePresence>
       {children}
       <UserProfile />
+      <ExpandedImage />
     </>
   );
 };

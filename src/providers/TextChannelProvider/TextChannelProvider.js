@@ -14,7 +14,7 @@ export const TextChannelProvider = ({children, channel}) => {
     const dispatch = useDispatch();
 
     const socket = useSocket();
-
+   
     React.useEffect(() => {
 
         dispatch(setCurrentTextChannel(channel));

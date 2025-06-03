@@ -16,8 +16,6 @@ import { Outlet } from 'react-router';
 
 import { ControlBar } from '../../components/ControlBar/ControlBar';
 
-import { TextChannelOverlay } from './channel/TextChannelOverlay/TextChannelOverlay';
-
 import { Users } from './users/Users';
 
 import { ServerLayoutWrapper } from '../../components/ui/Wrappers/ServerlayoutWrapper/ServerLayoutWrapper';

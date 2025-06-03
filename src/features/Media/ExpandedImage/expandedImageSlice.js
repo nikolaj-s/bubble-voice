@@ -14,6 +14,7 @@ const expandedImageSlice = createSlice({
         },
         clearExpandedImage: (state, action) => {
             state.expandedImage = false;
+            state.expandedImageData = null;
         }
     }
 })

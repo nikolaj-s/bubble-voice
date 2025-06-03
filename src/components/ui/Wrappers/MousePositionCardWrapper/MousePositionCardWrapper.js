@@ -88,7 +88,7 @@ const MousePositionModal = ({
         left: 0,
         width: '100vw',
         height: '100vh',
-        zIndex: 9999
+        zIndex: 49
       }}
     >
       {/* Overlay */}

@@ -9,6 +9,10 @@
     transition: opacity 0.2s ease-in-out;
 }
 
+.categoryWrapper {
+    margin-bottom: var(--gap);
+}
+
 .channel-list-collapse-button svg {
     width: 15px;
     height: 20px;

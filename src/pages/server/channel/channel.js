@@ -1,4 +1,3 @@
-import React from 'react';
 
 import { ChannelProvider } from '../../../providers/ChannelProvider/ChannelProvider';
 

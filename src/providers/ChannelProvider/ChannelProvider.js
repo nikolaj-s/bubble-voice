@@ -29,11 +29,7 @@ export const ChannelProvider = ({children, overlay = false, channel_id_prop}) =>
 
     React.useEffect(() => {
         
-        if (overlay) {
-            setChannelID(channel_id_prop)
-        } else {
-            setChannelID(channel_id_param)
-        }
+        setChannelID(channel_id_param);
 
         setServerID(server_id_param);
 
@@ -58,7 +54,7 @@ export const ChannelProvider = ({children, overlay = false, channel_id_prop}) =>
             await socket.request('fetch channel details', {channelID, serverID})
             .then(res => {
                 if (res.channel_id) {
-
+                  
                     if (res.channel_type === 'voice') {
                         dispatch(setCurrentVoiceChannel(res.channel_id));
                     }

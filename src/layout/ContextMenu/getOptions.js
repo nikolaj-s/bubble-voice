@@ -28,6 +28,7 @@ import { useGlobalVolume } from "../../context/GlobalVolumeContext";
 import { toggleUsingPushToTalk } from "../../features/Channel/MediaControl/mediaControlSlice";
 import { setChannelToViewWidgetsOf } from "../../features/Widgets/widgetsSlice";
 import { expandVideo } from "../../features/Media/ExpandedVideo/expandedVideoSlice";
+import { clearExpandedImage } from "../../features/Media/ExpandedImage/expandedImageSlice";
 
 export const useContextMenuOptions = () => {
 
@@ -74,7 +75,7 @@ export const useContextMenuOptions = () => {
             }
             }
 
-            if (data.appSubmenu) {
+            if (data.appSubmenu || data.widgetsOverlay) {
 
                 if (server_id) {
                     let widget_options = [];
@@ -421,6 +422,8 @@ export const useContextMenuOptions = () => {
                         label: "Find Similar Images",
                         onClick: () => {
 
+                            dispatch(clearExpandedImage());
+
                             dispatch(setQuery(""));
 
                             dispatch(setSimilarImageSrc(data.message.image));
@@ -448,6 +451,7 @@ export const useContextMenuOptions = () => {
                             dispatch(sendMessage({channel_id: currentTextChannel, text: data.imageSearchResult.src, ...data.imageSearchResult}));
                             dispatch(closeOverlay());
                             dispatch(setVoiceChannelFocused(false));
+                            dispatch(clearExpandedImage());
                         },
                         type: "button",
                         icon: <Send color="var(--text-color)" />
@@ -481,6 +485,8 @@ export const useContextMenuOptions = () => {
                                     dispatch(sendMessage({channel_id: channel.channel_id, text: data.imageSearchResult.src, ...data.imageSearchResult}));
                                     
                                     dispatch(setVoiceChannelFocused(false));
+
+                                    dispatch(clearExpandedImage());
                                 },
                                 icon: <Hash color="var(--text-color)" />,
                                 type: "button",
@@ -518,6 +524,8 @@ export const useContextMenuOptions = () => {
                         dispatch(globalSearch());
 
                         dispatch(setOverlay('search'));
+
+                        dispatch(clearExpandedImage())
 
                     },
                     type: "button"
