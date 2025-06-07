@@ -16,7 +16,8 @@ const initialState = {
     deleting: false,
     currentTextChannel: null,
     textChannelPos: {},
-    replyTo: null
+    replyTo: null,
+    text: ""
 }
 
 const textChannelSlice = createSlice({
@@ -73,6 +74,9 @@ const textChannelSlice = createSlice({
                     return message;
                 }
             })
+        },
+        setTextForTextChannel: (state, action) => {
+            state.text = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -166,7 +170,8 @@ export const {
     setCurrentTextChannel, 
     setTextChannelPos,
     updateMessage,
-    setReplyTo
+    setReplyTo,
+    setTextForTextChannel
 } = textChannelSlice.actions;
 
 export default textChannelSlice.reducer;

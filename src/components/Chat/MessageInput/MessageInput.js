@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import imageCompression from "browser-image-compression";
 import styles from "./MessageInput.module.css";
 import IconButton from "../../ui/Buttons/IconButton/IconButton";
-import { ImageUp, Pencil, Plus, SearchIcon } from "lucide-react";
+import { ImageUp, Pencil, Plus, SearchIcon, Send } from "lucide-react";
 import { MediaPreview } from "../MediaPreview/MediaPreview";
 import { useDispatch } from "react-redux";
 import { setFilter } from "../../../features/Search/searchSlice";
@@ -115,7 +115,7 @@ export const MessageInput = ({ value, setValue, setImage = () => {}, error, send
 
     return (
         <>
-        <div className={styles["message-input-container"]}>
+        <div data-context={JSON.stringify({type: 'input', id: 'chat-input'})} className={styles["message-input-container"]}>
             {error && 
                 (<div className={styles.errorWrapper}>
                     <TextLabelError label="Error:" error={error} />
@@ -139,6 +139,7 @@ export const MessageInput = ({ value, setValue, setImage = () => {}, error, send
                 className={`${styles["input-wrapper"]} ${focused && (styles.focused)}`}>
                     <textarea
                         onFocus={() => {toggleFocused(true)}}
+                        onPaste={(e) => {handleSetValue(e.target.value)}}
                         onBlur={() => {toggleFocused(false)}}
                         ref={textAreaRef}
                         id="chat-input"
@@ -156,6 +157,14 @@ export const MessageInput = ({ value, setValue, setImage = () => {}, error, send
                             } 
                         }}
                     />
+                    <div className={styles.sendButton}>
+                        <IconButton 
+                        disabled={value.length === 0 && !preview}
+                        Icon={<Send color="var(--text-color)" />}
+                        title={'Send'}
+                        onClick={() => {setPreview(null); send()}}
+                        />
+                    </div>
                     
                 </div>
                 

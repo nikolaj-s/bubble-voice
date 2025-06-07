@@ -3,6 +3,7 @@
     flex-direction: column-reverse;
     overflow-y: auto;
     height: 100%;
+    overflow-x: hidden;
     scrollbar-width: thin;
   }
   

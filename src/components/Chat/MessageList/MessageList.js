@@ -106,7 +106,7 @@ const MessageList = ({
 
   return (
     <div 
-    
+    id="chat-scroll-wrapper"
     className={styles.messageListContainer} ref={listRef} onScroll={handleScroll}>
       <AnimatePresence>
         

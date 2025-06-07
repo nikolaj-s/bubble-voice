@@ -16,7 +16,7 @@ const ExpandedImageViewer = ({ src, alt, open, onClose, context }) => {
     const handleImageColor = async () => {
       const res = await getImageColor(src);
 
-      setColor(`rgba(${res.r}, ${res.g}, ${res.b}, 0.98)`);
+      setColor(`rgba(${res.r}, ${res.g}, ${res.b}, 0.75)`);
     }
 
     handleImageColor();
@@ -31,6 +31,18 @@ const ExpandedImageViewer = ({ src, alt, open, onClose, context }) => {
     }
   }, [open]);
 
+  const handleExpand = (e) => {
+
+    setExpanded(!expanded);
+    console.log(e)
+    
+    requestAnimationFrame(() => {
+      scrollRef.current.scrollTo(e.clientX, e.clientY * 2.5)
+    })
+    
+
+  }
+
   if (!open) return null;
 
   return (
@@ -42,9 +54,7 @@ const ExpandedImageViewer = ({ src, alt, open, onClose, context }) => {
       <div
         ref={scrollRef}
         className={`${styles.imageContainer} ${expanded ? styles.expanded : ""}`}
-        onClick={e => { 
-          setExpanded(exp => !exp); // toggle expand
-        }}
+        onClick={handleExpand}
         tabIndex={0}
       >
         <img
@@ -53,7 +63,9 @@ const ExpandedImageViewer = ({ src, alt, open, onClose, context }) => {
           draggable={false}
           className={styles.image}
           style={{
-            width: expanded ? "100vw" : "auto",
+            scale: expanded ? 2 : null,
+            minHeight: expanded ? "100vh" : null,
+            minWidth: expanded ? "200vw" : null,
             maxWidth: expanded ? "none" : "90vw",
             maxHeight: expanded ? "none" : "90vh",
             cursor: expanded ? "grab" : "zoom-in",

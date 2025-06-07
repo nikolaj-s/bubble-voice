@@ -1,11 +1,11 @@
 // components/Widgets/SingleImageWidget/SingleImageWidget.jsx
-import React from "react";
+
 import styles from "./SingleImageWidget.module.css";
 import { ImageOff } from "lucide-react";
 import { ImageTooltipWrapper } from "../../ui/Wrappers/ImageTooltipWrapper/ImageTooltipWrapper";
 import { ImageComponent } from "../../ui/Image/Image";
 
-export const SingleImageWidget = ({ image, alt = "Widget Image" }) => {
+export const SingleImageWidget = ({ image, color, alt = "Widget Image" }) => {
   if (!image) {
     return (
       <div className={styles.placeholder}>
@@ -16,9 +16,9 @@ export const SingleImageWidget = ({ image, alt = "Widget Image" }) => {
   }
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} style={{backgroundColor: color}}>
       <ImageTooltipWrapper image={{src: image, type: 'image'}}>
-        <ImageComponent src={image} />
+        <ImageComponent src={image} objectFit="contain" />
       </ImageTooltipWrapper>
     </div>
   );

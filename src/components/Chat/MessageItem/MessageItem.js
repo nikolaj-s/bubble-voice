@@ -27,8 +27,10 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
 
     return (
         <>
+            
             {isDifferentDay && inSearch && (<Spacer date={message.formattedDate} />)}
             <LongPressGestureWrapper onTouchContext={openCtx}>
+              
                 <div 
                 id={`message-id-${message._id}`}
                 data-context={JSON.stringify({...message, type: isReply ? 'reply-message' : 'message', inSearch})}
@@ -36,34 +38,40 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
                     borderColor: users[message.user_id]?.color
                 }}
                 className={styles.messageItem}>
-                    {!isReply && 
-                    <div className={styles.buttons}>
-                        <IconButton 
-                        Icon={<Ellipsis color='var(--text-color)' />}
-                        onClick={openCtx}
-                        title={'Options'}
-                        position='left'
-                        />
-                    </div>}
-                    <div className={styles.userImageWrapper}>
-                        {(message.user_id !== prevMessage.user_id || isDifferentDay) &&
-                        <div className={styles.userImage}>
-                            <ImageComponent src={users[message.user_id]?.user_image} />
+                    <ReplyBlock {...message} users={users} />
+                    <div className={styles.messageWrapper}>
+                        {!isReply && 
+                        <div className={styles.buttons}>
+                            <IconButton 
+                            Icon={<Ellipsis color='var(--text-color)' />}
+                            onClick={openCtx}
+                            title={'Options'}
+                            position='bottom'
+                            />
                         </div>}
-                    {message.user_id !== prevMessage.user_id || isDifferentDay ? null : <TimeDisplay time={message.formattedTime} />}
-                    </div>
-                    <div className={`${styles.messageContent} ${loading ? styles.sending : ''}`}>
-                        <UserBlock users={users} message={message} prevMessage={prevMessage} isDifferentDay={isDifferentDay} styles={styles} />
-                        <ReplyBlock {...message} users={users} />
-                        <TextBlock {...message} styles={styles} />
-                        <ImageBlock {...message} styles={styles} loading={loading} />
-                        <VideoBlock {...message} styles={styles} />
-                        {!message.image  && !message.video && !message.link_preview && (<LinkComponent link={message.link} />)}
-                        <LinkPreview {...message} /> 
+                        <div className={styles.userImageWrapper}>
+                            {(message.user_id !== prevMessage.user_id || isDifferentDay || message.reply_to) &&
+                            <div className={styles.userImage}>
+                                <ImageComponent src={users[message.user_id]?.user_image} />
+                            </div>}
+                        {message.user_id !== prevMessage.user_id || isDifferentDay || message.reply_to ? null : <TimeDisplay className={styles.time} time={message.formattedTime} />}
+                        </div>
+                        <div className={`${styles.messageContent} ${loading ? styles.sending : ''}`}>
+                            <UserBlock users={users} message={message} prevMessage={prevMessage} isDifferentDay={isDifferentDay} styles={styles} />
+                        
+                            <TextBlock {...message} styles={styles} />
+                            <ImageBlock {...message} styles={styles} loading={loading} />
+                            <VideoBlock {...message} styles={styles} />
+                            {!message.image  && !message.video && !message.link_preview && (<LinkComponent link={message.link} />)}
+                            <LinkPreview {...message} /> 
+                        </div>
                     </div>
                 </div>
+                
             </LongPressGestureWrapper>
+           
             {isDifferentDay && !inSearch && (<Spacer date={message.formattedDate} />)}
+
         </>
     )
 }

@@ -85,7 +85,6 @@ const ContextMenu = ({ children }) => {
             window.removeEventListener("click", handleClick);
         };
     }, [getOptions, permissions, user, currentTextChannel, channels, currentChannel, mediaPlayerState]);
-    
 
     return (
         <div>
@@ -104,7 +103,7 @@ const ContextMenu = ({ children }) => {
                         borderRadius: "6px",
                         boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
                         zIndex: 1000,
-                        minWidth: 155,
+                        minWidth: 200,
                         padding: 5,
                         backgroundColor: 'var(--card-background-color)'
                         

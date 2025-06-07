@@ -1,0 +1,26 @@
+.addedBy {
+  display: flex;
+  align-items: center;
+  gap:5px;
+  height: 22px;
+}
+
+.addedByIndicator {
+  width: 25px;
+  height: 18px;
+  border-left: solid 2px;
+  border-color: var(--accent-color);
+  margin-left: 15px;
+}
+
+.bottom {
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom: solid 2px;
+  margin-top: -16px;
+}
+
+.top {
+  border-top-left-radius: var(--border-radius);
+  border-top: solid 2px;
+  margin-top: 16px;
+}

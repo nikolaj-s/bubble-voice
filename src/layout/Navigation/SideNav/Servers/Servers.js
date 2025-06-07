@@ -33,26 +33,26 @@ export const Servers = () => {
 
     const handleSwitchServer = (server_id) => {
     
-            if (currentServer) {
-                setHistory(prev => ({
-                    ...prev,
-                    [currentServer]: window.location.pathname
-                }))
+            // if (currentServer) {
+            //     setHistory(prev => ({
+            //         ...prev,
+            //         [currentServer]: window.location.pathname
+            //     }))
     
-                console.log(window.location.pathname)
-            }
+            //     console.log(window.location.pathname)
+            // }
     
-            handleCloseMobileMenu();
+            // handleCloseMobileMenu();
     
-            if (history[server_id]) {
+            // if (history[server_id]) {
     
-                navigate(history[server_id]);
+            //     navigate(history[server_id]);
     
-            } else {
+            // } else {
     
                 navigate(`/dashboard/server/${server_id}`);
     
-            }
+        //    }
     
     }
 

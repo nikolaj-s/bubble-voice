@@ -121,6 +121,13 @@
     width: calc(100% - 10px);
 }
 
+.sendButton {
+    position: absolute;
+    top: 50%;
+    right: 25px;
+    translate: 0% -50%;
+}
+
 @media screen and (max-width: 730px) {
     .menu button {
         width: 160px;

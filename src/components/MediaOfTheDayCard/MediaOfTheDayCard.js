@@ -14,6 +14,7 @@ import { getTimeUntil24Hours, triggerContext } from '../../lib/services/helperFu
 import { useDispatch } from 'react-redux';
 import { setExpandedImage } from '../../features/Media/ExpandedImage/expandedImageSlice';
 import { setOverlay } from '../../features/Overlay/overlaySlice';
+import { Subtitle } from '../ui/Titles/Subtitle/Subtitle';
 
 const MediaOfTheDayCard = ({ title = "Media of the day", query, tags = "", src, type = 'image', date, media = {}}) => {
 
@@ -70,20 +71,20 @@ const MediaOfTheDayCard = ({ title = "Media of the day", query, tags = "", src, 
       </div>
       <div className={styles.mediaFooter}>
         <div className={styles.mediaQuery}>
-          Media found related to {
+          Media found related to: {
           source.type === 'image' ?
           <span onClick={openSource}>source</span>
           :
           <strong>{query}</strong>
           }
         </div>
-        <div className={styles.updatesIn}><Clock strokeWidth={3} color='var(--text-color)' size={15} /> updates in: {untilUpdate}</div>
-        <div className={styles.mediaTags}>
-          {tags?.split(" ").slice(0, 3).map((tag, idx) => (
-            <span className={styles.mediaTag} key={idx}>#{tag}</span>
-          ))}
+        <div className={styles.updatesIn}><Clock strokeWidth={3} color='var(--text-color)' size={15} /><Subtitle> updates in: {untilUpdate}</Subtitle></div>
+          <div className={styles.mediaTags}>
+            {tags?.split(" ").slice(0, 3).map((tag, idx) => (
+              <span className={styles.mediaTag} key={idx}>#{tag}</span>
+            ))}
+          </div>
         </div>
-      </div>
     </div>
   );
 };

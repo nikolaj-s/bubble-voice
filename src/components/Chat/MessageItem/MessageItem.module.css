@@ -24,24 +24,46 @@
   .messageItem {
     display: flex;
     align-items: flex-start;
-    padding: 5px;
+    flex-direction: column;
+    padding: 5px var(--gap);
     border-left: 2px solid var(--accent-color);
     position: relative;
     flex-shrink: 0;
     min-height: 25px;
-    max-width: calc(100vw - 15px);
+    max-width: calc(100vw - 22px);
+    gap: var(--gap);
+  }
+
+  .messageWrapper {
+    display: flex;
+    align-items: flex-start;
   }
 
   .buttons {
     display: flex;
     align-items: center;
     position: absolute;
-    top: 2px;
-    right: 10px;
+    top: -10px;
+    right: 20px;
+    opacity: 0;
+    background-color: var(--primary-color);
+    border-radius: var(--border-radius);
+  }
+
+  .time {
+    opacity: 0 !important;
   }
 
   .messageItem:hover {
     background-color: var(--card-background-color);
+  }
+
+  .messageItem:hover .time {
+    opacity: 0.5 !important;
+  }
+
+  .messageItem:hover .buttons {
+    opacity: 1;
   }
   
   .userImageWrapper {
@@ -69,23 +91,24 @@
     margin-left: 12px;
     display: flex;
     flex-direction: column;
-    gap: 5px;
     max-width: calc(100% - 52px);
   }
   
   .userName {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     gap: 5px;
     width: auto;
     height: 18px;
     border-radius: 4px;
+    margin-bottom: 10px;
   }
 
   .userName h3 {
     margin: 0px;
     font-size: 16px;
     cursor: pointer;
+    line-height: 13px;
   }
 
   .userName h3:hover {

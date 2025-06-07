@@ -6,6 +6,7 @@ import { triggerContext } from '../../../lib/services/helperFunctions';
 import { MicroUserDisplay } from '../../ui/MicroUserDisplay/MicroUserDisplay';
 import { Subtitle } from '../../ui/Titles/Subtitle/Subtitle';
 import DateTimeDisplay from '../../ui/DateTimeDisplay/DateTimeDisplay';
+import { UserIndicator } from '../../UserIndicator/UserIndicator';
 
 export const MediaItem = ({ title, duration, thumbnail, src, url, inQueue, added_by, status, action = () => {}, position, context = {}, at }) => {
 
@@ -48,14 +49,7 @@ export const MediaItem = ({ title, duration, thumbnail, src, url, inQueue, added
           </div>
         )}
         </div>
-         {added_by && (
-          <div className={styles.addedBy} >
-            <div style={{marginLeft: typeof position === 'number' ? 52 : null}} className={styles.addedByIndicator} />
-            <Subtitle>added by:</Subtitle>
-            <MicroUserDisplay user_id={added_by} />
-            {at && (<DateTimeDisplay date={at} />)}
-          </div>
-        )}
+        <UserIndicator label={'added by:'} user_id={added_by} date={at} marginLeft={typeof position === 'number' ? 52 : null} />
     </div>
   </>
   );

@@ -3,6 +3,8 @@ import { useDropzone } from "react-dropzone";
 import imageCompression from "browser-image-compression";
 import { ImageUp } from "lucide-react";
 import styles from "./ImageDropZone.module.css"; // Ensure this file exists
+import { useDispatch } from "react-redux";
+import { triggerAlert } from "../../../../features/Alerts/alertsSlice";
 
 const ImageDropZone = ({ 
   existingImage, 
@@ -13,7 +15,10 @@ const ImageDropZone = ({
   dimensions = 800,
   objectFit = 'cover',
   parentFileSrc,
+  backgroundColor
 }) => {
+
+  const dispatch = useDispatch();
   
   const [preview, setPreview] = useState(existingImage || "");
 
@@ -50,7 +55,7 @@ const ImageDropZone = ({
       const file = acceptedFiles[0];
       const maxSize = dimensions;
       const options = {
-        maxSizeMB: 0.2,
+        maxSizeMB: 0.6,
         maxWidthOrHeight: maxSize,
         useWebWorker: true,
         fileType: 'image/webp'
@@ -65,9 +70,10 @@ const ImageDropZone = ({
         onImageChange(compressedFile);
       } catch (error) {
         console.error("Image compression error:", error);
+        dispatch(triggerAlert("Error Processing Image", 'error'))
       }
     },
-    [onImageChange, dimensions]
+    [onImageChange, dimensions, dispatch]
   );
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -86,7 +92,7 @@ const ImageDropZone = ({
     <div 
       {...getRootProps()} 
       className={styles.dropzone} 
-      style={{ width, height, borderRadius, flexShrink: 0 }}
+      style={{ width, height, borderRadius, flexShrink: 0, backgroundColor }}
     >
       <input {...getInputProps()} />
       {preview ? (

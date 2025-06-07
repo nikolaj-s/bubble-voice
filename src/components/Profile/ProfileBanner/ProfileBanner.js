@@ -5,14 +5,10 @@ import { ImageComponent } from "../../ui/Image/Image";
 const ProfileBanner = ({ user_banner, user_image, color }) => {
   return (
     <div className={styles.bannerContainer}>
-      <img 
-      src={user_banner} 
-      alt="User Banner" 
-      className={styles.bannerImage} 
-      style={{
-        borderColor: color || null
-      }}
-      />
+      <div className={styles.bannerImage}>
+        <ImageComponent src={user_banner} alt="User Banner" />
+      </div>
+     
       <div 
       style={{
         borderColor: color || null

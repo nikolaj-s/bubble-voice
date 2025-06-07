@@ -4,7 +4,7 @@ import { ChatContainer } from '../../../../components/Chat/ChatContainer'
 import { useDispatch, useSelector } from 'react-redux'
 import { sendMessage } from '../../../../features/Channel/TextChannel/Thunks/sendMessage'
 import { fetchMessages } from '../../../../features/Channel/TextChannel/Thunks/fetchMessages'
-import { setReplyTo, setTextChannelPos } from '../../../../features/Channel/TextChannel/textChannelSlice'
+import { setReplyTo, setTextChannelPos, setTextForTextChannel } from '../../../../features/Channel/TextChannel/textChannelSlice'
 import { ChannelBackground } from '../../../../components/ChannelBackground/ChannelBackground'
 import { setLastReadStatus } from '../../../../features/Notifications/notificationsSlice'
 import { updateLastReadStatus } from '../../../../features/Notifications/Thunks/updateLastReadStatus'
@@ -13,7 +13,7 @@ export const TextChannel = ({channel}) => {
 
     const dispatch = useDispatch();
 
-    const {messages, loading, loadingMore, error, sending, noMoreMessages, replyTo} = useSelector(state => state.textChannelSlice);
+    const {messages, loading, loadingMore, error, sending, noMoreMessages, replyTo, text} = useSelector(state => state.textChannelSlice);
 
     const [showBackground, toggeShowBackground] = React.useState(false);
 
@@ -27,8 +27,6 @@ export const TextChannel = ({channel}) => {
 
     const [image, setImage] = React.useState(null);
 
-    const [text, setText] = React.useState("");
-
     const channel_details = useSelector(state => state.channelsSlice.channels[channel]);
 
     const handleSend = () => {
@@ -41,7 +39,7 @@ export const TextChannel = ({channel}) => {
         
         setImage(null);
 
-        setText("");
+        dispatch(setTextForTextChannel(""));
 
     }
 
@@ -100,7 +98,7 @@ export const TextChannel = ({channel}) => {
             sending={sending} send={handleSend} 
             messages={messages} error={error} 
             loading={loading}  setImage={setImage} 
-            setValue={setText} value={text} 
+            setValue={(value) => {dispatch(setTextForTextChannel(value))}} value={text} 
             replyTo={replyTo} clearReplyTo={clearReplyTo}
             placeholder={`Post in ${channel_details?.channel_name}`}
             noMoreMessages={noMoreMessages}

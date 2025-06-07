@@ -22,6 +22,7 @@ export const createWidget = createAsyncThunk('createWidget/manageWidgetsSlice', 
                 break;
             case "single_image":
                 data.append('image', params.image);
+                data.append('color', params.color);
                 break;
             case "embed":
                 data.append('embed', params.embed);

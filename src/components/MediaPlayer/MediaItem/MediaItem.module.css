@@ -84,20 +84,3 @@
   flex-shrink: 0;
 }
 
-.addedBy {
-  display: flex;
-  align-items: center;
-  gap: var(--gap);
-  height: 22px;
-}
-
-.addedByIndicator {
-  width: 20px;
-  height: 18px;
-  border-bottom-left-radius: var(--border-radius);
-  border-bottom: solid 2px;
-  border-left: solid 2px;
-  border-color: var(--accent-color);
-  margin-left: 25px;
-  margin-top: -16px;
-}

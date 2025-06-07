@@ -1,4 +1,4 @@
-import { Bookmark, BookmarkCheck, ChevronRight, Cog, Copy, Download, FilePenLine, FolderPen, FolderPlus, Hash, History, ImageDown, LayoutDashboard, LayoutDashboardIcon, Link, ListPlus, ListX, Mic, Music2, Pause, Pencil, Pin, PinOff, Play, PlaySquare, Plus, Reply, Search, Send, Settings, Settings2, SkipForward, Trash2, Unplug, UserPen, Users, Video } from "lucide-react";
+import { Bookmark, BookmarkCheck, ChevronRight, ClipboardPaste, Cog, Copy, Download, FilePenLine, FolderPen, FolderPlus, Hash, History, ImageDown, ImageMinus, ImagePlus, LayoutDashboard, LayoutDashboardIcon, Link, ListPlus, ListX, Mic, Music2, Pause, Pencil, Pin, PinOff, Play, PlaySquare, Plus, Reply, Search, Send, Settings, Settings2, SkipForward, Trash2, Unplug, UserPen, Users, Video } from "lucide-react";
 import { useCallback } from "react";
 import { useDispatch, useSelector,} from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -6,7 +6,7 @@ import { copyToClipboard, downloadImage } from "../../lib/services/helperFunctio
 import { deleteMessage } from "../../features/Channel/TextChannel/Thunks/deleteMessage";
 import { closeOverlay, setOverlay } from "../../features/Overlay/overlaySlice";
 import { sendMessage } from "../../features/Channel/TextChannel/Thunks/sendMessage";
-import { setCurrentTextChannel, setReplyTo } from "../../features/Channel/TextChannel/textChannelSlice";
+import { setCurrentTextChannel, setReplyTo, setTextForTextChannel } from "../../features/Channel/TextChannel/textChannelSlice";
 import { setFilter, setQuery, setSimilarImageSrc } from "../../features/Search/searchSlice";
 import { globalSearch } from "../../features/Search/Thunks/globalSearch";
 import { setChannelToEdit } from "../../features/Channel/editChannel/editChannelSlice";
@@ -29,6 +29,8 @@ import { toggleUsingPushToTalk } from "../../features/Channel/MediaControl/media
 import { setChannelToViewWidgetsOf } from "../../features/Widgets/widgetsSlice";
 import { expandVideo } from "../../features/Media/ExpandedVideo/expandedVideoSlice";
 import { clearExpandedImage } from "../../features/Media/ExpandedImage/expandedImageSlice";
+import { getClipboardText } from "../../lib/services/getClipboardText";
+import { pasteIntoInputById } from "../../lib/services/pasteIntoInput";
 
 export const useContextMenuOptions = () => {
 
@@ -299,6 +301,19 @@ export const useContextMenuOptions = () => {
 
                 const root = `/dashboard/server/${channel.server_id}`;
 
+                options.push({
+                    label: "View Widgets",
+                    icon: <LayoutDashboard color="var(--text-color)" />,
+                    onClick: () => {
+
+                        dispatch(setChannelToViewWidgetsOf(channel._id));
+
+                        dispatch(setOverlay('widgets'));
+
+                    },
+                    type: 'button'
+                })
+
                 if (channel.channel_type === "voice") {
                     
                 } else {
@@ -387,7 +402,7 @@ export const useContextMenuOptions = () => {
                 })
 
                 options.push({
-                    label: data.message.pinned ? "Unpin" : "Pin",
+                    label: (data.message.pinned ? "Unpin" : "Pin") + ' Message',
                     onClick: () => {dispatch(pinMessage(data.message))},
                     type: 'button',
                     icon: data.message.pinned ? <PinOff color="var(--text-color)" /> : <Pin color="var(--text-color)" />
@@ -709,19 +724,23 @@ export const useContextMenuOptions = () => {
             }
 
             if (data.room || data.appSubmenu) {
+
+                options.push({
+                    label: hideChannelBackgrounds ? 'Show Channel Background' : "Hide Channel Background",
+                    type: 'button',
+                    icon: hideChannelBackgrounds ? <ImagePlus color="var(--text-color)" /> : <ImageMinus color="var(--text-color)" />,
+                    onClick: () => {
+                        dispatch(toggleAppearanceSetting('hideChannelBackgrounds'))
+                    }
+                })
+
                 if (currentVoiceChannel) {
                     options.push({
                         label: hideNonVideoUsers ? 'Show Non Video Users' : 'Hide Non Video Users',
                         type: 'button',
                         onClick: () => {dispatch(toggleVoiceChannelOptions('hideNonVideoUsers'))}
                     })
-                    options.push({
-                        label: hideChannelBackgrounds ? 'Show Channel Background' : "Hide Channel Background",
-                        type: 'button',
-                        onClick: () => {
-                            dispatch(toggleAppearanceSetting('hideChannelBackgrounds'))
-                        }
-                    })
+                    
                     options.push({
                         label: mediaPlayerState.hideMediaPlayer ? 'Show Media Player' : "Hide Media Player",
                         type: 'button',
@@ -745,6 +764,27 @@ export const useContextMenuOptions = () => {
                         })
                     }
                 }
+            }
+
+            if (data.input) {
+                options.push({
+                    label: "Paste",
+                    icon: <ClipboardPaste color="var(--text-color)" />,
+                    type: "button",
+                    onClick: () => {
+                        getClipboardText().then(res => {
+                            if (res.error) return dispatch(triggerAlert("Not able to paste", 'error'));
+                            
+                            if (data.input.id === 'chat-input') {
+                                dispatch(setTextForTextChannel(res));
+                            }
+
+                            if (data.input.id === 'search') {
+                                dispatch(setQuery(res));
+                            }
+                        })
+                    }
+                })
             }
 
             if (data.channel || data.room || data.controlBar || data.appSubmenu) {

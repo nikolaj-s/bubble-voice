@@ -15,6 +15,7 @@
     height: 150px;
     object-fit: cover;
     border-radius: var(--border-radius);
+    overflow: hidden;
   }
   
   .profileWrapper {
@@ -26,7 +27,7 @@
     height: 80px;
     border-radius: 50%;
     overflow: hidden;
-    border: 10px solid var(--background-color);
+    border: 10px solid var(--card-background-color);
     background: var(--secondary-color);
   }
   

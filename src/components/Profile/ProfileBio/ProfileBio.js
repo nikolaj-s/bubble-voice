@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import styles from './ProfileBio.module.css';
 import { useDispatch } from 'react-redux';
 import { setExpandedImage } from '../../../features/Media/ExpandedImage/expandedImageSlice';
-import { setOverlay } from '../../../features/Overlay/overlaySlice';
 
 const ProfileBio = ({ bio = "" }) => {
 
@@ -19,8 +18,6 @@ const ProfileBio = ({ bio = "" }) => {
 
   const expandImage = (image) => {
     dispatch(setExpandedImage({image}));
-
-    dispatch(setOverlay('expandImage'));
   }
 
   return (

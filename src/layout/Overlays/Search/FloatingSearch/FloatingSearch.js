@@ -64,6 +64,7 @@ const FloatingSearch = ({filter, filters = [], loading, setFilter = () => {}, se
 
   return (
     <div
+      data-context={JSON.stringify({type: 'input', id: "search"})}
       onClick={focusInput}
       className={`${styles.searchBox}`}
     >
@@ -75,7 +76,7 @@ const FloatingSearch = ({filter, filters = [], loading, setFilter = () => {}, se
         placeholder="Search..."
         className={styles.searchInput}
         onChange={(e) => {setValue(e.target.value)}}
-        
+        maxLength={128}
         value={value}
         onKeyDown={(e) => {e.stopPropagation()}}
         onKeyUp={(e) => {e.stopPropagation(); handleSearch(e);}}// Expand on focus

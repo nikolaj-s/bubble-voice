@@ -30,18 +30,18 @@
   
   .navButton {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 0px;
+    height: 100%;
     background: rgba(0, 0, 0, 0.4);
     border: none;
     padding: 6px;
-    border-radius: 50%;
     cursor: pointer;
     z-index: 2;
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 80px;
   }
   
   .navButton:hover {
@@ -49,11 +49,11 @@
   }
   
   .left {
-    left: 8px;
+    left: 0px;
   }
   
   .right {
-    right: 8px;
+    right: 0px;
   }
   
   .counter {

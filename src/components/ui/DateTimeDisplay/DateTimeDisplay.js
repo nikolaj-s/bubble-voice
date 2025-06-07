@@ -1,5 +1,7 @@
 
-import { Subtitle } from "../Titles/Subtitle/Subtitle";
+
+
+import styles from './DateTimeDisplay.module.css'
 
 // Helper to pad numbers with leading zeros
 const pad = (num) => num.toString().padStart(2, "0");
@@ -17,9 +19,9 @@ export const DateTimeDisplay = ({ date, className = "" }) => {
   const minute = pad(d.getMinutes());
 
   return (
-    <Subtitle>
-      {day} / {month} / {year} — {hour}:{minute}
-    </Subtitle>
+    <p className={styles.time}>
+      {day}-{month}-{year}  {hour}:{minute}
+    </p>
   );
 };
 

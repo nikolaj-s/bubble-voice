@@ -1,7 +1,7 @@
 import styles from './Subtitle.module.css'
 
-export const Subtitle = ({children, margin}) => {
+export const Subtitle = ({children, margin, className}) => {
     return (
-        <p style={{margin}} className={styles.subtitle}>{children}</p>
+        <p style={{margin}} className={`${styles.subtitle} ${className}`}>{children}</p>
     )
 }
