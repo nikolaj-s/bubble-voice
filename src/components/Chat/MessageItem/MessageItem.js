@@ -7,7 +7,7 @@ import LinkComponent from '../../LinkComponent/LinkComponent';
 import { TimeDisplay } from '../../TimeDisplay/TimeDisplay';
 import Spacer from './Spacer/Spacer';
 import IconButton from '../../ui/Buttons/IconButton/IconButton';
-import { Ellipsis } from 'lucide-react';
+import { Ellipsis, Reply } from 'lucide-react';
 import { triggerContext } from '../../../lib/services/helperFunctions';
 
 import { LongPressGestureWrapper } from '../../ui/Gestures/LongPressGestureWrapper';
@@ -17,7 +17,7 @@ import { TextBlock } from './TextBlock/TextBlock';
 import { UserBlock } from './UserBlock/UserBlock';
 import { ReplyBlock } from './ReplyBlock/ReplyBlock';
 
-export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inSearch = false, isReply}) => {
+export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inSearch = false, isReply, reply = () => {}}) => {
 
     const isDifferentDay = prevMessage?.formattedDate !== message?.formattedDate;
 
@@ -43,8 +43,15 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
                         {!isReply && 
                         <div className={styles.buttons}>
                             <IconButton 
+                            Icon={<Reply color='var(--text-color)' />}
+                            title={'Reply'}
+                            position='bottom'
+                            onClick={() => {reply(message)}}
+                            />
+                            <IconButton 
                             Icon={<Ellipsis color='var(--text-color)' />}
                             onClick={openCtx}
+                            
                             title={'Options'}
                             position='bottom'
                             />

@@ -10,7 +10,7 @@ const MessageList = ({
   position = 0, messages = [], loadMoreMessages = () => {}, 
   loading, loadingMore, sending, users = {}, 
   returnPos = () => {}, name,
-  noMoreMessages
+  noMoreMessages, reply
 }) => {
 
   const listRef = useRef(null);
@@ -127,7 +127,7 @@ const MessageList = ({
           <MessageItemSkeleton key={i} hasImage={i % 3 === 0} />
         ))
         : messages.map((msg, index) => (
-           <MessageItem users={users} prevMessage={index === messages.length - 1 ? {} : messages[index + 1]} message={msg} key={msg.message_id} />
+           <MessageItem reply={reply} users={users} prevMessage={index === messages.length - 1 ? {} : messages[index + 1]} message={msg} key={msg.message_id} />
         ))}
         {noMoreMessages && (<FeedStartMessage channelName={name}  />)}
         {loadingMore && (

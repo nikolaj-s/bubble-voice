@@ -21,7 +21,7 @@ export const ChatContainer = ({
     returnPos, position, replyTo, clearReplyTo, 
     placeholder = 'Type a message...',
     name, noMoreMessages,
-    disableInput
+    disableInput, reply
 }) => {
 
     const [isDraggingImage, setIsDraggingImage] = React.useState();
@@ -33,8 +33,8 @@ export const ChatContainer = ({
         className={styles.container} 
         onDragEnter={() => {setIsDraggingImage(true)}}
         >
-
             <MessageList 
+            reply={reply}
             position={position} returnPos={returnPos} 
             users={users} loading={loading}  
             messages={messages} sending={sending} 

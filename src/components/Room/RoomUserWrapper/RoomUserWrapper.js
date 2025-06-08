@@ -18,7 +18,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
 
     const textChannelOpen = useSelector(state => state.textChannelSlice.currentTextChannel);
 
-    const [expanded, setExpanded] = React.useState("");
+    const [expanded, setExpanded] = React.useState(null);
 
     const hideNonVideoUsers = useSelector(state => state.voiceChannelSlice.hideNonVideoUsers);
 
@@ -29,62 +29,92 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
     const ratio = 9 / 16;
 
     React.useEffect(() => {
-        
-        const parent = document.getElementById('user-streams-wrapper');
+            const parent = document.getElementById('user-streams-wrapper');
+            if (!parent) return;
 
-        const c_count = Array.from(parent.children);
+            const children = Array.from(parent.children).filter(c => !c.hidden);
 
-        if (expanded !== "") {
-            for (const child of c_count) {
-                if (child.id === expanded) {
-                    let wDimension = parent.offsetWidth;
-                    let hDimension = parent.offsetHeight;
-                    let hConstraints = c_count.length === 1 ? 0 : c_count[0].id === expanded || c_count[c_count.length - 1].id === expanded ? 108 : 208;
+            // Calculate available space for expanded child
+            if (expanded) {
+                const expandedChild = children.find(child => child.id === expanded);
+                const nonExpandedChildren = children.filter(child => child.id !== expanded);
 
-                    let height = hDimension - hConstraints;
-                    let max = 0;
-                    let i = 1;
+                const parentWidth = parent.offsetWidth;
+                const parentHeight = parent.offsetHeight;
 
-                    while (i < 5000) {
-                        let a = area(i, height, wDimension, [0]);
-                        if (a === false) {
-                            max = i - 1;
-                            break;
-                        }
-                        i++;
-                    }
+                // How much space do the other items need?
+                const reservedWidth = nonExpandedChildren.length * 100; // 100px width per side-by-side? (adjust as needed)
+                const reservedHeight = nonExpandedChildren.length * 100; // 100px height if stacked (see below)
 
-                    max = max - (2 * 2);
-                    const v = child.querySelector('video');
+                // We'll assume you want the others at the BOTTOM, so reserve height
+                const availableHeight = Math.max(parentHeight - (nonExpandedChildren.length > 0 ? 100 : 0), 0);
+                const availableWidth = parentWidth;
 
-                    if (v) {
-                        v.style.objectFit = 'contain';
-                    }
+                // Aspect ratio logic
+                if (expandedChild) {
+                const context = JSON.parse(expandedChild.getAttribute('data-context'));
+                let width = availableWidth;
+                let height = availableHeight;
 
-                    child.style.width = `100%`;
-                    child.style.margin = '0px';
-                    child.style.height = `${(max * ratio)}px`;
-                    child.style.maxHeight = `100%`;
-                    child.style.maxWidth = `100%`;
-                    child.style.borderRadius = '0px';
-
+                // Fit the aspect ratio box inside the available area
+                const wByAR = height * (context.aspectRatio || (16 / 9));
+                const hByAR = width / (context.aspectRatio || (16 / 9));
+                
+                if (wByAR <= width) {
+                    width = wByAR;
                 } else {
-                    const v = child.querySelector('video');
-                    if (v) {
-                        v.style.objectFit = null;
+                    height = hByAR;
+                }
+                
+
+                // Apply styles to expanded child
+                expandedChild.style.width = `100%`;
+                expandedChild.style.height = `${height}px`;
+                expandedChild.style.maxWidth = `100%`;
+                expandedChild.style.maxHeight = `100%`;
+                expandedChild.style.margin = '0px';
+                expandedChild.style.borderRadius = '0px';
+                expandedChild.style.gridColumn = '1 / -1';
+                expandedChild.style.gridRow = '1';
+                const v = expandedChild.querySelector('video');
+                    if (v) v.style.objectFit = 'contain';
+                }
+
+                const numberofColums = Math.floor(parentWidth / 100);
+               
+                // All other (non-expanded) children: 100x100
+                let column = 1;
+
+                for (const child of nonExpandedChildren) {
+
+                    if (column === numberofColums) {
+                        column = 1;
                     }
+                
+                    child.style.gridRow = 2;
+
+                    child.style.gridColumn = column;
+
+                    child.style.width = `100px`;
+
+                    child.style.height = `100px`;
+
+                    child.style.margin = '0px';
 
                     child.style.borderRadius = null;
-                    child.style.margin = '0px';
-                    child.style.width = '100px';
-                    child.style.height = '100px';
+
+                    const v = child.querySelector('video');
+
+                    if (v) v.style.objectFit = 'cover';
+
+                    column += 1;
                 }
+            } else {
+                handleScaling();
             }
-        } else {
-            handleScaling();
-        }
-    // eslint-disable-next-line   
+    // eslint-disable-next-line
     }, [expanded, hideNonVideoUsers, hideUsers, textChannelOpen, hideMediaPlayer]);
+
 
     React.useEffect(() => {
         let observer;
@@ -95,7 +125,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
             };
 
             const el = document.getElementById('user-streams-wrapper');
-            const config = { childList: true, subtree: true };
+            const config = { childList: true, subtree: false };
 
             observer = new MutationObserver(handleScaling);
             observer.observe(el, config);
@@ -135,7 +165,10 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
 
     const handleScaling = (resize = false) => {
         try {
-            if (expanded !== "" && !resize) return;
+            console.log(`resizing ${resize}`)
+            if (expanded && !resize) return;
+
+            if (resize) setExpanded(null);
 
             const parent = document.getElementById('user-streams-wrapper');
 
@@ -168,7 +201,10 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
                 c.style.position = null;
                 c.style.objectFit = 'contain';
                 c.style.borderRadius = null;
-
+                c.style.gridRow = null;
+                c.style.gridRow = null;
+                c.style.maxWidth = `960px`;
+                c.style.maxHeight = '540px'
                 const v = c.querySelector('video');
                 if (v) {
                     v.style.objectFit = null;
@@ -181,7 +217,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
 
     const handleStreamExpansion = (id) => {
         if (id === expanded) {
-            setExpanded("");
+            setExpanded(null);
         } else {
             setExpanded(id);
         }
@@ -190,22 +226,25 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
     return (
         <>
             <div
-                className={styles.container}
+                className={`${styles.container} ${expanded ? styles.expandedContainer : null}`}
                 id='user-streams-wrapper'
                 style={{
                     overflowY:'hidden',   // Allow vertical scrolling if needed
-                    height: '100%',      // Ensure the parent has a full height to manage child sizes
-                    display: 'flex',     // Use flexbox to control the children layout
-                    flexWrap: 'wrap',    // Allow wrapping of child components
+                    height: '100%',      // Allow wrapping of child components
                     justifyContent: 'center'  // Center the children horizontally
                 }}
-            >
-                {!users ? null :
-                    users.flatMap(user => (
-                        [<RoomUserCard action={handleStreamExpansion} key={user.user_id} {...user} />, user.stream ? <UserStreamSource action={handleStreamExpansion}  key={`stream-src-for-${user.user_id}`} stream={user.stream} user_id={user.user_id} /> : null]
-                    ))
-                }
-                <MediaPlayerStreamSource expand={handleStreamExpansion} />
+            >   
+                {users.map(user => (
+                    <>
+                   {user.type === 'user' ?
+                    <RoomUserCard key={user.id} {...user} action={handleStreamExpansion} />
+                    : user.type === 'stream' ?
+                    <UserStreamSource action={handleStreamExpansion} key={user.id} {...user} /> :
+                    null
+                    }
+                    </>
+                ))}
+                <MediaPlayerStreamSource expanded={expanded === 'media-player-stream-source'} expand={handleStreamExpansion} /> 
                 {disable_streams && (<RoomPlaceholder />)}
             </div>
         </>

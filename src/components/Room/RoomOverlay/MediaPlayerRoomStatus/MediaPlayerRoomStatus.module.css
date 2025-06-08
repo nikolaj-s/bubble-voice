@@ -1,0 +1,12 @@
+
+.container {
+    justify-content: space-between;
+    margin-bottom: 5px;
+    transition: 0.2s ease-in-out;
+    background-color: var(--card-background-color);
+    white-space: nowrap;
+}
+
+.currentlyPlaying {
+    width: 100%;
+}

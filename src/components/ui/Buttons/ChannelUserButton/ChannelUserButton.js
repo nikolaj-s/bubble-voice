@@ -15,10 +15,13 @@ export const ChannelUserButton = ({user_id, active, action = () => {}}) => {
         
     }
 
+    const user = useSelector(state => state.serverUsersSlice.users[user_id]) || {};
+        
+    const isWebcamDisabled = useSelector(state => state.userStreamStateSlice.streams[`${user._id}-webcam`]?.disabled) || false
+
     try {
         
-        const user = useSelector(state => state.serverUsersSlice.users[user_id]);
-        
+       
         return (
             <div 
             onDragStart={onDragStart}
@@ -34,7 +37,7 @@ export const ChannelUserButton = ({user_id, active, action = () => {}}) => {
                         <ImageComponent src={user.user_image} />
                     </span>
                     <h3>{user.display_name}</h3> 
-                    <MediaStatusIcons {...user?.channel_status} />
+                    <MediaStatusIcons {...user?.channel_status} webcamDisabled={isWebcamDisabled} />
                 </div>
                 {user?.channel_status?.streamDetails && (
                 <div className={styles.streamStatus}>

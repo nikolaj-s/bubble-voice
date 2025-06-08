@@ -27,11 +27,13 @@ import StreamOverlay from '../../ui/StreamOverlay/StreamOverlay';
 import IconButton from '../../ui/Buttons/IconButton/IconButton';
 import { Ellipsis } from 'lucide-react';
 
-export const MediaPlayerStreamSource = ({expand}) => {
+export const MediaPlayerStreamSource = ({expand, expanded}) => {
 
     const dispatch = useDispatch();
 
     const playerRef = React.useRef();
+
+    const [aspectRatio, setAspectRatio] = React.useState(null);
 
     // eslint-disable-next-line
     const [localTime, setLocalTime] = React.useState(0);
@@ -47,6 +49,15 @@ export const MediaPlayerStreamSource = ({expand}) => {
         dispatch(incrementCurrentTime(value.playedSeconds));
     }
 
+    const checkVideoAspectRatio = () => {
+      const container = playerRef.current?.getInternalPlayer ? playerRef.current.getInternalPlayer() : null;
+      if (container && container.videoWidth && container.videoHeight) {
+        setAspectRatio(container.videoWidth / container.videoHeight);
+      } else {
+        setAspectRatio(16 /9)
+      }
+    };
+    
     React.useEffect(() => {
         if (!playerRef.current) return;
     
@@ -59,11 +70,11 @@ export const MediaPlayerStreamSource = ({expand}) => {
         }
       }, [currentTime]);
 
-    if (!currentlyPlaying) return null;
+    if (!currentlyPlaying && !expanded) return null;
 
     return (
         <div 
-        data-context={JSON.stringify({...currentlyPlaying, type: 'mediaplayer' })} 
+        data-context={JSON.stringify({...currentlyPlaying, type: 'mediaplayer', aspectRatio})} 
         style={{display: hideMediaPlayer ? 'none' : null, backgroundColor: color,}} 
         hidden={hideMediaPlayer} id='media-player-stream-source' onClick={() => {expand('media-player-stream-source')}} className={styles.container}>
             <LongPressGestureWrapper width={'100%'} height={'100%'} onTouchContext={(e) => {triggerContext(e, 'media-player-stream-source')}}>
@@ -75,6 +86,7 @@ export const MediaPlayerStreamSource = ({expand}) => {
                     autoPlay
                     volume={volume}
                     onProgress={handleProgress}
+                    onReady={checkVideoAspectRatio}
                     width={'100%'}
                     height={'100%'}
                     url={currentlyPlaying?.url?.includes('youtu') || currentlyPlaying?.url?.includes('vimeo') ? currentlyPlaying?.url : currentlyPlaying?.src || currentlyPlaying?.url}

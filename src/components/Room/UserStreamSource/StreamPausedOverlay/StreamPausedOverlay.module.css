@@ -15,7 +15,6 @@
 }
 
 .card {
-  background: var(--card-background-color, #1d2d44);
   border-radius: 18px;
   padding: 30px 34px 24px 34px;
   box-shadow: 0 4px 24px 0 rgba(18,26,34,0.11);
@@ -62,6 +61,6 @@
   display: block;
   margin-top: 7px;
   font-size: 0.97rem;
-  opacity: 0.67;
-  color: var(--secondary-color, #4e8e8b);
+  opacity: 0.75;
+  color: var(--text-color);
 }

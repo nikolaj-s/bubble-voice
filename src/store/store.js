@@ -2,6 +2,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import {FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER} from 'redux-persist';
+import { userStreamPersistMiddleware } from './Middleware/userStreamPersistMiddleware';
 
 const reducers = {};
 
@@ -22,7 +23,7 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }),
+    }).concat(userStreamPersistMiddleware),
 })
 
 export default store;

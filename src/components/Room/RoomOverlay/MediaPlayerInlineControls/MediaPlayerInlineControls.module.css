@@ -1,16 +1,8 @@
 
-.container {
-    justify-content: space-between;
-    margin-bottom: 5px;
-    transition: 0.2s ease-in-out;
-    background-color: var(--card-background-color);
-    white-space: nowrap;
-}
 .buttonWrapper {
     display: flex;
     align-items: center;
-}
-
-.currentlyPlaying {
-    width: 100%;
+    background-color: var(--card-background-color);
+    padding: var(--gap);
+    border-radius: var(--border-radius);
 }

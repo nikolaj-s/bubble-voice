@@ -3,26 +3,21 @@ import React from 'react';
 
 import styles from '../Room.module.css';
 import IconButton from '../../ui/Buttons/IconButton/IconButton';
-import { Ellipsis, ImageMinus, VideoOff, Mic, MicOff, Unplug, Video, HeadphoneOff, Headphones, Maximize } from 'lucide-react';
+import { Ellipsis, VideoOff, Mic, MicOff, Unplug, Video, HeadphoneOff, Headphones, Maximize } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router';
 import { PillSpacer } from '../../ui/Spacers/PillSpacer/PillSpacer';
 import { useMediaControls } from '../../../context/MediaControlsContext';
 import { KeybindToolTip } from '../../ui/Titles/KeybindToolTip/KeybindToolTip';
-import { MediaPlayerControls } from './MediaPlayerControls/MediaPlayerControls';
 import { MediaPlayerInlineControls } from './MediaPlayerInlineControls/MediaPlayerInlineControls';
 import { triggerContext } from '../../../lib/services/helperFunctions';
 import { setFullscreen } from '../../../features/Ui/uiSlice';
 import { ErrorToolTip } from '../../ui/ErrorToolTip/ErrorToolTip';
 import { setCurrentVoiceChannel } from '../../../features/Channel/VoiceChannel/voiceChannelSlice';
+import { MediaPlayerRoomStatus } from './MediaPlayerRoomStatus/MediaPlayerRoomStatus';
 
 export const RoomOverlay = () => {
 
-    const {serverID} = useParams();
-
     const dispatch = useDispatch();
-
-    const navigate = useNavigate();
 
     const {isWebcamOn, isMicrophoneMuted, isAudioMuted, isScreenSharing, handleToggleAudio, handleToggleMicrophone, handleToggleWebcam, webcamError, microphoneError, audioError } = useMediaControls();
 
@@ -87,9 +82,9 @@ export const RoomOverlay = () => {
                 />
             </div>
             <div className={styles.bottomButtons}>
-                <MediaPlayerInlineControls />
+                <MediaPlayerRoomStatus />
                 <div className={styles.wrapper}>
-                    <MediaPlayerControls />
+                    <MediaPlayerInlineControls />
                     <IconButton 
                     padding={15}
                     borderRadius={"50%"}

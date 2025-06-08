@@ -13,6 +13,7 @@ import { useContextMenuOptions } from "./getOptions";
 import ContextMenuButtonWithSubmenu from "../../components/ui/Buttons/ContextButtons/ContextMenuButtonWithSubMenu";
 
 import styles from './ContextMenuWrapper.module.css'
+import { LineSpacer } from "../../components/ui/Spacers/LineSpacer/LineSpacer";
 
 const ContextMenu = ({ children }) => {
 
@@ -131,6 +132,9 @@ const ContextMenu = ({ children }) => {
                             : option.type === 'range' ?
                                 <ContextRangeInput zIndex={12} top={index === 0} bottom={index=== contextMenu.options.length - 1}  label={option.label} onChange={option.onChange} value={option.value} max={option.max} min={option.min} step={option.step} />
                             : 
+                            option.type === 'spacer' ?
+                                <LineSpacer />
+                            :
                             null
                             }
                         </div>

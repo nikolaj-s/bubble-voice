@@ -37,6 +37,7 @@
   .messageWrapper {
     display: flex;
     align-items: flex-start;
+    width: 100%;
   }
 
   .buttons {
@@ -46,8 +47,11 @@
     top: -10px;
     right: 20px;
     opacity: 0;
+    z-index: 5;
+    height: 32px;
     background-color: var(--primary-color);
     border-radius: var(--border-radius);
+    border: solid 1px var(--accent-color);
   }
 
   .time {
@@ -134,7 +138,6 @@
   }
   
   .imageBlock {
-    max-height: 350px;
     max-width: calc(100%);
     width: auto;
     border-radius: 10px;
@@ -153,3 +156,8 @@
     margin-top: 6px;
   }
   
+  .lazyImageContainer {
+    max-height: 350px;
+    max-width: calc(100%);
+    overflow: hidden;
+  }

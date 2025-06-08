@@ -10,7 +10,7 @@ import StreamOverlay from "../../ui/StreamOverlay/StreamOverlay";
 import IconButton from "../../ui/Buttons/IconButton/IconButton";
 import { Ellipsis } from "lucide-react";
 
-export const RoomUserCard = ({ user_id, webcam, action }) => {
+export const RoomUserCard = ({ user_id, webcam, action, id }) => {
 
     const user = useSelector(state => state.serverUsersSlice.users[user_id]);
 
@@ -21,6 +21,8 @@ export const RoomUserCard = ({ user_id, webcam, action }) => {
     const webcamElementRef = useRef({});
 
     const channel_status = user?.channel_status;
+
+    const userStreamState = useSelector(state => state.userStreamStateSlice.streams);
 
     // 🔹 Function to remove video elements for webcam
     const removeWebcamElement = (webcam) => {
@@ -62,7 +64,7 @@ export const RoomUserCard = ({ user_id, webcam, action }) => {
                 }
             }
         }
-
+       
         removeWebcamElement(webcam?.id);
         // Cleanup function when component unmounts or when consumers change
         return () => {
@@ -77,11 +79,12 @@ export const RoomUserCard = ({ user_id, webcam, action }) => {
 
     return (
         <div 
-        data-context={JSON.stringify({...user, type: 'user'})}
-        onClick={(e) => { action(`room-user-card-${user_id}`) }} 
-        id={`room-user-card-${user_id}`} 
+        data-context={JSON.stringify({...user, type: 'user', webcam: webcam?.id})}
+        onClick={(e) => { action(id) }} 
+        id={id} 
         style={{
-            display: hideNonVideoUsers && !channel_status?.isWebcamOn ? 'none' : null
+            display: hideNonVideoUsers && !channel_status?.isWebcamOn ? 'none' : null,
+            zIndex: user.voiceActive ? 10 : null
         }}
         hidden={hideNonVideoUsers && !channel_status?.isWebcamOn}
         className={styles.container}>
@@ -100,24 +103,26 @@ export const RoomUserCard = ({ user_id, webcam, action }) => {
                     }}
                     className={styles.overlay} />
                     <div className={styles.userStatus}>
-                        <MediaStatusIcons {...channel_status} />
+                        <MediaStatusIcons 
+                        {...channel_status} 
+                        webcamDisabled={userStreamState[`${user_id}-webcam`]?.disabled} 
+                        />
                        
                     </div>
-                    <div className={styles.streamStatus}>
-                         {channel_status?.streamDetails && (<MiniStreamIndicator hide_title={true} {...channel_status?.streamDetails} />)}
-                    </div>
                     {/* Audio elements will be appended here */}
-                    <div ref={webcamContainerRef} className={styles.webcamSource} ></div>
+                    <div ref={webcamContainerRef} className={styles.webcamSource} style={{display: userStreamState[`${user_id}-webcam`]?.disabled ? 'none' : null}} ></div>
                 </div>
        
             </LongPressGestureWrapper>
             <StreamOverlay name={user.display_name} button={
+            <>
             <IconButton
             Icon={<Ellipsis color="var(--text-color)" />}
-            onClick={(e) => {triggerContext(e, `room-user-card-${user_id}`)}}
+            onClick={(e) => {triggerContext(e, id)}}
             title={'More'}
             position="bottom"
             />
+            </>
         } />
         </div>
     );

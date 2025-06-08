@@ -12,6 +12,7 @@ import { RoomOverlay } from './RoomOverlay/RoomOverlay';
 import { usePushToTalk } from '../../hooks/usePushToTalk';
 import { useMicrophoneToggle } from '../../hooks/useMicrophoneToggle';
 import { useScreenShare } from '../../hooks/useScreenShare';
+import { UserStreamStateProvider } from '../../providers/UserStreamStateProvider/UserStreamStateProvider';
 
 export const Room = () => {
     
@@ -122,17 +123,31 @@ export const Room = () => {
             // Find all consumers that match the current user's user_id
             const webcam = user === account_id ? producers.get('webcam') : Array.from(consumers.values()).filter(consumer => consumer.user_id === user && consumer.appData.type === 'webcam')[0];
             
-            const stream = user === account_id ? producers.get('screen') : Array.from(consumers.values()).filter(consumer => consumer.user_id === user && consumer.appData.type === 'screen')[0]
+            //const stream = user === account_id ? producers.get('stream') : Array.from(consumers.values()).filter(consumer => consumer.user_id === user && consumer.appData.type === 'stream')[0]
             // Return user with the matched consumers
-            return { user_id: user, webcam, stream };
+            return { user_id: user, webcam, type: 'user', id: `room-user-card-${user}`};
         });
 
         return updatedUsers;
         
     }, [users, consumers, producers, disable_streams, account_id]);
+
+    const streams = React.useMemo(() => {
+
+        let arr = [];
+
+        const stream = producers.get('stream') ? {stream: producers.get('stream'), type: 'stream', id: `stream-src-for-${account_id}`, user_id: account_id} : null;
+
+        const streams = Array.from(consumers.values()).filter(consumer => consumer.appData.type === 'stream').map(c => ({stream: c, type: 'stream', user_id: c.user_id, id: `stream-src-for-${c.user_id}`}));
+
+        arr = streams;
+
+        if (stream) arr.unshift(stream);
+
+        return arr;
+    }, [consumers, producers, account_id])
    
     return (
-        
             <div 
             style={{
                 backgroundColor: useBlackVoiceChannelBackground ? 'black' : null,
@@ -140,9 +155,10 @@ export const Room = () => {
             id='voice-channel'
             data-context={JSON.stringify({type: 'room'})}
             className={`${styles.container}`}>
-                <RoomUserWrapper users={combinedUsers} disable_streams={disable_streams} />
+                <RoomUserWrapper users={[...combinedUsers, ...streams]} disable_streams={disable_streams} />
                 <ChannelBackground channel_background={channel_background} />
                 <RoomOverlay />
+                <UserStreamStateProvider consumers={consumers} />
             </div>
     );
 };

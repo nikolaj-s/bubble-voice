@@ -104,6 +104,7 @@ export const TextChannel = ({channel}) => {
             noMoreMessages={noMoreMessages}
             name={channel_details?.channel_name}
             disableInput={!permissions?.user_can_post_in_text_channels}
+            reply={(message) => {dispatch(setReplyTo(message))}}
             />
             {showBackground ? <ChannelBackground {...channel_details} /> : null}
         </TextChannelProvider>

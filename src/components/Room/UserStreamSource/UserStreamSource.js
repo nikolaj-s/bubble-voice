@@ -5,11 +5,17 @@ import { useSelector } from "react-redux";
 import { MicroUserDisplay } from "../../ui/MicroUserDisplay/MicroUserDisplay";
 import { Subtitle } from "../../ui/Titles/Subtitle/Subtitle";
 import StreamPausedOverlay from "./StreamPausedOverlay/StreamPausedOverlay";
+import StreamOverlay from "../../ui/StreamOverlay/StreamOverlay";
+import IconButton from "../../ui/Buttons/IconButton/IconButton";
+import { Ellipsis } from "lucide-react";
+import { triggerContext } from "../../../lib/services/helperFunctions";
 
-const UserStreamSource = ({ user_id, stream, action }) => {
+const UserStreamSource = ({ user_id, stream, action, id }) => {
     const videoRef = useRef(null);
 
     const [loading, setLoading] = useState(true);
+
+    const [trackSettings, setTrackSettings] = useState({});
 
     const user = useSelector(state => state.serverUsersSlice.users[user_id]);
 
@@ -26,6 +32,8 @@ const UserStreamSource = ({ user_id, stream, action }) => {
 
         if (video && stream) {
             const track = stream.track;
+            
+            setTrackSettings(track.getSettings());
 
             video.srcObject = new MediaStream([track]);
 
@@ -50,6 +58,8 @@ const UserStreamSource = ({ user_id, stream, action }) => {
 
             setLoading(false);
 
+            setTrackSettings({});
+
         }
 
     }, [stream]);
@@ -64,9 +74,9 @@ const UserStreamSource = ({ user_id, stream, action }) => {
 
     return (
         <div 
-        data-context={JSON.stringify({type: 'userStreamSource', user_id, consumer_id: stream.id})}
-        onClick={() => {action(`${user_id}-screen-share-source`)}}
-        id={`${user_id}-screen-share-source`}
+        data-context={JSON.stringify({type: 'userStreamSource', user_id, consumer_id: stream.id, ...trackSettings})}
+        onClick={() => {action(id)}}
+        id={id}
         className={styles.container} 
         title={`${user.display_name} streaming ${channel_status?.streamDetails?.name || 'screen'}`}>
         {loading && (
@@ -86,6 +96,16 @@ const UserStreamSource = ({ user_id, stream, action }) => {
                     <Subtitle >is streaming: {channel_status?.streamDetails?.name || 'Screen'}</Subtitle>
                 </div>
             </div>
+            <StreamOverlay name={`${user.display_name} is streaming: ${channel_status?.streamDetails?.name || 'Screen'}`} 
+            button={
+                <IconButton 
+                Icon={<Ellipsis color="var(--text-color)" />}
+                onClick={(e) => {triggerContext(e, id)}}
+                title={'More'}
+                position="bottom"
+                />
+            }
+            />
             {!focused && (user_id === userID) && (<StreamPausedOverlay />)}
         </div>
     );

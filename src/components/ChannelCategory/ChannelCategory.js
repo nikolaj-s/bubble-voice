@@ -114,7 +114,7 @@ export const Category = ({
         }}
         className={styles["channel-list-collapse-button"]}
       >
-        <Subtitle>{catagoryName}</Subtitle>
+        <Subtitle margin={0}>{catagoryName}</Subtitle>
         <ChevronDown style={{rotate: collapse ? '-90deg' : '0deg', transition: '0.2s'}} />
       </div>
       <div onDragOver={(e) => {e.preventDefault()}} draggable={false} className={styles["channel-list-button-wrapper"]}>

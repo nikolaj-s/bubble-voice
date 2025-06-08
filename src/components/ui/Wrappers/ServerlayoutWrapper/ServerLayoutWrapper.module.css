@@ -1,7 +1,7 @@
 .container {
     display: grid;
     border-top-left-radius: 20px;
-    grid-template-columns: 225px minmax(200px, 1fr) 225px;
+    grid-template-columns: 250px minmax(200px, 1fr) 250px;
     gap: 1px;
 }
 
@@ -12,7 +12,7 @@
 }
 
 .hideUsers {
-    grid-template-columns: 225px minmax(200px, 1fr);
+    grid-template-columns: 250px minmax(200px, 1fr);
 }
 
 @media screen and (max-width: 730px) {

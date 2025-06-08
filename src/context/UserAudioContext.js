@@ -66,6 +66,7 @@ export const UserAudioProvider = ({ children }) => {
    */
   const addTrack = useCallback(async (userId, streamOrTrack) => {
     try {
+      console.log(userId)
       if (tracksRef.current.has(userId)) {
         removeTrack(userId);
       }
@@ -75,7 +76,7 @@ export const UserAudioProvider = ({ children }) => {
           ? streamOrTrack
           : new MediaStream([streamOrTrack]);
 
-      let exists = document.getElementById(`user-audio-stream-src-${userId}`);
+      let exists = document.getElementById(`${userId}`);
       if (exists) exists.remove();
 
       let el = document.createElement('audio');
@@ -84,7 +85,7 @@ export const UserAudioProvider = ({ children }) => {
       el.srcObject = mediaStream;
       el.volume = 0;
       el.muted = true;
-      el.id = `user-audio-stream-src-${userId}`;
+      el.id = `${userId}`;
       document.body.appendChild(el);
 
       // Try to create and connect audio context
@@ -153,6 +154,7 @@ export const UserAudioProvider = ({ children }) => {
 
   // Reactively update gains when volume changes
   useEffect(() => {
+   
     tracksRef.current.forEach((entry, userId) => {
       const volPercent = clamp(volumes[userId] ?? 0.5, 0, 2.5);
       entry.gain.gain.value = volPercent;
@@ -161,9 +163,11 @@ export const UserAudioProvider = ({ children }) => {
 
   useEffect(() => {
     tracksRef.current.forEach((entry, userId) => {
+      
       const volPercent = clamp(volumes[userId] ?? 0.5, 0, 2.5);
       entry.gain.gain.value = isAudioMuted ? 0 : volPercent;
     });
+  // eslint-disable-next-line
   }, [isAudioMuted, unlockTries]);
 
   // Cleanup all tracks/context on unmount

@@ -33,9 +33,9 @@ export const useScreenShare = ({produce, closeProducer}) => {
 
     if (typeof closeProducer === "function") {
 
-      await closeProducer("screen");
+      await closeProducer("stream");
 
-      await closeProducer("screenAudio");
+      await closeProducer("streamAudio");
 
     }
 
@@ -96,10 +96,10 @@ export const useScreenShare = ({produce, closeProducer}) => {
             streamRef.current = mediaStream;
 
             if (typeof produce === "function") {
-              await produce("screen", mediaStream.getVideoTracks()[0]);
+              await produce("stream", mediaStream.getVideoTracks()[0]);
 
               if (mediaStream.getAudioTracks()[0]) {
-           //     await produce("screenAudio", mediaStream.getAudioTracks()[0]);
+                await produce("streamAudio", mediaStream.getAudioTracks()[0]);
               }
             }
 
@@ -151,10 +151,10 @@ export const useScreenShare = ({produce, closeProducer}) => {
 
           if (typeof produce === "function") {
 
-            await produce("screen", mediaStream.getVideoTracks()[0]);
+            await produce("stream", mediaStream.getVideoTracks()[0]);
 
             if (mediaStream.getAudioTracks()[0]) {
-              await produce("screenAudio", mediaStream.getAudioTracks()[0]);
+              await produce("streamAudio", mediaStream.getAudioTracks()[0]);
             }
           }
 

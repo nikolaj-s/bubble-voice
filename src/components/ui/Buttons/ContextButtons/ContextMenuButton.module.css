@@ -16,6 +16,7 @@
     overflow: hidden;
 }
 
+.rangeContainer p,
 .contextButton p {
     margin: 0;
     padding: 0;
@@ -72,7 +73,7 @@
 .rangeContainer {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
     font-family: var(--font-family);
     color: var(--text-color);
     width: calc(100% - 10px);

@@ -1,13 +1,9 @@
 
-import FullScreenWrapper from '../../../components/ui/Wrappers/FullScreenWrapper/FullScreenWrapper';
-
 import ScreenPicker from '../../../components/ScreenPicker/ScreenPicker';
 
-export const ScreenPickerOverlay = ({close}) => {
+export const ScreenPickerOverlay = () => {
 
     return (
-        <FullScreenWrapper onClose={close}>
-            <ScreenPicker />
-        </FullScreenWrapper>
+        <ScreenPicker />
     )
 }

@@ -50,6 +50,9 @@ export const MediasoupProvider = ({ children }) => {
     if (!socket) return;
 
     const setupMediasoup = async () => {
+
+      setError(false);
+
       toggleLoading(true);
 
       const capabilities = await socket.request("getRouterRtpCapabilities").catch(setError);
@@ -215,11 +218,7 @@ export const MediasoupProvider = ({ children }) => {
 
     consumer.appData = data;
     
-    if (data.type === 'microphone') {
-      addTrack(user, consumer.track)
-    } else if (data.type === 'screenAudio') {
-      addTrack(`screen-audio-source-${user}`, consumer.track);
-    }
+    if (consumer.track.kind === 'audio') addTrack(`${consumer.appData.type}-${user}`, consumer.track);
 
     consumer.on("trackended", () => {
 
@@ -261,7 +260,7 @@ export const MediasoupProvider = ({ children }) => {
       const producer = producersRef.current.get(type);
 
       if (producer) {
-        await socket.request('producerClosed', { producer_id: producer.id });
+        await socket.request('closeProducer', { producer_id: producer.id });
         producer?.close();
         producersRef?.current?.delete(type);
         forceUpdate();
@@ -313,7 +312,7 @@ export const MediasoupProvider = ({ children }) => {
 
   const getProducers = () => new Map(producersRef.current);
   const getConsumers = () => new Map(consumersRef.current);
-  
+  console.log(error)
   if (error) return <ErrorIndicator message={error} />
 
   if (loading) return <ConnectingIndicator />
@@ -321,7 +320,7 @@ export const MediasoupProvider = ({ children }) => {
   return (
     <MediasoupContext.Provider value={{ 
       produce, consume, closeProducer, pauseProducer, resumeProducer,
-      getProducers, getConsumers, updateSignal // Trigger context updates
+      getProducers, getConsumers, updateSignal,// Trigger context updates
     }}>
       {children}
     </MediasoupContext.Provider>

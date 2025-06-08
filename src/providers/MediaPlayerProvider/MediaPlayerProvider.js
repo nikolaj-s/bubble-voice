@@ -147,28 +147,38 @@ export const MediaPlayerProvider = ({children}) => {
 
     React.useEffect(() => {
     
-            if (!socket || !channelId) return;
+        if (!socket || !channelId) return;
 
-            dispatch(resetMediaPlayer());
-    
-            socket
-            .request('media-widget/check', { channel_id: channelId })
-            .then((res) => {
-              if (res?.enabled) {
-                console.log(res)
-                dispatch(enableMediaPlayer(true));
+        dispatch(resetMediaPlayer());
+
+        socket
+        .request('media-widget/check', { channel_id: channelId })
+        .then((res) => {
+          if (res?.enabled) {
             
-                dispatch(setCurrentChannel(channelId));
+            dispatch(enableMediaPlayer(true));
+        
+            dispatch(setCurrentChannel(channelId));
 
-                setMedia();
-    
-              }
-            })
-            .catch((err) => {
-              console.warn('Media widget check failed:', err);
-            });
+            setMedia();
 
-        }, [socket, channelId, dispatch]);
+          }
+        })
+        .catch((err) => {
+          console.warn('Media widget check failed:', err);
+        });
+
+    }, [socket, channelId, dispatch]);
+
+
+    // reset mediaplayer state on unmount
+    React.useEffect(() => {
+
+      return () => {
+        dispatch(resetMediaPlayer());
+      }
+
+    }, [dispatch])
 
     return (
         <>
