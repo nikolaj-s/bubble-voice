@@ -81,11 +81,13 @@ export const useContextMenuOptions = () => {
 
             if (data.appSubmenu || data.widgetsOverlay) getViewWidgetsOption(options);
 
-            if (data.userStreamSource) getUserStreamOptions(options, data);
+            if (data.userStreamSource) getUserStreamOptions(options, data.userStreamSource);
             
             if (data.mediaplayer) getMediaPlayerOptions(options);
 
             if (data.user) getUserOptions(options, data.user, permissions);
+
+            if (data.user) getUserStreamOptions(options, data.user);
 
             if (data.widgetsOverlay) getWidgetsOptions(options, data, permissions);
 

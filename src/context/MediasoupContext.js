@@ -312,7 +312,7 @@ export const MediasoupProvider = ({ children }) => {
 
   const getProducers = () => new Map(producersRef.current);
   const getConsumers = () => new Map(consumersRef.current);
-  console.log(error)
+
   if (error) return <ErrorIndicator message={error} />
 
   if (loading) return <ConnectingIndicator />

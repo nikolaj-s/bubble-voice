@@ -26,6 +26,7 @@ import styles from './MediaPlayerStreamSource.module.css';
 import StreamOverlay from '../../ui/StreamOverlay/StreamOverlay';
 import IconButton from '../../ui/Buttons/IconButton/IconButton';
 import { Ellipsis } from 'lucide-react';
+import { useBlockGlobalPlayPauseKeys } from '../../../hooks/useBlockGlobalPlayPauseKeys';
 
 export const MediaPlayerStreamSource = ({expand, expanded}) => {
 
@@ -68,7 +69,9 @@ export const MediaPlayerStreamSource = ({expand, expanded}) => {
             playerRef.current.seekTo(currentTime, 'seconds');
             hasSeekedInitially.current = true;
         }
-      }, [currentTime]);
+    }, [currentTime]);
+
+    useBlockGlobalPlayPauseKeys();
 
     if (!currentlyPlaying && !expanded) return null;
 

@@ -2,7 +2,7 @@
 import { PillSpacer } from '../../../ui/Spacers/PillSpacer/PillSpacer';
 import IconButton from '../../../ui/Buttons/IconButton/IconButton';
 import { AudioLines, Pause, Play, SkipForward, Volume1, Volume2, VolumeOff } from 'lucide-react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setOverlay } from '../../../../features/Overlay/overlaySlice';
 
 import styles from './MediaPlayerInlineControls.module.css';
@@ -15,7 +15,7 @@ export const MediaPlayerInlineControls = () => {
 
     const dispatch = useDispatch();
 
-    const {enabled, toggleIsPlaying, isPlaying, isMuted, next, volume } = useMediaPlayer();
+    const {enabled, toggleIsPlaying, isPlaying, isMuted, next, volume, showInlineControls } = useMediaPlayer();
 
     const handleMute = () => {
         dispatch(toggleMediaPlayerMuted());
@@ -41,6 +41,7 @@ export const MediaPlayerInlineControls = () => {
         Icon={<AudioLines color='var(--text-color)' />}
         onClick={() => {dispatch(setOverlay('mediaPlayer'))}}
         />
+        {showInlineControls && 
         <div className={`${styles.buttonWrapper} hideOnMobile`}>
             <IconButton 
             Icon={
@@ -63,7 +64,7 @@ export const MediaPlayerInlineControls = () => {
             title={isMuted ? "Unmute" : "Mute"}
             />
             <VolumeSlider className={'hideOnMobile'} maxWidth={80} min={0} max={1} step={0.01} value={volume} label={volume * 100} onChange={handleVolume}  />
-        </div>
+        </div>}
         <PillSpacer verticle={true} />
         </div>
     )

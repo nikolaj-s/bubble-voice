@@ -7,6 +7,7 @@ import { toggleHideMediaPlayer } from '../../../features/MediaPlayer/mediaPlayer
 import { setChannelToEdit } from '../../../features/Channel/editChannel/editChannelSlice';
 import { useSearchParams } from 'react-router-dom';
 import { setOverlay } from '../../../features/Overlay/overlaySlice';
+import { BoolIndicator } from '../../../components/ui/BoolIndicator/BoolIndicator';
 
 export const useVoiceChannelCtxMenu = () => {
 
@@ -26,7 +27,7 @@ export const useVoiceChannelCtxMenu = () => {
         options.push({
             label: "Hide Channel Background",
             type: 'button',
-            icon: <Circle strokeWidth={2.5} color='var(--background-color)' fill={hideChannelBackgrounds ? 'var(--text-color)' : 'var(--primary-color)'} />,
+            icon: <BoolIndicator active={hideChannelBackgrounds} />,
             onClick: () => {
                 dispatch(toggleAppearanceSetting('hideChannelBackgrounds'))
             }
@@ -35,7 +36,7 @@ export const useVoiceChannelCtxMenu = () => {
         if (currentVoiceChannel) {
             options.push({
                 label: 'Hide Non Video Users',
-                icon: <Circle strokeWidth={2.5} color='var(--background-color)' fill={hideNonVideoUsers ? 'var(--text-color)' : 'var(--primary-color)'} />,
+                icon: <BoolIndicator active={hideNonVideoUsers} />,
                 type: 'button',
                 onClick: () => {dispatch(toggleVoiceChannelOptions('hideNonVideoUsers'))}
             })
@@ -44,7 +45,7 @@ export const useVoiceChannelCtxMenu = () => {
                 label: "Hide Media Player",
                 type: 'button',
                 onClick: () => {dispatch(toggleHideMediaPlayer())},
-                icon: <Circle strokeWidth={2.5} color='var(--background-color)' fill={hideMediaPlayer ? 'var(--text-color)' : 'var(--primary-color)'} />
+                icon: <BoolIndicator active={hideMediaPlayer} />
             })
             
             if (permissions.user_can_edit_channels) {

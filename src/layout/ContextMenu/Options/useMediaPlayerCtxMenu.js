@@ -1,14 +1,15 @@
 import React, { useCallback } from 'react'
 import { useMediaPlayer } from '../../../hooks/useMediaPlayer'
 import { useDispatch, useSelector } from 'react-redux';
-import { setMediaPlayerVolume } from '../../../features/MediaPlayer/mediaPlayerSlice';
-import { Bookmark, BookmarkCheck, History, Pause, Play, Search, SkipForward } from 'lucide-react';
+import { setMediaPlayerVolume, toggleMediaPlayerMuted, toggleShowInlineControls } from '../../../features/MediaPlayer/mediaPlayerSlice';
+import { Bookmark, BookmarkCheck, Circle, History, Pause, Play, Search, SkipForward } from 'lucide-react';
 import { setOverlay } from '../../../features/Overlay/overlaySlice';
 import { saveMediaToPlayer } from '../../../features/MediaPlayer/Thunks/saveMediaToPlayer';
 import { removeSavedMediaFromPlayer } from '../../../features/MediaPlayer/Thunks/removeSavedMediaFromPlayer';
 import { isMediaSaved } from '../../../features/MediaPlayer/Helpers/isMediaSaved';
 import { setFilter } from '../../../features/Search/searchSlice';
 import { setChannelToViewWidgetsOf } from '../../../features/Widgets/widgetsSlice';
+import { BoolIndicator } from '../../../components/ui/BoolIndicator/BoolIndicator';
 
 export const useMediaPlayerCtxMenu = () => {
 
@@ -92,6 +93,13 @@ export const useMediaPlayerCtxMenu = () => {
             icon: <SkipForward  color="var(--text-color)" />,
             onClick: () => {next()}
         })
+
+        options.push({
+            label: "Mute Media Player",
+            type: 'button',
+            icon: <BoolIndicator active={mediaPlayerState.isMuted} />,
+            onClick: () => {dispatch(toggleMediaPlayerMuted())}
+        })
               
         options.push({
             type: 'range',
@@ -105,6 +113,14 @@ export const useMediaPlayerCtxMenu = () => {
             step: 0.01
         })
         
+        options.push({
+            type: 'button',
+            label: 'Show Inline Player Controls',
+            icon: <BoolIndicator active={mediaPlayerState.showInlineControls} />,
+            onClick: () => {
+                dispatch(toggleShowInlineControls())
+            }
+        })
 
     }, [dispatch, mediaPlayerState, currentVoiceChannel, savedMediaState, next, toggleIsPlaying])
 

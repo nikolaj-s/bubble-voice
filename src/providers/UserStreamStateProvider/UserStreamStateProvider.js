@@ -9,7 +9,7 @@ export const UserStreamStateProvider = ({consumers}) => {
     const userStreamState = useSelector(state => state.userStreamStateSlice.streams);
 
     React.useEffect(() => {
-        
+      
         for (const [, value] of consumers) {
            
             if (userStreamState[`${value?.user_id}-${value?.appData?.type}`]?.disabled && !value.paused) {

@@ -18,7 +18,7 @@ export const removeSavedMediaFromPlayer = createAsyncThunk('removeSavedMediaFrom
         const {server_id} = getState().serverDetailsSlice;
 
         if (!channel_id) {rejectWithValue('You are not currently in a channel to perform this action'); dispatch(triggerAlert('You are not currently in a channel to perform this action', 'error')); return}
-        console.log(media_id)
+   
         if (!media_id) {
             rejectWithValue("No media provided to delete");
 

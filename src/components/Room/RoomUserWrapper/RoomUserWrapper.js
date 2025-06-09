@@ -165,7 +165,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
 
     const handleScaling = (resize = false) => {
         try {
-            console.log(`resizing ${resize}`)
+
             if (expanded && !resize) return;
 
             if (resize) setExpanded(null);

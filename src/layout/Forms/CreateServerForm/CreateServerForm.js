@@ -40,7 +40,7 @@ export const CreateServerForm = () => {
             <CreateBubbleSplash />
             <Label label='Upload A Banner' />
             <ImageDropZone parentFileSrc={banner}  width={320} height={200} onImageChange={setBanner}/>
-            <Label label='Bubble Name:' />
+            <Label label='Bubble Name' />
             <TextInput placeholder={"Name"} type='text' value={name} onChange={setName} />
             <PasswordRequirements isValid={toggleValidPassword} password={password} />
             <TextInput placeholder={"Password"}  value={password} onChange={setPassword} type='password' />

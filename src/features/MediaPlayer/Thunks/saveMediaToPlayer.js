@@ -26,7 +26,7 @@ export const saveMediaToPlayer = createAsyncThunk('saveMediaToPlayer/mediaPlayer
         })
 
         if (response.data.media) {
-            dispatch(triggerAlert(`${response.data.media.title} saved`));
+            dispatch(triggerAlert(`SAVED: ${response.data.media.title}`));
         }
       
 

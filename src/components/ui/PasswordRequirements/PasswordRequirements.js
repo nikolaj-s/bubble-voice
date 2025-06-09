@@ -20,7 +20,7 @@ const PasswordRequirements = ({ password, isValid = () => {} }) => {
 
   return (
     <div className={styles.requirementsContainer}>
-      <Label label="Password Must Contain:" />
+      <Label label="Password Must Contain" />
       <ul>
         {requirements.map(({ label, test }, index) => (
           <li key={index} className={test(password) ? styles.valid : styles.invalid}>

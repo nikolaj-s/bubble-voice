@@ -18,7 +18,8 @@ const initialState = {
   hideMediaPlayer: false,
   enabled: false,
   color: null,
-  hideQueue: true
+  hideQueue: true,
+  showInlineControls: JSON.parse(localStorage.getItem('showInlineControls')) || false
 };
 
 const mediaPlayerSlice = createSlice({
@@ -136,6 +137,13 @@ const mediaPlayerSlice = createSlice({
     toggleHideQueue: (state, action) => {
       state.hideQueue = !state.hideQueue;
     },
+    toggleShowInlineControls: (state, action) => {
+
+      localStorage.setItem('showInlineControls', `${!state.showInlineControls}`);
+
+      state.showInlineControls = !state.showInlineControls;
+
+    },
     resetMediaPlayer: () => initialState
   },
   extraReducers: (builder) => {
@@ -178,7 +186,8 @@ export const {
   enableMediaPlayer,
   reorderQueue,
   setColor,
-  toggleHideQueue
+  toggleHideQueue,
+  toggleShowInlineControls
 } = mediaPlayerSlice.actions;
 
 export default mediaPlayerSlice.reducer;

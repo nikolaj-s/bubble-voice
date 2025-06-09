@@ -9,6 +9,7 @@ import StreamOverlay from "../../ui/StreamOverlay/StreamOverlay";
 import IconButton from "../../ui/Buttons/IconButton/IconButton";
 import { Ellipsis } from "lucide-react";
 import { triggerContext } from "../../../lib/services/helperFunctions";
+import { useAppFocus } from "../../../hooks/useAppFocus";
 
 const UserStreamSource = ({ user_id, stream, action, id }) => {
     const videoRef = useRef(null);
@@ -21,7 +22,7 @@ const UserStreamSource = ({ user_id, stream, action, id }) => {
 
     const {user_id: userID} = useSelector(state => state.accountSlice.account);
 
-    const {focused} = useSelector(state => state.uiSlice);
+    const focused = useAppFocus();
     
     const channel_status = user?.channel_status;
 

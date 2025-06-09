@@ -43,7 +43,7 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
 
       if (active && channel_type === 'text') {
 
-        navigate(`/dashboard/server/${server_id}`);
+      //  navigate(`/dashboard/server/${server_id}`);
 
         if (currentVoiceChannel) dispatch(setVoiceChannelFocused(true));
 

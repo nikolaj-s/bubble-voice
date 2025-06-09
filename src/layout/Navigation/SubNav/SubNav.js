@@ -52,7 +52,7 @@ export const SubNav = ({basePath = '/dashboard', options = []}) => {
           </button>
         );
       })}
-      <LineSpacer />
+      <LineSpacer margin={'15px 0px'} />
     </nav>
   );
 };

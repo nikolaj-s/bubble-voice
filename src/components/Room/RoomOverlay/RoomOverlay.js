@@ -3,7 +3,7 @@ import React from 'react';
 
 import styles from '../Room.module.css';
 import IconButton from '../../ui/Buttons/IconButton/IconButton';
-import { Ellipsis, VideoOff, Mic, MicOff, Unplug, Video, HeadphoneOff, Headphones, Maximize } from 'lucide-react';
+import { Ellipsis, VideoOff, Mic, MicOff, Unplug, Video, HeadphoneOff, Headphones, Maximize, MonitorOff, Monitor } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PillSpacer } from '../../ui/Spacers/PillSpacer/PillSpacer';
 import { useMediaControls } from '../../../context/MediaControlsContext';
@@ -19,7 +19,7 @@ export const RoomOverlay = () => {
 
     const dispatch = useDispatch();
 
-    const {isWebcamOn, isMicrophoneMuted, isAudioMuted, isScreenSharing, handleToggleAudio, handleToggleMicrophone, handleToggleWebcam, webcamError, microphoneError, audioError } = useMediaControls();
+    const {isWebcamOn, isMicrophoneMuted, isAudioMuted, isSharing, handleToggleAudio, handleToggleMicrophone, handleToggleWebcam, webcamError, microphoneError, audioError, handleShareScreen } = useMediaControls();
 
     const {fullscreen} = useSelector(state => state.uiSlice);
 
@@ -151,6 +151,16 @@ export const RoomOverlay = () => {
                     <Video color='var(--text-color)' />
                     } 
                     backgroundColor={isWebcamOn && !webcamError ? 'var(--success-color)' : 'var(--background-color)'}
+                    />
+                    <IconButton 
+                    title={isSharing ? "Stop Streaming" : "Start Streaming"}
+                    Icon={isSharing ? <MonitorOff color='var(--text-color)' /> : <Monitor color='var(--text-color)' />}
+                    backgroundColor={isSharing ? "var(--success-color)" : null}
+                    onClick={handleShareScreen}
+                    padding={15}
+                    width={50}
+                    height={50}
+                    borderRadius={"50%"}
                     />
                     <PillSpacer verticle={true} />
                     <IconButton 

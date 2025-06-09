@@ -19,6 +19,7 @@ export const ServerSettings = ({close}) => {
 
     const navItems = [
         {key: "general", label: "General"},
+        {key: "invites", label: "Invites"},
         {key: "createChannel", label: "Create Channel" },
         {key: "createCategory", label: "Create Category"},
         {key: "permissions", label: "Edit Permissions"},
@@ -34,6 +35,7 @@ export const ServerSettings = ({close}) => {
         permissions: <EditPermissionsForm />,
         createCategory: <CreateCategoryForm />,
         security: <></>,
+        invites: <></>,
         editPermissionGroup: <EditPermissionGroupForm />,
         editChannel: <EditChannelForm />,
         manageUsers: <UserManagementForm />,

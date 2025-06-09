@@ -23,10 +23,6 @@
   gap: var(--gap);
 }
 
-.mediaItem:active {
-  scale: 0.98;
-}
-
 .mediaItem:hover {
   background-color: var(--primary-color);
 }
