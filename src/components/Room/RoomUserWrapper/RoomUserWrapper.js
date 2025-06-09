@@ -24,6 +24,8 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
 
     const hideMediaPlayer = useSelector(state => state.mediaPlayerSlice.hideMediaPlayer);
 
+    const fullScreen = useSelector(state => state.uiSlice.fullScreen)
+
     let margin = 8;
 
     const ratio = 9 / 16;
@@ -113,7 +115,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
                 handleScaling();
             }
     // eslint-disable-next-line
-    }, [expanded, hideNonVideoUsers, hideUsers, textChannelOpen, hideMediaPlayer]);
+    }, [expanded, hideNonVideoUsers, hideUsers, textChannelOpen, hideMediaPlayer, fullScreen]);
 
 
     React.useEffect(() => {

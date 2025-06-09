@@ -78,7 +78,7 @@ export const MediaPlayerStreamSource = ({expand, expanded}) => {
     return (
         <div 
         data-context={JSON.stringify({...currentlyPlaying, type: 'mediaplayer', aspectRatio})} 
-        style={{display: hideMediaPlayer ? 'none' : null, backgroundColor: color,}} 
+        style={{display: hideMediaPlayer ? 'none' : null}} 
         hidden={hideMediaPlayer} id='media-player-stream-source' onClick={() => {expand('media-player-stream-source')}} className={styles.container}>
             <LongPressGestureWrapper width={'100%'} height={'100%'} onTouchContext={(e) => {triggerContext(e, 'media-player-stream-source')}}>
                 <DoubleTapWrapper onDoubleTap={() => {dispatch(toggleIsMediaPlayerOpen(true))}}>

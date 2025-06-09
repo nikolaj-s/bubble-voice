@@ -74,11 +74,12 @@ const Dashboard = () => {
                     </MediaControlsProvider>
                   </Overlay>
                 </ContextMenu>
+                <AlertToast />
                 </NativeFullScreenWrapper>
              </GlobalVolumeProvider>
             </NotificationProvider>
           </SocketProvider>
-          <AlertToast />
+          
         <ConnectionStatusNotice />
       </FetchAccountProvider>
   

@@ -26,16 +26,7 @@ export const useUserStreamCtxMenu = () => {
 
                 const isStreamDisabled = userStreamState[stream_source_key]?.disabled || false;
 
-                options.push({
-                    label: "Disable Stream",
-                    type: 'button',
-                    icon: <BoolIndicator active={isStreamDisabled} />,
-                    onClick: () => {
-                        dispatch(setStreamDisabled({key: stream_source_key, disabled: !isStreamDisabled}));
-                        dispatch(setStreamDisabled({key: stream_audio_source_key, disabled: !isStreamDisabled}));
-                    },
-                    color: 'var(--error-color)'
-                })
+               
 
                 options.push({
                     label: "Change Stream Volume",
@@ -45,6 +36,17 @@ export const useUserStreamCtxMenu = () => {
                     step: 0.01,
                     value: typeof volumes[volume_source_key] === 'number' ? volumes[volume_source_key] : 0.5,
                     onChange: (value) => {changeVolume(volume_source_key, value)}
+                })
+
+                 options.push({
+                    label: "Disable Stream",
+                    type: 'button',
+                    icon: <BoolIndicator active={isStreamDisabled} color="var(--error-color)" />,
+                    onClick: () => {
+                        dispatch(setStreamDisabled({key: stream_source_key, disabled: !isStreamDisabled}));
+                        dispatch(setStreamDisabled({key: stream_audio_source_key, disabled: !isStreamDisabled}));
+                    },
+                    color: 'var(--error-color)'
                 })
             }
     }, [changeVolume, volumes, user_id, userStreamState])

@@ -160,7 +160,7 @@ export const useScreenShare = ({produce, closeProducer}) => {
 
           dispatch(setScreenSharing(true));
 
-          dispatch(setStreamDetails({name: 'Screen'}));
+          dispatch(setStreamDetails({name: 'Their Screen'}));
 
           dispatch(setSelecting(false));
           // Listen for manual stream end (user stops sharing)

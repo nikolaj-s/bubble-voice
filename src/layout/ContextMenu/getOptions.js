@@ -18,6 +18,7 @@ import { useMobileCtxMenu } from "./Options/useMobileCtxMenu";
 import { useVoiceChannelCtxMenu } from "./Options/useVoiceChannelCtxMenu";
 import { useConnectionCtxMenu } from "./Options/useConnectionCtxMenu";
 import { useInputCtxMenu } from "./Options/useInputCtxMenu";
+import { useUserControlsCtxMenu } from "./Options/UserOptions/useUserControlsCtxMenu";
 
 export const useContextMenuOptions = () => {
 
@@ -57,6 +58,8 @@ export const useContextMenuOptions = () => {
 
     const {getInputOptions} = useInputCtxMenu();
 
+    const {getUserControlsOptions} = useUserControlsCtxMenu();
+
     const getOptions = (e, permissions) => {
         try {
             const options = [];
@@ -85,6 +88,8 @@ export const useContextMenuOptions = () => {
             
             if (data.mediaplayer) getMediaPlayerOptions(options);
 
+            if (data.user) getUserControlsOptions(options, data.user);
+
             if (data.user) getUserOptions(options, data.user, permissions);
 
             if (data.user) getUserStreamOptions(options, data.user);
@@ -104,6 +109,8 @@ export const useContextMenuOptions = () => {
             if (data.image || data.imageSearchResult) getImageOptions(options, data, permissions);
 
             if (data.video) getVideoOptions(options, data);
+
+            if (data.controlBar) getUserControlsOptions(options, {}, true);
 
             if (data.controlBar) getControlBarOptions(options);
 
