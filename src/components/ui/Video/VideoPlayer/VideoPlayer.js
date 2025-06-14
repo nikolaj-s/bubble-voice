@@ -5,10 +5,11 @@ import styles from './VideoPlayer.module.css';
 import VolumeSlider from '../../Inputs/VolumeSlider/VolumeSlider';
 import { useSelector } from 'react-redux';
 import ProgressBar from '../../ProgressBar/ProgressBar';
+import RedditAudioSrc from '../../../RedditAudioSrc/RedditAudioSrc';
 
 const INACTIVITY_TIMEOUT = 2500;
 
-const VideoPlayer = ({ src }) => {
+const VideoPlayer = ({ src, title }) => {
   const videoRef = useRef(null);
   const hideControlsTimeoutRef = useRef(null);
 
@@ -36,7 +37,7 @@ const VideoPlayer = ({ src }) => {
       setDuration(video.duration);
       setVolume(video.volume * 100);
     };
-
+    if (videoRef.current) videoRef.current.load();
     video.addEventListener('timeupdate', updateTime);
     video.addEventListener('loadedmetadata', loadMetadata);
 
@@ -114,9 +115,9 @@ const VideoPlayer = ({ src }) => {
         clearTimeout(hideControlsTimeoutRef.current);
       }}
       className={`${styles.customVideoContainer} ${!showControls ? styles.hideCursor : ''}`}
+      data-context={JSON.stringify({ type: 'video', src, title: title || src, duration: Math.floor(duration), query: title || src })}
     >
       <video
-        data-context={JSON.stringify({ type: 'video', src, title: src, duration: Math.floor(duration), query: src })}
         onClick={togglePlay}
         ref={videoRef}
         src={src}
@@ -124,7 +125,7 @@ const VideoPlayer = ({ src }) => {
         controls={false}
         playsInline
       />
-
+      <RedditAudioSrc autoPlay={false} currentTime={currentTime} isPlaying={isPlaying} muted={isMuted} url={src} volume={volume / 100} />
       {!isPlaying && (
         <div className={styles.overlay} onClick={togglePlay}>
           <PlayCircle size={64} className={styles.overlayPlayIcon} />

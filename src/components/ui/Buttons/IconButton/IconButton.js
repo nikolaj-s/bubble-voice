@@ -27,6 +27,7 @@ const IconButton = ({
   return (
     <Tooltip content={title} position={position} disabled={disabled}>
       <button
+        onMouseDown={(e) => {e.stopPropagation()}}
         type="button"
         style={{ width, height, backgroundColor, padding, borderRadius, margin, cursor: disabled ? "not-allowed" : "pointer" }}
         onClick={handleClick}

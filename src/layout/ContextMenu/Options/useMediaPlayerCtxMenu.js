@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react'
 import { useMediaPlayer } from '../../../hooks/useMediaPlayer'
 import { useDispatch, useSelector } from 'react-redux';
-import { setMediaPlayerVolume, toggleMediaPlayerMuted, toggleShowInlineControls } from '../../../features/MediaPlayer/mediaPlayerSlice';
-import { Bookmark, BookmarkCheck, Circle, History, Pause, Play, Search, SkipForward } from 'lucide-react';
+import { setMediaPlayerVolume, toggleMediaPlayerMuted, toggleShowInlineControls, toggleShowMediaPlayerRoomStatus } from '../../../features/MediaPlayer/mediaPlayerSlice';
+import { Bookmark, BookmarkCheck, Circle, History, LayoutDashboard, Pause, Play, Search, SkipForward } from 'lucide-react';
 import { setOverlay } from '../../../features/Overlay/overlaySlice';
 import { saveMediaToPlayer } from '../../../features/MediaPlayer/Thunks/saveMediaToPlayer';
 import { removeSavedMediaFromPlayer } from '../../../features/MediaPlayer/Thunks/removeSavedMediaFromPlayer';
@@ -25,102 +25,123 @@ export const useMediaPlayerCtxMenu = () => {
     
     const getMediaPlayerOptions = useCallback((options) => {
 
-        if (mediaPlayerState.currentlyPlaying) {
-            const saved = isMediaSaved(savedMediaState, currentVoiceChannel, mediaPlayerState.currentlyPlaying.src);
+        if (mediaPlayerState.enabled) {
+            if (mediaPlayerState.currentlyPlaying) {
+                const saved = isMediaSaved(savedMediaState, currentVoiceChannel, mediaPlayerState.currentlyPlaying.src);
+
+                options.push({
+                    label: saved ? `Unsave ${mediaPlayerState.currentlyPlaying.title}` : `Save ${mediaPlayerState.currentlyPlaying.title}`,
+                    onClick: () => {
+                        if (saved) {
+                            dispatch(removeSavedMediaFromPlayer(mediaPlayerState.currentlyPlaying._id));
+                        } else {
+                            dispatch(saveMediaToPlayer(mediaPlayerState.currentlyPlaying));
+                        }
+                        
+                    },
+                    type: 'button',
+                    icon: <Bookmark fill={saved ? 'var(--text-color)' : 'transparent'} color="var(--text-color)" /> 
+                })
+            }
 
             options.push({
-                label: saved ? `Unsave ${mediaPlayerState.currentlyPlaying.title}` : `Save ${mediaPlayerState.currentlyPlaying.title}`,
-                onClick: () => {
-                    if (saved) {
-                        dispatch(removeSavedMediaFromPlayer(mediaPlayerState.currentlyPlaying._id));
-                    } else {
-                        dispatch(saveMediaToPlayer(mediaPlayerState.currentlyPlaying));
-                    }
-                    
-                },
+                label: 'Search',
                 type: 'button',
-                icon: <Bookmark fill={saved ? 'var(--text-color)' : 'transparent'} color="var(--text-color)" /> 
+                icon: <Search color="var(--text-color)" />,
+                onClick: () => {
+                    dispatch(setFilter({path: 'videos'}));
+
+                    dispatch(setOverlay('search'));
+                }
+            })
+
+            options.push({
+                label: "View Saves",
+                type: 'button',
+                icon: <BookmarkCheck color="var(--text-color" />,
+                onClick: () => {
+
+                    dispatch(setChannelToViewWidgetsOf(currentVoiceChannel));
+
+                    dispatch(setOverlay('widgets'));
+
+                    setTimeout(() => {
+
+                        document.getElementById('media-player-widget-saves')?.scrollIntoView({behavior: 'instant'});
+                    
+                    }, 100)
+                }
+            })
+
+            options.push({
+                label: "View History",
+                type: 'button',
+                icon: <History color="var(--text-color)" />,
+                onClick: () => {
+                    dispatch(setOverlay('mediaPlayerHistory'));
+                }
+            })
+            
+            options.push({
+                label: mediaPlayerState.isPlaying ? 'Pause' : 'Play',
+                type: 'button',
+                icon: mediaPlayerState.isPlaying ? <Pause color="var(--text-color)"  /> : <Play color="var(--text-color)" />,
+                onClick: () => {toggleIsPlaying()}
+            })
+            options.push({
+                label: 'Skip',
+                type: 'button',
+                icon: <SkipForward  color="var(--text-color)" />,
+                onClick: () => {next()}
+            })
+
+            options.push({
+                label: "Mute Media Player",
+                type: 'button',
+                icon: <BoolIndicator active={mediaPlayerState.isMuted} />,
+                onClick: () => {dispatch(toggleMediaPlayerMuted())}
+            })
+                
+            options.push({
+                type: 'range',
+                label: "Change Media Player Volume",
+                onChange: (value) => {
+                    dispatch(setMediaPlayerVolume(value));
+                },
+                value: mediaPlayerState.volume,
+                min: 0,
+                max: 1,
+                step: 0.01
+            })
+            
+            options.push({
+                type: 'button',
+                label: 'Show Inline Player Controls',
+                icon: <BoolIndicator active={mediaPlayerState.showInlineControls} />,
+                onClick: () => {
+                    dispatch(toggleShowInlineControls())
+                }
+            })
+
+            options.push({
+                type: 'button',
+                label: 'Hide Media Player Room Status',
+                icon: <BoolIndicator active={mediaPlayerState.hideMediaPlayerRoomStatus} />,
+                onClick: () => {
+                    dispatch(toggleShowMediaPlayerRoomStatus())
+                }
+            })
+        } else {
+            options.push({
+                label: "Widgets",
+                type: 'button',
+                icon: <LayoutDashboard color='var(--text-color)' />,
+                onClick: () => {
+                    dispatch(setChannelToViewWidgetsOf(currentVoiceChannel))
+                    dispatch(setOverlay('widgets'))
+                }
             })
         }
-
-        options.push({
-            label: 'Search',
-            type: 'button',
-            icon: <Search color="var(--text-color)" />,
-            onClick: () => {
-                dispatch(setFilter({path: 'videos'}));
-
-                dispatch(setOverlay('search'));
-            }
-        })
-
-        options.push({
-            label: "View Saves",
-            type: 'button',
-            icon: <BookmarkCheck color="var(--text-color" />,
-            onClick: () => {
-
-                dispatch(setChannelToViewWidgetsOf(currentVoiceChannel));
-
-                dispatch(setOverlay('widgets'));
-
-                setTimeout(() => {
-
-                    document.getElementById('media-player-widget-saves')?.scrollIntoView({behavior: 'instant'});
-                
-                }, 100)
-            }
-        })
-
-        options.push({
-            label: "View History",
-            type: 'button',
-            icon: <History color="var(--text-color)" />,
-            onClick: () => {
-                dispatch(setOverlay('mediaPlayerHistory'));
-            }
-        })
-        
-        options.push({
-            label: mediaPlayerState.isPlaying ? 'Pause' : 'Play',
-            type: 'button',
-            icon: mediaPlayerState.isPlaying ? <Pause color="var(--text-color)"  /> : <Play color="var(--text-color)" />,
-            onClick: () => {toggleIsPlaying()}
-        })
-        options.push({
-            label: 'Skip',
-            type: 'button',
-            icon: <SkipForward  color="var(--text-color)" />,
-            onClick: () => {next()}
-        })
-
-        options.push({
-            label: "Mute Media Player",
-            type: 'button',
-            icon: <BoolIndicator active={mediaPlayerState.isMuted} />,
-            onClick: () => {dispatch(toggleMediaPlayerMuted())}
-        })
-              
-        options.push({
-            type: 'range',
-            label: "Change Media Player Volume",
-            onChange: (value) => {
-                dispatch(setMediaPlayerVolume(value));
-            },
-            value: mediaPlayerState.volume,
-            min: 0,
-            max: 1,
-            step: 0.01
-        })
-        
-        options.push({
-            type: 'button',
-            label: 'Show Inline Player Controls',
-            icon: <BoolIndicator active={mediaPlayerState.showInlineControls} />,
-            onClick: () => {
-                dispatch(toggleShowInlineControls())
-            }
-        })
 
     }, [dispatch, mediaPlayerState, currentVoiceChannel, savedMediaState, next, toggleIsPlaying])
 

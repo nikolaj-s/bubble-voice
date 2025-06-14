@@ -14,6 +14,7 @@
   min-width: 60px;
   min-height: 45px;
   background: var(--background-color, #121a22);
+  transition: background-color box-shadow 0.5s ease-in;
 }
 
 /* Video stretches responsively inside the container */
@@ -22,7 +23,7 @@
   height: 100%;
   object-fit: contain;
   display: block;
-  background: black;
+  transition: background-color 0.5s ease-in;
 }
 
 .streamOverlay {

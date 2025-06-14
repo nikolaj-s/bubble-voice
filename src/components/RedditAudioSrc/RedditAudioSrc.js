@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-const RedditAudioSrc = ({ url, hasAudioFunction = () => {}, currentTime, isPlaying, volume = 1, muted }) => {
+const RedditAudioSrc = ({ url, hasAudioFunction = () => {}, currentTime, isPlaying, volume = 1, muted, autoPlay = true }) => {
   const audioRef = useRef(null);
   const [audioUrl, setAudioUrl] = useState(null);
 
@@ -49,10 +49,11 @@ const RedditAudioSrc = ({ url, hasAudioFunction = () => {}, currentTime, isPlayi
   return (
     <audio
       key={audioUrl}
-      autoPlay
+      autoPlay={autoPlay}
       playsInline
       preload="auto"
       ref={audioRef}
+      muted={muted}
       src={audioUrl}
       style={{ display: 'none' }}
       onLoadedData={(e) => {

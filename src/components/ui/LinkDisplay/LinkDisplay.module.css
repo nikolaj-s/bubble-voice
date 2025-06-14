@@ -1,0 +1,59 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--background-color);
+  border-radius: 14px;
+  padding: 10px 16px;
+  min-width: 0;
+  box-shadow: 0 2px 8px 0 rgba(30,58,95,0.08);
+  font-family: var(--font-family);
+}
+
+.label {
+  color: var(--secondary-color);
+  font-size: 0.95em;
+  margin-right: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.linkText {
+  color: var(--link-color, #11ffff);
+  font-size: 1.02em;
+  font-family: var(--font-family);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  flex: 1 1 auto;
+  margin-right: 8px;
+  user-select: all;
+  cursor: pointer;
+  transition: color 0.12s;
+}
+
+.linkText:hover {
+  text-decoration: underline;
+}
+
+.copyButton {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 3px;
+  border-radius: 8px;
+  transition: background 0.16s;
+  display: flex;
+  align-items: center;
+  color: var(--text-color);
+}
+
+.copyButton:hover, .copyButton:focus {
+  background: var(--button-hover);
+}
+
+.copied {
+  color: var(--success-color);
+  background: rgba(118, 199, 165, 0.11);
+}

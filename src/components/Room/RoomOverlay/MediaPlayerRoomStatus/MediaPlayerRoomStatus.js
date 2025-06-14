@@ -17,11 +17,13 @@ export const MediaPlayerRoomStatus = () => {
 
     const color = useSelector(state => state.mediaPlayerSlice.color);
 
+    const hide = useSelector(state => state.mediaPlayerSlice.hideMediaPlayerRoomStatus)
+
     const openOverlay = () => {
         dispatch(setOverlay("mediaPlayer"));
     }
 
-    if (!enabled || !currentlyPlaying) return null;
+    if (!enabled || !currentlyPlaying || hide) return null;
 
     return (
         <ToolBar className={`${styles.container}`} style={{backgroundColor: color}} data-context={JSON.stringify({type: 'mediaplayer'})}>

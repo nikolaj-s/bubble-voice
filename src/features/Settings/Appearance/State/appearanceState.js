@@ -9,6 +9,8 @@ export const initialState = () => {
     
     const useBlackVoiceChannelBackground = JSON.parse(localStorage.getItem('useBlackVoiceChannelBackground')) || false;
 
+    const disableStreamAmbiance = JSON.parse(localStorage.getItem('disableStreamAmbiance')) || false;
+
     const theme = localStorage.getItem('theme') || 'default'; // 'default' = your dark theme
   
     return {
@@ -16,7 +18,8 @@ export const initialState = () => {
       hideCustomChannelIcons,
       hideChannelBackgrounds,
       theme,
-      useBlackVoiceChannelBackground
+      useBlackVoiceChannelBackground,
+      disableStreamAmbiance
     };
   };
   

@@ -17,7 +17,8 @@ export const IsAuthenticated = ({children}) => {
             navigate("/dashboard");
         }
 
-    }, [authenticated, location.pathname, navigate])
+    // eslint-disable-next-line
+    }, [authenticated, location.pathname])
 
     return (
         <>

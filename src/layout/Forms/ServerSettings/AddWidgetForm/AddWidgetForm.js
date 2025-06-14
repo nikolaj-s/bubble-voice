@@ -9,10 +9,11 @@ import { SelectWidgetTypeForm } from './SelectWidgetTypeForm/SelectWidgetTypeFor
 import { AddSingleImageWidgetForm } from './AddSingIeImageWidgetForm/AddSingleImageWidgetForm'
 import { AddGalleryWidgetForm } from './AddGalleryWidgetForm/AddGalleryWidgetForm'
 import { AddEmbedWidgetForm } from './AddEmbedWidgetForm/AddEmbedWidgetForm'
-import { AnimatePresence, motion } from 'framer-motion'
+
 import { AddRichTextWidget } from './AddRichTextWidget/AddRichTextWidget'
 import { AddDynamicMediaGallery } from './AddDynamicMediaGalleryWidgetForm/AddDynamicMediaGallery'
 import { AddMediaPlayerWidgetForm } from './AddMediaPlayerWidgetForm/AddMediaPlayerWidgetForm'
+import { SubPageWrapper } from '../../../../components/ui/Wrappers/SubPageWrapper/SubPageWrapper'
 
 export const AddWidgetForm = ({permissions}) => {
 
@@ -22,12 +23,11 @@ export const AddWidgetForm = ({permissions}) => {
 
     const channel = useSelector(state => state.channelsSlice.channels[channel_id]);
 
-    const [options, setOptions] = React.useState([]);
-
     React.useEffect(() => {
 
         if (!channel) return setSearchParams({section: ""});
 
+    // eslint-disable-next-line
     }, [channel])
 
     const content = {
@@ -49,24 +49,9 @@ export const AddWidgetForm = ({permissions}) => {
             <LoadingErrorFormWrapper sliceName='manageWidgetsSlice'>
                 <Header text={`Add a Widget To ${channel.channel_name}`} />
                 <LineSpacer />
-                <AnimatePresence mode='wait'>
-                    <motion.div
-                    key={activeSection}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        width: '100%',
-                        gap: 10
-                    }}
-                    >
-                        {React.createElement(content[activeSection], {channel})}
-                    </motion.div>
-                </AnimatePresence>
-                
+                <SubPageWrapper page={activeSection}>
+                    {React.createElement(content[activeSection], {channel})}
+                </SubPageWrapper>
             </LoadingErrorFormWrapper>
         </NotAuthorized>
     )

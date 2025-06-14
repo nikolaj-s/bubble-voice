@@ -28,9 +28,8 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
     return (
         <>
             
-            {isDifferentDay && inSearch && (<Spacer date={message.formattedDate} />)}
+            {isDifferentDay && !inSearch && (<Spacer date={message.formattedDate} />)}
             <LongPressGestureWrapper onTouchContext={openCtx}>
-              
                 <div 
                 id={`message-id-${message._id}`}
                 data-context={JSON.stringify({...message, type: isReply ? 'reply-message' : 'message', inSearch})}
@@ -76,9 +75,7 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
                 </div>
                 
             </LongPressGestureWrapper>
-           
-            {isDifferentDay && !inSearch && (<Spacer date={message.formattedDate} />)}
-
+            {isDifferentDay && inSearch && (<Spacer date={message.formattedDate} />)}
         </>
     )
 }

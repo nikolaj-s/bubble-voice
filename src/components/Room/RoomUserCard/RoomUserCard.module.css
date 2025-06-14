@@ -51,9 +51,10 @@
 
 .userStatus {
     position: absolute;
-    right: 10px;
-    bottom: 10px;
+    
+    bottom: 15px;
     z-index: 3;
+    margin: 0 auto;
 }
 
 .webcamSource video {

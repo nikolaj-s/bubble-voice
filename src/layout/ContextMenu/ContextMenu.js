@@ -18,8 +18,8 @@ import { LineSpacer } from "../../components/ui/Spacers/LineSpacer/LineSpacer";
 const ContextMenu = ({ children }) => {
 
     const account = useSelector((state) => state.accountSlice.account);
-    
-    const user = useSelector((state) => state.serverUsersSlice?.users[account?.user_id]);
+
+    const user = useSelector((state) => state.serverUsersSlice?.users[account?._id]);
 
     const currentTextChannel = useSelector((state) => state.textChannelSlice.currentTextChannel);
 
@@ -96,6 +96,8 @@ const ContextMenu = ({ children }) => {
                 <div
                     className={styles.container}
                     ref={menuRef}
+                    onScroll={(e) => {e.target.style.overflowY = 'auto'}}
+                    onWheel={(e) => {e.target.style.overflowY = 'auto'}}
                     style={{
                         position: "fixed",
                         top: `${contextMenu.y}px`,
@@ -106,12 +108,16 @@ const ContextMenu = ({ children }) => {
                         zIndex: 1000,
                         minWidth: 200,
                         padding: 5,
-                        backgroundColor: 'var(--card-background-color)'
+                        backgroundColor: 'var(--card-background-color)',
+                        maxHeight: 'calc(100svh - 40px)',
+                        overflowY: null
                         
                     }}
                 >
                     {contextMenu.options.map((option, index) => (
                         <div
+                            
+                            
                             key={index}
                             onClick={() => {
                                 handleClick();

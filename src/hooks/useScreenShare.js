@@ -95,8 +95,10 @@ export const useScreenShare = ({produce, closeProducer}) => {
 
             streamRef.current = mediaStream;
 
+            const videoTrack = mediaStream.getVideoTracks()[0]
+
             if (typeof produce === "function") {
-              await produce("stream", mediaStream.getVideoTracks()[0]);
+              await produce("stream", videoTrack);
 
               if (mediaStream.getAudioTracks()[0]) {
                 await produce("streamAudio", mediaStream.getAudioTracks()[0]);
@@ -105,7 +107,7 @@ export const useScreenShare = ({produce, closeProducer}) => {
 
             dispatch(setScreenSharing(true));
 
-            dispatch(setStreamDetails({name: source.name, thumbnail: source.thumbnail}));
+            dispatch(setStreamDetails({name: source.name, ...videoTrack.getSettings()}));
             // Listen for manual stream end (user stops sharing)
             const stopHandler = async () => {
               await cleanupStream();
@@ -149,9 +151,11 @@ export const useScreenShare = ({produce, closeProducer}) => {
           
           streamRef.current = mediaStream;
 
+          const videoTrack = mediaStream.getVideoTracks()[0]
+
           if (typeof produce === "function") {
 
-            await produce("stream", mediaStream.getVideoTracks()[0]);
+            await produce("stream", videoTrack);
 
             if (mediaStream.getAudioTracks()[0]) {
               await produce("streamAudio", mediaStream.getAudioTracks()[0]);
@@ -160,7 +164,7 @@ export const useScreenShare = ({produce, closeProducer}) => {
 
           dispatch(setScreenSharing(true));
 
-          dispatch(setStreamDetails({name: 'Their Screen'}));
+          dispatch(setStreamDetails({name: 'Their Screen', ...videoTrack.getSettings()}));
 
           dispatch(setSelecting(false));
           // Listen for manual stream end (user stops sharing)

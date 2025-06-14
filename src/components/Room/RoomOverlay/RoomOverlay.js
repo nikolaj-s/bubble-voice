@@ -3,7 +3,7 @@ import React from 'react';
 
 import styles from '../Room.module.css';
 import IconButton from '../../ui/Buttons/IconButton/IconButton';
-import { Ellipsis, VideoOff, Mic, MicOff, Unplug, Video, HeadphoneOff, Headphones, Maximize, MonitorOff, Monitor } from 'lucide-react';
+import { Ellipsis, VideoOff, Mic, MicOff, Unplug, Video, HeadphoneOff, Headphones, Maximize, MonitorOff, MonitorUp, ChevronDown } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PillSpacer } from '../../ui/Spacers/PillSpacer/PillSpacer';
 import { useMediaControls } from '../../../context/MediaControlsContext';
@@ -81,9 +81,10 @@ export const RoomOverlay = () => {
                 onClick={() => {dispatch(setFullscreen(!fullscreen))}}
                 />
             </div>
-            <div className={styles.bottomButtons}>
+            <div id='room-control-bar' data-context={JSON.stringify({type: 'roomControl'})} className={styles.bottomButtons}>
                 <MediaPlayerRoomStatus />
                 <div className={styles.wrapper}>
+                    <IconButton title={'Options'} onClick={(e) => {triggerContext(e, 'room-control-bar')}} Icon={<ChevronDown color='var(--text-color)' />} width={20} height={50} padding={'2px'} />
                     <MediaPlayerInlineControls />
                     <IconButton 
                     padding={15}
@@ -154,7 +155,7 @@ export const RoomOverlay = () => {
                     />
                     <IconButton 
                     title={isSharing ? "Stop Streaming" : "Start Streaming"}
-                    Icon={isSharing ? <MonitorOff color='var(--text-color)' /> : <Monitor color='var(--text-color)' />}
+                    Icon={isSharing ? <MonitorOff color='var(--text-color)' /> : <MonitorUp color='var(--text-color)' />}
                     backgroundColor={isSharing ? "var(--success-color)" : null}
                     onClick={handleShareScreen}
                     padding={15}

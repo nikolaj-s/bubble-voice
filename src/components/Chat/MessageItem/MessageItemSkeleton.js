@@ -2,7 +2,7 @@ import styles from "./MessageItem.module.css";
 
 const MessageItemSkeleton = ({ hasImage = false }) => {
   return (
-    <div className={styles.messageItem}>
+    <div style={{flexDirection: 'row'}} className={styles.messageItem}>
       {/* User Image Skeleton */}
       <div className={styles.userImageWrapper}>
         <div className={`${styles.skeleton} ${styles.userImage}`} />
@@ -10,7 +10,7 @@ const MessageItemSkeleton = ({ hasImage = false }) => {
       </div>
      
       {/* Message Content Skeleton */}
-      <div className={styles.messageContent}>
+      <div style={{width: 'calc(100% - 52px)'}} className={styles.messageContent}>
         <div className={`${styles.skeleton} ${styles.userName}`} />
 
         {/* Randomly vary between text blocks or an image skeleton */}

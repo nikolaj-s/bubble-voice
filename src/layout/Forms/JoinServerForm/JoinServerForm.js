@@ -23,7 +23,7 @@ export const JoinServerForm = () => {
     
     if (loading) return;
 
-    dispatch(JoinServer(navigate));
+    dispatch(JoinServer({navigate}));
 
   }
 

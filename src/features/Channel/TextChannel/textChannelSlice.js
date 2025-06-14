@@ -28,7 +28,7 @@ const textChannelSlice = createSlice({
             state.replyTo = action.payload;
         },
         addMessage: (state, action) => {
-            console.log(action.payload)
+
             if (action.payload.message_id) {
 
                 if (state.messages.find(msg => msg.message_id === action.payload.message_id)) return;
@@ -62,7 +62,7 @@ const textChannelSlice = createSlice({
         setTextChannelPos: (state, action) => {
             if (!action.payload.channel_id) return;
 
-            state.textChannelPos[action.payload.channel_id] = action.payload;
+            sessionStorage.setItem(`${action.payload.channel_id}-pagination`, JSON.stringify(action.payload));
         },
         updateMessage: (state, action) => {
             if (!action.payload.message_id) return;

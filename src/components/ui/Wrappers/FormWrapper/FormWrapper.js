@@ -20,10 +20,11 @@ export const FormWrapper = ({children, header = false, label = false, onSubmit, 
         {!header ? null :<Header text={header} />}
         {!label ? null :<Label label={label} />}
         <form className={styles.form} onSubmit={onSubmit}>
+          {error ?
+          <TextLabelError label='Error:' error={error} />
+          : null}
         {children}
-        {error ?
-        <TextLabelError label='Error:' error={error} />
-        : null}
+        
         </form>
         {loading ? <SpinnerLoading /> : null}
     </motion.div>

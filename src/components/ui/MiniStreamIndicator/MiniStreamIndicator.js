@@ -1,73 +1,34 @@
-import React, { useState } from "react";
-import styles from "./MiniStreamIndicator.module.css";
+
 import { Subtitle } from "../Titles/Subtitle/Subtitle";
+import styles from "./MiniStreamIndicator.module.css";
+import { Play } from "lucide-react"; // Example placeholder icon
 
 const MiniStreamIndicator = ({
   name = "Screen",
   thumbnail = null,
-  type = "screen",
   icon = null,
-  channel_bar,
-  hide_title,
-  action = () => {},
+  streamColor = 'var(--background-color)',
 }) => {
-
-  const [showThumb, setShowThumb] = useState(false);
-
-  const [titleVisible, toggleTitleVisible] = useState(true);
-
-  React.useEffect(() => {
-
-    let timeout;
-
-    toggleTitleVisible(true);
-
-    if (hide_title) {
-      timeout = setTimeout(() => {
-        toggleTitleVisible(false);
-      }, 1000)
-    }
-
-    return () => {
-      clearTimeout(timeout);
-    }
-
-  }, [hide_title, name])
 
   return (
     <div
-      className={styles.wrapper}
-      onMouseEnter={() => {setShowThumb(true); toggleTitleVisible(true)}}
-      onMouseLeave={() => {setShowThumb(false); if (hide_title) toggleTitleVisible(false)}}
-      onFocus={() => setShowThumb(true)}
-      onBlur={() => setShowThumb(false)}
-      tabIndex={0} // makes it focusable by keyboard
-      onClick={(e) => {
-        e.stopPropagation();
-        action();
-      }}
-      title={name}
+      className={styles.card}
+      tabIndex={0}
       role="button"
-    > 
-    
-      <div className={styles.miniStreamIndicator}>
-        <div className={styles.liveIndicator} />
-        {titleVisible && (<>
-        <Subtitle>streaming: </Subtitle>
-        <span className={styles.text}>
-          {name}
-        </span>
-        </>)}
-      </div>
-      {thumbnail && (
-        <div
-          className={`${styles.thumbnailPreview} ${
-            showThumb ? styles.thumbVisible : ""
-          }`}
-        >
+      title={name}
+      style={{backgroundColor: streamColor}}
+    >
+      <div className={styles.thumbWrapper}>
+        {thumbnail ? (
           <img src={thumbnail} alt={name} className={styles.thumbnail} />
-        </div>
-      )}
+        ) : (
+          <div className={styles.placeholder}>
+            {icon || <Play className={styles.placeholderIcon} />}
+          </div>
+        )}
+        <div className={styles.liveIndicator}>LIVE</div>
+      </div>
+      <Subtitle width={'100%'} textAlign={'center'}>{name}</Subtitle>
     </div>
   );
 };

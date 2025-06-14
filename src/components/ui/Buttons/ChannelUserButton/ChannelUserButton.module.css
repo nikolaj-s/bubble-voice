@@ -67,9 +67,9 @@
 }
 
 .arrowIndicator {
-    height: 20px;
+    height: 60px;
     width: 10px;
-    margin-left: 10px;
+    margin-left: 12px;
     flex-shrink: 0;
     border-left: 2px solid var(--accent-color);
     border-bottom: 2px solid var(--accent-color);
@@ -77,5 +77,5 @@
 }
 
 .indicatorWrapper {
-    width: calc(100% - 20px);
+    width: calc(100% - 25px);
 }

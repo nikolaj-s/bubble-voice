@@ -5,6 +5,7 @@ import HoverVideoPreview from "../ui/Video/HoverVideoPreview/HoverVideoPreview";
 import { NsfwWrapper } from "../ui/Wrappers/NsfwWrapper/NsfwWrapper";
 import { useDispatch } from "react-redux";
 import { setExpandedImage } from "../../features/Media/ExpandedImage/expandedImageSlice";
+import VideoPlayer from "../ui/Video/VideoPlayer/VideoPlayer";
 
 const LinkPreview = ({ link_preview: preview, nsfw }) => {
 
@@ -12,11 +13,12 @@ const LinkPreview = ({ link_preview: preview, nsfw }) => {
 
   const openPreview = (e) => {
     
+    if (preview.video || preview.image) e.stopPropagation();
 
     if (preview.image) {
-      e.stopPropagation(); 
       
       dispatch(setExpandedImage(preview.image));
+    
     }
   }
 
@@ -31,9 +33,8 @@ const LinkPreview = ({ link_preview: preview, nsfw }) => {
       <div onClick={openPreview} className={`${styles.previewImage} ${preview.type === 'reddit' || preview.video ? styles.redditImage : null}`} >
           <NsfwWrapper nsfw={nsfw ? {nsfw} : preview} >
             <div className={`${styles.mediaWrapper} ${preview.type === 'reddit' ? styles.redditMediaWrapper : null}`} >
-              {
-              preview.video ?
-              <HoverVideoPreview src={preview.video} />
+              {preview.video ?
+              <VideoPlayer src={preview.video} title={preview.title} />
               :
               preview.image ?
               <ImageComponent src={preview.image}  />

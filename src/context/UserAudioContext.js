@@ -33,13 +33,14 @@ export const UserAudioProvider = ({ children }) => {
     try {
       const entry = tracksRef.current.get(userId);
       if (!entry) return;
-      entry.sourceNode?.disconnect();
-      entry.gainNode?.disconnect();
-      entry.el?.remove();
-      entry.mediaStream.getTracks().forEach(t => t.stop());
+      // Safely disconnect everything
+      try { entry.src?.disconnect(); } catch {}
+      try { entry.gain?.disconnect(); } catch {}
+      try { entry.el?.remove(); } catch {}
+      try { entry.mediaStream?.getTracks().forEach(t => t.stop()); } catch {}
       tracksRef.current.delete(userId);
     } catch (err) {
-      console.warn(err);
+      console.warn('Failed to fully clean up audio track:', err);
     }
   };
 
@@ -76,7 +77,7 @@ export const UserAudioProvider = ({ children }) => {
           ? streamOrTrack
           : new MediaStream([streamOrTrack]);
 
-      let exists = document.getElementById(`${userId}`);
+      let exists = document.getElementById(userId);
       if (exists) exists.remove();
 
       let el = document.createElement('audio');
@@ -84,8 +85,9 @@ export const UserAudioProvider = ({ children }) => {
       el.autoplay = true;
       el.srcObject = mediaStream;
       el.volume = 0;
-      el.muted = true;
+      el.muted = false;
       el.id = `${userId}`;
+      el.playsInline = true;
       document.body.appendChild(el);
 
       // Try to create and connect audio context
@@ -159,7 +161,7 @@ export const UserAudioProvider = ({ children }) => {
       const volPercent = clamp(volumes[userId] ?? 0.5, 0, 2.5);
       entry.gain.gain.value = volPercent;
     });
-  }, [volumes, unlockTries]);
+  }, [volumes]);
 
   useEffect(() => {
     tracksRef.current.forEach((entry, userId) => {
@@ -180,6 +182,20 @@ export const UserAudioProvider = ({ children }) => {
       }
     };
   }, []);
+
+    // audioCtxRef is your AudioContext reference
+  const resumeAudio = () => {
+    if (audioCtxRef.current?.state === 'suspended') {
+      audioCtxRef.current.resume();
+    }
+  };
+
+  useEffect(() => {
+    const events = ['touchstart', 'mousedown', 'keydown'];
+    events.forEach(e => window.addEventListener(e, resumeAudio, true));
+    return () => events.forEach(e => window.removeEventListener(e, resumeAudio, true));
+  }, []);
+
 
   // Expose context value
   const contextValue = {

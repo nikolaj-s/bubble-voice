@@ -13,14 +13,14 @@ export const fetchMessages = createAsyncThunk(
             
             if (!params.channel_id) return rejectWithValue("Invalid Channel");
 
-            const {textChannelPos} = getState().textChannelSlice;
-
             const {server_id} = getState().serverDetailsSlice;
 
             let count = 20;
 
-            if (textChannelPos[params.channel_id] && !params?.last_message_id) {
-                count = textChannelPos[params.channel_id].count;
+            const textChannelPos = JSON.parse(sessionStorage.getItem(`${params.channel_id}-pagination`)) || null;
+
+            if (textChannelPos && !params?.last_message_id) {
+                count = textChannelPos.count;
             }
 
             const response = await axios({

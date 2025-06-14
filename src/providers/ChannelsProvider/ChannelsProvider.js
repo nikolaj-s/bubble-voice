@@ -2,7 +2,7 @@ import React from 'react'
 import { useSocket } from '../../context/SocketContext';
 import { useDispatch, useSelector } from 'react-redux';
 import ChannelButtonSkeleton from '../../components/ui/Loading/ChannelButtonSkeleton/ChannelButtonSkeleton';
-import { addChannel, removeChannel, reorderChannels, setChannels, setChannelsStatus, updateCategoryofChannels, updateChannelDetails, updateChannelStatus, updateLatestMessageAt, userJoinsChannel, userLeavesChannel } from '../../features/Channel/Channels/channelsSlice';
+import { addChannel, removeChannel, reorderChannels, setChannels, setChannelsStatus, updateCategoryofChannels, updateChannelDetails, updateChannelStatus, userJoinsChannel, userLeavesChannel } from '../../features/Channel/Channels/channelsSlice';
 import { removeCategory, reorderCategories, setCategories, updateCategoryDetails, addCategory } from '../../features/Categories/categoriesSlice';
 
 export const ChannelsProvider = ({children}) => {
@@ -106,8 +106,6 @@ export const ChannelsProvider = ({children}) => {
 
         const handleRemoveChannel = data => dispatch(removeChannel(data));
 
-        const handleUpdateLatestMessageAt = data => dispatch(updateLatestMessageAt(data));
-
         socket.on('connect', handleFetchChannels);
 
         socket.on(`add category to ${server_id}`, handleAddCategory);
@@ -131,8 +129,6 @@ export const ChannelsProvider = ({children}) => {
         socket.on(`update category in ${server_id}`, handleUpdateCategoryDetails);
 
         socket.on(`delete category in ${server_id}`, handleRemoveCategory);
-
-        socket.on(`update latest message in ${server_id}`, handleUpdateLatestMessageAt);
 
         handleFetchChannels();
 
@@ -158,8 +154,6 @@ export const ChannelsProvider = ({children}) => {
             socket.off(`update category in ${server_id}`, handleUpdateCategoryDetails);
 
             socket.off(`delete category in ${server_id}`, handleRemoveCategory);
-
-            socket.off(`update latest message in ${server_id}`, handleUpdateLatestMessageAt);
 
             dispatch(setChannelsStatus("loading"));
         }

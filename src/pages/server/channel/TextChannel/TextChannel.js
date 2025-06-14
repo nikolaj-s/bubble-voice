@@ -53,6 +53,7 @@ export const TextChannel = ({channel}) => {
     }
 
     const saveTextChannelPos = (data) => {
+        console.log(data)
         dispatch(setTextChannelPos(data));
     }
 
@@ -89,6 +90,7 @@ export const TextChannel = ({channel}) => {
     return (
         <TextChannelProvider channel={channel} >
             <ChatContainer 
+            id={channel}
             position={position?.position} 
             returnPos={saveTextChannelPos} 
             key={channel} 

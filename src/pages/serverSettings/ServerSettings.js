@@ -1,5 +1,4 @@
-import React from 'react'
-import FullScreenWrapper from '../../components/ui/Wrappers/FullScreenWrapper/FullScreenWrapper'
+
 import MenuWrapper from '../../components/ui/Wrappers/MenuWrapper/MenuWrapper'
 import ProtectedFormWrapper from '../../components/ui/Wrappers/ProtectedFormWrapper/ProtectedFormWrapper'
 import { CreateChannelForm } from '../../layout/Forms/ServerSettings/CreateChannelForm/CreateChannelForm'
@@ -14,6 +13,7 @@ import { ContentDataForm } from '../../layout/Forms/ServerSettings/ContentDataFo
 import { AddWidgetForm } from '../../layout/Forms/ServerSettings/AddWidgetForm/AddWidgetForm'
 import { ManageWidgetsForm } from '../../layout/Forms/ServerSettings/ManageWidgetsForm/ManageWidgetsForm'
 import { ManageChannelsForm } from '../../layout/Forms/ServerSettings/ManageChannelsForm/ManageChannelsForm'
+import { InvitesForm } from '../../layout/Forms/ServerSettings/InvitesForm/InvitesForm'
 
 export const ServerSettings = ({close}) => {
 
@@ -35,7 +35,7 @@ export const ServerSettings = ({close}) => {
         permissions: <EditPermissionsForm />,
         createCategory: <CreateCategoryForm />,
         security: <></>,
-        invites: <></>,
+        invites: <InvitesForm />,
         editPermissionGroup: <EditPermissionGroupForm />,
         editChannel: <EditChannelForm />,
         manageUsers: <UserManagementForm />,

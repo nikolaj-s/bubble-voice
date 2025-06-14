@@ -4,6 +4,7 @@ import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { useGlobalVolume } from '../../../../context/GlobalVolumeContext';
 import { setStreamDisabled } from '../../../../features/UserStreamState/userStreamStateSlice';
+import { BoolIndicator } from '../../../../components/ui/BoolIndicator/BoolIndicator';
 
 export const useUserCtxMenu = () => {
 
@@ -42,10 +43,10 @@ export const useUserCtxMenu = () => {
             }
 
             options.push({
-                label: isWebcamDisabled ? "Enable User's Webcam" : "Disable User's Webcam",
+                label: "Disable Webcam",
                 type: 'button',
-                icon: isWebcamDisabled ? <Camera color='var(--text-color)' /> : <CameraOff color='var(--error-color)' />,
-                color: isWebcamDisabled ? null : 'var(--error-color)',
+                icon: <BoolIndicator color={'var(--error-color)'} active={isWebcamDisabled}/>,
+                color: 'var(--error-color)',
                 onClick: async () => {
                     
                     dispatch(setStreamDisabled({key: `${user.user_id}-webcam`, disabled: !isWebcamDisabled}));
@@ -55,7 +56,7 @@ export const useUserCtxMenu = () => {
         }
 
 
-    }, [changeVolume, userStreamState, volumes, user_id])
+    }, [changeVolume, userStreamState, volumes, user_id, dispatch])
   
     return {getUserOptions}
 }

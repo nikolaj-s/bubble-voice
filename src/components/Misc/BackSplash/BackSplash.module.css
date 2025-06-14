@@ -1,5 +1,6 @@
 .wrapper {
     position: relative;
+    height: 100svh;
   }
   .logo-wrapper {
     position: absolute;
@@ -51,5 +52,8 @@
   .content {
     position: relative; /* Ensures the child content is above the splash */
     z-index: 1; /* Puts the content above the splash */
+    margin: auto 0;
+    height: 100svh;
+    overflow-y: auto;
   }
   

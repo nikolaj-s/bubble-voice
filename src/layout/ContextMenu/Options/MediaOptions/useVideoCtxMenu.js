@@ -43,7 +43,7 @@ export const useVideoCtxMenu = () => {
             }
             
             const saved = isMediaSaved(savedMediaState, currentVoiceChannel, data.video.src);
-
+            console.log(data.video)
             options.push({
                 label: saved ? `Unsave ${data.video.title}` : `Save ${data.video.title}`,
                 onClick: () => {

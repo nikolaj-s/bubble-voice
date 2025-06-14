@@ -9,6 +9,7 @@ const notificationsSlice = createSlice({
         loading: false,
         error: false,
         last_read_status: {},
+        notifications: [],
     },
     reducers: {
         setLastReadStatus: (state, action) => {
@@ -33,7 +34,7 @@ const notificationsSlice = createSlice({
 
         // update last read status
         builder.addCase(updateLastReadStatus.fulfilled, (state, action) => {
-            console.log(action.payload);
+
             state.loading = false;
             if (action.payload.channel_id) {
                 state.last_read_status[action.payload.channel_id] = action.payload;

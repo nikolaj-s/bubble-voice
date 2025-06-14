@@ -49,7 +49,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
                 const reservedHeight = nonExpandedChildren.length * 100; // 100px height if stacked (see below)
 
                 // We'll assume you want the others at the BOTTOM, so reserve height
-                const availableHeight = Math.max(parentHeight - (nonExpandedChildren.length > 0 ? 100 : 0), 0);
+                const availableHeight = Math.max(parentHeight - (nonExpandedChildren.length > 0 ? 110 : 0), 0);
                 const availableWidth = parentWidth;
 
                 // Aspect ratio logic
@@ -103,7 +103,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
 
                     child.style.margin = '0px';
 
-                    child.style.borderRadius = null;
+                    child.style.borderRadius = '50%';
 
                     const v = child.querySelector('video');
 
@@ -241,7 +241,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
                    {user.type === 'user' ?
                     <RoomUserCard key={user.id} {...user} action={handleStreamExpansion} />
                     : user.type === 'stream' ?
-                    <UserStreamSource action={handleStreamExpansion} key={user.id} {...user} /> :
+                    <UserStreamSource action={handleStreamExpansion} key={user.id} {...user} isExpanded={expanded === user.id} /> :
                     null
                     }
                     </>

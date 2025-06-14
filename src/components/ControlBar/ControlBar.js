@@ -62,7 +62,7 @@ export const ControlBar = () => {
                 height={35}
                 padding={8}
                 onClick={handleShareScreen}
-                title={isSharing ? "Stop Sharing Screen" : "Share Screen"}
+                title={isSharing ? "Stop Stream" : "Start Streaming"}
                 Icon={isSharing ? <MonitorOff strokeWidth={2.5} color='var(--text-color)' /> : <MonitorUp strokeWidth={2.5} color='var(--text-color)' />}
                 />
                 <ConnectionIndicator />

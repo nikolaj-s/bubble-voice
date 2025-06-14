@@ -20,13 +20,12 @@ export const ChannelUserButton = ({user_id, active, action = () => {}}) => {
     const isWebcamDisabled = useSelector(state => state.userStreamStateSlice.streams[`${user._id}-webcam`]?.disabled) || false
 
     try {
-        
        
         return (
             <div 
             onDragStart={onDragStart}
             draggable={true} 
-            data-context={JSON.stringify({...user, type: 'user'})} 
+            data-context={JSON.stringify({...user, channel_status: null, type: 'user'})} 
             onClick={() => {action(user_id)}} className={styles.container}>
                 <div className={styles.wrapper}>
                     <span 
@@ -41,9 +40,9 @@ export const ChannelUserButton = ({user_id, active, action = () => {}}) => {
                 </div>
                 {user?.channel_status?.streamDetails && (
                 <div className={styles.streamStatus}>
-                    <div className={styles.arrowIndicator} />
+                    <div className={styles.arrowIndicator} style={{borderColor: user.color}} />
                     <div className={styles.indicatorWrapper}>
-                        <MiniStreamIndicator channel_bar={true} {...user?.channel_status?.streamDetails}/>
+                        <MiniStreamIndicator channel_bar={true} {...user?.channel_status?.streamDetails} streamColor={user.channel_status?.streamColor} thumbnail={user?.channel_status?.streamPreview}/>
                     </div>
 
                 </div>

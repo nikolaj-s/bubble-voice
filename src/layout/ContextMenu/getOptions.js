@@ -79,14 +79,16 @@ export const useContextMenuOptions = () => {
                     continue;
                 }
             }
-
+            console.log(permissions)
             if (data.appSubmenu) getAppSubmenuOptions(options);
 
             if (data.appSubmenu || data.widgetsOverlay) getViewWidgetsOption(options);
 
             if (data.userStreamSource) getUserStreamOptions(options, data.userStreamSource);
             
-            if (data.mediaplayer) getMediaPlayerOptions(options);
+            if (data.mediaplayer || data.roomControl) getMediaPlayerOptions(options);
+
+            if (data.roomControl) options.push({type: 'spacer'});
 
             if (data.user) getUserControlsOptions(options, data.user);
 
@@ -103,14 +105,14 @@ export const useContextMenuOptions = () => {
             if (data.category) getCategoryOptions(options, data, permissions);
 
             if (data.channelList || data.mobileMenu) getChannelsOptions(options, permissions);
-
-            if (data.message) getMessageOptions(options, data, permissions);
-
+         
             if (data.image || data.imageSearchResult) getImageOptions(options, data, permissions);
 
             if (data.video) getVideoOptions(options, data);
 
-            if (data.controlBar) getUserControlsOptions(options, {}, true);
+            if (data.message) getMessageOptions(options, data, permissions);
+
+            if (data.controlBar || data.roomControl) getUserControlsOptions(options, {}, true);
 
             if (data.controlBar) getControlBarOptions(options);
 

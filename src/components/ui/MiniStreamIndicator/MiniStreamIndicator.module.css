@@ -1,98 +1,77 @@
-.wrapper {
-  display: flex;
-  flex-direction: column;   /* Changed to column */
-  align-items: flex-start;  /* Align left (can change to center if you want) */
-  position: relative;
-  width: fit-content;
-  outline: none;
-  width: 100%;
-  transition: 0.2s;
-}
-
-.miniStreamIndicator {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: var(--background-color, #121a22);
-  color: var(--text-color, #d1d9e6);
+.card {
+  background: var(--background-color, #1d2d44);
   border-radius: var(--border-radius);
-  font-size: 0.97rem;
-  font-weight: 500;
-  margin-top: 4px;
-  margin-bottom: 2px;
-  padding: 5px 10px 5px 8px;
-  width: fit-content;
-  box-shadow: 0 2px 6px 0 rgba(18,26,34,0.07);
-  opacity: 0.92;
-  transition: 0.2s;
-  cursor: pointer;
-  user-select: none;
-  width: calc(100% - 18px);
-  min-height: 20px;
-
+  box-shadow: 0 3px 24px 0 rgba(18,26,34,0.10);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: calc(100% - 10px);
+  padding: 5px;
+  transition: box-shadow 0.2s, transform 0.16s;
+  outline: none;
+  position: relative;
+  gap: var(--gap);
 }
 
-.arrow {
-  opacity: 0.5;
-  flex-shrink: 0;
-}
 
-.liveIndicator {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--success-color, #76c7a5);
-  margin-left: 1px;
-  box-shadow: 0 0 6px 1px rgba(118,199,165,0.12);
-  flex-shrink: 0;
-}
-
-.text {
-  overflow: hidden;
-  text-wrap: nowrap;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.thumbWrapper {
+  width: 100%;
+  position: relative;
   display: flex;
   align-items: center;
-  max-width: calc(100% - 84px);
-  min-width: 0; /* ← This line ensures flex items don't overflow */
-}
-
-.thumbnailPreview {
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(10px) scale(0.95); /* now vertical */
-  transition: 
-    opacity 0.21s cubic-bezier(0.61,0.14,0.44,0.87), 
-    transform 0.21s cubic-bezier(0.61,0.14,0.44,0.87);
-  position: absolute;
-  width: 100%;
-  margin-top: 3px;
-  display: flex;
   justify-content: center;
-  background: black;
-  border-radius: 10px;
-  box-shadow: 0 6px 24px 0 rgba(18,26,34,0.18);
-  top: 35px;
-  min-height: 100px;
-  min-width: 150px;
-  z-index: 10;
-  left: 0px;
-  max-height: 200px;
   overflow: hidden;
-  max-width: 250px;
-}
-
-.thumbVisible {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0) scale(1);
+  min-height: 80px;
+  max-height: 130px;
+  border-radius: var(--border-radius);
+  overflow: hidden;
 }
 
 .thumbnail {
-  height: auto;
-  aspect-ratio: 16 / 9;
-  object-fit: contain;
-  background: #11151c;
-  box-shadow: 0 1.5px 10px 0 rgba(0,0,0,0.10);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.placeholder {
+  width: 60px;
+  height: 60px;
+  background: var(--background-color, #121a22);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  opacity: 0.5;
+}
+.placeholderIcon {
+  width: 32px;
+  height: 32px;
+  color: var(--secondary-color, #4e8e8b);
+}
+
+.liveIndicator {
+  position: absolute;
+  bottom: 9px;
+  right: 14px;
+  background: var(--success-color, #76c7a5);
+  color: var(--background-color, #121a22);
+  font-size: 0.8rem;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  padding: 3px 10px;
+  border-radius: 999px;
+  box-shadow: 0 2px 10px 0 rgba(18,26,34,0.09);
+  text-shadow: 0 1px 6px rgba(20,24,32,0.09);
+}
+
+.streamInfo {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

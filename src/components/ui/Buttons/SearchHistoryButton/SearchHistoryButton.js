@@ -11,7 +11,7 @@ export const SearchHistoryButton = ({action, query, deleteItem, index}) => {
         onClick={() => {action(query)}}
       >
         <span>
-        <History size={18} color='var(--text-color)' />
+        <History size={18} style={{flexShrink: 0}} color='var(--text-color)' />
         {query}
         </span>
         <IconButton 

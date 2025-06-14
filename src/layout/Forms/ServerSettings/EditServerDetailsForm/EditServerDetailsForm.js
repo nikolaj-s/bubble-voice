@@ -10,8 +10,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import ImageDropZone from '../../../../components/ui/Inputs/ImageDropZone/ImageDropZone';
 
-import TextButton from '../../../../components/ui/Buttons/TextButton/TextButton';
-
 import { updateServerDetails } from '../../../../features/ServerDetails/Thunks/updateServerDetails';
 
 import { LoadingErrorFormWrapper } from '../../../../components/ui/Wrappers/LoadingErrorFormWrapper/LoadingErrorFormWrapper';

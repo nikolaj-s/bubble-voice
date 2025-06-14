@@ -1,7 +1,7 @@
 
 import { PillSpacer } from '../../../ui/Spacers/PillSpacer/PillSpacer';
 import IconButton from '../../../ui/Buttons/IconButton/IconButton';
-import { AudioLines, Pause, Play, SkipForward, Volume1, Volume2, VolumeOff } from 'lucide-react';
+import { AudioLines, ChevronDown, Pause, Play, SkipForward, Volume1, Volume2, VolumeOff } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { setOverlay } from '../../../../features/Overlay/overlaySlice';
 
@@ -10,6 +10,7 @@ import styles from './MediaPlayerInlineControls.module.css';
 import { useMediaPlayer } from '../../../../hooks/useMediaPlayer';
 import VolumeSlider from '../../../ui/Inputs/VolumeSlider/VolumeSlider';
 import { setMediaPlayerVolume, toggleMediaPlayerMuted } from '../../../../features/MediaPlayer/mediaPlayerSlice';
+import { triggerContext } from '../../../../lib/services/helperFunctions';
 
 export const MediaPlayerInlineControls = () => {
 
@@ -28,7 +29,7 @@ export const MediaPlayerInlineControls = () => {
     if (!enabled) return null;
 
     return (
-        <div data-context={JSON.stringify({type: 'mediaplayer'})} style={{display: 'flex', height: '100%', alignItems: 'center', gap: '5px'}}>
+        <div id='room-media-player-overlay-button' data-context={JSON.stringify({type: 'mediaplayer'})} style={{display: 'flex', height: '100%', alignItems: 'center', gap: '5px'}}>
         
         <IconButton 
         
@@ -38,7 +39,12 @@ export const MediaPlayerInlineControls = () => {
         height={50}
         borderRadius={'50%'}
         title={'Media Player'}
-        Icon={<AudioLines color='var(--text-color)' />}
+        Icon={
+        <>
+        <AudioLines color='var(--text-color)' />
+       
+        </>
+       }
         onClick={() => {dispatch(setOverlay('mediaPlayer'))}}
         />
         {showInlineControls && 

@@ -21,6 +21,7 @@ import { useDetectOS } from '../hooks/useDetectOs';
 import AppTitleBar from '../components/AppTitleBar/AppTitleBar';
 import { useDisableNavigation } from '../hooks/useDisableNavigation';
 import { useTrackMouseClick } from '../hooks/useTrackMouseClick';
+import { InvitePage } from '../pages/invitePage/InvitePage';
 
 function App() {
 
@@ -48,7 +49,7 @@ function App() {
 //  useGlobalWindowFocusListener();
 
   useTrackMouseClick();
-
+console.log(window.location.pathname )
   return (
     <Router>
       <div className={`App`}>
@@ -58,6 +59,7 @@ function App() {
           <Route path="/signup" element={<BackSplash><Signup /></BackSplash>} />
           <Route path="/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/account-error" element={<FatalErrorPage />} />
+          <Route path="/bubble-invite" element={<BackSplash><InvitePage /></BackSplash>} />
           <Route path="/" element={<ProtectedRoute><Navigate to={'/dashboard'} /></ProtectedRoute>} />
         </Routes>
       </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { motion } from 'framer-motion'; // Importing framer-motion
 import styles from './CardWrapper.module.css'; // Import the CSS module
 

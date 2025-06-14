@@ -49,7 +49,7 @@ export const useUserStreamCtxMenu = () => {
                     color: 'var(--error-color)'
                 })
             }
-    }, [changeVolume, volumes, user_id, userStreamState])
+    }, [changeVolume, volumes, user_id, userStreamState, dispatch])
     
     return {getUserStreamOptions}
 }

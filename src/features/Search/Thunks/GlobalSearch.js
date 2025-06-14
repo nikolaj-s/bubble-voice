@@ -40,7 +40,7 @@ export const globalSearch = createAsyncThunk(
             }).then(res => {
                 return res.data;
             })
-
+            console.log(response)
             if (response.success) {
                 return {filter: filter.path, ...response};
             }
