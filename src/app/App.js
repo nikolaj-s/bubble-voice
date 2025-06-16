@@ -22,6 +22,7 @@ import AppTitleBar from '../components/AppTitleBar/AppTitleBar';
 import { useDisableNavigation } from '../hooks/useDisableNavigation';
 import { useTrackMouseClick } from '../hooks/useTrackMouseClick';
 import { InvitePage } from '../pages/invitePage/InvitePage';
+import { AudioContextProvider } from '../context/AudioContext';
 
 function App() {
 
@@ -49,9 +50,10 @@ function App() {
 //  useGlobalWindowFocusListener();
 
   useTrackMouseClick();
-console.log(window.location.pathname )
+  
   return (
     <Router>
+      <AudioContextProvider>
       <div className={`App`}>
         <AppTitleBar />
         <Routes>
@@ -63,6 +65,7 @@ console.log(window.location.pathname )
           <Route path="/" element={<ProtectedRoute><Navigate to={'/dashboard'} /></ProtectedRoute>} />
         </Routes>
       </div>
+      </AudioContextProvider>
     </Router>
   );
 }

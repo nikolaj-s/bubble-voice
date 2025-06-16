@@ -5,7 +5,6 @@ import {ImageComponent }from "../../ui/Image/Image";  // Assuming this is a vali
 import { LongPressGestureWrapper } from "../../ui/Gestures/LongPressGestureWrapper";
 import { triggerContext } from "../../../lib/services/helperFunctions";
 import MediaStatusIcons from "../../MediaStatusIcons/MediaStatusIcons";
-import MiniStreamIndicator from "../../ui/MiniStreamIndicator/MiniStreamIndicator";
 import StreamOverlay from "../../ui/StreamOverlay/StreamOverlay";
 import IconButton from "../../ui/Buttons/IconButton/IconButton";
 import { Ellipsis } from "lucide-react";

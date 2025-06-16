@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react'
 import { useMediaPlayer } from '../../../hooks/useMediaPlayer'
 import { useDispatch, useSelector } from 'react-redux';
-import { setMediaPlayerVolume, toggleMediaPlayerMuted, toggleShowInlineControls, toggleShowMediaPlayerRoomStatus } from '../../../features/MediaPlayer/mediaPlayerSlice';
-import { Bookmark, BookmarkCheck, Circle, History, LayoutDashboard, Pause, Play, Search, SkipForward } from 'lucide-react';
+import { setMediaPlayerVolume, toggleHideMediaPlayer, toggleMediaPlayerMuted, toggleShowInlineControls, toggleShowMediaPlayerRoomStatus } from '../../../features/MediaPlayer/mediaPlayerSlice';
+import { Bookmark, BookmarkCheck, ChevronRight, Circle, History, LayoutDashboard, Pause, Play, Search, SkipForward } from 'lucide-react';
 import { setOverlay } from '../../../features/Overlay/overlaySlice';
 import { saveMediaToPlayer } from '../../../features/MediaPlayer/Thunks/saveMediaToPlayer';
 import { removeSavedMediaFromPlayer } from '../../../features/MediaPlayer/Thunks/removeSavedMediaFromPlayer';
@@ -68,14 +68,39 @@ export const useMediaPlayerCtxMenu = () => {
                 }
             })
 
-            options.push({
-                label: "View History",
-                type: 'button',
-                icon: <History color="var(--text-color)" />,
-                onClick: () => {
-                    dispatch(setOverlay('mediaPlayerHistory'));
+            let sub_options = [
+                {
+                    label: "View History",
+                    type: 'button',
+                    icon: <History color="var(--text-color)" />,
+                    onClick: () => {
+                        dispatch(setOverlay('mediaPlayerHistory'));
+                    }
+                },
+                {
+                    type: 'button',
+                    label: 'Show Inline Player Controls',
+                    icon: <BoolIndicator active={mediaPlayerState.showInlineControls} />,
+                    onClick: () => {
+                        dispatch(toggleShowInlineControls())
+                    }
+                },
+                {
+                    type: 'button',
+                    label: 'Hide Media Player Room Status',
+                    icon: <BoolIndicator active={mediaPlayerState.hideMediaPlayerRoomStatus} />,
+                    onClick: () => {
+                        dispatch(toggleShowMediaPlayerRoomStatus())
+                    }
+                },
+                {
+                    label: "Hide Media Player",
+                    type: 'button',
+                    onClick: () => {dispatch(toggleHideMediaPlayer())},
+                    icon: <BoolIndicator active={mediaPlayerState.hideMediaPlayer} />
                 }
-            })
+
+            ]
             
             options.push({
                 label: mediaPlayerState.isPlaying ? 'Pause' : 'Play',
@@ -93,8 +118,9 @@ export const useMediaPlayerCtxMenu = () => {
             options.push({
                 label: "Mute Media Player",
                 type: 'button',
-                icon: <BoolIndicator active={mediaPlayerState.isMuted} />,
-                onClick: () => {dispatch(toggleMediaPlayerMuted())}
+                icon: <BoolIndicator color={'var(--error-color)'} active={mediaPlayerState.isMuted} />,
+                onClick: () => {dispatch(toggleMediaPlayerMuted())},
+                color: 'var(--error-color)'
             })
                 
             options.push({
@@ -108,24 +134,13 @@ export const useMediaPlayerCtxMenu = () => {
                 max: 1,
                 step: 0.01
             })
-            
-            options.push({
-                type: 'button',
-                label: 'Show Inline Player Controls',
-                icon: <BoolIndicator active={mediaPlayerState.showInlineControls} />,
-                onClick: () => {
-                    dispatch(toggleShowInlineControls())
-                }
-            })
 
             options.push({
-                type: 'button',
-                label: 'Hide Media Player Room Status',
-                icon: <BoolIndicator active={mediaPlayerState.hideMediaPlayerRoomStatus} />,
-                onClick: () => {
-                    dispatch(toggleShowMediaPlayerRoomStatus())
-                }
+                label: "View Media Player Options",
+                icon: <ChevronRight color='var(--text-color)' />,
+                submenuOptions: sub_options
             })
+
         } else {
             options.push({
                 label: "Widgets",

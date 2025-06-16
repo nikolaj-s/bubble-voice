@@ -16,7 +16,7 @@ export const CreateChannelForm = ({permissions}) => {
 
     const dispatch = useDispatch();
 
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [, setSearchParams] = useSearchParams();
 
     const {categories} = useSelector(state => state.categoriesSlice);
 

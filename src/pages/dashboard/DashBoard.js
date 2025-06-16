@@ -37,12 +37,23 @@ import { useApplyTheme } from "../../hooks/useApplyTheme";
 import { NotificationProvider } from "../../providers/NotificationProvider/NotificationProvider";
 import { GlobalVolumeProvider } from "../../context/GlobalVolumeContext";
 import NativeFullScreenWrapper from "../../components/ui/Wrappers/NativeFullScreenWrapper/NativeFullScreenWrapper";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { fetchDevices } from "../../features/Settings/Devices/deviceSlice";
 
 const Dashboard = () => {
+
+  const dispatch = useDispatch();
 
   useDeviceWatcher();
 
   useApplyTheme();
+
+  useEffect(() => {
+
+    dispatch(fetchDevices());
+
+  }, [dispatch])
 
   return (
    

@@ -84,7 +84,6 @@ export const RoomOverlay = () => {
             <div id='room-control-bar' data-context={JSON.stringify({type: 'roomControl'})} className={styles.bottomButtons}>
                 <MediaPlayerRoomStatus />
                 <div className={styles.wrapper}>
-                    <IconButton title={'Options'} onClick={(e) => {triggerContext(e, 'room-control-bar')}} Icon={<ChevronDown color='var(--text-color)' />} width={20} height={50} padding={'2px'} />
                     <MediaPlayerInlineControls />
                     <IconButton 
                     padding={15}

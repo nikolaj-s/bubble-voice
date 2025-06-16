@@ -1,112 +1,148 @@
-import { useState, useEffect, useRef } from 'react';
+// hooks/useTestMicrophone.js
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { useAudioContext } from '../context/AudioContext';
 
-const useTestMicrophone = (speechThreshold, deviceId = null) => {
-  const [micVolume, setMicVolume] = useState(0); // Track the mic volume
-  const audioContextRef = useRef(null); // To store the audio context
-  const analyserRef = useRef(null); // To store the analyser node
-  const mediaStreamRef = useRef(null); // To store the media stream
-  const bufferLengthRef = useRef(null); // To store the frequency buffer length
-  const dataArrayRef = useRef(null); // To store the frequency data array
-  const animationFrameRef = useRef(null); // For animation frame handling
-  const speakingRef = useRef(false); // To track if speech is detected
-  const audioSourceRef = useRef(null); // Store the audio source node
-  const gainNodeRef = useRef(null); // Store the gain node for microphone feedback
+const useTestMicrophone = (
+  speechThreshold = 0,
+  deviceId = null,
+  echoCancellation = true,
+  noiseSuppression = true,
+  autoGainControl = false
+) => {
+  const ctx = useAudioContext();           // shared AudioContext
+  const [volume, setVolume]       = useState(0);
+  const [isSpeaking, setSpeaking] = useState(false);
+
+  // Refs for our audio graph & stream
+  const streamRef     = useRef(null);
+  const sourceRef     = useRef(null);
+  const analyserRef   = useRef(null);
+  const dataRef       = useRef(null);
+  const gainNodeRef   = useRef(null);
+  const frameRef      = useRef(null);
+  const speakingRef   = useRef(false);
+  const historyRef    = useRef([]);
+
+  // Cleanup function, wrapped in useCallback so it's stable
+  const cleanup = useCallback(() => {
+    // stop the animation loop
+    if (frameRef.current) {
+      cancelAnimationFrame(frameRef.current);
+      frameRef.current = null;
+    }
+    // disconnect audio nodes
+    sourceRef.current?.disconnect();
+    analyserRef.current?.disconnect();
+    gainNodeRef.current?.disconnect();
+    // stop the mic
+    streamRef.current?.getTracks().forEach(t => t.stop());
+
+    // reset everything
+    streamRef.current   = null;
+    sourceRef.current   = null;
+    analyserRef.current = null;
+    dataRef.current     = null;
+    gainNodeRef.current = null;
+    historyRef.current  = [];
+    speakingRef.current = false;
+    setVolume(0);
+    setSpeaking(false);
+  }, []);
 
   useEffect(() => {
-    // Initialize the audio context and microphone stream
-    const initAudioProcessing = async () => {
+    let cancelled = false;
+
+    const detect = () => {
+      if (cancelled) return;
+      const analyser = analyserRef.current;
+      const dataArr  = dataRef.current;
+      if (!analyser || !dataArr) return;
+
+      analyser.getByteFrequencyData(dataArr);
+      let sum = 0;
+      for (let v of dataArr) sum += v;
+      const raw = sum / dataArr.length;
+
+      const H = historyRef.current;
+      H.push(raw);
+      if (H.length > 10) H.shift();
+      const smooth = H.reduce((a, b) => a + b, 0) / H.length;
+
+      const pct = Math.min(100, (smooth / 255) * 100);
+      setVolume(pct);
+
+      if (pct >= speechThreshold) {
+        if (!speakingRef.current) {
+          speakingRef.current = true;
+          setSpeaking(true);
+        }
+      } else {
+        if (speakingRef.current) {
+          speakingRef.current = false;
+          setSpeaking(false);
+        }
+      }
+
+      frameRef.current = requestAnimationFrame(detect);
+    };
+
+    const init = async () => {
       try {
-        // Create an audio context to analyze the audio
-        audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
-        
-        // Get access to the microphone with optional deviceId
         const constraints = {
-          audio: deviceId
-            ? { deviceId: { exact: deviceId } }
-            : true, // Use default device if no deviceId is provided
-        };
-
-        mediaStreamRef.current = await navigator.mediaDevices.getUserMedia(constraints);
-
-        // Create a media stream source node
-        const source = audioContextRef.current.createMediaStreamSource(mediaStreamRef.current);
-        analyserRef.current = audioContextRef.current.createAnalyser();
-        analyserRef.current.fftSize = 2048; // Larger FFT for better frequency accuracy
-        bufferLengthRef.current = analyserRef.current.frequencyBinCount;
-        dataArrayRef.current = new Uint8Array(bufferLengthRef.current);
-
-        // Connect the source to the analyser node
-        source.connect(analyserRef.current);
-
-        // Create a GainNode to allow the user to hear the microphone input
-        gainNodeRef.current = audioContextRef.current.createGain();
-        gainNodeRef.current.gain.setValueAtTime(1, audioContextRef.current.currentTime); // Set volume to 100%
-
-        
-        // Connect analyser to the gain node, and gain node to the destination (i.e., speakers)
-        analyserRef.current.connect(gainNodeRef.current);
-        gainNodeRef.current.connect(audioContextRef.current.destination);
-
-        // Function to detect microphone volume
-        const detectVolume = () => {
-          analyserRef.current.getByteFrequencyData(dataArrayRef.current);
-
-          // Calculate the volume based on the average of the frequency data
-          const total = dataArrayRef.current.reduce((sum, value) => sum + value, 0);
-          const average = total / bufferLengthRef.current;
-
-          // Update the state with the calculated average volume
-          setMicVolume(average);
-
-          // Check if the mic volume surpasses the speech threshold
-          if (average > speechThreshold) {
-            if (!speakingRef.current) {
-              speakingRef.current = true;
-              console.log("Speech detected - activating voice producer.");
-
-              gainNodeRef.current.gain.setValueAtTime(1, audioContextRef.current.currentTime); // Set volume to 100%
-
-            }
-          } else if (speakingRef.current) {
-            speakingRef.current = false;
-            console.log("Speech stopped - pausing voice producer.");
-            
-            gainNodeRef.current.gain.setValueAtTime(0, audioContextRef.current.currentTime); // Set volume to 100%
-
+          audio: {
+            echoCancellation,
+            noiseSuppression,
+            autoGainControl,
+            ...(deviceId ? { deviceId: { exact: deviceId } } : {}),
           }
-
-          // Continue detecting volume
-          animationFrameRef.current = requestAnimationFrame(detectVolume);
         };
 
-        // Start detecting volume
-        detectVolume();
-      } catch (error) {
-        console.error('Error accessing microphone:', error);
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        if (cancelled) {
+          stream.getTracks().forEach(t => t.stop());
+          return;
+        }
+        streamRef.current = stream;
+
+        const source = ctx.createMediaStreamSource(stream);
+        sourceRef.current = source;
+
+        const analyser = ctx.createAnalyser();
+        analyser.fftSize = 2048;
+        analyserRef.current = analyser;
+        source.connect(analyser);
+
+        dataRef.current = new Uint8Array(analyser.frequencyBinCount);
+
+        const gainNode = ctx.createGain();
+        gainNode.gain.setValueAtTime(1, ctx.currentTime);
+        gainNodeRef.current = gainNode;
+        source.connect(gainNode);
+        gainNode.connect(ctx.destination);
+
+        detect();
+      } catch (err) {
+        console.error('useTestMicrophone init failed:', err);
       }
     };
 
-    // Initialize the audio processing
-    initAudioProcessing();
+    init();
 
-    // Clean up when the component is unmounted
     return () => {
-      if (audioContextRef.current) {
-        audioContextRef.current.close();
-      }
-      if (mediaStreamRef.current) {
-        mediaStreamRef.current.getTracks().forEach(track => track.stop());
-      }
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
-      if (gainNodeRef.current) {
-        gainNodeRef.current.disconnect();
-      }
+      cancelled = true;
+      cleanup();
     };
-  }, [speechThreshold, deviceId]);
+  }, [
+    ctx,
+    speechThreshold,
+    deviceId,
+    echoCancellation,
+    noiseSuppression,
+    autoGainControl,
+    cleanup
+  ]);
 
-  return micVolume;
+  return { volume, isSpeaking };
 };
 
 export default useTestMicrophone;

@@ -2,7 +2,7 @@
 import { useAppCtxMenu } from "./Options/useAppCtxMenu";
 import { useMediaPlayerCtxMenu } from "./Options/useMediaPlayerCtxMenu";
 import { useUserCtxMenu } from "./Options/UserOptions/useUserCtxMenu";
-import { useViewWidgetsCtxMenu } from "./Options/useViewWidgetsCtxMenu";
+import { useViewWidgetsCtxMenu } from "./Options/WidgetOptions/useViewWidgetsCtxMenu";
 import { useWidgetsCtxMenu } from "./Options/WidgetOptions/useWidgetsCtxMenu";
 import { useWidgetCtxMenu } from "./Options/WidgetOptions/useWidgetCtxMenu";
 import { useChannelCtxMenu } from "./Options/ChannelOptions/useChannelCtxMenu";
@@ -78,16 +78,16 @@ export const useContextMenuOptions = () => {
                     continue;
                 }
             }
-            console.log(permissions)
+           
             if (data.appSubmenu) getAppSubmenuOptions(options);
 
             if (data.appSubmenu || data.widgetsOverlay) getViewWidgetsOption(options);
 
             if (data.userStreamSource) getUserStreamOptions(options, data.userStreamSource);
             
-            if (data.mediaplayer || data.roomControl) getMediaPlayerOptions(options);
+            if (data.mediaplayer || data.roomControl || data.room) getMediaPlayerOptions(options);
 
-            if (data.roomControl) options.push({type: 'spacer'});
+            if (data.roomControl || data.room) options.push({type: 'spacer'});
 
             if (data.user) getUserControlsOptions(options, data.user);
 

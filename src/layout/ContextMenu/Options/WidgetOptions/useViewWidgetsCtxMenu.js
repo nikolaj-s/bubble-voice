@@ -1,8 +1,8 @@
 import { ChevronRight, LayoutDashboard } from "lucide-react";
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setOverlay } from "../../../features/Overlay/overlaySlice";
-import { setChannelToViewWidgetsOf } from "../../../features/Widgets/widgetsSlice";
+import { setOverlay } from "../../../../features/Overlay/overlaySlice";
+import { setChannelToViewWidgetsOf } from "../../../../features/Widgets/widgetsSlice";
 
 
 export const useViewWidgetsCtxMenu = () => {
@@ -34,7 +34,8 @@ export const useViewWidgetsCtxMenu = () => {
         options.push({
             label: "View Widgets From",
             submenuOptions: widget_options,
-            icon: <ChevronRight color="var(--text-color)" />
+            icon: <ChevronRight color="var(--text-color)" />,
+            useFilter: true
         })
 
     }, [dispatch, channels]);

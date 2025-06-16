@@ -1,9 +1,8 @@
-import { Circle, ImageMinus, ImagePlus, Music2, Pencil } from 'lucide-react';
-import React, { useCallback } from 'react'
+import { Pencil } from 'lucide-react';
+import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toggleAppearanceSetting } from '../../../features/Settings/Appearance/appearanceSlice';
 import { toggleVoiceChannelOptions } from '../../../features/Channel/VoiceChannel/voiceChannelSlice';
-import { toggleHideMediaPlayer } from '../../../features/MediaPlayer/mediaPlayerSlice';
 import { setChannelToEdit } from '../../../features/Channel/editChannel/editChannelSlice';
 import { useSearchParams } from 'react-router-dom';
 import { setOverlay } from '../../../features/Overlay/overlaySlice';
@@ -20,8 +19,6 @@ export const useVoiceChannelCtxMenu = () => {
     const {currentVoiceChannel, hideNonVideoUsers} = useSelector(state => state.voiceChannelSlice);
 
     const {channels} = useSelector(state => state.channelsSlice);
-
-    const hideMediaPlayer = useSelector(state => state.mediaPlayerSlice.hideMediaPlayer);
 
     const getVoiceChannelOptions = useCallback((options, permissions) => {
         options.push({
@@ -41,13 +38,6 @@ export const useVoiceChannelCtxMenu = () => {
                 onClick: () => {dispatch(toggleVoiceChannelOptions('hideNonVideoUsers'))}
             })
             
-            options.push({
-                label: "Hide Media Player",
-                type: 'button',
-                onClick: () => {dispatch(toggleHideMediaPlayer())},
-                icon: <BoolIndicator active={hideMediaPlayer} />
-            })
-            
             if (permissions.user_can_edit_channels) {
                 options.push({
                     label: "Edit Channel",
@@ -64,7 +54,7 @@ export const useVoiceChannelCtxMenu = () => {
                 })
             }
         }
-    }, [channels, currentVoiceChannel, hideMediaPlayer, hideNonVideoUsers, hideChannelBackgrounds, dispatch, setSearchParams])
+    }, [channels, currentVoiceChannel, hideNonVideoUsers, hideChannelBackgrounds, dispatch, setSearchParams])
   
     return {getVoiceChannelOptions}
 }

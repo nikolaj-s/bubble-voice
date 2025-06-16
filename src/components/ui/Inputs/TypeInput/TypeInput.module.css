@@ -24,7 +24,7 @@
 
 .option.selected {
   border-color: var(--success-color);
-  background: var(--accent-color);
+  background: var(--secondary-color);
 }
 
 .title {

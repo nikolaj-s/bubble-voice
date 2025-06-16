@@ -23,7 +23,6 @@ export const useImageCtxMenu = () => {
 
     const getImageOptions = useCallback((options, data, permissions) => {
 
-     
         if (currentTextChannel && permissions?.user_can_post_in_text_channels && data.imageSearchResult) {
             options.push({
                 label: "Send To Current Channel",
@@ -69,8 +68,11 @@ export const useImageCtxMenu = () => {
             if (sendToOptions.length > 0) {
                 options.push({
                     label: "Send To",
-                    submenuOptions: sendToOptions,
-                    icon: <ChevronRight color="var(--text-color)" />
+                    submenuOptions: sendToOptions.sort((a, b) => 
+            a.label.localeCompare(b.label, undefined, { sensitivity: 'base' })
+            ),
+                    icon: <ChevronRight color="var(--text-color)" />,
+                    useFilter: true
                 })
             }
         }

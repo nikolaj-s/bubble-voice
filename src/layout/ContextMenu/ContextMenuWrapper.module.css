@@ -12,7 +12,8 @@
 
 .scrollWrapper {
   max-height: calc(100svh - 40px);
-  overflow-y: auto;                /* only this scrolls */
+  overflow-y: auto;  
+  overflow-x: hidden;              /* only this scrolls */
   padding:  5px 0px;
   gap: 5px;
   display: flex;

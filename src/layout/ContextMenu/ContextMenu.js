@@ -97,7 +97,7 @@ const ContextMenu = ({ children }) => {
 
                                 if (opt.submenuOptions) {
                                     return (
-                                        <div {...commonProps}>
+                                        <div {...commonProps} key={idx}>
                                             <ContextMenuButtonWithSubmenu
                                                 {...opt}
                                                 top={idx === 0}
@@ -110,7 +110,7 @@ const ContextMenu = ({ children }) => {
                                 switch (opt.type) {
                                     case "button":
                                         return (
-                                            <div {...commonProps}>
+                                            <div {...commonProps}key={idx}>
                                                 <ContextMenuButton
                                                     {...opt}
                                                     top={idx === 0}
@@ -120,7 +120,7 @@ const ContextMenu = ({ children }) => {
                                         );
                                     case "radio":
                                         return (
-                                            <div {...commonProps}>
+                                            <div {...commonProps} key={idx}>
                                                 <ContextRadioButton
                                                     label={opt.label}
                                                     checked={opt.state}
@@ -132,7 +132,7 @@ const ContextMenu = ({ children }) => {
                                         );
                                     case "range":
                                         return (
-                                            <div {...commonProps}>
+                                            <div {...commonProps} key={idx}>
                                                 <ContextRangeInput
                                                     label={opt.label}
                                                     value={opt.value}

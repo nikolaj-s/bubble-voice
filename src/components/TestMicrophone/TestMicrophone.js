@@ -1,65 +1,110 @@
-import React from 'react'
-import TextButton from '../ui/Buttons/TextButton/TextButton'
-import VUMeter from '../Misc/VUMeter/VUMeter'
-import useTestMicrophone from '../../hooks/useTestMicrophone'
-import Label from '../ui/Titles/Label/Label'
-import VolumeSlider from '../ui/Inputs/VolumeSlider/VolumeSlider'
+import React, { useState, useEffect, useRef } from 'react';
+import TextButton from '../ui/Buttons/TextButton/TextButton';
+import VUMeter from '../Misc/VUMeter/VUMeter';
+import useTestMicrophone from '../../hooks/useTestMicrophone';
+import Label from '../ui/Titles/Label/Label';
+import VolumeSlider from '../ui/Inputs/VolumeSlider/VolumeSlider';
+import styles from './TestMicrophone.module.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleMicrophone } from '../../features/Channel/MediaControl/mediaControlSlice';
 
-import styles from './TestMicrophone.module.css'
+// This child only exists while testing === true, so the hook
+// only activates when you’re in “Start” mode.
+const ListenToMicrophone = ({ voiceThreshold, toggleIsSpeaking, deviceId, onChange }) => {
 
+  const dispatch = useDispatch();
 
-const ListenToMicrophone = ({onChange = () => {}, deviceId, voiceThreshold}) => {
+  const wasMuted = useRef(false);
 
-    const volume = useTestMicrophone(voiceThreshold, deviceId);
+  const {noiseSuppression, echoCancellation, autoGainControl, isMicrophoneMuted} = useSelector(state => state.mediaControlSlice);
 
-    React.useEffect(() => {
-        onChange(volume);
+  const {selectedMicrophone} = useSelector(state => state.deviceSlice);
 
-    }, [volume, onChange])
+  const { volume, isSpeaking } = useTestMicrophone(voiceThreshold, selectedMicrophone?.deviceId, echoCancellation, noiseSuppression, autoGainControl);
 
-    return (
-       null
-    )
-}
+  useEffect(() => {
 
+    wasMuted.current = isMicrophoneMuted;
 
-export const TestMicrophone = ({voiceThreshold = 0, setVoiceThreshold = () => {}, usingPushToTalk, deviceId}) => {
+    if (isMicrophoneMuted) return;
 
-    const [testingMicrophone, toggleTestingMicrophone] = React.useState(false);
+    dispatch(toggleMicrophone());
 
-    const [volume, setVolume] = React.useState(0);
+    return () => {
+      if (wasMuted.current) return;
+      dispatch(toggleMicrophone());
+    }
+  //eslint-disable-next-line
+  }, [dispatch])
 
-    return (
-        <div className={styles.container}>
-        <VUMeter 
-        volume={volume} 
+  useEffect(() => {
+
+    toggleIsSpeaking(isSpeaking);
+
+  }, [isSpeaking, toggleIsSpeaking])
+
+  useEffect(() => {
+    onChange(volume);
+  }, [volume, onChange]);
+
+  return null;
+};
+
+export const TestMicrophone = ({
+  voiceThreshold = 0,
+  setVoiceThreshold = () => {},
+  usingPushToTalk = false,
+  deviceId = null,
+}) => {
+  const [testing, setTesting] = useState(false);
+  const [volume, setVolume]   = useState(0);
+  const [isSpeaking, toggleIsSpeaking] = useState(false);
+
+  return (
+    <div className={styles.container}>
+      {/* VU-Meter always visible, shows 0 when not testing */}
+      <VUMeter
+        volume={volume}
         voiceThreshold={usingPushToTalk ? null : voiceThreshold}
-        />
-        {!usingPushToTalk && 
+        isSpeaking={isSpeaking}
+      />
+
+      {/* Slider to tweak the activation point */}
+      {!usingPushToTalk && (
         <>
-        <Label label='Adjust Voice Activation Threshold' />
-        <VolumeSlider 
-        min={1}
-        max={99}
-        step={2}
-        value={voiceThreshold}
-        onChange={setVoiceThreshold}
-        />
-        </>}
-        <TextButton
-        backgroundColor={testingMicrophone ? "var(--error-color)" : null}
-        action={() => {toggleTestingMicrophone(!testingMicrophone); setVolume(0)}}
-        title={testingMicrophone ? "Stop" : "Start"} 
+          <Label label="Adjust Voice Activation Threshold" />
+          <VolumeSlider
+            min={0}
+            max={100}
+            step={1}
+            value={voiceThreshold}
+            onChange={(v) => setVoiceThreshold(Number(v))}
+          />
+        </>
+      )}
+
+      {/* Start / Stop testing */}
+      <TextButton
+        backgroundColor={testing ? 'var(--error-color)' : null}
+        action={() => {
+          setTesting((t) => !t);
+          setVolume(0);
+        }}
+        title={testing ? 'Stop Testing' : 'Start Testing'}
         maxWidth={120}
+      />
+
+      {/* When testing, mount the listener which drives volume state */}
+      {testing && (
+        <ListenToMicrophone
+          deviceId={deviceId}
+          voiceThreshold={voiceThreshold}
+          onChange={setVolume}
+          toggleIsSpeaking={toggleIsSpeaking}
         />
-        {testingMicrophone ?
-        <ListenToMicrophone 
-        deviceId={deviceId}
-        voiceThreshold={voiceThreshold}
-        onChange={setVolume} />
-        :
-        null
-        }
-        </div>
-    )
-}
+      )}
+    </div>
+  );
+};
+
+export default TestMicrophone;

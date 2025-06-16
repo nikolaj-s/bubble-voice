@@ -8,6 +8,15 @@
   box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
   flex-shrink: 0;
   height: auto;
+  transition: box-shadow 0.3s ease;
+}
+
+/* GLOW when talking */
+.vuMeterContainer.talking {
+  /* adds an outer green-ish glow */
+  box-shadow:
+    inset 0 0 15px rgba(0, 0, 0, 0.5),
+    0 0 12px var(--success-color);
 }
 
 .vuMeterBar {
@@ -21,7 +30,7 @@
 }
 
 .vuMeterPid {
-  width: 3.33%; /* 100% divided by 30 segments */
+  width: 3.33%; /* 100% / 30 segments */
   height: 100%;
   background-color: var(--primary-color);
   transition: background-color 0.3s ease;
@@ -38,4 +47,10 @@
   width: 2px;
   background-color: var(--error-color);
   z-index: 1;
+  transform: translateX(-50%);
+  transition: 0.4s background-color ease-in-out;
+}
+
+.speaking {
+  background-color: var(--success-color);
 }

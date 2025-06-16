@@ -59,8 +59,42 @@
     cursor: pointer;
   }
 
-  .rightFade:hover {
-    background-color: var(--background-color);
+  .leftFade,
+  .rightFade {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: 0.2s ease-in;
+  }
+
+  /* left arrow gradient */
+  .leftFade {
+    left: 0;
+    background: linear-gradient(to right, rgba(18, 26, 34, 0.8), transparent);
+  }
+
+  /* right arrow gradient */
+  .rightFade {
+    right: 0;
+    background: linear-gradient(to left, rgba(18, 26, 34, 0.8), transparent);
+  }
+
+  .arrowIcon {
+    color: var(--text-color);
+    width: 24px;
+    height: 24px;
+  }
+
+
+  .rightFade:hover,
+  .leftFade:hover {
+    background-color: var(--overlay-color);
   }
   
   .arrowIcon {

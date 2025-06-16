@@ -8,7 +8,6 @@ import {
 // import { getMicrophoneMedia, produce, pauseProducer, closeProducer } from "...";
 
 export const useMicrophoneToggle = ({
-  selectedMicrophone,
   echoCancellation,
   autoGainControl,
   noiseSuppression,
@@ -22,9 +21,9 @@ export const useMicrophoneToggle = ({
   const timerRef = useRef();
 
   const debouncedToggle = useCallback(
-    (state) => {
+    (state, selectedMicrophone) => {
       if (timerRef.current) clearTimeout(timerRef.current);
-
+    //  console.log(`changing microphone state of ${selectedMicrophone?.deviceId} is muted ${state}`)
       timerRef.current = setTimeout(async () => {
         dispatch(throwMicrophoneError(false));
         dispatch(toggleMediaControlLoading(true));
@@ -53,7 +52,6 @@ export const useMicrophoneToggle = ({
     },
     [
       dispatch,
-      selectedMicrophone,
       echoCancellation,
       autoGainControl,
       noiseSuppression,

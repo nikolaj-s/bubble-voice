@@ -1,159 +1,174 @@
-import React, { useState, useEffect, useRef } from "react";
+// Dropdown.jsx
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import styles from "./DropDown.module.css";
 import { ChevronDown } from "lucide-react";
+import styles from "./DropDown.module.css";
 
-const Dropdown = ({ selected, options, setSelected, selector = "label", minWidth }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
+const Dropdown = ({
+  selected,
+  options,
+  setSelected,
+  selector = "label",
+  minWidth = "120px",
+}) => {
+  const [isOpen, setIsOpen]     = useState(false);
+  const [anchor, setAnchor]     = useState({ x: 0, y: 0, width: 0 });
   const [menuStyle, setMenuStyle] = useState({});
-
-  const [position, setPosition] = useState(null);
-
   const dropdownRef = useRef(null);
-  
-  const menuRef = useRef(null);
+  const menuRef     = useRef(null);
 
-  const toggleDropdown = () => setIsOpen((prev) => !prev);
+  const getLabel = (opt) =>
+    typeof opt === "string" ? opt : opt[selector];
 
-  const handleSelect = (option) => {
-    setSelected(option);
-    setIsOpen(false);
+  // Toggle open/close & capture the button's rect on open
+  const toggle = () => {
+    if (!isOpen && dropdownRef.current) {
+      const rect = dropdownRef.current.getBoundingClientRect();
+      setAnchor({ x: rect.left, y: rect.bottom, width: rect.width });
+    }
+    setIsOpen((o) => !o);
   };
 
-  // Extract label from either strings or objects
-  const getLabel = (option) => (typeof option === "string" ? option : option[selector]);
-
-  // Close dropdown when clicking outside
+  // ——— FIXED outside‐click logic ———
   useEffect(() => {
-    const handleClickOutside = (event) => {
-
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-
+    const handleOutside = (e) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target) &&
+        menuRef.current &&
+        !menuRef.current.contains(e.target)
+      ) {
         setIsOpen(false);
-
       }
-      
     };
+    if (isOpen) document.addEventListener("mousedown", handleOutside);
+    return () => document.removeEventListener("mousedown", handleOutside);
+  }, [isOpen]);
+  // ————————————————————————————
 
-    if (isOpen) {
+  // Position & clamp the portal menu
+  useLayoutEffect(() => {
+    if (!isOpen) return;
+    const margin = 8;
+    const vw     = window.innerWidth;
+    const vh     = window.innerHeight;
 
-      document.addEventListener("mousedown", handleClickOutside);
-
-    } else {
-
-      document.removeEventListener("mousedown", handleClickOutside);
-
+    // 1) Seed it under the button instantly
+    {
+      let left = anchor.x;
+      const btnW = anchor.width;
+      if (left + btnW > vw - margin) {
+        left = vw - btnW - margin;
+      }
+      setMenuStyle({
+        position:  "fixed",
+        top:       `${anchor.y + margin}px`,
+        left:      `${left}px`,
+        minWidth:  `${btnW}px`,
+        maxHeight: `${vh - margin * 2}px`,
+        overflowY: "auto",
+        overflowX: "hidden",
+      });
     }
 
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen]);
-
-  useEffect(() => {
+    // 2) Refine after it renders
     requestAnimationFrame(() => {
-      if (isOpen && dropdownRef.current && menuRef.current) {
-        const triggerRect = dropdownRef.current.getBoundingClientRect();
-        const viewportHeight = window.innerHeight;
-    
-        const spaceBelow = viewportHeight - triggerRect.bottom;
-        const spaceAbove = triggerRect.top;
-    
-        const desiredHeight = menuRef.current.scrollHeight;
-        const menuRect = menuRef.current.getBoundingClientRect();
+      if (!menuRef.current || !dropdownRef.current) return;
+      const btnRect    = dropdownRef.current.getBoundingClientRect();
+      const menuH      = menuRef.current.scrollHeight;
+      const menuW      = menuRef.current.offsetWidth;
+      const spaceBelow = vh - btnRect.bottom;
+      const spaceAbove = btnRect.top;
 
-        const overflowsRight = triggerRect.left + menuRect.width > window.innerWidth;
-        const overflowsBottom = triggerRect.bottom + menuRect.height > window.innerHeight;
-
-        if (overflowsRight && overflowsBottom) {
-          setPosition("top-right");
-        } else if (overflowsRight) {
-          setPosition("bottom-right");
-        } else if (overflowsBottom) {
-          setPosition("top-left");
-        } else {
-          setPosition("bottom-left");
-        }
-    
-        if (spaceBelow >= desiredHeight) {
-          // Enough space below
-          setMenuStyle({
-            top: "100%",
-            maxHeight: desiredHeight,
-            overflowY: "visible",
-            marginTop: "8px",
-          });
-        } else if (spaceAbove >= desiredHeight) {
-          // Enough space above
-          setMenuStyle({
-            bottom: "100%",
-            maxHeight: desiredHeight,
-            overflowY: "visible",
-            marginBottom: "8px",
-          });
-        } else if (spaceBelow >= spaceAbove) {
-          // Not enough space, but use what we have below
-          setMenuStyle({
-            top: "100%",
-            maxHeight: spaceBelow - 15,
-            overflowY: "auto",
-            marginTop: "8px",
-          });
-        } else {
-          // Use the space above
-          setMenuStyle({
-            bottom: "100%",
-            maxHeight: spaceAbove - 15,
-            overflowY: "auto",
-            marginBottom: "8px",
-          });
-        }
+      let top;
+      if (spaceBelow >= menuH + margin) {
+        top = btnRect.bottom + margin;
+      } else if (spaceAbove >= menuH + margin) {
+        top = btnRect.top - menuH - margin;
+      } else if (spaceBelow >= spaceAbove) {
+        top = btnRect.bottom + margin;
+      } else {
+        top = Math.max(margin, btnRect.top - menuH - margin);
       }
-    })
-      
-  }, [isOpen]);
 
-  return (
-    <div className={styles.dropdown} ref={dropdownRef} style={{minWidth}}>
-      <button className={styles.dropdownButton} onClick={toggleDropdown} style={{minWidth}}>
-        {selected ? getLabel(selected) : "Select an option"}
-        <ChevronDown 
-        style={{rotate: isOpen ? '-180deg' : '0deg', transition: '0.2s'}}
-        color="var(--text-color)" 
-        size={15}
-         />
-      </button>
+      let left2 = btnRect.left;
+      if (btnRect.left + menuW > vw - margin) {
+        left2 = vw - menuW - margin;
+      }
 
-      <AnimatePresence>
-        {isOpen && (
+      setMenuStyle((ms) => ({
+        ...ms,
+        top:       `${top}px`,
+        left:      `${left2}px`,
+        maxHeight: `${Math.min(menuH, vh - margin * 2)}px`,
+        overflowY:
+          vh - margin * 2 < menuH ? "auto" : "visible",
+      }));
+    });
+  }, [isOpen, anchor]);
+
+  // Portal’d menu
+  const menu = isOpen
+    ? createPortal(
+        <AnimatePresence>
           <motion.ul
-            style={menuStyle}
             ref={menuRef}
-            className={`${styles.options} ${styles[position]}`}
+            className={styles.options}
+            style={menuStyle}
             initial={{ opacity: 0, y: -5 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -5 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.2 }}
           >
-            {options.map((option, indx) => (
+            {options.map((opt, i) => (
               <motion.li
-                key={indx}
+                key={i}
                 className={`${styles.option} ${
-                  selected && getLabel(selected) === getLabel(option) ? styles.selectedOption : ""
+                  selected && getLabel(selected) === getLabel(opt)
+                    ? styles.selectedOption
+                    : ""
                 }`}
-                onClick={() => handleSelect(option)}
+                onClick={() => {
+                  setSelected(opt);
+                  setIsOpen(false);
+                }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                {getLabel(option)}
+                {getLabel(opt)}
               </motion.li>
             ))}
           </motion.ul>
-        )}
-      </AnimatePresence>
+        </AnimatePresence>,
+        document.body
+      )
+    : null;
+
+  return (
+    <div
+      className={styles.dropdown}
+      ref={dropdownRef}
+      style={{ minWidth }}
+    >
+      <button
+        className={styles.dropdownButton}
+        onClick={toggle}
+        style={{ minWidth }}
+      >
+        {selected ? getLabel(selected) : "Select..."}
+        <ChevronDown
+          size={16}
+          style={{
+            rotate: isOpen ? "-180deg" : "0deg",
+            transition: "0.2s",
+          }}
+          color="var(--text-color)"
+        />
+      </button>
+      {menu}
     </div>
   );
 };
 
 export default Dropdown;
-
-

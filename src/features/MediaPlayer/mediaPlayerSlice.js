@@ -15,12 +15,12 @@ const initialState = {
   error: false,
   isPlayerOpen: false,
   hasAudio: true,
-  hideMediaPlayer: false,
+  hideMediaPlayer: JSON.parse(localStorage.getItem('hideMediaPlayer')) || false,
   enabled: false,
   color: null,
   hideQueue: true,
   showInlineControls: JSON.parse(localStorage.getItem('showInlineControls')) || false,
-  hideMediaPlayerRoomStatus: false
+  hideMediaPlayerRoomStatus: JSON.parse(localStorage.getItem('hideMediaPlayerRoomStatus')) || false
 };
 
 const mediaPlayerSlice = createSlice({
@@ -138,6 +138,8 @@ const mediaPlayerSlice = createSlice({
     },
     toggleHideMediaPlayer: (state, action) => {
       state.hideMediaPlayer = !state.hideMediaPlayer
+
+      localStorage.setItem('hideMediaPlayer', JSON.stringify(state.hideMediaPlayer));
     },
     enableMediaPlayer: (state, action) => {
       state.enabled = action.payload;
@@ -147,6 +149,8 @@ const mediaPlayerSlice = createSlice({
     },
     toggleShowMediaPlayerRoomStatus: (state, action) => {
       state.hideMediaPlayerRoomStatus = !state.hideMediaPlayerRoomStatus;
+
+      localStorage.setItem('hideMediaPlayerRoomStatus', JSON.stringify(state.hideMediaPlayerRoomStatus));
     },
     toggleShowInlineControls: (state, action) => {
 

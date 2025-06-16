@@ -2,6 +2,7 @@
 import React, { useState, useRef, useLayoutEffect } from "react";
 import { createPortal } from "react-dom";
 import ContextMenuButton from "./ContextMenuButton";
+import TextInput from "../../Inputs/TextInput/TextInput";
 
 const ContextMenuButtonWithSubmenu = ({
     label,
@@ -9,12 +10,15 @@ const ContextMenuButtonWithSubmenu = ({
     top,
     bottom,
     icon,
+    useFilter
 }) => {
     const [open, setOpen] = useState(false);
     const buttonRef = useRef(null);
     const submenuRef = useRef(null);
     const closeTimeout = useRef(null);
     const [coords, setCoords] = useState({ top: 0, left: 0 });
+
+    const [filter, setFilter] = useState('');
 
     const openMenu = () => {
         clearTimeout(closeTimeout.current);
@@ -81,11 +85,18 @@ const ContextMenuButtonWithSubmenu = ({
                             display: 'flex',
                             flexDirection: 'column',
                             gap: '5px',
-                            minWidth: 150,
+                            minWidth: 250,
                             zIndex: 2000,
+                            marginTop: -5
                         }}
-                    >
-                        {submenuOptions.map((opt, i) => (
+                    >   
+                        {useFilter && (
+                        <div style={{flexShrink: 0, width: '100%'}} onKeyDown={(e) => {e.stopPropagation()}} 
+                        onKeyUp={(e) => {e.stopPropagation()}} 
+                        onClick={(e) => e.stopPropagation()}>
+                            <TextInput placeholder={'Filter'} onChange={setFilter} />
+                        </div>)}
+                        {submenuOptions.filter(o => o.label.toLowerCase().startsWith(filter.toLowerCase())).map((opt, i) => (
                             <div
                                 key={i}
 

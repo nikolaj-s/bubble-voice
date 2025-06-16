@@ -36,7 +36,7 @@ export const Room = () => {
 
     const producers = getProducers();
 
-    const handleMicrophone = useMicrophoneToggle({selectedMicrophone, echoCancellation, autoGainControl, noiseSuppression, getMicrophoneMedia, produce, pauseProducer, closeProducer});
+    const handleMicrophone = useMicrophoneToggle({echoCancellation, autoGainControl, noiseSuppression, getMicrophoneMedia, produce, pauseProducer, closeProducer});
  
     const { handleScreenShare } = useScreenShare({produce, closeProducer});
     // microphoneMuteState effect
@@ -50,9 +50,9 @@ export const Room = () => {
             return;
         }
         
-        handleMicrophone(isMicrophoneMuted);
+        handleMicrophone(isMicrophoneMuted, selectedMicrophone);
     // eslint-disable-next-line
-    }, [isMicrophoneMuted, disable_streams]);
+    }, [isMicrophoneMuted, disable_streams, selectedMicrophone]);
 
     React.useEffect(() => {
 
@@ -110,7 +110,7 @@ export const Room = () => {
     }, [isWebcamOn, selectedWebcam, disable_streams])
 
     // Hook for detecting speech
-    useDetectSpeech((disable_streams || isMicrophoneMuted), pauseProducer, resumeProducer, voiceThreshold, usingPushToTalk);
+    useDetectSpeech((disable_streams || isMicrophoneMuted), pauseProducer, resumeProducer, voiceThreshold, usingPushToTalk, selectedMicrophone?.deviceId, echoCancellation, noiseSuppression, autoGainControl);
 
     usePushToTalk((disable_streams || isMicrophoneMuted), usingPushToTalk, isPushToTalkActive, resumeProducer, pauseProducer);
 

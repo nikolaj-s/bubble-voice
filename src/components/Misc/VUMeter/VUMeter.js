@@ -1,38 +1,37 @@
-import React, { useState, useEffect } from "react";
-import styles from "./VUMeter.module.css"; // Importing CSS Module
-import VolumeSlider from "../../ui/Inputs/VolumeSlider/VolumeSlider";
+import React from "react";
+import styles from "./VUMeter.module.css";
 
-const VUMeter = ({ volume, voiceThreshold }) => {
-  // Define how many "pids" (segments) the meter will have
-  const pidCount = 30;
-
-  // Calculate the number of pids to light up based on the volume level
-  const activePids = Math.floor((volume / 100) * pidCount);
-
-  // Calculate the position of the threshold based on the volume floor and the bar width
-  const thresholdPosition = Math.floor((voiceThreshold / 100) * pidCount);
+const VUMeter = ({ volume = 0, voiceThreshold = 0, isSpeaking = false }) => {
+  const pidCount     = 30;
+  const activePids   = Math.floor((volume / 100) * pidCount);
+  const thresholdPct = Math.min(100, Math.max(0, voiceThreshold));
 
   return (
-    <div className={styles.vuMeterContainer}>
+    <div
+      className={`${styles.vuMeterContainer}`}
+    >
       <div className={styles.vuMeterBar}>
-        {/* Render the pids */}
-        {Array.from({ length: pidCount }, (_, index) => (
+        {Array.from({ length: pidCount }, (_, i) => (
           <div
-            key={index}
-            className={`${styles.vuMeterPid} ${index < activePids ? styles.active : ""}`}
-          ></div>
+            key={i}
+            className={`${styles.vuMeterPid} ${
+              i < activePids ? styles.active : ""
+            }`}
+          />
         ))}
-        {/* Render the threshold line */}
-        {voiceThreshold && 
-        <div
-          className={styles.thresholdLine}
-          style={{ left: `${(thresholdPosition / pidCount) * 100}%` }}
-        />}
+
+        {voiceThreshold != null && (
+          <div
+            className={`${styles.thresholdLine} ${isSpeaking ? styles.speaking : null}`}
+            style={{ left: `${thresholdPct}%`, backgroundColor: isSpeaking ? 'var(--success-color)' : null }}
+          />
+        )}
       </div>
     </div>
   );
 };
 
 export default VUMeter;
+
 
 

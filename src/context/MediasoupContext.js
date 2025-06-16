@@ -192,7 +192,7 @@ export const MediasoupProvider = ({ children }) => {
     let params = { track, appData: { type } };
 
     const producer = await producerTransportRef.current.produce(params);
-    console.log(producer, type)
+
     producer.on("transportclose", () => closeProducer(type));
     producer.on("close", () => closeProducer(type));
     producer.on("trackended", () => closeProducer(type));

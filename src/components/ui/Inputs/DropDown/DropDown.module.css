@@ -1,90 +1,58 @@
+/* DropDown.module.css */
+
 .dropdown {
-    position: relative;
-    display: inline-block;
-    color: var(--text-color);
-  }
-  
-  .dropdownButton {
-    background-color: var(--background-color);
-    min-width: 80px;
-    border: none;
-    padding: 10px;
-    color: var(--text-color);
-    font-size: 16px;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    text-transform: capitalize;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    white-space: nowrap;
-    display: flex;
-    justify-content: space-between;
-  }
+  position: relative;       /* only the button lives here */
+  display: inline-block;
+}
 
-  .dropdownButton:active {
-    scale: 0.98;
-  }
-  
-  .dropdownButton:hover {
-    background-color: var(--button-hover);
-  }
-  
-  .options {
-    position: absolute;
-    width: 100%;
-    background-color: var(--background-color);
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    padding: 5px 0;
-    margin-top: 8px;
-    list-style: none;
-    padding-left: 0;
-    z-index: 999;
-    overflow: hidden;
-    text-transform: capitalize;
-    max-height: 380px;
-    overflow-y: auto;
-    max-width: 250px;
-  }
+.dropdownButton {
+  background-color: var(--background-color);
+  border: none;
+  padding: 8px 12px;
+  border-radius: var(--border-radius);
+  color: var(--text-color);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  white-space: nowrap;
+  transition: background 0.2s, transform 0.1s;
+}
 
-  .bottom-left {
-    top: 100%;
-    left: 0;
-    margin-top: 8px;
-  }
-  
-  .bottom-right {
-    top: 100%;
-    right: 0;
-    margin-top: 8px;
-  }
-  
-  .top-left {
-    bottom: 100%;
-    left: 0;
-    margin-bottom: 8px;
-  }
-  
-  .top-right {
-    bottom: 100%;
-    right: 0;
-    margin-bottom: 8px;
-  }  
-  
-  .option {
-    padding: 10px 5px;
-    color: var(--text-color);
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .option:hover {
-    background-color: var(--button-hover);
-  }
-  
-  .selectedOption {
-    background-color: var(--accent-color);
-  }
-  
+.dropdownButton:hover {
+  background-color: var(--button-hover);
+}
+.dropdownButton:active {
+  transform: scale(0.98);
+}
+
+/* the portal’d menu */
+.options {
+  background-color: var(--background-color);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  padding: 5px;
+  margin: 0;
+  list-style: none;
+  z-index: 2000;
+  width: auto;              /* JS inline style will set minWidth + limit */
+}
+
+.option {
+  padding: 8px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  color: var(--text-color);
+  border-radius: var(--border-radius);
+}
+
+.option:hover {
+  background-color: var(--button-hover);
+}
+
+.selectedOption {
+  background-color: var(--accent-color);
+}
+

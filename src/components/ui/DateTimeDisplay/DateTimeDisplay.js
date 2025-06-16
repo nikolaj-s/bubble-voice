@@ -20,7 +20,7 @@ export const DateTimeDisplay = ({ date, className = "" }) => {
 
   return (
     <p className={styles.time}>
-      {day}-{month}-{year}  {hour}:{minute}
+      - {day}-{month}-{year}  {hour}:{minute}
     </p>
   );
 };

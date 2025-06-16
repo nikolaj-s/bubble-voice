@@ -63,6 +63,9 @@ const mediaControlSlice = createSlice({
 
             state.isWebcamOn = !state.isWebcamOn;
         },
+        setMicrophoneState: (state, action) => {
+            state.isMicrophoneMuted = action.payload;
+        },
         toggleMicrophone: (state, action) => {
             if (state.loading) return;
 
