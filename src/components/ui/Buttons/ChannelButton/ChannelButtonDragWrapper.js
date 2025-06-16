@@ -2,7 +2,7 @@ import React from "react";
 
 import { useSelector } from "react-redux";
 import useUnreadStatus from "../../../../hooks/useUnreadStatus";
-import { UnreadChannelStatus } from "./UnreadChannelStatus/UnreadChannelStatus";
+import { AlertIndicator } from "../../AlertIndicator/AlertIndicator";
 
 export const ChannelButtonDragWrapper = ({
   children,
@@ -55,7 +55,7 @@ export const ChannelButtonDragWrapper = ({
         position: 'relative'
       }}
     >
-      {unread && (<UnreadChannelStatus />)}
+      <AlertIndicator active={unread} />
       {children}
       <div
       onDragOver={(e) => e.preventDefault()}

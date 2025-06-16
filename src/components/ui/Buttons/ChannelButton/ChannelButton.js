@@ -19,6 +19,8 @@ import { ChannelStatus } from "./ChannelStatus/ChannelStatus";
 
 import { setCurrentVoiceChannel, setVoiceChannelFocused } from "../../../../features/Channel/VoiceChannel/voiceChannelSlice";
 
+import { NavButton } from "../NavButton/NavButton";
+
 const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, channel_type, server_id, channel }) => {
 
     const dispatch = useDispatch();
@@ -91,22 +93,9 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
         style={{ backgroundColor: users.length > 0 ? 'var(--card-background-color)' : 'transparent' }}
         className={`${styles.channelContainer} ${active ? styles.active : ''}`}
       >
-        <button
-          tabIndex={0}
-          onClick={openChannel}
-          onTouchEnd={openChannel}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') openChannel();
-          }}
-          className={styles.channelButton}
-          style={{
-            touchAction: 'manipulation',
-            userSelect: 'none',
-            WebkitUserDrag: 'none'
-          }}
-        >
-          <span className={styles.icon} draggable={false}>
-            {channel_icon && !hideCustomChannelIcons ? (
+       <NavButton 
+       icon=
+        {channel_icon && !hideCustomChannelIcons ? (
               <ImageComponent src={channel_icon} draggable={false} />
             ) : channel_type === 'text' ? (
               <Hash color="var(--text-color)" style={{ marginLeft: '-5px' }} width="100%" height="100%" draggable={false} />
@@ -118,11 +107,11 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
             )
             : (
               <Volume1 color="var(--text-color)" width="100%" height="100%" draggable={false} />
-            )}
-          </span>
-          <span draggable={false} className={styles.channelName}>{channel_name}</span>
-        </button>
-  
+          )}
+          name={channel_name}
+          action={openChannel}
+          active={active}
+       />
         <div className={styles.subButtonWrapper}>
           <IconButton
             onClick={openContext}

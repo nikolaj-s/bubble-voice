@@ -1,13 +1,14 @@
 
 import styles from "./SocialFilter.module.css";
 
-import { Image, Video, Link, Pin, Hash } from "lucide-react";
+import { Hash } from "lucide-react";
 import DatePicker from "../../../../components/ui/Inputs/DatePicker/DatePicker";
 import { PillSpacer } from "../../../../components/ui/Spacers/PillSpacer/PillSpacer";
 import { useDispatch, useSelector } from "react-redux";
 import { setFromDate, setSelectedChannelToFilter, setTextChannelFilter } from "../../../../features/Search/searchSlice";
 import Dropdown from "../../../../components/ui/Inputs/DropDown/DropDown";
 import { InlineLabel } from "../../../../components/ui/Titles/InlineLabel/InlineLabel";
+import { useEffect, useState } from "react";
 
 const SocialFilter = ({ onFilterChange = () => {} }) => {
 
@@ -15,13 +16,17 @@ const SocialFilter = ({ onFilterChange = () => {} }) => {
 
   const selectedChannel = useSelector((state) => state.searchSlice.selectedChannel);
 
-  const channels = useSelector((state) => {
-    const {channels} = state.channelsSlice;
+  const [textChannels, setTextChannels] = useState([]);
 
-    return [{channel_name: "All", channel_id: "*"}, ...Object.values(channels).filter(channel => channel.channel_type === 'text')];
-  })
+  const channels = useSelector((state) => state.channelsSlice.channels);
 
   const filters = useSelector((state) => state.searchSlice);
+
+  useEffect(() => {
+
+    setTextChannels([{channel_name: "All", channel_id: "*"}, ...Object.values(channels).filter(channel => channel.channel_type === 'text')]);
+
+  }, [channels])
 
   const toggleFilter = (filter) => {
     const updatedFilters = { ...filters, [filter]: !filters[filter] };
@@ -75,7 +80,7 @@ const SocialFilter = ({ onFilterChange = () => {} }) => {
       <DatePicker onDateChange={onDateChange} />
       <PillSpacer height={15} verticle={true} />
       <InlineLabel icon={ <Hash color="var(--text-color)" size={20} />} />
-      <Dropdown selector="channel_name" options={channels} selected={selectedChannel} setSelected={handleSetChannel} />
+      <Dropdown selector="channel_name" options={textChannels} selected={selectedChannel} setSelected={handleSetChannel} />
     </div>
   );
 };

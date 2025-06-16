@@ -5,7 +5,7 @@ const RedditAudioSrc = ({ url, hasAudioFunction = () => {}, currentTime, isPlayi
   const [audioUrl, setAudioUrl] = useState(null);
 
   useEffect(() => {
-    if (!url || !url.includes('v.redd.it')) return;
+    if (!url || !url.includes('v.redd.it') || url.includes('.m3u8')) return;
 
     const match = url.match(/^https:\/\/v\.redd\.it\/([^/]+)/);
     if (!match) return;

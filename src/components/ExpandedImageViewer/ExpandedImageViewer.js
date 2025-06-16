@@ -36,7 +36,7 @@ const ExpandedImageViewer = ({ src, alt, open, onClose, context }) => {
     setExpanded(!expanded);
     
     requestAnimationFrame(() => {
-      scrollRef.current.scrollTo(e.clientX, e.clientY * 2)
+      scrollRef.current.scrollTo(e.clientX, e.clientY * 1.5)
     })
     
 
@@ -62,8 +62,7 @@ const ExpandedImageViewer = ({ src, alt, open, onClose, context }) => {
           draggable={false}
           className={styles.image}
           style={{
-            scale: expanded ? 2 : null,
-            minHeight: expanded ? "250vh" : null,
+            height: expanded ? "200vh" : null,
             maxWidth: expanded ? "none" : "90vw",
             maxHeight: expanded ? "none" : "90vh",
             cursor: expanded ? "grab" : "zoom-in",

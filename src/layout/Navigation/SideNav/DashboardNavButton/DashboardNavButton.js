@@ -1,4 +1,4 @@
-import React from 'react'
+
 import IconButton from '../../../../components/ui/Buttons/IconButton/IconButton'
 import { Logo } from '../../../../components/Icons/Bubble/Logo'
 import { useNavigate } from 'react-router'

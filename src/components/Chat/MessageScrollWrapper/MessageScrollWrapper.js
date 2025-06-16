@@ -2,7 +2,7 @@ import React, {
   useRef,
   useLayoutEffect,
   useCallback,
-  useEffect
+  useEffect,
 } from "react";
 import PropTypes from "prop-types";
 import styles from "./MessageScrollWrapper.module.css";
@@ -25,16 +25,19 @@ export const MessageScrollWrapper = ({
   const prevLoading = useRef(false);
 
   // 1. After first render of messages, restore saved or go bottom
-  useLayoutEffect(() => {
+  useEffect(() => {
     
-    const el = ref.current;
-      
-    if (!el || didInit.current || loading) return;
 
-    const raf = requestAnimationFrame(() => {
-      // only once after there is at least one child
+    let raf = requestAnimationFrame(() => {
+      
+      const el = ref.current;
+
+      if (!el || didInit.current || loading) return;
+
       const saved = sessionStorage.getItem(`scroll-pos-${persistKey}`);
+      // only once after there is at least one child
       console.log(saved)
+      console.log(el.scrollHeight)
       if (saved !== null) {
         el.scrollTop = Number(saved);
       } else {
@@ -45,7 +48,7 @@ export const MessageScrollWrapper = ({
 
       didInit.current = true;
     })
-
+     
     return () => {
       cancelAnimationFrame(raf);
     }
@@ -63,10 +66,6 @@ export const MessageScrollWrapper = ({
         `scroll-pos-${persistKey}`,
         el.scrollTop
       );
-      
-      console.log(el.scrollTop);
-
-      console.log(sessionStorage.getItem(`scroll-pos-${persistKey}`))
 
       // near the top? top = scrollTop <= 50px
       if (

@@ -6,10 +6,11 @@ import styles from './ServerButton.module.css';
 import { ImageComponent } from '../../../ui/Image/Image';
 import IconButton from '../IconButton/IconButton';
 import { useSelector } from 'react-redux';
-import { Volume2 } from 'lucide-react';
-import { MiniUserPreview } from '../../MiniUserPreview/MiniUserPreview';
+import { AlertIndicator } from '../../AlertIndicator/AlertIndicator';
+import ServerActivityIndicator from '../../ServerActivityIndicator/ServerActivityIndicator';
+import { ServerPreview } from './ServerPreview/ServerPreview';
 
-export const ServerButton = ({ action, server_banner, server_name, server_id, active_users = [] }) => {
+export const ServerButton = ({ action, server_banner, server_name, server_id, active_users = [], unread_message}) => {
     
     const [isActive, setIsActive] = React.useState(false);
 
@@ -27,6 +28,7 @@ export const ServerButton = ({ action, server_banner, server_name, server_id, ac
 
     return (
         <div style={{position: 'relative'}}>
+            <AlertIndicator active={unread_message} />
             <IconButton 
             backgroundColor={isActive ? 'var(--accent-color)' : 'var(--background-color)'}
             onClick={handleAction}
@@ -35,16 +37,7 @@ export const ServerButton = ({ action, server_banner, server_name, server_id, ac
             padding={2}
             position='right'
             title={
-                <>
-                <p style={{
-                    padding: 5,
-                    margin: 0,
-                    fontSize: '14px'
-                }}>
-                    {server_name}
-                </p>
-                {active_users && (<MiniUserPreview users={active_users} />)}
-                </>
+                <ServerPreview server_banner={server_banner} server_name={server_name} active_users={active_users} />
             }
             Icon={
             <div 
@@ -52,9 +45,7 @@ export const ServerButton = ({ action, server_banner, server_name, server_id, ac
             >
                 <ImageComponent src={server_banner} />
                 {active_users.length > 0 && (
-                <div className={styles.activeUsersIndicator} >
-                    <Volume2 color='var(--text-color)' />
-                </div>)}
+                <ServerActivityIndicator />)}
             </div>
             }
             />

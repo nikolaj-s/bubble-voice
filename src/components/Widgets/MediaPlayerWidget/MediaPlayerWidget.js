@@ -1,46 +1,44 @@
-import React from 'react'
-
-import SavedMedia from '../../MediaPlayer/SavedMedia/SavedMedia'
-import { useDispatch, useSelector } from 'react-redux'
-import { addMediaToPlayer } from '../../../features/MediaPlayer/Thunks/addMediaToPlayer';
+import React from 'react';
+import styles from './MediaPlayerWidget.module.css';
+import { FolderSearch, Bookmark } from 'lucide-react';
+import { LineSpacer } from '../../ui/Spacers/LineSpacer/LineSpacer';
+import Header from '../../ui/Titles/Header/Header';
+import { useDispatch } from 'react-redux';
 import { setOverlay } from '../../../features/Overlay/overlaySlice';
-import { fetchSavedMedia } from '../../../features/MediaPlayer/Thunks/fetchSavedMedia';
 
-export const MediaPlayerWidget = ({editing}) => {
+export const MediaPlayerWidget = () => {
+  const dispatch = useDispatch();
+  const goTo = (overlayName) => dispatch(setOverlay(overlayName));
 
-    const dispatch = useDispatch();
-    
-    const {loading: mediaPlayerLoading, enabled} = useSelector(state => state.mediaPlayerSlice);
+  return (
+    <div className={styles.wrapper}>
+      <Header level={3} text="Media Player" />
+      <LineSpacer margin="0 0 16px 0" />
 
-    const {loading, error} = useSelector(state => state.savedMediaSlice);
+      {/* Bubble background layer */}
+      <div className={styles.bubbleBackground}>
+        <div className={`${styles.bubble} ${styles.bubble1}`} />
+        <div className={`${styles.bubble} ${styles.bubble2}`} />
+        <div className={`${styles.bubble} ${styles.bubble3}`} />
+        <div className={`${styles.bubble} ${styles.bubble4}`} />
+      </div>
 
-    const {channel} = useSelector(state => state.widgetsSlice);
-
-    const saves = useSelector(state => state.savedMediaSlice.saves[channel]);
-
-    const playMediaInChannel = (media) => {
-
-        if (editing) return;
-
-        if (mediaPlayerLoading || !enabled) return;
-
-        dispatch(addMediaToPlayer(media));
-
-        dispatch(setOverlay('mediaPlayer'));
-
-    }
-
-    React.useEffect(() => {
-
-        if (!saves) {
-            dispatch(fetchSavedMedia(channel))
-        }
-
-    }, [saves, dispatch, channel]);
-
-    return (
-        <>
-        <SavedMedia savedItemAction={playMediaInChannel} media={saves} loading={loading} error={error} />
-        </>
-    )
-}
+      <div className={styles.buttonRow}>
+        <button
+          className={styles.actionButton}
+          onClick={() => goTo('mediaPlayerSaves')}
+        >
+          <Bookmark size={20} />
+          <span>Saved</span>
+        </button>
+        <button
+          className={styles.actionButton}
+          onClick={() => goTo('search')}
+        >
+          <FolderSearch size={20} />
+          <span>Discover</span>
+        </button>
+      </div>
+    </div>
+  );
+};

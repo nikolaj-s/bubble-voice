@@ -1,10 +1,11 @@
-import React from 'react';
+
 import { useNavigate, useLocation, } from 'react-router-dom';
 import styles from './SubNav.module.css';
 import { LineSpacer } from '../../../components/ui/Spacers/LineSpacer/LineSpacer';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleMobileMenu } from '../../../features/Mobile/mobileSlice';
 import { setVoiceChannelFocused } from '../../../features/Channel/VoiceChannel/voiceChannelSlice';
+import { NavButton } from '../../../components/ui/Buttons/NavButton/NavButton';
 
 export const SubNav = ({basePath = '/dashboard', options = []}) => {
 
@@ -14,18 +15,16 @@ export const SubNav = ({basePath = '/dashboard', options = []}) => {
 
   const location = useLocation();
 
-  const {currentVoiceChannel, focused} = useSelector(state => state.voiceChannelSlice);
+  const {focused} = useSelector(state => state.voiceChannelSlice);
 
   // Helper to normalize paths by removing trailing slashes.
   const normalizePath = (path) => path.replace(/\/+$/, '');
 
   const currentPath = normalizePath(location.pathname);
 
-  const closeMobileMenu = () => {
-    dispatch(toggleMobileMenu())
-  }
-
   const handleNavigate = (path) => {
+
+    dispatch(toggleMobileMenu())
 
     dispatch(setVoiceChannelFocused(false));
 
@@ -41,15 +40,9 @@ export const SubNav = ({basePath = '/dashboard', options = []}) => {
         const optionPathNormalized = normalizePath(option.path);
 
         const active = currentPath === optionPathNormalized && !focused;
+  
         return (
-          <button
-            key={option.label}
-            onClick={() => {closeMobileMenu(); handleNavigate(option.path)}}
-            className={`${styles.navButton} ${active ? styles.active : ''}`}
-          >
-            {option.icon}
-            <span className={styles.label}>{option.label}</span>
-          </button>
+          <NavButton action={() => {handleNavigate(option.path)}} icon={option.icon} active={active} name={option.label}  />
         );
       })}
       <LineSpacer margin={'15px 0px'} />

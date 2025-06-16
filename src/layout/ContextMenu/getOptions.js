@@ -1,4 +1,3 @@
-import { useCallback } from "react";
 
 import { useAppCtxMenu } from "./Options/useAppCtxMenu";
 import { useMediaPlayerCtxMenu } from "./Options/useMediaPlayerCtxMenu";
@@ -60,7 +59,7 @@ export const useContextMenuOptions = () => {
 
     const {getUserControlsOptions} = useUserControlsCtxMenu();
 
-    const getOptions = (e, permissions) => {
+    const getOptions = (e, permissions = {}) => {
         try {
             const options = [];
 
@@ -105,7 +104,7 @@ export const useContextMenuOptions = () => {
             if (data.category) getCategoryOptions(options, data, permissions);
 
             if (data.channelList || data.mobileMenu) getChannelsOptions(options, permissions);
-         
+        
             if (data.image || data.imageSearchResult) getImageOptions(options, data, permissions);
 
             if (data.video) getVideoOptions(options, data);

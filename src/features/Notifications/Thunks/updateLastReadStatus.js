@@ -11,10 +11,6 @@ export const updateLastReadStatus = createAsyncThunk('updateLastReadStatus/notif
 
         const {token} = getState().authSlice;
 
-        const {last_read_status} = getState().notificationsSlice;
-
-        const {channels} = getState().channelsSlice;
-
         const response = await axios({
             method: "PUT",
             url: `${API_URL}/notifications/update-last-read-status`,

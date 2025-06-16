@@ -20,15 +20,11 @@ export const WidgetsOverlay = ({close}) => {
 
     const dispatch = useDispatch();
 
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [, setSearchParams] = useSearchParams();
 
     const {widgets, loading, error} = useSelector(state => state.widgetsSlice);
 
     const channel = useSelector(state => state.widgetsSlice.channel);
-
-    const textChannel = useSelector(state => state.textChannelSlice.currentTextChannel);
-
-    const voiceChannel = useSelector(state => state.voiceChannelSlice.currentVoiceChannel);
 
     const subtitles = [
         "Gadgets for days. Mischief for nights.",
@@ -61,7 +57,7 @@ export const WidgetsOverlay = ({close}) => {
     const refreshWidgets = () => {
         if (loading) return;
 
-        dispatch(fetchWidgets(textChannel || voiceChannel));
+        dispatch(fetchWidgets(channel));
     }
 
     const openAddMoreWidgets = () => {

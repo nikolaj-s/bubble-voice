@@ -35,7 +35,8 @@ export const useRedditMedia = (query, debounceDelay = 1500) => {
           setLoading(true);
           console.log('Fetching new Reddit media for:', query);
 
-          const response = await fetch(`https://www.reddit.com/search.json?q=${encodeURIComponent(query)}&limit=45&include_over_18=on&sort=relevance&type=link`);
+          const response = await fetch(`https://www.reddit.com/search.json?q=${encodeURIComponent(query)}&limit=45&include_over_18=on&sort=relevance&type=link&t=month`);
+          
           const data = await response.json();
 
           if (!data?.data?.children) {

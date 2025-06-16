@@ -63,7 +63,6 @@ export const HorizontalMediaScroller = ({ media = [], loading = false, error = n
       </div>
     );
   }
-  
 
   if (error) {
     return <div className={styles.error}>Failed to load media.</div>;

@@ -2,7 +2,6 @@ import React from 'react'
 import { LoadingErrorFormWrapper } from '../../../../components/ui/Wrappers/LoadingErrorFormWrapper/LoadingErrorFormWrapper'
 import { useDispatch, useSelector } from 'react-redux'
 import { ImageMasonryWrapper } from '../../../../components/ui/Wrappers/ImageMasonryWrapper/ImageMasonryWrapper';
-import { ImageTooltipWrapper } from '../../../../components/ui/Wrappers/ImageTooltipWrapper/ImageTooltipWrapper';
 import { NsfwWrapper } from '../../../../components/ui/Wrappers/NsfwWrapper/NsfwWrapper';
 import { ImageComponent } from '../../../../components/ui/Image/Image';
 import { fetchUserRecommendations } from '../../../../features/UserRecommendations/Thunks/fetchUserRecommendations';
@@ -40,9 +39,9 @@ export const UserRecommendations = () => {
                         <MediaTooltipWrapper media={media} key={media.src}>
                             <NsfwWrapper nsfw={media}>
                                 {media.type === 'video' ?
-                                <VideoThumbnail {...media} width="100%" />
+                                <VideoThumbnail {...media} width="100%" maxWidth="100%" />
                                 :
-                                <ImageComponent src={media?.src?.includes('gif') ? media.src : media.thumbnail} />
+                                <ImageComponent borderRadius={'var(--border-radius)'} src={media?.src?.includes('gif') ? media.src : media.thumbnail} />
                                 }
                             </NsfwWrapper>
                         </MediaTooltipWrapper>

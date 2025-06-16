@@ -23,6 +23,7 @@ const SavedMedia = ({ media = [], savedItemAction = () => {}, loading, error }) 
             </div>
             <TextInput onChange={setFilter} value={filter} placeholder={'Filter'} />
             {error && (<TextLabelError error={error} />)}
+        
             {hasMedia ? (
                 <div className={styles.grid}>
                 
@@ -36,6 +37,7 @@ const SavedMedia = ({ media = [], savedItemAction = () => {}, loading, error }) 
                 <p className={styles.placeholderText}>No saved media yet. Go tag something worth keeping!</p>
                 </div>
             )}
+    
             {loading && <SpinnerLoading />}
         </div>
     );

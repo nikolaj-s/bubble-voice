@@ -8,7 +8,7 @@ import { pinMessage } from "./Thunks/pinMessage";
 const initialState = {
     page: 0,
     messages: [],
-    loading: false,
+    loading: true,
     error: false,
     loadingMore: false,
     sending: false,

@@ -18,7 +18,7 @@ export const ChatContainer = ({
     loadMoreMessages = () => {}, 
     users, loading, error, value, 
     setValue, setImage, sending, loadingMore, 
-    returnPos, position, replyTo, clearReplyTo, 
+    returnPos = () => {}, position, replyTo, clearReplyTo, 
     placeholder = 'Type a message...',
     name, noMoreMessages,
     disableInput, reply, id

@@ -32,8 +32,17 @@ const serversSlice = createSlice({
             })
 
         },
+        toggleNewMessageStatus: (state, action) => {
+            state.servers = state.servers.map(server => {
+                if (action.payload.server_id === server.server_id) {
+                    return {...server, unread_message: action.payload.unread_message}
+                } else {
+                    return server;
+                }
+            })
+        },
         setServerStatus: (state, action) => {
-
+console.log(action.payload)
             state.servers = state.servers.map(server => {
                 if (action.payload[server.server_id]) {
                     return {...server, ...action.payload[server.server_id]}
@@ -63,6 +72,6 @@ const serversSlice = createSlice({
 
 export const selectServers = state => state.serversSlice.servers;
 
-export const {setServers, addServer, updateServerButton, setServerStatus } = serversSlice.actions;
+export const {setServers, addServer, updateServerButton, setServerStatus, toggleNewMessageStatus } = serversSlice.actions;
 
 export default serversSlice.reducer;

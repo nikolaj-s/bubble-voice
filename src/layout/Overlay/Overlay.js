@@ -37,6 +37,7 @@ import { ScreenPickerOverlay } from "../Overlays/ScreenPickerOverlay/ScreenPicke
 import MobileSwipeToCloseWrapper from "../../components/ui/Wrappers/MobileSwipeToCloseWrapper/MobileSwipteToCloseWrapper";
 import FullScreenWrapper from "../../components/ui/Wrappers/FullScreenWrapper/FullScreenWrapper";
 import { MediaPlayerHistory } from "../Overlays/MediaPlayerHistory/MediaPlayerHistory";
+import { MediaPlayerSaves } from "../Overlays/MediaPlayerSaves/MediaPlayerSaves";
 
 const overlayComponents = {
   search: Search,
@@ -54,7 +55,8 @@ const overlayComponents = {
   widgets: WidgetsOverlay,
   mediaPlayer: MediaPlayerOverlay,
   screenPicker: ScreenPickerOverlay,
-  mediaPlayerHistory: MediaPlayerHistory
+  mediaPlayerHistory: MediaPlayerHistory,
+  mediaPlayerSaves: MediaPlayerSaves
 };
 
 export const Overlay = ({ children }) => {
@@ -66,6 +68,8 @@ export const Overlay = ({ children }) => {
   const ActiveComponent = overlayComponents[activeOverlay];
 
   const [currentY, setCurrentY] = React.useState(null);
+
+  const image = useSelector(state => state.expandedImageSlice.expandedImage);
 
   useKeyupListener(() => {dispatch(closeOverlay())}, 27, false);
 
@@ -81,7 +85,7 @@ export const Overlay = ({ children }) => {
         </MobileSwipeToCloseWrapper>
         :
         <>
-        <OverlayCloseButton action={() => {dispatch(closeOverlay())}} />
+        {!image && <OverlayCloseButton action={() => {dispatch(closeOverlay())}} />}
         <FullScreenWrapper maxContentWidth={activeOverlay === 'expandImage' ? '100%' : null} key={activeOverlay} exitFromY={currentY} onClose={() => {dispatch(closeOverlay())}}>
           <MobileSwipeToCloseWrapper onClose={(y) => {setCurrentY(y); dispatch(closeOverlay())}}>
             <ActiveComponent close={() => dispatch(closeOverlay())}  /> 

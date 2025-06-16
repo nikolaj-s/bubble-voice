@@ -22,7 +22,9 @@ export const useImageCtxMenu = () => {
     const {currentTextChannel} = useSelector(state => state.textChannelSlice);
 
     const getImageOptions = useCallback((options, data, permissions) => {
-        if (currentTextChannel && permissions?.user_can_post_in_text_channels) {
+
+     
+        if (currentTextChannel && permissions?.user_can_post_in_text_channels && data.imageSearchResult) {
             options.push({
                 label: "Send To Current Channel",
                 onClick: () => {
@@ -36,8 +38,8 @@ export const useImageCtxMenu = () => {
             })
 
         }
-        
-        if (permissions?.user_can_post_in_text_channels) {
+      
+        if (permissions?.user_can_post_in_text_channels && channels) {
 
             let sendToOptions = [];
 
@@ -71,43 +73,43 @@ export const useImageCtxMenu = () => {
                     icon: <ChevronRight color="var(--text-color)" />
                 })
             }
-
-
-            options.push({
-                label: "Find Similar Images",
-                onClick: () => {
-
-                    dispatch(setQuery(""));
-
-                    dispatch(setSimilarImageSrc(data.imageSearchResult?.src || data.image?.src));
-
-                    dispatch(setFilter({path: "images", label: "Images"}));
-
-                    dispatch(globalSearch());
-
-                    dispatch(setOverlay('search'));
-
-                    dispatch(clearExpandedImage())
-
-                },
-                type: "button"
-            })
-
-            options.push({
-                label: "Copy Link",
-                onClick: () => {copyToClipboard(data.imageSearchResult?.src || data.image?.src); dispatch(triggerAlert('Link Copied'))},
-                type: 'button',
-                icon: <Link color="var(--text-color)" />
-            })
-            
-            options.push({
-                label: "Download Image",
-                onClick: () => {downloadImage(data.imageSearchResult?.src || data.image?.src)},
-                type: "button",
-                icon: <ImageDown color="var(--text-color)" />
-            })
-        
         }
+     
+        options.push({
+            label: "Find Similar Images",
+            onClick: () => {
+
+                dispatch(setQuery(""));
+
+                dispatch(setSimilarImageSrc(data.imageSearchResult?.src || data.image?.src));
+
+                dispatch(setFilter({path: "images", label: "Images"}));
+
+                dispatch(globalSearch());
+
+                dispatch(setOverlay('search'));
+
+                dispatch(clearExpandedImage())
+
+            },
+            type: "button"
+        })
+
+        options.push({
+            label: "Copy Link",
+            onClick: () => {copyToClipboard(data.imageSearchResult?.src || data.image?.src); dispatch(triggerAlert('Link Copied'))},
+            type: 'button',
+            icon: <Link color="var(--text-color)" />
+        })
+        
+        options.push({
+            label: "Download Image",
+            onClick: () => {downloadImage(data.imageSearchResult?.src || data.image?.src)},
+            type: "button",
+            icon: <ImageDown color="var(--text-color)" />
+        })
+    
+        
     }, [currentTextChannel, channels, dispatch, navigate])
 
     return {getImageOptions};

@@ -6,69 +6,6 @@
     position: relative;
 }
 
-.channelButton {
-    display: flex;
-    align-items: center;
-    padding: 5px;
-    border-radius: 8px;
-    background-color: transparent;
-    color: var(--text-color);
-    cursor: pointer;
-    transition: background 0.2s ease-in-out;
-    border: none;
-    width: calc(100%);
-    height: 35px;
-    touch-action: manipulation;
-    -webkit-user-drag: none;
-    user-select: none;
-}
-
-.channelName {
-    font-size: 15px;
-    font-weight: 400;
-    opacity: 0.75;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.icon {
-    height: 20px;
-    width: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 5px;
-    flex-shrink: 0;
-    border-radius: 50%;
-    overflow: hidden;
-    opacity: 0.75;
-}
-
-.active .channelButton {
-    background-color: var(--secondary-color);
-    cursor: default;
-}
-
-.channelContainer:hover .channelName,
-.channelContainer:hover .icon {
-    opacity: 1;
-}
-
-.active .channelName,
-.active .icon {
-    opacity: 1;
-}
-
-.channelContainer:hover .channelButton {
-    background-color: var(--button-hover);
-}
-
-.channelButton:active {
-    scale: 0.98;
-    translate: 0px 2px;
-}
-
 .userList {
     background-color: var(--card-background-color);
     padding: 5px;
@@ -92,8 +29,9 @@
     flex-shrink: 0;
     margin-left: auto;
     position: absolute;
-    right: 5px;
-    top: 5px;
+    right: 8px;
+    top: 8px;
+  
     display: none;
 }
 

@@ -14,7 +14,7 @@ import { StreamDisabledOverlay } from "./StreamDisabledOverlay/StreamDisabledOve
 import { setStreamDisabled } from "../../../features/UserStreamState/userStreamStateSlice";
 import { useVideoElementAverageColor } from "../../../hooks/useVideoTrackAverageColor";
 
-const UserStreamSource = ({ user_id, stream, action, id, isExpanded }) => {
+const UserStreamSource = ({ user_id, stream, action, id, isExpanded, setAmbientColor }) => {
 
     const dispatch = useDispatch();
 
@@ -105,12 +105,14 @@ const UserStreamSource = ({ user_id, stream, action, id, isExpanded }) => {
 
         setBackgroundColor(color);
 
-    }, [color])
+        if (isExpanded) setAmbientColor(color);
+    // eslint-disable-next-line
+    }, [color, isExpanded])
 
     return (
         <div 
         hidden={hideNonVideoUsers && isStreamDisabled}
-        style={{display: hideNonVideoUsers && isStreamDisabled ? 'none' : null, backgroundColor,}}
+        style={{display: hideNonVideoUsers && isStreamDisabled ? 'none' : null, backgroundColor: isExpanded ? 'transparent' : backgroundColor,}}
         data-context={JSON.stringify({type: 'userStreamSource', user_id, consumer_id: stream.id, ...trackSettings, ...channel_status?.streamDetails})}
         onClick={() => {action(id)}}
         id={id}
@@ -126,7 +128,7 @@ const UserStreamSource = ({ user_id, stream, action, id, isExpanded }) => {
                 playsInline
                 muted
                 className={styles.video}
-                style={loading ? { visibility: "hidden" } : {backgroundColor}} // Hide video while loading
+                style={loading ? { visibility: "hidden" } : {backgroundColor: isExpanded ? 'transparent' : backgroundColor}} // Hide video while loading
             />
             <div className={styles.streamOverlay}>
                 <div className={styles.wrapper}>

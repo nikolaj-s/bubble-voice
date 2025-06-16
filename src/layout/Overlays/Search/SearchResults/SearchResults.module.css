@@ -1,18 +1,17 @@
 
 .container {
-    width: calc(100% - 10px);
+    width: calc(100% - 20px);
     background-color: var(--primary-color);
     margin-top: 2px;
     border-radius: 0px 0px 10px 10px;
-    padding: 5px;
+    padding: var(--gap);
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .wrapper {
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
-    max-height: calc(100vh - 150px);
-    padding: 5px;
     box-sizing: border-box;
 }
 

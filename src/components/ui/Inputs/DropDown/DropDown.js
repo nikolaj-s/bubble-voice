@@ -134,9 +134,9 @@ const Dropdown = ({ selected, options, setSelected, selector = "label", minWidth
             exit={{ opacity: 0, y: -5 }}
             transition={{ duration: 0.3 }}
           >
-            {options.map((option) => (
+            {options.map((option, indx) => (
               <motion.li
-                key={typeof option === "string" ? option : option.path}
+                key={indx}
                 className={`${styles.option} ${
                   selected && getLabel(selected) === getLabel(option) ? styles.selectedOption : ""
                 }`}

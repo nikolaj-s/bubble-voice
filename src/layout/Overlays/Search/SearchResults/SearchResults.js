@@ -14,7 +14,6 @@ import { ServerResults } from './ServerResults/ServerResults';
 import { TextChannelResults } from './TextChannelResults/TextChannelResults';
 import { VideoResults } from './VideoResults/VideoResults';
 import { SearchRecommendations } from './SearchRecommendations/SearchRecommendations';
-import { LineSpacer } from '../../../../components/ui/Spacers/LineSpacer/LineSpacer';
 import SectionDivider from '../../../../components/ui/SectionDivider/SectionDivider';
 
 export const SearchResults = ({results = [], loading = false, filter, searchHistory, handleDeleteSearchHistoryItem, handleSearchFromHistory, title}) => {
@@ -30,16 +29,16 @@ export const SearchResults = ({results = [], loading = false, filter, searchHist
         requestAnimationFrame(() => {
             scrollRef.current.scrollTop = loading ? 0 : scrollPos;
         })
-
+    // eslint-disable-next-line
     }, [loading]);
 
     return (
-        <div className={styles.container}>
-            
+        <div 
+        ref={scrollRef} 
+        onScroll={(e) => {dispatch(setSearchResultsScrollPos(e.target.scrollTop))}}
+        className={styles.container}>
             <div 
-            onScroll={(e) => {dispatch(setSearchResultsScrollPos(e.target.scrollTop))}}
-            ref={scrollRef} className={styles.wrapper}>
-                
+           className={styles.wrapper}>
                 {(filter === 'images' || filter === 'videos') &&
                 <>
                 <SearchHistory 

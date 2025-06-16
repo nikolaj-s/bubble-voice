@@ -4,7 +4,10 @@
     align-items: center;
     gap: 10px;
     font-family: var(--font-family);
-    width: 100%;
+    max-width: 100%;
+    padding: 10px 0px;
+    background-color: var(--primary-color);
+    border-radius: var(--border-radius);
   }
   
   .toolbar {

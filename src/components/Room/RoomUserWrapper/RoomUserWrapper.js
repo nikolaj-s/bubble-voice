@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { RoomUserCard } from '../RoomUserCard/RoomUserCard';
 
@@ -13,6 +13,8 @@ import RoomPlaceholder from '../RoomPlaceholder/RoomPlaceholder';
 import UserStreamSource from '../UserStreamSource/UserStreamSource';
 
 export const RoomUserWrapper = ({ users, disable_streams }) => {
+
+    const [ambientColor, setAmbientColor] = useState(null);
 
     const { hideUsers } = useSelector(state => state.appearanceSlice);
 
@@ -49,7 +51,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
                 const reservedHeight = nonExpandedChildren.length * 100; // 100px height if stacked (see below)
 
                 // We'll assume you want the others at the BOTTOM, so reserve height
-                const availableHeight = Math.max(parentHeight - (nonExpandedChildren.length > 0 ? 110 : 0), 0);
+                const availableHeight = Math.max(parentHeight - (nonExpandedChildren.length > 0 ? 105 : 0), 0);
                 const availableWidth = parentWidth;
 
                 // Aspect ratio logic
@@ -82,37 +84,54 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
                     if (v) v.style.objectFit = 'contain';
                 }
 
-                const numberofColums = Math.floor(parentWidth / 100);
-               
-                // All other (non-expanded) children: 100x100
-                let column = 1;
+                // 1) Compute how many 100px columns fit (at least 1)
+                const numberOfColumns = Math.max(Math.floor(parentWidth / 100), 1);
 
-                for (const child of nonExpandedChildren) {
+                // 2) Build [middle, middle-1, middle+1, middle-2, middle+2…] up to `n`
+                function generateColumnOrder(n) {
+                const order = [];
+                const midF = (n + 1) / 2;
+                const left  = Math.floor(midF);
+                const right = Math.ceil(midF);
+                const seen  = new Set();
+                let step = 0;
 
-                    if (column === numberofColums) {
-                        column = 1;
+                while (order.length < n) {
+                    if (step === 0) {
+                    if (!seen.has(left))  { order.push(left);  seen.add(left);  }
+                    if (right !== left && !seen.has(right)) { order.push(right); seen.add(right); }
+                    } else {
+                    const l = left - step;
+                    if (l >= 1 && !seen.has(l)) { order.push(l); seen.add(l); }
+                    const r = right + step;
+                    if (r <= n && !seen.has(r)) { order.push(r); seen.add(r); }
                     }
-                
-                    child.style.gridRow = 2;
-
-                    child.style.gridColumn = column;
-
-                    child.style.width = `100px`;
-
-                    child.style.height = `100px`;
-
-                    child.style.margin = '0px';
-
-                    child.style.borderRadius = '50%';
-
-                    const v = child.querySelector('video');
-
-                    if (v) v.style.objectFit = 'cover';
-
-                    column += 1;
+                    step++;
                 }
+                return order;
+                }
+
+                const columnOrder = generateColumnOrder(numberOfColumns);
+                // e.g. n=5 → [3,2,4,1,5]; n=4 → [2,3,1,4]
+
+                // 3) Loop and assign each child to the next spot in that spiral
+                nonExpandedChildren.forEach((child, idx) => {
+                const col = columnOrder[idx % numberOfColumns];
+
+                child.style.gridRow    = 2;
+                child.style.gridColumn = col;
+                child.style.width      = `100px`;
+                child.style.height     = `100px`;
+                child.style.margin     = `0`;
+                child.style.borderRadius = `50%`;
+
+                const v = child.querySelector('video');
+                if (v) v.style.objectFit = 'cover';
+                });
+
             } else {
                 handleScaling();
+                setAmbientColor(null);
             }
     // eslint-disable-next-line
     }, [expanded, hideNonVideoUsers, hideUsers, textChannelOpen, hideMediaPlayer, fullScreen]);
@@ -233,7 +252,8 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
                 style={{
                     overflowY:'hidden',   // Allow vertical scrolling if needed
                     height: '100%',      // Allow wrapping of child components
-                    justifyContent: 'center'  // Center the children horizontally
+                    justifyContent: 'center',
+                    backgroundColor: ambientColor  // Center the children horizontally
                 }}
             >   
                 {users.map(user => (
@@ -241,7 +261,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
                    {user.type === 'user' ?
                     <RoomUserCard key={user.id} {...user} action={handleStreamExpansion} />
                     : user.type === 'stream' ?
-                    <UserStreamSource action={handleStreamExpansion} key={user.id} {...user} isExpanded={expanded === user.id} /> :
+                    <UserStreamSource setAmbientColor={setAmbientColor} action={handleStreamExpansion} key={user.id} {...user} isExpanded={expanded === user.id} /> :
                     null
                     }
                     </>

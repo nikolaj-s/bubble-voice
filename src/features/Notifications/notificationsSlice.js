@@ -10,10 +10,34 @@ const notificationsSlice = createSlice({
         error: false,
         last_read_status: {},
         notifications: [],
+        notifications_overlay: []
     },
     reducers: {
         setLastReadStatus: (state, action) => {
-            state.last_read_status[action.payload] = {...state.last_read_status[action.payload], last_read_at: String(new Date())}
+            state.last_read_status[action.payload] = {
+            ...state.last_read_status[action.payload],
+            last_read_at: String(new Date())
+            };
+        },
+
+        pushNotificationOverlay: (state, action) => {
+            const notification = {
+            id: Date.now(), // unique id
+            ...action.payload
+            };
+
+            // Keep only the most recent 2 if already at max
+            if (state.notifications_overlay.length >= 3) {
+            state.notifications_overlay.shift(); // remove the oldest
+            }
+
+            state.notifications_overlay.push(notification);
+        },
+
+        removeNotificationOverlay: (state, action) => {
+            state.notifications_overlay = state.notifications_overlay.filter(
+            (n) => n.id !== action.payload
+            );
         }
     },
     extraReducers: (builder) => {
@@ -43,6 +67,6 @@ const notificationsSlice = createSlice({
     }
 })
 
-export const {setLastReadStatus} = notificationsSlice.actions;
+export const {setLastReadStatus, pushNotificationOverlay, removeNotificationOverlay} = notificationsSlice.actions;
 
 export default notificationsSlice.reducer;

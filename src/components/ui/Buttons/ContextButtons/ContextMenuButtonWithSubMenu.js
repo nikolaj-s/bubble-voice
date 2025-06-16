@@ -1,67 +1,115 @@
+// ContextMenuButtonWithSubmenu.jsx
+import React, { useState, useRef, useLayoutEffect } from "react";
+import { createPortal } from "react-dom";
 import ContextMenuButton from "./ContextMenuButton";
 
-import React, {useState, useRef, useEffect } from "react";
-
-const ContextMenuButtonWithSubmenu = ({ label, submenuOptions, top, bottom, icon}) => {
-    const [hovered, setHovered] = useState(false);
+const ContextMenuButtonWithSubmenu = ({
+    label,
+    submenuOptions,
+    top,
+    bottom,
+    icon,
+}) => {
+    const [open, setOpen] = useState(false);
     const buttonRef = useRef(null);
     const submenuRef = useRef(null);
-    const [submenuPosition, setSubmenuPosition] = useState("right");
+    const closeTimeout = useRef(null);
+    const [coords, setCoords] = useState({ top: 0, left: 0 });
 
-    useEffect(() => {
-        if (hovered && buttonRef.current && submenuRef.current) {
-            
-            const buttonRect = buttonRef.current.getBoundingClientRect();
+    const openMenu = () => {
+        clearTimeout(closeTimeout.current);
+        setOpen(true);
+    };
+    const closeMenu = () => {
+        // wait a bit before closing to allow pointer to enter submenu
+        closeTimeout.current = setTimeout(() => setOpen(false), 100);
+    };
 
-            const submenuWidth = submenuRef.current.offsetWidth;
-
-            if (buttonRect.right + submenuWidth > window.innerWidth) {
-                setSubmenuPosition("right");
-            } else {
-                setSubmenuPosition("left");
-            }
+    useLayoutEffect(() => {
+        if (!open || !buttonRef.current || !submenuRef.current) return;
+        const btnRect = buttonRef.current.getBoundingClientRect();
+        const submenuW = submenuRef.current.offsetWidth;
+        const submenuH = submenuRef.current.offsetHeight;
+        // default right
+        let leftPos = btnRect.right;
+        if (btnRect.right + submenuW > window.innerWidth) {
+            leftPos = btnRect.left - submenuW;
         }
-    }, [hovered]);
+        // clamp vertical
+        let topPos = btnRect.top;
+        if (btnRect.top + submenuH > window.innerHeight) {
+            topPos = window.innerHeight - submenuH - 8;
+        }
+        setCoords({ top: topPos, left: leftPos });
+    }, [open, submenuOptions]);
 
     return (
-        <div
-            ref={buttonRef}
-            onMouseEnter={() => setHovered(true)}
-            onMouseLeave={() => setHovered(false)}
-            style={{ position: "relative", cursor: "pointer",  }}
-        >
-            <ContextMenuButton icon={icon} label={label} top={top} bottom={bottom} />
-            {hovered && (
-                <div
-                    ref={submenuRef}
-                    style={{
-                        position: "absolute",
-                        backgroundColor: 'var(--card-background-color)',
-                        top: -5,
-                        [submenuPosition]: "100%", // Either 'left' or 'right'
-                        color: "var(--text-color)",
-                        borderRadius: "10px",
-                        maxHeight: '300px',
-                        overflowY: 'auto',
-                        padding: '5px',
-                        minWidth: 150,
-                        zIndex:0
-                    }}
-                >
-                    {submenuOptions.map((option, index) => (
-                        <div
-                        key={`ctx-sub-option-${index}`}
+        <>
+            {/* trigger */}
+            <div
+                ref={buttonRef}
+                onMouseEnter={openMenu}
+                onMouseLeave={closeMenu}
+                style={{ position: "relative", cursor: "pointer" }}
+            >
+                <ContextMenuButton
+                    icon={icon}
+                    label={label}
+                    top={top}
+                    bottom={bottom}
+                />
+            </div>
+
+            {/* submenu portal */}
+            {open &&
+                createPortal(
+                    <div
+                        ref={submenuRef}
+                        onMouseEnter={openMenu}
+                        onMouseLeave={closeMenu}
                         style={{
-                            cursor: "pointer",
-                            borderBottom: index !== submenuOptions.length - 1 ? "1px solid rgba(0,0,0,0.1)" : "none",
+                            position: "fixed",
+                            top: coords.top,
+                            left: coords.left,
+                            backgroundColor: "var(--card-background-color)",
+                            color: "var(--text-color)",
+                            borderRadius: 6,
+                            boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+                            maxHeight: "calc(100svh - 40px)",
+                            overflowY: "auto",
+                            padding: "5px",
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '5px',
+                            minWidth: 150,
+                            zIndex: 2000,
                         }}
-                        >
-                        <ContextMenuButton {...option} top={index === 0} bottom={index === submenuOptions.length - 1}  />
-                        </div>
-                    ))}
-                </div>
-            )}
-        </div>
+                    >
+                        {submenuOptions.map((opt, i) => (
+                            <div
+                                key={i}
+
+                                style={{
+                                    padding: "0px",
+                                    cursor: "pointer",
+                                    borderBottom:
+                                        i < submenuOptions.length - 1
+                                            ? "1px solid rgba(0,0,0,0.1)"
+                                            : "none",
+                                }}
+                            >
+                                <ContextMenuButton
+
+                                    {...opt}
+                                    top={i === 0}
+                                    bottom={i === submenuOptions.length - 1}
+                                />
+                            </div>
+                        ))}
+                    </div>,
+                    document.body
+                )}
+        </>
     );
 };
 

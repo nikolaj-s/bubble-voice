@@ -26,7 +26,7 @@ const MessageList = ({
       setSendCounter((c) => c + 1);
     }
   }, [sending]);
-
+ 
   useEffect(() => {
 
     return () => {
@@ -35,7 +35,8 @@ const MessageList = ({
       returnPos({count: messages.length, last_message_id: messages[messages.length - 1]?._id, channel_id: id});
 
     }
-  }, [messages, returnPos, id])
+  // eslint-disable-next-line
+  }, [messages, id])
   // reverse the array so we pass oldest → newest into the wrapper
   const oldestFirst = [...messages].reverse();
 

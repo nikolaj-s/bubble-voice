@@ -2,6 +2,7 @@
 import { Subtitle } from "../Titles/Subtitle/Subtitle";
 import styles from "./MiniStreamIndicator.module.css";
 import { Play } from "lucide-react"; // Example placeholder icon
+import {TextIndicator} from '../TextIndicator/TextIndicator'
 
 const MiniStreamIndicator = ({
   name = "Screen",
@@ -26,7 +27,10 @@ const MiniStreamIndicator = ({
             {icon || <Play className={styles.placeholderIcon} />}
           </div>
         )}
-        <div className={styles.liveIndicator}>LIVE</div>
+
+        <div className={styles.liveIndicator}>
+          <TextIndicator backgroundColor="var(--success-color)" title="LIVE" />
+        </div>
       </div>
       <Subtitle width={'100%'} textAlign={'center'}>{name}</Subtitle>
     </div>

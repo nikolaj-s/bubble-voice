@@ -1,17 +1,22 @@
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { PlayCircle, PauseCircle, Maximize2, Volume2, VolumeX } from 'lucide-react';
+import { PlayCircle, Volume2, VolumeX } from 'lucide-react';
 import styles from './VideoPlayer.module.css';
 import VolumeSlider from '../../Inputs/VolumeSlider/VolumeSlider';
 import { useSelector } from 'react-redux';
 import ProgressBar from '../../ProgressBar/ProgressBar';
 import RedditAudioSrc from '../../../RedditAudioSrc/RedditAudioSrc';
+import ReactPlayer from 'react-player';
 
 const INACTIVITY_TIMEOUT = 2500;
 
 const VideoPlayer = ({ src, title }) => {
-  const videoRef = useRef(null);
+
+  const playerRef = useRef(null);
+
   const hideControlsTimeoutRef = useRef(null);
+
+  const [interacted, toggleInteracted] = useState(false);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -24,76 +29,40 @@ const VideoPlayer = ({ src, title }) => {
   const { muteVideo } = useSelector(state => state.contentSettingsSlice);
 
   const togglePlay = () => {
-    if (!videoRef.current) return;
-    isPlaying ? videoRef.current.pause() : videoRef.current.play().catch(() => {});
+    setIsPlaying(prev => !prev);
   };
 
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+  const handleProgress = (state) => {
+    setCurrentTime(state.playedSeconds);
+  };
 
-    const updateTime = () => setCurrentTime(video.currentTime);
-    const loadMetadata = () => {
-      setDuration(video.duration);
-      setVolume(video.volume * 100);
-    };
-    if (videoRef.current) videoRef.current.load();
-    video.addEventListener('timeupdate', updateTime);
-    video.addEventListener('loadedmetadata', loadMetadata);
+  const handleDuration = (dur) => {
+    setDuration(dur);
+  };
 
-    return () => {
-      video.removeEventListener('timeupdate', updateTime);
-      video.removeEventListener('loadedmetadata', loadMetadata);
-    };
-  }, []);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    const onPlay = () => setIsPlaying(true);
-    const onPause = () => setIsPlaying(false);
-
-    video.addEventListener('play', onPlay);
-    video.addEventListener('pause', onPause);
-
-    return () => {
-      video.removeEventListener('play', onPlay);
-      video.removeEventListener('pause', onPause);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (videoRef.current && muteVideo) {
-      setIsMuted(true);
-      videoRef.current.muted = true;
-    }
-  }, [muteVideo]);
-
-  const handleProgressClick = (value) => {
-    if (videoRef.current) {
-      videoRef.current.currentTime = value;
-    }
+  const handleSeek = (value) => {
+    playerRef.current?.seekTo(value, 'seconds');
+    setCurrentTime(value);
   };
 
   const handleVolumeChange = (newVolume) => {
     setVolume(newVolume);
-    if (videoRef.current) {
-      videoRef.current.volume = newVolume / 100;
-      setIsMuted(newVolume === 0);
-    }
+    setIsMuted(newVolume === 0);
   };
 
   const toggleMute = () => {
-    if (!videoRef.current) return;
     const newMuted = !isMuted;
     setIsMuted(newMuted);
-    videoRef.current.muted = newMuted;
     if (!newMuted && volume === 0) {
       setVolume(50);
-      videoRef.current.volume = 0.5;
     }
   };
+
+  useEffect(() => {
+    if (muteVideo) {
+      setIsMuted(true);
+    }
+  }, [muteVideo]);
 
   useEffect(() => {
     return () => clearTimeout(hideControlsTimeoutRef.current);
@@ -117,24 +86,29 @@ const VideoPlayer = ({ src, title }) => {
       className={`${styles.customVideoContainer} ${!showControls ? styles.hideCursor : ''}`}
       data-context={JSON.stringify({ type: 'video', src, title: title || src, duration: Math.floor(duration), query: title || src })}
     >
-      <video
-        onClick={togglePlay}
-        ref={videoRef}
-        src={src}
-        className={styles.customVideo}
+      <ReactPlayer
+        ref={playerRef}
+        url={duration === 0 ? src : interacted ? src : null}
+        playing={isPlaying}
+        muted={isMuted}
+        volume={volume / 100}
+        width="100%"
+        height="100%"
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+        onProgress={handleProgress}
+        onDuration={handleDuration}
+        onError={(e) => {console.log(e)}}
         controls={false}
-        playsInline
+        playsinline
       />
       <RedditAudioSrc autoPlay={false} currentTime={currentTime} isPlaying={isPlaying} muted={isMuted} url={src} volume={volume / 100} />
-      {!isPlaying && (
-        <div className={styles.overlay} onClick={togglePlay}>
-          <PlayCircle size={64} className={styles.overlayPlayIcon} />
-        </div>
-      )}
-
+      <div className={styles.overlay} style={{opacity: isPlaying ? 0 : null}} onClick={() => {togglePlay(); toggleInteracted(true)}}>
+          {!isPlaying && (<PlayCircle size={64} className={styles.overlayPlayIcon} />)}
+      </div>
       <div className={styles.videoControls}>
         <div className={styles.controlWrapper}>
-          <ProgressBar width="100%" duration={duration} currentTime={currentTime} onSeek={handleProgressClick} />
+          <ProgressBar width="100%" duration={duration} currentTime={currentTime} onSeek={handleSeek} />
           <div className={styles.volumeControl}>
             <div onMouseEnter={() => toggleVolumeHover(true)} className={styles.volumeWrapper}>
               <button onClick={toggleMute} className={styles.controlButton}>
@@ -158,7 +132,6 @@ const VideoPlayer = ({ src, title }) => {
             </div>
           </div>
         </div>
-     
       </div>
     </div>
   );
@@ -166,8 +139,7 @@ const VideoPlayer = ({ src, title }) => {
 
 VideoPlayer.propTypes = {
   src: PropTypes.string.isRequired,
+  title: PropTypes.string
 };
 
 export default VideoPlayer;
-
-

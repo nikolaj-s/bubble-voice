@@ -1,6 +1,7 @@
 import React from 'react'
 import { MessageItem } from '../../../../../components/Chat/MessageItem/MessageItem'
 import { useSelector } from 'react-redux'
+import SearchPromptPlaceholder from './SearchPromptPlaceholder/SearchPromptPlaceholder'
 
 export const TextChannelResults = ({results}) => {
 
@@ -8,7 +9,10 @@ export const TextChannelResults = ({results}) => {
 
     return (
         <>
-        {results.map((message, key) => {
+        {results?.length === 0 ?
+        <SearchPromptPlaceholder />
+        :
+        results.map((message, key) => {
             return <MessageItem prevMessage={results[key - 1]} inSearch={true} message={message} users={users} />
         })}
         </>

@@ -48,8 +48,9 @@
 
 /* Right tooltip */
 .tooltipRight {
+  top: 0;
   left: 100%;
-  transform: translateX(5px) translateY(-50%);
+  transform: translateX(5px) translateY(0%);
 }
 
 /* Visible tooltip */

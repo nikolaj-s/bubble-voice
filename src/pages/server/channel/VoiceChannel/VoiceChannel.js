@@ -13,6 +13,7 @@ import { UserAudioProvider } from '../../../../context/UserAudioContext'
 import { ChannelStatusProvider } from '../../../../providers/ChannelStatusProvider/ChannelStatusProvider'
 import { useDispatch } from 'react-redux'
 import { setFullscreen } from '../../../../features/Ui/uiSlice'
+import { ChannelProvider } from '../../../../providers/ChannelProvider/ChannelProvider'
 
 export const VoiceChannel = ({channel, focused}) => {
 
@@ -27,20 +28,24 @@ export const VoiceChannel = ({channel, focused}) => {
     }, [dispatch])
 
     return (
+        
         <div className={styles.container} style={{zIndex: focused ? 2 : null}}>  
-            <UserAudioProvider>
-                <KeybindProvider>
-                    <VoiceChannelProvider key={channel} channel={channel}>
-                        <ChannelStatusProvider>
-                            <MediasoupProvider>
-                                <MediaPlayerProvider>
-                                    <Room />
-                                </MediaPlayerProvider>
-                            </MediasoupProvider>
-                        </ChannelStatusProvider>
-                    </VoiceChannelProvider>
-                </KeybindProvider>
-            </UserAudioProvider>
+            <ChannelProvider overlay={true} channel_id_prop={channel}>
+                <UserAudioProvider>
+                    <KeybindProvider>
+                        <VoiceChannelProvider key={channel} channel={channel}>
+                            <ChannelStatusProvider>
+                                <MediasoupProvider>
+                                    <MediaPlayerProvider>
+                                        <Room />
+                                    </MediaPlayerProvider>
+                                </MediasoupProvider>
+                            </ChannelStatusProvider>
+                        </VoiceChannelProvider>
+                    </KeybindProvider>
+                </UserAudioProvider>
+            </ChannelProvider>
         </div>
+      
     )
 }

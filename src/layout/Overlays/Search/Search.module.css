@@ -2,4 +2,14 @@
     background-color: var(--card-background-color);
     border-radius: var(--border-radius);
     position: relative;
+    max-height: calc(100svh - 25px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+@media screen and (max-width: 730px) {
+    .container {
+        height: 100%;
+    }
 }

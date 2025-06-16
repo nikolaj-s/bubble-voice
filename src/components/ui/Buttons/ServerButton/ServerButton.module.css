@@ -2,7 +2,8 @@
 .server-button-image-container {
   width: 46px;
   height: 46px;
-  border-radius: 50%;
+  border-radius: 35% / 30%;
+  aspect-ratio: 1 /1;
   overflow: hidden;
   flex-shrink: 0;
   cursor: pointer;
@@ -13,7 +14,6 @@
   position: absolute;
   bottom: 0px;
   right: 0px;
-  background-color: var(--accent-color);
   width: 15px;
   height: 15px;
   border-radius: 6px;

@@ -3,12 +3,11 @@ import styles from './MediaItem.module.css';
 import { Ellipsis, Music2 } from 'lucide-react';
 import IconButton from '../../ui/Buttons/IconButton/IconButton';
 import { triggerContext } from '../../../lib/services/helperFunctions';
-import { MicroUserDisplay } from '../../ui/MicroUserDisplay/MicroUserDisplay';
 import { Subtitle } from '../../ui/Titles/Subtitle/Subtitle';
-import DateTimeDisplay from '../../ui/DateTimeDisplay/DateTimeDisplay';
 import { UserIndicator } from '../../UserIndicator/UserIndicator';
+import { TextIndicator } from '../../ui/TextIndicator/TextIndicator';
 
-export const MediaItem = ({ title, duration, thumbnail, src, url, inQueue, added_by, status, action = () => {}, position, context = {}, at }) => {
+export const MediaItem = ({ title, duration, thumbnail, src, url, inQueue, added_by, nsfw, status, action = () => {}, position, context = {}, at }) => {
 
   const [thumbnailError, toggleThumbnailError] = React.useState(false);
 
@@ -36,6 +35,7 @@ export const MediaItem = ({ title, duration, thumbnail, src, url, inQueue, added
           <div className={styles.title}>{title}</div>
           <div className={styles.detailsWrapper}>
             <Subtitle>{formatDuration(Math.floor(duration))}</Subtitle>
+            {nsfw && (<TextIndicator backgroundColor='var(--error-color)' title='18+' />)}
           </div>
         </div>
 
@@ -49,7 +49,7 @@ export const MediaItem = ({ title, duration, thumbnail, src, url, inQueue, added
           </div>
         )}
         </div>
-        <UserIndicator label={'added by:'} user_id={added_by} date={at} marginLeft={typeof position === 'number' ? 52 : null} />
+        <UserIndicator label={'added by:'} user_id={added_by} date={at} marginLeft={typeof position === 'number' ? 52 : 24} />
     </div>
   </>
   );

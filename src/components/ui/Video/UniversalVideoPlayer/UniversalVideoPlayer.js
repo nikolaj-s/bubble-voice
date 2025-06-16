@@ -83,6 +83,30 @@ export const UniversalVideoPlayer = ({ src, autoplay = false }) => {
     setMuted(newVolume === 0);
   };
 
+   useEffect(() => {
+    return () => {
+      // 1) clear your hide‐controls timeout
+      clearTimeout(timeoutRef.current);
+
+      // 2) grab the “internal” player and pause/stop it
+      const internal = playerRef.current?.getInternalPlayer();
+      if (internal) {
+        // YouTube iframe API
+        if (typeof internal.pauseVideo === 'function') {
+          internal.pauseVideo();
+        }
+        // HTML5 <video> element
+        else if (typeof internal.pause === 'function') {
+          internal.pause();
+        }
+        // Vimeo / other players
+        else if (typeof internal.stopVideo === 'function') {
+          internal.stopVideo();
+        }
+      }
+    };
+  }, []);
+
   const resetHideTimeout = () => {
     clearTimeout(timeoutRef.current);
     setShowControls(true);

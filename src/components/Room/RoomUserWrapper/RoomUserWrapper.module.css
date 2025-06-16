@@ -13,6 +13,7 @@
     flex: 1;
     overflow: hidden;
     z-index: 1;
+    transition: background-color 0.5s ease-in;
 }
 
 .expandedContainer {

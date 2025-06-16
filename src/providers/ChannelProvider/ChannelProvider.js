@@ -28,6 +28,15 @@ export const ChannelProvider = ({children, overlay = false, channel_id_prop}) =>
     const [serverID, setServerID] = React.useState(null);
 
     React.useEffect(() => {
+
+        if (overlay) {
+
+            setChannelID(channel_id_prop);
+
+            setServerID(server_id_param);
+
+            return;
+        }
         
         setChannelID(channel_id_param);
 
@@ -53,14 +62,14 @@ export const ChannelProvider = ({children, overlay = false, channel_id_prop}) =>
 
             await socket.request('fetch channel details', {channelID, serverID})
             .then(res => {
-                if (res.channel_id) {
+                if (res._id) {
                   
                     if (res.channel_type === 'voice') {
-                        dispatch(setCurrentVoiceChannel(res.channel_id));
+                        dispatch(setCurrentVoiceChannel(res._id));
                     }
                     
                     if (res.channel_type === 'text') {
-                        dispatch(setCurrentTextChannel(res.channel_id));
+                        dispatch(setCurrentTextChannel(res._id));
                     }
 
                 } else {
@@ -101,7 +110,7 @@ export const ChannelProvider = ({children, overlay = false, channel_id_prop}) =>
             socket.off(`delete channel ${channelID}`, onChannelDelete);
 
         }
-
+    // eslint-disable-next-line
     }, [channelID, serverID, socket, dispatch, overlay]) 
 
     React.useEffect(() => {

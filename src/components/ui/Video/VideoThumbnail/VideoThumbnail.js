@@ -23,9 +23,9 @@ const formatDuration = (seconds) => {
  * @param {string} props.title - Title of the video
  * @param {number} props.duration - Duration in seconds
  */
-const VideoThumbnail = ({ thumbnail, title, duration, action, width }) => {
+const VideoThumbnail = ({ thumbnail, title, duration, action, width, maxWidth }) => {
   return (
-    <div onClick={action} style={{width}} className={styles.wrapper}>
+    <div onClick={action} style={{width, maxWidth}} className={styles.wrapper}>
       <ImageComponent src={thumbnail} />
       <div className={styles.overlay}>
         <span className={styles.title} title={title}>{title}</span>

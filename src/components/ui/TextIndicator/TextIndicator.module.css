@@ -1,0 +1,26 @@
+.indicator {
+  position: relative;
+  display: inline-block;
+  padding: 5px;
+  border-radius: 15px;
+  background-color: var(--button-background);
+  color: transparent;
+  overflow: hidden;
+  min-width: 30px;
+  height: 6px;
+  /* Creates new stacking context */
+  isolation: isolate;
+}
+
+.cutoutText {
+  font-weight: bold;
+  font-size: 12px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  color: black;
+  mix-blend-mode: destination-out;
+  pointer-events: none;
+}

@@ -6,8 +6,8 @@ const initialState = {
   currentTime: 0,
   currentlyPlaying: null, // { id, title, url, type, duration, etc. }
   isPlaying: false,
-  isMuted: false,
-  volume: 1,
+  isMuted: JSON.parse(localStorage.getItem('isMediaPlayerMuted')) || false,
+  volume: JSON.parse(localStorage.getItem('mediaPlayerVolume')) || 1,
   queue: [],
   currentChannel: null, // e.g. channel id if this is per channel
   savedMedia: [],
@@ -109,10 +109,17 @@ const mediaPlayerSlice = createSlice({
       state.currentTime = 0;
     },
     setMediaPlayerVolume: (state, action) => {
+
+      if (typeof action.payload !== 'number') return;
+
       state.volume = action.payload;
+
+      localStorage.setItem('mediaPlayerVolume', JSON.stringify(state.volume));
     },
     toggleMediaPlayerMuted: (state, action) => {
       state.isMuted = !state.isMuted;
+
+      localStorage.setItem('isMediaPlayerMuted', JSON.stringify(state.isMuted));
     },
     setCurrentChannel: (state, action) => {
       state.currentChannel = action.payload;

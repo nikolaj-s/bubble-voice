@@ -63,13 +63,8 @@ export const useMediaPlayerCtxMenu = () => {
 
                     dispatch(setChannelToViewWidgetsOf(currentVoiceChannel));
 
-                    dispatch(setOverlay('widgets'));
+                    dispatch(setOverlay('mediaPlayerSaves'));
 
-                    setTimeout(() => {
-
-                        document.getElementById('media-player-widget-saves')?.scrollIntoView({behavior: 'instant'});
-                    
-                    }, 100)
                 }
             })
 

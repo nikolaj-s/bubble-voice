@@ -15,12 +15,14 @@ const ContextRangeInput = ({ label, value = 0, onChange, min = 0, max = 100 }) =
 
         localValueRef.current = localValue;
 
-    }, [localValue]);
+        onChange(localValue);
+
+    }, [localValue, onChange]);
 
     useEffect(() => {
 
         return () => {
-            onChange?.(localValueRef.current);
+          //  onChange?.(localValueRef.current);
         }
         // eslint-disable-next-line
     }, []);

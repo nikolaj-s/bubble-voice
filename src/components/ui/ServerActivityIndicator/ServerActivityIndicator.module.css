@@ -1,0 +1,27 @@
+.activityDot {
+  position: absolute;
+  right: 0px;
+  bottom: -2px;
+  width: 10px;
+  height: 10px;
+  background-color: var(--success-color); /* e.g. green */
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--success-color);
+  animation: pulse 5s ease-in-out infinite;
+  z-index: 2;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translateY(-50%) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-50%) scale(1.4);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-50%) scale(1);
+    opacity: 1;
+  }
+}

@@ -33,13 +33,7 @@ export const MediaPlayerOverlay = ({close}) => {
         
         dispatch(setChannelToViewWidgetsOf(currentVoiceChannel));
 
-        dispatch(setOverlay('widgets'));
-
-        setTimeout(() => {
-
-            document.getElementById('media-player-widget-saves')?.scrollIntoView({behavior: 'instant'});
-          
-        }, 100)
+        dispatch(setOverlay('mediaPlayerSaves'));
 
     }
 

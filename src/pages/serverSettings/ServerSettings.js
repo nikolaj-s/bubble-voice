@@ -14,6 +14,7 @@ import { AddWidgetForm } from '../../layout/Forms/ServerSettings/AddWidgetForm/A
 import { ManageWidgetsForm } from '../../layout/Forms/ServerSettings/ManageWidgetsForm/ManageWidgetsForm'
 import { ManageChannelsForm } from '../../layout/Forms/ServerSettings/ManageChannelsForm/ManageChannelsForm'
 import { InvitesForm } from '../../layout/Forms/ServerSettings/InvitesForm/InvitesForm'
+import { ServerSecurityForm } from '../../layout/Forms/ServerSettings/ServerSecurityForm/ServerSecurityForm'
 
 export const ServerSettings = ({close}) => {
 
@@ -34,7 +35,7 @@ export const ServerSettings = ({close}) => {
         createChannel: <CreateChannelForm />,
         permissions: <EditPermissionsForm />,
         createCategory: <CreateCategoryForm />,
-        security: <></>,
+        security: <ServerSecurityForm />,
         invites: <InvitesForm />,
         editPermissionGroup: <EditPermissionGroupForm />,
         editChannel: <EditChannelForm />,

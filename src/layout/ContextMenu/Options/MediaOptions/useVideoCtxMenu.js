@@ -25,7 +25,7 @@ export const useVideoCtxMenu = () => {
     const { currentVoiceChannel }= useSelector(state => state.voiceChannelSlice);
 
     const getVideoOptions = useCallback((options, data) => {
-        if ((data.video?.src?.includes('.mp4') || data?.video?.url?.includes('youtu')) && data.video.duration && mediaPlayerState.enabled) {
+        if (data.video.duration && mediaPlayerState.enabled) {
         
             if (!data.video.inQueue) {
                 options.push({
@@ -43,7 +43,7 @@ export const useVideoCtxMenu = () => {
             }
             
             const saved = isMediaSaved(savedMediaState, currentVoiceChannel, data.video.src);
-            console.log(data.video)
+          
             options.push({
                 label: saved ? `Unsave ${data.video.title}` : `Save ${data.video.title}`,
                 onClick: () => {

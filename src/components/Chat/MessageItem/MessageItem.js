@@ -17,7 +17,7 @@ import { TextBlock } from './TextBlock/TextBlock';
 import { UserBlock } from './UserBlock/UserBlock';
 import { ReplyBlock } from './ReplyBlock/ReplyBlock';
 
-export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inSearch = false, isReply, reply = () => {}}) => {
+export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inSearch = false, isReply, reply = () => {}, notification}) => {
 
     const isDifferentDay = prevMessage?.formattedDate !== message?.formattedDate;
 
@@ -39,7 +39,7 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
                 className={styles.messageItem}>
                     <ReplyBlock {...message} users={users} />
                     <div className={styles.messageWrapper}>
-                        {!isReply && 
+                        {(!isReply && !notification) && 
                         <div className={styles.buttons}>
                             <IconButton 
                             Icon={<Reply color='var(--text-color)' />}

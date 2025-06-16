@@ -33,7 +33,13 @@
   font-size: 0.875rem;
   transition: color 0.15s;
   margin-left: 10px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%; /* or set a specific width if needed */
 }
+
 
 .link .icon {
   margin-right: -3px;

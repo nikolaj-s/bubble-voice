@@ -19,6 +19,7 @@ import {
 } from '../../features/MediaPlayer/mediaPlayerSlice';
 import { fetchSavedMedia } from '../../features/MediaPlayer/Thunks/fetchSavedMedia';
 import { getImageColor } from '../../lib/services/getImageColor';
+import { useNotify } from '../../hooks/useNotify';
 
 export const MediaPlayerProvider = ({children}) => {
 
@@ -30,7 +31,13 @@ export const MediaPlayerProvider = ({children}) => {
 
     const {currentVoiceChannel: channelId} = useSelector(state => state.voiceChannelSlice);
 
+    const {handleMediaPlayerNotification} = useNotify();
+
     React.useEffect(() => {
+
+      if (currentlyPlaying) {
+        handleMediaPlayerNotification({...currentlyPlaying, user: currentlyPlaying?.added_by}, 'nowPlaying')
+      }
     
       if (currentlyPlaying?.thumbnail) {
         try {
@@ -49,7 +56,7 @@ export const MediaPlayerProvider = ({children}) => {
       } else {
           dispatch(setColor(null));
       }
-    
+    //eslint-disable-next-line
     }, [currentlyPlaying, dispatch]);
 
     React.useEffect(() => {
@@ -57,15 +64,19 @@ export const MediaPlayerProvider = ({children}) => {
       if (!socket || !channelId) return;
 
       const handleTogglePlaying = (data) => {
+         
           dispatch(toggleMediaPlaying(data?.playing));
+          handleMediaPlayerNotification(data, 'play/pause');
       }
 
       const handleNewMedia = (data) => {
           dispatch(addMediaToQueue(data.media));
+          handleMediaPlayerNotification(data, 'newMedia');
       }
 
       const handleRemoveMediaFromQueue = (data) => {
           dispatch(removeMediaFromQueue(data));
+          handleMediaPlayerNotification(data, 'removedMedia');
       }
 
       const handleSeek = (data) => {
@@ -74,10 +85,12 @@ export const MediaPlayerProvider = ({children}) => {
 
       const handleSkip = (data) => {
           dispatch(playNextInQueue());
+          handleMediaPlayerNotification(data, 'skippedMedia');
       }
 
       const handleReorder = (data) => {
         dispatch(reorderQueue(data));
+        handleMediaPlayerNotification(data, 'reorderedMedia');
       }
 
       if (enabled) {
@@ -115,7 +128,7 @@ export const MediaPlayerProvider = ({children}) => {
 
       };
 
-    }, [enabled, channelId, dispatch, socket]);
+    }, [enabled, channelId, dispatch, socket, handleMediaPlayerNotification]);
 
     const setMedia = React.useCallback(async () => {
           try {
@@ -167,7 +180,7 @@ export const MediaPlayerProvider = ({children}) => {
         .catch((err) => {
           console.warn('Media widget check failed:', err);
         });
-
+    // eslint-disable-next-line
     }, [socket, channelId, dispatch]);
 
 

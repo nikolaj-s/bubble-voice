@@ -21,7 +21,7 @@ export const ReplyBlock = ({reply_to, users}) => {
             el.scrollIntoView({block: 'center', 'boundary': scrollEl});
 
             requestAnimationFrame(() => {
-                el.style.backgroundColor = 'var(--card-background-color)';
+                el.style.backgroundColor = 'var(--accent-color)';
 
                 setTimeout(() => {
 

@@ -2,11 +2,12 @@ import React, { useEffect } from "react";
 import Label from "../Titles/Label/Label";
 import styles from "./PasswordRequirements.module.css";
 
-const PasswordRequirements = ({ password, isValid = () => {} }) => {
+const PasswordRequirements = ({ password = "", isValid = () => {} }) => {
+  
   const requirements = [
-    { label: "At least 10 characters", test: (pw) => pw.length >= 10 },
+    { label: "At least 10 characters", test: (pw) => pw?.length >= 10 },
     { label: "At least 1 number", test: (pw) => /\d/.test(pw) },
-    { label: "At least 1 special character", test: (pw) => /[!@#$%^&*(),.?\":{}|<>]/.test(pw) },
+    { label: "At least 1 special character", test: (pw) => /[!@#$%^&*(),.?":{}|<>]/.test(pw) },
     { label: "At least 1 uppercase letter", test: (pw) => /[A-Z]/.test(pw) },
     { label: "At least 1 lowercase letter", test: (pw) => /[a-z]/.test(pw) },
   ];
@@ -16,6 +17,8 @@ const PasswordRequirements = ({ password, isValid = () => {} }) => {
       const allPassed = requirements.every(({ test }) => test(password));
       isValid(allPassed);
     }
+
+  // eslint-disable-next-line
   }, [password, isValid]);
 
   return (
