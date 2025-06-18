@@ -7,6 +7,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { NotAuthorized } from '../../../../components/Error/NotAuthorized/NotAuthorized'
 import { LoadingErrorFormWrapper } from '../../../../components/ui/Wrappers/LoadingErrorFormWrapper/LoadingErrorFormWrapper'
 import { createCategory } from '../../../../features/Categories/Thunks/createCategory'
+import { ApplyChangesPopup } from '../../../../components/ApplyChangesPopup/ApplyChangesPopup'
+import ToggleSwitch from '../../../../components/ui/Inputs/ToggleSwitch/ToggleSwitch'
+import { Description } from '../../../../components/ui/Description/Description'
 
 export const CreateCategoryForm = ({permissions}) => {
 
@@ -14,12 +17,14 @@ export const CreateCategoryForm = ({permissions}) => {
 
     const [categoryName, setCategoryName] = React.useState("");
 
+    const [autoSort, toggleAutoSort] = React.useState(false);
+
     const {loading} = useSelector(state => state.channelsSlice);
 
     const handleCreateCategory = () => {
         if (loading) return;
 
-        dispatch(createCategory({categoryName}));
+        dispatch(createCategory({categoryName, autoSort}));
     }
 
     return (
@@ -28,7 +33,11 @@ export const CreateCategoryForm = ({permissions}) => {
             <Header text='Create A Category' />
             <Label label='Category Name' />
             <TextInput placeholder={"Enter Category Name"} onChange={setCategoryName} value={categoryName} />
-            <TextButton action={handleCreateCategory} disabled={categoryName.length < 3} title='Create' />
+            <Label label='Enable Auto Sort' />
+            <Description description={"Flip the switch and your channels snap into A→Z order—just remember, any custom placements will be wiped clean!"} />
+            <ToggleSwitch initialState={autoSort} onToggle={() => {toggleAutoSort(!autoSort)}} />
+            <ApplyChangesPopup onApply={handleCreateCategory} disabled={categoryName.trim().length < 3} name='Create' onClearChanges={() => {setCategoryName(""); toggleAutoSort(false)}} />
+
         </LoadingErrorFormWrapper>
     </NotAuthorized>
     )

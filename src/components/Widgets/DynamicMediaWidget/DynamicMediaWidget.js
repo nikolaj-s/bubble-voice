@@ -21,7 +21,7 @@ export const DynamicMediaWidget = ({query = "", timeout = 1500}) => {
                 <NsfwWrapper nsfw={media} key={media.src}>
                     <MediaTooltipWrapper media={media}>
                     {{
-                        image: <ImageComponent objectFit='contain' {...media} />,
+                        image: <ImageComponent objectFit='contain' {...media} width={'100%'} height={'100%'} />,
                         video: <VideoPlayer {...media} />
                     }[media.type || null]}
                     </MediaTooltipWrapper>

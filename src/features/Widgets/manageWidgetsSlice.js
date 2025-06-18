@@ -3,6 +3,7 @@ import { createWidget } from "./Thunks/createWidget";
 import { fetchWidgetsToManage } from "./Thunks/fetchWidgetsToManage";
 import { deleteWidget } from "./Thunks/deleteWidget";
 import { reorderWidgets } from "./Thunks/reorderWidgets";
+import { editWidget } from "./Thunks/editWidget";
 
 const manageWidgetsSlice = createSlice({
     name: 'manageWidgetsSlice',
@@ -77,6 +78,27 @@ const manageWidgetsSlice = createSlice({
             state.loading = false;
             state.error = false;
             state.widgets = action.payload;
+        })
+
+        // edit widget
+        builder.addCase(editWidget.pending, (state) => {
+            state.loading = true;
+            state.error = false;
+        })
+        builder.addCase(editWidget.rejected, (state, action) => {
+            state.error = action.payload;
+            state.loading = false;
+        })
+        builder.addCase(editWidget.fulfilled, (state, action) => {
+            state.error = false;
+            state.loading = false;
+            state.widgets = state.widgets.map(w => {
+                if (w._id === action.payload._id) {
+                    return action.payload;
+                } else {
+                    return w;
+                }
+            })
         })
     }
 })

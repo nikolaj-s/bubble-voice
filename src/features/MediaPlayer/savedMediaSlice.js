@@ -8,16 +8,22 @@ const savedMediaSlice = createSlice({
     initialState: {
         loading: false,
         error: false,
-        saves: {}
+        saves: {},
+        channel: null
     },
-    addSavedMedia: (state, action) => {
-        if (action.payload.channel_id) {
-            state.saves[action.payload.channel_id].push(action.payload.media)
-        }
-    },
-    removeSavedMedia: (state, action) => {
-        if (action.payload.channel_id) {
-            state.saves[action.payload.channel_id] = state.saves[action.payload.channel_id].filter(m => m._id !== action.payload.media_id)
+    reducers: {
+        addSavedMedia: (state, action) => {
+            if (action.payload.channel_id) {
+                state.saves[action.payload.channel_id].push(action.payload.media)
+            }
+        },
+        removeSavedMedia: (state, action) => {
+            if (action.payload.channel_id) {
+                state.saves[action.payload.channel_id] = state.saves[action.payload.channel_id].filter(m => m._id !== action.payload.media_id)
+            }
+        },
+        setChannelToViewSavedMediaFrom: (state, action) => {
+            state.channel = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -77,7 +83,7 @@ const savedMediaSlice = createSlice({
     }
 })
 
-export const {addSavedMedia, removeSavedMedia} = savedMediaSlice.actions;
+export const {addSavedMedia, removeSavedMedia, setChannelToViewSavedMediaFrom} = savedMediaSlice.actions;
 
 export default savedMediaSlice.reducer;
 

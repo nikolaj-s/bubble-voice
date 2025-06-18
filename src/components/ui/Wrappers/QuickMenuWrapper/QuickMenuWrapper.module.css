@@ -19,8 +19,6 @@
 
 .container {
     position: fixed;
-    bottom: 70px;
-    left: 35px;
     width: 300px;
     border-radius: 15px;
     border: solid 1px var(--accent-color);

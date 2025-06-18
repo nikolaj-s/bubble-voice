@@ -1,4 +1,4 @@
-import React from 'react'
+
 import RichTextView from '../../ui/RichTexrView/RichTextView'
 
 export const RichTextWidget = ({rich_text}) => {

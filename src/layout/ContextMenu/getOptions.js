@@ -97,7 +97,7 @@ export const useContextMenuOptions = () => {
 
             if (data.widgetsOverlay) getWidgetsOptions(options, data, permissions);
 
-            if (data.widget) getWidgetOptions(options, data, permissions);
+            if (data.widget) getWidgetOptions(options, data.widget, permissions);
 
             if (data.channel) getChannelOptions(options, data, permissions);
 

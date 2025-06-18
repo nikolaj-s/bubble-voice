@@ -8,11 +8,15 @@ const notificationsSlice = createSlice({
     initialState: {
         loading: false,
         error: false,
+        notificationPanelOpen: false,
         last_read_status: {},
         notifications: [],
         notifications_overlay: []
     },
     reducers: {
+        toggleNotificationPanel: (state, action) => {
+            state.notificationPanelOpen = !state.notificationPanelOpen;
+        },
         setLastReadStatus: (state, action) => {
             state.last_read_status[action.payload] = {
             ...state.last_read_status[action.payload],
@@ -67,6 +71,6 @@ const notificationsSlice = createSlice({
     }
 })
 
-export const {setLastReadStatus, pushNotificationOverlay, removeNotificationOverlay} = notificationsSlice.actions;
+export const {setLastReadStatus, pushNotificationOverlay, removeNotificationOverlay, toggleNotificationPanel} = notificationsSlice.actions;
 
 export default notificationsSlice.reducer;

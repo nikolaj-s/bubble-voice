@@ -67,7 +67,7 @@ export const useImageCtxMenu = () => {
             
             if (sendToOptions.length > 0) {
                 options.push({
-                    label: "Send To",
+                    label: "Send Image To",
                     submenuOptions: sendToOptions.sort((a, b) => 
             a.label.localeCompare(b.label, undefined, { sensitivity: 'base' })
             ),

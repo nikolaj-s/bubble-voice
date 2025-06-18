@@ -38,6 +38,7 @@ const FetchAccountProvider = ({ children }) => {
         } catch (error) {
             navigate('/account-error')
         }
+    //eslint-disable-next-line
     }, [dispatch, token]);
 
     useEffect(() => {
@@ -47,6 +48,7 @@ const FetchAccountProvider = ({ children }) => {
             navigate("/account-error"); // Redirect to login
 
         }
+    //eslint-disable-next-line
     }, [error, dispatch]);
 
     if (!user) return <DashboardSkeleton />;

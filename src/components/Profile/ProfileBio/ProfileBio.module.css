@@ -26,5 +26,11 @@
   
   .bioText {
     display: block;
+    padding: 0;
+  }
+
+  .bioText p {
+    padding: 0;
+    margin: 0;
   }
   

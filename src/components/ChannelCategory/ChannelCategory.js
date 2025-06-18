@@ -5,6 +5,7 @@ import ChannelButton from "../ui/Buttons/ChannelButton/ChannelButton";
 import { ChevronDown } from "lucide-react";
 import { ChannelButtonDragWrapper } from "../ui/Buttons/ChannelButton/ChannelButtonDragWrapper";
 import { Subtitle } from "../ui/Titles/Subtitle/Subtitle";
+import { TextIndicator } from "../ui/TextIndicator/TextIndicator";
 
 export const Category = ({
   category_id,
@@ -20,7 +21,8 @@ export const Category = ({
   toggleDraggingCategory,
   moveCategory,
   marginBottom = null,
-  category
+  category,
+  autoSort
 }) => {
   const [collapse, toggleCollapse] = React.useState(false);
 
@@ -68,7 +70,7 @@ export const Category = ({
 
       if (value?.collapsed) toggleCollapse(true);
     }
-  }, []);
+  }, [category_id]);
 
   React.useEffect(() => {
 
@@ -114,12 +116,17 @@ export const Category = ({
         }}
         className={styles["channel-list-collapse-button"]}
       >
+        {autoSort && (<TextIndicator title="A-Z" />)}
         <Subtitle margin={0}>{catagoryName}</Subtitle>
         <ChevronDown style={{rotate: collapse ? '-90deg' : '0deg', transition: '0.2s'}} />
       </div>
       <div onDragOver={(e) => {e.preventDefault()}} draggable={false} className={styles["channel-list-button-wrapper"]}>
         <>
-          {channels.map((channel, key) => {
+          {channels.sort((a, b) =>
+            autoSort
+              ? a.channel_name.localeCompare(b.channel_name)
+              : 0
+          ).map((channel, key) => {
             return (
               <ChannelButtonDragWrapper
                 key={`channel-drag-wrapper-${channel.channel_id}`}

@@ -25,20 +25,24 @@ const IconButton = ({
   };
 
   return (
+  <div style={{width, height}} className={className}>
     <Tooltip content={title} position={position} disabled={disabled}>
-      <button
-        onMouseDown={(e) => {e.stopPropagation()}}
-        type="button"
-        style={{ width, height, backgroundColor, padding, borderRadius, margin, cursor: disabled ? "not-allowed" : "pointer" }}
-        onClick={handleClick}
-        className={`${styles.button} ${className} ${disabled ? styles.disabled : ""}`}
-        disabled={disabled}
-        tabIndex={disabled ? -1 : 0}
-        aria-disabled={disabled}
-      >
-        {Icon}
-      </button>
+        <button
+          onMouseDown={(e) => {e.stopPropagation()}}
+          type="button"
+          style={{ width, height, backgroundColor, padding, borderRadius, margin, cursor: disabled ? "not-allowed" : "pointer" }}
+          onClick={handleClick}
+          className={`${styles.button} ${className} ${disabled ? styles.disabled : ""}`}
+          disabled={disabled}
+          tabIndex={disabled ? -1 : 0}
+          aria-disabled={disabled}
+        >
+          
+          {Icon}
+          
+        </button>
     </Tooltip>
+   </div>
   );
 };
 

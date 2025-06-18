@@ -13,6 +13,22 @@ const widgetsSlice = createSlice({
     reducers: {
         setChannelToViewWidgetsOf: (state, action) => {
             state.channel = action.payload;
+        },
+        removeWidget: (state, action) => {
+            if (state.widgets[action.payload.channel_id]) {
+                state.widgets[action.payload.channel_id] = state.widgets[action.payload.channel_id].filter(w => w._id !== action.payload._id)
+            }
+        },
+        updateWidget: (state, action) => {
+            if (state.widgets[action.payload.channel_id]) {
+                state.widgets[action.payload.channel_id] = state.widgets[action.payload.channel_id].map(w => {
+                    if (w._id === action.payload._id) {
+                        return action.payload;
+                    } else {
+                        return w;
+                    }
+                })
+            }
         }
     },
     extraReducers: (builder) => {
@@ -35,6 +51,6 @@ const widgetsSlice = createSlice({
     }
 })
 
-export const {setChannelToViewWidgetsOf} = widgetsSlice.actions;
+export const {setChannelToViewWidgetsOf, removeWidget, updateWidget} = widgetsSlice.actions;
 
 export default widgetsSlice.reducer;

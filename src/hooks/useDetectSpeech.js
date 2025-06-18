@@ -128,7 +128,7 @@ export const useDetectSpeech = (
 
       rafIdRef.current = requestAnimationFrame(detect);
     };
-
+    try {
     // init
     navigator.mediaDevices.getUserMedia(constraints)
       .then(stream => {
@@ -156,6 +156,10 @@ export const useDetectSpeech = (
         else if (err.name === 'NotFoundError') msg = 'No microphone device found.';
         dispatch(throwMicrophoneError(msg));
       });
+    } catch (err) {
+      console.log(err);
+      dispatch(throwMicrophoneError("Access To Microphone Blocked"));
+    }
 
     return () => {
       mounted = false;

@@ -35,17 +35,17 @@ export const SubNav = ({basePath = '/dashboard', options = []}) => {
   return (
     <nav className={styles.subNav}>
 
-      {options.map((option) => {
+      {options.map((option, indx) => {
 
         const optionPathNormalized = normalizePath(option.path);
 
         const active = currentPath === optionPathNormalized && !focused;
   
         return (
-          <NavButton action={() => {handleNavigate(option.path)}} icon={option.icon} active={active} name={option.label}  />
+          <NavButton key={indx} action={() => {handleNavigate(option.path)}} icon={option.icon} active={active} name={option.label}  />
         );
       })}
-      <LineSpacer margin={'15px 0px'} />
+      <LineSpacer margin={'15px 0px 0px 0px'} />
     </nav>
   );
 };

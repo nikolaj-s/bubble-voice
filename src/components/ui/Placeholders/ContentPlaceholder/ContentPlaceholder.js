@@ -1,41 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './ContentPlaceholder.module.css';
+import TextButton from '../../Buttons/TextButton/TextButton';
 
-const ContentPlaceholder = ({ title, message }) => {
+const ContentPlaceholder = ({ title, message, icon: Icon, action, actionTitle }) => {
   return (
-    <div className={styles.placeholderContainer}>
-      {title && <h2 className={styles.title}>{title}</h2>}
-      <div className={styles.bubblesContainer}>
-        <div
-          className={styles.bubble}
-          style={{ '--bubble-size': '60px', '--bubble-left': '10%', '--animation-delay': '0s' }}
-        />
-        <div
-          className={styles.bubble}
-          style={{ '--bubble-size': '80px', '--bubble-left': '50%', '--animation-delay': '1s' }}
-        />
-        <div
-          className={styles.bubble}
-          style={{ '--bubble-size': '40px', '--bubble-left': '80%', '--animation-delay': '2s' }}
-        />
-        <div
-          className={styles.bubble}
-          style={{ '--bubble-size': '70px', '--bubble-left': '30%', '--animation-delay': '0.5s' }}
-        />
-        <div
-          className={styles.bubble}
-          style={{ '--bubble-size': '50px', '--bubble-left': '65%', '--animation-delay': '1.5s' }}
-        />
+    <div className={styles.container}>
+      <div className={styles.bubbleArt}>
+        <div className={styles.bubble + ' ' + styles.bubble1}></div>
+        <div className={styles.bubble + ' ' + styles.bubble2}></div>
+        <div className={styles.bubble + ' ' + styles.bubble3}></div>
       </div>
-      <p className={styles.message}>{message}</p>
+      <div className={styles.content}>
+        {Icon && (<Icon size={48} color={'var(--accent-color)'} />)}
+        <h2 className={styles.title}>{title}</h2>
+        <p className={styles.subtitle}>{message}</p>
+        {typeof action === 'function' && (<TextButton title={actionTitle} action={action} />)}
+      </div>
     </div>
   );
 };
 
 ContentPlaceholder.propTypes = {
   title: PropTypes.string,
-  message: PropTypes.string.isRequired,
+  message: PropTypes.string,
 };
 
 export default ContentPlaceholder;

@@ -28,7 +28,7 @@ const SortableWidget = ({ id, children, editing, widget }) => {
   };
 
   return (
-    <div id={id} ref={setNodeRef} data-context={editing ? JSON.stringify({...widget, type: 'widget'}) : null} style={style} className={styles.widgetWrapper}>
+    <div id={id} ref={setNodeRef} data-context={JSON.stringify({...widget, type: 'widget', editing})} style={style} className={styles.widgetWrapper}>
       {editing && (
         <div className={styles.controls}>
           <IconButton 
@@ -52,7 +52,43 @@ const SortableWidget = ({ id, children, editing, widget }) => {
   );
 };
 
-export const Widgets = ({ widgets, editing, onReorder = () => {}, openAddWidgets = () => {} }) => {
+export const WidgetList = ({widgets, editing}) => {
+  console.log(widgets)
+  if (widgets.length === 0) return null;
+
+  return (
+    <>
+     {widgets.map(widget => (
+        <SortableWidget widget={widget} key={widget._id} id={widget._id} editing={editing}>
+            {{
+              single_image: <SingleImageWidget {...widget.config} />,
+              gallery:      <GalleryWidget {...widget.config} />,
+              embed:        <EmbedWidget {...widget.config} />,
+              rich_text:    <RichTextWidget {...widget.config} />,
+              dynamic_media:<DynamicMediaWidget {...widget.config} timeout={0} />,
+              media_player: <MediaPlayerWidget {...widget.config} {...widget} />
+            }[widget.widget_type] || null}
+        </SortableWidget>
+    ))}
+    </>
+  )
+
+}
+
+export const WidgetArray = (widgets) => {return widgets?.map(widget => (
+        <SortableWidget widget={widget} key={widget._id} id={widget._id} editing={false}>
+            {{
+              single_image: <SingleImageWidget {...widget.config} />,
+              gallery:      <GalleryWidget {...widget.config} />,
+              embed:        <EmbedWidget {...widget.config} />,
+              rich_text:    <RichTextWidget {...widget.config} />,
+              dynamic_media:<DynamicMediaWidget {...widget.config} timeout={0} />,
+              media_player: <MediaPlayerWidget {...widget.config} channel_id={widget.channel_id} />
+            }[widget.widget_type] || null}
+        </SortableWidget>
+))}
+
+export const Widgets = ({ widgets, editing, onReorder = () => {}, openAddWidgets = () => {}, pinned }) => {
 
     
     const [currentWidgets, setCurrentWidgets] = React.useState(widgets);
@@ -79,29 +115,20 @@ export const Widgets = ({ widgets, editing, onReorder = () => {}, openAddWidgets
         setCurrentWidgets(widgets);
     }, [widgets]);
 
+    if (pinned && widgets.length === 0) return null;
+
     if (widgets.length === 0) return <NoWidgetsPlaceholder user_can_edit_channels={true} action={openAddWidgets} />
 
     return (
         <div className={styles.container}>
-        <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd} modifiers={[restrictToVerticalAxis]}>
-            <SortableContext
-            items={currentWidgets.map(w => w._id)}
-            strategy={verticalListSortingStrategy}
-            >
-            {currentWidgets.map(widget => (
-                <SortableWidget widget={widget} key={widget._id} id={widget._id} editing={editing}>
-                    {{
-                      single_image: <SingleImageWidget {...widget.config} />,
-                      gallery:      <GalleryWidget {...widget.config} />,
-                      embed:        <EmbedWidget {...widget.config} />,
-                      rich_text:    <RichTextWidget {...widget.config} />,
-                      dynamic_media:<DynamicMediaWidget {...widget.config} timeout={0} />,
-                      media_player: <MediaPlayerWidget {...widget.config} />
-                    }[widget.widget_type] || null}
-                </SortableWidget>
-            ))}
-            </SortableContext>
-        </DndContext>
+          <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd} modifiers={[restrictToVerticalAxis]}>
+              <SortableContext
+              items={currentWidgets.map(w => w._id)}
+              strategy={verticalListSortingStrategy}
+              >
+                <WidgetList widgets={currentWidgets} editing={editing} />
+              </SortableContext>
+          </DndContext>
         </div>
     );
 };

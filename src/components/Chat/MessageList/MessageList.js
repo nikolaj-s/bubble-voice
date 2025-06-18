@@ -64,7 +64,7 @@ const MessageList = ({
         : // Otherwise render all fetched messages
           oldestFirst.map((msg, idx) => (
             <MessageItem
-              key={msg.message_id}
+              key={msg._id}
               message={msg}
               users={users}
               reply={reply}

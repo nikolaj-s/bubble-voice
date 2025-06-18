@@ -3,7 +3,7 @@ import React from 'react';
 import styles from './Image.module.css'
 import { ImageOff } from 'lucide-react';
 
-export const ImageComponent = ({src, objectFit = 'cover', alt = "Image", borderRadius}) => {
+export const ImageComponent = ({src, objectFit = 'cover', alt = "Image", borderRadius, aspectRatio, height, width}) => {
 
     const [imageError, setImageError] = React.useState(false);
 
@@ -15,7 +15,10 @@ export const ImageComponent = ({src, objectFit = 'cover', alt = "Image", borderR
             minHeight: imageError ? 90 : loading ? 150 : null,
             backgroundColor: imageError || loading ? 'black' : null,
             minWidth: loading ? 100 : null,
-            borderRadius
+            borderRadius,
+            aspectRatio,
+            height,
+            width
         }}
         className={`${styles.imageContainer} ${loading && src ? styles.loading : ''}`}>
             {imageError || !src ? (

@@ -14,7 +14,7 @@ export const themes = {
   },
   light: {
     '--primary-color': '#e0e0e0',
-    '--secondary-color': '#999999', // more visible than #c1c1c1
+    '--secondary-color': '#999999', // more visible thanrgb(193, 193, 193)
     '--accent-color': '#a1a1a1',
     '--background-color': '#f7f7f7',
     '--card-background-color': '#ffffff',

@@ -34,6 +34,7 @@ export const createWidget = createAsyncThunk('createWidget/manageWidgetsSlice', 
                 data.append('query', params.query);
                 break;
             case "media_player":
+                data.append('name', params.name);
                 break;
             default:
                 return rejectWithValue("Invalid Widget Type");

@@ -1,0 +1,38 @@
+.container {
+  position: relative;
+  overflow: hidden;
+  background: var(--card-background-color);
+  border-radius: var(--border-radius);
+  padding: var(--padding);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
+}
+
+/* subtle radial-gradient bubbles */
+.container::before,
+.container::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(20px);
+  opacity: 0.4;
+}
+
+/* big bluish bubble top-left */
+.container::before {
+  width: 120px;
+  height: 120px;
+  background: var(--button-background);
+  top: -40px;
+  left: -40px;
+}
+
+/* smaller teal bubble bottom-right */
+.container::after {
+  width: 80px;
+  height: 80px;
+  background: var(--accent-color);
+  bottom: -30px;
+  right: -30px;
+}

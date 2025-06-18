@@ -3,45 +3,35 @@ import PropTypes from 'prop-types';
 import styles from './ProfileBio.module.css';
 import { useDispatch } from 'react-redux';
 import { setExpandedImage } from '../../../features/Media/ExpandedImage/expandedImageSlice';
+import ReactMarkdown from 'react-markdown';
 
 const ProfileBio = ({ bio = "" }) => {
-
   const dispatch = useDispatch();
 
-  const imageRegex = /(https?:\/\/\S+\.(?:png|jpe?g|gif)\S*)/gi;
-
-  const parts = bio.split(imageRegex);
-
-  const images = parts.filter(part => part.match(imageRegex));
-  
-  const texts = parts.filter(part => !part.match(imageRegex) && part.trim() !== '');
-
-  const expandImage = (image) => {
-    dispatch(setExpandedImage({image}));
-  }
+  // Custom component for image markdown
+  const components = {
+    img: ({node, ...props}) => (
+      <img
+        {...props}
+        className={styles.bioImage}
+        style={{ cursor: 'pointer' }}
+        onClick={() => dispatch(setExpandedImage({ image: props.src }))}
+        alt={props.alt || 'User provided'}
+      />
+    )
+  };
 
   return (
     <div
       style={{
-        padding: bio.trim().length === 0 ? 0 : null,
+        padding: bio.trim().length === 0 ? 0 : undefined,
       }}
       className={styles.userBio}
     >
-      <div className={styles.bioImages}>
-        {images.map((url, index) => (
-          <img
-            onClick={() => {expandImage(url)}}
-            key={`img-${index}`}
-            src={url}
-            alt="User provided"
-            className={styles.bioImage}
-          />
-        ))}
-      </div>
       <div className={styles.bioText}>
-        {texts.map((text, index) => (
-          <span key={`text-${index}`}>{text}</span>
-        ))}
+        <ReactMarkdown components={components}>
+          {bio}
+        </ReactMarkdown>
       </div>
     </div>
   );
@@ -50,6 +40,5 @@ const ProfileBio = ({ bio = "" }) => {
 ProfileBio.propTypes = {
   bio: PropTypes.string,
 };
-
 
 export default ProfileBio;

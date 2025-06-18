@@ -116,8 +116,8 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
           <IconButton
             onClick={openContext}
             Icon={<Ellipsis color="var(--text-color)"/>}
-            title="more"
-            position="left"
+            title="Channel Options"
+            position="top"
             width={25}
             height={25}
             backgroundHover="var(--background-color)"

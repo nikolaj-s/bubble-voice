@@ -11,6 +11,8 @@ export const signinThunk = createAsyncThunk(
     async ({email, password}, { rejectWithValue }) => {
       try {
         
+        clearToken();
+
         if (!validateEmail(email) || !validatePassword(password)) {
             return rejectWithValue({ errorMessage: 'Invalid Credentials', errorType: "signinError" });
         }

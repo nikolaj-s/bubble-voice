@@ -20,7 +20,6 @@ export const useRedditMedia = (query, debounceDelay = 1500) => {
           const parsed = JSON.parse(cachedData);
           const now = Date.now();
           const threeDays = 1000 * 60 * 60 * 24 * 3;
-
           if (now - parsed.timestamp < threeDays) {
             console.log('Using cached Reddit media for:', query);
             setMedia(parsed.data);
@@ -35,8 +34,11 @@ export const useRedditMedia = (query, debounceDelay = 1500) => {
           setLoading(true);
           console.log('Fetching new Reddit media for:', query);
 
-          const response = await fetch(`https://www.reddit.com/search.json?q=${encodeURIComponent(query)}&limit=45&include_over_18=on&sort=relevance&type=link&t=month`);
-          
+          const response = await fetch(
+            `https://www.reddit.com/search.json?` +
+            `q=${encodeURIComponent(query)}` +
+            `&limit=45&include_over_18=on&sort=relevance&type=link&t=month`
+          );
           const data = await response.json();
 
           if (!data?.data?.children) {
@@ -49,92 +51,96 @@ export const useRedditMedia = (query, debounceDelay = 1500) => {
 
           for (const child of data.data.children) {
             const post = child.data;
-            const nsfw = post.over_18 || false;
-            const tags = extractTagsFromTitle(post.title);
+            const nsfw = !!post.over_18;
             const snippet = post.title || '';
+            // turn tags array into a comma-separated string
+            const tagsArray = extractTagsFromTitle(snippet);
+            const tagsString = tagsArray.join(' ');
 
+            // --- gallery images ---
             if (post.is_gallery && post.gallery_data) {
               const mediaMetadata = post.media_metadata || {};
               const galleryItems = post.gallery_data.items || [];
-
               for (const item of galleryItems) {
-                const mediaItem = mediaMetadata[item.media_id];
-                if (mediaItem?.s?.u) {
-                  const origUrl = decodeHtmlEntities(mediaItem.s.u);
-
+                const meta = mediaMetadata[item.media_id];
+                if (meta?.s?.u) {
+                  const origUrl = decodeHtmlEntities(meta.s.u);
                   formattedResults.push({
                     src: origUrl,
                     thumbnail: origUrl,
                     query,
                     type: 'image',
-                    tags,
+                    tags: tagsString,
+                    title: snippet,
                     nsfw,
                     alt_links: [],
-                    width: mediaItem.s?.x || 0,
-                    height: mediaItem.s?.y || 0,
-                    snippet,
+                    width: meta.s?.x || 0,
+                    height: meta.s?.y || 0,
                   });
                 }
               }
             }
-            else if (post.is_video && post.media?.reddit_video?.fallback_url) {
-              const origUrl = post.media.reddit_video.fallback_url;
+            // --- videos: HLS → DASH → fallback ---
+            else if (post.is_video && post.media?.reddit_video) {
+              const rv = post.media.reddit_video;
+              const srcUrl = rv.hls_url || rv.dash_url || rv.fallback_url || '';
               formattedResults.push({
-                src: origUrl,
-                thumbnail: post.thumbnail || origUrl,
-                query,
-                type: 'video',
-                tags,
-                nsfw,
-                alt_links: [],
-                width: post.media.reddit_video.width || 0,
-                height: post.media.reddit_video.height || 0,
-                duration: post.media.reddit_video.duration || null,
-                snippet,
+                    src: srcUrl,
+                    thumbnail: post.thumbnail || srcUrl,
+                    query,
+                    type: 'video',
+                    tags: tagsString,
+                    title: snippet,
+                    nsfw,
+                    alt_links: [],
+                    width: rv.width || 0,
+                    height: rv.height || 0,
+                    duration: rv.duration || null,
               });
             }
-            else if (post.url?.match(/\.(jpeg|jpg|gif|png)$/)) {
+            // --- direct image links ---
+            else if (post.url?.match(/\.(jpe?g|gif|png)$/i)) {
               const origUrl = post.url;
-              const previewImage = post.preview?.images?.[0];
+              const preview = post.preview?.images?.[0];
               formattedResults.push({
-                src: origUrl,
-                thumbnail: origUrl,
-                query,
-                type: 'image',
-                tags,
-                nsfw,
-                alt_links: [],
-                width: previewImage?.source?.width || 0,
-                height: previewImage?.source?.height || 0,
-                snippet,
+                    src: origUrl,
+                    thumbnail: origUrl,
+                    query,
+                    type: 'image',
+                    tags: tagsString,
+                    title: snippet,
+                    nsfw,
+                    alt_links: [],
+                    width: preview?.source?.width || 0,
+                    height: preview?.source?.height || 0,
               });
             }
+            // --- imgur fallback ---
             else if (post.domain === 'i.imgur.com' && post.url) {
               const origUrl = post.url;
-              const previewImage = post.preview?.images?.[0];
+              const preview = post.preview?.images?.[0];
               formattedResults.push({
-                src: origUrl,
-                thumbnail: origUrl,
-                query,
-                type: 'image',
-                tags,
-                nsfw,
-                alt_links: [],
-                width: previewImage?.source?.width || 0,
-                height: previewImage?.source?.height || 0,
-                snippet,
+                    src: origUrl,
+                    thumbnail: origUrl,
+                    query,
+                    type: 'image',
+                    tags: tagsString,
+                    title: snippet,
+                    nsfw,
+                    alt_links: [],
+                    width: preview?.source?.width || 0,
+                    height: preview?.source?.height || 0,
               });
             }
           }
 
-          localStorage.setItem(cacheKey, JSON.stringify({
-            data: formattedResults,
-            timestamp: Date.now(),
-          }));
-
+          // cache + set state
+          localStorage.setItem(
+            cacheKey,
+            JSON.stringify({ data: formattedResults, timestamp: Date.now() })
+          );
           setMedia(formattedResults);
           setLoading(false);
-
         } catch (err) {
           console.error('Error fetching Reddit media:', err);
           setError(err);
@@ -162,6 +168,6 @@ const extractTagsFromTitle = (title) => {
   if (!title) return [];
   return title
     .toLowerCase()
-    .split(' ')
-    .filter(word => word.length > 2 && /^[a-z0-9]+$/.test(word));
+    .split(/\s+/)
+    .filter(w => w.length > 2 && /^[a-z0-9]+$/.test(w));
 };

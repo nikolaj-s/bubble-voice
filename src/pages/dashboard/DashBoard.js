@@ -40,6 +40,7 @@ import NativeFullScreenWrapper from "../../components/ui/Wrappers/NativeFullScre
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { fetchDevices } from "../../features/Settings/Devices/deviceSlice";
+import { ServerActivityFeed } from "../server/serverActivityFeed/ServerActivityFeed";
 
 const Dashboard = () => {
 
@@ -75,6 +76,7 @@ const Dashboard = () => {
                             </Route>
                             <Route path="/server/:serverID/*" element={<Server />} >
                               <Route path="" element={<ServerDashboard />} />
+                              <Route path="activity" element={<ServerActivityFeed />} />
                               <Route path="channel/:channelID" element={<Channel />} />
                             </Route>
                             <Route path="/not-found" element={<ServerNotFound />} />

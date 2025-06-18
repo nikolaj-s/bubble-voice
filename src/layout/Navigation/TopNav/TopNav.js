@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setOverlay } from "../../../features/Overlay/overlaySlice";
 import { selectServerName } from "../../../features/ServerDetails/serverDetailsSlice";
 
-import { Bell, Ellipsis, EllipsisVertical, Icon, LayoutDashboard, Menu, Settings2, UserRoundX, UsersRound, X } from "lucide-react";
+import { Bell, Ellipsis, LayoutDashboard, Menu, Settings2, UserRoundX, UsersRound, X } from "lucide-react";
 import { Route, Routes } from "react-router";
 import { SearchButton } from "./SearchButton/SearchButton";
 import ChannelHeader from "../../../components/Headers/ChannelHeader/ChannelHeader";
@@ -18,6 +18,7 @@ import { toggleAppearanceSetting } from "../../../features/Settings/Appearance/a
 import MetaTags from "../../../components/MetaTags/MetaTags";
 import { setChannelDescription } from "../../../features/Channel/ChannelDescription/channelDescriptionSlice";
 import { setChannelToViewWidgetsOf } from "../../../features/Widgets/widgetsSlice";
+import { toggleNotificationPanel } from "../../../features/Notifications/notificationsSlice";
 
 const TopNav = () => {
   
@@ -99,7 +100,7 @@ const TopNav = () => {
         <div className={`${styles.header} ${styles.hideOnMobile}`}>
           <h2>{serverName || "Dashboard"}</h2>
           {isServerRoute ?
-          <IconButton Icon={<Settings2 color={"var(--text-color)"} />} position="bottom" title={`Settings`} onClick={() => {dispatch(setOverlay('serverSettings'))}} />
+          <IconButton Icon={<Settings2 color={"var(--text-color)"} />} position="bottom" title={`Bubble Options`} onClick={() => {dispatch(setOverlay('serverSettings'))}} />
           : null}
         </div>
       </div>
@@ -131,7 +132,7 @@ const TopNav = () => {
           Icon={<Bell color="var(--text-color)" />}
           position="bottom"
           title={"Notifications"}
-          
+          onClick={() => {dispatch(toggleNotificationPanel())}}
         />
         <IconButton
         Icon={hideUsers ? <UserRoundX color="var(--text-color)" /> : <UsersRound color="var(--text-color)" />}

@@ -63,9 +63,11 @@ export const ChannelDescription = ({close}) => {
                 gap: '10px',
                 alignItems: 'flex-start',
                 position: 'relative',
-                padding: 5,
+                padding: 'var(--padding)',
                 backgroundColor: 'var(--card-background-color)',
-                borderRadius: 10
+                borderRadius: 10,
+                margin: '0 auto',
+                maxWidth: '400px'
             }}>
                 <BoxLabel label={`${channel.channel_type} channel`} />
                 {channel.channel_icon ?

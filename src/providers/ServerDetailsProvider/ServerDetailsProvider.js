@@ -122,7 +122,7 @@ export const ServerDetailsProvider = ({children}) => {
         
         }
 
-    // eslint-ignore-next-line
+    // eslint-disable-next-line
     }, [socket, serverID, dispatch])
 
 

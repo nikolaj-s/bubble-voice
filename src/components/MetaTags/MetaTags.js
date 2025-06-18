@@ -24,8 +24,8 @@ const MetaTags = ({ title, description, image }) => {
 };
 
 MetaTags.propTypes = {
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
+  title: PropTypes.string,
+  description: PropTypes.string,
   image: PropTypes.string
 };
 

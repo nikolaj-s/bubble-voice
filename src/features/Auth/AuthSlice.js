@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import { signupThunk as signUp } from "./Thunks/SignupThunk";
 import { signinThunk as signIn } from "./Thunks/SigninThunk";
-import { getToken } from "../../lib/services/authService";
+import { clearToken, getToken } from "../../lib/services/authService";
 
 const initialState = {
   isAuthenticated: false,
@@ -31,6 +31,9 @@ const authSlice = createSlice({
     logout: (state) => {
       state.isAuthenticated = false;
       state.user = null;
+      state.token = null;
+      clearToken();
+      window.location.pathname = '/';
     },
     throwAuthInputError: (state, action) => {
       state[action.payload.state] = action.payload.error;

@@ -22,20 +22,20 @@ const serverActivityFeedSlice = createSlice({
     builder
       .addCase(fetchServerActivityFeed.pending, (state, action) => {
         const serverId = action.meta.arg.server_id;
-        if (!state.feeds[serverId]) state.feeds[serverId] = {};
-        state.loading = true;
-        state.error = null;
+        if (!state.feeds[serverId]) state.feeds[serverId] = {loading: true, error: false};
+        
       })
       .addCase(fetchServerActivityFeed.fulfilled, (state, action) => {
-        const { serverId, feed } = action.payload;
-        state.feeds[serverId] = {
+        const { server_id, feed } = action.payload;
+        state.feeds[server_id] = {
           feed,
           lastFetched: Date.now(),
+          loading: false
         };
       })
       .addCase(fetchServerActivityFeed.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
+        const serverId = action.meta.arg.server_id;
+        state.feeds[serverId] = {loading: false, error: action.payload};
       });
   }
 });

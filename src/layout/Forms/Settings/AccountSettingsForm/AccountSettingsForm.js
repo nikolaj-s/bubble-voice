@@ -13,6 +13,9 @@ import TextArea from '../../../../components/ui/Inputs/TextArea/TextArea'
 import ColorPicker from '../../../../components/ui/Inputs/ColorPicker/ColorPicker'
 import { LineSpacer } from '../../../../components/ui/Spacers/LineSpacer/LineSpacer'
 import { ApplyChangesPopup } from '../../../../components/ApplyChangesPopup/ApplyChangesPopup'
+import { Power } from 'lucide-react'
+import { logout } from '../../../../features/Auth/authSlice'
+import MarkdownHelp from '../../../../components/MarkdownHelp/MarkdownHelp'
 
 export const AccountSettingsForm = () => {
 
@@ -66,6 +69,10 @@ export const AccountSettingsForm = () => {
     setColor(user_color);
   }
 
+  const handleLogout = () => {
+    dispatch(logout());
+  }
+
   return (
     <>
     <Header text='Account Settings' />
@@ -76,13 +83,14 @@ export const AccountSettingsForm = () => {
     <Label label='Edit Profile Banner' />
     <ImageDropZone parentFileSrc={userBanner} width={320} height={200} dimensions={1200} existingImage={user_banner} onImageChange={setUserBanner} />
     <Label label='Bio' />
+    <MarkdownHelp />
     <TextArea text={bio} setText={setBio} limit={512} placeholder='Enter a bio...' />
     <Label label='Choose An Accent Color' />
     <ColorPicker onChange={setColor} value={color} />
     {updateError ? <TextLabelError label='Error:' error={updateError} /> : null}
     {updateLoading ? <SpinnerLoading /> : null}
     <LineSpacer />
-    <TextButton title='Log out' maxWidth={150} backgroundColor={'var(--error-color)'} />
+    <TextButton action={handleLogout} title='Log out' maxWidth={150} backgroundColor={'var(--error-color)'} icon={<Power strokeWidth={3} size={15} color='var(--text-color)' />} />
     <ApplyChangesPopup 
     onClearChanges={clearChanges}
     disabled={color === user_color && display_name === displayName && userImage === null && userBanner === null && user_bio === bio}

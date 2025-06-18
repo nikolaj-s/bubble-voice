@@ -1,66 +1,62 @@
+/* src/components/ToolTip/ToolTip.module.css */
+
 .tooltipContainer {
-  position: relative;
-  display: flex;
-  align-items: center;
-  z-index: 11;
+  display: inline-block;
 }
 
+/* Base tooltip box */
 .tooltip {
-  position: absolute;
-  background-color: var(--background-color);
+  background: var(--card-background-color);
   color: var(--text-color);
-  border: solid 1px var(--button-hover);
-  font-size: 0.75rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: var(--border-radius);
-  text-align: center;
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
-  pointer-events: none;
-  z-index: 10;
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
   white-space: nowrap;
-  text-overflow: ellipsis;
-  word-wrap: normal;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  z-index: 1000;
+  position: fixed; /* positioning handled by JS */
 }
 
-/* Top tooltip */
-.tooltipTop {
-  bottom: 100%;
+/* Arrow pointers for each side */
+.tooltipTop::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
   left: 50%;
-  transform: translateX(-50%) translateY(-5px);
-  margin-bottom: 5px;
+  transform: translateX(-50%);
+  border-width: 6px 6px 0 6px;
+  border-style: solid;
+  border-color: var(--card-background-color) transparent transparent transparent;
 }
 
-/* Bottom tooltip */
-.tooltipBottom {
-  top: 100%;
+.tooltipBottom::after {
+  content: "";
+  position: absolute;
+  top: -6px;
   left: 50%;
-  transform: translateX(-50%) translateY(5px);
-  margin-top: 5px;
+  transform: translateX(-50%);
+  border-width: 0 6px 6px 6px;
+  border-style: solid;
+  border-color: transparent transparent var(--card-background-color) transparent;
 }
 
-/* Left tooltip */
-.tooltipLeft {
-  right: 100%;
-  transform: translateX(-5px) translateY(-50%);
-
+.tooltipLeft::after {
+  content: "";
+  position: absolute;
+  right: -6px;
+  top: 8px;
+  border-width: 6px 0 6px 6px;
+  border-style: solid;
+  border-color: transparent transparent transparent var(--card-background-color);
 }
 
-/* Right tooltip */
-.tooltipRight {
-  top: 0;
-  left: 100%;
-  transform: translateX(5px) translateY(0%);
-}
-
-/* Visible tooltip */
-.tooltipVisible {
-  opacity: 1;
-  transform: translateX(0) translateY(0);
-}
-
-@media screen and (max-width: 730px) {
-  .tooltip {
-    display: none;
-  }
+.tooltipRight::after {
+  content: "";
+  position: absolute;
+  left: -6px;
+  top: 8px;
+  border-width: 6px 6px 6px 0;
+  border-style: solid;
+  border-color: transparent var(--card-background-color) transparent transparent;
 }

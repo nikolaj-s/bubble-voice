@@ -2,8 +2,10 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { APIErrorHandler } from "../../../lib/handlers/APIErrorHandler/APIErrorHandler";
 import axios from "axios";
 import { API_URL } from "../../../lib/Validation";
+import { removeWidget } from "../widgetsSlice";
+import { removePinnedWidget } from "../pinnedWidgetsSlice";
 
-export const deleteWidget = createAsyncThunk('deleteWidget/manageWidgetsSlice', async (id, {rejectWithValue, getState}) => {
+export const deleteWidget = createAsyncThunk('deleteWidget/manageWidgetsSlice', async (id, {rejectWithValue, getState, dispatch}) => {
     try {
 
         const {token} = getState().authSlice;
@@ -17,8 +19,12 @@ export const deleteWidget = createAsyncThunk('deleteWidget/manageWidgetsSlice', 
             params: {server_id}
         })
 
-        console.log(response, 'DELETED');
+        console.log(response.data, 'DELETED');
+
+        dispatch(removePinnedWidget(response.data));
         
+        dispatch(removeWidget(response.data));
+
         return response.data;
 
     } catch (error) {

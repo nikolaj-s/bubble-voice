@@ -6,19 +6,19 @@ import { API_URL } from '../../../lib/Validation';
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-const FEED_CACHE_TTL = 1000 * 60 * 3; // 3 minutes (adjust as needed)
+const FEED_CACHE_TTL = 1000 * 60 * 1; // 3 minutes (adjust as needed)
 
 export const fetchServerActivityFeed = createAsyncThunk(
   'serverActivityFeedSlice/fetchServerActivityFeed',
   async ({ limit = 30 }, { getState, rejectWithValue }) => {
-
+    console.log('fetching feed')
     const {server_id} = getState().serverDetailsSlice;
 
     const {token} = getState().authSlice;
 
     if (!server_id) return rejectWithValue("You are not currently in a server");
 
-    const state = getState().serverActivityFeed;
+    const state = getState().serverActivityFeedSlice;
 
     const serverFeed = state.feeds[server_id];
 
@@ -36,9 +36,10 @@ export const fetchServerActivityFeed = createAsyncThunk(
         const response = await axios({
             method: "GET",
             url: `${API_URL}/activity-feed/server/${server_id}?limit=${limit}`,
-            headers: {TOKEN: token}
+            headers: {TOKEN: token},
+            params: {server_id}
         })
-
+        console.log(response.data)
         return { server_id, feed: response.data, fromCache: false };
     } catch (error) {
         return APIErrorHandler(rejectWithValue, error)

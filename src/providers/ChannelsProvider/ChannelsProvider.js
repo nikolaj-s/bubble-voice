@@ -11,8 +11,6 @@ export const ChannelsProvider = ({children}) => {
 
     const [loading, toggleLoading] = React.useState(true);
 
-    const [error, toggleError] = React.useState(false);
-
     const {server_id} = useSelector(state => state.serverDetailsSlice);
 
     const serverStatus = useSelector(state => state.serverDetailsSlice.status);
@@ -33,7 +31,7 @@ export const ChannelsProvider = ({children}) => {
 
             await socket.request('fetch channels')
             .then(res => {
-                console.log(res)
+
                 if (res.channels) {
 
                     dispatch(setChannels(res.channels));

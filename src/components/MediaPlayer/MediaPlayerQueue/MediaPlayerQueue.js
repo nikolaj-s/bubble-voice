@@ -1,9 +1,10 @@
-import React from 'react'
-import EmptyListPlaceholder from '../../ui/Placeholders/EmptyListPlaceholder/EmptyListPlaceholder'
+
 import { MediaItem } from '../MediaItem/MediaItem';
 
 import styles from './MediaPlayerQueue.module.css';
 import { VerticalReorderWrapper } from '../../ui/Wrappers/VerticalReorderWrapper/VerticalReorderWrapper';
+import ContentPlaceholder from '../../ui/Placeholders/ContentPlaceholder/ContentPlaceholder';
+import { ListX } from 'lucide-react';
 
 export const MediaPlayerQueue = ({queue, onReorder = () => {}}) => {
     return (
@@ -16,7 +17,7 @@ export const MediaPlayerQueue = ({queue, onReorder = () => {}}) => {
                 ))}
             </VerticalReorderWrapper>
             ) : (
-            <EmptyListPlaceholder message='No Media In The Queue' />
+            <ContentPlaceholder title={'No Media In The Queue'} icon={ListX} />
             )}
         </div>
     )

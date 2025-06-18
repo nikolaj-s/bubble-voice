@@ -131,6 +131,7 @@ export const ReOrderChannels = ({ onDrop }) => {
                 category_id={category.category_id} 
                 key={category.category_id} 
                 catagoryName={category.category_name} 
+                autoSort={category.auto_sort}
                 channels={localChannels.filter(c => c.category === category.category_id)} 
                 draggingChannel={draggingChannel} toggleDraggingChannel={toggleDraggingChannel} 
                 category={category}

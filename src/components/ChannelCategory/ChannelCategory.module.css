@@ -7,11 +7,10 @@
     height: 20px;
     cursor: pointer;
     transition: 0.2s ease-in-out;
+    gap: var(--gap);
+    padding: var(--padding) 0px;
 }
 
-.categoryWrapper {
-    margin-bottom: var(--gap);
-}
 
 .channel-list-collapse-button svg {
     width: 15px;

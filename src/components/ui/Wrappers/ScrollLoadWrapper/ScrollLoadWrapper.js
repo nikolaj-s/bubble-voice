@@ -8,7 +8,7 @@ const ScrollLoadWrapper = ({
   noMoreItems,         // Boolean, disables loadMore
   className = "",      // Optional, custom classes
   style,               // Optional, custom styles
-  threshold = 80       // px distance from bottom to trigger loadMore
+  threshold = 80,     // px distance from bottom to trigger loadMore
 }) => {
   const containerRef = useRef();
 

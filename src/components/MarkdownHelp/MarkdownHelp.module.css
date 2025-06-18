@@ -1,0 +1,92 @@
+.markdownHelp {
+  background: var(--background-color, #1d2d44);
+  color: var(--text-color, #d1d9e6);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.65em;
+  width: 100%;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: inherit;
+  padding: 1em 1.2em 1em 1.2em;
+  font-size: 1.08em;
+  text-align: left;
+  transition: background 0.18s;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.header:hover, .header:focus {
+  background: rgba(60, 80, 120, 0.13);
+}
+
+.icon {
+  color: var(--accent-color, #3b7a6e);
+  flex-shrink: 0;
+}
+
+.chevron {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  transition: transform 0.25s cubic-bezier(.7,1.7,.6,1.1);
+}
+.chevron.open {
+  transform: rotate(180deg);
+}
+
+.tapHint {
+  margin-left: 0.7em;
+  font-size: 0.93em;
+  opacity: 0.7;
+  user-select: none;
+}
+
+.instructions {
+  padding: var(--padding);
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(.45,1.32,.68,1), opacity 0.2s;
+}
+
+.examples {
+  margin: 0 0 0.8em 0;
+  padding: 0;
+  list-style: none;
+}
+.examples li {
+  display: flex;
+  gap: 1em;
+  align-items: baseline;
+  margin-bottom: 0.3em;
+}
+.code {
+  font-family: 'JetBrains Mono', 'Fira Mono', 'Consolas', monospace;
+  background: rgba(40,70,120,0.13);
+  padding: 2px 7px;
+  border-radius: 0.35em;
+  font-size: 0.96em;
+  white-space: pre;
+}
+.result {
+  color: var(--secondary-color, #4e8e8b);
+  font-size: 0.97em;
+}
+.tip {
+  margin-top: 0.8em;
+  font-size: 0.96em;
+  color: var(--accent-color, #3b7a6e);
+}
+.tip a {
+  color: var(--link-color, #11ffff);
+  text-decoration: underline;
+}

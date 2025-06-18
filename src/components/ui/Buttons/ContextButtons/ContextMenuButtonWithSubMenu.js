@@ -94,7 +94,7 @@ const ContextMenuButtonWithSubmenu = ({
                         <div style={{flexShrink: 0, width: '100%'}} onKeyDown={(e) => {e.stopPropagation()}} 
                         onKeyUp={(e) => {e.stopPropagation()}} 
                         onClick={(e) => e.stopPropagation()}>
-                            <TextInput placeholder={'Filter'} onChange={setFilter} />
+                            <TextInput value={filter} placeholder={'Filter'} onChange={setFilter} />
                         </div>)}
                         {submenuOptions.filter(o => o.label.toLowerCase().startsWith(filter.toLowerCase())).map((opt, i) => (
                             <div

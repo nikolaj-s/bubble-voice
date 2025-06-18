@@ -28,12 +28,11 @@ export const ImageBlock = ({image, loading, nsfw, styles, width, height = 350}) 
         className={styles.imageBlock}>
             <NsfwWrapper nsfw={{nsfw}}>
                 <LazyImageWrapper 
-                className={`${styles.lazyImageContainer}`}
+                width='100%'
                 height={height > 350 ? 350 : height}
-                width={'100%'}
-                aspectRatio={aspectRatio}
+                className={`${styles.lazyImageContainer}`}
                 >
-                    <ImageComponent src={image} />
+                    <ImageComponent borderRadius={'var(--border-radius)'} width={'auto'} aspectRatio={aspectRatio} height={height > 350 ? 350 : height} src={image} />
                 </LazyImageWrapper>
             </NsfwWrapper>
         </div>

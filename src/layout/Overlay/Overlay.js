@@ -38,6 +38,7 @@ import MobileSwipeToCloseWrapper from "../../components/ui/Wrappers/MobileSwipeT
 import FullScreenWrapper from "../../components/ui/Wrappers/FullScreenWrapper/FullScreenWrapper";
 import { MediaPlayerHistory } from "../Overlays/MediaPlayerHistory/MediaPlayerHistory";
 import { MediaPlayerSaves } from "../Overlays/MediaPlayerSaves/MediaPlayerSaves";
+import { Notifications } from "../Overlays/Notifications/Notifications";
 
 const overlayComponents = {
   search: Search,
@@ -97,6 +98,7 @@ export const Overlay = ({ children }) => {
       {children}
       <UserProfile />
       <ExpandedImage />
+      <Notifications />
     </>
   );
 };

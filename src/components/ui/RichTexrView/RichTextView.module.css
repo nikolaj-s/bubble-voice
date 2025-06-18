@@ -1,6 +1,5 @@
 
   .viewer {
-    background: var(--background-color);
     color: var(--text-color);
     font-family: var(--font-family);
     padding: 1rem;
