@@ -23,6 +23,7 @@ import { useDisableNavigation } from '../hooks/useDisableNavigation';
 import { useTrackMouseClick } from '../hooks/useTrackMouseClick';
 import { InvitePage } from '../pages/invitePage/InvitePage';
 import { AudioContextProvider } from '../context/AudioContext';
+import { ResetPassword } from '../pages/resetPassword/ResetPassword';
 
 function App() {
 
@@ -59,6 +60,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<BackSplash><Login /></BackSplash>} />
           <Route path="/signup" element={<BackSplash><Signup /></BackSplash>} />
+          <Route path='/reset-password' element={<BackSplash><ResetPassword /></BackSplash>} />
           <Route path="/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/account-error" element={<FatalErrorPage />} />
           <Route path="/bubble-invite" element={<BackSplash><InvitePage /></BackSplash>} />

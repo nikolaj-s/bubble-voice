@@ -10,6 +10,7 @@ import { signinThunk } from "../../features/Auth/Thunks/SigninThunk";
 import { IsAuthenticated } from "../../components/Auth/IsAuthenticated/IsAuthenticated";
 import Label from "../../components/ui/Titles/Label/Label";
 import { useNavigate } from "react-router";
+import { LineSpacer } from "../../components/ui/Spacers/LineSpacer/LineSpacer";
 
 const Login = () => {
 
@@ -37,10 +38,13 @@ const Login = () => {
     navigate('/signup')
   }
 
+  const resetPassword = () => {
+    navigate('/reset-password')
+  }
+
   return (
     <IsAuthenticated>
       <div className={styles.wrapper}>
-        <div className='application-drag-area-for-desktop'/>
         <FormWrapper error={altError} header="BUBBLE" onSubmit={handleLogin} loading={loading}>
             <Label label="Log in to your Bubble Account"/>
             <TextInput
@@ -61,6 +65,8 @@ const Login = () => {
             />
             <TextButton  action={handleLogin} title="Log In" />
             <TextButton action={redirect} title="Sign Up" />
+            <LineSpacer />
+            <TextButton title="Forgot Password" action={resetPassword} />
         </FormWrapper>
       </div>
     </IsAuthenticated>

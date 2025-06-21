@@ -4,7 +4,7 @@ import styles from "./TextButton.module.css";
 const TextButton = ({ title, disabled, action, backgroundColor, maxWidth, icon }) => {
   return (
     <>
-    {disabled ? null :
+    
     <button
       style={{
         backgroundColor,
@@ -17,7 +17,7 @@ const TextButton = ({ title, disabled, action, backgroundColor, maxWidth, icon }
       {title}
       {icon}
     </button>
-    }
+    
     </>
   );
 };

@@ -4,6 +4,7 @@ import { Ellipsis, Play } from 'lucide-react';
 import { ImageComponent } from '../../Image/Image';
 import IconButton from '../../Buttons/IconButton/IconButton';
 import { triggerContext } from '../../../../lib/services/helperFunctions';
+import { TextIndicator } from '../../TextIndicator/TextIndicator';
 
 export const VideoPreview = ({ title, src, thumbnail, query, tags, nsfw, width, height, duration, snippet, url, action }) => {
   const formatDuration = (sec) => {
@@ -48,7 +49,7 @@ export const VideoPreview = ({ title, src, thumbnail, query, tags, nsfw, width, 
         <p className={styles.snippet}>{tags || snippet}</p>
         <div className={styles.meta}>
           <span className={styles.query}>{siteName}</span>
-          {nsfw && <span className={styles.nsfw}>NSFW</span>}
+          {nsfw && <TextIndicator title='18+' backgroundColor='var(--error-color)' />}
         </div>
       </div>
     </div>

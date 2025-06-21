@@ -15,6 +15,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   pointer-events: none;
   z-index: 1000;
+  text-align: center;
   position: fixed; /* positioning handled by JS */
 }
 

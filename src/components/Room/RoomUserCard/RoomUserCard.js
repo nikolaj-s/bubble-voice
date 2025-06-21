@@ -82,10 +82,10 @@ export const RoomUserCard = ({ user_id, webcam, action, id }) => {
         onClick={(e) => { action(id) }} 
         id={id} 
         style={{
-            display: hideNonVideoUsers && !channel_status?.isWebcamOn ? 'none' : null,
+            display: hideNonVideoUsers && (!channel_status?.isWebcamOn || userStreamState[`${user_id}-webcam`]?.disabled) ? 'none' : null,
             zIndex: user.voiceActive ? 10 : null
         }}
-        hidden={hideNonVideoUsers && !channel_status?.isWebcamOn}
+        hidden={hideNonVideoUsers && (!channel_status?.isWebcamOn || userStreamState[`${user_id}-webcam`]?.disabled)}
         className={styles.container}>
             <LongPressGestureWrapper width={'100%'} height={'100%'} onTouchContext={(e) => {triggerContext(e, `room-user-card-${user_id}`)}}>
                 <div className={styles.userInnerContainer}>

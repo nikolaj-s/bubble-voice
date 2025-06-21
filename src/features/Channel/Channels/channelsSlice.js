@@ -26,7 +26,6 @@ const channelsSlice = createSlice({
 
         },
         updateChannelDetails: (state, action) => {
-            console.log(action.payload)
             if (action.payload.channel_id) {
                 
                 state.channels[action.payload.channel_id] = {...state.channels[action.payload.channel_id], ...action.payload};

@@ -23,8 +23,21 @@ const Tooltip = ({
 
   // mount/unmount the portal container
   useEffect(() => {
-    document.body.appendChild(portalEl)
-    return () => void document.body.removeChild(portalEl)
+
+    let parentEl = document.getElementById("tool-tip-parent");
+
+    if (!parentEl) {
+
+      parentEl = document.createElement('div');
+
+      parentEl.id = 'tool-tip-parent';
+
+      document.body.appendChild(parentEl);
+
+    }
+    
+    parentEl.appendChild(portalEl)
+    return () => void parentEl.removeChild(portalEl)
   }, [portalEl])
 
   // when tooltip becomes visible, measure the trigger element

@@ -23,8 +23,8 @@
   border-radius: 8px;
   padding: 10px 14px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
-  min-width: 260px;
-  max-width: 320px;
+ 
+  max-width: 250px;
   animation: fadeInUp 0.3s ease;
 }
 
@@ -36,12 +36,13 @@
 
 .toasterWrapper {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 5px;
+  right: 5px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--gap);
   z-index: 1000;
+  max-width: 250px;
 }
 
 @keyframes fadeInUp {

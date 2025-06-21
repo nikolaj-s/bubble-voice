@@ -21,7 +21,7 @@ export const FormWrapper = ({children, header = false, label = false, onSubmit, 
         {!label ? null :<Label label={label} />}
         <form className={styles.form} onSubmit={onSubmit}>
           {error ?
-          <TextLabelError label='Error:' error={error} />
+          <TextLabelError error={error} />
           : null}
         {children}
         

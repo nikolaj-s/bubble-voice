@@ -25,6 +25,8 @@ const BackSplash = ({ children }) => {
   }, []);
 
   return (
+    <>
+    <div className='application-drag-area-for-desktop'/>
     <div className={styles.wrapper}>
       <div className={styles['logo-wrapper']}>
         <Logo width={100} height={100} />
@@ -48,6 +50,7 @@ const BackSplash = ({ children }) => {
         {children} {/* This will render the wrapped component */}
       </div>
     </div>
+    </>
   );
 };
 

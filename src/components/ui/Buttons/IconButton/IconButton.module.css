@@ -13,6 +13,7 @@
   -webkit-app-region: no-drag;
   transition: 0.2s ease-in-out;
   flex-shrink: 0;
+  position: relative;
 }
 
 @media (hover: hover) and (pointer: fine) {
