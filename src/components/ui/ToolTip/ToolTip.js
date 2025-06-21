@@ -4,6 +4,10 @@ import { createPortal } from "react-dom"
 import { motion } from "framer-motion"
 import styles from "./ToolTip.module.css"
 
+export const ToolTipParent = () => {
+  return <div id="tool-tip-parent" />
+}
+
 const Tooltip = ({
   content,
   position = "top",
