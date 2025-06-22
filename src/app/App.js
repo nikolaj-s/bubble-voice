@@ -24,6 +24,7 @@ import { useTrackMouseClick } from '../hooks/useTrackMouseClick';
 import { InvitePage } from '../pages/invitePage/InvitePage';
 import { AudioContextProvider } from '../context/AudioContext';
 import { ResetPassword } from '../pages/resetPassword/ResetPassword';
+import { VerifyAccount } from '../pages/verifyAccount/VerifyAccount';
 
 function App() {
 
@@ -56,16 +57,19 @@ function App() {
     <Router>
       <AudioContextProvider>
       <div className={`App`}>
+      <BackSplash>
         <AppTitleBar />
         <Routes>
-          <Route path="/login" element={<BackSplash><Login /></BackSplash>} />
-          <Route path="/signup" element={<BackSplash><Signup /></BackSplash>} />
-          <Route path='/reset-password' element={<BackSplash><ResetPassword /></BackSplash>} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path='/reset-password' element={<ResetPassword />} />
           <Route path="/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/account-error" element={<FatalErrorPage />} />
-          <Route path="/bubble-invite" element={<BackSplash><InvitePage /></BackSplash>} />
+          <Route path="/bubble-invite" element={<InvitePage />} />
+          <Route path="/verify-account" element={<VerifyAccount />} />
           <Route path="/" element={<ProtectedRoute><Navigate to={'/dashboard'} /></ProtectedRoute>} />
         </Routes>
+      </BackSplash>
       </div>
       </AudioContextProvider>
     </Router>

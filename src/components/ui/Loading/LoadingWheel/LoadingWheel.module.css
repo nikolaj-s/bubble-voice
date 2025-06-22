@@ -1,0 +1,39 @@
+
+.container {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    animation: scaleUpAndDown infinite 1s ease-in-out;
+}
+
+.outerRim {
+    animation: spin infinite 2s linear;
+    transform-origin: center;
+}
+
+
+@keyframes scaleUpAndDown {
+    0% {
+        scale: 1;
+    }
+    50% {
+        scale: 1.2;
+    }
+    100% {
+        scale: 1
+    }
+}
+/* Animation for spinning */
+  @keyframes spin {
+    0% {
+    rotate: 0deg;
+    }
+    100% {
+      rotate: 360deg;
+    }
+  }

@@ -7,14 +7,31 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setOverlay } from '../../../features/Overlay/overlaySlice';
 import { MediaItem } from '../../MediaPlayer/MediaItem/MediaItem';
 import ContentPlaceholder from '../../ui/Placeholders/ContentPlaceholder/ContentPlaceholder';
+import { expandVideo } from '../../../features/Media/ExpandedVideo/expandedVideoSlice';
+import { addMediaToPlayer } from '../../../features/MediaPlayer/Thunks/addMediaToPlayer';
 
 export const MediaPlayerWidget = ({ channel_id, saves = [] }) => {
+
   const dispatch = useDispatch();
+
   const channel = useSelector(
     state => state.channelsSlice.channels[channel_id]
   ) || {};
 
+  const {currentVoiceChannel} = useSelector(state => state.voiceChannelSlice);
+
   const goTo = overlayName => dispatch(setOverlay(overlayName));
+
+  const openMediaItem = (mediaItem) => {
+
+    if (currentVoiceChannel) {
+      dispatch(addMediaToPlayer(mediaItem));
+      dispatch(setOverlay('mediaPlayer'));
+    } else {
+      dispatch(expandVideo(mediaItem));
+      dispatch(setOverlay('expandVideo'));
+    }
+  }
 
   return (
     <div className={styles.wrapper}>
@@ -26,7 +43,7 @@ export const MediaPlayerWidget = ({ channel_id, saves = [] }) => {
       <div className={styles.list}>
         {saves.length > 0 ? (
           saves.map(save => (
-            <MediaItem key={save._id} {...save} context={save} />
+            <MediaItem key={save._id} {...save} context={save} action={openMediaItem} />
           ))
         ) : (
           <ContentPlaceholder icon={ImageOff} title={'No Saved Media'} />

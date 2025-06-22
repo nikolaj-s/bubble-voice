@@ -1,9 +1,10 @@
 .time {
     opacity: 0.95;
-    font-weight: 500;
-    font-size: .825rem;
+    font-weight: 400;
+    font-size: .7rem;
     letter-spacing: 0px;
     margin: 0px;
     padding: 0px;
     line-height: 12px;
+
 }

@@ -23,6 +23,7 @@ const MarkdownHelp = () => {
       <div
         className={styles.instructions}
         style={{
+          display: open ? null : 'none',
           maxHeight: open ? 1000 : 0,
           opacity: open ? 1 : 0,
           pointerEvents: open ? 'auto' : 'none',

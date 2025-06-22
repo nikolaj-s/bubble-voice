@@ -24,3 +24,17 @@
     justify-items: center;
     gap: 5px;
 }
+
+.popout {
+    position: fixed;
+    width: 242px;
+    height: 105px !important;
+    left: 73px;
+    margin-top: 5px;
+    pointer-events: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}

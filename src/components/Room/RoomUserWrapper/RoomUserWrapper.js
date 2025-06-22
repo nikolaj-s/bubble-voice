@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { RoomUserCard } from '../RoomUserCard/RoomUserCard';
 
@@ -20,6 +20,8 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
 
     const textChannelOpen = useSelector(state => state.textChannelSlice.currentTextChannel);
 
+    const focused = useSelector(state => state.voiceChannelSlice.focused);
+
     const [expanded, setExpanded] = React.useState(null);
 
     const hideNonVideoUsers = useSelector(state => state.voiceChannelSlice.hideNonVideoUsers);
@@ -39,7 +41,21 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
             const children = Array.from(parent.children).filter(c => !c.hidden);
 
             // Calculate available space for expanded child
-            if (expanded) {
+            if (focused === false) {
+
+                for (const child of children) {
+                 
+                    child.style.gridRow = 1;
+                    child.style.gridColumn = 1;
+                    child.style.width = '100%';
+                    child.style.height = '100%';
+
+                    const video = child.querySelector('video');
+
+                    if (video) video.style.objectFit = 'contain'
+                }
+
+            } else if (expanded) {
                 const expandedChild = children.find(child => child.id === expanded);
                 const nonExpandedChildren = children.filter(child => child.id !== expanded);
 
@@ -128,13 +144,14 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
                 const v = child.querySelector('video');
                 if (v) v.style.objectFit = 'cover';
                 });
+            
 
             } else {
                 handleScaling();
                 setAmbientColor(null);
             }
     // eslint-disable-next-line
-    }, [expanded, hideNonVideoUsers, hideUsers, textChannelOpen, hideMediaPlayer, fullScreen]);
+    }, [expanded, hideNonVideoUsers, hideUsers, textChannelOpen, hideMediaPlayer, fullScreen, focused]);
 
 
     React.useEffect(() => {
@@ -166,7 +183,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
             observer?.disconnect();
         };
     // eslint-disable-next-line
-    }, []);
+    }, [focused]);
 
     const area = (increment, hD, wD, active_streams) => {
         let i = 0;
@@ -184,8 +201,10 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
         else return increment;
     };
 
-    const handleScaling = (resize = false) => {
+    const handleScaling = useCallback((resize = false) => {
         try {
+
+            
 
             if (expanded && !resize) return;
 
@@ -194,6 +213,21 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
             const parent = document.getElementById('user-streams-wrapper');
 
             const children = parent.children;
+
+            if (focused === false) {
+                for (const child of children) {
+                    child.style.gridRow = 1;
+                    child.style.gridColumn = 1;
+                    child.style.width = '100%';
+                    child.style.height = '100%';
+
+                    const video = child.querySelector('video');
+
+                    if (video) video.style.objectFit = 'contain'
+                }
+
+                return;
+            }
 
             const c_count = Array.from(children).filter(c => !c.hidden);
       
@@ -234,7 +268,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
         } catch (error) {
             console.log(error);
         }
-    };
+    }, [expanded, focused]);
 
     const handleStreamExpansion = (id) => {
         if (id === expanded) {
@@ -247,7 +281,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
     return (
         <>
             <div
-                className={`${styles.container} ${expanded ? styles.expandedContainer : null}`}
+                className={`${styles.container} ${expanded ? styles.expandedContainer : null} ${focused === false ? styles.popout : null}`}
                 id='user-streams-wrapper'
                 style={{
                     overflowY:'hidden',   // Allow vertical scrolling if needed

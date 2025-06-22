@@ -28,9 +28,6 @@ const BackSplash = ({ children }) => {
     <>
     <div className='application-drag-area-for-desktop'/>
     <div className={styles.wrapper}>
-      <div className={styles['logo-wrapper']}>
-        <Logo width={100} height={100} />
-      </div>
       <div className={styles.splashContainer}>
         {bubbles.map((bubble) => (
           <div

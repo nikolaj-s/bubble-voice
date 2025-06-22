@@ -1,0 +1,36 @@
+.container {
+  display: flex;
+  gap: 0.5rem;          /* spacing between inputs */
+  justify-content: center;
+  width: 100%;          /* fill its parent */
+  max-width: 100%;      /* never exceed parent */
+  box-sizing: border-box;
+}
+
+.input {
+  /* evenly share available space, but allow shrinking below intrinsic size */
+  flex: 1 1 0;
+  min-width: 0;         /* critical: lets flex-shrink actually work */
+  
+  /* maintain your 48×56 aspect ratio */
+  aspect-ratio: 6 / 7;
+  
+  /* scale text responsively but within sensible bounds */
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  line-height: 1;
+  text-align: center;
+  
+  /* Bubble theme */
+  background-color: var(--card-background-color);
+  color:            var(--text-color);
+  border:           1px solid var(--secondary-color);
+  border-radius:    4px;
+  
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input:focus {
+  border-color: var(--accent-color);
+  box-shadow:   0 0 0 3px var(--overlay-color);
+}

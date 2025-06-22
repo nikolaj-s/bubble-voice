@@ -25,7 +25,6 @@ export const ImageComponent = ({src, objectFit = 'cover', alt = "Image", borderR
                 <ImageOff color='var(--text-color)' />
             ) : (
                 <img
-                    loading='lazy'
                     decoding='async'
                     src={src}
                     alt={alt}

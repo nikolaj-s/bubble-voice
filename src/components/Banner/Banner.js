@@ -7,8 +7,8 @@ export const Banner = ({image, height = 80}) => {
 
     return (
         
-        <div style={{height: 80}} className={styles.banner}>
-            <ImageComponent alt='banner' src={image} />
+        <div style={{height: 105}} className={styles.banner}>
+            <ImageComponent borderRadius={'var(--border-radius)'} alt='banner' src={image} />
         </div>
     )
 

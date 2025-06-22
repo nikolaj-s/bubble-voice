@@ -11,7 +11,8 @@ const LinkPreview = ({ link_preview: preview, nsfw }) => {
 
   const openPreview = (e) => {
     if (preview.video || preview.image) e.stopPropagation();
-    if (preview.image) dispatch(setExpandedImage(preview.image));
+    console.log(preview)
+    if (preview.image && !preview.video) dispatch(setExpandedImage(preview));
   };
 
   if (!preview) return null;

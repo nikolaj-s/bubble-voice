@@ -7,7 +7,7 @@ import styles from './DateTimeDisplay.module.css'
 const pad = (num) => num.toString().padStart(2, "0");
 
 export const DateTimeDisplay = ({ date, className = "" }) => {
-  if (!date) return <span className={className}>—</span>;
+  if (!date) return null;
 
   const d = new Date(date);
   if (isNaN(d.getTime())) return <span className={className}>Invalid date</span>;

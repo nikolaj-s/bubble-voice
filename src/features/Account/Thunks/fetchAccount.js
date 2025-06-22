@@ -19,12 +19,15 @@ export const fetchAccount = createAsyncThunk(
               headers: {"TOKEN": token},
           })
 
-          if (response.status === 200) {
+          if (response.data.verification_required) {
 
-            return response.data;
-          } else {
-            return rejectWithValue("Not Authroized")
+            window.location.assign(`/verify-account?email=${response.data.email}`);
+
+            return {account: null};
+          
           }
+
+          return response.data;
   
       } catch (error) {
   

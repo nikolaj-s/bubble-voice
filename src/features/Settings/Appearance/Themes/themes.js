@@ -39,18 +39,26 @@ export const themes = {
   '--overlay-color':      'rgba(0, 0, 0, 0.76)', // Slightly more opaque overlay for clarity
   },
   charcoal: {
-    '--primary-color': '#2c2f33',           // deep charcoal
-    '--secondary-color': '#40444b',         // lighter but rich gray
-    '--accent-color': '#7289da',            // soft blue-purple (Discord-esque)
-    '--background-color': '#1e2124',        // base charcoal backdrop
-    '--card-background-color': '#2a2d31',   // subtly lighter for contrast
-    '--text-color': '#e4e6eb',              // soft white/gray text
-    '--button-background': '#5865f2',       // elegant saturated blue
-    '--button-hover': '#4752c4',            // slightly darker hover
-    '--error-color': '#f04747',             // red with a charcoal glow feel
-    '--success-color': '#43b581',           // minty green
-    '--overlay-color': 'rgba(32, 34, 37, 0.7)', // soft charcoal overlay
-  }, 
+  /* — Base tones — */
+  '--primary-color':           '#2e3136',   // slightly lighter charcoal
+  '--secondary-color':         '#40444b',   // mid-gray UI elements
+  '--background-color':        '#2c2f33',   // lighter backdrop
+  '--card-background-color':   '#34373d',   // gentle contrast panels
+
+  /* — Text & icons — */
+  '--text-color':              '#ffffff',   // full white for max legibility
+  '--link-color':              '#aeb7f5',   // softer pale blue
+  '--overlay-color':           'rgba(44,47,51,0.85)',
+
+  /* — Buttons & accents — */
+  '--accent-color':            '#99a9f9',   // lighter, airy blue
+  '--button-background':       '#6a75f8',   // brightened button fill
+  '--button-hover':            '#5865f2',   // deep hover state
+
+  /* — Feedback states — */
+  '--error-color':             '#ff7b7b',   // softer but clear red
+  '--success-color':           '#69f292',   // fresh mint green
+},
   solarizedNight: {
   '--primary-color':      '#073642',
   '--secondary-color':    '#268bd2',

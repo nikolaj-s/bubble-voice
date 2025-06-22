@@ -54,6 +54,5 @@
     z-index: 1; /* Puts the content above the splash */
     margin: auto 0;
     height: 100svh;
-    overflow-y: auto;
   }
   

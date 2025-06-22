@@ -1,7 +1,9 @@
+import React from "react";
 import PropTypes from "prop-types";
 import styles from "./TextButton.module.css";
 
-const TextButton = ({ title, disabled, action, backgroundColor, maxWidth, icon }) => {
+const TextButton = ({ title, disabled, action, backgroundColor, maxWidth, icon: Icon }) => {
+  
   return (
     <>
     
@@ -15,7 +17,7 @@ const TextButton = ({ title, disabled, action, backgroundColor, maxWidth, icon }
       disabled={disabled}
     >
       {title}
-      {icon}
+      {React.isValidElement(Icon) ? Icon : typeof Icon === 'function' || typeof Icon === 'object' ? <Icon color='var(--text-color)' size={16} strokeWidth={2.5} /> : null}
     </button>
     
     </>

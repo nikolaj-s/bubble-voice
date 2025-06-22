@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 import styles from "./MessageScrollWrapper.module.css";
 
 import {motion} from 'framer-motion';
+import { LoadingWheel } from "../../ui/Loading/LoadingWheel/LoadingWheel";
 
 export const MessageScrollWrapper = ({
   children,
@@ -121,7 +122,7 @@ export const MessageScrollWrapper = ({
     >
       {loadingOlder && (
         <div className={styles.spinnerWrapper}>
-          <div className={styles.spinner} />
+          <LoadingWheel />
         </div>
       )}
       {children}

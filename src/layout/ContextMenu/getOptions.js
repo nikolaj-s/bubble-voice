@@ -97,8 +97,6 @@ export const useContextMenuOptions = () => {
 
             if (data.widgetsOverlay) getWidgetsOptions(options, data, permissions);
 
-            if (data.widget) getWidgetOptions(options, data.widget, permissions);
-
             if (data.channel) getChannelOptions(options, data, permissions);
 
             if (data.category) getCategoryOptions(options, data, permissions);
@@ -120,6 +118,8 @@ export const useContextMenuOptions = () => {
             if (data.room || data.appSubmenu) getVoiceChannelOptions(options, permissions);
 
             if (data.input) getInputOptions(options, data);
+
+            if (data.widget) getWidgetOptions(options, data.widget, permissions);
 
             if (data.channel || data.room || data.controlBar || data.appSubmenu) getConnectionOptions(options); 
 

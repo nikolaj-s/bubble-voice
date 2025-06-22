@@ -6,9 +6,9 @@ import { useNavigate } from "react-router-dom";
 
 import { fetchAccount } from "../../features/Account/Thunks/fetchAccount";
 
-import DashboardSkeleton from "../../components/ui/Loading/DashBoardSkeleton/DashBoardSkeleton";
-
 import { selectAccount, selectAccountError } from "../../features/Account/accountSlice";
+
+import FetchAccountLoadingCard from "../../components/ui/Loading/FetchAccountLoadingCard/FetchAccountLoadingCard";
 
 const FetchAccountProvider = ({ children }) => {
 
@@ -19,6 +19,8 @@ const FetchAccountProvider = ({ children }) => {
     const user = useSelector(selectAccount);
 
     const error = useSelector(selectAccountError);
+
+    const status = useSelector(state => state.accountSlice.status);
 
     const token = useSelector(state => state.authSlice.token);
 
@@ -51,7 +53,7 @@ const FetchAccountProvider = ({ children }) => {
     //eslint-disable-next-line
     }, [error, dispatch]);
 
-    if (!user) return <DashboardSkeleton />;
+    if (!user || status === 'loading') return <FetchAccountLoadingCard />;
 
     return (
         <>

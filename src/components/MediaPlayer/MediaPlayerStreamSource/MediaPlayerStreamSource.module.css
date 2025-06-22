@@ -3,13 +3,14 @@
     vertical-align: middle;
     display: flex;
     align-self: center;
-    border-radius: 15px;
+    border-radius: var(--border-radius);
     overflow: hidden;
     justify-content: center;
     align-items: center;
     margin: 2px;
     cursor: pointer;
     background-color: black;
+    z-index: 5;
 }
 
 .overlay {

@@ -1,10 +1,11 @@
 import React from 'react';
 import styles from './SpinnerLoading.module.css';
+import { LoadingWheel } from '../LoadingWheel/LoadingWheel';
 
 const SpinnerLoading = () => {
   return (
     <div className={styles.overlay}>
-      <div className={styles.spinner}></div>
+      <LoadingWheel />
     </div>
   );
 };

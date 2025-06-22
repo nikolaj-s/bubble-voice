@@ -71,7 +71,7 @@ export const useVideoCtxMenu = () => {
         })
 
         options.push({
-            label: "Copy Link",
+            label: "Copy Video Link",
             onClick: () => {copyToClipboard(data.video.url || data.video.src); dispatch(triggerAlert("Link Copied"))},
             type: 'button',
             icon: <Link color="var(--text-color)" />
