@@ -36,8 +36,7 @@ export const MessageScrollWrapper = ({
 
       const saved = sessionStorage.getItem(`scroll-pos-${persistKey}`);
       // only once after there is at least one child
-      console.log(saved)
-      console.log(el.scrollHeight)
+     
       if (saved !== null) {
         el.scrollTop = Number(saved);
       } else {

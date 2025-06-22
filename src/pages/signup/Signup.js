@@ -65,7 +65,7 @@ const Signup = () => {
                     <TextInput autoComplete="new-password" error={passwordError} onChange={(v) => {setPassword(v)}} value={password} placeholder={"Password"} type='password' /> 
                     <TextInput autoComplete="new-password" error={confirmPasswordError} onChange={(v) => {setConfirmPassword(v)}} placeholder={"Confirm password"} value={confirmPassword} type='password' />
                     <TextButton title='Create Account' />
-                    <TextButton action={redirect} title='Login' />
+                    <TextButton action={redirect} title='Log In' />
                 </FormWrapper>
             </div>
         </IsAuthenticated>

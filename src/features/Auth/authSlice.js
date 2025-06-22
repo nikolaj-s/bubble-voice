@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { signupThunk as signUp } from "./Thunks/SignupThunk";
 import { signinThunk as signIn } from "./Thunks/SigninThunk";
 import { clearToken, getToken } from "../../lib/services/authService";
+import { signInWithGoogle } from "./Thunks/signInWithGoogle";
 
 const initialState = {
   isAuthenticated: false,
@@ -40,6 +41,7 @@ const authSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
+    // sign in
     builder
     .addCase(signIn.pending, (state) => {
       state.isLoading = true;
@@ -63,6 +65,7 @@ const authSlice = createSlice({
       }
       
     })
+    // sign up
     .addCase(signUp.pending, (state) => {
       state.isLoading = true;
       state.error = null;
@@ -89,7 +92,24 @@ const authSlice = createSlice({
       } else {
         state.error = action.payload;
       }
-    });
+    })
+    // sign up / in with google
+    .addCase(signInWithGoogle.pending, (state) => {
+      state.isLoading = true;
+      state.error = false;
+    })
+    .addCase(signInWithGoogle.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    })
+    .addCase(signInWithGoogle.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = false;
+      if (action.payload.authorized) {
+        state.isAuthenticated = true;
+        state.token = action.payload.token;
+      }
+    })
   }
 });
 

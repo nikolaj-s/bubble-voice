@@ -42,7 +42,7 @@ const FetchAccountProvider = ({ children }) => {
     }, [dispatch, token]);
 
     useEffect(() => {
-        console.log(error)
+       
         if (error) {
 
             navigate("/account-error"); // Redirect to login

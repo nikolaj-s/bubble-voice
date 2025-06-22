@@ -53,7 +53,6 @@ export const TextChannel = ({channel}) => {
     }
 
     const saveTextChannelPos = (data) => {
-        console.log(data)
         dispatch(setTextChannelPos(data));
     }
 

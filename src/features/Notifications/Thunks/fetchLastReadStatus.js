@@ -13,7 +13,7 @@ export const fetchLastReadStatus = createAsyncThunk('fetchLastReadStatus/notific
             url: `${API_URL}/notifications/fetch-last-read-status`,
             headers: {TOKEN: token}
         })
-console.log(response.data)
+
         return response.data;
 
     } catch (error) {

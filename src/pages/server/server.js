@@ -45,7 +45,7 @@ export const Server = () => {
     React.useEffect(() => {
 
         return () => {
-            console.log('changing server')
+          
             dispatch(setCurrentVoiceChannel(null));
         }
     }, [dispatch, server_id])

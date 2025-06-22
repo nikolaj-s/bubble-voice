@@ -11,6 +11,7 @@ import { IsAuthenticated } from "../../components/Auth/IsAuthenticated/IsAuthent
 import Label from "../../components/ui/Titles/Label/Label";
 import { useNavigate } from "react-router";
 import { LineSpacer } from "../../components/ui/Spacers/LineSpacer/LineSpacer";
+import GoogleLoginButton from "../../components/GoogleLoginButton/GoogleLoginButton";
 
 const Login = () => {
 
@@ -57,14 +58,16 @@ const Login = () => {
             />
             <TextInput
               type="password"
-              placeholder="Password"
+              placeholder="password"
               value={password}
               onChange={(e) => setPassword(e)}
               error={error}
               autoComplete={'password'}
             />
+           
             <TextButton  action={handleLogin} title="Log In" />
             <TextButton action={redirect} title="Sign Up" />
+             <GoogleLoginButton />
             <LineSpacer />
             <TextButton title="Forgot Password" action={resetPassword} />
         </FormWrapper>

@@ -6,6 +6,9 @@ import { API_URL } from "../../../lib/Validation";
 export const fetchPinnedWidgets = createAsyncThunk(
   'pinnedWidgetsSlice/fetchPinnedWidgets',
   async (server_id, { rejectWithValue, getState }) => {
+
+    if (!server_id) return;
+
     const cacheKey = `pinnedWidgets_${server_id}`
 
     // 1. Check sessionStorage for cached data

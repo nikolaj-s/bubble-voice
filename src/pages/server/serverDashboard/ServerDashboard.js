@@ -7,8 +7,11 @@ import ServerWelcomeMessage from '../../../components/Headers/ServerWelcomeMessa
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ServerRecommendations } from './ServerRecommendations/ServerRecommendations';
+
 import { WidgetArray } from '../../../components/Widgets/Widgets';
+
 import { fetchPinnedWidgets } from '../../../features/Widgets/Thunks/fetchPinnedWIdgets';
+
 export const ServerDashboard = () => {
 
     const dispatch = useDispatch();
@@ -22,6 +25,8 @@ export const ServerDashboard = () => {
     const recommendations = ServerRecommendations();
 
     React.useEffect(() => {
+
+        if (!server_id) return;
 
         dispatch(fetchPinnedWidgets(server_id))
 

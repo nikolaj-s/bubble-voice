@@ -17,7 +17,7 @@ export const updateLastReadStatus = createAsyncThunk('updateLastReadStatus/notif
             headers: {TOKEN: token},
             data: {channel_id}
         })
-        console.log(response.data);
+      
         return response.data;
 
     } catch (error) {

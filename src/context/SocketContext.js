@@ -51,8 +51,6 @@ export const SocketProvider = ({ children }) => {
         }
 
         socket.on('connect', () => {
-            console.log('Connected to socket');
-
             dispatch(setConnectionState('connected'));
 
             toggleLoading(false);
@@ -69,7 +67,7 @@ export const SocketProvider = ({ children }) => {
 
             dispatch(setConnectionState('disconnected'));
 
-            console.log('Disconnected from socket', reason);
+            console.warn('Disconnected from socket', reason);
         });
 
         setSocket(socket);

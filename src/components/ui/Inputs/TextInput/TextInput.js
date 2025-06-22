@@ -1,12 +1,12 @@
 import PropTypes from "prop-types";
 import styles from "./TextInput.module.css";
 
-const TextInput = ({ type = "text", placeholder, value, onChange, error, autoComplete, maxLength }) => {
+const TextInput = ({ type = "text", placeholder = "", value, onChange, error, autoComplete, maxLength }) => {
   return (
     <div className={`${styles.inputContainer} ${error ? styles.error : ""}`}>
       <input
         type={type}
-        placeholder={placeholder}
+        placeholder={placeholder.toLowerCase()}
         value={value}
         onChange={(e) => {e.stopPropagation(); onChange(e.target.value)}}
         onKeyDown={(e) => {e.stopPropagation()}}

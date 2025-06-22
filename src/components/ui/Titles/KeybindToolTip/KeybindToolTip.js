@@ -26,9 +26,10 @@ export const KeybindToolTip = ({binds, label, width}) => {
         {
          binds.map((bind, key) => {
                 return (
-                    <>
+                    <div style={{display: 'flex', alignItems: 'center', gap: 5
+                    }} key={key}>
                     <p
-                    key={bind + key}
+                    key={key}
                     style={{
                         textAlign: 'center', 
                         backgroundColor: "var(--primary-color)", 
@@ -40,8 +41,8 @@ export const KeybindToolTip = ({binds, label, width}) => {
                     >
                     {bind}
                     </p>
-                    {binds.length > 1 && key === 0 ? "+" : null}
-                    </>
+                    {binds.length > 1 && key === 0 ? <p key={key + '+'}>+</p> : null}
+                    </div>
                 )
             })
         }

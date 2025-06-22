@@ -6,7 +6,7 @@ import { Logo } from '../Icons/Bubble/Logo';
 
 const AppTitleBar = ({ title = "Bubble" }) => {
   const { name: osName } = useSelector(state => state.osSlice);
-  console.log(window.electron)
+
   if (!window?.electron?.ipcRenderer) return null;
 
   const handleWindow = (action) => {

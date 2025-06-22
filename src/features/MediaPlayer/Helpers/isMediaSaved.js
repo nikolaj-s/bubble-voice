@@ -7,8 +7,11 @@
  * @returns {boolean} True if found, otherwise false.
  */
 export const isMediaSaved = (savedMediaState, channelId, src) => {
+
   const channelData = savedMediaState.saves[channelId];
+
   if (!channelData || !Array.isArray(channelData)) return false;
-  console.log(src)
+
   return channelData.some(item => item.src === src);
+  
 };

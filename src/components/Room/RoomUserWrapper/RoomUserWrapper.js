@@ -266,7 +266,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
                     }
                     </>
                 ))}
-                <MediaPlayerStreamSource expanded={expanded === 'media-player-stream-source'} expand={handleStreamExpansion} /> 
+                <MediaPlayerStreamSource key='media-player-stream-source' expanded={expanded === 'media-player-stream-source'} expand={handleStreamExpansion} /> 
                 {disable_streams && (<RoomPlaceholder />)}
             </div>
         </>

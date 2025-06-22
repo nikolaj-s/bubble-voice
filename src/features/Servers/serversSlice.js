@@ -42,7 +42,7 @@ const serversSlice = createSlice({
             })
         },
         setServerStatus: (state, action) => {
-console.log(action.payload)
+
             state.servers = state.servers.map(server => {
                 if (action.payload[server.server_id]) {
                     return {...server, ...action.payload[server.server_id]}
