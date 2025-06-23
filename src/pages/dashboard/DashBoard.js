@@ -41,6 +41,7 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { fetchDevices } from "../../features/Settings/Devices/deviceSlice";
 import { ServerActivityFeed } from "../server/serverActivityFeed/ServerActivityFeed";
+import SoundEffectPlayer from "../../components/SoundEffectPlayer/SoundEffectPlayer";
 
 const Dashboard = () => {
 
@@ -83,8 +84,9 @@ const Dashboard = () => {
                           </Routes>
                         </div>
                       </div>
-                      
+                    
                     </MediaControlsProvider>
+                    <SoundEffectPlayer />
                   </Overlay>
                 </ContextMenu>
                 <AlertToast />

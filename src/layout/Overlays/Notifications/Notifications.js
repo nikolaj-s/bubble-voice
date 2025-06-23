@@ -25,7 +25,7 @@ export const Notifications = () => {
     if (!open) return null;
 
     return (
-    <QuickMenuWrapper close={() => {dispatch(toggleNotificationPanel())}} top={40} right={20} bottom={0} left={null}>
+    <QuickMenuWrapper close={() => {dispatch(toggleNotificationPanel())}} top={window?.electron ? 80 : 40} right={20} bottom={0} left={null}>
         <ScrollLoadWrapper>
             <StickyWrapper className={styles.header}>
                 <Label label='Your Notifications' />

@@ -70,25 +70,29 @@ export const useMessageCtxMenu = () => {
                 type: "button",
                 icon: <ImageDown color="var(--text-color)" />
             })
-            options.push({
-                label: "Find Similar Images",
-                onClick: () => {
 
-                    dispatch(clearExpandedImage());
+            if (data.message.tags) {
+                options.push({
+                    label: "Find Similar Images",
+                    onClick: () => {
 
-                    dispatch(setQuery(""));
+                        dispatch(clearExpandedImage());
 
-                    dispatch(setSimilarImageSrc(data.message.image));
+                        dispatch(setQuery(""));
 
-                    dispatch(setFilter({path: 'images', label: "Images"}));
+                        dispatch(setSimilarImageSrc(data.message.image + `?similarTags=${data.message.tags}`));
 
-                    dispatch(globalSearch());
+                        dispatch(setFilter({path: 'images', label: "Images"}));
 
-                    dispatch(setOverlay('search'));
+                        dispatch(globalSearch());
 
-                },
-                type: "button"
-            })
+                        dispatch(setOverlay('search'));
+
+                    },
+                    type: "button"
+                })
+            }
+          
         }
 
          if (data.message.user_id === user_id || permissions.user_can_delete_other_users_messages) {

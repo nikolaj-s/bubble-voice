@@ -2,5 +2,6 @@
 .wrapper {
     height: 100vh;
     display: flex;
+    overflow-y: auto;
 }
 

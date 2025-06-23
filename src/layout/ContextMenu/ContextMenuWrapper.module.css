@@ -29,6 +29,10 @@
   border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 
+.mobileCloseWrapper {
+    display: none;
+}
+
 
 @keyframes slideUp {
     0% {
@@ -54,20 +58,30 @@
     display: none;
 }
 
-@media screen and (min-width: 730px) {
+@media screen and (min-width: 731px) {
     .container {
         max-width: 250px;
     }
 }
 
 @media screen and (max-width: 730px) {
+    .mobileCloseWrapper {
+        display: flex;
+        justify-content: flex-end;
+        padding: 5px 10px;
+    }
+    .scrollWrapper {
+        max-height: calc(100svh - 200px);
+    }
     .container {
         bottom: 0px !important;
         left: 0px !important;
         top: auto !important;
-        width: calc(100% - 10px);
         padding-bottom: 35px !important;
         animation: slideUp 0.2s forwards ease-in-out;
+        max-width: 100%;
+        width: 100%;
+
     }
 
     .mobileContainer {

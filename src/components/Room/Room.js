@@ -13,6 +13,7 @@ import { usePushToTalk } from '../../hooks/usePushToTalk';
 import { useMicrophoneToggle } from '../../hooks/useMicrophoneToggle';
 import { useScreenShare } from '../../hooks/useScreenShare';
 import { UserStreamStateProvider } from '../../providers/UserStreamStateProvider/UserStreamStateProvider';
+import { playSoundEffect } from '../../features/SoundEffects/soundEffectsSlice';
 
 export const Room = () => {
     
@@ -146,6 +147,16 @@ export const Room = () => {
 
         return arr;
     }, [consumers, producers, account_id])
+
+    React.useEffect(() => {
+        console.log('joining')
+        dispatch(playSoundEffect('channelConnected'));
+
+        return () => {
+            console.log('leaving')
+            dispatch(playSoundEffect('channelDisconnected'));
+        }
+    }, [dispatch])
    
     return (
             <div 

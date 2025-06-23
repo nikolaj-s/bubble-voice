@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { fetchUserRecommendations } from '../../../../../features/UserRecommendations/Thunks/fetchUserRecommendations';
 import { HorizontalMediaScroller } from '../../../../../components/ui/HorizontalMediaScroller/HorizontalMediaScroller';
-import NoRecommendationsNotice from '../../../../../components/Misc/NoRecommendationsNotice/NoRecommendationsNotice';
+import ContentPlaceholder from '../../../../../components/ui/Placeholders/ContentPlaceholder/ContentPlaceholder';
+import { WandSparkles } from 'lucide-react';
 
 export const SearchRecommendations = ({filter = 'images'}) => {
 
@@ -22,7 +23,7 @@ export const SearchRecommendations = ({filter = 'images'}) => {
 
     }, [status, loading, dispatch])
    
-    if (!loading && recommendations.filter(i => filter.includes(i.type)).length === 0) return <NoRecommendationsNotice />
+    if (!loading && recommendations.filter(i => filter.includes(i.type)).length === 0) return <ContentPlaceholder icon={WandSparkles} title={"No recommendations just yet..."} message={'Try searching or adding some tags to get things bubbling.'} />
 
     return (
         <HorizontalMediaScroller media={recommendations.filter(i => filter.includes(i.type))} loading={loading} error={error} title={'Your Recommendations'} />

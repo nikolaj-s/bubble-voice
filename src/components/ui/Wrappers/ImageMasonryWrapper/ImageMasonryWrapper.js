@@ -6,7 +6,7 @@ export const ImageMasonryWrapper = ({children}) => {
 
     return (
         <ResponsiveMasonry 
-        columnsCountBreakPoints={{500: 1, 700: 2, 1000: 3}}
+        columnsCountBreakPoints={{500: 1, 1000: 3}}
         gutterBreakPoints={{500: '3px'}}
         >
             <Masonry gutter='2px'>

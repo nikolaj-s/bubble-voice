@@ -7,6 +7,8 @@ import ContextMenuButtonWithSubmenu from "../../components/ui/Buttons/ContextBut
 import { useContextMenuOptions } from "./getOptions";
 import { LineSpacer } from "../../components/ui/Spacers/LineSpacer/LineSpacer";
 import styles from "./ContextMenuWrapper.module.css";
+import IconButton from "../../components/ui/Buttons/IconButton/IconButton";
+import { X } from "lucide-react";
 
 const ContextMenu = ({ children }) => {
     const account = useSelector(s => s.accountSlice.account);
@@ -86,6 +88,9 @@ const ContextMenu = ({ children }) => {
                         }}
                     >
                         <div className={styles.scrollWrapper}>
+                            <div className={styles.mobileCloseWrapper}>
+                                <IconButton onClick={() => {setContextMenu(null)}} Icon={<X color="var(--text-color)" />} />
+                            </div>
                             {contextMenu.options.map((opt, idx) => {
                                 const isLast = idx === contextMenu.options.length - 1;
                                 const commonProps = {

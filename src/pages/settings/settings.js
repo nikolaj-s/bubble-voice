@@ -12,8 +12,12 @@ import { SoundSettingsForm } from '../../layout/Forms/Settings/SoundSettingsForm
 import { PrivacySettingsForm } from '../../layout/Forms/Settings/PrivacySettingsForm/PrivacySettingsForm'
 import { SecuritySettingsForm } from '../../layout/Forms/Settings/SecuritySettingsForm/SecuritySettingsForm'
 import { SearchSettingsForm } from '../../layout/Forms/Settings/SearchSettingsForm/SearchSettingsForm'
+import { useDispatch } from 'react-redux'
+import { updateAccountPreferences } from '../../features/AccountPreferences/Thunks/updateAccountPreferences'
 
 export const Settings = ({close}) => {
+
+    const dispatch = useDispatch();
 
     const navItems = [
         {key: "account", label: "Account"},
@@ -40,6 +44,14 @@ export const Settings = ({close}) => {
         security: <SecuritySettingsForm />,
         search: <SearchSettingsForm />
     }
+
+    React.useEffect(() => {
+
+        return () => {
+            dispatch(updateAccountPreferences());
+        }
+
+    }, [dispatch])
         
     return (
         <MenuWrapper navItems={navItems}>

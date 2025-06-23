@@ -85,9 +85,9 @@ export const useContextMenuOptions = () => {
 
             if (data.userStreamSource) getUserStreamOptions(options, data.userStreamSource);
             
-            if (data.mediaplayer || data.roomControl || data.room) getMediaPlayerOptions(options);
+            if (data.mediaplayer || data.roomControl) getMediaPlayerOptions(options);
 
-            if (data.roomControl || data.room) options.push({type: 'spacer'});
+            if (data.roomControl) options.push({type: 'spacer'});
 
             if (data.user) getUserControlsOptions(options, data.user);
 

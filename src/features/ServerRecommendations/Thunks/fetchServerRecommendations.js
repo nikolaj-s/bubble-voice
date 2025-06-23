@@ -14,7 +14,7 @@ export const fetchServerRecommendations = createAsyncThunk(
         if (mediaByServer[server_id]) {
             return {cached: true, server_id}
         }
-
+        console.log(mediaByServer[server_id])
         if (!server_id) return rejectWithValue("No server passed");
 
         const response = await axios({
@@ -23,7 +23,7 @@ export const fetchServerRecommendations = createAsyncThunk(
           headers: { TOKEN: token },
           params: {server_id}
         });
-  console.log(response.data)
+  
         return response.data;
       } catch (error) {
         

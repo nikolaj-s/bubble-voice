@@ -54,7 +54,7 @@ export const VerifyAccount = () => {
     }
 
     return (
-        <div style={{display: 'flex', height: '100svh'}}>
+        <div style={{display: 'flex', height: '100svh', overflowY: 'auto'}}>
             <FormWrapper onSubmit={(e) => {e.preventDefault()}} header="Account Verification" loading={loading} error={error} >
                 <Description description={`A verification code was sent to the following email ${email}`} />
                 <CodeInput value={code} onChange={setCode} />

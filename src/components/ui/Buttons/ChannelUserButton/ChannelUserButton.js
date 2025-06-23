@@ -27,6 +27,7 @@ export const ChannelUserButton = ({user_id, active, action = () => {}}) => {
             draggable={true} 
             data-context={JSON.stringify({...user, channel_status: null, type: 'user'})} 
             onClick={() => {action(user_id)}} className={styles.container}>
+                
                 <div className={styles.wrapper}>
                     <span 
                     style={{

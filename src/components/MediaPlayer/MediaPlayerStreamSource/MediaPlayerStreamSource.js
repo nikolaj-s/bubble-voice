@@ -36,12 +36,47 @@ export const MediaPlayerStreamSource = ({expand, expanded}) => {
 
     const [aspectRatio, setAspectRatio] = React.useState(null);
 
+    const [src, setSrc] = React.useState(null);
+
     // eslint-disable-next-line
     const [localTime, setLocalTime] = React.useState(0);
 
     const hasSeekedInitially = React.useRef(false);
 
     const {currentlyPlaying, currentTime, isPlaying, volume, loading, error, isMuted, hasAudio, hideMediaPlayer, color} = useSelector(state => state.mediaPlayerSlice);
+
+    React.useEffect(() => {
+
+        setSrc(null);
+
+        // const fetchDirectSrc = async (url) => {
+
+        //     let res = await window?.electron?.ipcRenderer?.invoke('FETCH_YOUTUBE_STREAM_URL', currentlyPlaying.url);
+
+        //     if (res.error) return setSrc(url);
+
+        //     setSrc(res);
+
+        // }
+
+        if (!currentlyPlaying) return setSrc(null);
+
+        // if (window?.electron && currentlyPlaying?.url?.includes('youtu')) {
+
+        //     fetchDirectSrc();
+
+        // } else 
+        
+        if (currentlyPlaying?.url?.includes('youtu') || currentlyPlaying?.url?.includes('vimeo')) {
+            
+            setSrc(currentlyPlaying?.url);
+
+        } else {
+
+            setSrc(currentlyPlaying?.src);
+        }
+
+    }, [currentlyPlaying])
 
     const handleProgress = (value) => {
 
@@ -92,7 +127,7 @@ export const MediaPlayerStreamSource = ({expand, expanded}) => {
                     onReady={checkVideoAspectRatio}
                     width={'100%'}
                     height={'100%'}
-                    url={currentlyPlaying?.url?.includes('youtu') || currentlyPlaying?.url?.includes('vimeo') ? currentlyPlaying?.url : currentlyPlaying?.src || currentlyPlaying?.url}
+                    url={src}
                     playing={isPlaying}
                     muted={isMuted}
                     />
@@ -106,7 +141,8 @@ export const MediaPlayerStreamSource = ({expand, expanded}) => {
                     </div>
                     )}
                     <RedditAudioSrc 
-                    url={currentlyPlaying?.src} currentTime={currentTime} 
+                    key={src}
+                    url={src} currentTime={currentTime} 
                     isPlaying={isPlaying} volume={volume} 
                     muted={isMuted} hasAudioFunction={() => {dispatch(setMediaHasAudio(true))}} 
                     

@@ -1,59 +1,61 @@
-import React, { useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { setFullscreen } from '../../../../features/Ui/uiSlice';
+import React, { useEffect, useRef } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { setFullscreen } from '../../../../features/Ui/uiSlice'
+
+const isElectron = !!window?.electron
 
 const NativeFullScreenWrapper = ({ children }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
+  const fullscreen = useSelector(state => state.uiSlice.fullscreen)
+  const wrapperRef = useRef(null)
 
-  const fullscreen = useSelector((state) => state.uiSlice.fullscreen);
-
-  const wrapperRef = useRef(null);
-
-  // Trigger fullscreen based on Redux state
+  // when redux fullscreen changes, toggle either Web API (browser/mac) or Electron IPC (Windows)
   useEffect(() => {
-    const element = wrapperRef.current;
-
-    if (fullscreen && element && !document.fullscreenElement) {
-      element.requestFullscreen?.();
-    } else if (!fullscreen && document.fullscreenElement) {
-      document.exitFullscreen?.();
+    if (isElectron) {
+      window?.electron?.toggleFullscreen(fullscreen)
+    } else {
+      const el = wrapperRef.current
+      if (fullscreen && el && !document.fullscreenElement) {
+        el.requestFullscreen?.()
+      } else if (!fullscreen && document.fullscreenElement) {
+        document.exitFullscreen?.()
+      }
     }
-  }, [fullscreen]);
+  }, [fullscreen])
 
-  // Sync fullscreen state on ESC or browser UI exit
+  // listen for actual full-screen changes from Electron main
   useEffect(() => {
-    const handleFullscreenChange = () => {
-      const isActive = !!document.fullscreenElement;
-      if (!isActive && fullscreen) {
-        dispatch(setFullscreen(false));
+    if (!isElectron) return
+
+    const handler = (flag) => {
+      // if user hit F11 or exited via ESC, keep Redux in sync
+      if (flag !== fullscreen) {
+        dispatch(setFullscreen(flag))
       }
-    };
-
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    }
+    window.electron.onFullscreenChanged(handler)
     return () => {
-      document.removeEventListener('fullscreenchange', handleFullscreenChange);
-    };
-  }, [fullscreen, dispatch]);
+      // no direct removeListener, but you could track a ref and call .removeAllListeners
+    }
+  }, [fullscreen, dispatch])
 
-  // ESC key support
+  // also sync ESC in browser mode
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    
+    const onKey = (e) => {
       if (fullscreen && e.key === 'Escape') {
-        dispatch(setFullscreen(false));
+        dispatch(setFullscreen(false))
       }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [fullscreen, dispatch]);
+    }
+    window.addEventListener('keyup', onKey)
+    return () => window.removeEventListener('keyup', onKey)
+  }, [fullscreen, dispatch])
 
   return (
     <div ref={wrapperRef} style={{ width: '100%', height: '100%' }}>
       {children}
     </div>
-  );
-};
+  )
+}
 
-export default NativeFullScreenWrapper;
+export default NativeFullScreenWrapper

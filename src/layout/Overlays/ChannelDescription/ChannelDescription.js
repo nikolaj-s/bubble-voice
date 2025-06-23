@@ -1,11 +1,9 @@
 
-import FullScreenWrapper from '../../../components/ui/Wrappers/FullScreenWrapper/FullScreenWrapper'
 import { useDispatch, useSelector } from 'react-redux'
 import { IconPlaceholder } from '../../../components/ui/Placeholders/IconPlaceholder/IconPlaceholder';
 import { Hash, Pencil, Pin, Volume1 } from 'lucide-react';
 import { ImageComponent } from '../../../components/ui/Image/Image';
 import Header from '../../../components/ui/Titles/Header/Header';
-import { LineSpacer } from '../../../components/ui/Spacers/LineSpacer/LineSpacer';
 import { Description } from '../../../components/ui/Description/Description';
 import { BoxLabel } from '../../../components/ui/Titles/BoxLabel/BoxLabel';
 import { ToolBar } from '../../../components/ui/Wrappers/ToolBar/ToolBar';
@@ -15,7 +13,7 @@ import { setChannelToEdit } from '../../../features/Channel/editChannel/editChan
 import { setOverlay } from '../../../features/Overlay/overlaySlice';
 import { setFilter, setFromDate, setSelectedChannelToFilter, setTextChannelFilter } from '../../../features/Search/searchSlice';
 import { globalSearch } from '../../../features/Search/Thunks/globalSearch';
-import MobileSwipeToCloseWrapper from '../../../components/ui/Wrappers/MobileSwipeToCloseWrapper/MobileSwipteToCloseWrapper';
+import { ChannelBackground } from '../../../components/ChannelBackground/ChannelBackground';
 
 export const ChannelDescription = ({close}) => {
 
@@ -67,8 +65,20 @@ export const ChannelDescription = ({close}) => {
                 backgroundColor: 'var(--card-background-color)',
                 borderRadius: 10,
                 margin: '0 auto',
-                maxWidth: '400px'
+                maxWidth: '400px',
+                minWidth: 300,
+                overflow: 'hidden'
             }}>
+                <div style={{
+                    display: 'flex',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '10px',
+                    alignItems: 'flex-start',
+                    position: 'relative',
+                    zIndex: 2,
+                    width: '100%'
+                }}>
                 <BoxLabel label={`${channel.channel_type} channel`} />
                 {channel.channel_icon ?
                 <div style={{
@@ -102,6 +112,8 @@ export const ChannelDescription = ({close}) => {
                     />}
 
                 </ToolBar>
+                </div>
+                <ChannelBackground {...channel} />
             </div>
         </>
     )

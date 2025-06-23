@@ -27,7 +27,7 @@ export const useImageCtxMenu = () => {
             options.push({
                 label: "Send To Current Channel",
                 onClick: () => {
-                    dispatch(sendMessage({channel_id: currentTextChannel, text: data.imageSearchResult.src, ...data.imageSearchResult}));
+                    dispatch(sendMessage({channel_id: currentTextChannel, text: data.imageSearchResult.src, ...data.imageSearchResult, ...data?.image}));
                     dispatch(closeOverlay());
                     dispatch(setVoiceChannelFocused(false));
                     dispatch(clearExpandedImage());
@@ -52,7 +52,7 @@ export const useImageCtxMenu = () => {
 
                             navigate(`/dashboard/server/${channel.server_id}/channel/${channel.channel_id}`);
                             
-                            dispatch(sendMessage({channel_id: channel.channel_id, text: data?.imageSearchResult?.src || data?.image?.src, ...data?.imageSearchResult}));
+                            dispatch(sendMessage({channel_id: channel.channel_id, text: data?.imageSearchResult?.src || data?.image?.src, ...data?.imageSearchResult, ...data?.image}));
                             
                             dispatch(setVoiceChannelFocused(false));
 
@@ -76,29 +76,31 @@ export const useImageCtxMenu = () => {
                 })
             }
         }
-     
+
+        if (data.imageSearchResult?.tags || data.image?.tags) {
+            options.push({
+                label: "Find Similar Images",
+                onClick: () => {
+
+                    dispatch(setQuery(""));
+                    console.log(data.imageSearchResult, data.image)
+                    dispatch(setSimilarImageSrc((data.imageSearchResult?.thumbnail || data.image?.thumbnail) + `?similarTags=${data.image?.tags || data?.imageSearchResult?.tags}`));
+
+                    dispatch(setFilter({path: "images", label: "Images"}));
+
+                    dispatch(globalSearch());
+
+                    dispatch(setOverlay('search'));
+
+                    dispatch(clearExpandedImage())
+
+                },
+                type: "button"
+            })
+        }
+
         options.push({
-            label: "Find Similar Images",
-            onClick: () => {
-
-                dispatch(setQuery(""));
-
-                dispatch(setSimilarImageSrc(data.imageSearchResult?.src || data.image?.src));
-
-                dispatch(setFilter({path: "images", label: "Images"}));
-
-                dispatch(globalSearch());
-
-                dispatch(setOverlay('search'));
-
-                dispatch(clearExpandedImage())
-
-            },
-            type: "button"
-        })
-
-        options.push({
-            label: "Copy Link",
+            label: "Copy Image Link",
             onClick: () => {copyToClipboard(data.imageSearchResult?.src || data.image?.src); dispatch(triggerAlert('Link Copied'))},
             type: 'button',
             icon: <Link color="var(--text-color)" />
@@ -106,7 +108,18 @@ export const useImageCtxMenu = () => {
         
         options.push({
             label: "Download Image",
-            onClick: () => {downloadImage(data.imageSearchResult?.src || data.image?.src)},
+            onClick: () => {
+
+                if (window?.electron) return window?.electron?.downloadFile(data.imageSearchResult?.src || data.image?.src).then(res => {
+                    if (res?.status === 'success') {
+                        dispatch(triggerAlert('Image downloaded', 'success'))
+                    } else {
+                        dispatch(triggerAlert('Failed to download image', 'error'))
+                    }
+                }).catch(err => dispatch(triggerAlert('Failed to download image', 'error')));
+
+                downloadImage(data.imageSearchResult?.src || data.image?.src)
+            },
             type: "button",
             icon: <ImageDown color="var(--text-color)" />
         })

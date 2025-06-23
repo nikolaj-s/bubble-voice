@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setOverlay } from '../../../../features/Overlay/overlaySlice';
 import { BoolIndicator } from '../../../../components/ui/BoolIndicator/BoolIndicator';
 import { toggleUsingPushToTalk } from '../../../../features/Channel/MediaControl/mediaControlSlice';
-import { ChevronRight, Video } from 'lucide-react';
+import { AlertTriangle, ChevronRight, Video } from 'lucide-react';
 import { setMicrophone } from '../../../../features/Settings/Devices/deviceSlice';
 
 export const useUserControlsCtxMenu = () => {
@@ -49,14 +49,25 @@ export const useUserControlsCtxMenu = () => {
                 }
             })
 
-            const subOptions = microphones.map(microphone => ({
-                label: microphone.label,
-                type: 'button',
-                icon: <BoolIndicator active={selectedMicrophone?.deviceId === microphone.deviceId} />,
-                onClick: () => {
-                    dispatch(setMicrophone(microphone))
-                }
-            }))
+            let subOptions = [];
+
+            if (microphones.length > 0) {
+                subOptions = microphones.map(microphone => ({
+                    label: microphone.label,
+                    type: 'button',
+                    icon: <BoolIndicator active={selectedMicrophone?.deviceId === microphone.deviceId} />,
+                    onClick: () => {
+                        dispatch(setMicrophone(microphone))
+                    }
+                }))
+            } else {
+                subOptions = [{
+                    label: "Unable To Detect Input Devices",
+                    type: 'button',
+                    icon: <AlertTriangle color='var(--error-color)' />,
+                    color: 'var(--error-color)'
+                }]
+            }
 
             options.push({
                 label: "Choose Input Device",

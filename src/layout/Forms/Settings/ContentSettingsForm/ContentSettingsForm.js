@@ -6,12 +6,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { toggleContentState } from '../../../../features/Settings/Content/contentSettingsSlice'
 import TextButton from '../../../../components/ui/Buttons/TextButton/TextButton'
 import { LineSpacer } from '../../../../components/ui/Spacers/LineSpacer/LineSpacer'
+import { Description } from '../../../../components/ui/Description/Description'
+import { togglePreference } from '../../../../features/AccountPreferences/accountPreferencesSlice'
 
 export const ContentSettingsForm = () => {
 
     const dispatch = useDispatch();
 
     const { disableNsfwBlur, muteVideo }= useSelector(state => state.contentSettingsSlice);
+
+    const { disable_content_filter_for_recommendations } = useSelector(state => state.accountPreferencesSlice);
 
     return (
         <>
@@ -27,6 +31,11 @@ export const ContentSettingsForm = () => {
         <ToggleSwitch initialState={disableNsfwBlur} onToggle={() => {
             dispatch(toggleContentState('disableNsfwBlur'))
         }} />
+        <LineSpacer />
+        <Header level={3} text='User Recommendations' />
+        <Label label='Disable Content Filter For Your Recommendations' />
+        <Description description={'Turning off the content filter may expose you to unmoderated or sensitive material in your recommendations. This setting is intended for advanced users—proceed only if you understand the risks.'} />
+        <ToggleSwitch initialState={disable_content_filter_for_recommendations} onToggle={() => {dispatch(togglePreference('disable_content_filter_for_recommendations'))}} />
        </>
     )
 }

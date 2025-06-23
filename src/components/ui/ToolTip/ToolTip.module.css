@@ -70,3 +70,9 @@
   height: 100%;
   pointer-events: none;
 }
+
+@media screen and (max-width: 730px) {
+  .tooltip {
+    display: none;
+  }
+}

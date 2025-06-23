@@ -66,7 +66,7 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
                             <UserBlock users={users} message={message} prevMessage={prevMessage} isDifferentDay={isDifferentDay} styles={styles} />
                         
                             <TextBlock {...message} styles={styles} />
-                            <ImageBlock {...message} styles={styles} loading={loading} />
+                            <ImageBlock {...message} styles={styles} loading={message.loading || loading} />
                             <VideoBlock {...message} styles={styles} />
                             {!message.image  && !message.video && !message.link_preview && (<LinkComponent link={message.link} />)}
                             <LinkPreview {...message} /> 

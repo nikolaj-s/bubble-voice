@@ -52,6 +52,7 @@ export const TextChannelProvider = ({children, channel}) => {
         }
 
         const handleUpdateMessage = (data) => {
+            console.log(data)
             dispatch(updateMessage(data));
         }
 

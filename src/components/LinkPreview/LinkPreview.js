@@ -31,7 +31,7 @@ const LinkPreview = ({ link_preview: preview, nsfw }) => {
           preview.video ? (
             <VideoPlayer src={preview.video} title={preview.title} />
           ) : preview.image ? (
-            <ImageComponent src={preview.image} />
+            <ImageComponent objectFit="contain" src={preview.image} />
           ) : null}
         </NsfwWrapper>
       </div>

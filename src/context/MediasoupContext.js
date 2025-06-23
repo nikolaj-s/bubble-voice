@@ -189,7 +189,16 @@ export const MediasoupProvider = ({ children }) => {
       await closeProducer(type);
     }
 
-    let params = { track, appData: { type } };
+    let encodings = []
+
+    if (type === 'stream') {
+      encodings.push({
+        maxBitrate: 2_000_000,
+        maxFramerate: 30
+      })
+    }
+
+    let params = { track, appData: { type }, encodings };
 
     const producer = await producerTransportRef.current.produce(params);
 

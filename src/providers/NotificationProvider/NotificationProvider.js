@@ -32,7 +32,7 @@ export const NotificationProvider = ({children}) => {
     const handleUpdateLatestMessage = useCallback((data) => {
 
         dispatch(updateLatestMessageAt(data));
-        console.log(server_id, data.server_id, currentTextChannel)
+        
         if (currentTextChannel !== data.channel_id && server_id === data.server_id) {
             notify(data);
         }

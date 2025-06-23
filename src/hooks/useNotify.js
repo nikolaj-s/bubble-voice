@@ -1,6 +1,7 @@
 
 import { useDispatch } from 'react-redux';
 import { pushNotificationOverlay, removeNotificationOverlay } from '../features/Notifications/notificationsSlice';
+import { playSoundEffect } from '../features/SoundEffects/soundEffectsSlice';
 
 export const useNotify = () => {
 
@@ -11,6 +12,8 @@ export const useNotify = () => {
         if (message) {
 
             const id = Date.now();
+
+            dispatch(playSoundEffect('newMessage'));
 
             dispatch(pushNotificationOverlay({id, ...message}));
 

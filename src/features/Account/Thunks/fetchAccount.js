@@ -5,6 +5,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { API_URL } from "../../../lib/Validation";
 
 import { APIErrorHandler } from "../../../lib/handlers/APIErrorHandler/APIErrorHandler";
+import { setPreferences } from "../../AccountPreferences/accountPreferencesSlice";
 
 // Async thunk to fetch account details
 export const fetchAccount = createAsyncThunk(
@@ -26,6 +27,8 @@ export const fetchAccount = createAsyncThunk(
             return {account: null};
           
           }
+
+          dispatch(setPreferences(response.data.preferences));
 
           return response.data;
   

@@ -9,6 +9,7 @@ const accountSlice = createSlice({
   name: 'accountSlice',
   initialState: {
     account: null,
+    preferences: {},
     status: 'idle', // idle, loading, succeeded, failed
     error: null,
     updateLoading: false,
@@ -20,6 +21,9 @@ const accountSlice = createSlice({
       state.account = null;
       state.status = 'idle';
       state.error = null;
+    },
+    updatePreferences: (state, action) => {
+      state.preferences = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -32,6 +36,7 @@ const accountSlice = createSlice({
         state.status = 'succeeded';
         state.error = false;
         state.account = action.payload.account; // Set the account details
+        state.preferences = action.payload.preferences;
       })
       .addCase(fetchAccount.rejected, (state, action) => {
         state.status = 'failed';
@@ -72,6 +77,6 @@ export const selectAccountError = state => state.accountSlice.error;
 
 export const selectAccount = state => state.accountSlice.account;
 
-export const { logout } = accountSlice.actions;
+export const { logout, updatePreferences } = accountSlice.actions;
 
 export default accountSlice.reducer;

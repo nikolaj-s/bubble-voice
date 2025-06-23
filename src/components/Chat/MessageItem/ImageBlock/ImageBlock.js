@@ -4,7 +4,6 @@ import { ImageComponent } from '../../../ui/Image/Image'
 import { NsfwWrapper } from '../../../ui/Wrappers/NsfwWrapper/NsfwWrapper';
 import { useDispatch } from 'react-redux';
 import { setExpandedImage } from '../../../../features/Media/ExpandedImage/expandedImageSlice';
-import LazyImageWrapper from '../../../ui/Wrappers/LazyImageWrapper/LazyImageWrapper';
 
 export const ImageBlock = ({image, loading, nsfw, styles, width, height = 350}) => {
 

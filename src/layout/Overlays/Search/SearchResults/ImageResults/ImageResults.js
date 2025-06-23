@@ -40,7 +40,7 @@ export const ImageResults = ({images, id = 'image-grid', send = () => {}}) => {
         <ImageMasonryWrapper>
             {images.map((image, index) => {
                 return (
-                <LongPressGestureWrapper key={index}  width={'100%'} height={'100%'} onTouchContext={(e) => {triggerContext(e, image.src)}}>   
+                <LongPressGestureWrapper key={image.src + index}  width={'100%'} height={'100%'} onTouchContext={(e) => {triggerContext(e, image.src)}}>   
                     <ImageTooltipWrapper 
                         disableDefaultBehaviour={autoSendOnClick && currentTextChannel}
                         image={image}>
