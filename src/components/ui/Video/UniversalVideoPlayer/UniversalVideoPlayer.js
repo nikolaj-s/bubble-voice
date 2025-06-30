@@ -167,7 +167,7 @@ export const UniversalVideoPlayer = ({ src, autoplay = false }) => {
             height="100%"
             className={styles.reactPlayer}
           />
-          <RedditAudioSrc currentTime={Math.floor(progress)} isPlaying={playing} muted={muted} url={src} volume={volume} />
+          {/* <RedditAudioSrc currentTime={Math.floor(progress)} isPlaying={playing} muted={muted} url={src} volume={volume} /> */}
           <div className={styles.playerOverlay} onClick={togglePlay} />
           {showControls && (
             <div className={styles.controls}> 

@@ -3,12 +3,12 @@
 .sectionOne {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 105px minmax(0px, 1fr) 65px;
+    grid-template-rows: 105px minmax(0px, 1fr) auto;
     border-top-left-radius: 10px;
 }
 
 .inVoiceChannel {
-    grid-template-rows: 105px minmax(0px, 1fr) 110px;
+    grid-template-rows: 105px minmax(0px, 1fr) auto;
 }
 
 .sectionTwo {
@@ -52,12 +52,12 @@
             /* Set starting transform for animation */
         transform: translateX(-100%);
         transition: 0.3s ease-in-out;
-        grid-template-rows: 105px minmax(0px, 1fr) 85px;
+        grid-template-rows: 105px minmax(0px, 1fr) auto;
         opacity: 0;
     }
 
     .inVoiceChannel {
-        grid-template-rows: 105px minmax(0px, 1fr) 130px;
+        grid-template-rows: 105px minmax(0px, 1fr) auto;
     }
 
     .sectionOneMobile {

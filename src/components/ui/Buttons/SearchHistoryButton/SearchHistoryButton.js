@@ -4,7 +4,7 @@ import styles from './SearchHistoryButton.module.css'
 import IconButton from '../IconButton/IconButton'
 import { History, X } from 'lucide-react'
 
-export const SearchHistoryButton = ({action, query, deleteItem, index}) => {
+export const SearchHistoryButton = ({action, query, deleteItem}) => {
     return (
         <div
         className={styles.button}
@@ -21,7 +21,7 @@ export const SearchHistoryButton = ({action, query, deleteItem, index}) => {
         title={'Delete'}
         Icon={<X color='var(--text-color)' size={15} />}
         onClick={() => {deleteItem(query)}}
-        position={index === 0 ? 'bottom' : 'top'}
+        position={'top'}
         />
       </div>
     )

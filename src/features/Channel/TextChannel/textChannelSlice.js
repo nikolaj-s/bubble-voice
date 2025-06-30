@@ -17,7 +17,8 @@ const initialState = {
     currentTextChannel: null,
     textChannelPos: {},
     replyTo: null,
-    text: ""
+    text: "",
+    targetNotFound: false
 }
 
 const textChannelSlice = createSlice({
@@ -69,13 +70,14 @@ const textChannelSlice = createSlice({
 
             state.messages = state.messages.map(message => {
                 if (message.message_id === action.payload.message_id) {
-                    return {...message, ...action.payload};
+                    return {...message, ...action.payload, media_ref: action?.payload?.media_ref};
                 } else {
                     return message;
                 }
             })
         },
         setTextForTextChannel: (state, action) => {
+            if (typeof action.payload !== 'string') return;
             state.text = action.payload;
         }
     },
@@ -90,6 +92,7 @@ const textChannelSlice = createSlice({
             }
 
             state.error = false;
+            state.targetNotFound = false;
         })
         builder.addCase(fetchMessages.rejected, (state, action) => {
             state.loading = false;
@@ -119,6 +122,7 @@ const textChannelSlice = createSlice({
             // Convert the Map back to an array
             state.messages = Array.from(messagesMap.values());
             state.noMoreMessages = action.payload.no_more_messages;
+            state.targetNotFound = action.payload.targetNotFound;
         });
         
         builder.addCase(sendMessage.pending, (state, action) => {

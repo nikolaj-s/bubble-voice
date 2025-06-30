@@ -1,10 +1,11 @@
 // MessageList.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { MessageItem } from "../MessageItem/MessageItem";
 import MessageItemSkeleton from "../MessageItem/MessageItemSkeleton";
 import { AnimatePresence, motion } from "framer-motion";
 import FeedStartMessage from "../FeedStartMessage/FeedStartMessage";
 import { MessageScrollWrapper } from "../MessageScrollWrapper/MessageScrollWrapper";
+import { useSearchParams } from "react-router-dom";
 
 const MessageList = ({
   id,                    // channel id, used as persistKey
@@ -20,7 +21,54 @@ const MessageList = ({
   returnPos                // reply callback
 }) => {
   // we need a numeric flag that changes whenever `sending` changes
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [sendCounter, setSendCounter] = useState(0);
+
+  const [showLoading, toggleShowLoading] = useState(false);
+
+  useLayoutEffect(() => {
+    if (loading || loadingMore || messages.length === 0) return;
+
+    const messageId = searchParams.get('message');
+    if (!messageId) return;
+
+    const wrapper = document.getElementById('chat-scroll-wrapper');
+    const el      = document.getElementById(`message-id-${messageId}`);
+
+    if (el && wrapper) {
+      // clear the search param so we only run this once
+      setSearchParams({});
+
+      // calculate the offset of the message *within* the wrapper:
+      const wrapperRect = wrapper.getBoundingClientRect();
+      const elRect      = el.getBoundingClientRect();
+
+      // current scroll + (element top relative to wrapper)
+      const targetScrollTop =
+        wrapper.scrollTop + (elRect.top - wrapperRect.top)
+          // center it (optional)
+          - (wrapper.clientHeight / 2 - el.offsetHeight / 2);
+
+      // scroll the wrapper
+      wrapper.scrollTo({
+        top: Math.max(0, targetScrollTop),
+        behavior: 'instant'
+      });
+
+      // highlight it briefly
+      requestAnimationFrame(() => {
+        el.style.backgroundColor = 'var(--accent-color)';
+        setTimeout(() => (el.style.backgroundColor = ''), 1000);
+      });
+    }
+    else if (!el && wrapper) {
+      console.log('loading more messages from scroll to message handler')
+      // if it hasn’t been rendered yet, load more
+      loadMoreMessages();
+    }
+  }, [loading, loadingMore, messages.length, searchParams, setSearchParams, loadMoreMessages]);
+
   useEffect(() => {
     if (sending) {
       setSendCounter((c) => c + 1);
@@ -37,6 +85,26 @@ const MessageList = ({
     }
   // eslint-disable-next-line
   }, [messages, id])
+
+  useEffect(() => {
+
+    let timeout;
+
+    if (loading) {
+      timeout = setTimeout(() => {
+
+        toggleShowLoading(true);
+
+      }, 500)
+    } else {
+      toggleShowLoading(false);
+    }
+
+    return () => {
+      clearTimeout(timeout);
+    }
+
+  }, [loading])
   // reverse the array so we pass oldest → newest into the wrapper
   const oldestFirst = [...messages].reverse();
 
@@ -57,7 +125,7 @@ const MessageList = ({
      
 
       {/* Show skeletons on initial load */}
-      {loading
+      {showLoading
         ? Array.from({ length: 20 }).map((_, i) => (
             <MessageItemSkeleton key={i} hasImage={i % 3 === 0} />
           ))

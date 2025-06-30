@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setTheme } from '../../features/Settings/Appearance/appearanceSlice';
+import { setAppearanceSettings } from '../../features/Settings/Appearance/appearanceSlice';
 import { themes } from '../../features/Settings/Appearance/Themes/themes';
 import styles from './ThemePicker.module.css';
 
@@ -15,7 +15,7 @@ const ThemePicker = () => {
       {Object.entries(themes).map(([themeKey, themeValues]) => (
         <button
           key={themeKey}
-          onClick={() => dispatch(setTheme(themeKey))}
+          onClick={() => dispatch(setAppearanceSettings({name: 'theme', value: themeKey}))}
           className={`${styles.themeButton} ${currentTheme === themeKey ? styles.active : ''}`}
         >
           <div className={styles.previewBox}>

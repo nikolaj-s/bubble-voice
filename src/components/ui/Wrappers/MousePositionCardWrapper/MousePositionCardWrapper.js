@@ -122,7 +122,7 @@ const MousePositionModal = ({
               overflowY: "auto",
               background: "var(--card-background-color, #222B3A)",
               color: "var(--text-color, #fff)",
-              borderRadius: "1.1rem",
+              borderRadius: "var(--border-radius)",
               boxShadow: "0 6px 32px 0 rgba(10,14,20,0.29)",
               zIndex: 10000,
               ...style,

@@ -11,28 +11,58 @@ import StickyWrapper from '../../../components/ui/Wrappers/StickyWrapper/StickyW
 import IconButton from '../../../components/ui/Buttons/IconButton/IconButton';
 import { Bell, X } from 'lucide-react';
 import ContentPlaceholder from '../../../components/ui/Placeholders/ContentPlaceholder/ContentPlaceholder';
+import NotificationItem from './NotificationItems/NotificationItem';
+import { markNotificationsRead } from '../../../features/Notifications/Thunks/markNotificationsRead';
+import { useNavigate } from 'react-router';
+import { deleteNotification } from '../../../features/Notifications/Thunks/deleteNotification';
+import TextLabelError from '../../../components/Error/TextLabelError/TextLabelError';
+import { closeOverlay } from '../../../features/Overlay/overlaySlice';
 
 
 export const Notifications = () => {
+
+    const navigate = useNavigate();
 
     const dispatch = useDispatch();
 
     const open = useSelector(state => state.notificationsSlice.notificationPanelOpen);
 
-    const notifications = useSelector(state => state.notificationsSlice.notifications);
+    const {notifications, notification_count, error} = useSelector(state => state.notificationsSlice);
 
+    React.useEffect(() => {
+
+        if (notification_count === 0) return;
+
+        if (open) {
+            dispatch(markNotificationsRead());
+        }
+
+    }, [open, dispatch , notification_count]);
+
+    const handleOpenNotification = (data) => {
+
+        if (data.type === 'reply') {
+            navigate(`/dashboard/server/${data.server_id._id}/channel/${data.channel_id._id}?message=${data.message_id}`)
+        }
+
+        dispatch(deleteNotification(data._id));
+
+        dispatch(closeOverlay());
+
+    }
 
     if (!open) return null;
 
     return (
     <QuickMenuWrapper close={() => {dispatch(toggleNotificationPanel())}} top={window?.electron ? 80 : 40} right={20} bottom={0} left={null}>
         <ScrollLoadWrapper>
+            {error && (<TextLabelError error={error} />)}
             <StickyWrapper className={styles.header}>
                 <Label label='Your Notifications' />
                 <IconButton Icon={<X color='var(--text-color)' />} title={'Close'} onClick={() => {dispatch(toggleNotificationPanel())}} />
             </StickyWrapper>
             {notifications?.length === 0 && (<ContentPlaceholder icon={Bell} title={"No Notifications"} message={'You are all caught up'} />)}
-
+            {notifications.map(notifcation => (<NotificationItem notification={notifcation} onClick={handleOpenNotification} />))}
         </ScrollLoadWrapper>
     </QuickMenuWrapper>
     )

@@ -3,7 +3,7 @@ import FloatingSearch from './FloatingSearch/FloatingSearch'
 import { SearchResults } from './SearchResults/SearchResults'
 import { useDispatch, useSelector } from 'react-redux'
 import TextLabelError from '../../../components/Error/TextLabelError/TextLabelError'
-import { setFilter, setQuery, setSimilarImageSrc } from '../../../features/Search/searchSlice'
+import { setFilter, setPrevSearch, setQuery, setSimilarImageSrc } from '../../../features/Search/searchSlice'
 import { globalSearch } from '../../../features/Search/Thunks/globalSearch'
 import { fetchSearchHistory } from '../../../features/Search/Thunks/fetchSearchHistory'
 import { deleteSearchHistoryItem } from '../../../features/Search/Thunks/deleteSearchHistoryItem'
@@ -16,7 +16,7 @@ export const Search = ({close}) => {
 
     const dispatch = useDispatch();
 
-    const {loading, results, filter, filters, query, error, searchHistory, searchHistoryFetched, similarImageSrc} = useSelector(state => state.searchSlice);
+    const {loading, results, filter, filters, query, error, searchHistory, searchHistoryFetched, similarImageSrc, prevSearch} = useSelector(state => state.searchSlice);
 
     const {server_id} = useSelector(state => state.serverDetailsSlice);
 
@@ -41,6 +41,8 @@ export const Search = ({close}) => {
     const handleSearch = () => {
         if (loading) return;
 
+        dispatch(setPrevSearch(query));
+
         dispatch(globalSearch());
     }
 
@@ -58,6 +60,22 @@ export const Search = ({close}) => {
     const clearFindSimilarImage = () => {
         dispatch(setSimilarImageSrc(false));
     }
+
+    React.useEffect(() => {
+
+        let timeout
+
+        if (loading || (prevSearch === query) || query.length < 2) return clearTimeout(timeout);
+
+        timeout = setTimeout(() => {
+            handleSearch();
+        }, 800)
+
+        return () => {
+            clearTimeout(timeout)
+        }
+
+    }, [query, prevSearch, loading])
 
     return (
        <div key='search' className={styles.container}>

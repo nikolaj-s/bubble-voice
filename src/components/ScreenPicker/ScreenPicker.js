@@ -3,8 +3,6 @@ import styles from "./ScreenPicker.module.css";
 import { useDispatch } from "react-redux";
 import { stopSharingScreen } from "../../features/Channel/MediaControl/mediaControlSlice";
 import SpinnerLoading from "../ui/Loading/Spinner/SpinnerLoading";
-import Header from "../ui/Titles/Header/Header";
-import Label from "../ui/Titles/Label/Label";
 import TextButton from "../ui/Buttons/TextButton/TextButton";
 
 const ScreenPicker = () => {
@@ -57,8 +55,6 @@ const ScreenPicker = () => {
 
   return (
     <div className={styles.modal}>
-      <Header text="Share your screen or window" />
-      <Label label="Select a screen or app window to share with others." />
       {loading ? (
         <SpinnerLoading />
       ) : error ? (

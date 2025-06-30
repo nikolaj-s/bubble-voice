@@ -17,7 +17,7 @@ export const MediaPlayerQueue = ({queue, onReorder = () => {}}) => {
                 ))}
             </VerticalReorderWrapper>
             ) : (
-            <ContentPlaceholder title={'No Media In The Queue'} icon={ListX} />
+            <ContentPlaceholder title={'No Media In The Queue'} message={"No jams in the queue — it's quieter than a mime in a library!"} icon={ListX} />
             )}
         </div>
     )

@@ -10,6 +10,7 @@ import { MediaTitle } from '../ui/Titles/MediaTitle/MediaTitle';
 import { Images } from 'lucide-react';
 import { LongPressGestureWrapper } from '../ui/Gestures/LongPressGestureWrapper';
 import { triggerContext } from '../../lib/services/helperFunctions';
+import { VideoPreview } from '../ui/Video/VideoPreview/VideoPreview';
 
 const RandomMediaGallery = ({ media = [], title = "", action = () => {} }) => {
 
@@ -25,17 +26,20 @@ const RandomMediaGallery = ({ media = [], title = "", action = () => {} }) => {
                 <Masonry gutter="16px">
                     {randomMedia.map((item, idx) => (
                     <div key={idx} className={styles.card} >
-                        <NsfwWrapper nsfw={item}>
-                        {item.type === 'video' ? (
-                        <video src={item.src} autoPlay loop muted className={styles.media} />
-                        ) : (
                         <LongPressGestureWrapper width={'100%'} height={'100%'} onTouchContext={(e) => {triggerContext(e, item.src)}} >
-                            <ImageTooltipWrapper image={item}>
-                                <ImageComponent objectFit='cover' src={item.thumbnail} />
-                            </ImageTooltipWrapper>
+                            <NsfwWrapper nsfw={item}>
+                                {item.type === 'video' ? (
+                                    <VideoPreview action={action} {...item} />
+                                ) : (
+                                
+                                    <ImageTooltipWrapper image={item}>
+                                        <ImageComponent objectFit='cover' src={item.thumbnail} />
+                                    </ImageTooltipWrapper>
+                                
+                                )}
+                        
+                            </NsfwWrapper>
                         </LongPressGestureWrapper>
-                        )}
-                        </NsfwWrapper>
                     </div>
                     ))}
                 </Masonry>

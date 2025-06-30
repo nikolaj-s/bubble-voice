@@ -1,6 +1,5 @@
-import React from 'react';
 
-import styles from './ToolBar.module.css'
+import styles from './ToolBar.module.css';
 
 export const ToolBar = ({children, ...props}) => {
     return (

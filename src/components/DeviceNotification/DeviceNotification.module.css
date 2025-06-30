@@ -1,0 +1,57 @@
+.popup {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 320px;
+  background: var(--card-background-color);
+  border: 1px solid var(--accent-color);
+  border-radius: var(--border-radius);
+  padding: 16px;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  color: var(--text-color);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+  justify-content: space-between;
+}
+
+.closeBtn {
+  background: transparent;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.deviceName {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  margin: 4px 0 12px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.switchBtn {
+  background: var(--button-background);
+  color: var(--text-color);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.2s ease;
+}
+
+.switchBtn:hover {
+  background: var(--button-hover);
+}

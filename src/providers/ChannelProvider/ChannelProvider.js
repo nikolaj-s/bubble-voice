@@ -1,7 +1,7 @@
 import React from 'react'
 import LoadingSpinnerCard from '../../components/ui/Loading/LoadingSpinnerCard/LoadingSpinnerCard';
 import { useNavigate, useParams } from 'react-router';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSocket } from '../../context/SocketContext';
 import ErrorCard from '../../components/Error/ErrorCard/ErrorCard';
 import { setCurrentTextChannel } from '../../features/Channel/TextChannel/textChannelSlice';
@@ -26,6 +26,8 @@ export const ChannelProvider = ({children, overlay = false, channel_id_prop}) =>
     const [channelID, setChannelID] = React.useState(null);
 
     const [serverID, setServerID] = React.useState(null);
+
+    const channelsStatus = useSelector(state => state.channelsSlice.status)
 
     React.useEffect(() => {
 
@@ -52,7 +54,7 @@ export const ChannelProvider = ({children, overlay = false, channel_id_prop}) =>
 
         if (!socket) return;
 
-      //  if (channelsStatus !== 'complete') return;
+        if (channelsStatus !== 'complete') return;
        
         const handleFetchChannelDetails = async () => {
             
@@ -111,7 +113,7 @@ export const ChannelProvider = ({children, overlay = false, channel_id_prop}) =>
 
         }
     // eslint-disable-next-line
-    }, [channelID, serverID, socket, dispatch, overlay]) 
+    }, [channelID, serverID, socket, dispatch, overlay, channelsStatus]) 
 
     React.useEffect(() => {
         let timer;

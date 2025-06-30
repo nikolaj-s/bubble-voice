@@ -25,8 +25,8 @@ export const fetchMessages = createAsyncThunk(
 
             const response = await axios({
                 method: "GET",
-                url: `${API_URL}/social/fetch`,
-                params: {channel_id: params.channel_id, last_message_id: params?.last_message_id, count: count, server_id: server_id},
+                url: `${API_URL}/text-channel/fetch`,
+                params: {channel_id: params.channel_id, last_message_id: params?.last_message_id, count: count, server_id: server_id, message_id: params?.message_id},
                 headers: {TOKEN: token}
             })
 

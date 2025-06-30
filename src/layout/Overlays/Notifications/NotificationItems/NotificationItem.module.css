@@ -1,0 +1,27 @@
+/* NotificationItem.module.css */
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--padding);
+  background: var(--card-background-color);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s, border 0.2s;
+  border: 2px solid transparent;
+  gap: var(--gap);
+}
+
+.card:hover {
+  background: var(--button-hover);
+}
+
+.unread {
+  border-color: var(--accent-color);
+}
+
+.timeAgo {
+  align-self: flex-end;
+  font-size: 0.75rem;
+  color: var(--success-color);
+  margin-top: 4px;
+}

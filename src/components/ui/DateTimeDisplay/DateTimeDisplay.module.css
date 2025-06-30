@@ -1,10 +1,14 @@
 .time {
-    opacity: 0.95;
-    font-weight: 400;
-    font-size: .7rem;
-    letter-spacing: 0px;
-    margin: 0px;
-    padding: 0px;
-    line-height: 12px;
+  opacity: 0.95;
+  font-weight: 400;
+  font-size: 0.7rem;
+  letter-spacing: 0px;
+  margin: 0;
+  padding: 0;
+  line-height: 12px;
 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%; /* or set a fixed width if needed */
 }

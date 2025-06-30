@@ -1,0 +1,35 @@
+.panel {
+  background: var(--background-color);
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  max-width: calc(100% - 20px);
+}
+
+.topBar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.info {
+  display: flex;
+  flex-direction: row;
+  padding: 10px 16px;
+  gap: 16px;
+}
+
+.thumbnail {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.meta {
+  color: var(--text-color);
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}

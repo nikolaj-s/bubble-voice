@@ -86,7 +86,7 @@ export const Overlay = ({ children }) => {
         </MobileSwipeToCloseWrapper>
         :
         <>
-        {!image && <OverlayCloseButton action={() => {dispatch(closeOverlay())}} />}
+        {(!image) && <OverlayCloseButton action={() => {dispatch(closeOverlay())}} />}
         <FullScreenWrapper maxContentWidth={activeOverlay === 'expandImage' ? '100%' : null} key={activeOverlay} exitFromY={currentY} onClose={() => {dispatch(closeOverlay())}}>
           <MobileSwipeToCloseWrapper onClose={(y) => {setCurrentY(y); dispatch(closeOverlay())}}>
             <ActiveComponent close={() => dispatch(closeOverlay())}  /> 

@@ -19,7 +19,7 @@ export const pinMessage = createAsyncThunk(
 
             await axios({
                 method: "PUT",
-                url: `${API_URL}/social/pin`,
+                url: `${API_URL}/text-channel/pin`,
                 headers: {TOKEN: token},
                 data
             })

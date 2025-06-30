@@ -14,10 +14,3 @@
     display: none;
 }
 
-@media screen and (max-width: 730px) {
-    .serverButtons {
-      margin-left: 5px;
-    }
-  
-}
-

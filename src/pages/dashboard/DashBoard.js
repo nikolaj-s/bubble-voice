@@ -42,6 +42,7 @@ import { useEffect } from "react";
 import { fetchDevices } from "../../features/Settings/Devices/deviceSlice";
 import { ServerActivityFeed } from "../server/serverActivityFeed/ServerActivityFeed";
 import SoundEffectPlayer from "../../components/SoundEffectPlayer/SoundEffectPlayer";
+import { DeviceNotification } from "../../components/DeviceNotification/DeviceNotification";
 
 const Dashboard = () => {
 
@@ -87,6 +88,7 @@ const Dashboard = () => {
                     
                     </MediaControlsProvider>
                     <SoundEffectPlayer />
+                    <DeviceNotification />
                   </Overlay>
                 </ContextMenu>
                 <AlertToast />

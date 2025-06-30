@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './ServerWelcomeMessage.module.css';
-import Header from '../../ui/Titles/Header/Header';
+import { Markdown } from '../../Markdown/Markdown';
 
 const ServerWelcomeMessage = ({
   display_name,
@@ -25,7 +25,7 @@ const ServerWelcomeMessage = ({
       )}
       <div className={styles.welcomeMessageText}>
         <h3>{welcomeMessage}</h3>
-        {welcome_message && <p>{welcome_message}</p>}
+        {welcome_message && <Markdown text={welcome_message} />}
       </div>
     </div>
   );

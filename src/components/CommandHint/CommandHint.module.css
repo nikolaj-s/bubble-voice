@@ -1,0 +1,35 @@
+.hintContainer {
+  background: var(--card-background-color);
+  padding: 8px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--accent-color);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
+  margin-left: 10px;
+  width: calc(100% - 40px);
+  max-width: 400px;
+}
+
+.hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--text-color);
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.hint.active {
+  background: var(--button-hover);
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-color);
+}

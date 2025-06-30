@@ -6,26 +6,43 @@ import { useDispatch, useSelector } from "react-redux";
 import { useSocket } from "../../context/SocketContext"
 import { fetchMessages } from "../../features/Channel/TextChannel/Thunks/fetchMessages";
 import { addMessage, clearTextChannelState, removeMessage, setCurrentTextChannel, updateMessage } from "../../features/Channel/TextChannel/textChannelSlice";
+import { useParams, useSearchParams } from "react-router-dom";
 
 export const TextChannelProvider = ({children, channel}) => {
 
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const {channelID} = useParams();
+
     const { server_id } = useSelector(state => state.serverDetailsSlice);
+
+    const targetNotFound = useSelector(state => state.textChannelSlice);
 
     const dispatch = useDispatch();
 
     const socket = useSocket();
+
+    React.useEffect(() => {
+
+        if (targetNotFound) {
+            setSearchParams({});
+        }
+
+    }, [targetNotFound])
    
     React.useEffect(() => {
 
-        dispatch(setCurrentTextChannel(channel));
+        if (channelID !== channel) return;
+
+    //    dispatch(setCurrentTextChannel(channel));
 
         return () => {
-
+            console.log('clearing state')
             dispatch(clearTextChannelState())
         
         }
 
-    }, [channel, dispatch])
+    }, [channel, dispatch, channelID])
 
     React.useEffect(() => {
 
@@ -37,7 +54,7 @@ export const TextChannelProvider = ({children, channel}) => {
 
         const handleFetchMessages = () => {
 
-            dispatch(fetchMessages({channel_id: channel, server_id}));
+            dispatch(fetchMessages({channel_id: channel, server_id, message_id: searchParams.get('message')}));
 
         }
 

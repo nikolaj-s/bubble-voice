@@ -17,17 +17,30 @@ export const useInputCtxMenu = () => {
             icon: <ClipboardPaste color="var(--text-color)" />,
             type: "button",
             onClick: () => {
-                getClipboardText().then(res => {
-                    if (res.error) return dispatch(triggerAlert("Not able to paste", 'error'));
-                    
-                    if (data.input.id === 'chat-input') {
-                        dispatch(setTextForTextChannel(res));
-                    }
 
-                    if (data.input.id === 'search') {
-                        dispatch(setQuery(res));
-                    }
-                })
+                let res;
+
+                if (window?.electron) {
+
+                    res  = window.electron.pasteText();
+
+                } else {
+                    res = getClipboardText().then(res => {
+
+                        return res;
+                        
+                    }).catch(err => {})
+                } 
+
+                if (res?.error) return dispatch(triggerAlert("Not able to paste", 'error'));
+                        
+                if (data.input.id === 'chat-input') {
+                    dispatch(setTextForTextChannel(res));
+                }
+
+                if (data.input.id === 'search') {
+                    dispatch(setQuery(res));
+                }
             }
         })
     }, [dispatch])

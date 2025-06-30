@@ -16,6 +16,9 @@ import { VideoBlock } from './VideoBlock/VideoBlock';
 import { TextBlock } from './TextBlock/TextBlock';
 import { UserBlock } from './UserBlock/UserBlock';
 import { ReplyBlock } from './ReplyBlock/ReplyBlock';
+import { ToolBar } from '../../ui/Wrappers/ToolBar/ToolBar';
+import { MediaInfo } from '../../MediaInfo/MediaInfo';
+import { MediaItem } from '../../MediaPlayer/MediaItem/MediaItem';
 
 export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inSearch = false, isReply, reply = () => {}, notification}) => {
 
@@ -40,11 +43,12 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
                     <ReplyBlock {...message} users={users} />
                     <div className={styles.messageWrapper}>
                         {(!isReply && !notification) && 
-                        <div className={styles.buttons}>
+                        <ToolBar className={styles.buttons}>
+                            {message?.media_ref && (<MediaInfo data={message.media_ref} />)}
                             <IconButton 
                             Icon={<Reply color='var(--text-color)' />}
                             title={'Reply'}
-                            position='bottom'
+                            position='top'
                             onClick={() => {reply(message)}}
                             />
                             <IconButton 
@@ -52,9 +56,9 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
                             onClick={openCtx}
                             
                             title={'Options'}
-                            position='bottom'
+                            position='top'
                             />
-                        </div>}
+                        </ToolBar>}
                         <div className={styles.userImageWrapper}>
                             {(message.user_id !== prevMessage.user_id || isDifferentDay || message.reply_to) &&
                             <div className={styles.userImage}>
@@ -66,6 +70,7 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
                             <UserBlock users={users} message={message} prevMessage={prevMessage} isDifferentDay={isDifferentDay} styles={styles} />
                         
                             <TextBlock {...message} styles={styles} />
+                            {message.media_item && (<MediaItem {...message.media_item} context={message.media_item} />)}
                             <ImageBlock {...message} styles={styles} loading={message.loading || loading} />
                             <VideoBlock {...message} styles={styles} />
                             {!message.image  && !message.video && !message.link_preview && (<LinkComponent link={message.link} />)}

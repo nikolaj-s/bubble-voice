@@ -96,7 +96,7 @@ export const MessageInput = ({ value, setValue, setImage = () => {}, error, send
             setPreview(null);
         }
     }
-    React.useEffect(() => {
+    React.useLayoutEffect(() => {
 
         const adjustHeight = () => {
             const element = textAreaRef.current;
@@ -118,7 +118,7 @@ export const MessageInput = ({ value, setValue, setImage = () => {}, error, send
         <div data-context={JSON.stringify({type: 'input', id: 'chat-input'})} className={styles["message-input-container"]}>
             {error && 
                 (<div className={styles.errorWrapper}>
-                    <TextLabelError label="Error:" error={error} />
+                    <TextLabelError error={error} />
                 </div>
                 ) 
             }
@@ -147,11 +147,10 @@ export const MessageInput = ({ value, setValue, setImage = () => {}, error, send
                         className={styles["message-input"]}
                         placeholder={placeholder}
                         value={value}
-                        onChange={(e) => {e.stopPropagation(); handleSetValue(e.target.value)}}
+                        onChange={(e) => {handleSetValue(e.target.value)}}
                         onKeyUp={handleSend}
                         maxLength={1024}
                         onKeyDown={(e) => {
-                            e.stopPropagation();
                             if (e.key === "Enter") {
                                 e.preventDefault();
                             } 

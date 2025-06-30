@@ -39,7 +39,7 @@ export const JoinServerForm = () => {
     <ImageComponent src={selectedServer?.server_banner} />
     </div>
     <Label label='Enter Server Password' />
-    <TextInput value={password} onChange={(value) => {dispatch(setServerToJoinPassword(value))}} type='password'  />
+    <TextInput value={password} onChange={(value) => {dispatch(setServerToJoinPassword(value))}} type='password' placeholder='password'  />
     {error ? <TextLabelError label='Error:' error={error} /> : null}
     {loading ? <SpinnerLoading /> : null}
     <TextButton action={handleJoinServer} title='Join' />

@@ -11,6 +11,7 @@ import {motion} from 'framer-motion';
 import { ReplyTo } from './ReplyTo/ReplyTo';
 
 import PostDisabledPlaceholder from './PostDisabledPlaceholder/PostDisabledPlaceholder';
+import { CommandHint } from '../CommandHint/CommandHint';
 
 export const ChatContainer = ({
     messages = [], 
@@ -32,6 +33,8 @@ export const ChatContainer = ({
         animate={{opacity: 1}}
         className={styles.container} 
         onDragEnter={() => {setIsDraggingImage(true)}}
+        onKeyDown={(e) => {e.stopPropagation();}}
+        onKeyUp={(e) => {e.stopPropagation()}}
         >
             <MessageList 
             id={id}
@@ -42,6 +45,7 @@ export const ChatContainer = ({
             loadingMore={loadingMore} loadMoreMessages={loadMoreMessages} 
             noMoreMessages={noMoreMessages} name={name}
             />
+            <CommandHint value={value} setValue={setValue} />
             <ReplyTo replyTo={replyTo} users={users} clearReplyTo={clearReplyTo} />
             {disableInput ? 
             <PostDisabledPlaceholder channelName={name} />

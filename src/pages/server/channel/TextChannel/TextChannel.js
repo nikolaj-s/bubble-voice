@@ -8,10 +8,13 @@ import { setReplyTo, setTextChannelPos, setTextForTextChannel } from '../../../.
 import { ChannelBackground } from '../../../../components/ChannelBackground/ChannelBackground'
 import { setLastReadStatus } from '../../../../features/Notifications/notificationsSlice'
 import { updateLastReadStatus } from '../../../../features/Notifications/Thunks/updateLastReadStatus'
+import { useSearchParams } from 'react-router-dom'
 
 export const TextChannel = ({channel}) => {
 
     const dispatch = useDispatch();
+
+    const [searchParams] = useSearchParams();
 
     const {messages, loading, loadingMore, error, sending, noMoreMessages, replyTo, text} = useSelector(state => state.textChannelSlice);
 
@@ -49,7 +52,7 @@ export const TextChannel = ({channel}) => {
 
         const last_message_id = messages[messages.length - 1].message_id;
 
-        dispatch(fetchMessages({last_message_id, channel_id: channel}));
+        dispatch(fetchMessages({last_message_id, channel_id: channel, message_id: searchParams.get('message')}));
     }
 
     const saveTextChannelPos = (data) => {
@@ -87,7 +90,7 @@ export const TextChannel = ({channel}) => {
     }, [channel, dispatch])
    
     return (
-        <TextChannelProvider channel={channel} >
+        <TextChannelProvider key={channel} channel={channel} >
             <ChatContainer 
             id={channel}
             position={position?.position} 

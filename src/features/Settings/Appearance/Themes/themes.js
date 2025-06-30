@@ -12,18 +12,18 @@ export const themes = {
     '--success-color': '#76c7a5',
     '--overlay-color': 'rgba(18, 26, 34, 0.7)',
   },
-  light: {
-    '--primary-color': '#e0e0e0',
-    '--secondary-color': '#999999', // more visible thanrgb(193, 193, 193)
-    '--accent-color': '#a1a1a1',
-    '--background-color': '#f7f7f7',
-    '--card-background-color': '#ffffff',
-    '--text-color': '#1a1a1a',
-    '--button-background': '#d0d0d0',
-    '--button-hover': '#b8b8b8',
-    '--error-color': '#e16b6b',
-    '--success-color': '#76c7a5',
-    '--overlay-color': 'rgba(255, 255, 255, 0.7)',
+  glacierFade: {
+    '--primary-color': '#1d252c',             // cold slate
+    '--secondary-color': '#33444d',           // glacial depth
+    '--accent-color': '#80e1dd',              // aurora teal
+    '--background-color': '#12181d',
+    '--card-background-color': '#1c2329',
+    '--text-color': '#dff7f5',
+    '--button-background': '#5dd9d4',
+    '--button-hover': '#4bc2be',
+    '--error-color': '#ee9090',
+    '--success-color': '#a3e7cb',
+    '--overlay-color': 'rgba(18, 24, 29, 0.7)'
   },
   black: {
   '--primary-color':      '#151d2a',   // Brighter deep blue/gray for UI highlights
@@ -38,9 +38,22 @@ export const themes = {
   '--success-color':      '#31ec89',   // Bright green for success
   '--overlay-color':      'rgba(0, 0, 0, 0.76)', // Slightly more opaque overlay for clarity
   },
+  carbon: {
+  '--primary-color': '#1a1a1a',              // matte charcoal, carbon fiber base
+  '--secondary-color': '#2b2b2b',            // darkened steel gray
+  '--accent-color': '#4682b4',               // steel blue accent (subtle highlight)
+  '--background-color': '#0e0e0f',           // deep carbon fiber black
+  '--card-background-color': '#1c1d1f',      // slightly lifted gray for cards
+  '--text-color': '#d4d4d4',                 // soft light gray for legibility
+  '--button-background': '#3a75a3',          // carbon blue button
+  '--button-hover': '#32618a',               // darker hover state
+  '--error-color': '#d04f4f',                // restrained red
+  '--success-color': '#5fa88d',              // carbon teal
+  '--overlay-color': 'rgba(14, 14, 15, 0.7)' // aligned with true black bg
+  },
   charcoal: {
   /* — Base tones — */
-  '--primary-color':           '#2e3136',   // slightly lighter charcoal
+  '--primary-color':           '#474d56',   // slightly lighter charcoal
   '--secondary-color':         '#40444b',   // mid-gray UI elements
   '--background-color':        '#2c2f33',   // lighter backdrop
   '--card-background-color':   '#34373d',   // gentle contrast panels
@@ -72,44 +85,82 @@ export const themes = {
   '--success-color':      '#859900',
   '--overlay-color':      'rgba(7, 54, 66, 0.87)',
   },
-    midnightNeon: {
-    '--primary-color':      '#23233c',
-    '--secondary-color':    '#12e2dc',
-    '--accent-color':       '#e97bff',
-    '--background-color':   '#0b0e17',
-    '--card-background-color': '#18182b',
-    '--text-color':         '#f5f6ff',
-    '--button-background':  '#12e2dc',
-    '--button-hover':       '#19f6e8',
-    '--error-color':        '#ff5370',
-    '--success-color':      '#4df68d',
-    '--overlay-color':      'rgba(18, 34, 44, 0.81)',
+  obsidianPetal: {
+    '--primary-color': '#18171d',             // near black
+    '--secondary-color': '#312c3f',           // muted violet charcoal
+    '--accent-color': '#d7a3f3',              // orchid shimmer
+    '--background-color': '#0e0d11',
+    '--card-background-color': '#201c29',
+    '--text-color': '#e8e1f2',
+    '--button-background': '#b37edf',
+    '--button-hover': '#9e6ccc',
+    '--error-color': '#f59bb3',
+    '--success-color': '#b4edcc',
+    '--overlay-color': 'rgba(14, 13, 17, 0.7)'
   },
-  crimson: {
-    '--primary-color':      '#420818',    // deep crimson for top navs, accents
-    '--secondary-color':    '#ff4b82',    // hot magenta-pink for badges, links, etc
-    '--accent-color':       '#ff1744',    // bold crimson accent
-    '--background-color':   '#17060d',    // nearly black, subtle red undertone
-    '--card-background-color': '#25101b', // card/modal, slightly lighter
-    '--text-color':         '#fff0f4',    // soft blush white for text
-    '--button-background':  '#ff1744',    // high-contrast crimson
-    '--button-hover':       '#ff4b82',    // hover = magenta pink
-    '--error-color':        '#ff3333',    // vivid error
-    '--success-color':      '#60faaf',    // teal-green for pop
-    '--overlay-color':      'rgba(67, 8, 24, 0.88)', // semi-transparent crimson
+    sunsetSerotonin: {
+    '--primary-color': '#2e1b1f',             // dusk plum
+    '--secondary-color': '#523434',           // rich crimson
+    '--accent-color': '#f58b8b',              // sunset rose
+    '--background-color': '#1a1214',
+    '--card-background-color': '#2a1c1f',
+    '--text-color': '#fce9e9',
+    '--button-background': '#ff7171',
+    '--button-hover': '#e45959',
+    '--error-color': '#ff4c4c',
+    '--success-color': '#f5b97f',
+    '--overlay-color': 'rgba(26, 18, 20, 0.7)'
   },
-  pastel: {
-    '--primary-color':      '#a5c8e6', // gentle blue
-    '--secondary-color':    '#ffd6e0', // pastel pink
-    '--accent-color':       '#b2efd7', // soft mint green
-    '--background-color':   '#f9f7fa', // barely-off-white
-    '--card-background-color': '#f3eaf5', // soft lavender for cards
-    '--text-color':         '#364458',   // calm navy-gray for contrast
-    '--button-background':  '#94b7f2',   // pastel blue button
-    '--button-hover':       '#b5dbff',   // lighter blue hover
-    '--error-color':        '#ffb3b3',   // pastel red (not jarring)
-    '--success-color':      '#b7f9ce',   // light mint for success
-    '--overlay-color':      'rgba(200, 180, 220, 0.48)', // lavender/blue soft overlay
-  }
-
+  velvetAsh: {
+  '--primary-color': '#1a1715',              // dark velvet
+  '--secondary-color': '#2f2926',            // burned ash gray
+  '--accent-color': '#c97465',               // muted crimson-peach
+  '--background-color': '#0e0c0b',
+  '--card-background-color': '#221d1a',
+  '--text-color': '#e7deda',
+  '--button-background': '#b36050',
+  '--button-hover': '#944e40',
+  '--error-color': '#c96363',
+  '--success-color': '#c6a779',
+  '--overlay-color': 'rgba(14, 12, 11, 0.7)'
+},
+porcelainBloom: {
+  '--primary-color': '#f1f0f2',              // porcelain white
+  '--secondary-color': '#dedcdf',            // matte ceramic
+  '--accent-color': '#ae94e6',               // soft iris bloom
+  '--background-color': '#eae8ee',
+  '--card-background-color': '#f6f5f8',
+  '--text-color': '#3a3544',
+  '--button-background': '#c7afe9',
+  '--button-hover': '#a991d3',
+  '--error-color': '#e57b91',
+  '--success-color': '#a6d6bb',
+  '--overlay-color': 'rgba(255, 255, 255, 0.65)'
+},
+neonRitual: {
+  '--primary-color': '#120011',              // pure void
+  '--secondary-color': '#3a003a',            // saturated royal purple
+  '--accent-color': '#ff4fbd',               // electric magenta
+  '--background-color': '#0a000b',
+  '--card-background-color': '#1a0022',
+  '--text-color': '#fef3fc',
+  '--button-background': '#d800a6',
+  '--button-hover': '#b4008d',
+  '--error-color': '#ff6a6a',
+  '--success-color': '#58e0d6',
+  '--overlay-color': 'rgba(10, 0, 11, 0.7)'
+},
+mossCircuit: {
+  '--primary-color': '#1c2a20',              // dark moss base
+  '--secondary-color': '#3c4d3c',            // faded foliage
+  '--accent-color': '#a2c98f',               // lichen green highlight
+  '--background-color': '#111a12',
+  '--card-background-color': '#1d2c1b',
+  '--text-color': '#e5f0dd',
+  '--button-background': '#7cb072',
+  '--button-hover': '#67955f',
+  '--error-color': '#d3766e',
+  '--success-color': '#a9d4a0',
+  '--overlay-color': 'rgba(17, 26, 18, 0.7)'
+}
 };

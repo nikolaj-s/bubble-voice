@@ -19,6 +19,7 @@ import { NotAuthorized } from '../../../../components/Error/NotAuthorized/NotAut
 import TextArea from '../../../../components/ui/Inputs/TextArea/TextArea';
 import { LineSpacer } from '../../../../components/ui/Spacers/LineSpacer/LineSpacer';
 import { ApplyChangesPopup } from '../../../../components/ApplyChangesPopup/ApplyChangesPopup';
+import MarkdownHelp from '../../../../components/MarkdownHelp/MarkdownHelp';
 
 export const EditServerDetailsForm = ({permissions}) => {
 
@@ -42,7 +43,7 @@ export const EditServerDetailsForm = ({permissions}) => {
   
   const handleUpdate = () => {
 
-    if (serverName.length < 5) return setServerNameError("Bubble name cannot be less than 5 characters long");
+    if (serverName.length < 4) return setServerNameError("Bubble name cannot be less than 5 characters long");
 
     if (serverName.length > 84) return setServerNameError("Bubble name cannot be longer than 84 characters long");
 
@@ -83,6 +84,7 @@ export const EditServerDetailsForm = ({permissions}) => {
         {permissions.user_can_edit_server_welcome_message && (
         <>
         <Label label='Edit Description:' />
+        <MarkdownHelp />
         <TextArea 
          text={welcomeMessage}
         setText={(value) => {setWelcomeMessage(value)}}

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSocket } from '../../context/SocketContext';
 import { fetchLastReadStatus } from '../../features/Notifications/Thunks/fetchLastReadStatus';
@@ -6,6 +6,8 @@ import { updateLatestMessageAt } from '../../features/Channel/Channels/channelsS
 import { toggleNewMessageStatus } from '../../features/Servers/serversSlice';
 import Toaster from '../../components/Toaster/Toaster';
 import { useNotify } from '../../hooks/useNotify';
+import { fetchNotifications } from '../../features/Notifications/Thunks/fetchNotifications';
+import { pushNotification } from '../../features/Notifications/notificationsSlice';
 
 export const NotificationProvider = ({children}) => {
 
@@ -29,32 +31,53 @@ export const NotificationProvider = ({children}) => {
 
     }, [dispatch]);
 
+    // inside your component…
+    const serverIdRef           = useRef(server_id)
+    const currentChannelRef     = useRef(currentTextChannel)
+
+    // keep the refs up-to-date
+    useEffect(() => { serverIdRef.current       = server_id      }, [server_id])
+    useEffect(() => { currentChannelRef.current = currentTextChannel }, [currentTextChannel])
+
+    // now define a stable handler that only depends on dispatch
     const handleUpdateLatestMessage = useCallback((data) => {
+        dispatch(updateLatestMessageAt(data))
 
-        dispatch(updateLatestMessageAt(data));
-        
-        if (currentTextChannel !== data.channel_id && server_id === data.server_id) {
-            notify(data);
+        // read the *current* values out of the refs
+        if (currentChannelRef.current !== data.channel_id
+            && serverIdRef.current === data.server_id) {
+            notify(data)
         }
 
-        if (server_id !== data.server_id) {
-            console.log(data)
-            dispatch(toggleNewMessageStatus({...data, unread_message: true}));
+        if (serverIdRef.current !== data.server_id) {
+            dispatch(toggleNewMessageStatus({ ...data, unread_message: true }))
         }
-    // eslint-disable-next-line
-    }, [dispatch, server_id, currentTextChannel])
+    }, [dispatch])
 
-    React.useEffect(() => {
+    useEffect(() => {
+        if (!socket) return
 
-        if (!socket) return;
-        
-        socket.on(`update latest message`, handleUpdateLatestMessage);
+        const handleFetchNotifications = () => dispatch(fetchNotifications());
+
+        const handlePushNotification = (data) => dispatch(pushNotification(data));
+
+        // these functions never change, so this effect only runs once
+        socket.on('new notification', handlePushNotification);
+
+        socket.on('update latest message', handleUpdateLatestMessage);
+
+        socket.on('connect', handleFetchNotifications);
+
+        handleFetchNotifications()
 
         return () => {
-            socket.off(`update latest message`, handleUpdateLatestMessage);
+            socket.off('new notification', handlePushNotification);
+
+            socket.off('update latest message', handleUpdateLatestMessage);
+
+            socket.off('connect', handleFetchNotifications);
+
         }
-        
-    //eslint-disable-next-line
     }, [socket, dispatch, handleUpdateLatestMessage])
 
     React.useEffect(() => {

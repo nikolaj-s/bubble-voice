@@ -9,16 +9,18 @@ const appearanceSlice = createSlice({
       state[action.payload] = !state[action.payload];
       localStorage.setItem(action.payload, JSON.stringify(state[action.payload]));
     },
-    setTheme: (state, action) => {
-      state.theme = action.payload;
-      localStorage.setItem('theme', action.payload);
-    }
+    setAppearanceSettings: (state, action) => {
+
+      state[action.payload.name] = action.payload.value;
+      localStorage.setItem(action.payload.name, JSON.stringify(action.payload.value));
+
+    },
   }
 });
 
 export const {
+  setAppearanceSettings,
   toggleAppearanceSetting,
-  setTheme
 } = appearanceSlice.actions;
 
 export default appearanceSlice.reducer;

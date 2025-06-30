@@ -1,14 +1,16 @@
 import styles from "./IconButton.module.css";
 import Tooltip from '../../ToolTip/ToolTip';
 
+import { isValidElement } from "react";
+
 const IconButton = ({
   Icon,
   title,
   onClick,
   position = "top",
   className = "",
-  width,
-  height,
+  width = 30,
+  height = 30,
   backgroundColor = 'rgba(0,0,0,0)',
   backgroundHover = 'var(--button-hover)',
   padding = 5,
@@ -38,7 +40,7 @@ const IconButton = ({
           aria-disabled={disabled}
         >
           
-          {Icon}
+          {isValidElement(Icon) ? Icon : typeof Icon === 'function' || typeof Icon === 'object' ? <Icon color='var(--text-color)' /> : null}
           
         </button>
     </Tooltip>

@@ -6,37 +6,18 @@ import { ReOrderChannels } from './ReOrderChannels/ReOrderChannels';
 import { Calendar, Home, Newspaper } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { SubNav } from '../../../layout/Navigation/SubNav/SubNav';
+import { ToolBar } from '../../../components/ui/Wrappers/ToolBar/ToolBar';
+import IconButton from '../../../components/ui/Buttons/IconButton/IconButton';
+import { useNavigate } from 'react-router';
+import { ServerNav } from '../../../layout/Navigation/ServerNav/ServerNav';
 
 export const Channels = ({currentChannel}) => {
 
     const {server_id} = useSelector(state => state.serverDetailsSlice);
 
-    const basePath = `/dashboard/server/${server_id}`
-
-    const options = [
-        {
-          label: 'Dashboard',
-          // Dashboard route: "/dashboard/Sub/:SubID/"
-          path: `${basePath}/`,
-          icon: <Home className={styles.icon} size={20} />
-        },
-        {
-          label: 'Events',
-          // Events route: "/dashboard/Sub/:SubID/events"
-          path: `${basePath}/events`,
-          icon: <Calendar className={styles.icon} size={20}/>
-        },
-        {
-          label: 'Activity',
-          // Activity route: "/dashboard/Sub/:SubID/activity"
-          path: `${basePath}/activity`,
-          icon: <Newspaper className={styles.icon} size={20} />
-        }
-      ];
-    
-
     return (
         <div 
+        id='channel-list-container'
         data-context={JSON.stringify({createChannel: true, createCategory: true, type: "channelList"})} 
         className={styles.container}
         style={{
@@ -44,10 +25,7 @@ export const Channels = ({currentChannel}) => {
         }}
         >
              <div className={styles.wrapper}>
-                <SubNav 
-                options={options}
-                basePath={basePath}
-                />
+                <ServerNav />
                 <ChannelsProvider>
                     <ReOrderChannels />
                 </ChannelsProvider>

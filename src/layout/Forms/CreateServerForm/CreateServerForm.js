@@ -8,8 +8,9 @@ import SpinnerLoading from '../../../components/ui/Loading/Spinner/SpinnerLoadin
 import { CreateServerThunk } from '../../../features/CreateServer/Thunks/CreateServerThunk'
 import TextLabelError from '../../../components/Error/TextLabelError/TextLabelError'
 import PasswordRequirements from '../../../components/ui/PasswordRequirements/PasswordRequirements'
-import CreateBubbleSplash from '../../../components/Headers/CreateBubbleSplash/CreateBubbleSplash'
 import { ApplyChangesPopup } from '../../../components/ApplyChangesPopup/ApplyChangesPopup'
+import ContentHeader from '../../../components/Headers/ContentHeader/ContentHeader'
+import { PlusCircle } from 'lucide-react'
 
 export const CreateServerForm = () => {
 
@@ -37,7 +38,7 @@ export const CreateServerForm = () => {
 
     return (
         <>
-            <CreateBubbleSplash />
+            <ContentHeader Icon={PlusCircle} title={'Create your bubble'} subTitle={'Start a new community and have fun!'} />
             <Label label='Upload A Banner' />
             <ImageDropZone parentFileSrc={banner}  width={320} height={200} onImageChange={setBanner}/>
             <Label label='Bubble Name' />

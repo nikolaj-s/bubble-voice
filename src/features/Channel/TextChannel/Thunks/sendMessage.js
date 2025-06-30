@@ -26,7 +26,7 @@ export const sendMessage = createAsyncThunk(
 
             const response = await axios({
                 method: "POST",
-                url: `${API_URL}/social/send`,
+                url: `${API_URL}/text-channel/send`,
                 data,
                 headers: {TOKEN: token}
             })

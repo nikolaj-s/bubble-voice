@@ -19,6 +19,7 @@ import MetaTags from "../../../components/MetaTags/MetaTags";
 import { setChannelDescription } from "../../../features/Channel/ChannelDescription/channelDescriptionSlice";
 import { setChannelToViewWidgetsOf } from "../../../features/Widgets/widgetsSlice";
 import { toggleNotificationPanel } from "../../../features/Notifications/notificationsSlice";
+import { NotificationButton } from "./NotificationButton/NotificationButton";
 
 const TopNav = () => {
   
@@ -128,12 +129,7 @@ const TopNav = () => {
         onClick={openWidgets}
         />
         )}
-        <IconButton
-          Icon={<Bell color="var(--text-color)" />}
-          position="bottom"
-          title={"Notifications"}
-          onClick={() => {dispatch(toggleNotificationPanel())}}
-        />
+        <NotificationButton />
         <IconButton
         Icon={hideUsers ? <UserRoundX color="var(--text-color)" /> : <UsersRound color="var(--text-color)" />}
         position="bottom"

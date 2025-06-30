@@ -3,9 +3,14 @@ import { useSelector } from 'react-redux';
 import styles from './AppTitleBar.module.css';
 import { Minus, Square, X } from 'lucide-react';
 import { Logo } from '../Icons/Bubble/Logo';
+import { ImageComponent } from '../ui/Image/Image';
 
 const AppTitleBar = ({ title = "Bubble" }) => {
+
+
   const { name: osName } = useSelector(state => state.osSlice);
+
+  const {name, banner, server_id} = useSelector(state => state.serverDetailsSlice);
 
   if (!window?.electron?.ipcRenderer) return null;
 
@@ -20,9 +25,9 @@ const AppTitleBar = ({ title = "Bubble" }) => {
       <div className={styles.spacer} />
       <div className={styles.centerTitle}>
         <div className={styles.icon}>
-          <Logo />
+          {server_id ? <ImageComponent src={banner} /> : <Logo />}
         </div>
-        {title}
+        {name || title}
       </div>
       <div className={styles.controls}>
         {isMac ? (

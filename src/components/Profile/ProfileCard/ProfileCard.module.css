@@ -1,0 +1,61 @@
+.card {
+  background: var(--card-background-color);
+  overflow: hidden;
+  width: 100%;
+  max-width: 360px;
+  position: relative;
+  text-align: center;
+}
+
+.banner {
+  height: 100px;
+  width: 100%;
+  overflow: hidden;
+  background: var(--secondary-color);
+  object-fit: cover;
+}
+
+.bannerImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.8);
+}
+
+.avatarWrapper {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: 4px solid var(--card-background-color);
+  background: var(--background-color);
+  overflow: hidden;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.info {
+  padding: 75px 16px 20px;
+}
+
+.displayName {
+  color: var(--text-color);
+  font-size: 1.25rem;
+  margin: 0 0 4px;
+}
+
+.username {
+  color: var(--text-color);
+  opacity: 0.6;
+  font-size: 0.9rem;
+  margin: 0;
+}

@@ -47,6 +47,7 @@ export const ImageResults = ({images, id = 'image-grid', send = () => {}}) => {
                         <NsfwWrapper 
                         nsfw={{...image}} >
                             <div 
+                            style={{width: '100%', height: '100%'}}
                             onClick={(e) => {
                                 sendToChannel(e, image);
                             }}

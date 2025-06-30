@@ -1,16 +1,21 @@
 import { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { PlayCircle, Volume2, VolumeX } from 'lucide-react';
+import { Fullscreen, Maximize, PlayCircle, Volume2, VolumeX } from 'lucide-react';
 import styles from './VideoPlayer.module.css';
 import VolumeSlider from '../../Inputs/VolumeSlider/VolumeSlider';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ProgressBar from '../../ProgressBar/ProgressBar';
 import RedditAudioSrc from '../../../RedditAudioSrc/RedditAudioSrc';
 import ReactPlayer from 'react-player';
+import IconButton from '../../Buttons/IconButton/IconButton';
+import { expandVideo } from '../../../../features/Media/ExpandedVideo/expandedVideoSlice';
+import { setOverlay } from '../../../../features/Overlay/overlaySlice';
 
 const INACTIVITY_TIMEOUT = 2500;
 
 const VideoPlayer = ({ src, title }) => {
+
+  const dispatch = useDispatch();
 
   const playerRef = useRef(null);
 
@@ -114,10 +119,7 @@ const VideoPlayer = ({ src, title }) => {
               <button onClick={toggleMute} className={styles.controlButton}>
                 {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
               </button>
-              {volumeHover && (
                 <div
-                  onMouseEnter={() => toggleVolumeHover(true)}
-                  onMouseLeave={() => toggleVolumeHover(false)}
                   className={styles.volumeSlider}
                 >
                   <VolumeSlider
@@ -126,10 +128,11 @@ const VideoPlayer = ({ src, title }) => {
                     step={1}
                     value={volume}
                     onChange={handleVolumeChange}
+                    label={volume}
                   />
                 </div>
-              )}
             </div>
+            <IconButton Icon={Maximize} title={'Expand'} onClick={() => {dispatch(expandVideo({src})); dispatch(setOverlay('expandVideo')); setIsPlaying(false)}} />
           </div>
         </div>
       </div>

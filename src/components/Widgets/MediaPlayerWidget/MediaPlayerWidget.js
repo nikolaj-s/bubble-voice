@@ -9,6 +9,7 @@ import { MediaItem } from '../../MediaPlayer/MediaItem/MediaItem';
 import ContentPlaceholder from '../../ui/Placeholders/ContentPlaceholder/ContentPlaceholder';
 import { expandVideo } from '../../../features/Media/ExpandedVideo/expandedVideoSlice';
 import { addMediaToPlayer } from '../../../features/MediaPlayer/Thunks/addMediaToPlayer';
+import { setChannelToViewWidgetsOf } from '../../../features/Widgets/widgetsSlice';
 
 export const MediaPlayerWidget = ({ channel_id, saves = [] }) => {
 
@@ -20,7 +21,10 @@ export const MediaPlayerWidget = ({ channel_id, saves = [] }) => {
 
   const {currentVoiceChannel} = useSelector(state => state.voiceChannelSlice);
 
-  const goTo = overlayName => dispatch(setOverlay(overlayName));
+  const goTo = overlayName => {
+    if (overlayName === 'mediaPlayerSaves') dispatch(setChannelToViewWidgetsOf(channel_id));
+    dispatch(setOverlay(overlayName))
+  };
 
   const openMediaItem = (mediaItem) => {
 

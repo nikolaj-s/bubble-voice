@@ -3,6 +3,7 @@ import styles from './DrawingCanvas.module.css';
 import { Pencil, Eraser, Download, Upload, PaintBucket, Trash2 } from 'lucide-react';
 import IconButton from '../ui/Buttons/IconButton/IconButton';
 import VolumeSlider from '../ui/Inputs/VolumeSlider/VolumeSlider';
+import { ToolBar } from '../ui/Wrappers/ToolBar/ToolBar';
 
 const PREDEFINED_COLORS = ['#000000', '#ff4747', '#ffb347', '#ffe347', '#76c7a5', '#4e8e8b', '#3b7a6e'];
 
@@ -115,11 +116,11 @@ const DrawingCanvas = ({ onSubmit }) => {
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.toolbar}>
+      <ToolBar style={{alignItems: 'center'}}>
         
-        <IconButton position='bottom' Icon={<Pencil size={20} />} onClick={() => setTool('brush')} className={`${styles.toolButton} ${tool === 'brush' ? styles.active : ''}`} title={"Brush"} />
-        <IconButton position='bottom' Icon={<Eraser size={20} />} onClick={() => setTool('eraser')} className={`${styles.toolButton} ${tool === 'eraser' ? styles.active : ''}`}  title="Eraser" />
-        <IconButton position='bottom' Icon={<PaintBucket size={20} />} onClick={() => setTool('fill')} className={`${styles.toolButton} ${tool === 'fill' ? styles.active : ''}`} title="Fill" />
+        <IconButton position='bottom' Icon={Pencil} onClick={() => setTool('brush')} backgroundColor={tool === 'brush' && 'var(--button-hover)'} title={"Brush"} />
+        <IconButton position='bottom' Icon={Eraser} onClick={() => setTool('eraser')} backgroundColor={tool === 'eraser' && 'var(--button-hover)'} title="Eraser" />
+        <IconButton position='bottom' Icon={PaintBucket} onClick={() => setTool('fill')} backgroundColor={tool === 'fill' && 'var(--button-hover)'} title="Fill" />
         <div className={styles.brushSize}>
           Size: {brushSize}
         </div>
@@ -137,7 +138,7 @@ const DrawingCanvas = ({ onSubmit }) => {
             />
           ))}
         </div>
-      </div>
+      </ToolBar>
 
       <div
         className={`${styles.canvasWrapper} ${shake ? styles.shake : ''}`}

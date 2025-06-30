@@ -15,6 +15,7 @@
     margin: 0px 10px 0px 10px;
     flex-shrink: 0;
     gap: 5px;
+    position: relative;
 }
 
 .error-message {
@@ -124,7 +125,7 @@
 .sendButton {
     position: absolute;
     top: 50%;
-    right: 25px;
+    right: 10px;
     translate: 0% -50%;
 }
 

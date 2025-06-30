@@ -15,6 +15,8 @@ import { useDispatch } from 'react-redux';
 import { setExpandedImage } from '../../features/Media/ExpandedImage/expandedImageSlice';
 import { setOverlay } from '../../features/Overlay/overlaySlice';
 import { Subtitle } from '../ui/Titles/Subtitle/Subtitle';
+import { expandVideo } from '../../features/Media/ExpandedVideo/expandedVideoSlice';
+import VideoThumbnail from '../ui/Video/VideoThumbnail/VideoThumbnail';
 
 const MediaOfTheDayCard = ({ title = "Media of the day", query, tags = "", src, type = 'image', date, media = {}}) => {
 
@@ -47,18 +49,26 @@ const MediaOfTheDayCard = ({ title = "Media of the day", query, tags = "", src, 
   }, [query]);
 
   const openSource = () => {
-    console.log(source)
-    dispatch(setExpandedImage({image: source?.src}));
+    if (type === 'image') {
+      dispatch(setExpandedImage({image: source?.src}));
 
-    dispatch(setOverlay("expandImage"));
-  }
+      dispatch(setOverlay("expandImage"));
+    } else if (type === 'video') {
+
+      dispatch(setOverlay('expandVideo'));
+
+      dispatch(expandVideo(media))
+    }
+   
+  } 
+
 
   return (
-    <div data-context={JSON.stringify({src, tags, query, type})} className={styles.mediaCard}>
+    <div data-context={JSON.stringify(media)} className={styles.mediaCard}>
       <div className={styles.mediaContent}>
         <NsfwWrapper nsfw={media} >
         {type === 'video' ? (
-          <video src={src} autoPlay loop muted className={styles.media} />
+          <VideoThumbnail width="100%" maxWidth="100%" {...media} action={openSource} />
         ) : (
           <LongPressGestureWrapper width={'100%'} height={'100%'} onTouchContext={(e) => {triggerContext(e, src)}}>
             <ImageTooltipWrapper image={{src, type}}>

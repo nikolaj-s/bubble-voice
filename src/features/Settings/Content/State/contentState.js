@@ -4,7 +4,7 @@ export const initialState = () => {
 
     const disableNsfwBlur = JSON.parse(localStorage.getItem('disableNsfwBlur')) || false;
 
-    const muteVideo = JSON.parse(localStorage.getItem('muteVideo')) || false;
+    const muteVideo = JSON.parse(localStorage.getItem('muteVideo')) || true;
 
     return {
         disableNsfwBlur,

@@ -1,20 +1,35 @@
 import React from 'react';
 import styles from './MediaItem.module.css';
-import { Ellipsis, Music2 } from 'lucide-react';
+import { Ellipsis, Music2, Play } from 'lucide-react';
 import IconButton from '../../ui/Buttons/IconButton/IconButton';
 import { triggerContext } from '../../../lib/services/helperFunctions';
 import { Subtitle } from '../../ui/Titles/Subtitle/Subtitle';
 import { UserIndicator } from '../../UserIndicator/UserIndicator';
 import { TextIndicator } from '../../ui/TextIndicator/TextIndicator';
+import { useDispatch } from 'react-redux';
+import { expandVideo } from '../../../features/Media/ExpandedVideo/expandedVideoSlice';
+import { setOverlay } from '../../../features/Overlay/overlaySlice';
 
-export const MediaItem = ({ title, duration, thumbnail, src, url, inQueue, added_by, nsfw, status, action = () => {}, position, context = {}, at }) => {
+export const MediaItem = ({ title, duration, thumbnail, src, url, inQueue, added_by, nsfw, status, action = () => {}, position, context = {}, at, style }) => {
+
+  const dispatch = useDispatch();
 
   const [thumbnailError, toggleThumbnailError] = React.useState(false);
+
+
+  const play = (e) => {
+    e.stopPropagation();
+
+    dispatch(expandVideo(context));
+
+    dispatch(setOverlay('expandVideo'));
+  }
 
   return (
     <>
   
       <div
+      style={style}
       onClick={() => action(context)}
       id={src}
       data-context={JSON.stringify({ ...context, inQueue })}
@@ -24,11 +39,21 @@ export const MediaItem = ({ title, duration, thumbnail, src, url, inQueue, added
       <div className={styles.wrapper}>
         <div className={styles.leftBlock}>
           {position >= 0 && <div className={styles.queueIndication}>{position + 1}</div>}
-          {thumbnail && !thumbnailError ? (
-            <img src={thumbnail} alt="" className={styles.thumbnail} onError={() => toggleThumbnailError(true)} />
-          ) : (
-            <div className={styles.fallbackIcon}><Music2 size={20} /></div>
-          )}
+          <div className={styles.thumbnail}>
+           {thumbnail && !thumbnailError ? (
+                <img src={thumbnail} alt="" className={styles.thumbnail} onError={() => toggleThumbnailError(true)} />
+              ) : (
+                <div className={styles.fallbackIcon}><Music2 size={20} /></div>
+              )}
+              <div className={styles.playOverlay}>
+                <IconButton 
+                Icon={<Play fill='var(--text-color)' color='var(--text-color)' />}
+                title={'Play'}
+                onClick={play}
+                />
+              </div>
+          </div>
+          
         </div>
 
         <div className={styles.details}>

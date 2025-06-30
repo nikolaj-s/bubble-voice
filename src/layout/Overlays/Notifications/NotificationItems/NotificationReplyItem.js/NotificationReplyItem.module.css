@@ -1,0 +1,29 @@
+/* Use your Bubble theme variables directly */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.title {
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.sender {
+  color: var(--link-color);
+}
+
+.channel {
+  font-style: normal;
+  color: var(--link-color);
+}
+
+.body {
+  margin: 0;
+  padding-left: 8px;
+  border-left: 3px solid var(--button-background);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--text-color);
+}

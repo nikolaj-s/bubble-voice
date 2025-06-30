@@ -4,7 +4,7 @@
     flex-wrap: wrap;
     padding: 5px;
     gap: 5px;
-    border-radius: 8px;
+    border-radius: var(--border-radius);
     background-color: var(--background-color);
-    width: calc(100% - 10px);
+    max-width: calc(100% - 10px);
 }

@@ -39,6 +39,8 @@
 .icon {
   width: 18px;
   height: 18px;
+  border-radius: var(--border-radius);
+  overflow: hidden;
 }
 
 .icon svg {

@@ -22,7 +22,7 @@ export const deleteMessage = createAsyncThunk(
 
             const response = await axios({
                 method: "DELETE",
-                url: `${API_URL}/social/delete`,
+                url: `${API_URL}/text-channel/delete`,
                 headers: {TOKEN: token},
                 data
             })

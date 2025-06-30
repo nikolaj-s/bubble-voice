@@ -3,13 +3,14 @@ import { useSelector } from 'react-redux';
 import { ImageMasonryWrapper } from '../../../components/ui/Wrappers/ImageMasonryWrapper/ImageMasonryWrapper';
 import { LongPressGestureWrapper } from '../../../components/ui/Gestures/LongPressGestureWrapper';
 import { triggerContext } from '../../../lib/services/helperFunctions';
-import { ImageTooltipWrapper } from '../../../components/ui/Wrappers/ImageTooltipWrapper/ImageTooltipWrapper';
 import { NsfwWrapper } from '../../../components/ui/Wrappers/NsfwWrapper/NsfwWrapper';
 import { ImageComponent } from '../../../components/ui/Image/Image';
 import { Images } from 'lucide-react';
 import ScrollLoadWrapper from '../../../components/ui/Wrappers/ScrollLoadWrapper/ScrollLoadWrapper';
 import TextLabelError from '../../../components/Error/TextLabelError/TextLabelError';
 import ContentHeader from '../../../components/Headers/ContentHeader/ContentHeader';
+import { MediaTooltipWrapper } from '../../../components/ui/Wrappers/MediaTooltipWrapper/MediaTooltipWrapper';
+import { VideoPreview } from '../../../components/ui/Video/VideoPreview/VideoPreview';
 
 export const ServerRecommendations = ({close}) => {
 
@@ -37,18 +38,19 @@ export const ServerRecommendations = ({close}) => {
             {media?.media?.map(media => {
                 return (
                     <LongPressGestureWrapper key={media.src} width={'100%'} height={'100%'} onTouchContext={(e) => triggerContext(e, media.src)}>
-                        <ImageTooltipWrapper
-                        image={media}
-
-                        >
+                        <MediaTooltipWrapper media={media} >
                             <NsfwWrapper nsfw={media}>
-                                <ImageComponent src={media?.src?.includes('.gif') ? media?.src : media?.thumbnail}/>
+                                {media.type === 'video' ? 
+                                <VideoPreview {...media} action={() => {}} />
+                                :
+                                <ImageComponent borderRadius={'var(--border-radius)'} src={media?.src?.includes('.gif') ? media?.src : media?.thumbnail}/>
+                                }
                             </NsfwWrapper>
-                        </ImageTooltipWrapper>
+                        </MediaTooltipWrapper>
                     </LongPressGestureWrapper>
                 )
             })}
         </ImageMasonryWrapper>
 
-</ScrollLoadWrapper>)
+    </ScrollLoadWrapper>)
 }

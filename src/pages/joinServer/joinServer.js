@@ -14,11 +14,9 @@ export const JoinServer = ({close}) => {
     }
 
     return (
-        <FullScreenWrapper onClose={close}>
             <MenuWrapper navItems={navItems}>
                 {content}
             </MenuWrapper>
-        </FullScreenWrapper>
     )
 }
 

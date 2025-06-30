@@ -34,7 +34,7 @@ const FloatingSearch = ({filter, filters = [], loading, setFilter = () => {}, se
   }
 
   const handleSetFilter = (value) => {
-console.log(value)
+
     setFilter(value);
   
   }

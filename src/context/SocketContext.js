@@ -36,7 +36,7 @@ export const SocketProvider = ({ children }) => {
 
         const socket = io(SOCKET_URL, {query: {
             "TOKEN": token
-        }});
+        }, reconnectionDelay: 5000});
 
         socket.request = function request(type, data = {}) {
             return new Promise((resolve, reject) => {

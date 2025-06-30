@@ -13,6 +13,7 @@
   font-size: 0.875rem;
   white-space: nowrap;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--accent-color);
   pointer-events: none;
   z-index: 1000;
   text-align: center;
@@ -23,15 +24,41 @@
 .tooltipTop::after {
   content: "";
   position: absolute;
+  bottom: -7px; /* 1px lower to account for outline */
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 7px 7px 0 7px;
+  border-style: solid;
+  border-color: var(--accent-color) transparent transparent transparent;
+  z-index: 1;
+}
+
+.tooltipTop::before {
+  content: "";
+  position: absolute;
   bottom: -6px;
   left: 50%;
   transform: translateX(-50%);
   border-width: 6px 6px 0 6px;
   border-style: solid;
   border-color: var(--card-background-color) transparent transparent transparent;
+  z-index: 2;
 }
 
+
 .tooltipBottom::after {
+  content: "";
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 0 7px 7px 7px;
+  border-style: solid;
+  border-color: transparent transparent var(--accent-color) transparent;
+  z-index: 1;
+}
+
+.tooltipBottom::before {
   content: "";
   position: absolute;
   top: -6px;
@@ -40,19 +67,21 @@
   border-width: 0 6px 6px 6px;
   border-style: solid;
   border-color: transparent transparent var(--card-background-color) transparent;
-}
-
-.tooltipLeft::after {
-  content: "";
-  position: absolute;
-  right: -6px;
-  top: 8px;
-  border-width: 6px 0 6px 6px;
-  border-style: solid;
-  border-color: transparent transparent transparent var(--card-background-color);
+  z-index: 2;
 }
 
 .tooltipRight::after {
+  content: "";
+  position: absolute;
+  left: -7px;
+  top: 7px;
+  border-width: 7px 7px 7px 0px;
+  border-style: solid;
+  border-color: transparent var(--accent-color) transparent transparent;
+  z-index: 1;
+}
+
+.tooltipRight::before {
   content: "";
   position: absolute;
   left: -6px;
@@ -60,7 +89,32 @@
   border-width: 6px 6px 6px 0;
   border-style: solid;
   border-color: transparent var(--card-background-color) transparent transparent;
+  z-index: 2;
 }
+
+.tooltipLeft::after {
+  content: "";
+  position: absolute;
+  right: -7px;
+  top: 8px;
+  border-width: 7px 0 7px 7px;
+  border-style: solid;
+  border-color: transparent transparent transparent var(--accent-color);
+  z-index: 1;
+}
+
+.tooltipLeft::before {
+  content: "";
+  position: absolute;
+  right: -6px;
+  top: 8px;
+  border-width: 6px 0 6px 6px;
+  border-style: solid;
+  border-color: transparent transparent transparent var(--card-background-color);
+  z-index: 2;
+}
+
+
 
 #tool-tip-parent {
   position: fixed;

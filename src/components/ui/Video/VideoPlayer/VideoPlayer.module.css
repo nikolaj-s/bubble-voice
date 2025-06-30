@@ -49,8 +49,9 @@
   .controlWrapper {
     display: flex;
     gap: 5px;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
+    flex-direction: column;
     width: calc(100% - 20px);
     padding: 0px 10px;
   }
@@ -90,25 +91,21 @@
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    width: 100%;
   }
   
   .volumeWrapper {
     position: relative;
-    display: flex;
-    flex-direction: column-reverse;
+    display: flex;;
     align-items: center;
+    height: 30px;
+    gap: 5px;
   }
   
   .volumeSlider {
-    position: absolute;
     bottom: 100%;
-    left: 5px; /* place it above the button */
-    margin-bottom: 8px;
-    height: 0px;
     width: 60px;
-    transform: rotate(-90deg);
-    transform-origin: bottom left;
     transition: opacity 0.2s ease;
   }
 

@@ -16,6 +16,7 @@ const searchSlice = createSlice({
         similarImageSrc: false,
         open: false,
         query: "",
+        prevSearch: "",
         scrollPos: 0,
         loadingSearchHistory: false,
         searchHistoryFetched: false,
@@ -28,6 +29,9 @@ const searchSlice = createSlice({
         selectedChannel: {channel_name: "All", channel_id: "*"}
     },
     reducers: {
+        setPrevSearch: (state, action) => {
+            state.prevSearch = action.payload;
+        },
         toggleOpenSearch: (state, action) => {
             state.open = action.payload;
         },
@@ -129,7 +133,8 @@ export const {
     setSimilarImageSrc,
     setTextChannelFilter,
     setSelectedChannelToFilter,
-    setFromDate
+    setFromDate,
+    setPrevSearch
 } = searchSlice.actions;
 
 export default searchSlice.reducer;

@@ -1,6 +1,15 @@
 
 export const copyToClipboard = (str) => {
-    navigator.clipboard.writeText(str);
+
+    try {
+        if (window?.electron) {
+            window?.electron?.copyText(str);
+        } else {
+            navigator.clipboard.writeText(str);
+        }
+    } catch (err) {
+        return {error: true}
+    }
 }
 
 export const downloadImage = (image) => {

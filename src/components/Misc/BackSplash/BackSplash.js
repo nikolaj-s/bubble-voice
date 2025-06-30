@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import styles from "./BackSplash.module.css";
 import { Logo } from "../../Icons/Bubble/Logo";
+import { useAppFocus } from "../../../hooks/useAppFocus";
 
 const BackSplash = ({ children }) => {
+
   const [bubbles, setBubbles] = useState([]);
+
+  const focused = useAppFocus();
 
   useEffect(() => {
     const createBubbles = () => {
@@ -24,25 +28,27 @@ const BackSplash = ({ children }) => {
     createBubbles(); // Generate bubbles when component mounts
   }, []);
 
+
   return (
     <>
     <div className='application-drag-area-for-desktop'/>
     <div className={styles.wrapper}>
-      <div className={styles.splashContainer}>
-        {bubbles.map((bubble) => (
-          <div
-            key={bubble.id}
-            className={styles.bubble}
-            style={{
-              width: `${bubble.size}px`,
-              height: `${bubble.size}px`,
-              left: `${bubble.left}%`,
-              animationDuration: bubble.animationDuration,
-              animationDelay: bubble.animationDelay,
-            }}
-          />
-        ))}
-      </div>
+      {focused && (
+        <div className={styles.splashContainer}>
+          {bubbles.map((bubble) => (
+            <div
+              key={bubble.id}
+              className={styles.bubble}
+              style={{
+                width: `${bubble.size}px`,
+                height: `${bubble.size}px`,
+                left: `${bubble.left}%`,
+                animationDuration: bubble.animationDuration,
+                animationDelay: bubble.animationDelay,
+              }}
+            />
+          ))}
+        </div>)}
       <div className={styles.content}>
         {children} {/* This will render the wrapped component */}
       </div>

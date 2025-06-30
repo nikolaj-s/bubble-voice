@@ -8,6 +8,7 @@ import { useSearchParams } from "react-router-dom";
 import Label from "../../ui/Titles/Label/Label";
 import TextInput from "../../ui/Inputs/TextInput/TextInput";
 import ErrorCard from "../../Error/ErrorCard/ErrorCard";
+import { ApplyChangesPopup } from "../../ApplyChangesPopup/ApplyChangesPopup";
 
 const UserPermissionsEditor = ({ permissions, onUpdate }) => {
 
@@ -74,12 +75,7 @@ const UserPermissionsEditor = ({ permissions, onUpdate }) => {
           ) : null
         )}
       </div>
-      {changesMade && (
-        <div className={styles.buttonWrapper}>
-        <TextButton action={handleApplyChanges} title="Apply Changes" />
-        <TextButton action={handleCancel} title="Cancel" backgroundColor={'var(--error-color)'} />
-        </div>
-      )}
+      <ApplyChangesPopup disabled={!changesMade} onApply={handleApplyChanges} onClearChanges={handleCancel} />
     </div>
   );
 };
