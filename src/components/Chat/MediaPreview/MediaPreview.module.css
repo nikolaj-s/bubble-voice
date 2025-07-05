@@ -1,33 +1,47 @@
 
-
 .container {
-    position: absolute;
-    left: 10px;
-    bottom: 100%;
-    margin-bottom: 10px;
-    width: auto;
-    height: 200px;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  position: relative;
 }
 
+.scroller {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: var(--padding); /* leave room on the right for the clear button */
+  width: calc(100% - 20px)
+}
+
+.card {
+  flex: 0 0 auto;
+  width: 100px;   /* adjust as needed */
+  height: 100px;  /* adjust as needed */
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Clear (“×”) button in top-right of the container */
 .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    transition: opacity 0.2s;
-    cursor: pointer;
+  position: absolute;
+  top: -8px;
+  right: 8px;
+  background: var(--background-color);
+  border-radius: var(--border-radius);
+  padding: 4px;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .overlay:hover {
-    opacity: 1;
+  background: rgba(0,0,0,0.8);
 }
-

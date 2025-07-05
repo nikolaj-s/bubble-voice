@@ -5,16 +5,17 @@
     color: var(--text-color);
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    transition: transform 0.2s ease;
+    transition: 0.2s ease;
     display: flex;
     flex-direction: column;
     width: 100%;
     max-width: 350px;
     position: relative;
+    cursor: pointer;
   }
-  
+
   .card:hover {
-    transform: scale(1.01);
+    background-color: var(--button-hover);
   }
 
   .contextButton {

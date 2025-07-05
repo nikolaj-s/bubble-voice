@@ -15,6 +15,7 @@ import { TextChannelResults } from './TextChannelResults/TextChannelResults';
 import { VideoResults } from './VideoResults/VideoResults';
 import { SearchRecommendations } from './SearchRecommendations/SearchRecommendations';
 import SectionDivider from '../../../../components/ui/SectionDivider/SectionDivider';
+import { UserResults } from './UserResults/UserResults';
 
 export const SearchResults = ({results = [], loading = false, filter, searchHistory, handleDeleteSearchHistoryItem, handleSearchFromHistory, title}) => {
 
@@ -63,7 +64,10 @@ export const SearchResults = ({results = [], loading = false, filter, searchHist
                 <TextChannelResults results={results} />
                 : filter === 'videos' ?
                 <VideoResults results={results} />
-                : null}
+                : filter === 'users' ?
+                <UserResults results={results} /> 
+                :
+                null}
             </div>
         </div>
     )

@@ -16,7 +16,7 @@ export const useInputCtxMenu = () => {
             label: "Paste",
             icon: <ClipboardPaste color="var(--text-color)" />,
             type: "button",
-            onClick: () => {
+            onClick: async () => {
 
                 let res;
 
@@ -25,7 +25,7 @@ export const useInputCtxMenu = () => {
                     res  = window.electron.pasteText();
 
                 } else {
-                    res = getClipboardText().then(res => {
+                    res = await getClipboardText().then(res => {
 
                         return res;
                         

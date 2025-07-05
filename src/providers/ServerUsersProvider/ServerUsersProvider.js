@@ -2,7 +2,8 @@ import React from 'react'
 import { useSocket } from '../../context/SocketContext';
 import { useDispatch, useSelector } from 'react-redux';
 import UserButtonSkeleton from '../../components/ui/Buttons/UserButton/UserButtonSkeleton';
-import { addUser, setUsers, updateUser, updateUserChannelStatus, updateUserStatus } from '../../features/ServerUsers/serverUsersSlice';
+import { addUser, removeUser, setUsers, updateUser, updateUserChannelStatus, updateUserStatus } from '../../features/ServerUsers/serverUsersSlice';
+import { clearMessagesByUser } from '../../features/Channel/TextChannel/textChannelSlice';
 
 export const ServerUsersProvider = ({children}) => {
 
@@ -81,6 +82,13 @@ export const ServerUsersProvider = ({children}) => {
                 }
             }
 
+            const handleUserLeavesServer = (data) => {
+                if (data.user_id) {
+                    dispatch(clearMessagesByUser(data));
+                    dispatch(removeUser(data));
+                }
+            }
+
             const handleUpdatePermissions = (data) => {
                 if (data.user_id) {
                     dispatch(updateUser(data));
@@ -90,6 +98,8 @@ export const ServerUsersProvider = ({children}) => {
             socket.on(`update permissions for user in ${serverID}`, handleUpdatePermissions);
 
             socket.on(`user joins ${serverID}`, handleUserJoinsServer);
+
+            socket.on(`user leaves ${serverID}`, handleUserLeavesServer);
 
             socket.on('user updates channel status', handleUpdateUserChannelStatus);
 
@@ -108,6 +118,8 @@ export const ServerUsersProvider = ({children}) => {
                 socket.off(`update permissions for user in ${serverID}`, handleUpdatePermissions);
 
                 socket.off(`user joins ${serverID}`, handleUserJoinsServer);
+
+                socket.off(`user leaves ${serverID}`, handleUserLeavesServer);
 
                 socket.off('user updates channel status', handleUpdateUserChannelStatus);
 

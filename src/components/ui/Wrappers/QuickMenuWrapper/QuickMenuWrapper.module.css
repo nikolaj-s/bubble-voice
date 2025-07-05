@@ -43,7 +43,7 @@
     }
     .container {
         width: calc(100% - 20px);
-        left: 50%;
+        left: 50% !important;
         translate: -50%;
         bottom: 100px;
         max-width: 400px;

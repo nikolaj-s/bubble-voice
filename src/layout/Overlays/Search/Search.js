@@ -52,6 +52,9 @@ export const Search = ({close}) => {
     }
 
     const handleSearchFromHistory = (query) => {
+
+        dispatch(setPrevSearch(query));
+
         handleSetQuery(query);
 
         handleSearch();

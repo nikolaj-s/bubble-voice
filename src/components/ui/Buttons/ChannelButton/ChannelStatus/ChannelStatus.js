@@ -20,8 +20,6 @@ export const ChannelStatus = ({channel = {}, active}) => {
 
         if (status.type === 'video') {
             dispatch(expandVideo(status));
-
-            dispatch(setOverlay('expandVideo'))
         }
     }
 

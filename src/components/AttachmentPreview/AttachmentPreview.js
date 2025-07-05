@@ -4,6 +4,7 @@ import styles from "./AttachmentPreview.module.css";
 
 const AttachmentPreview = ({ reply, onClick }) => {
   // Prioritize: image > video > link > text
+
   if (reply.image) {
     return (
       <span className={styles.attachment} tabIndex={0} onClick={onClick} role="button">
@@ -12,7 +13,7 @@ const AttachmentPreview = ({ reply, onClick }) => {
       </span>
     );
   }
-  if (reply.video) {
+  if (reply.video || reply.media_item) {
     return (
       <span className={styles.attachment} tabIndex={0} onClick={onClick} role="button">
         <VideoIcon size={18} className={styles.icon} />

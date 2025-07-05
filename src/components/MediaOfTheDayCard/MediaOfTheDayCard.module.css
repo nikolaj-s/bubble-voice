@@ -11,13 +11,14 @@
   
   .mediaContent {
     position: relative;
-    flex: 1;
     width: 100%;
-    height: calc(100% - 105px);
+    height: calc(100% - 115px);
     background-color: black;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: var(--border-radius);
+    overflow: hidden;
   }
   
   .media {

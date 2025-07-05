@@ -3,11 +3,11 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: var(--gap);
     background-color: var(--background-color);
     border-radius: 5px;
     align-items: flex-start;
-    padding: 5px;
+    padding: var(--padding);
 }
 
 .header {

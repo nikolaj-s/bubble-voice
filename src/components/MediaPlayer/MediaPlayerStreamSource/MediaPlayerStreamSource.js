@@ -140,13 +140,6 @@ export const MediaPlayerStreamSource = ({expand, expanded}) => {
                         <BoxLabel label={'no audio'} />
                     </div>
                     )}
-                    <RedditAudioSrc 
-                    key={src}
-                    url={src} currentTime={currentTime} 
-                    isPlaying={isPlaying} volume={volume} 
-                    muted={isMuted} hasAudioFunction={() => {dispatch(setMediaHasAudio(true))}} 
-                    
-                    />
                     <PlayPauseFlash isPlaying={isPlaying} />
                 </DoubleTapWrapper>
             </LongPressGestureWrapper>

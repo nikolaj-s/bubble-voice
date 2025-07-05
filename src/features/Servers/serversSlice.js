@@ -19,6 +19,9 @@ const serversSlice = createSlice({
         addServer: (state, action) => {
             state.servers.push(action.payload);
         },
+        removeServer: (state, action) => {
+            state.servers = state.servers.filter(s => s._id !== action.payload.server_id);
+        },
         updateServerButton: (state, action) => {
 
             state.servers = state.servers.map(server => {
@@ -72,6 +75,6 @@ const serversSlice = createSlice({
 
 export const selectServers = state => state.serversSlice.servers;
 
-export const {setServers, addServer, updateServerButton, setServerStatus, toggleNewMessageStatus } = serversSlice.actions;
+export const {setServers, addServer, updateServerButton, setServerStatus, toggleNewMessageStatus, removeServer } = serversSlice.actions;
 
 export default serversSlice.reducer;

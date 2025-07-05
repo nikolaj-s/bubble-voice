@@ -5,8 +5,21 @@ import { ImageComponent } from '../../Image/Image';
 import IconButton from '../../Buttons/IconButton/IconButton';
 import { triggerContext } from '../../../../lib/services/helperFunctions';
 import { TextIndicator } from '../../TextIndicator/TextIndicator';
+import { useDispatch } from 'react-redux';
+import { expandVideo } from '../../../../features/Media/ExpandedVideo/expandedVideoSlice';
 
 export const VideoPreview = ({ title, src, thumbnail, query, tags, nsfw, width, height, duration, snippet, url, action }) => {
+
+  const dispatch = useDispatch();
+
+  const handleAction = (data) => {
+
+    if (typeof action !== 'function') return dispatch(expandVideo(data));
+
+    action(data);
+
+  }
+
   const formatDuration = (sec) => {
     const mins = Math.floor(sec / 60);
     const secs = sec % 60;
@@ -28,7 +41,7 @@ export const VideoPreview = ({ title, src, thumbnail, query, tags, nsfw, width, 
     <div 
     id={src}
     data-context={JSON.stringify({title, src, thumbnail, url, query, tags, nsfw, width, height, duration, type: 'video'})}
-    onClick={() => {action({title, src, thumbnail, tags, nsfw, url, duration})}} className={styles.card}>
+    onClick={() => {handleAction({title, src, thumbnail, tags, nsfw, url, duration})}} className={styles.card}>
       <div className={styles.contextButton}>
         <IconButton
         Icon={<Ellipsis color='var(--text-color)' />}

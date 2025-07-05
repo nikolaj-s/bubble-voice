@@ -1,10 +1,11 @@
 
-import { Camera, CameraOff } from 'lucide-react';
+
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { useGlobalVolume } from '../../../../context/GlobalVolumeContext';
 import { setStreamDisabled } from '../../../../features/UserStreamState/userStreamStateSlice';
 import { BoolIndicator } from '../../../../components/ui/BoolIndicator/BoolIndicator';
+import { sendServerInvite } from '../../../../features/Invites/ServerInvites/Thunks/sendServerInvite';
 
 export const useUserCtxMenu = () => {
 
@@ -12,13 +13,28 @@ export const useUserCtxMenu = () => {
 
     const userStreamState = useSelector(state => state.userStreamStateSlice.streams);
 
+    const {name} = useSelector(state => state.serverDetailsSlice);
+
+    const {users} = useSelector(state => state.serverUsersSlice);
+
     const {_id: user_id} = useSelector(state => state.accountSlice.account) || {};
 
     const {volumes, changeVolume} = useGlobalVolume();
 
     const getUserOptions = useCallback((options, user, permissions) => {
 
-         if (user.user_id !== user_id) {
+        if (!users[user._id] && permissions?.user_can_manage_invites) {
+            options.push({
+                label: `Invite user to ${name}`,
+                type: 'button',
+                onClick: () => {
+                 
+                    dispatch(sendServerInvite(user._id))
+                }
+            })
+        } 
+
+         if (user._id !== user_id && users[user._id]) {
         
             const isWebcamDisabled = userStreamState[`${user.user_id}-webcam`]?.disabled || false;
 
@@ -56,7 +72,7 @@ export const useUserCtxMenu = () => {
         }
 
 
-    }, [changeVolume, userStreamState, volumes, user_id, dispatch])
+    }, [changeVolume, userStreamState, volumes, user_id, dispatch, users, name])
   
     return {getUserOptions}
 }

@@ -2,14 +2,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { generateInviteLink } from "./Thunks/generateInviteLink";
+
 import { getInviteLink } from "./Thunks/getInviteLink";
+import { sendServerInvite } from "./Thunks/sendServerInvite";
 
 const serverInvitesSlice = createSlice({
     name: "serverInvitesSlice",
     initialState: {
         error: false,
         loading: false,
-        inviteLink: null
+        inviteLink: null,
+        pendingInvites: []
     },
     extraReducers: (builder) => {
         // generate invite link
@@ -40,6 +43,20 @@ const serverInvitesSlice = createSlice({
             state.loading = false;
             state.error = false;
             state.inviteLink = action.payload;
+        })
+
+        // send server invite
+        builder.addCase(sendServerInvite.pending, (state) => {
+            state.loading = true;
+            state.error = false;
+        })
+        builder.addCase(sendServerInvite.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        })
+        builder.addCase(sendServerInvite.fulfilled, (state) => {
+            state.loading = false;
+            state.error = false;
         })
     }
 })

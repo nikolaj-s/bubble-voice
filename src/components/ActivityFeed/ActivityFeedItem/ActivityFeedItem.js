@@ -4,6 +4,7 @@ import { EditedFeedItem } from './EditedFeedItem/EditedFeedItem'
 import { UserIndicator } from '../../UserIndicator/UserIndicator'
 import { CreatedFeedItem } from './CreatedFeedItem/CreatedFeedItem'
 import { DeletedFeedItem } from './DeletedFeedItem/DeletedFeedItem'
+import { GenericFeedItem } from './GenericFeedItem/GenericFeedItem'
 
 export const ActivityFeedItem = ({ item = {} }) => {
   let content 
@@ -31,7 +32,7 @@ export const ActivityFeedItem = ({ item = {} }) => {
     //   break
 
     default:
-      content = <em>Unknown activity type: {item.type}</em>
+      content = <GenericFeedItem {...item} />
   }
 
   return (

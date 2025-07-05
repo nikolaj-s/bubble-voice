@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const expandedVideoSlice = createSlice({
     name: "expandedVideoSlice",
     initialState: {
-        video: {}
+        video: null
     },
     reducers: {
         expandVideo: (state, action) => {

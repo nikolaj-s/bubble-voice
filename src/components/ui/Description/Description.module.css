@@ -14,5 +14,9 @@
     font-style: italic;
     font-weight: 300;
     font-size: 14px;
+    /* ensure the ellipsis shows */
+    text-overflow: ellipsis;
+    /* optional: keep word breaks tidy */
+    word-break: break-word;
 }
 

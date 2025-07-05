@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './ServerWelcomeMessage.module.css';
 import { Markdown } from '../../Markdown/Markdown';
+import { Card } from '../../ui/Wrappers/Card/Card';
+import { Banner } from '../../Banner/Banner';
 
 const ServerWelcomeMessage = ({
   display_name,
@@ -13,21 +15,15 @@ const ServerWelcomeMessage = ({
   const welcomeMessage = `Welcome ${display_name || ''} to ${server_name || 'Bubble'}`;
 
   return (
-    <div className={styles.serverWelcomeMessage}>
+    <Card>
       {server_banner && (
-        <div className={styles.bannerContainer}>
-          <img
-            src={server_banner}
-            alt={`${server_name} banner`}
-            className={styles.serverBanner}
-          />
-        </div>
+        <Banner image={server_banner} height={150} />
       )}
       <div className={styles.welcomeMessageText}>
         <h3>{welcomeMessage}</h3>
         {welcome_message && <Markdown text={welcome_message} />}
       </div>
-    </div>
+    </Card>
   );
 };
 

@@ -3,7 +3,7 @@ import styles from "./TextInput.module.css";
 
 const TextInput = ({ type = "text", placeholder = "", value, onChange, error, autoComplete, maxLength }) => {
   return (
-    <div className={`${styles.inputContainer} ${error ? styles.error : ""}`}>
+    <div className={`${styles.inputContainer} ${error || (typeof maxLength === 'number' && value.length === maxLength) ? styles.error : ""}`}>
       <input
         type={type}
         placeholder={placeholder.toLowerCase()}

@@ -15,7 +15,7 @@ export const MediaInfo = ({data, width = 30, height = 30}) => {
     <motion.div
       className={styles.panel}
       initial={{ height: height }}
-      animate={{ height: expanded ? '300px' : height }}
+      animate={{ height: expanded ? 'auto' : height }}
      
     >
       <div className={styles.topBar}>
@@ -40,6 +40,7 @@ export const MediaInfo = ({data, width = 30, height = 30}) => {
               <div><strong>NSFW:</strong> {data.nsfw ? 'Yes' : 'No'}</div>
               <div><strong>Interactions:</strong> {data.interactions}</div>
               <div><strong>Date:</strong> {new Date(data.date).toLocaleString()}</div>
+              
             </div>
           </motion.div>
         )}

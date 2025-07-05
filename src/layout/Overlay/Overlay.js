@@ -39,6 +39,7 @@ import FullScreenWrapper from "../../components/ui/Wrappers/FullScreenWrapper/Fu
 import { MediaPlayerHistory } from "../Overlays/MediaPlayerHistory/MediaPlayerHistory";
 import { MediaPlayerSaves } from "../Overlays/MediaPlayerSaves/MediaPlayerSaves";
 import { Notifications } from "../Overlays/Notifications/Notifications";
+import { LeaveServer } from "../Overlays/LeaveServer/LeaveServer";
 
 const overlayComponents = {
   search: Search,
@@ -46,7 +47,6 @@ const overlayComponents = {
   serverSettings: ServerSettings,
   settings:Settings,
   joinServer: JoinServer,
-  expandVideo: ExpandedVideo,
   userQuickMenu: UserQuickMenu,
   settingsQuickMenu: SettingsQuickMenu,
   webcamOverlay: WebcamOverlay,
@@ -57,7 +57,8 @@ const overlayComponents = {
   mediaPlayer: MediaPlayerOverlay,
   screenPicker: ScreenPickerOverlay,
   mediaPlayerHistory: MediaPlayerHistory,
-  mediaPlayerSaves: MediaPlayerSaves
+  mediaPlayerSaves: MediaPlayerSaves,
+  leaveServer: LeaveServer
 };
 
 export const Overlay = ({ children }) => {
@@ -71,6 +72,8 @@ export const Overlay = ({ children }) => {
   const [currentY, setCurrentY] = React.useState(null);
 
   const image = useSelector(state => state.expandedImageSlice.expandedImage);
+
+  const video = useSelector(state => state.expandedVideoSlice.video)
 
   useKeyupListener(() => {dispatch(closeOverlay())}, 27, false);
 
@@ -86,7 +89,7 @@ export const Overlay = ({ children }) => {
         </MobileSwipeToCloseWrapper>
         :
         <>
-        {(!image) && <OverlayCloseButton action={() => {dispatch(closeOverlay())}} />}
+        {(!image && !video) && <OverlayCloseButton action={() => {dispatch(closeOverlay())}} />}
         <FullScreenWrapper maxContentWidth={activeOverlay === 'expandImage' ? '100%' : null} key={activeOverlay} exitFromY={currentY} onClose={() => {dispatch(closeOverlay())}}>
           <MobileSwipeToCloseWrapper onClose={(y) => {setCurrentY(y); dispatch(closeOverlay())}}>
             <ActiveComponent close={() => dispatch(closeOverlay())}  /> 
@@ -98,6 +101,7 @@ export const Overlay = ({ children }) => {
       {children}
       <UserProfile />
       <ExpandedImage />
+      <ExpandedVideo />
       <Notifications />
     </>
   );

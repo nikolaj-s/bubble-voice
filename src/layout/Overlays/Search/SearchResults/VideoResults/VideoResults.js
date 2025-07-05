@@ -30,7 +30,6 @@ export const VideoResults = ({results = []}) => {
 
             dispatch(expandVideo(video));
 
-            dispatch(setOverlay('expandVideo'));
         }
 
     }, [enabled, dispatch, addToMediaPlayerOnClick])

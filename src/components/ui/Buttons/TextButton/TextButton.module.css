@@ -2,7 +2,8 @@
    
     border: none;
     color: var(--text-color);
-    font-size: 16px;
+    font-size: 14px;
+    font-weight: 800;
     cursor: pointer;
     padding: 10px;
     transition: 0.1s ease-in-out;
@@ -14,6 +15,7 @@
     align-items: center;
     gap: 10px;
     justify-content: space-between;
+    min-height: 40px;
   }
   
   .button:hover {
@@ -26,8 +28,9 @@
   
   .disabled {
     color: #ccc;
+    background-color: var(--background-color);
     cursor: not-allowed;
-    opacity: 0.5;
+    pointer-events: none;
   }
   
   .disabled:hover {

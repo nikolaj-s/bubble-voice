@@ -8,6 +8,7 @@ import Toaster from '../../components/Toaster/Toaster';
 import { useNotify } from '../../hooks/useNotify';
 import { fetchNotifications } from '../../features/Notifications/Thunks/fetchNotifications';
 import { pushNotification } from '../../features/Notifications/notificationsSlice';
+import { playSoundEffect } from '../../features/SoundEffects/soundEffectsSlice';
 
 export const NotificationProvider = ({children}) => {
 
@@ -54,12 +55,16 @@ export const NotificationProvider = ({children}) => {
         }
     }, [dispatch])
 
+    const handlePushNotification = (data) => {
+        dispatch(pushNotification(data));
+
+        dispatch(playSoundEffect('newMessage'));
+    }
+
     useEffect(() => {
         if (!socket) return
 
         const handleFetchNotifications = () => dispatch(fetchNotifications());
-
-        const handlePushNotification = (data) => dispatch(pushNotification(data));
 
         // these functions never change, so this effect only runs once
         socket.on('new notification', handlePushNotification);

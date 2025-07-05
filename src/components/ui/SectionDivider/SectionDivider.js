@@ -1,19 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styles from './SectionDivider.module.css';
-import { Subtitle } from '../Titles/Subtitle/Subtitle';
 
-/**
- * SectionDivider component
- * @param {Object} props
- * @param {string} props.label - The text to display before the line
- */
-const SectionDivider = ({ label, margin }) => {
-  return (
-    <div className={styles.wrapper} style={{margin}}>
-      <Subtitle>{label}</Subtitle>
-      <div className={styles.line} />
-    </div>
-  );
+const SectionDivider = ({ label }) => (
+  <div className={styles.divider}>
+    {label && <span className={styles.label}>{label}</span>}
+  </div>
+);
+
+SectionDivider.propTypes = {
+  label: PropTypes.string,
+};
+SectionDivider.defaultProps = {
+  label: '',
 };
 
-export default SectionDivider;
+export default SectionDivider
+

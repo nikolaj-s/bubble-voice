@@ -5,7 +5,9 @@ export const InlineLabel = ({icon, title}) => {
         <span style={{
             display: 'flex',
             alignItems: 'center',
-            opacity: 0.75
+            opacity: 1,
+            fontWeight: 600,
+            fontSize: 16
         }}>
             {icon}
             {title}:

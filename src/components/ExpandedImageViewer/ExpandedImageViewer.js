@@ -6,6 +6,7 @@ import { getImageColor } from "../../lib/services/getImageColor";
 import IconButton from "../ui/Buttons/IconButton/IconButton";
 import { ToolBar } from "../ui/Wrappers/ToolBar/ToolBar";
 import { MediaInfo } from "../MediaInfo/MediaInfo";
+import { ExpandedMediaWrapper } from "../ui/Wrappers/ExpandedMediaWrapper/ExpandedMediaWrapper";
 
 const ExpandedImageViewer = ({ src, alt, open, onClose, context }) => {
 
@@ -16,18 +17,6 @@ const ExpandedImageViewer = ({ src, alt, open, onClose, context }) => {
   const [error, toggleError] = useState(false);
 
   const scrollRef = useRef();
-
-  useEffect(() => {
-
-    const handleImageColor = async () => {
-      const res = await getImageColor(src);
-
-      setColor(`rgba(${res.r}, ${res.g}, ${res.b}, 0.75)`);
-    }
-
-    handleImageColor();
-
-  }, [src])
 
   // Lock body scroll while open
   useEffect(() => {
@@ -51,12 +40,7 @@ const ExpandedImageViewer = ({ src, alt, open, onClose, context }) => {
   if (!open) return null;
 
   return (
-    <div data-context={JSON.stringify(context)} className={styles.overlay} style={{backgroundColor: color}} >
-      <div className={styles.closeOverlay} onClick={onClose} />
-      <ToolBar className={styles.close}>
-        {context?.src && (<MediaInfo data={context} />)}
-        <IconButton Icon={X} position="bottom" title={'close'} onClick={onClose} />
-      </ToolBar>
+    <ExpandedMediaWrapper onClose={onClose} context={context} >
       <div
         ref={scrollRef}
         className={`${styles.imageContainer} ${expanded ? styles.expanded : ""}`}
@@ -79,7 +63,7 @@ const ExpandedImageViewer = ({ src, alt, open, onClose, context }) => {
           }}
         />}
       </div>
-    </div>
+    </ExpandedMediaWrapper>
   );
 };
 

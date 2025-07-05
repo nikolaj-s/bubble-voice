@@ -14,7 +14,16 @@
   }
   
   .userButton:hover {
-    background: var(--background-color);
+    background: var(--button-hover);
+  }
+
+  .userButton:active {
+  
+    scale: 0.998;
+    translate: 0px 2px;
+    filter: brightness(0.95);
+    box-shadow: inset 0px 1px 3px rgba(0,0,0,0.2);
+
   }
   
   .avatar {
@@ -50,6 +59,13 @@
     width: calc(100% - 50px);
   }
   
+  .username {
+    font-weight: 300;
+    font-size: 0.8rem;
+    font-style: italic;
+    opacity: 0.875;
+  }
+
   .displayName {
     font-size: 0.9rem;
     font-weight: bold;

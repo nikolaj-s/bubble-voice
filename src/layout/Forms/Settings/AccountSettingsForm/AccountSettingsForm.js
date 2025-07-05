@@ -77,7 +77,7 @@ export const AccountSettingsForm = () => {
     <>
     <Header text='Account Settings' />
     <Label label='Edit Display Name' />
-    <TextInput value={displayName} onChange={setDisplayName} />
+    <TextInput value={displayName} onChange={setDisplayName} maxLength={15} />
     <Label label='Edit Profile Image' />
     <ImageDropZone parentFileSrc={userImage} width={150} height={150} dimensions={300} borderRadius='50%' existingImage={user_image} onImageChange={setUserImage} />
     <Label label='Edit Profile Banner' />

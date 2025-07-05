@@ -1,63 +1,9 @@
-.card {
-    background-color: var(--card-background-color);
-    border-radius: 10px;
-    width: 300px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
-    margin: 20px;
-    color: var(--text-color);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .bannerContainer {
-    width: 100%;
-    height: 160px;
-    overflow: hidden;
-    position: relative;
-  }
-  
-  .banner {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
+
   .serverName {
     font-size: 1.2rem;
     font-weight: bold;
     margin: 16px 0;
     text-align: center;
   }
-  
-  .joinButton {
-    background-color: var(--button-background);
-    color: var(--text-color);
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    width: calc(100% - 10px);
-    margin-bottom: 10px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease, scale 0.2s ease;
-  }
 
-  .joinButton:active {
-    scale: 0.98;
-  }
-  
-  .joinButton:hover {
-    background-color: var(--button-hover);
-  }
-  
-  .joined {
-    background-color: var(--success-color);
-    pointer-events: none;
-  }
-  
-  .joinButton:focus {
-    outline: none;
-  }
   

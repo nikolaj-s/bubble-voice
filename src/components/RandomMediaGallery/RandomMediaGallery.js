@@ -11,6 +11,7 @@ import { Images } from 'lucide-react';
 import { LongPressGestureWrapper } from '../ui/Gestures/LongPressGestureWrapper';
 import { triggerContext } from '../../lib/services/helperFunctions';
 import { VideoPreview } from '../ui/Video/VideoPreview/VideoPreview';
+import { Card } from '../ui/Wrappers/Card/Card';
 
 const RandomMediaGallery = ({ media = [], title = "", action = () => {} }) => {
 
@@ -20,7 +21,7 @@ const RandomMediaGallery = ({ media = [], title = "", action = () => {} }) => {
     }, [media]);
 
     return (
-        <div className={styles.galleryWrapper}>
+        <Card>
             <MediaTitle icon={Images} title={title} />
             <ResponsiveMasonry className={styles.galleryContainer} columnsCountBreakPoints={{ 1000: 3, }}>
                 <Masonry gutter="16px">
@@ -45,7 +46,7 @@ const RandomMediaGallery = ({ media = [], title = "", action = () => {} }) => {
                 </Masonry>
             </ResponsiveMasonry>
             <OverlayActionButton action={action} title={"See more..."} />
-        </div>
+        </Card>
     );
 };
 

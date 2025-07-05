@@ -60,7 +60,7 @@ export const Server = () => {
                     }}
                     className={`${styles.sectionOne} ${isChannelMenuOpen ? styles.sectionOneMobile : ''} ${currentVoiceChannel ? styles.inVoiceChannel : ''}`}
                     >
-                        <Banner image={banner} />
+                        <Banner image={banner} padding={'5px 5px 0px 5px'} />
                         <Channels currentChannel={currentChannel} />
                         <ControlBar key={'control-bar'} />
                     </section>

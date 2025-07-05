@@ -32,7 +32,7 @@ const UserStreamSource = ({ user_id, stream, action, id, isExpanded, setAmbientC
 
     const user = useSelector(state => state.serverUsersSlice.users[user_id]);
 
-    const {user_id: userID} = useSelector(state => state.accountSlice.account);
+    const {_id: userID} = useSelector(state => state.accountSlice.account);
 
     const isStreamDisabled = useSelector(state => state.userStreamStateSlice.streams[`${user_id}-stream`]?.disabled) || false;
 
@@ -117,7 +117,7 @@ const UserStreamSource = ({ user_id, stream, action, id, isExpanded, setAmbientC
         onClick={() => {action(id)}}
         id={id}
         className={styles.container} 
-        title={`${user.display_name} streaming ${channel_status?.streamDetails?.name || 'screen'}`}>
+        title={`${user?.display_name} streaming ${channel_status?.streamDetails?.name || 'screen'}`}>
         {loading && (
             <SpinnerLoading />
         )}
@@ -136,7 +136,7 @@ const UserStreamSource = ({ user_id, stream, action, id, isExpanded, setAmbientC
                     <Subtitle >is streaming: {channel_status?.streamDetails?.name || 'Screen'}</Subtitle>
                 </div>
             </div>
-            <StreamOverlay name={`${user.display_name} is streaming: ${channel_status?.streamDetails?.name || 'Screen'}`} 
+            <StreamOverlay name={`${user?.display_name} is streaming: ${channel_status?.streamDetails?.name || 'Screen'}`} 
             button={
                 <IconButton 
                 Icon={<Ellipsis color="var(--text-color)" />}
@@ -146,7 +146,7 @@ const UserStreamSource = ({ user_id, stream, action, id, isExpanded, setAmbientC
                 />
             }
             />
-            {isStreamDisabled && (<StreamDisabledOverlay onWatch={watchStream} displayName={user.display_name} streamName={channel_status?.streamDetails?.name} streamPreview={channel_status?.streamPreview} />)}
+            {isStreamDisabled && (<StreamDisabledOverlay onWatch={watchStream} displayName={user?.display_name} streamName={channel_status?.streamDetails?.name} streamPreview={channel_status?.streamPreview} />)}
             {!focused && (user_id === userID) && (<StreamPausedOverlay />)}
         </div>
     );

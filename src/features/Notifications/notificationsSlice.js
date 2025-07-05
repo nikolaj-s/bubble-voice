@@ -53,6 +53,9 @@ const notificationsSlice = createSlice({
             state.notifications.unshift(action.payload);
             state.notification_count += 1;
         },
+        removeNotification: (state, action) => {
+            state.notifications = state.notifications.filter(n => n._id !== action.payload);
+        }
 
     },
     extraReducers: (builder) => {
@@ -155,6 +158,6 @@ const notificationsSlice = createSlice({
     }
 })
 
-export const {setLastReadStatus, pushNotificationOverlay, removeNotificationOverlay, toggleNotificationPanel, pushNotification} = notificationsSlice.actions;
+export const {setLastReadStatus, pushNotificationOverlay, removeNotificationOverlay, toggleNotificationPanel, pushNotification, removeNotification} = notificationsSlice.actions;
 
 export default notificationsSlice.reducer;

@@ -18,6 +18,7 @@ import { useVoiceChannelCtxMenu } from "./Options/useVoiceChannelCtxMenu";
 import { useConnectionCtxMenu } from "./Options/useConnectionCtxMenu";
 import { useInputCtxMenu } from "./Options/useInputCtxMenu";
 import { useUserControlsCtxMenu } from "./Options/UserOptions/useUserControlsCtxMenu";
+import { useServerCtxMenu } from "./Options/useServerCtxMenu";
 
 export const useContextMenuOptions = () => {
 
@@ -59,6 +60,8 @@ export const useContextMenuOptions = () => {
 
     const {getUserControlsOptions} = useUserControlsCtxMenu();
 
+    const {getServerOptions} = useServerCtxMenu();
+
     const getOptions = (e, permissions = {}) => {
         try {
             const options = [];
@@ -78,7 +81,7 @@ export const useContextMenuOptions = () => {
                     continue;
                 }
             }
-           
+        
             if (data.appSubmenu) getAppSubmenuOptions(options);
 
             if (data.appSubmenu || data.widgetsOverlay) getViewWidgetsOption(options);
@@ -116,6 +119,8 @@ export const useContextMenuOptions = () => {
             if (data.mobileMenu) getMobileMenuOptions(options);
 
             if (data.room || data.appSubmenu) getVoiceChannelOptions(options, permissions);
+
+            if (data.server) getServerOptions(options, data.server);
 
             if (data.input) getInputOptions(options, data);
 

@@ -19,7 +19,7 @@ export const ExpandedImage = () => {
 
   return (
     <>
-    {image && (<ExpandedImageViewer onClose={close} src={image} open={true} context={data ? data : {src: image, image: image, type: 'image'}} />)}
+    {image && (<ExpandedImageViewer onClose={close} src={image} open={true} context={data ? {...data, type: 'image'} : {src: image, image: image, type: 'image'}} />)}
     </>
   );
   };

@@ -11,12 +11,12 @@
 }
 
 .sender {
-  color: var(--link-color);
+  color: var(--accent-color);
 }
 
 .channel {
   font-style: normal;
-  color: var(--link-color);
+  color: var(--accent-color);
 }
 
 .body {

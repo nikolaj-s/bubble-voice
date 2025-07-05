@@ -9,6 +9,7 @@ import { setFromDate, setSelectedChannelToFilter, setTextChannelFilter } from ".
 import Dropdown from "../../../../components/ui/Inputs/DropDown/DropDown";
 import { InlineLabel } from "../../../../components/ui/Titles/InlineLabel/InlineLabel";
 import { useEffect, useState } from "react";
+import { InlineToggleGroup } from "../../../../components/ui/InlineToggleGroup/InlineToggleGroup";
 
 const SocialFilter = ({ onFilterChange = () => {} }) => {
 
@@ -51,30 +52,7 @@ const SocialFilter = ({ onFilterChange = () => {} }) => {
   return (
     <div className={styles.filterContainer}>
       <InlineLabel title={"Has / Is"} />
-      <button
-        className={`${styles.filterButton} ${filters.hasImage ? styles.active : ""}`}
-        onClick={() => toggleFilter("hasImage")}
-      >
-        Image
-      </button>
-      <button
-        className={`${styles.filterButton} ${filters.hasVideo ? styles.active : ""}`}
-        onClick={() => toggleFilter("hasVideo")}
-      >
-        Video
-      </button>
-      <button
-        className={`${styles.filterButton} ${filters.hasLink ? styles.active : ""}`}
-        onClick={() => toggleFilter("hasLink")}
-      >
-        Link
-      </button>
-      <button
-        className={`${styles.filterButton} ${filters.isPinned ? styles.active : ""}`}
-        onClick={() => toggleFilter("isPinned")}
-      >
-       Pinned
-      </button>
+      <InlineToggleGroup toggles={{hasImage: {value: filters.hasImage, label: 'Image'}, hasVideo: {value: filters.hasVideo, label: "Video"}, isPinned: {value: filters.isPinned, label: 'Pinned'}, hasLink: {value: filters.hasLink, label: "Link"}}} onToggle={toggleFilter} />
       <PillSpacer height={15} verticle={true} />
       <InlineLabel title={'From'} />
       <DatePicker onDateChange={onDateChange} />

@@ -8,8 +8,6 @@ import { UserIndicator } from '../../UserIndicator/UserIndicator';
 import { TextIndicator } from '../../ui/TextIndicator/TextIndicator';
 import { useDispatch } from 'react-redux';
 import { expandVideo } from '../../../features/Media/ExpandedVideo/expandedVideoSlice';
-import { setOverlay } from '../../../features/Overlay/overlaySlice';
-
 export const MediaItem = ({ title, duration, thumbnail, src, url, inQueue, added_by, nsfw, status, action = () => {}, position, context = {}, at, style }) => {
 
   const dispatch = useDispatch();
@@ -21,8 +19,6 @@ export const MediaItem = ({ title, duration, thumbnail, src, url, inQueue, added
     e.stopPropagation();
 
     dispatch(expandVideo(context));
-
-    dispatch(setOverlay('expandVideo'));
   }
 
   return (

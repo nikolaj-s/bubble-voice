@@ -16,7 +16,7 @@ export const useUserStreamCtxMenu = () => {
 
     const getUserStreamOptions = useCallback((options, data) => {
 
-        if (data.user_id !== user_id) {
+        if (data._id !== user_id) {
 
                 const volume_source_key = `streamAudio-${data.user_id}`;
 

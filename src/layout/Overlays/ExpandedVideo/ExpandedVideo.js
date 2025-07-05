@@ -1,23 +1,23 @@
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { UniversalVideoPlayer } from '../../../components/ui/Video/UniversalVideoPlayer/UniversalVideoPlayer'
-import { MediaTooltipWrapper } from '../../../components/ui/Wrappers/MediaTooltipWrapper/MediaTooltipWrapper'
-import { ToolBar } from '../../../components/ui/Wrappers/ToolBar/ToolBar'
-import IconButton from '../../../components/ui/Buttons/IconButton/IconButton'
-import { X } from 'lucide-react'
-import { MediaInfo } from '../../../components/MediaInfo/MediaInfo'
+import { expandVideo } from '../../../features/Media/ExpandedVideo/expandedVideoSlice'
+import { ExpandedMediaWrapper } from '../../../components/ui/Wrappers/ExpandedMediaWrapper/ExpandedMediaWrapper'
 
-export const ExpandedVideo = ({close}) => {
+export const ExpandedVideo = () => {
+
+    const dispatch = useDispatch();
 
     const {video} = useSelector(state => state.expandedVideoSlice)
 
+    const close = () => {
+        dispatch(expandVideo(null));
+    }
+
+    if (!video) return null;
+
     return (
-        <>
-        <MediaTooltipWrapper media={{...video, type: 'video'}}>
+        <ExpandedMediaWrapper context={{...video, type: 'video'}} onClose={close} >
             <UniversalVideoPlayer autoplay={true} src={video.url || video.src} />
-        </MediaTooltipWrapper>
-        <ToolBar>
-            <MediaInfo data={video} />
-        </ToolBar>
-        </>
+        </ExpandedMediaWrapper>
     )
 }

@@ -79,6 +79,9 @@ const textChannelSlice = createSlice({
         setTextForTextChannel: (state, action) => {
             if (typeof action.payload !== 'string') return;
             state.text = action.payload;
+        },
+        clearMessagesByUser: (state, action) => {
+            state.messages = state.messages.filter(m => m.user_id !== action.payload.user_id);
         }
     },
     extraReducers: (builder) => {
@@ -175,7 +178,8 @@ export const {
     setTextChannelPos,
     updateMessage,
     setReplyTo,
-    setTextForTextChannel
+    setTextForTextChannel,
+    clearMessagesByUser
 } = textChannelSlice.actions;
 
 export default textChannelSlice.reducer;

@@ -1,12 +1,15 @@
 import React from 'react'
 import { ToolBar } from '../../../components/ui/Wrappers/ToolBar/ToolBar'
 import IconButton from '../../../components/ui/Buttons/IconButton/IconButton'
-import { Ellipsis, Home, Newspaper } from 'lucide-react'
+import { Ellipsis, Home, Newspaper, UserPlus } from 'lucide-react'
 import { triggerContext } from '../../../lib/services/helperFunctions'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router'
 import { toggleMobileMenu } from '../../../features/Mobile/mobileSlice'
 import { setVoiceChannelFocused } from '../../../features/Channel/VoiceChannel/voiceChannelSlice'
+import { setFilter } from '../../../features/Search/searchSlice'
+import { setOverlay } from '../../../features/Overlay/overlaySlice'
+import { usePermissions } from '../../../hooks/usePermissions'
 
 export const ServerNav = () => {
 
@@ -20,6 +23,8 @@ export const ServerNav = () => {
 
     const {server_id} = useSelector(state => state.serverDetailsSlice);
 
+    const permissions = usePermissions();
+    
     const basePath = `/dashboard/server/${server_id}`;
 
     const normalizePath = (path) => path.replace(/\/+$/, '');
@@ -49,6 +54,16 @@ export const ServerNav = () => {
             backgroundColor={currentPath === `${basePath}/activity` && !focused ? 'var(--button-hover)' : null}
             />
             <div style={{width: '100%'}} />
+            {permissions?.user_can_manage_invites && (
+                <IconButton 
+                Icon={UserPlus}
+                title={'Invite Users'}
+                onClick={() => {
+                    dispatch(setFilter({path: 'users'}));
+                    dispatch(setOverlay('search'));
+                }}
+                />
+            )}
             <IconButton 
             Icon={Ellipsis}
             title={'More'}

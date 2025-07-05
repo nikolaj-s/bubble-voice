@@ -1,0 +1,16 @@
+
+
+.container {
+    padding: var(--padding);
+    width: calc(100%);
+    box-sizing: border-box;
+    background-color: var(--card-background-color);
+    border-radius: var(--border-radius);
+    gap: var(--gap);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    position: relative;
+}
+
+

@@ -2,7 +2,7 @@ import React from 'react'
 import { QuickMenuWrapper } from '../../../components/ui/Wrappers/QuickMenuWrapper/QuickMenuWrapper'
 import Label from '../../../components/ui/Titles/Label/Label'
 import { useDispatch, useSelector } from 'react-redux'
-import { toggleNotificationPanel } from '../../../features/Notifications/notificationsSlice';
+import { removeNotification, toggleNotificationPanel } from '../../../features/Notifications/notificationsSlice';
 
 import ScrollLoadWrapper from '../../../components/ui/Wrappers/ScrollLoadWrapper/ScrollLoadWrapper';
 
@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router';
 import { deleteNotification } from '../../../features/Notifications/Thunks/deleteNotification';
 import TextLabelError from '../../../components/Error/TextLabelError/TextLabelError';
 import { closeOverlay } from '../../../features/Overlay/overlaySlice';
+import { JoinServer } from '../../../features/JoinServer/Thunks/JoinServer';
 
 
 export const Notifications = () => {
@@ -42,10 +43,23 @@ export const Notifications = () => {
     const handleOpenNotification = (data) => {
 
         if (data.type === 'reply') {
-            navigate(`/dashboard/server/${data.server_id._id}/channel/${data.channel_id._id}?message=${data.message_id}`)
+            navigate(`/dashboard/server/${data.server_id._id}/channel/${data.channel_id._id}?message=${data.message_id}`);
+
+            dispatch(deleteNotification(data._id));
         }
 
-        dispatch(deleteNotification(data._id));
+        if (data.type === 'server_invite') {
+            if (data.accepted) {
+
+                dispatch(JoinServer({inviteKey: data._id, navigate}));
+
+                dispatch(removeNotification(data._id));
+
+            } else {
+                dispatch(deleteNotification(data._id));
+            }
+        }
+
 
         dispatch(closeOverlay());
 

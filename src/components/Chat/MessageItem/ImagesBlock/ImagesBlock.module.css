@@ -1,0 +1,14 @@
+
+.container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap);
+}
+
+.imageWrapper {
+    width: 150px;
+    height: 150px;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}

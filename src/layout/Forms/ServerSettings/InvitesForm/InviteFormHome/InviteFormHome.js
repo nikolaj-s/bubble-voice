@@ -25,12 +25,12 @@ export const InviteFormHome = ({permissions, setSearchParams}) => {
         <Label label='Generate a One-Time Invite Link' />
         <LinkDisplay value={inviteLink} />
         <Description description={'Create a secure, single-use invite link to share with someone you trust. Once used, the link will expire and cannot be reused.'} />
-        <TextButton action={handleGenerateInviteLink} title='Generate Link' icon={<Link color='var(--text-color)' />} />
+        <TextButton action={handleGenerateInviteLink} title='Generate Link' icon={Link} maxWidth={170} />
         <LineSpacer />
         <Label label='Invite A User' />
-        <TextButton title='Invite' action={() => {setSearchParams({section: 'invites', invites: 'inviteUser'})}} />
+        <TextButton title='Invite' action={() => {setSearchParams({section: 'invites', invites: 'inviteUser'})}} maxWidth={170} />
         <Label label='View Pending Invites' />
-        <TextButton title='Pending Invites' action={() => {setSearchParams({section: 'invites', invites: 'pendingInvites'})}} />
+        <TextButton title='Pending Invites' action={() => {setSearchParams({section: 'invites', invites: 'pendingInvites'})}} maxWidth={170} />
         </>
     )
 }

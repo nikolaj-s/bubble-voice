@@ -8,7 +8,8 @@ const ScrollLoadWrapper = ({
   noMoreItems,         // Boolean, disables loadMore
   className = "",      // Optional, custom classes
   style,               // Optional, custom styles
-  threshold = 80,     // px distance from bottom to trigger loadMore
+  threshold = 80,
+  maxContentWidth = 1000     // px distance from bottom to trigger loadMore
 }) => {
   const containerRef = useRef();
 
@@ -29,8 +30,10 @@ const ScrollLoadWrapper = ({
       ref={containerRef}
       onScroll={handleScroll}
       tabIndex={0}
-    >
-      {children}
+    > 
+      <div style={{maxWidth: maxContentWidth}} className={styles.content}>
+        {children}
+      </div>
       <div className={styles.bottomBar}>
         {loading && (
           <div className={styles.loader}>

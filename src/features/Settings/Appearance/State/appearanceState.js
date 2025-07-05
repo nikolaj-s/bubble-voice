@@ -11,7 +11,7 @@ export const initialState = () => {
 
     const disableStreamAmbiance = JSON.parse(localStorage.getItem('disableStreamAmbiance')) || false;
 
-    const theme = localStorage.getItem('theme') || 'default'; // 'default' = your dark theme
+    const theme = JSON.parse(localStorage.getItem('theme')) || 'default'; // 'default' = your dark theme
 
     const fontSize = JSON.parse(localStorage.getItem('fontSize')) || 14;
 

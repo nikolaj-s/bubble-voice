@@ -61,7 +61,7 @@ export const Servers = () => {
         dispatch(reorderServers(newOrder))
 
     }
-
+console.log(servers)
     return (
         <div 
         style={{
@@ -71,7 +71,7 @@ export const Servers = () => {
         className={styles.serverButtons}>
             <VerticalReorderWrapper items={servers} onReorder={handleReorderServers} >
                 {servers.map(s => {
-                    return <ServerButton action={handleSwitchServer} key={s.server_id} {...s} />
+                    return <ServerButton server={s} action={handleSwitchServer} key={s.server_id} {...s} />
                 })}
             </VerticalReorderWrapper>
         </div>

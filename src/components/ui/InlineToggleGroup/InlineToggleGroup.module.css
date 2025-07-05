@@ -1,0 +1,32 @@
+.container {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  background-color: var(--background-color);
+}
+
+.toggleButton {
+  padding: 5px 10px;
+  height: 40px;
+  font-size: 0.875rem;
+  font-family: var(--font-family);
+  background: var(--background-color);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  border: none;
+}
+
+.toggleButton:hover {
+  background: var(--button-hover);
+}
+
+.active {
+  background: var(--button-background);
+}
+
+.inactive {
+  background: transparent;
+}

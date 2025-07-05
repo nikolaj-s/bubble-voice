@@ -1,9 +1,9 @@
-import React from 'react';
+
 import styles from './NotificationItem.module.css';
 import NotificationReplyItem from './NotificationReplyItem.js/NotificationReplyItem';
 import { getTimeAgo } from '../../../../lib/services/getTimeAgo';
 import { Subtitle } from '../../../../components/ui/Titles/Subtitle/Subtitle';
-import Label from '../../../../components/ui/Titles/Label/Label';
+import { NotificationInviteItem } from './NotificationInviteItem/NotificationInviteItem';
 
 const NotificationItem = ({ notification, onClick, onDelete }) => {
   const { type, read, createdAt } = notification;
@@ -15,6 +15,9 @@ const NotificationItem = ({ notification, onClick, onDelete }) => {
     //  break;
     case 'reply':
       ContentComponent = NotificationReplyItem;
+      break;
+    case 'server_invite':
+      ContentComponent = NotificationInviteItem;
       break;
     //case 'mention':
     //  ContentComponent = NotificationMention;
@@ -32,7 +35,7 @@ const NotificationItem = ({ notification, onClick, onDelete }) => {
       onClick={() => onClick(notification)}
     >
         <Subtitle>{notification.title}</Subtitle>
-        <ContentComponent {...notification} />
+        <ContentComponent {...notification} onAccept={() => {onClick({...notification, accepted: true})}} onDecline={() => {onClick({...notification, accepted: false})}} />
         <Subtitle>{getTimeAgo(createdAt)}</Subtitle>
     </div>
   );

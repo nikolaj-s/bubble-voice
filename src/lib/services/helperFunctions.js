@@ -53,12 +53,12 @@ export const triggerContext = (e, id) => {
 
     const event = new MouseEvent("contextmenu", {
         bubbles: true,
-        cancelable: true,
+        cancelable: false,
         view: window,
         clientX: e.clientX, // Set X position
         clientY: e.clientY, // Set Y position
         });
-        
+       
         element.dispatchEvent(event);
 }
 

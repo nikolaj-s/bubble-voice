@@ -2,7 +2,7 @@
   display: flex;
   align-items: flex-start;
   gap: 15px;
-  background: var(--card-background-color);
+  background: var(--primary-color);
   padding: 15px;
   border-radius: var(--border-radius);
   box-shadow: 0 2px 16px 0 rgba(18,26,34,0.22);

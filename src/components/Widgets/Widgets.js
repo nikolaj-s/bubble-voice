@@ -14,6 +14,7 @@ import { RichTextWidget } from './RichTextWidget/RichTextWidget';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { DynamicMediaWidget } from './DynamicMediaWidget/DynamicMediaWidget';
 import { MediaPlayerWidget } from './MediaPlayerWidget/MediaPlayerWidget';
+import { Card } from '../ui/Wrappers/Card/Card';
 
 const SortableWidget = ({ id, children, editing, widget }) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
@@ -28,7 +29,7 @@ const SortableWidget = ({ id, children, editing, widget }) => {
   };
 
   return (
-    <div id={id} ref={setNodeRef} data-context={JSON.stringify({...widget, type: 'widget', editing})} style={style} className={styles.widgetWrapper}>
+    <Card id={id} ref={setNodeRef} data-context={JSON.stringify({...widget, type: 'widget', editing})} style={style} className={styles.widgetWrapper}>
       {editing && (
         <div className={styles.controls}>
           <IconButton 
@@ -48,7 +49,7 @@ const SortableWidget = ({ id, children, editing, widget }) => {
       }}>
       {children}
       </div>
-    </div>
+    </Card>
   );
 };
 
@@ -120,7 +121,7 @@ export const Widgets = ({ widgets, editing, onReorder = () => {}, openAddWidgets
     if (widgets.length === 0) return <NoWidgetsPlaceholder user_can_edit_channels={true} action={openAddWidgets} />
 
     return (
-        <div className={styles.container}>
+        <>
           <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd} modifiers={[restrictToVerticalAxis]}>
               <SortableContext
               items={currentWidgets.map(w => w._id)}
@@ -129,6 +130,6 @@ export const Widgets = ({ widgets, editing, onReorder = () => {}, openAddWidgets
                 <WidgetList widgets={currentWidgets} editing={editing} />
               </SortableContext>
           </DndContext>
-        </div>
+        </>
     );
 };

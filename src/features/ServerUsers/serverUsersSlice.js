@@ -43,7 +43,7 @@ const serverUsersSlice = createSlice({
             }
         },
         removeUser: (state, action) => {
-
+            delete state.users[action.payload.user_id];
         },
         removeServerGroupFromUsers: (state, action) => {
             for (const [key, value] of Object.entries(state.users)) {

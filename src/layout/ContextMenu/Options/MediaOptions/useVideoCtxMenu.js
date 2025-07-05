@@ -31,6 +31,8 @@ export const useVideoCtxMenu = () => {
                 options.push({
                     label: mediaPlayerState.currentlyPlaying ? "Add To Queue" : "Play In Channel",
                     onClick: () => {
+                        dispatch(expandVideo(null));
+
                         dispatch(setOverlay('mediaPlayer'));
 
                         dispatch(addMediaToPlayer(data.video));
@@ -63,8 +65,6 @@ export const useVideoCtxMenu = () => {
             label: "Preview",
             onClick: () => {
                 dispatch(expandVideo(data.video));
-
-                dispatch(setOverlay("expandVideo"))
             },
             type: "button",
             icon: <Play color="var(--text-color)" />

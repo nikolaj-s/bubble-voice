@@ -5,6 +5,7 @@ import ProfileBio from './ProfileBio/ProfileBio';
 import MiniStreamIndicator from '../ui/MiniStreamIndicator/MiniStreamIndicator';
 import ProfileCard from './ProfileCard/ProfileCard';
 import { ProfileActionBar } from './ProfileActionBar/ProfileActionBar';
+import { ProfileStreamPreview } from './ProfileStreamPreview/ProfileStreamPreview';
 
 export const Profile = ({account = {}, options = false}) => {
     
@@ -20,7 +21,7 @@ export const Profile = ({account = {}, options = false}) => {
             <ProfileActionBar profile={account} />
             {!options && (
                 <>
-                {channelStatus?.streamDetails && (<MiniStreamIndicator streamColor={channelStatus?.streamColor} thumbnail={channelStatus?.streamPreview} name={channelStatus?.streamDetails?.name} />)}
+                <ProfileStreamPreview {...account} />
                 <ProfileBio {...account} />
                 </>
             )}

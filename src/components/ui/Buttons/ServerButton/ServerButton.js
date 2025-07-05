@@ -10,7 +10,7 @@ import { AlertIndicator } from '../../AlertIndicator/AlertIndicator';
 import ServerActivityIndicator from '../../ServerActivityIndicator/ServerActivityIndicator';
 import { ServerPreview } from './ServerPreview/ServerPreview';
 
-export const ServerButton = ({ action, server_banner, server_name, server_id, active_users = [], unread_message}) => {
+export const ServerButton = ({ action, server_banner, server_name, server_id, active_users = [], unread_message, server}) => {
     
     const [isActive, setIsActive] = React.useState(false);
 
@@ -27,7 +27,7 @@ export const ServerButton = ({ action, server_banner, server_name, server_id, ac
     }
 
     return (
-        <div style={{position: 'relative'}}>
+        <div data-context={JSON.stringify({...server, type: 'server'})} style={{position: 'relative'}}>
             <AlertIndicator active={unread_message} />
             <IconButton 
             backgroundColor={isActive ? 'var(--accent-color)' : 'var(--background-color)'}

@@ -18,7 +18,7 @@ export const JoinServer = createAsyncThunk(
 
             const {token} = getState().authSlice;
 
-            const response = await axios.post(`${API_URL}/join-new-server`, {
+            const response = await axios.post(`${API_URL}/server/join`, {
                 password: password,
                 server_id: selectedServer.server_id,
                 inviteKey

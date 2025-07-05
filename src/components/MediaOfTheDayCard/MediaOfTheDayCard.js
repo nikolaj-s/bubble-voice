@@ -17,6 +17,7 @@ import { setOverlay } from '../../features/Overlay/overlaySlice';
 import { Subtitle } from '../ui/Titles/Subtitle/Subtitle';
 import { expandVideo } from '../../features/Media/ExpandedVideo/expandedVideoSlice';
 import VideoThumbnail from '../ui/Video/VideoThumbnail/VideoThumbnail';
+import { Card } from '../ui/Wrappers/Card/Card';
 
 const MediaOfTheDayCard = ({ title = "Media of the day", query, tags = "", src, type = 'image', date, media = {}}) => {
 
@@ -64,7 +65,9 @@ const MediaOfTheDayCard = ({ title = "Media of the day", query, tags = "", src, 
 
 
   return (
-    <div data-context={JSON.stringify(media)} className={styles.mediaCard}>
+    <Card data-context={JSON.stringify(media)} style={{maxHeight: 800, minHeight: 500, flexShrink: 0}} >
+
+      <MediaTitle icon={Icon} title={title} />
       <div className={styles.mediaContent}>
         <NsfwWrapper nsfw={media} >
         {type === 'video' ? (
@@ -77,9 +80,8 @@ const MediaOfTheDayCard = ({ title = "Media of the day", query, tags = "", src, 
           </LongPressGestureWrapper>
         )}
         </NsfwWrapper>
-        <MediaTitle icon={Icon} title={title} />
       </div>
-      <div className={styles.mediaFooter}>
+      <Card style={{backgroundColor: 'var(--background-color)'}}>
         <div className={styles.mediaQuery}>
           Media found related to: {
           source.type === 'image' ?
@@ -94,8 +96,8 @@ const MediaOfTheDayCard = ({ title = "Media of the day", query, tags = "", src, 
               <span className={styles.mediaTag} key={idx}>#{tag}</span>
             ))}
           </div>
-        </div>
-    </div>
+        </Card>
+    </Card>
   );
 };
 

@@ -11,6 +11,7 @@ import { ServerRecommendations } from './ServerRecommendations/ServerRecommendat
 import { WidgetArray } from '../../../components/Widgets/Widgets';
 
 import { fetchPinnedWidgets } from '../../../features/Widgets/Thunks/fetchPinnedWIdgets';
+import ScrollLoadWrapper from '../../../components/ui/Wrappers/ScrollLoadWrapper/ScrollLoadWrapper';
 
 export const ServerDashboard = () => {
 
@@ -33,10 +34,10 @@ export const ServerDashboard = () => {
     }, [server_id, dispatch])
    
     return (
-        <ResponsiveGrid>
+        <ScrollLoadWrapper>
             <ServerWelcomeMessage {...details} display_name={display_name} />
             {recommendations}
             {widgets?.length > 0 && (WidgetArray(widgets))}
-        </ResponsiveGrid>
+        </ScrollLoadWrapper>
     )
 }

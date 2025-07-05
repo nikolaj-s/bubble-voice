@@ -18,7 +18,9 @@ import { UserBlock } from './UserBlock/UserBlock';
 import { ReplyBlock } from './ReplyBlock/ReplyBlock';
 import { ToolBar } from '../../ui/Wrappers/ToolBar/ToolBar';
 import { MediaInfo } from '../../MediaInfo/MediaInfo';
-import { MediaItem } from '../../MediaPlayer/MediaItem/MediaItem';
+import { ImagesBlock } from './ImagesBlock/ImagesBlock';
+import ProcessingBlock from './ProcessingBlock/ProcessingBlock';
+import { VideoPreview } from '../../ui/Video/VideoPreview/VideoPreview';
 
 export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inSearch = false, isReply, reply = () => {}, notification}) => {
 
@@ -70,11 +72,13 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
                             <UserBlock users={users} message={message} prevMessage={prevMessage} isDifferentDay={isDifferentDay} styles={styles} />
                         
                             <TextBlock {...message} styles={styles} />
-                            {message.media_item && (<MediaItem {...message.media_item} context={message.media_item} />)}
+                            {message.media_item && (<VideoPreview {...message.media_item} context={message.media_item} />)}
                             <ImageBlock {...message} styles={styles} loading={message.loading || loading} />
                             <VideoBlock {...message} styles={styles} />
                             {!message.image  && !message.video && !message.link_preview && (<LinkComponent link={message.link} />)}
                             <LinkPreview {...message} /> 
+                            <ImagesBlock {...message} />
+                            <ProcessingBlock {...message} />
                         </div>
                     </div>
                 </div>

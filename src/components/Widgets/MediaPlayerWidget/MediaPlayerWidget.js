@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './MediaPlayerWidget.module.css';
-import { FolderSearch, Bookmark, ImageOff } from 'lucide-react';
+import { FolderSearch, Bookmark, ImageOff, Play } from 'lucide-react';
 import { LineSpacer } from '../../ui/Spacers/LineSpacer/LineSpacer';
 import Header from '../../ui/Titles/Header/Header';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,6 +10,8 @@ import ContentPlaceholder from '../../ui/Placeholders/ContentPlaceholder/Content
 import { expandVideo } from '../../../features/Media/ExpandedVideo/expandedVideoSlice';
 import { addMediaToPlayer } from '../../../features/MediaPlayer/Thunks/addMediaToPlayer';
 import { setChannelToViewWidgetsOf } from '../../../features/Widgets/widgetsSlice';
+import ContentHeader from '../../Headers/ContentHeader/ContentHeader';
+import { ToolBar } from '../../ui/Wrappers/ToolBar/ToolBar';
 
 export const MediaPlayerWidget = ({ channel_id, saves = [] }) => {
 
@@ -33,17 +35,12 @@ export const MediaPlayerWidget = ({ channel_id, saves = [] }) => {
       dispatch(setOverlay('mediaPlayer'));
     } else {
       dispatch(expandVideo(mediaItem));
-      dispatch(setOverlay('expandVideo'));
     }
   }
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.header}>
-        <Header level={3} text={`Saved Media From ${channel.channel_name || '…'}`} />
-        <LineSpacer margin="0 0 8px 0" />
-      </div>
-
+      <ContentHeader Icon={Play} title={`Saved Media From ${channel.channel_name}`} />
       <div className={styles.list}>
         {saves.length > 0 ? (
           saves.map(save => (
@@ -54,7 +51,7 @@ export const MediaPlayerWidget = ({ channel_id, saves = [] }) => {
         )}
       </div>
 
-      <div className={styles.footer}>
+      <ToolBar>
         <button
           className={styles.actionButton}
           onClick={() => goTo('mediaPlayerSaves')}
@@ -69,7 +66,7 @@ export const MediaPlayerWidget = ({ channel_id, saves = [] }) => {
           <FolderSearch size={20} />
           <span>Discover</span>
         </button>
-      </div>
+      </ToolBar>
 
       <div className={styles.bubbleBackground}>
         <span className={`${styles.bubble} ${styles.b1}`} />
@@ -77,5 +74,6 @@ export const MediaPlayerWidget = ({ channel_id, saves = [] }) => {
         <span className={`${styles.bubble} ${styles.b3}`} />
       </div>
     </div>
+
   );
 };
