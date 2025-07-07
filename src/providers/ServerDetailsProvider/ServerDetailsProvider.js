@@ -30,6 +30,8 @@ export const ServerDetailsProvider = ({children}) => {
     const [showLoading, toggleShowLoading] = React.useState(false);
 
     React.useEffect(() => {
+console.log(serverID, 'fetchserverDetailsProvider')
+        let timeout;
 
         if (!serverID) return;
 
@@ -38,33 +40,30 @@ export const ServerDetailsProvider = ({children}) => {
         const handleFetchServerDetails = async () => {
 
             dispatch(setServerDetailsStatus('loading'));
-
-            setTimeout(async () => {
-                const data = await socket.request('fetch server details', {server_id: serverID})
-                .then(res => res)
-                .catch(error => {
-                    console.log(error);
-                    if (error === "Server Not Found") {
-                        navigate('/dashboard/not-found')
-                    } else {
-                        navigate('/dashboard/not-found')
-                    }
-
-                    return {error: true}
-                });
-                
-                if (data.details) {
-
-                    dispatch(setServerDetails(data.details));
-
+            
+            const data = await socket.request('fetch server details', {server_id: serverID})
+            .then(res => res)
+            .catch(error => {
+                console.log(error);
+                if (error === "Server Not Found") {
+                    navigate('/dashboard/not-found')
+                } else {
+                    navigate('/dashboard/not-found')
                 }
 
-                if (data.permissions) {
-                    dispatch(setPermissions(data.permissions));
-                }
-            }, 10)
-                
+                return {error: true}
+            });
+          
+            if (data.details) {
 
+                dispatch(setServerDetails(data.details));
+
+            }
+
+            if (data.permissions) {
+                dispatch(setPermissions(data.permissions));
+            }
+        
             return;
         }
 

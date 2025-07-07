@@ -3,29 +3,48 @@ import { APIErrorHandler } from "../../../lib/handlers/APIErrorHandler/APIErrorH
 import axios from "axios";
 import { API_URL } from "../../../lib/Validation";
 
+const CACHE_KEY = "userRecommendations";
+const TTL_MS     = 12 * 60 * 60 * 1000; // 12 hours
 
 export const fetchUserRecommendations = createAsyncThunk(
-    'fetchUserRecommendations/userRecommendations',
-    async (__, {rejectWithValue, getState}) => {
+  "fetchUserRecommendations/userRecommendations",
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const { token } = getState().authSlice;
+      if (!token) return rejectWithValue("Validation Error");
+
+      // 1) Try to load from cache
+      const raw = localStorage.getItem(CACHE_KEY);
+      if (raw) {
         try {
-
-            const {token} = getState().authSlice;
-
-            if (!token) return rejectWithValue("Validation Error");
-
-            const response = await axios({
-                method: "GET",
-                headers: {TOKEN: token},
-                url: `${API_URL}/recommendations/fetch-user-recommendations`
-            })
-
-            console.log(response);
-
-            return response.data;
-
-        } catch (error) {
-            console.log(error);
-            return APIErrorHandler(rejectWithValue, error, 'Internal Server Error')
+          const { timestamp, data } = JSON.parse(raw);
+          if (Date.now() - timestamp < TTL_MS) {
+            // still fresh—return cached data
+            return data;
+          }
+        } catch {
+          // if parse fails, fall back to network
         }
+      }
+
+      // 2) Fetch from API
+      const response = await axios.get(
+        `${API_URL}/recommendations/fetch-user-recommendations`,
+        { headers: { TOKEN: token } }
+      );
+      const result = response.data;
+
+      // 3) Cache if it meets criteria
+      if (Array.isArray(result) && result.length > 10) {
+        localStorage.setItem(
+          CACHE_KEY,
+          JSON.stringify({ timestamp: Date.now(), data: result })
+        );
+      }
+
+      return result;
+    } catch (error) {
+      return APIErrorHandler(rejectWithValue, error, "Internal Server Error");
     }
-)
+  }
+);

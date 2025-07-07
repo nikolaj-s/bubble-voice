@@ -1,44 +1,65 @@
+// src/features/textChannel/Thunks/fetchMessages.js
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { APIErrorHandler } from "../../../../lib/handlers/APIErrorHandler/APIErrorHandler";
 import axios from "axios";
+import { APIErrorHandler } from "../../../../lib/handlers/APIErrorHandler/APIErrorHandler";
 import { API_URL } from "../../../../lib/Validation";
-
+import { loadMessagesFromCache } from "../textChannelSlice";
+import { getCachedMessages } from "../../../../lib/indexedDBCache";
 
 export const fetchMessages = createAsyncThunk(
-    'fetchMessages/textChannelSlice',
-    async (params, {rejectWithValue, getState, dispatch}) => {
-        try {
+  'textChannel/fetchMessages',
+  async (params, { rejectWithValue, getState, dispatch }) => {
+    const { channel_id, last_message_id, count = 20 } = params;
 
-            const {token} = getState().authSlice;
-            
-            if (!params.channel_id) return rejectWithValue("Invalid Channel");
-
-            const {server_id} = getState().serverDetailsSlice;
-
-            let count = 20;
-
-            const textChannelPos = JSON.parse(sessionStorage.getItem(`${params.channel_id}-pagination`)) || null;
-
-            if (textChannelPos && !params?.last_message_id) {
-                count = textChannelPos.count;
-            }
-
-            const response = await axios({
-                method: "GET",
-                url: `${API_URL}/text-channel/fetch`,
-                params: {channel_id: params.channel_id, last_message_id: params?.last_message_id, count: count, server_id: server_id, message_id: params?.message_id},
-                headers: {TOKEN: token}
-            })
-
-            if (response.data.messages) {
-                return response.data;
-            }
-
-            return {messages: [], no_more_messages: true};
-
-        } catch (error) {
-            console.log(error);
-            return APIErrorHandler(rejectWithValue, error, 'Internal Server Error');
-        }
+    if (!channel_id) {
+      return rejectWithValue("Invalid Channel");
     }
-)
+
+    let cachedRec = null;
+    const STALE_MS = 3 * 60 * 60 * 1000; // 3h
+
+    // 1️⃣ Try to load from IndexedDB on initial load
+    if (!last_message_id) {
+      try {
+        const rec = await getCachedMessages(channel_id);
+
+        if (rec && (Date.now() - rec.cachedAt) < STALE_MS) {
+
+          cachedRec = rec;
+
+          dispatch(loadMessagesFromCache({ channel_id, messages: rec.messages }));
+
+        }
+      } catch {
+        // ignore any idb errors
+      }
+    }
+
+    // 2️⃣ Fetch fresh from server, including cachedLength if we had a valid cache
+    try {
+      const { token } = getState().authSlice;
+
+      const { server_id } = getState().serverDetailsSlice;
+
+      const query = { channel_id, last_message_id, count, server_id };
+
+      if (!last_message_id && Array.isArray(cachedRec?.messages)) {
+        query.count = cachedRec.messages.length;
+      }
+
+      const response = await axios.get(`${API_URL}/text-channel/fetch`, {
+        params:  query,
+        headers: { TOKEN: token }
+      });
+
+      return {
+        channel_id,
+        messages:        response.data.messages || [],
+        no_more_messages: response.data.no_more_messages,
+        last_message_id
+      };
+    } catch (err) {
+      return APIErrorHandler(rejectWithValue, err, 'Internal Server Error');
+    }
+  }
+);

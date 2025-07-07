@@ -62,9 +62,10 @@
 
 /* Fixed Sections (250px width) */
 .fixedSection {
-  width: 225px;
+  width: 250px;
   background-color: var(--secondary-color);
   animation: pulse 1.5s infinite ease-in-out;
+  border-top-left-radius: 15px;
 }
 
 /* Center Section (fills remaining space) */

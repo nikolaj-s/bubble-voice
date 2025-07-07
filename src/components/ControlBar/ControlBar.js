@@ -35,10 +35,6 @@ export const ControlBar = () => {
         dispatch(setCurrentVoiceChannel(null));
     }
 
-    const openQuickSettings = () => {
-        dispatch(setOverlay('settingsQuickMenu'));
-    }
-
     return (
         <>
         <div

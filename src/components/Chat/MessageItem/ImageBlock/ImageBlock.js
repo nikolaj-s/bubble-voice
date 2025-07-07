@@ -29,9 +29,7 @@ export const ImageBlock = ({image, loading, nsfw, styles, width, height = 350, m
         onClick={expandImage}
         className={styles.imageBlock}>
             <NsfwWrapper nsfw={{nsfw}}>
-                
-                    <ImageComponent borderRadius={'var(--border-radius)'} width={'auto'} aspectRatio={aspectRatio} height={height > maximumMediaHeight || !height ? maximumMediaHeight : height} src={image} />
-               
+                <ImageComponent borderRadius={'var(--border-radius)'} width={'auto'} aspectRatio={aspectRatio} height={height > maximumMediaHeight || !height ? maximumMediaHeight : height} src={image} />   
             </NsfwWrapper>
         </div>
         : null}

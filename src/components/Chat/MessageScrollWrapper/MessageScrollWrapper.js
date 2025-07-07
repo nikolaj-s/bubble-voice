@@ -7,7 +7,6 @@ import React, {
 import PropTypes from "prop-types";
 import styles from "./MessageScrollWrapper.module.css";
 
-import {motion} from 'framer-motion';
 import { LoadingWheel } from "../../ui/Loading/LoadingWheel/LoadingWheel";
 
 export const MessageScrollWrapper = ({
@@ -112,13 +111,10 @@ export const MessageScrollWrapper = ({
   }, [scrollToBottomFlag, persistKey]);
 
   return (
-   <motion.div
+   <div
       className={styles.container}
       ref={ref}
       onScroll={handleScroll}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
       id={'chat-scroll-wrapper'}
     >
       {loadingOlder && (
@@ -127,7 +123,7 @@ export const MessageScrollWrapper = ({
         </div>
       )}
       {children}
-    </motion.div>
+    </div>
   );
 };
 

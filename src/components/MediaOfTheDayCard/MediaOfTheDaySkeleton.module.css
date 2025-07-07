@@ -5,9 +5,11 @@
     overflow: hidden;
     border-radius: 12px;
     display: flex;
+    height: 500px;
     flex-direction: column;
     background-color: var(--card-background-color);
     font-family: var(--font-family);
+    flex-shrink: 0;
   }
   
   .mediaContent {

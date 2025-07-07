@@ -43,13 +43,13 @@ export const Servers = () => {
             }
     
             handleCloseMobileMenu();
-    
+      
             if (history[server_id]) {
-    
+             
                 navigate(history[server_id]);
     
             } else {
-    
+                
                 navigate(`/dashboard/server/${server_id}`);
     
            }
@@ -61,7 +61,7 @@ export const Servers = () => {
         dispatch(reorderServers(newOrder))
 
     }
-console.log(servers)
+
     return (
         <div 
         style={{
@@ -71,7 +71,7 @@ console.log(servers)
         className={styles.serverButtons}>
             <VerticalReorderWrapper items={servers} onReorder={handleReorderServers} >
                 {servers.map(s => {
-                    return <ServerButton server={s} action={handleSwitchServer} key={s.server_id} {...s} />
+                    return <ServerButton server={s} action={handleSwitchServer} key={s._id} {...s} />
                 })}
             </VerticalReorderWrapper>
         </div>

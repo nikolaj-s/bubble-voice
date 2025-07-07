@@ -11,7 +11,6 @@ const DashboardSkeleton = ({alt = false}) => {
     <>
         <div className={styles.fixedSection}></div>
         <div className={styles.centerSection}></div>
-        <div className={styles.fixedSection}></div>
     </>
     :
     <div className={styles.layout}>

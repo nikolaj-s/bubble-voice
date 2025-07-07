@@ -33,9 +33,6 @@ const serverRecommendationsSlice = createSlice({
           const { server_id, cached, mediaOfTheDay, media } = action.payload;
           state.loading = false;
   
-          // Do not overwrite if cached
-          if (cached) return;
-  
           state.mediaByServer[server_id] = {
             mediaOfTheDay,
             media,

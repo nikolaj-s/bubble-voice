@@ -30,7 +30,7 @@ export const CreateCategoryForm = ({permissions}) => {
     return (
     <NotAuthorized permission={permissions?.user_can_manage_channels}>
         <LoadingErrorFormWrapper sliceName='channelsSlice'>
-            <Header text='Create A Category' />
+            <Header text='Create Category' />
             <Label label='Category Name' />
             <TextInput placeholder={"Enter Category Name"} onChange={setCategoryName} value={categoryName} />
             <Label label='Enable Auto Sort' />

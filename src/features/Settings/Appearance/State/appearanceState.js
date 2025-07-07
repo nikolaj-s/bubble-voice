@@ -1,31 +1,23 @@
-
-
 export const initialState = () => {
-    const hideUsers = JSON.parse(localStorage.getItem('hideUsers')) || false;
-
-    const hideCustomChannelIcons = JSON.parse(localStorage.getItem('hideCustomChannelIcons')) || false;
-
-    const hideChannelBackgrounds = JSON.parse(localStorage.getItem('hideChannelBackgrounds')) || false;
-    
-    const useBlackVoiceChannelBackground = JSON.parse(localStorage.getItem('useBlackVoiceChannelBackground')) || false;
-
-    const disableStreamAmbiance = JSON.parse(localStorage.getItem('disableStreamAmbiance')) || false;
-
-    const theme = JSON.parse(localStorage.getItem('theme')) || 'default'; // 'default' = your dark theme
-
-    const fontSize = JSON.parse(localStorage.getItem('fontSize')) || 14;
-
-    const maximumMediaHeight = JSON.parse(localStorage.getItem('maximumMediaHeight')) || 350;
-  
-    return {
-      hideUsers,
-      hideCustomChannelIcons,
-      hideChannelBackgrounds,
-      theme,
-      useBlackVoiceChannelBackground,
-      disableStreamAmbiance,
-      fontSize,
-      maximumMediaHeight
-    };
+  const safeGet = (key, fallback) => {
+    try {
+      const value = JSON.parse(localStorage.getItem(key));
+      return value !== null ? value : fallback;
+    } catch (err) {
+      console.warn(`Corrupt localStorage item: "${key}", clearing it.`);
+      localStorage.removeItem(key);
+      return fallback;
+    }
   };
-  
+
+  return {
+    hideUsers: safeGet('hideUsers', false),
+    hideCustomChannelIcons: safeGet('hideCustomChannelIcons', false),
+    hideChannelBackgrounds: safeGet('hideChannelBackgrounds', false),
+    useBlackVoiceChannelBackground: safeGet('useBlackVoiceChannelBackground', false),
+    disableStreamAmbiance: safeGet('disableStreamAmbiance', false),
+    theme: safeGet('theme', 'default'),
+    fontSize: safeGet('fontSize', 14),
+    maximumMediaHeight: safeGet('maximumMediaHeight', 350),
+  };
+};

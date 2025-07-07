@@ -6,8 +6,6 @@ import { MessageInput } from './MessageInput/MessageInput';
 
 import MessageList from './MessageList/MessageList';
 
-import {motion} from 'framer-motion';
-
 import { ReplyTo } from './ReplyTo/ReplyTo';
 
 import PostDisabledPlaceholder from './PostDisabledPlaceholder/PostDisabledPlaceholder';
@@ -28,9 +26,7 @@ export const ChatContainer = ({
     const [isDraggingImage, setIsDraggingImage] = React.useState();
 
     return (
-        <motion.div 
-        initial={{opacity: 0}}
-        animate={{opacity: 1}}
+        <div 
         className={styles.container} 
         onDragEnter={() => {setIsDraggingImage(true)}}
         onKeyDown={(e) => {e.stopPropagation();}}
@@ -57,6 +53,6 @@ export const ChatContainer = ({
             setIsDraggingImage={setIsDraggingImage}
             isDraggingImage={isDraggingImage}
             />}
-        </motion.div>
+        </div>
     )
 }
