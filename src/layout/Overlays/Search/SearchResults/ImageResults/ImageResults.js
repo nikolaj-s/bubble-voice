@@ -42,6 +42,7 @@ export const ImageResults = ({images, id = 'image-grid', send = () => {}}) => {
                 return (
                 <LongPressGestureWrapper key={image.src + index}  width={'100%'} height={'100%'} onTouchContext={(e) => {triggerContext(e, image.src)}}>   
                     <ImageTooltipWrapper 
+                        showCtxButton={true}
                         disableDefaultBehaviour={autoSendOnClick && currentTextChannel}
                         image={image}>
                         <NsfwWrapper 

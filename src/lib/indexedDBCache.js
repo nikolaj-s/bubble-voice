@@ -3,7 +3,7 @@ import { openDB } from 'idb';
 
 const DB_NAME     = 'BubbleCache';
 const STORE_NAME  = 'messageCache';
-const DB_VERSION  = 1;
+const DB_VERSION  = 2;
 
 let dbPromise = null;
 
@@ -14,10 +14,25 @@ function getDb() {
         if (!db.objectStoreNames.contains(STORE_NAME)) {
           db.createObjectStore(STORE_NAME, { keyPath: 'channel_id' });
         }
+        if (!db.objectStoreNames.contains('SEARCH_RESULTS')) {
+          db.createObjectStore("SEARCH_RESULTS", {keyPath: "query"})
+        }
       }
     });
   }
   return dbPromise;
+}
+
+
+export async function getCachedSearchResults(query) {
+  const db = await getDb();
+  return db.get("SEARCH_RESULTS", query);
+}
+
+export async function setCachedSearchResults(data) {
+  const db = await getDb();
+
+  await db.put("SEARCH_RESULTS", data)
 }
 
 /**

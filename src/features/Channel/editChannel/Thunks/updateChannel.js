@@ -24,8 +24,6 @@ export const updateChannel = createAsyncThunk(
                 headers: {TOKEN: token},
                 data
             })
-            
-            console.log(response.data);
 
             return response.data;
 

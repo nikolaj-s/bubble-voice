@@ -5,6 +5,7 @@ import axios from "axios";
 import { API_URL } from "../../../lib/Validation";
 
 import { APIErrorHandler } from "../../../lib/handlers/APIErrorHandler/APIErrorHandler";
+import { getCachedSearchResults, setCachedSearchResults } from "../../../lib/indexedDBCache";
 
 export const globalSearch = createAsyncThunk(
     'searchSlice/globalSearch',
@@ -23,6 +24,15 @@ export const globalSearch = createAsyncThunk(
 
             const { token }= getState().authSlice;
 
+            if ((filter.path === 'videos' || filter.path === 'images') && query) {
+                const cached = await getCachedSearchResults(query);
+
+                if (cached?.results) {
+                    console.log('using cached search results');
+                    return {filter: filter.path, results: cached.results, success: true}
+                }
+            }
+
             const response = await axios.get(`${API_URL}/search/${filter.path}`, {
                 headers: {TOKEN: token},
                 params: {
@@ -40,8 +50,10 @@ export const globalSearch = createAsyncThunk(
             }).then(res => {
                 return res.data;
             })
-            console.log(response)
+      
             if (response.success) {
+                if (query) setCachedSearchResults({query, results: response.results})
+
                 return {filter: filter.path, ...response};
             }
             

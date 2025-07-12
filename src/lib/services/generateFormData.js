@@ -6,7 +6,11 @@ export const generateFormData = (params) => {
   Object.entries(params).forEach(([key, value]) => {
     if (value == null) return;
 
-    if (Array.isArray(value)) {
+    if (typeof value === 'object' && !value.size && !Array.isArray(value)) {
+
+      data.append(key, JSON.stringify(value));
+
+    } else if (Array.isArray(value)) {
       value.forEach(item => {
         if (item != null) {
           data.append(key, item);

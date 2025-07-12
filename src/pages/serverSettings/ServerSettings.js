@@ -15,6 +15,7 @@ import { ManageWidgetsForm } from '../../layout/Forms/ServerSettings/ManageWidge
 import { ManageChannelsForm } from '../../layout/Forms/ServerSettings/ManageChannelsForm/ManageChannelsForm'
 import { InvitesForm } from '../../layout/Forms/ServerSettings/InvitesForm/InvitesForm'
 import { ServerSecurityForm } from '../../layout/Forms/ServerSettings/ServerSecurityForm/ServerSecurityForm'
+import { CreateMomentForm } from '../../layout/Forms/ServerSettings/CreateMomentForm/CreateMomentForm'
 
 export const ServerSettings = ({close}) => {
 
@@ -27,7 +28,7 @@ export const ServerSettings = ({close}) => {
         {key: "manageUsers", label: "Manage Users"},
         {key: "manageChannels", label: "Manage Channels"},
         {key: "security", label: "Security"},
-        {key: "contentData", label: "Content & Data"}
+        {key: "contentData", label: "Content & Data"},
     ]
 
     const content = {
@@ -44,7 +45,8 @@ export const ServerSettings = ({close}) => {
         contentData: <ContentDataForm />,
         addWidget: <AddWidgetForm />,
         manageWidgets: <ManageWidgetsForm />,
-        manageChannels: <ManageChannelsForm />
+        manageChannels: <ManageChannelsForm />,
+        createMoment: <CreateMomentForm />
     }
 
     return (

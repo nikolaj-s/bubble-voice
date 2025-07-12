@@ -77,4 +77,6 @@ export const getTimeUntil24Hours = (timestamp) => {
     return `${hours}h ${minutes}m`;
   };
   
-  
+export const isValidObjectId = (id) => {
+    return typeof id === 'string' && /^[a-f\d]{24}$/i.test(id);
+}

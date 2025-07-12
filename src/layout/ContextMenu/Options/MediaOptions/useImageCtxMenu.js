@@ -101,7 +101,9 @@ export const useImageCtxMenu = () => {
 
         options.push({
             label: "Copy Image Link",
-            onClick: () => {copyToClipboard(data.imageSearchResult?.src || data.image?.src); dispatch(triggerAlert('Link Copied'))},
+            onClick: () => {
+                console.log(data)
+                copyToClipboard((data.imageSearchResult?.src || data.image?.src)); dispatch(triggerAlert('Link Copied'))},
             type: 'button',
             icon: <Link color="var(--text-color)" />
         })

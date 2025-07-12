@@ -9,7 +9,9 @@ const ScrollLoadWrapper = ({
   className = "",      // Optional, custom classes
   style,               // Optional, custom styles
   threshold = 80,
-  maxContentWidth = 1000     // px distance from bottom to trigger loadMore
+  maxContentWidth = 1000,
+  contentGap
+    // px distance from bottom to trigger loadMore
 }) => {
   const containerRef = useRef();
 
@@ -31,7 +33,7 @@ const ScrollLoadWrapper = ({
       onScroll={handleScroll}
       tabIndex={0}
     > 
-      <div style={{maxWidth: maxContentWidth}} className={styles.content}>
+      <div style={{maxWidth: maxContentWidth, gap: contentGap}} className={styles.content}>
         {children}
       </div>
       <div className={styles.bottomBar}>

@@ -6,8 +6,6 @@ import LinkPreview from '../../LinkPreview/LinkPreview';
 import LinkComponent from '../../LinkComponent/LinkComponent';
 import { TimeDisplay } from '../../TimeDisplay/TimeDisplay';
 import Spacer from './Spacer/Spacer';
-import IconButton from '../../ui/Buttons/IconButton/IconButton';
-import { Ellipsis, Reply } from 'lucide-react';
 import { triggerContext } from '../../../lib/services/helperFunctions';
 
 import { LongPressGestureWrapper } from '../../ui/Gestures/LongPressGestureWrapper';
@@ -16,11 +14,11 @@ import { VideoBlock } from './VideoBlock/VideoBlock';
 import { TextBlock } from './TextBlock/TextBlock';
 import { UserBlock } from './UserBlock/UserBlock';
 import { ReplyBlock } from './ReplyBlock/ReplyBlock';
-import { ToolBar } from '../../ui/Wrappers/ToolBar/ToolBar';
-import { MediaInfo } from '../../MediaInfo/MediaInfo';
 import { ImagesBlock } from './ImagesBlock/ImagesBlock';
 import ProcessingBlock from './ProcessingBlock/ProcessingBlock';
 import { VideoPreview } from '../../ui/Video/VideoPreview/VideoPreview';
+import { MessageToolBar } from './MessageToolBar/MessageToolBar';
+import { MessageSelectInput } from './MessageSelectInput/MessageSelectInput';
 
 export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inSearch = false, isReply, reply = () => {}, notification}) => {
 
@@ -44,24 +42,9 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
                 className={styles.messageItem}>
                     <ReplyBlock {...message} users={users} />
                     <div className={styles.messageWrapper}>
-                        {(!isReply && !notification) && 
-                        <ToolBar className={styles.buttons}>
-                            {message?.media_ref && (<MediaInfo data={message.media_ref} />)}
-                            <IconButton 
-                            Icon={<Reply color='var(--text-color)' />}
-                            title={'Reply'}
-                            position='top'
-                            onClick={() => {reply(message)}}
-                            />
-                            <IconButton 
-                            Icon={<Ellipsis color='var(--text-color)' />}
-                            onClick={openCtx}
-                            
-                            title={'Options'}
-                            position='top'
-                            />
-                        </ToolBar>}
+                        <MessageToolBar styles={styles} message={message} isReply={isReply} notification={notification} reply={reply} openCtx={openCtx} />
                         <div className={styles.userImageWrapper}>
+                            <MessageSelectInput message={message} />
                             {(message.user_id !== prevMessage.user_id || isDifferentDay || message.reply_to) &&
                             <div className={styles.userImage}>
                                 <ImageComponent src={users[message.user_id]?.user_image} />

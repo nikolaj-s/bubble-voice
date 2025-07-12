@@ -13,6 +13,8 @@ import { TestMicrophone } from '../../../../components/TestMicrophone/TestMicrop
 import TypeInput from '../../../../components/ui/Inputs/TypeInput/TypeInput'
 import ToggleSwitch from '../../../../components/ui/Inputs/ToggleSwitch/ToggleSwitch'
 import { LineSpacer } from '../../../../components/ui/Spacers/LineSpacer/LineSpacer'
+import { togglePreference } from '../../../../features/AccountPreferences/accountPreferencesSlice'
+import { Description } from '../../../../components/ui/Description/Description'
 
 export const VoiceVideoSettingsForm = () => {
 
@@ -42,6 +44,8 @@ export const VoiceVideoSettingsForm = () => {
     const voice_threshold = useSelector(state => state.mediaControlSlice.voiceThreshold);
 
     const keybinds = useSelector((state) => state.keybindsSlice.keybinds);
+
+    const {disable_new_device_popup} = useSelector(state => state.accountPreferencesSlice);
     
     const {echoCancellation, noiseSuppression, autoGainControl, captureDesktopAudio} = useSelector(state => state.mediaControlSlice);
 
@@ -114,10 +118,14 @@ export const VoiceVideoSettingsForm = () => {
         <LineSpacer />
         {platform === 'win32' && (
         <>
-        <Header text='Screen Capture' />
+        <Header text='Screen Capture' level={2} />
         <Label label='Enable Desktop Audio Capture' />
         <ToggleSwitch initialState={captureDesktopAudio} onToggle={() => {dispatch(toggleMicrophoneAttribute('captureDesktopAudio'))}} />
         </>)}
+        <Header text='Misc' level={2} />
+        <Label  label='Disable New / Lost Device Popup' />
+        <Description description={'Disables the popup indicator for when a microphone is added or lost to allow for quick switching'} />
+        <ToggleSwitch initialState={disable_new_device_popup} onToggle={() => {dispatch(togglePreference('disable_new_device_popup'))}} />
         </>
     )
 }

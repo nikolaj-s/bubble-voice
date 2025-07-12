@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "./TextButton.module.css";
 
-const TextButton = ({ title, disabled, action, backgroundColor, maxWidth, icon: Icon }) => {
+const TextButton = ({ title, disabled, action, backgroundColor, maxWidth, icon: Icon, margin, padding, height, minHeight }) => {
   
   return (
     <>
@@ -10,7 +10,11 @@ const TextButton = ({ title, disabled, action, backgroundColor, maxWidth, icon: 
     <button
       style={{
         backgroundColor,
-        maxWidth
+        maxWidth,
+        margin,
+        padding,
+        height,
+        minHeight
       }}
       className={`${styles.button} ${disabled ? styles.disabled : ""}`}
       onClick={action}

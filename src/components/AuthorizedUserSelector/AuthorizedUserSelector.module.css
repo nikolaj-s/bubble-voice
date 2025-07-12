@@ -1,0 +1,32 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.userRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: var(--border-radius);
+  box-sizing: border-box;
+}
+
+.userRow:hover {
+    background-color: var(--button-hover);
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.name {
+  flex-grow: 1;
+  color: var(--text-color);
+  font-size: 0.875rem;
+}

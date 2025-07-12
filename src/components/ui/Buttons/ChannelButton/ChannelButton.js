@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import styles from "./ChannelButton.module.css";
-import { Ellipsis, Hash, TextQuote, Volume1, VolumeX } from "lucide-react";
+import { Ellipsis, Hash, Lock, TextQuote, Volume1, VolumeX } from "lucide-react";
 import { ImageComponent } from "../../../ui/Image/Image";
 import { useNavigate } from "react-router";
 import { ChannelUserButton } from "../ChannelUserButton/ChannelUserButton";
@@ -93,6 +93,7 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
         style={{ backgroundColor: users.length > 0 ? 'var(--card-background-color)' : 'transparent' }}
         className={`${styles.channelContainer} ${active ? styles.active : ''}`}
       >
+      {channel.locked_channel && (<Lock style={{position: 'absolute', top: 5, left: 5}} color="var(--text-color)" size={12} strokeWidth={3} />)}
        <NavButton 
        icon=
         {channel_icon && !hideCustomChannelIcons ? (

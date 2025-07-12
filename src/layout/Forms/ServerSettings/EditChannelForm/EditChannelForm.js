@@ -21,6 +21,7 @@ import { ApplyChangesPopup } from "../../../../components/ApplyChangesPopup/Appl
 import { setManageWidgetsForChannel } from "../../../../features/Widgets/manageWidgetsSlice"
 import { Description } from "../../../../components/ui/Description/Description"
 import ToggleSwitch from "../../../../components/ui/Inputs/ToggleSwitch/ToggleSwitch"
+import { AuthorizedUserSelector } from "../../../../components/AuthorizedUserSelector/AuthorizedUserSelector"
 
 export const EditChannelForm = ({permissions}) => {
 
@@ -48,7 +49,9 @@ export const EditChannelForm = ({permissions}) => {
 
     const [privateChannel, togglePrivateChannel] = React.useState(false);
 
-    const [authUsers, setAuthUsers] = React.useState([]);
+    const [authUsers, setAuthUsers] = React.useState({});
+
+    const {users} = useSelector(state => state.serverUsersSlice);
 
     const {categories} = useSelector(state => state.categoriesSlice);
 
@@ -66,7 +69,7 @@ export const EditChannelForm = ({permissions}) => {
 
         togglePrivateChannel(channel.locked_channel);
 
-        setAuthUsers(channel.auth_users);
+        setAuthUsers(channel.authorized_users || {});
 
         setChannelBackground(null);
 
@@ -90,7 +93,7 @@ export const EditChannelForm = ({permissions}) => {
 
         if (channelName.trim().length < 3) return;
 
-        dispatch(updateChannel({channelIcon, channelBackground, channelName, channelDescription, channel_id: channel.channel_id, category: category.category_id, locked_channel: privateChannel, disable_streams: disableStreams}));
+        dispatch(updateChannel({channelIcon, channelBackground, channelName, channelDescription, channel_id: channel.channel_id, category: category.category_id, locked_channel: privateChannel, disable_streams: disableStreams, authorized_users: authUsers}));
 
     }
 
@@ -183,13 +186,12 @@ export const EditChannelForm = ({permissions}) => {
                 )}
                 <LineSpacer />
                 <Header level={3} text="Lock This Channel" />
-                <Description description={"You can lock channels to specific users by setting a whitelist. Only users on the whitelist can join or view the channel. However, users with the Manage Channels privilege can always view the channel’s contents — even if they aren’t on the whitelist — for moderation and administrative purposes."} />
+                <Description description={"You can lock channels to specific users by setting a whitelist. Only users on the whitelist can join or view the channel. However, users with the Manage Channels privilege can always view the channel’s contents — even if they aren’t on the whitelist — for moderation and administrative purposes.  Posting in locked channels will also not contribute to recommendations"} />
                 <ToggleSwitch initialState={privateChannel} onToggle={() => {togglePrivateChannel(!privateChannel)}} />
+                {privateChannel && (<AuthorizedUserSelector users={users} authorizedUsers={authUsers} onChange={setAuthUsers} />)}
                 {permissions?.user_can_delete_channels &&
                 <>
                 <LineSpacer />
-                
-                
                 <Label label="Delete Channel" />
                 <TextButton 
                 icon={<Trash2 size={20} color="var(--text-color)" />}
@@ -207,7 +209,7 @@ export const EditChannelForm = ({permissions}) => {
                 <ApplyChangesPopup 
                 onClearChanges={discardChanges}
                 onApply={handleApplyChanges}
-                disabled={(!channelIcon && !channelBackground) && (channel.channel_name === channelName || channelName.trim().length < 3) && (channel.channel_description === channelDescription) && (channel.category === category.category_id) && (channel.disable_streams === disableStreams) && (channel.locked_channel === privateChannel)}
+                disabled={(!channelIcon && !channelBackground) && (channel.channel_name === channelName || channelName.trim().length < 3) && (channel.channel_description === channelDescription) && (channel.category === category.category_id) && (channel.disable_streams === disableStreams) && (channel.locked_channel === privateChannel) && (JSON.stringify(channel.authorized_users || {}) === JSON.stringify(authUsers))}
                 />
             </LoadingErrorFormWrapper>
         </NotAuthorized>

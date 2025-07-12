@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const AbsoluteContentWrapper = ({children, onClose}) => {
+export const AbsoluteContentWrapper = ({children, onClose, backgroundColor = 'var(--overlay-color)'}) => {
   return (
     <div style={{
         position: 'absolute',
@@ -8,7 +8,7 @@ export const AbsoluteContentWrapper = ({children, onClose}) => {
         left: 0,
         width: '100%',
         height: '100%',
-        backgroundColor: 'var(--overlay-color)',
+        backgroundColor,
         zIndex: 9,
         display: 'flex',
         justifyContent: 'center',

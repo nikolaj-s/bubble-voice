@@ -71,7 +71,8 @@ const searchSlice = createSlice({
         builder
         .addCase(globalSearch.pending, (state) => {
             state.loading = true;
-            state.error = false
+            state.error = false;
+            state.prevSearch = state.query;
         })
         .addCase(globalSearch.rejected, (state, action) => {
             state.loading = false;

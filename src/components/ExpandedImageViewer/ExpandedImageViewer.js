@@ -7,6 +7,8 @@ import IconButton from "../ui/Buttons/IconButton/IconButton";
 import { ToolBar } from "../ui/Wrappers/ToolBar/ToolBar";
 import { MediaInfo } from "../MediaInfo/MediaInfo";
 import { ExpandedMediaWrapper } from "../ui/Wrappers/ExpandedMediaWrapper/ExpandedMediaWrapper";
+import { Card } from "../ui/Wrappers/Card/Card";
+import { Text } from "../ui/Text/Text";
 
 const ExpandedImageViewer = ({ src, alt, open, onClose, context }) => {
 
@@ -48,7 +50,10 @@ const ExpandedImageViewer = ({ src, alt, open, onClose, context }) => {
         tabIndex={0}
       >
         {error ?
+        <Card style={{alignItems: 'center', textAlign: 'center', color: 'var(--error-color)'}}>
         <AlertTriangle size={50} color="var(--error-color)" /> 
+        <Text>Error Loading Full Image</Text>
+        </Card>
         : <img
           src={src}
           alt={alt}

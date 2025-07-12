@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router';
 import { setReplyTo } from '../../../features/Channel/TextChannel/textChannelSlice';
 import { closeOverlay, setOverlay } from '../../../features/Overlay/overlaySlice';
-import { Copy, ImageDown, Link, Pin, PinOff, Reply, Trash2 } from 'lucide-react';
+import { BookmarkPlus, Copy, ImageDown, Link, Pin, PinOff, Reply, Trash2 } from 'lucide-react';
 import { pinMessage } from '../../../features/Channel/TextChannel/Thunks/pinMessage';
 import { copyToClipboard, downloadImage } from '../../../lib/services/helperFunctions';
 import { triggerAlert } from '../../../features/Alerts/alertsSlice';
@@ -11,6 +11,8 @@ import { clearExpandedImage } from '../../../features/Media/ExpandedImage/expand
 import { setFilter, setQuery, setSimilarImageSrc } from '../../../features/Search/searchSlice';
 import { globalSearch } from '../../../features/Search/Thunks/globalSearch';
 import { deleteMessage } from '../../../features/Channel/TextChannel/Thunks/deleteMessage';
+import { addMessageToMoment, setIsSelecting } from '../../../features/Moments/momentsSlice';
+import { useSearchParams } from 'react-router-dom';
 
 export const useMessageCtxMenu = () => {
 
@@ -18,7 +20,11 @@ export const useMessageCtxMenu = () => {
 
     const navigate = useNavigate();
 
+    const [,setSearchParams] = useSearchParams();
+
     const {currentTextChannel} = useSelector(state => state.textChannelSlice);
+
+    const {isSelecting, selectedMessages} = useSelector(state => state.momentsSlice);
 
     const {_id: user_id} = useSelector(state => state.accountSlice.account) || {};
 
@@ -44,6 +50,36 @@ export const useMessageCtxMenu = () => {
             type: 'button',
             icon: data.message.pinned ? <PinOff color="var(--text-color)" /> : <Pin color="var(--text-color)" />
         })
+
+        if (permissions.user_can_create_moments) {
+            options.push({
+                label: (isSelecting && Object.values(selectedMessages).length > 0) ? "Create Moment" : !isSelecting ? "Create A Moment" : "Stop Selecting",
+                onClick: () => {
+                    if (isSelecting && Object.values(selectedMessages).length > 0) {
+                        setSearchParams({section: 'createMoment'});
+                        dispatch(setOverlay('serverSettings'));
+                    } else if (!isSelecting) {
+                        dispatch(setIsSelecting(true));
+                        dispatch(addMessageToMoment(data.message));
+                    } else {
+                        dispatch(setIsSelecting(false));
+                    }
+                },
+                type: 'button',
+                icon: <BookmarkPlus color='var(--text-color)' />
+            })
+        }
+
+        if (isSelecting && Object.values(selectedMessages).length > 0) {
+            options.push({
+                label: "Stop Selecting Messages",
+                onClick: () => {
+                    dispatch(setIsSelecting(false));
+                },
+                type: 'button',
+                color: 'var(--error-color)'
+            })
+        }
         
         if (data.message.link) {
             options.push({
@@ -105,7 +141,7 @@ export const useMessageCtxMenu = () => {
             })
         }
 
-    }, [currentTextChannel, dispatch, navigate, user_id]) 
+    }, [currentTextChannel, dispatch, navigate, user_id, isSelecting, selectedMessages]) 
     
     return {getMessageOptions};
 }

@@ -18,8 +18,9 @@ import { Subtitle } from '../ui/Titles/Subtitle/Subtitle';
 import { expandVideo } from '../../features/Media/ExpandedVideo/expandedVideoSlice';
 import VideoThumbnail from '../ui/Video/VideoThumbnail/VideoThumbnail';
 import { Card } from '../ui/Wrappers/Card/Card';
+import { Text } from '../ui/Text/Text';
 
-const MediaOfTheDayCard = ({ title = "Media of the day", query, tags = "", src, type = 'image', date, media = {}}) => {
+const MediaOfTheDayCard = ({ title = "Media of the day", query, tags = "", src, thumbnail, type = 'image', date, media = {}}) => {
 
   const dispatch = useDispatch();
 
@@ -75,21 +76,22 @@ const MediaOfTheDayCard = ({ title = "Media of the day", query, tags = "", src, 
         ) : (
           <LongPressGestureWrapper width={'100%'} height={'100%'} onTouchContext={(e) => {triggerContext(e, src)}}>
             <ImageTooltipWrapper image={{src, type}}>
-              <ImageComponent objectFit='contain' src={src} alt={title} />
+              <ImageComponent objectFit='contain' src={src} altSrc={thumbnail} alt={title} />
             </ImageTooltipWrapper>
           </LongPressGestureWrapper>
         )}
         </NsfwWrapper>
       </div>
       <Card style={{backgroundColor: 'var(--background-color)'}}>
-        <div className={styles.mediaQuery}>
-          Media found related to: {
+        <Subtitle>Media found related to:</Subtitle>
+        <Text>
+          {
           source.type === 'image' ?
           <span onClick={openSource}>source</span>
           :
           <strong>{query}</strong>
           }
-        </div>
+        </Text>
         <div className={styles.updatesIn}><Clock strokeWidth={3} color='var(--text-color)' size={15} /><Subtitle> updates in: {untilUpdate}</Subtitle></div>
           <div className={styles.mediaTags}>
             {tags?.split(" ").slice(0, 3).map((tag, idx) => (

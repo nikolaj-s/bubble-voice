@@ -23,6 +23,8 @@ import { ServerLayoutWrapper } from '../../components/ui/Wrappers/ServerlayoutWr
 import { CloseMobileMenu } from '../../components/CloseMobileMenu/CloseMobileMenu';
 import { VoiceChannel } from './channel/VoiceChannel/VoiceChannel';
 import { setCurrentVoiceChannel } from '../../features/Channel/VoiceChannel/voiceChannelSlice';
+import { SectionThree } from './SectionThree/SectionThree';
+import { ServerUsersProvider } from '../../providers/ServerUsersProvider/ServerUsersProvider';
 
 export const Server = () => {
 
@@ -81,7 +83,9 @@ export const Server = () => {
                         height: window?.electron?.ipcRenderer ? 'calc(100svh - 70px)' : null
                     }}
                     className={`${styles.sectionThree} ${isUserMenuOpen ? styles.sectionThreeMobile : ''} ${hideUsers ? styles.hideUsers : ''}`}>
-                        <Users />
+                        <ServerUsersProvider>
+                            <SectionThree />
+                        </ServerUsersProvider>
                     </section>
             </ServerDetailsProvider>
         </ServerLayoutWrapper>

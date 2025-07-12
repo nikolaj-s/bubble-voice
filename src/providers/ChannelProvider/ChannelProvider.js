@@ -6,6 +6,7 @@ import { useSocket } from '../../context/SocketContext';
 import ErrorCard from '../../components/Error/ErrorCard/ErrorCard';
 import { setCurrentTextChannel } from '../../features/Channel/TextChannel/textChannelSlice';
 import { setCurrentVoiceChannel } from '../../features/Channel/VoiceChannel/voiceChannelSlice';
+import { SensitiveContentWarning } from '../../components/SensitiveContentWarning/SensitiveContentWarning';
 
 export const ChannelProvider = ({children, overlay = false, channel_id_prop}) => {
 
@@ -16,6 +17,8 @@ export const ChannelProvider = ({children, overlay = false, channel_id_prop}) =>
     const socket = useSocket();
 
     const [loading, toggleLoading] = React.useState(true);
+
+    const [nsfw, toggleNsfw] = React.useState(false);
 
     const [error, toggleError] = React.useState(false);
 
@@ -71,6 +74,7 @@ export const ChannelProvider = ({children, overlay = false, channel_id_prop}) =>
                     }
                     
                     if (res.channel_type === 'text') {
+                        if (res.nsfw) toggleNsfw(true);
                         dispatch(setCurrentTextChannel(res._id));
                     }
 
@@ -150,6 +154,7 @@ export const ChannelProvider = ({children, overlay = false, channel_id_prop}) =>
     return (
         <>
         {children}
+        {nsfw && (<SensitiveContentWarning channelID={channelID} />)}
         </>
     )
 }

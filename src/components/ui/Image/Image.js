@@ -2,11 +2,7 @@ import React from 'react';
 
 import styles from './Image.module.css'
 import { ImageOff } from 'lucide-react';
-import { useGifControl } from '../../../hooks/useGifControl';
-
-export const ImageComponent = ({src, objectFit = 'cover', alt = "Image", borderRadius, aspectRatio, height, width}) => {
-
- //   const {ref} = useGifControl({scale: 0.5})
+export const ImageComponent = ({src, altSrc, objectFit = 'cover', alt = "Image", borderRadius, aspectRatio, height, width}) => {
 
     const [imageError, setImageError] = React.useState(false);
 
@@ -33,7 +29,12 @@ export const ImageComponent = ({src, objectFit = 'cover', alt = "Image", borderR
                     alt={alt}
                     className={styles.image}
                     style={{ objectFit }}
-                    onError={() => {setImageError(true); toggleLoading(false)}}
+                    onError={(e) => {
+                        if (e.target.src !== altSrc && altSrc) {
+                            e.target.src = altSrc;
+                            return;
+                        }
+                        setImageError(true); toggleLoading(false)}}
                     onLoad={() => {toggleLoading(false)}}
                 />
             )}

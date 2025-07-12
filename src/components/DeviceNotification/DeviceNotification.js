@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './DeviceNotification.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { setMicrophone } from '../../features/Settings/Devices/deviceSlice';
@@ -6,6 +6,8 @@ import { Mic, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import TextButton from '../ui/Buttons/TextButton/TextButton';
 import IconButton from '../ui/Buttons/IconButton/IconButton';
+import { togglePreference } from '../../features/AccountPreferences/accountPreferencesSlice';
+import { updateAccountPreferences } from '../../features/AccountPreferences/Thunks/updateAccountPreferences';
 
 export const DeviceNotification = () => {
   const dispatch = useDispatch();
@@ -15,8 +17,11 @@ export const DeviceNotification = () => {
 
   const microphones = useSelector(state => state.deviceSlice.microphones);
   const selectedMicrophone = useSelector(state => state.deviceSlice.selectedMicrophone);
+  const disablePopup = useSelector(state => state.accountPreferencesSlice.disable_new_device_popup)
 
   useEffect(() => {
+    if (disablePopup) return setVisible(false);
+
     const lastSeen = localStorage.getItem("lastMicIds");
     const oldIds = new Set(lastSeen ? JSON.parse(lastSeen) : []);
 
@@ -49,7 +54,7 @@ export const DeviceNotification = () => {
 
     // Nothing to show
     setVisible(false);
-  }, [microphones]);
+  }, [microphones, disablePopup]);
 
   const handleSwitch = () => {
     const device = newDevice || lostDevice?.suggested;
@@ -62,6 +67,11 @@ export const DeviceNotification = () => {
   const handleClose = () => {
     setVisible(false);
   };
+
+  const handleDontShowAgain = () => {
+    dispatch(togglePreference('disable_new_device_popup'));
+    dispatch(updateAccountPreferences());
+  }
 
   return (
     <AnimatePresence>
@@ -89,11 +99,14 @@ export const DeviceNotification = () => {
           </p>
 
           <div className={styles.actions}>
+            <TextButton 
+            backgroundColor={'var(--card-background-color)'}
+            title='Dont Show Again'
+            action={handleDontShowAgain}
+            />
             <TextButton
               title={
-                newDevice
-                  ? 'Switch Device'
-                  : `Switch to ${lostDevice?.suggested?.label}`
+                 'Switch Device'
               }
               action={handleSwitch}
             />

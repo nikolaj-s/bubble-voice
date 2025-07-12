@@ -11,6 +11,7 @@ import { reorderCategories } from "../../../../features/Categories/categoriesSli
 import { useSocket } from "../../../../context/SocketContext";
 import { triggerAlert } from "../../../../features/Alerts/alertsSlice";
 import { NoChannelsPlaceholder } from "../../../../components/Placeholders/NoChannelsPlaceholder/NoChannelsPlaceholder";
+import { usePermissions } from "../../../../hooks/usePermissions";
 
 // 🔹 Main Channels Component
 export const ReOrderChannels = ({ onDrop }) => {
@@ -22,6 +23,10 @@ export const ReOrderChannels = ({ onDrop }) => {
     const channels = useSelector((state) => state.channelsSlice.channels);
 
     const categories = useSelector((state) => state.categoriesSlice.categories);
+
+    const permission = usePermissions();
+
+    const {_id: user_id} = useSelector(state => state.accountSlice.account);
 
     const [reordering, toggleReordering] = React.useState(false);
 
@@ -132,7 +137,7 @@ export const ReOrderChannels = ({ onDrop }) => {
                 key={category.category_id} 
                 catagoryName={category.category_name} 
                 autoSort={category.auto_sort}
-                channels={localChannels.filter(c => c.category === category.category_id)} 
+                channels={localChannels.filter(c => c.category === category.category_id && (c.locked_channel ? permission.user_can_manage_channels || c?.authorized_users?.[user_id] : true))} 
                 draggingChannel={draggingChannel} toggleDraggingChannel={toggleDraggingChannel} 
                 category={category}
                 />
@@ -145,7 +150,7 @@ export const ReOrderChannels = ({ onDrop }) => {
             catagoryName={'Channels'}
             category_id={'channels'}
             channels={localChannels.map(c => ({ ...c, category: c.category || 'channels' }))
-              .filter(c => c.category === 'channels')}
+              .filter(c => c.category === 'channels' && (c.locked_channel ? permission.user_can_manage_channels || c?.authorized_users?.[user_id] : true))}
 
             draggingChannel={draggingChannel}
             toggleDraggingChannel={toggleDraggingChannel}

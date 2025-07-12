@@ -19,7 +19,7 @@ export const WidgetList = ({widgets, editing}) => {
   return (
     <>
      {widgets.map(widget => (
-      <Card key={widget._id}>
+      <Card key={widget._id} data-context={JSON.stringify({...widget, type: 'widget'})} >
       {{
         single_image: <SingleImageWidget {...widget.config} />,
         gallery:      <GalleryWidget {...widget.config} />,

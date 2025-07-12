@@ -24,6 +24,8 @@ export const NotificationProvider = ({children}) => {
 
     const {currentTextChannel} = useSelector(state => state.textChannelSlice);
 
+    const muted_notifications = useSelector(state => state.accountPreferencesSlice.muted_notifications) || {muted_notifications: {}};
+
     const {notify} = useNotify();
 
     React.useEffect(() => {
@@ -33,20 +35,21 @@ export const NotificationProvider = ({children}) => {
     }, [dispatch]);
 
     // inside your component…
-    const serverIdRef           = useRef(server_id)
-    const currentChannelRef     = useRef(currentTextChannel)
+    const serverIdRef = useRef(server_id);
+    const currentChannelRef = useRef(currentTextChannel);
+    const notificationPrefRef = useRef(muted_notifications);
 
     // keep the refs up-to-date
-    useEffect(() => { serverIdRef.current       = server_id      }, [server_id])
-    useEffect(() => { currentChannelRef.current = currentTextChannel }, [currentTextChannel])
+    useEffect(() => { serverIdRef.current       = server_id      }, [server_id]);
+    useEffect(() => { currentChannelRef.current = currentTextChannel }, [currentTextChannel]);
+    useEffect(() => {notificationPrefRef.current = muted_notifications}, [muted_notifications]);
 
     // now define a stable handler that only depends on dispatch
     const handleUpdateLatestMessage = useCallback((data) => {
         dispatch(updateLatestMessageAt(data))
 
         // read the *current* values out of the refs
-        if (currentChannelRef.current !== data.channel_id
-            && serverIdRef.current === data.server_id) {
+        if (currentChannelRef.current !== data.channel_id && serverIdRef.current === data.server_id && !notificationPrefRef.current[serverIdRef.current]) {
             notify(data)
         }
 
@@ -56,9 +59,13 @@ export const NotificationProvider = ({children}) => {
     }, [dispatch])
 
     const handlePushNotification = (data) => {
+
         dispatch(pushNotification(data));
 
+        if (notificationPrefRef.current[data.server_id]) return;
+
         dispatch(playSoundEffect('newMessage'));
+    
     }
 
     useEffect(() => {

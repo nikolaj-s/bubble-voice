@@ -40,6 +40,7 @@ import { MediaPlayerHistory } from "../Overlays/MediaPlayerHistory/MediaPlayerHi
 import { MediaPlayerSaves } from "../Overlays/MediaPlayerSaves/MediaPlayerSaves";
 import { Notifications } from "../Overlays/Notifications/Notifications";
 import { LeaveServer } from "../Overlays/LeaveServer/LeaveServer";
+import { MomentOverlay } from "../Overlays/MomentOverlay/MomentOverlay";
 
 const overlayComponents = {
   search: Search,
@@ -58,7 +59,8 @@ const overlayComponents = {
   screenPicker: ScreenPickerOverlay,
   mediaPlayerHistory: MediaPlayerHistory,
   mediaPlayerSaves: MediaPlayerSaves,
-  leaveServer: LeaveServer
+  leaveServer: LeaveServer,
+  moment: MomentOverlay
 };
 
 export const Overlay = ({ children }) => {
