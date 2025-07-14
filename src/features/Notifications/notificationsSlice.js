@@ -50,6 +50,9 @@ const notificationsSlice = createSlice({
         },
         pushNotification: (state, action) => {
             console.log(action.payload)
+            if (action.payload.type === 'poke' || action.payload.type === 'channel_invite') {
+                state.notifications = state.notifications.filter(n => n.type !== action.payload.type && n.sender_id !== action.payload.sender_id);
+            }
             state.notifications.unshift(action.payload);
             state.notification_count += 1;
         },

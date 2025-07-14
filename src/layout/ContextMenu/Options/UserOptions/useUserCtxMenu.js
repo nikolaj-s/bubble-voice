@@ -6,6 +6,8 @@ import { useGlobalVolume } from '../../../../context/GlobalVolumeContext';
 import { setStreamDisabled } from '../../../../features/UserStreamState/userStreamStateSlice';
 import { BoolIndicator } from '../../../../components/ui/BoolIndicator/BoolIndicator';
 import { sendServerInvite } from '../../../../features/Invites/ServerInvites/Thunks/sendServerInvite';
+import { Pointer } from 'lucide-react';
+import { pokeUser } from '../../../../features/Social/Thunks/pokeUser';
 
 export const useUserCtxMenu = () => {
 
@@ -37,6 +39,15 @@ export const useUserCtxMenu = () => {
          if (user._id !== user_id && users[user._id]) {
         
             const isWebcamDisabled = userStreamState[`${user.user_id}-webcam`]?.disabled || false;
+
+            options.push({
+                label: `Poke ${user?.display_name}`,
+                icon: <Pointer color='var(--text-color)' />,
+                type: 'button',
+                onClick: () => {
+                    dispatch(pokeUser(user._id));
+                }
+            })
 
             options.push({
                 label: "Change User Volume",

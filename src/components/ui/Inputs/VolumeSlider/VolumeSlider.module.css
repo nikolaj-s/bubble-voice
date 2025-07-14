@@ -35,9 +35,10 @@
   background: var(--accent-color);
   border-radius: 50%;
   cursor: pointer;
-  margin-top: -4px;
+  margin-top: -5px;
   transition: 0.2s;
   position: relative;
+  box-shadow: 5px 5px 30px black;
 }
 
 .slider::-webkit-slider-thumb:hover {

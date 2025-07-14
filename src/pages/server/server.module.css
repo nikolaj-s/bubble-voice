@@ -3,12 +3,12 @@
 .sectionOne {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 105px minmax(0px, 1fr) auto;
+    grid-template-rows: minmax(0px, 1fr) auto;
     border-top-left-radius: 10px;
 }
 
 .inVoiceChannel {
-    grid-template-rows: 105px minmax(0px, 1fr) auto;
+    grid-template-rows: minmax(0px, 1fr) auto;
 }
 
 .sectionTwo {
@@ -38,9 +38,6 @@
     height: 100svh !important;
 }
 
-.sectionThree {
-    
-}
 
 @media screen and (max-width: 730px) {
     

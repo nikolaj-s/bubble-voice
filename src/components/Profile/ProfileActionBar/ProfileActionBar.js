@@ -5,6 +5,7 @@ import { MessageSquare, Pencil, Pointer } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import { setOverlay } from '../../../features/Overlay/overlaySlice';
 import { ToolBar } from '../../ui/Wrappers/ToolBar/ToolBar';
+import { pokeUser } from '../../../features/Social/Thunks/pokeUser';
 
 export const ProfileActionBar = ({profile}) => {
 
@@ -13,11 +14,20 @@ export const ProfileActionBar = ({profile}) => {
     const dispatch = useDispatch();
     
     const {_id: userID} = useSelector(state => state.accountSlice.account);
+
+    const {loading} = useSelector(state => state.socialSlice);
     
     const handleOpenEditAccount = () => {
         setSearchParams({});
 
         dispatch(setOverlay('settings'));
+    }
+
+    const handlePokeUser = () => {
+
+        if (loading) return;
+
+        dispatch(pokeUser(profile._id));
     }
 
     return (
@@ -38,9 +48,10 @@ export const ProfileActionBar = ({profile}) => {
             onClick={() => {}}
             />
             <IconButton
+            disabled={loading}
             Icon={Pointer}
             title={`Poke ${profile?.display_name}`}
-            onClick={() => {}}
+            onClick={() => {handlePokeUser()}}
             />
             </>
             }

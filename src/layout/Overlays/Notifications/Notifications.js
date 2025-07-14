@@ -16,8 +16,10 @@ import { markNotificationsRead } from '../../../features/Notifications/Thunks/ma
 import { useNavigate } from 'react-router';
 import { deleteNotification } from '../../../features/Notifications/Thunks/deleteNotification';
 import TextLabelError from '../../../components/Error/TextLabelError/TextLabelError';
-import { closeOverlay } from '../../../features/Overlay/overlaySlice';
 import { JoinServer } from '../../../features/JoinServer/Thunks/JoinServer';
+import { isValidObjectId } from '../../../lib/services/helperFunctions';
+import { triggerAlert } from '../../../features/Alerts/alertsSlice';
+import { setCurrentVoiceChannel } from '../../../features/Channel/VoiceChannel/voiceChannelSlice';
 
 
 export const Notifications = () => {
@@ -58,10 +60,32 @@ export const Notifications = () => {
             } else {
                 dispatch(deleteNotification(data._id));
             }
+        
+        }
+
+        if (data.type === 'channel_invite') {
+            if (data.accepted) {
+                
+                const server_id = data.server_id._id;
+
+                const channel_id = data.channel_id._id;
+
+                if (isValidObjectId(server_id) && isValidObjectId(channel_id)) {
+
+                    navigate(`/dashboard/server/${server_id}`);
+
+                    dispatch(setCurrentVoiceChannel(channel_id));
+
+                } else {
+                    dispatch(triggerAlert("Unexpected Error Accepting Invite", 'error'))
+                }
+            }
+
+            dispatch(deleteNotification(data._id));
         }
 
 
-        dispatch(closeOverlay());
+        dispatch(toggleNotificationPanel());
 
     }
 

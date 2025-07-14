@@ -25,6 +25,9 @@ import { VoiceChannel } from './channel/VoiceChannel/VoiceChannel';
 import { setCurrentVoiceChannel } from '../../features/Channel/VoiceChannel/voiceChannelSlice';
 import { SectionThree } from './SectionThree/SectionThree';
 import { ServerUsersProvider } from '../../providers/ServerUsersProvider/ServerUsersProvider';
+import ScrollLoadWrapper from '../../components/ui/Wrappers/ScrollLoadWrapper/ScrollLoadWrapper';
+import StickyWrapper from '../../components/ui/Wrappers/StickyWrapper/StickyWrapper';
+import { ServerNav } from '../../layout/Navigation/ServerNav/ServerNav';
 
 export const Server = () => {
 
@@ -62,8 +65,14 @@ export const Server = () => {
                     }}
                     className={`${styles.sectionOne} ${isChannelMenuOpen ? styles.sectionOneMobile : ''} ${currentVoiceChannel ? styles.inVoiceChannel : ''}`}
                     >
-                        <Banner image={banner} padding={'5px 5px 0px 5px'} />
-                        <Channels currentChannel={currentChannel} />
+                        <ScrollLoadWrapper>
+                            <Banner image={banner} />
+                            <StickyWrapper>
+                                <ServerNav />
+                            </StickyWrapper>
+                            <Channels currentChannel={currentChannel} />
+
+                        </ScrollLoadWrapper>
                         <ControlBar key={'control-bar'} />
                     </section>
                     <section 

@@ -97,7 +97,7 @@ export const NotificationProvider = ({children}) => {
         if (!channels || !last_read_status) return;
 
         const hasUnread = Object.values(channels).some(channel => {
-            if (channel.channel_type !== 'text') return false;
+            if (channel.channel_type !== 'text' || channel.locked_channel) return false;
 
             const lastRead = last_read_status[channel._id]?.last_read_at;
             const latestMessage = channel.latest_message_at;

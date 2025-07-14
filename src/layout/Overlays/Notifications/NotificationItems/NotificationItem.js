@@ -4,6 +4,7 @@ import NotificationReplyItem from './NotificationReplyItem.js/NotificationReplyI
 import { getTimeAgo } from '../../../../lib/services/getTimeAgo';
 import { Subtitle } from '../../../../components/ui/Titles/Subtitle/Subtitle';
 import { NotificationInviteItem } from './NotificationInviteItem/NotificationInviteItem';
+import { NotificationPokeItem } from './NotificationPokeItem/NotificationPokeItem';
 
 const NotificationItem = ({ notification, onClick, onDelete }) => {
   const { type, read, createdAt } = notification;
@@ -17,7 +18,11 @@ const NotificationItem = ({ notification, onClick, onDelete }) => {
       ContentComponent = NotificationReplyItem;
       break;
     case 'server_invite':
+    case 'channel_invite':
       ContentComponent = NotificationInviteItem;
+      break;
+    case 'poke':
+      ContentComponent = NotificationPokeItem;
       break;
     //case 'mention':
     //  ContentComponent = NotificationMention;
