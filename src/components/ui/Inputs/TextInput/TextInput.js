@@ -1,7 +1,9 @@
 import PropTypes from "prop-types";
 import styles from "./TextInput.module.css";
+import IconButton from "../../Buttons/IconButton/IconButton";
+import { X } from "lucide-react";
 
-const TextInput = ({ type = "text", placeholder = "", value, onChange, error, autoComplete, maxLength }) => {
+const TextInput = ({ type = "text", placeholder = "", value, onChange, error, autoComplete, maxLength, onClear }) => {
   return (
     <div className={`${styles.inputContainer} ${error || (typeof maxLength === 'number' && value.length === maxLength) ? styles.error : ""}`}>
       <input
@@ -16,6 +18,7 @@ const TextInput = ({ type = "text", placeholder = "", value, onChange, error, au
         maxLength={maxLength}
       />
       {error && <span className={styles.errorMessage}>{error}</span>}
+      {(typeof onClear === 'function' && value.length > 0) && (<div className={styles.onClear}><IconButton title={'Clear'} onClick={onClear} Icon={X} /></div>)}
     </div>
   );
 };

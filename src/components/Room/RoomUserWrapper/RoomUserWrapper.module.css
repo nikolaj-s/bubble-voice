@@ -27,10 +27,10 @@
 
 .popout {
     position: fixed;
-    width: 242px;
-    height: 105px !important;
-    left: 73px;
-    margin-top: 5px;
+    width: var(--users-width, 250px) !important;
+    height: 110px !important;
+    left: 68px;
+    margin-top: 0px;
     pointer-events: none;
     display: grid;
     grid-template-columns: 1fr;

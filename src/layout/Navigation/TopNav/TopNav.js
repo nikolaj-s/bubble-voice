@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setOverlay } from "../../../features/Overlay/overlaySlice";
 import { selectServerName } from "../../../features/ServerDetails/serverDetailsSlice";
 
-import { Bell, Ellipsis, LayoutDashboard, Menu, Settings2, UserRoundX, UsersRound, X } from "lucide-react";
+import { Ellipsis, LayoutDashboard, Menu, Settings2, X } from "lucide-react";
 import { Route, Routes } from "react-router";
 import { SearchButton } from "./SearchButton/SearchButton";
 import ChannelHeader from "../../../components/Headers/ChannelHeader/ChannelHeader";
@@ -14,11 +14,9 @@ import { setFilter, setSelectedChannelToFilter} from "../../../features/Search/s
 import { toggleMobileMenu } from "../../../features/Mobile/mobileSlice";
 import { Logo } from "../../../components/Icons/Bubble/Logo";
 import { triggerContext } from "../../../lib/services/helperFunctions";
-import { toggleAppearanceSetting } from "../../../features/Settings/Appearance/appearanceSlice";
 import MetaTags from "../../../components/MetaTags/MetaTags";
 import { setChannelDescription } from "../../../features/Channel/ChannelDescription/channelDescriptionSlice";
 import { setChannelToViewWidgetsOf } from "../../../features/Widgets/widgetsSlice";
-import { toggleNotificationPanel } from "../../../features/Notifications/notificationsSlice";
 import { NotificationButton } from "./NotificationButton/NotificationButton";
 
 const TopNav = () => {
@@ -32,8 +30,6 @@ const TopNav = () => {
   const {isUserMenuOpen, isChannelMenuOpen, isServerMenuOpen} = useSelector(state => state.mobileSlice);
 
   const {details} = useSelector(state => state.serverDetailsSlice);
-
-  const hideUsers = useSelector(state => state.appearanceSlice.hideUsers);
 
   const {currentVoiceChannel} = useSelector(state => state.voiceChannelSlice);
 
@@ -130,13 +126,6 @@ const TopNav = () => {
         />
         )}
         <NotificationButton />
-        <IconButton
-        Icon={hideUsers ? <UserRoundX color="var(--text-color)" /> : <UsersRound color="var(--text-color)" />}
-        position="bottom"
-        title={hideUsers ? "Show Users" : "Hide Users"}
-        className={styles.desktopUserButton}
-        onClick={() => {dispatch(toggleAppearanceSetting('hideUsers'))}}
-        />
         <SearchButton onClick={handleOpenSearch} />
         {/* Notifications Button */}
         <IconButton 

@@ -48,7 +48,7 @@ export const ReOrderChannels = ({ onDrop }) => {
       
         let id_array = localChannels
           .map(c => c.channel_id);
-      console.log(id, moveTo, category)
+    
         const originatingPos = id_array.indexOf(id);
 
         const newPos = id_array.indexOf(moveTo);
@@ -116,6 +116,7 @@ export const ReOrderChannels = ({ onDrop }) => {
         })
         .catch(err => {
             console.log(err);
+            dispatch(triggerAlert(err, 'error'))
             return;
         })
 

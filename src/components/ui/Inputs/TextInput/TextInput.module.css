@@ -32,3 +32,10 @@
     bottom: -18px;
     left: 5px;
   }
+
+  .onClear {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    translate: 0% -50%;
+  }

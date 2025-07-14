@@ -4,46 +4,44 @@ import axios from "axios";
 import { API_URL } from "../../../lib/Validation";
 
 export const getMoments = createAsyncThunk(
-  'getMoments/momentsSlice',
-  async ({ channel_id, page = 1 }, { getState, rejectWithValue }) => {
+  'moments/getMoments',
+  async ({ channel_id, page = 1, query = '' }, { getState, rejectWithValue }) => {
     try {
       const { token } = getState().authSlice;
       const { server_id } = getState().serverDetailsSlice;
 
-      // Build a cache key that includes server, channel, and page
-      const cacheKey = `moments_${server_id}_${channel_id}_${page}`;
-      const rawCache = sessionStorage.getItem(cacheKey);
-      if (rawCache) {
-        const { timestamp, data } = JSON.parse(rawCache);
-        // If cached less than 10 minutes ago ago, return it
-        if (Date.now() - timestamp < 10 * 60 * 1000) {
-          return { ...data, channel_id };
+      // build params
+      const params = { page, server_id };
+      if (channel_id) params.channel_id = channel_id;
+      if (query)     params.query      = query;
+
+      // cache key includes channel, page & query
+      const key = `moments_${server_id}_${channel_id||'all'}_${page}_${query}`;
+      const raw = sessionStorage.getItem(key);
+      if (raw) {
+        const { timestamp, data } = JSON.parse(raw);
+        if (Date.now() - timestamp < 1*60*1000) {
+          return { ...data, channel_id, page, query };
         }
       }
 
-      // Otherwise, fetch from API
-      const response = await axios({
-        method: "GET",
-        url: `${API_URL}/moments`,
-        params: { page, server_id, channel_id },
+      const response = await axios.get(`${API_URL}/moments`, {
+        params,
         headers: { TOKEN: token }
       });
 
-      // Cache the fresh response
-      const toCache = {
-        timestamp: Date.now(),
-        data: response.data
-      };
-      try {
-        sessionStorage.setItem(cacheKey, JSON.stringify(toCache));
-      } catch {
-        // fail silently if storage quota exceeded
+      const payload = { ...response.data, channel_id, page, query };
+      // only cache if we got results
+      if (response.data.moments?.length) {
+        sessionStorage.setItem(key, JSON.stringify({
+          timestamp: Date.now(),
+          data: payload
+        }));
       }
-
-      return { ...response.data, channel_id };
-    } catch (error) {
-      console.log(error);
-      return APIErrorHandler(rejectWithValue, error);
+      return payload;
+    } catch (err) {
+      console.error(err);
+      return APIErrorHandler(rejectWithValue, err);
     }
   }
 );

@@ -17,7 +17,7 @@ export const MessageSelectInput = ({message = {}}) => {
     if (!isSelecting) return null;
 
     return (
-        <div style={{position: 'absolute', top: 5, left: 5}}>
+        <div style={{position: 'absolute', top: 5, left: 5, zIndex: 15}}>
             <IconButton 
             title={Object.values(selectedMessages).length === 10 ? 'Max Reached' : selectedMessages[message._id] ? "Unselect" : "Select"} 
             Icon={<BoolIndicator active={selectedMessages[message._id]} />}

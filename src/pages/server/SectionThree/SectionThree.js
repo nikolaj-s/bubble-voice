@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Users } from '../users/Users'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { LineSpacer } from '../../../components/ui/Spacers/LineSpacer/LineSpacer';
 import { ToolBar } from '../../../components/ui/Wrappers/ToolBar/ToolBar';
 import TextButton from '../../../components/ui/Buttons/TextButton/TextButton';
 import { Moments } from '../../../components/Moments/Moments';
 import { AnimatePresence, motion } from 'framer-motion';
+import { setSideBarPage } from '../../../features/Ui/uiSlice';
 
 const slideVariants = {
   enter: direction => ({
@@ -24,9 +25,15 @@ const slideVariants = {
 
 export const SectionThree = () => {
 
-    const [page, setPage] = useState('users');
+    const dispatch = useDispatch();
+
+    const page = useSelector(state => state.uiSlice.sideBarPage);
 
     const {currentTextChannel} = useSelector(state => state.textChannelSlice);
+
+    const setPage = (value) => {
+      dispatch(setSideBarPage(value))
+    } 
 
     const [direction, setDirection] = useState(0);
 

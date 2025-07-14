@@ -6,7 +6,8 @@ import { Description } from '../../ui/Description/Description';
 import { TextIndicator } from '../../ui/TextIndicator/TextIndicator';
 
 export const MomentsItem = ({ moment = {}, onClick }) => {
-  const { name, description, createdAt, thumbnail } = moment;
+  
+  const { name, description, createdAt, thumbnail, _id } = moment;
 
   // pick the first message with an image
   
@@ -15,6 +16,7 @@ export const MomentsItem = ({ moment = {}, onClick }) => {
       className={styles.item}
       onClick={() => onClick(moment)}
       aria-label={`Open moment ${name}`}
+      data-context={JSON.stringify({type: 'moment', _id, name, description, createdAt})}
     >
       {thumbnail ? (
         <img

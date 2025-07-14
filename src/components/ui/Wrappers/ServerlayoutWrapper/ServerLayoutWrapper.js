@@ -6,7 +6,7 @@ export const ServerLayoutWrapper = ({ children, hideUsers = false }) => {
 
   // Default and bounds
   const defaultSizes = { '--users-width': 250, '--sidebar-width': 250 }
-  const MIN = 200, MAX = 400
+  const MIN = 224, MAX = 400
 
   const [canResize, setCanResize] = useState(window.innerWidth > 730)
 

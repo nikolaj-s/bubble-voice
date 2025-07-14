@@ -17,7 +17,7 @@ export const fetchNotifications = createAsyncThunk('fetchNotifications/notificat
             headers: {TOKEN: token},
             params: {limit, skip}
         })
-        console.log(res)
+  
         return res.data;
 
     } catch (error) {

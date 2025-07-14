@@ -26,17 +26,17 @@ export const themes = {
     '--overlay-color': 'rgba(18, 24, 29, 0.7)',
   },
   black: {
-    '--primary-color': '#151d2a',
-    '--secondary-color': '#2d5fa7',
-    '--accent-color': '#3fcfff',
-    '--background-color': '#000000',
-    '--card-background-color': '#11151c',
-    '--text-color': '#f8faff',
-    '--button-background': '#288aff',
-    '--button-hover': '#2275d8',    // darker for readability
-    '--error-color': '#ff4949',
-    '--success-color': '#31ec89',
-    '--overlay-color': 'rgba(0, 0, 0, 0.76)',
+    '--primary-color':         '#000000',        // pure black base
+    '--secondary-color':       '#1a1a1a',        // very dark grey for subtle UI elements
+    '--accent-color':          '#1e90ff',        // electric blue accent
+    '--background-color':      '#000000',        // screen‐off blacks
+    '--card-background-color': '#121212',        // slightly lifted cards
+    '--text-color':            '#e0e0e0',        // soft white for legibility
+    '--button-background':     '#1e90ff',        // same as accent
+    '--button-hover':          '#187bcd',        // darker blue hover
+    '--error-color':           '#ff4c4c',        // vivid red
+    '--success-color':         '#4caf50',        // bright green
+    '--overlay-color':         'rgba(0, 0, 0, 0.85)', // deep overlay
   },
   carbon: {
     '--primary-color': '#1a1a1a',

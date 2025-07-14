@@ -5,12 +5,16 @@ import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { setOverlay } from "../../../features/Overlay/overlaySlice";
+import { BoolIndicator } from "../../../components/ui/BoolIndicator/BoolIndicator";
+import { toggleAppearanceSetting } from "../../../features/Settings/Appearance/appearanceSlice";
 
 export const useAppCtxMenu = () => {
 
     const dispatch = useDispatch();
 
     const {server_id} = useSelector(state => state.serverDetailsSlice);
+
+    const hideSideBar = useSelector(state => state.appearanceSlice.hideUsers);
 
     const getAppSubmenuOptions = useCallback((options) => {
 
@@ -34,9 +38,17 @@ export const useAppCtxMenu = () => {
             }
         })
 
+        options.push({
+            label: "Hide Side Bar",
+            type: 'button',
+            icon: <BoolIndicator active={hideSideBar} />,
+            onClick: () => {
+                dispatch(toggleAppearanceSetting('hideUsers'));
+            }
+        })
 
 
-    }, [dispatch, server_id])
+    }, [dispatch, server_id, hideSideBar])
 
     return {getAppSubmenuOptions}
 }

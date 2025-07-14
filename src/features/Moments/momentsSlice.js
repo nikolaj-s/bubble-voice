@@ -1,21 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getMoments } from "./Thunks/getMoments";
 import { createMoment } from "./Thunks/createMoment";
+import { deleteMoment } from "./Thunks/deleteMoment";
 
 const momentsSlice = createSlice({
     name: "momentsSlice",
-    initialState: {
+        initialState: {
         loading: false,
         error: false,
         isSelecting: false,
         selectedMessages: {},
-        selectedMoment: null,
-        selectedChannel: null,
         moments: [],
-        noMoreMoments: false
+        noMoreMoments: false,
+        lastChannel: null,
+        lastQuery: ''
     },
     reducers: {
         addMessageToMoment: (state, action) => {
+            if (Object.values(state.selectedMessages).length >= 10) return;
             state.selectedMessages[action.payload._id] = action.payload;
         },
         removeMessageFromMoment: (state, action) => {
@@ -25,9 +27,6 @@ const momentsSlice = createSlice({
             state.isSelecting = action.payload;
 
             state.selectedMessages = {};
-        },
-        setSelectedMoment: (state, action) => {
-            state.selectedMoment = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -40,15 +39,24 @@ const momentsSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         })
-        .addCase(getMoments.fulfilled, (state, action) => {
-            state.loading = false;
-            state.error = false;
-            if (action.payload.channel_id !== state.selectedChannel) {
-                state.selectedChannel = action.payload.channel_id;
-                state.moments = [];
+        .addCase(getMoments.fulfilled, (state, { payload, meta }) => {
+            state.loading      = false;
+            state.error        = false;
+            const { moments: pageData, noMoreItems, channel_id, query, page } = payload;
+
+            // if channel or query changed, always reset on page 1
+            const chanChanged  = channel_id !== state.lastChannel;
+            const queryChanged = query     !== state.lastQuery;
+
+            if (page === 1 || chanChanged || queryChanged) {
+                state.moments = pageData;
+            } else {
+                state.moments = state.moments.concat(pageData);
             }
-            state.moments = action.payload.moments;
-            state.noMoreMoments = action.payload.noMoreMoments;
+
+            state.noMoreMoments = noMoreItems;
+            state.lastChannel   = channel_id;
+            state.lastQuery     = query;
         })
 
         // create moment
@@ -67,9 +75,28 @@ const momentsSlice = createSlice({
             state.selectedMessages = {};
             state.moments.unshift(action.payload);
         })
+
+        // delete moment
+        builder.addCase(deleteMoment.pending, (state, action) => {
+            state.loading = true;
+            state.error = false;
+        })
+        .addCase(deleteMoment.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        })
+        .addCase(deleteMoment.fulfilled, (state, action) => {
+            state.loading = false;
+            state.error = false;
+            if (action.payload._id) {
+                state.moments = state.moments.filter(moment => moment._id !== action.payload._id)
+
+            }
+            
+        })
     }
 })
 
-export const {addMessageToMoment, removeMessageFromMoment, setIsSelecting, setSelectedMoment} = momentsSlice.actions;
+export const {addMessageToMoment, removeMessageFromMoment, setIsSelecting} = momentsSlice.actions;
 
 export default momentsSlice.reducer;

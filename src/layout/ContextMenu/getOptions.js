@@ -19,6 +19,7 @@ import { useConnectionCtxMenu } from "./Options/useConnectionCtxMenu";
 import { useInputCtxMenu } from "./Options/useInputCtxMenu";
 import { useUserControlsCtxMenu } from "./Options/UserOptions/useUserControlsCtxMenu";
 import { useServerCtxMenu } from "./Options/useServerCtxMenu";
+import { useMomentCtxMenu } from "./Options/useMomentCtxMenu";
 
 export const useContextMenuOptions = () => {
 
@@ -61,6 +62,8 @@ export const useContextMenuOptions = () => {
     const {getUserControlsOptions} = useUserControlsCtxMenu();
 
     const {getServerOptions} = useServerCtxMenu();
+
+    const {getMomentOptions} = useMomentCtxMenu();
 
     const getOptions = (e, permissions = {}) => {
         try {
@@ -111,6 +114,8 @@ export const useContextMenuOptions = () => {
             if (data.video) getVideoOptions(options, data);
 
             if (data.message) getMessageOptions(options, data, permissions);
+
+            if (data.moment) getMomentOptions(options, permissions, data.moment);
 
             if (data.controlBar || data.roomControl) getUserControlsOptions(options, {}, true);
 

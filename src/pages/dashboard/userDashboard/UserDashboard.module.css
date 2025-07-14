@@ -3,7 +3,7 @@
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-rows: 105px 1fr 65px;
+    grid-template-rows: 105px 1fr auto;
     border-top-left-radius: 15px;
 }
 

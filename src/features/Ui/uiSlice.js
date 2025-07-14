@@ -4,6 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     fullscreen: false,
     focused: typeof document !== "undefined" ? document.hasFocus() : true,
+    sideBarPage: 'users'
     // ...
 };
   
@@ -17,10 +18,13 @@ const uiSlice = createSlice({
         setFocused: (state, action) => {
             state.focused = action.payload;
         },
+        setSideBarPage: (state, action) => {
+            state.sideBarPage = action.payload;
+        }
     },
 });
   
-export const { setFullscreen, setFocused } = uiSlice.actions;
+export const { setFullscreen, setFocused, setSideBarPage } = uiSlice.actions;
 
 export default uiSlice.reducer;
   

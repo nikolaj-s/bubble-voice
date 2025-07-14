@@ -49,7 +49,7 @@
   .contentArea {
     flex: 1;
     padding: 10px;
-    background-color: var(--card-background-color);
+    background-color: var(--primary-color);
     display: grid;
     height: calc(100% - 20px);
     overflow-x: hidden;

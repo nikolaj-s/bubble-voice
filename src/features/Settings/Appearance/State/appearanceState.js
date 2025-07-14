@@ -1,15 +1,7 @@
-export const initialState = () => {
-  const safeGet = (key, fallback) => {
-    try {
-      const value = JSON.parse(localStorage.getItem(key));
-      return value !== null ? value : fallback;
-    } catch (err) {
-      console.warn(`Corrupt localStorage item: "${key}", clearing it.`);
-      localStorage.removeItem(key);
-      return fallback;
-    }
-  };
+import { safeGet } from "../../../../lib/handlers/safeGet";
 
+export const initialState = () => {
+  
   return {
     hideUsers: safeGet('hideUsers', false),
     hideCustomChannelIcons: safeGet('hideCustomChannelIcons', false),

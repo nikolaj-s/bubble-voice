@@ -14,6 +14,7 @@
 
 .container section {
     background-color: var(--primary-color);
+    height: calc(100svh - 40px);
 }
 
 .hideUsers {
