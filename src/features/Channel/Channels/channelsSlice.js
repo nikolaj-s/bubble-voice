@@ -8,7 +8,10 @@ const channelsSlice = createSlice({
         currentChannel: null,
         loading: false,
         status: "loading",
-        error: false
+        error: false,
+        draggingChannel: false,
+        draggingCategory: false,
+        draggingUser: false
     },
     reducers: {
         addChannel: (state, action) => {
@@ -61,7 +64,6 @@ const channelsSlice = createSlice({
         },
         setCurrentChannel: (state, action) => {
             state.currentChannel = action.payload;
-            console.log(action.payload)
         },
         clearCurrentChannel: (state,action) => {
             state.currentChannel = null;
@@ -73,7 +75,6 @@ const channelsSlice = createSlice({
             delete state.channels[action.payload._id];
         },
         updateChannelStatus: (state, action) => {
-            console.log(action.payload);
             if (action.payload.channel_id) {
                 state.channels[action.payload.channel_id].status = action.payload.status;
             }
@@ -83,6 +84,9 @@ const channelsSlice = createSlice({
             if (state.channels[action.payload.channel_id]) {
                 state.channels[action.payload.channel_id].latest_message_at = action.payload.latest_message_at;
             }
+        },
+        toggleDraggingState: (state, action) => {
+            state[action.payload.state] = action.payload.value;
         }
     },
     extraReducers: (builder) => {
@@ -114,7 +118,8 @@ export const {
     updateCategoryofChannels,
     removeChannel,
     updateChannelStatus,
-    updateLatestMessageAt
+    updateLatestMessageAt,
+    toggleDraggingState
 } = channelsSlice.actions;
 
 export default channelsSlice.reducer;

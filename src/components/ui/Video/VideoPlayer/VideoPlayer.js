@@ -13,7 +13,7 @@ import { setOverlay } from '../../../../features/Overlay/overlaySlice';
 
 const INACTIVITY_TIMEOUT = 2500;
 
-const VideoPlayer = ({ src, title }) => {
+const VideoPlayer = ({ src, title, thumbnail }) => {
 
   const dispatch = useDispatch();
 
@@ -83,6 +83,7 @@ const VideoPlayer = ({ src, title }) => {
 
   return (
     <div
+      onClick={(e) => {e.stopPropagation()}}
       onMouseMove={handleMouseMove}
       onMouseLeave={() => {
         setShowControls(false);
@@ -92,8 +93,9 @@ const VideoPlayer = ({ src, title }) => {
       data-context={JSON.stringify({ type: 'video', src, title: title || src, duration: Math.floor(duration), query: title || src })}
     >
       <ReactPlayer
+      light={isPlaying ? false : (thumbnail || true)}
         ref={playerRef}
-        url={duration === 0 ? src : interacted ? src : null}
+        url={src}
         playing={isPlaying}
         muted={isMuted}
         volume={volume / 100}
@@ -115,10 +117,13 @@ const VideoPlayer = ({ src, title }) => {
         <div className={styles.controlWrapper}>
           <ProgressBar width="100%" duration={duration} currentTime={currentTime} onSeek={handleSeek} />
           <div className={styles.volumeControl}>
+            
             <div onMouseEnter={() => toggleVolumeHover(true)} className={styles.volumeWrapper}>
-              <button onClick={toggleMute} className={styles.controlButton}>
-                {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
-              </button>
+              <IconButton 
+              Icon={isMuted ? VolumeX : Volume2}
+              onClick={toggleMute}
+              title={isMuted ? 'Unmute' : 'Mute'}
+              />
                 <div
                   className={styles.volumeSlider}
                 >

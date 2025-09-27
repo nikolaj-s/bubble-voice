@@ -114,11 +114,11 @@ export const HorizontalMediaScroller = ({
           </div>
         ))}
 
-        {showSeeMore && (
+        {/* {showSeeMore && (
           <div className={styles.seeMore} onClick={seeMore}>
             + See More
           </div>
-        )}
+        )} */}
       </div>
 
       {/* Right fade arrow */}

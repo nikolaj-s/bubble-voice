@@ -5,6 +5,8 @@ import { getTimeAgo } from '../../../../lib/services/getTimeAgo';
 import { Subtitle } from '../../../../components/ui/Titles/Subtitle/Subtitle';
 import { NotificationInviteItem } from './NotificationInviteItem/NotificationInviteItem';
 import { NotificationPokeItem } from './NotificationPokeItem/NotificationPokeItem';
+import IconButton from '../../../../components/ui/Buttons/IconButton/IconButton';
+import { X } from 'lucide-react';
 
 const NotificationItem = ({ notification, onClick, onDelete }) => {
   const { type, read, createdAt } = notification;
@@ -39,7 +41,11 @@ const NotificationItem = ({ notification, onClick, onDelete }) => {
       className={`${styles.card} ${!read ? styles.unread : ''}`}
       onClick={() => onClick(notification)}
     >
-        <Subtitle>{notification.title}</Subtitle>
+        <div className={styles.header}>
+          <Subtitle>{notification.title}</Subtitle>
+          <IconButton width={18} height={18} padding={2} title={'Delete'} onClick={() => {onDelete(notification)}} Icon={X} />
+        </div>
+     
         <ContentComponent {...notification} onAccept={() => {onClick({...notification, accepted: true})}} onDecline={() => {onClick({...notification, accepted: false})}} />
         <Subtitle>{getTimeAgo(createdAt)}</Subtitle>
     </div>

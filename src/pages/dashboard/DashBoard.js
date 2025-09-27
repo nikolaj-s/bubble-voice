@@ -43,6 +43,7 @@ import { fetchDevices } from "../../features/Settings/Devices/deviceSlice";
 import { ServerActivityFeed } from "../server/serverActivityFeed/ServerActivityFeed";
 import SoundEffectPlayer from "../../components/SoundEffectPlayer/SoundEffectPlayer";
 import { DeviceNotification } from "../../components/DeviceNotification/DeviceNotification";
+import { ConversationProvider } from "../../providers/ConversationProvider/ConversationProvider";
 
 const Dashboard = () => {
 
@@ -93,6 +94,7 @@ const Dashboard = () => {
                 </ContextMenu>
                 <AlertToast />
                 </NativeFullScreenWrapper>
+                <ConversationProvider />
              </GlobalVolumeProvider>
             </NotificationProvider>
           </SocketProvider>

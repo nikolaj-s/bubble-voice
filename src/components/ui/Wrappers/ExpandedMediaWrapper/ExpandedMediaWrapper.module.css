@@ -1,7 +1,7 @@
 .overlay {
   position: fixed;
   z-index: 52;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0px; left: 0; right: 0; bottom: 0;
   width: 100vw;
   height: 100svh;
   background: var(--overlay-color);
@@ -23,7 +23,7 @@
 
 .close {
   position: absolute;
-  top: 10px;
+  top: 30px;
   right: 10px;
   z-index: 10;
 }

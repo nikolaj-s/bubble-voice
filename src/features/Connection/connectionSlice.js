@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   status: 'connecting', // 'connected' | 'disconnected' | 'reconnected'
+  connectionInfo: {}
 };
 
 const connectionSlice = createSlice({
@@ -16,10 +17,13 @@ const connectionSlice = createSlice({
           state.status = action.payload;
         }
        
+    },
+    setConnectionInfo: (state, action) => {
+      state.connectionInfo = action.payload;
     }
   },
 });
 
-export const { setConnectionState } = connectionSlice.actions;
+export const { setConnectionState, setConnectionInfo } = connectionSlice.actions;
 
 export default connectionSlice.reducer;

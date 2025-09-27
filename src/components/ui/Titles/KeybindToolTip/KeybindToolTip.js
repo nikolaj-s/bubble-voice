@@ -36,7 +36,9 @@ export const KeybindToolTip = ({binds, label, width}) => {
                         padding: '5px 10px', 
                         margin: '5px 0px', 
                         borderRadius: 5,
-                        fontSize: '1rem'
+                        fontSize: '1rem',
+                        borderRight: '3px solid var(--background-color)',
+                        borderBottom: '3px solid var(--background-color)'
                     }}
                     >
                     {bind}

@@ -29,8 +29,16 @@
     text-overflow: ellipsis;
 }
 
+.contextButton svg {
+    transition: 0.2s ease-in-out;
+}
+
 .contextButton:hover {
     background: var(--button-hover);
+}
+
+.contextButton:hover svg {
+    scale: 1.2;
 }
 
 .contextButton:active {

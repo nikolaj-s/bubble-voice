@@ -74,12 +74,6 @@ export const useScreenShare = ({produce, closeProducer}) => {
           try {
 
             const mediaStream = await navigator.mediaDevices.getUserMedia({
-              // audio: {
-              //   mandatory: {
-              //     chromeMediaSource: "desktop",
-              //     chromeMediaSourceId: source.id
-              //   }
-              // },
               audio: false,
               video: {
                 mandatory: {
@@ -114,6 +108,10 @@ export const useScreenShare = ({produce, closeProducer}) => {
             };
             // Only add once
             mediaStream.getVideoTracks().forEach((track) => {
+              track.onended = stopHandler;
+            });
+
+            mediaStream.getAudioTracks().forEach((track) => {
               track.onended = stopHandler;
             });
 

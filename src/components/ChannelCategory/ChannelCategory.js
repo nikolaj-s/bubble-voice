@@ -6,24 +6,27 @@ import { ChevronDown } from "lucide-react";
 import { ChannelButtonDragWrapper } from "../ui/Buttons/ChannelButton/ChannelButtonDragWrapper";
 import { Subtitle } from "../ui/Titles/Subtitle/Subtitle";
 import { TextIndicator } from "../ui/TextIndicator/TextIndicator";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleDraggingState } from "../../features/Channel/Channels/channelsSlice";
 
 export const Category = ({
   category_id,
   catagoryName,
   channels,
-  draggingChannel,
   toggleDraggingChannel,
   draggingUser,
   toggleDragginUser,
   move,
-  loading,
-  draggingCategory,
-  toggleDraggingCategory,
   moveCategory,
   marginBottom = null,
   category,
   autoSort
 }) => {
+
+  const dispatch = useDispatch();
+
+  const {draggingCategory, draggingChannel} = useSelector(state => state.channelsSlice);
+
   const [collapse, toggleCollapse] = React.useState(false);
 
   const [moveIndicator, toggleMoveIndicator] = React.useState(false);
@@ -39,19 +42,21 @@ export const Category = ({
     } else if (id !== category_id) {
       move(id, 0, category_id);
     }
-  
-    toggleDraggingCategory(false);
-    toggleDraggingChannel(false);
+    
+    dispatch(toggleDraggingState({state: 'draggingChannel', value: false}));
+    dispatch(toggleDraggingState({state: 'draggingCategory', value: false}));
+ 
   };
 
   const onCategoryDragStart = (e) => {
     e.stopPropagation();
     e.dataTransfer.setData("application/category-id", category_id);
-    toggleDraggingCategory(true);
+    dispatch(toggleDraggingState({state: 'draggingCategory', value: true}));
+
   };
 
   const onCategoryDragEnd = () => {
-    toggleDraggingCategory(false);
+    dispatch(toggleDraggingState({state: "draggingCategory", value: false}));
   };
 
   const newCategoryPos = (e) => {
@@ -59,7 +64,6 @@ export const Category = ({
     const id = e.dataTransfer.getData("application/category-id");
     if (!id || id === category_id) return;
     moveCategory(id, category_id, true);
-    toggleMoveIndicator(false);
   };
 
   React.useEffect(() => {
@@ -137,8 +141,9 @@ export const Category = ({
                 move={move}
                 draggingCategory={draggingCategory}
                 toggleDraggingChannel={toggleDraggingChannel}
+                draggingUser={draggingUser}
               >
-                <ChannelButton {...channel} channel={channel} key={channel.channel_id} />
+                <ChannelButton {...channel} toggleDragginUser={toggleDragginUser} channel={channel} key={channel.channel_id} />
               </ChannelButtonDragWrapper>
             );
           })}

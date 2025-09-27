@@ -19,7 +19,7 @@
     padding: 0px;
     text-align: center;
     width: 100%;
-    max-width: 100%;
+    max-width: calc(100% - 20px);
     overflow: hidden;
     text-wrap: nowrap;
     text-overflow: ellipsis;

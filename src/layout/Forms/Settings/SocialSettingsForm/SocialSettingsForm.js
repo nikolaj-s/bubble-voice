@@ -35,7 +35,7 @@ export const SocialSettingsForm = () => {
                 <Label label={server.server_name} />
                 <Banner image={server.server_banner} />
                 <div style={{position: 'absolute', right: 5, top: 5}}>
-                    <IconButton onClick={() => {handleToggleServerMute(server)}} title={muted_notifications[server._id] ? 'Unmute' : 'Mute'}  Icon={<BoolIndicator active={muted_notifications[server._id]} />} />
+                    <IconButton onClick={() => {handleToggleServerMute(server)}} title={muted_notifications?.[server._id] ? 'Unmute' : 'Mute'}  Icon={<BoolIndicator active={muted_notifications?.[server._id]} />} />
                 </div>
             </Card>
         ))}

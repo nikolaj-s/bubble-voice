@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from "react";
+import React, { useRef, useCallback, useState } from "react";
 import styles from "./ScrollLoadWrapper.module.css";
 
 const ScrollLoadWrapper = ({
@@ -13,6 +13,9 @@ const ScrollLoadWrapper = ({
   contentGap
     // px distance from bottom to trigger loadMore
 }) => {
+
+  const [hover, toggleHover] = useState(false);
+
   const containerRef = useRef();
 
   const handleScroll = useCallback(() => {
@@ -27,8 +30,10 @@ const ScrollLoadWrapper = ({
 
   return (
     <div
+      onMouseEnter={() => {toggleHover(true)}}
+      onMouseLeave={() => {toggleHover(false)}}
       className={`${styles.scrollContainer} ${className}`}
-      style={style}
+      style={{...style, overflow: hover ? null : 'hidden'}}
       ref={containerRef}
       onScroll={handleScroll}
       tabIndex={0}

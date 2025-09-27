@@ -19,6 +19,8 @@
     background-size: 200px 100%;
     animation: shimmer 1.5s infinite linear;
     border-radius: 4px;
+    flex-shrink: 0;
+    
   }
   
   .messageItem {

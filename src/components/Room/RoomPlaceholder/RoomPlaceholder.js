@@ -1,7 +1,7 @@
 
-import styles from './RoomPlaceholder.module.css';
-import {ChannelBackground} from '../../ChannelBackground/ChannelBackground'; // Adjust path if needed
+import styles from './RoomPlaceholder.module.css';// Adjust path if needed
 import { MonitorX } from 'lucide-react';
+import { Description } from '../../ui/Description/Description';
 
 const RoomPlaceholder = ({ channelBackground }) => {
   return (
@@ -9,10 +9,7 @@ const RoomPlaceholder = ({ channelBackground }) => {
       <div className={styles.content}>
         <MonitorX color='var(--text-color)' size={60} />
         <h1 className={styles.title}> No Streams Here</h1>
-        <p className={styles.blurb}>
-          This channel is currently off the air. No video, no audio — just vibes and maybe some awkward silence. 
-        </p>
-        <p className={styles.suggestion}>Try a different channel or enjoy the peace and quiet.</p>
+        <Description description={'  This channel is currently off the air. No video, no audio — just vibes and maybe some awkward silence. '} />
       </div>
     </div>
   );

@@ -7,24 +7,32 @@ import {
   toggleWebcam,
 } from "../../features/Channel/MediaControl/mediaControlSlice";
 import { toggleMediaPlayerMuted } from "../../features/MediaPlayer/mediaPlayerSlice";
+import { useScreenshot } from "../../hooks/useScreenshot";
+import { useAppFocus } from "../../hooks/useAppFocus";
+import { setCurrentVoiceChannel } from "../../features/Channel/VoiceChannel/voiceChannelSlice";
 
 const KeybindProvider = ({ children }) => {
   const dispatch = useDispatch();
+
   const keybinds = useSelector((state) => state.keybindsSlice.keybinds);
 
-  const focused = useSelector(state => state.uiSlice.focused);
+  const focused = useAppFocus();
 
   const activeKeysRef = useRef(new Set());
   const cooldownRef = useRef({});
   const COOLDOWN_MS = 300;
   const isElectron = !!window?.electron?.ipcRenderer;
 
+  const {captureScreenshot} = useScreenshot();
+
   const handlers = useRef({
       muteMicrophone: () => dispatch(toggleMicrophone()),
       deafen: () => dispatch(toggleAudioMute()),
       enableWebcam: () => dispatch(toggleWebcam()),
       pushToTalk: (_, payload) => dispatch(togglePushToTalkActive(payload?.active)),
-      muteMediaPlayer: () => dispatch(toggleMediaPlayerMuted())
+      muteMediaPlayer: () => dispatch(toggleMediaPlayerMuted()),
+      screenshot: () => {captureScreenshot()},
+      disconnect: () => {dispatch(setCurrentVoiceChannel(null))}
   })
 
   const handleActionTrigger = (action) => {
@@ -113,7 +121,7 @@ const KeybindProvider = ({ children }) => {
   useEffect(() => {
 
     if (!window?.electron?.ipcRenderer) return;
-
+console.log('initializing keybinds')
     const ipc = window.electron.ipcRenderer;
 
     if (focused) {

@@ -38,7 +38,7 @@
 .channelName {
   margin: 0;
   color: var(--text-color);
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: bold;
   word-break: keep-all;
   white-space: nowrap;

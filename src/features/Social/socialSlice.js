@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { pokeUser } from "./Thunks/pokeUser";
 import { inviteUserToChannel } from "./Thunks/inviteUserToChannel";
+import { moveUserToChannel } from "./Thunks/moveUserToChannel";
 
 const socialSlice = createSlice({
     name: "socialSlice",
@@ -22,6 +23,7 @@ const socialSlice = createSlice({
             state.error = false;
         })
 
+        // handle invite user to your channel
         builder.addCase(inviteUserToChannel.pending, (state) => {
             state.loading = true;
             state.error = false;
@@ -31,6 +33,20 @@ const socialSlice = createSlice({
             state.error = action.payload;
         })
         .addCase(inviteUserToChannel.fulfilled, (state, action) => {
+            state.loading = false;
+            state.error = false;
+        })
+
+        // move a user to another channel
+        builder.addCase(moveUserToChannel.pending, (state) => {
+            state.loading = true;
+            state.error = false;
+        })
+        .addCase(moveUserToChannel.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        })
+        .addCase(moveUserToChannel.fulfilled, (state, action) => {
             state.loading = false;
             state.error = false;
         })

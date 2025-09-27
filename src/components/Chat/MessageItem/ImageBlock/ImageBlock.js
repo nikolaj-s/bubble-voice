@@ -5,7 +5,7 @@ import { NsfwWrapper } from '../../../ui/Wrappers/NsfwWrapper/NsfwWrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import { setExpandedImage } from '../../../../features/Media/ExpandedImage/expandedImageSlice';
 
-export const ImageBlock = ({image, loading, nsfw, styles, width, height = 350, media_ref = {}}) => {
+export const ImageBlock = ({image, loading, nsfw, styles, width, height = 350, media_ref = {}, notification}) => {
 
     const maximumMediaHeight = useSelector(state => state.appearanceSlice.maximumMediaHeight);
 
@@ -29,7 +29,7 @@ export const ImageBlock = ({image, loading, nsfw, styles, width, height = 350, m
         onClick={expandImage}
         className={styles.imageBlock}>
             <NsfwWrapper nsfw={{nsfw}}>
-                <ImageComponent borderRadius={'var(--border-radius)'} width={'auto'} aspectRatio={aspectRatio} height={height > maximumMediaHeight || !height ? maximumMediaHeight : height} src={image} />   
+                <ImageComponent borderRadius={'var(--border-radius)'} width={'auto'} aspectRatio={notification ? 'auto' : aspectRatio} height={notification ? 'auto' : height > maximumMediaHeight || !height ? maximumMediaHeight : height} src={image} />   
             </NsfwWrapper>
         </div>
         : null}

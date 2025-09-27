@@ -18,11 +18,13 @@ export const NotificationProvider = ({children}) => {
 
     const {channels} = useSelector(state => state.channelsSlice);
 
-    const {last_read_status} = useSelector(state => state.notificationsSlice);
+    const {last_read_status, muteNotifications} = useSelector(state => state.notificationsSlice);
 
     const {server_id} = useSelector(state => state.serverDetailsSlice);
 
     const {currentTextChannel} = useSelector(state => state.textChannelSlice);
+
+    
 
     const muted_notifications = useSelector(state => state.accountPreferencesSlice.muted_notifications) || {muted_notifications: {}};
 
@@ -38,11 +40,13 @@ export const NotificationProvider = ({children}) => {
     const serverIdRef = useRef(server_id);
     const currentChannelRef = useRef(currentTextChannel);
     const notificationPrefRef = useRef(muted_notifications);
+    const mutedNotificationRef = useRef(muteNotifications);
 
     // keep the refs up-to-date
     useEffect(() => { serverIdRef.current       = server_id      }, [server_id]);
     useEffect(() => { currentChannelRef.current = currentTextChannel }, [currentTextChannel]);
     useEffect(() => {notificationPrefRef.current = muted_notifications}, [muted_notifications]);
+    useEffect(() => {mutedNotificationRef.current = muteNotifications}, [muteNotifications]);
 
     // now define a stable handler that only depends on dispatch
     const handleUpdateLatestMessage = useCallback((data) => {
@@ -62,7 +66,7 @@ export const NotificationProvider = ({children}) => {
 
         dispatch(pushNotification(data));
 
-        if (notificationPrefRef.current[data.server_id]) return;
+        if (notificationPrefRef.current[data.server_id] || mutedNotificationRef.current) return;
 
         dispatch(playSoundEffect('newMessage'));
     

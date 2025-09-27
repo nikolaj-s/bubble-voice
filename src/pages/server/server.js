@@ -28,12 +28,16 @@ import { ServerUsersProvider } from '../../providers/ServerUsersProvider/ServerU
 import ScrollLoadWrapper from '../../components/ui/Wrappers/ScrollLoadWrapper/ScrollLoadWrapper';
 import StickyWrapper from '../../components/ui/Wrappers/StickyWrapper/StickyWrapper';
 import { ServerNav } from '../../layout/Navigation/ServerNav/ServerNav';
+import { useSearchParams } from 'react-router-dom';
+import { isValidObjectId } from '../../lib/services/helperFunctions';
 
 export const Server = () => {
 
     const dispatch = useDispatch();
 
     const banner = useSelector(selectServerBanner);
+
+    const [searchParams, setSearchParams] = useSearchParams();
     
     const {currentChannel} = useSelector(state => state.channelsSlice);
 
@@ -46,6 +50,18 @@ export const Server = () => {
     const hideUsers = useSelector(state => state.appearanceSlice.hideUsers);
 
     const {fullscreen} = useSelector(state => state.uiSlice);
+
+    React.useEffect(() => {
+
+        if (!searchParams.get('voice-channel')) return;
+
+        if (isValidObjectId(searchParams.get('voice-channel'))) {
+            dispatch(setCurrentVoiceChannel(searchParams.get('voice-channel')));
+
+            setSearchParams({});
+        }
+
+    }, [searchParams])
 
     React.useEffect(() => {
 

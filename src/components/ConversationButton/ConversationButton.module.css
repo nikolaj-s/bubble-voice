@@ -1,0 +1,152 @@
+.button {
+  --radius: 12px;
+  --padX: 12px;
+  --padY: 10px;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  width: 100%;
+  padding: var(--padY) var(--padX);
+  background: color-mix(in oklab, var(--card-background-color), black 4%);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius);
+  cursor: pointer;
+  text-align: left;
+  transition: background 160ms ease, border-color 160ms ease, transform 80ms ease;
+}
+
+.button:hover {
+  background: color-mix(in oklab, var(--card-background-color), white 4%);
+  border-color: rgba(255,255,255,0.12);
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+.active {
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--button-background), var(--card-background-color) 80%),
+    var(--card-background-color)
+  );
+  border-color: color-mix(in oklab, var(--button-background), white 18%);
+}
+
+.unread {
+  border-color: color-mix(in oklab, var(--accent-color), white 18%);
+}
+
+/* left accent bar */
+.accent {
+  grid-column: 1 / span 1;
+  align-self: stretch;
+  width: 4px;
+  border-radius: 6px;
+  background: transparent;
+  transition: background 160ms ease;
+}
+
+.active .accent {
+  background: var(--button-background);
+}
+.unread .accent:not(.active .accent) {
+  background: var(--accent-color);
+}
+
+/* alert pill area (uses your AlertIndicator) */
+.alert {
+  grid-column: 2 / span 1;
+  justify-self: center;
+}
+
+.avatarWrapper {
+  grid-column: 3 / span 1;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;               /* soft squircle */
+  object-fit: cover;
+}
+
+.skeletonAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.08);
+}
+
+/* content */
+.content {
+  grid-column: 4 / span 1;
+  min-width: 0; /* allow text truncation */
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.topRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.name {
+  color: var(--text-color);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1 1 auto;
+}
+
+.time {
+  color: var(--text-color);
+  opacity: 0.7;
+  font-size: 12px;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.bottomRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 16px;
+}
+
+/* unread badge vs subtle label */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  height: 18px;
+  padding: 0 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  border-radius: 999px;
+  color: var(--text-color);
+  background: color-mix(in oklab, var(--accent-color), var(--card-background-color) 50%);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.subtle {
+  font-size: 12px;
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+/* focus */
+.button:focus-visible {
+  outline: 2px solid var(--button-background);
+  outline-offset: 2px;
+  border-color: color-mix(in oklab, var(--button-background), white 18%);
+}

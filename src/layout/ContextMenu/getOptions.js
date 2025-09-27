@@ -20,6 +20,8 @@ import { useInputCtxMenu } from "./Options/useInputCtxMenu";
 import { useUserControlsCtxMenu } from "./Options/UserOptions/useUserControlsCtxMenu";
 import { useServerCtxMenu } from "./Options/useServerCtxMenu";
 import { useMomentCtxMenu } from "./Options/useMomentCtxMenu";
+import { useConversationCtxMenu } from "./Options/ConversationOptions/useConversationCtxMenu";
+import { useConversationMessageCtxMenu } from "./Options/ConversationOptions/useConversationMessageCtxMenu";
 
 export const useContextMenuOptions = () => {
 
@@ -65,6 +67,10 @@ export const useContextMenuOptions = () => {
 
     const {getMomentOptions} = useMomentCtxMenu();
 
+    const {getConversationOptions} = useConversationCtxMenu();
+
+    const {getConversationMessageOptions} = useConversationMessageCtxMenu();
+
     const getOptions = (e, permissions = {}) => {
         try {
             const options = [];
@@ -86,6 +92,10 @@ export const useContextMenuOptions = () => {
             }
         
             if (data.appSubmenu) getAppSubmenuOptions(options);
+
+            if (data.conversation) getConversationOptions(options, data.conversation);
+
+            if (data['conversation-message']) getConversationMessageOptions(options, data['conversation-message'])
 
             if (data.appSubmenu || data.widgetsOverlay) getViewWidgetsOption(options);
 

@@ -67,7 +67,7 @@ export const ControlBar = () => {
                 width={50}
                 height={35}
                 padding={8}
-                title={"Disconnect"}
+                title={keybinds['disconnect'] ? <KeybindToolTip label={'Disconnect'} binds={[keybinds['disconnect']?.key]} /> : "Disconnect"}
                 backgroundColor='var(--error-color)'
                 Icon={<Unplug strokeWidth={2.5} color='var(--text-color)' />}
                 />

@@ -8,7 +8,6 @@ import { toggleMobileMenu } from '../../../../features/Mobile/mobileSlice';
 import { VerticalReorderWrapper } from '../../../../components/ui/Wrappers/VerticalReorderWrapper/VerticalReorderWrapper';
 import { reorderServers } from '../../../../features/Servers/Thunks/reorderServers';
 
-
 export const Servers = () => {
 
     const dispatch = useDispatch();
@@ -73,7 +72,9 @@ export const Servers = () => {
                 {servers.map(s => {
                     return <ServerButton server={s} action={handleSwitchServer} key={s._id} {...s} />
                 })}
+                
             </VerticalReorderWrapper>
+            
         </div>
     )
 }

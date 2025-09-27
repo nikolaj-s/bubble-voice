@@ -100,6 +100,9 @@ const mediaControlSlice = createSlice({
         throwWebcamError: (state, action) => {
             state.webcamError = action.payload
         },
+        throwScreenShareError: (state, action) => {
+            state.screenShareError = action.payload;
+        },
         clearMediaControlError: (state,action) => {
             state[action.payload] = false;
         },
@@ -127,7 +130,8 @@ export const {
     throwWebcamError,
     clearMediaControlError,
     toggleMicrophoneAttribute,
-    stopSharingScreen
+    stopSharingScreen,
+    throwScreenShareError
 } = mediaControlSlice.actions;
 
 export default mediaControlSlice.reducer;

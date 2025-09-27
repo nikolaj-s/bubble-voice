@@ -1,22 +1,28 @@
 import React from "react";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useUnreadStatus from "../../../../hooks/useUnreadStatus";
 import { AlertIndicator } from "../../AlertIndicator/AlertIndicator";
+import { toggleDraggingState } from "../../../../features/Channel/Channels/channelsSlice";
+import { moveUserToChannel } from "../../../../features/Social/Thunks/moveUserToChannel";
 
 export const ChannelButtonDragWrapper = ({
   children,
   channel,
-  draggingChannel,
-  toggleDraggingChannel,
   move,
   category_id,
   collapse,
-  draggingCategory,
 }) => {
+
+  const dispatch = useDispatch();
+
   const {currentTextChannel} = useSelector(state => state.textChannelSlice);
 
   const {currentVoiceChannel} = useSelector(state => state.voiceChannelSlice);
+
+  const {draggingUser, draggingChannel} = useSelector(state => state.channelsSlice);
+
+  const [draggingOver, toggleDraggingOver] = React.useState(false);
 
   const [moveIndicator, toggleMoveIndicator] = React.useState(false);
 
@@ -25,22 +31,51 @@ export const ChannelButtonDragWrapper = ({
   const handleDragStart = (e) => {
     e.stopPropagation();
     e.dataTransfer.setData("application/channel-id", channel.channel_id);
-    toggleDraggingChannel(true);
+
+    dispatch(toggleDraggingState({state: 'draggingChannel', value: true}));
     console.log('dragging', category_id, channel)
   };
 
   const handleDragEnd = (e) => {
-   toggleDraggingChannel(false);
+    dispatch(toggleDraggingState({state: 'draggingChannel', value: false}));
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
-    toggleDraggingChannel(false);
+
+    toggleDraggingOver(false);
+
+    dispatch(toggleDraggingState({state: 'draggingChannel', value: false}));
+
     const sourceId = e.dataTransfer.getData("application/channel-id");
+
+    const user = e.dataTransfer.getData("application/user-id");
+
+    if (user && channel.channel_type === 'voice') {
+
+      dispatch(moveUserToChannel({user_id: user, channel_id: channel._id}));
+
+      return;
+    }
+
     if (!sourceId || sourceId === channel.channel_id) return;
-    console.log(sourceId, category_id)
+
     move(sourceId, channel.channel_id, category_id); // ensure this category_id is valid
   };
+
+  const handleDragOver = (e) => {
+    e.preventDefault()
+
+    if (channel.channel_type === 'voice') toggleDraggingOver(true);
+
+  }
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+
+    toggleDraggingOver(false);
+
+  }
 
   return (
     <div
@@ -48,11 +83,13 @@ export const ChannelButtonDragWrapper = ({
       draggable={true}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
+      onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      onDragOver={(e) => e.preventDefault()}
+      onDragEnter={handleDragOver}
       style={{
         display: unread ? null : collapse && channel?.channel_id !== currentTextChannel && channel?.channel_id !== currentVoiceChannel ? "none" : undefined,
-        position: 'relative'
+        position: 'relative',
+        backgroundColor: draggingOver ? 'var(--success-color)' : null
       }}
     >
       <AlertIndicator active={unread} />

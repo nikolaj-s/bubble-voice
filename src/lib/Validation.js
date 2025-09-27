@@ -1,5 +1,5 @@
 
-const URL = 'http://10.0.0.136:3016';
+const URL = 'http://192.168.0.12:3016';
 
 export const INVITE_URL = `${URL}/bubble-invite`
 

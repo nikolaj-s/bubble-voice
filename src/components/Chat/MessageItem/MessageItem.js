@@ -20,7 +20,7 @@ import { VideoPreview } from '../../ui/Video/VideoPreview/VideoPreview';
 import { MessageToolBar } from './MessageToolBar/MessageToolBar';
 import { MessageSelectInput } from './MessageSelectInput/MessageSelectInput';
 
-export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inSearch = false, isReply, reply = () => {}, notification}) => {
+export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inSearch = false, isReply, reply = () => {}, notification, type}) => {
 
     const isDifferentDay = prevMessage?.formattedDate !== message?.formattedDate;
 
@@ -35,7 +35,7 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
             <LongPressGestureWrapper onTouchContext={openCtx}>
                 <div 
                 id={`message-id-${message._id}`}
-                data-context={JSON.stringify({...message, type: isReply ? 'reply-message' : 'message', inSearch})}
+                data-context={JSON.stringify({...message, type: type ? `${type}-message` : isReply ? 'reply-message' : 'message', inSearch})}
                 style={{
                     borderColor: users[message.user_id]?.color
                 }}
@@ -56,7 +56,7 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
                         
                             <TextBlock {...message} styles={styles} />
                             {message.media_item && (<VideoPreview {...message.media_item} context={message.media_item} />)}
-                            <ImageBlock {...message} styles={styles} loading={message.loading || loading} />
+                            <ImageBlock {...message} styles={styles} loading={message.loading || loading} notification={notification} />
                             <VideoBlock {...message} styles={styles} />
                             {!message.image  && !message.video && !message.link_preview && (<LinkComponent link={message.link} />)}
                             <LinkPreview {...message} /> 

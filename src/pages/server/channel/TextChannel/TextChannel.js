@@ -52,7 +52,7 @@ console.log(files)
   // ─── Sending ─────────────────────────────────────────────────────────────────
   const handleSend = () => {
     if (sending) return;
-    if (!text.trim() && images.length === 0) return;
+    if (!text.trim().length && images.length === 0) return;
 
     // build payload
     const payload = {

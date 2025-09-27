@@ -32,16 +32,16 @@ function App() {
   
   const Router = isElectron ? HashRouter : BrowserRouter;
 
-  React.useEffect(() => {
-    const setHeight = () => {
-      document.documentElement.style.setProperty("--app-height", `${window.innerHeight}px`);
-    };
+  // React.useEffect(() => {
+  //   const setHeight = () => {
+  //     document.documentElement.style.setProperty("--app-height", `${window.innerHeight}px`);
+  //   };
     
-    setHeight();
-    window.addEventListener("resize", setHeight);
+  //   setHeight();
+  //   window.addEventListener("resize", setHeight);
   
-    return () => window.removeEventListener("resize", setHeight);
-  }, []);
+  //   return () => window.removeEventListener("resize", setHeight);
+  // }, []);
   
 
   // application specific

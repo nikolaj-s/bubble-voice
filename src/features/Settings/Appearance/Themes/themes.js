@@ -1,18 +1,5 @@
 export const themes = {
   default: {
-    '--primary-color': '#1e3a5f',
-    '--secondary-color': '#3c607a',
-    '--accent-color': '#3b7a6e',
-    '--background-color': '#121a22',
-    '--card-background-color': '#1d2d44',
-    '--text-color': '#d1d9e6',
-    '--button-background': '#5c9dbd',
-    '--button-hover': '#4c8b9e',     // darker for better contrast
-    '--error-color': '#e16b6b',
-    '--success-color': '#76c7a5',
-    '--overlay-color': 'rgba(18, 26, 34, 0.7)',
-  },
-  glacierFade: {
     '--primary-color': '#1d252c',
     '--secondary-color': '#33444d',
     '--accent-color': '#80e1dd',
@@ -25,6 +12,7 @@ export const themes = {
     '--success-color': '#a3e7cb',
     '--overlay-color': 'rgba(18, 24, 29, 0.7)',
   },
+
   black: {
     '--primary-color':         '#000000',        // pure black base
     '--secondary-color':       '#1a1a1a',        // very dark grey for subtle UI elements

@@ -169,7 +169,7 @@ export const RoomOverlay = () => {
                     width={50}
                     height={50}
                     borderRadius={"50%"}
-                    title={"Disconnect"}
+                    title={keybinds['disconnect'] ? <KeybindToolTip label={'Disconnect'} binds={[keybinds['disconnect']?.key]} /> : "Disconnect"}
                     backgroundColor='var(--error-color)'
                     Icon={<Unplug color='var(--text-color)' />}
                     />

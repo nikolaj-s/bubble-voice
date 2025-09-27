@@ -1,6 +1,4 @@
-import React from 'react';
-import { DndContext, closestCenter } from '@dnd-kit/core';
-import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy} from '@dnd-kit/sortable';
+
 import { SingleImageWidget } from './SingleImageWidget/SingleImageWidget';
 import { GalleryWidget } from './GalleryWidget/GalleryWidget';
 import { NoWidgetsPlaceholder } from './NoWidgetsPlaceholder/NoWidgetsPlaceholder';
@@ -12,8 +10,8 @@ import { Card } from '../ui/Wrappers/Card/Card';
 import { VerticalReorderWrapper } from '../ui/Wrappers/VerticalReorderWrapper/VerticalReorderWrapper';
 
 
-export const WidgetList = ({widgets, editing}) => {
-  console.log(widgets)
+export const WidgetList = ({widgets}) => {
+
   if (widgets.length === 0) return null;
 
   return (
@@ -36,7 +34,7 @@ export const WidgetList = ({widgets, editing}) => {
 }
 
 export const Widgets = ({ widgets, editing, onReorder = () => {}, openAddWidgets = () => {}, pinned }) => {
-console.log(widgets)
+
     if (pinned && widgets.length === 0) return null;
 
     if (widgets.length === 0) return <NoWidgetsPlaceholder user_can_edit_channels={true} action={openAddWidgets} />

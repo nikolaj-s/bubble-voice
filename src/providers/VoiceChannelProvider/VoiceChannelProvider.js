@@ -4,6 +4,8 @@ import React from 'react';
 import { updateVoiceActivation } from "../../features/ServerUsers/serverUsersSlice";
 import ConnectingIndicator from "../../components/Indicators/ConnectingIndicator/ConnectingIndicator";
 import ErrorIndicator from "../../components/Indicators/ErrorIndicator/ErrorIndicator";
+import { isValidObjectId } from "../../lib/services/helperFunctions";
+import { setCurrentVoiceChannel } from "../../features/Channel/VoiceChannel/voiceChannelSlice";
 
 export const VoiceChannelProvider = ({ channel, children }) => {
   const dispatch = useDispatch();
@@ -39,7 +41,16 @@ export const VoiceChannelProvider = ({ channel, children }) => {
       }
     };
 
+    const handleMoveChannel = (data) => {
+      if (isValidObjectId(data.channel_id)) {
+        dispatch(setCurrentVoiceChannel(data.channel_id));
+      }
+    }
+
+    socket.on('move to channel', handleMoveChannel);
+
     socket.on('voice activation', handleVoiceActivation);
+
     socket.on('connect', handleJoinChannel);
 
     // Debounce join
@@ -49,8 +60,13 @@ export const VoiceChannelProvider = ({ channel, children }) => {
 
     return () => {
       socket.emit('leave channel');
+
       socket.off('connect', handleJoinChannel);
+
       socket.off('voice activation', handleVoiceActivation);
+
+      socket.off('move to channel', handleMoveChannel);
+
       clearTimeout(debounceTimeout);
     };
 

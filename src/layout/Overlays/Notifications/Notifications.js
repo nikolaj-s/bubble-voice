@@ -19,8 +19,7 @@ import TextLabelError from '../../../components/Error/TextLabelError/TextLabelEr
 import { JoinServer } from '../../../features/JoinServer/Thunks/JoinServer';
 import { isValidObjectId } from '../../../lib/services/helperFunctions';
 import { triggerAlert } from '../../../features/Alerts/alertsSlice';
-import { setCurrentVoiceChannel } from '../../../features/Channel/VoiceChannel/voiceChannelSlice';
-
+import { createConversation } from '../../../features/Conversations/Thunks/createConversation';
 
 export const Notifications = () => {
 
@@ -72,9 +71,7 @@ export const Notifications = () => {
 
                 if (isValidObjectId(server_id) && isValidObjectId(channel_id)) {
 
-                    navigate(`/dashboard/server/${server_id}`);
-
-                    dispatch(setCurrentVoiceChannel(channel_id));
+                    navigate(`/dashboard/server/${server_id}?voice-channel=${channel_id}`);
 
                 } else {
                     dispatch(triggerAlert("Unexpected Error Accepting Invite", 'error'))
@@ -84,9 +81,26 @@ export const Notifications = () => {
             dispatch(deleteNotification(data._id));
         }
 
+        if (data.type === 'poke') {
+
+            if (data.sender_id) {
+
+                dispatch(createConversation(data.sender_id._id));
+
+            }
+
+            dispatch(deleteNotification(data._id));
+
+        }
 
         dispatch(toggleNotificationPanel());
 
+    }
+
+    const onDelete = (data) => {
+        if (!data._id) return;
+
+        dispatch(deleteNotification(data._id));
     }
 
     if (!open) return null;
@@ -100,7 +114,7 @@ export const Notifications = () => {
                 <IconButton Icon={<X color='var(--text-color)' />} title={'Close'} onClick={() => {dispatch(toggleNotificationPanel())}} />
             </StickyWrapper>
             {notifications?.length === 0 && (<ContentPlaceholder icon={Bell} title={"No Notifications"} message={'You are all caught up'} />)}
-            {notifications.map(notifcation => (<NotificationItem notification={notifcation} onClick={handleOpenNotification} />))}
+            {notifications.map(notifcation => (<NotificationItem notification={notifcation} onClick={handleOpenNotification} onDelete={onDelete} />))}
         </ScrollLoadWrapper>
     </QuickMenuWrapper>
     )

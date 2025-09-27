@@ -18,7 +18,8 @@ const MessageList = ({
   noMoreMessages,        // boolean when no more older messages
   name,                  // channel name (for FeedStartMessage)
   reply, 
-  returnPos                // reply callback
+  returnPos,
+  type                // reply callback
 }) => {
   // we need a numeric flag that changes whenever `sending` changes
   const [searchParams, setSearchParams] = useSearchParams();
@@ -118,7 +119,7 @@ const MessageList = ({
       loading={loading}
     >
        {/* At the very top, if we’ve hit the oldest message... */}
-      {noMoreMessages && (
+      {noMoreMessages && type !== 'conversation' && (
         <FeedStartMessage channelName={name} />
       )}
       {/* Show "sending" item at the bottom (latest) */}
@@ -136,6 +137,7 @@ const MessageList = ({
               message={msg}
               users={users}
               reply={reply}
+              type={type}
               // pass prevMessage if you need it; example below:
               prevMessage={oldestFirst[idx - 1] || {}}
             />

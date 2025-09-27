@@ -11,8 +11,10 @@ const LinkPreview = ({ link_preview: preview, nsfw }) => {
 
   const openPreview = (e) => {
     if (preview.video || preview.image) e.stopPropagation();
-    
+    console.log(preview)
     if (preview.image && !preview.video) dispatch(setExpandedImage(preview));
+
+  
   };
 
   if (!preview) return null;
@@ -26,7 +28,7 @@ const LinkPreview = ({ link_preview: preview, nsfw }) => {
       <div onClick={openPreview} className={styles.previewMedia}>
         <NsfwWrapper nsfw={nsfw ? { nsfw } : preview}>
           {preview.url.includes('youtu') ?
-          <VideoPlayer src={preview.url} title={preview.title} />
+          <VideoPlayer src={preview.url} thumbnail={preview.image} title={preview.title} />
           :
           preview.video ? (
             <VideoPlayer src={preview.video} title={preview.title} />

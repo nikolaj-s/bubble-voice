@@ -1,0 +1,39 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  width: calc(100% - 32px);
+  background-color: var(--card-background-color);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.name {
+  color: var(--text-color);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Static skeleton placeholder */
+.skeletonAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.skeletonText {
+  width: 120px;
+  height: 16px;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+}

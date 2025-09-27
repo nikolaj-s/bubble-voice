@@ -8,7 +8,7 @@ export const NsfwWrapper = ({children, nsfw: obj = {}}) => {
 
     const disableNsfwBlur = useSelector(state => state.contentSettingsSlice.disableNsfwBlur);
 
-    const {nsfw} = obj;
+    const {nsfw} = obj || {};
 
     const [filter, toggleFilter] = React.useState(true);
 

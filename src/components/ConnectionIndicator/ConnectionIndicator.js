@@ -6,10 +6,12 @@ import IconButton from '../ui/Buttons/IconButton/IconButton';
 
 import { useSocketPing } from '../../hooks/useSocketPing';
 import { useSelector } from 'react-redux';
+import ConnectionDetails from '../ConnectionDetails/ConnectionDetails';
 
 export const ConnectionIndicator = () => {
 
-    const {status} = useSelector(state => state.connectionSlice);
+    const {status, connectionInfo} = useSelector(state => state.connectionSlice);
+
 
     const ping = useSocketPing();
 
@@ -19,7 +21,11 @@ export const ConnectionIndicator = () => {
         padding={10}
         height={35}
         backgroundColor='var(--primary-color)'
-        title={`${ping}ms`}
+        title={
+            <>
+            <ConnectionDetails ping={ping} {...connectionInfo} />
+            </>
+        }
         Icon={
         <div className={styles.connection}>
             <div

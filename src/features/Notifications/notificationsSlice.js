@@ -16,7 +16,8 @@ const notificationsSlice = createSlice({
         notifications: [],
         notification_count: 0,
         notifications_overlay: [],
-        noMoreNotifications: false
+        noMoreNotifications: false,
+        muteNotifications: false
     },
     reducers: {
         toggleNotificationPanel: (state, action) => {
@@ -28,7 +29,9 @@ const notificationsSlice = createSlice({
             last_read_at: String(new Date())
             };
         },
-
+        toggleMuteNotifications: (state, action) => {
+            state.muteNotifications = action.payload;
+        },
         pushNotificationOverlay: (state, action) => {
             const notification = {
             id: Date.now(), // unique id
@@ -161,6 +164,6 @@ const notificationsSlice = createSlice({
     }
 })
 
-export const {setLastReadStatus, pushNotificationOverlay, removeNotificationOverlay, toggleNotificationPanel, pushNotification, removeNotification} = notificationsSlice.actions;
+export const {setLastReadStatus, pushNotificationOverlay, removeNotificationOverlay, toggleNotificationPanel, pushNotification, removeNotification, toggleMuteNotifications} = notificationsSlice.actions;
 
 export default notificationsSlice.reducer;

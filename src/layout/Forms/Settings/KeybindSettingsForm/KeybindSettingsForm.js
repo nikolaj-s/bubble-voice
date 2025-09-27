@@ -16,7 +16,7 @@ export const KeybindSettingsForm = () => {
     // Dispatch an action to update the keybind
     dispatch(setKeybind({ actionType, keybind }));
   };
-  console.log(keybinds)
+
   return (
     <>
       <Header text="Keybind Settings" />
@@ -47,6 +47,11 @@ export const KeybindSettingsForm = () => {
         currentKeybind={keybinds['startStopScreen'] || ''}
         onChange={(keybind) => handleKeybindChange('startStopScreen', keybind)}
       />
+      <Label label='Disconnect From Channel' />
+      <KeybindInput 
+      currentKeybind={keybinds['disconnect'] || ''}
+      onChange={(keybind) => handleKeybindChange('disconnect', keybind)}
+      />
       <LineSpacer />
       <Header level={3} text='Misc Keybinds' />
       <Label label='Mute / Unmute Media Player' />
@@ -54,6 +59,12 @@ export const KeybindSettingsForm = () => {
       currentKeybind={keybinds['muteMediaPlayer'] || ''}
       onChange={(keybind) => handleKeybindChange('muteMediaPlayer', keybind)}
       />
+      {window?.electron && (
+        <>
+        <Label label='Screenshot' />
+        <KeybindInput currentKeybind={keybinds['screenshot'] || ''} onChange={(keybind) => handleKeybindChange('screenshot', keybind)} />
+        </>
+      )}
     </>
   );
 };

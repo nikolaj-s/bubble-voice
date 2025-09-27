@@ -6,6 +6,7 @@ import { useSearchParams } from 'react-router-dom';
 import { setOverlay } from '../../../features/Overlay/overlaySlice';
 import { ToolBar } from '../../ui/Wrappers/ToolBar/ToolBar';
 import { pokeUser } from '../../../features/Social/Thunks/pokeUser';
+import { createConversation } from '../../../features/Conversations/Thunks/createConversation';
 
 export const ProfileActionBar = ({profile}) => {
 
@@ -30,6 +31,12 @@ export const ProfileActionBar = ({profile}) => {
         dispatch(pokeUser(profile._id));
     }
 
+    const handleMessageUser = () => {
+        if (profile._id === userID) return;
+        
+        dispatch(createConversation(profile._id));
+    }
+
     return (
         <ToolBar style={{width: 'calc(100% - 20px)', margin: '0 5px', maxWidth: 'calc(100% - 20px)'}}>
             {profile._id === userID ?
@@ -45,7 +52,7 @@ export const ProfileActionBar = ({profile}) => {
             <IconButton 
             Icon={MessageSquare}
             title={`Message ${profile?.display_name}`}
-            onClick={() => {}}
+            onClick={handleMessageUser}
             />
             <IconButton
             disabled={loading}

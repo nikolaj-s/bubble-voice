@@ -1,11 +1,13 @@
 import React from 'react';
 
-import styles from './Card.module.css'
+import styles from './Card.module.css';
+
+import { motion } from 'framer-motion';
 
 export const Card = ({className, children, ...props}) => {
     return (
-        <div className={`${styles.container} ${className}`} {...props}>
+        <motion.div className={`${styles.container} ${className}`} {...props}>
             {children}
-        </div>
+        </motion.div>
     )
 }

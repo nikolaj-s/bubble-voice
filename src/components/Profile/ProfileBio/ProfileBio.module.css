@@ -1,12 +1,62 @@
 .userBio {
-    color: var(--text-color);
-    font-size: 1rem;
-    line-height: 1.5;
-    width: calc(100% - 30px);
-    border-radius: var(--border-radius);
-    margin: 0 5px;
-    word-wrap: break-word;
-    padding: var(--gap);
-    background-color: var(--card-background-color);
-  }
-  
+  color: var(--text-color);
+  font-size: 1rem;
+  line-height: 1.5;
+  width: calc(100% - 30px);
+  border-radius: var(--border-radius);
+  margin: 0 5px;
+  word-wrap: break-word;
+  padding: var(--gap);
+  background-color: var(--card-background-color);
+  position: relative;
+}
+
+.bioText {
+  max-height: var(--max-height, 300px);
+  overflow: hidden;
+  transition: max-height 200ms ease;
+}
+
+/* expanded state */
+.expanded .bioText {
+  max-height: 100%; /* large enough for most bios */
+}
+
+/* gradient fade when collapsed */
+.fade {
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2.25rem; /* room for action row */
+  height: 40px;
+  background: linear-gradient(to bottom, rgba(18,26,34,0), var(--card-background-color));
+}
+
+/* add room for action row when collapsed */
+.collapsed {
+  padding-bottom: calc(var(--gap) + 24px);
+}
+
+/* action row + button */
+.actionRow {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 8px;
+  position: relative;
+  z-index: 5;
+}
+
+.actionButton {
+  background: none;
+  border: none;
+  color: var(--button-background);
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+}
+
+.actionButton:hover {
+  color: var(--button-hover);
+  text-decoration: underline;
+}

@@ -21,7 +21,7 @@ import { setCurrentVoiceChannel, setVoiceChannelFocused } from "../../../../feat
 
 import { NavButton } from "../NavButton/NavButton";
 
-const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, channel_type, server_id, channel }) => {
+const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, channel_type, server_id, channel, toggleDraggingUser }) => {
 
     const dispatch = useDispatch();
 
@@ -134,7 +134,7 @@ const ChannelButton = ({ users = [], channel_name, channel_icon, channel_id, cha
           >
             <ChannelStatus channel={channel} active={active} />
             {users.map((user) => (
-              <ChannelUserButton action={viewUserProfile} active={active} key={user} user_id={user} />
+              <ChannelUserButton action={viewUserProfile} active={active} key={user} user_id={user} toggleDraggingUser={toggleDraggingUser} />
             ))}
           </motion.div>
         )}

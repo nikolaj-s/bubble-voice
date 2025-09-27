@@ -40,9 +40,9 @@ export const AppearanceSettingsForm = () => {
         <MessageItem notification={true} message={{text: '“The quick brown fox jumps over the lazy dog.”', image: 'https://bubble-media.net/uploads/46bf5bc2-2526-49e1-9b7b-f90b730ca900.png', user_id: 'test'}} 
         users={{test: {user_image: "https://bubble-media.net/uploads/46bf5bc2-2526-49e1-9b7b-f90b730ca900.png", display_name: 'Bubble'}}} />
         <Label label='Adjust fontsize of messages' />
-        <VolumeSlider onChange={(value) => {dispatch(setAppearanceSettings({name: 'fontSize', value: value}))}} min={8} max={28} step={1} value={fontSize} />
+        <VolumeSlider maxWidth={200} onChange={(value) => {dispatch(setAppearanceSettings({name: 'fontSize', value: value}))}} min={8} max={28} step={1} value={fontSize} />
         <Label label='Adjust The Maximum Height of Media' />
-        <VolumeSlider min={100} max={400} step={10} value={maximumMediaHeight} onChange={(value) => {dispatch(setAppearanceSettings({name: 'maximumMediaHeight', value}))}} />
+        <VolumeSlider maxWidth={200} min={100} max={400} step={10} value={maximumMediaHeight} onChange={(value) => {dispatch(setAppearanceSettings({name: 'maximumMediaHeight', value}))}} />
         </>
     )
 }

@@ -41,6 +41,9 @@ import { MediaPlayerSaves } from "../Overlays/MediaPlayerSaves/MediaPlayerSaves"
 import { Notifications } from "../Overlays/Notifications/Notifications";
 import { LeaveServer } from "../Overlays/LeaveServer/LeaveServer";
 import { MomentOverlay } from "../Overlays/MomentOverlay/MomentOverlay";
+import { Conversations } from "../Overlays/Conversations/Conversations";
+import { DownloadOverlay } from "../Overlays/DownloadOverlay/DownloadOverlay";
+import { ScreenshotOverlay } from "../Overlays/ScreenshotOverlay/ScreenshotOverlay";
 
 const overlayComponents = {
   search: Search,
@@ -60,7 +63,8 @@ const overlayComponents = {
   mediaPlayerHistory: MediaPlayerHistory,
   mediaPlayerSaves: MediaPlayerSaves,
   leaveServer: LeaveServer,
-  moment: MomentOverlay
+  moment: MomentOverlay,
+  downloadApp: DownloadOverlay
 };
 
 export const Overlay = ({ children }) => {
@@ -105,6 +109,8 @@ export const Overlay = ({ children }) => {
       <ExpandedImage />
       <ExpandedVideo />
       <Notifications />
+      <Conversations />
+      <ScreenshotOverlay />
     </>
   );
 };

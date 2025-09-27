@@ -25,3 +25,9 @@
   color: var(--success-color);
   margin-top: 4px;
 }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}

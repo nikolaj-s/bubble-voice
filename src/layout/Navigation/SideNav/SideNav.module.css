@@ -2,7 +2,7 @@
     height: calc(100svh - 20px);
     padding: var(--gap) 0px;
     display: grid;
-    grid-template-rows: 50px 1fr 100px;
+    grid-template-rows: 50px 1fr 150px;
     justify-items: center;
     gap: 5px;
     z-index: 5;

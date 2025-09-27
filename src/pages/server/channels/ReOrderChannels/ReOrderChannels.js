@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -41,6 +41,44 @@ export const ReOrderChannels = ({ onDrop }) => {
       setLocalChannels(Object.values(channels).sort((a, b) => a.sort_order - b.sort_order));
 
     }, [channels])
+
+    const channelsByCategory = useMemo(() => {
+
+      if (localChannels.length === 0) return;
+
+      const map = new Map();
+      // seed real categories
+      categories.forEach(cat => map.set(cat.category_id, []));
+      // seed uncategorized
+      map.set('channels', []);
+
+      localChannels.forEach(c => {
+        const bucket = c.category || 'channels';
+     
+        const ok =
+          !c?.locked_channel ||
+          permission?.user_can_manage_channels ||
+          c?.authorized_users?.[user_id] ||
+          c?.active_users?.includes(user_id);
+
+        if (ok) {
+          // only push if that bucket exists
+          if (!map.has(bucket)) map.set(bucket, []);
+          map.get(bucket).push(c);
+        }
+      });
+
+    return map;
+    }, [categories, localChannels, permission, user_id]);
+
+    // 3) unified category list (real + uncategorized)
+    const allCategories = useMemo(
+      () => [
+        ...categories,
+        { category_id: 'channels', category_name: 'Channels', auto_sort: false }
+      ],
+      [categories]
+    );
 
     const handleReorder = async (id, moveTo, category) => {
         if (reordering) return;
@@ -126,36 +164,24 @@ export const ReOrderChannels = ({ onDrop }) => {
 
     if (localChannels.length === 0) return <NoChannelsPlaceholder />
 
-    return (
-        <>
-            {categories.map(category => {
-                return <Category 
-                move={handleReorder} 
-                moveCategory={handleReOrderCategories} 
-                draggingCategory={draggingCategory} 
-                toggleDraggingCategory={toggleDraggingCategory} 
-                category_id={category.category_id} 
-                key={category.category_id} 
-                catagoryName={category.category_name} 
-                autoSort={category.auto_sort}
-                channels={localChannels.filter(c => c.category === category.category_id && (c.locked_channel ? permission.user_can_manage_channels || c?.authorized_users?.[user_id] : true))} 
-                draggingChannel={draggingChannel} toggleDraggingChannel={toggleDraggingChannel} 
-                category={category}
-                />
-            })}
-            <Category 
-            move={handleReorder} 
-            moveCategory={() => {}} 
-            draggingCategory={draggingCategory} 
-            toggleDraggingCategory={() => {}}
-            catagoryName={'Channels'}
-            category_id={'channels'}
-            channels={localChannels.map(c => ({ ...c, category: c.category || 'channels' }))
-              .filter(c => c.category === 'channels' && (c.locked_channel ? permission.user_can_manage_channels || c?.authorized_users?.[user_id] : true))}
-
+     return (
+      <>
+        {allCategories.map(cat => (
+          <Category
+            key={cat.category_id}
+            move={handleReorder}
+            moveCategory={handleReOrderCategories}
+            draggingCategory={draggingCategory}
+            toggleDraggingCategory={toggleDraggingCategory}
+            category_id={cat.category_id}
+            catagoryName={cat.category_name}
+            autoSort={cat.auto_sort}
+            channels={channelsByCategory.get(cat.category_id) || []}
             draggingChannel={draggingChannel}
             toggleDraggingChannel={toggleDraggingChannel}
-            />
-        </>
+            category={cat}
+          />
+        ))}
+      </>
     );
 };

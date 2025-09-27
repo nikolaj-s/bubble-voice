@@ -52,9 +52,14 @@
 
 .volumeLabel {
   position: absolute;
-  bottom: 20px;
   left: calc(var(--slider-percent) * 100%);
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
+  transform-origin: center;
+  bottom: calc(100% + 26px);
+  height: 15px;
+  line-height: 1;
+  display: inline-block;
+  margin-bottom: 10px;
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--text-color);
@@ -63,8 +68,8 @@
   padding: 4px 8px;
   border-radius: 5px;
   white-space: nowrap;
-  opacity: 0;
-  transition: opacity 0.2s;
+  text-align: center;
   pointer-events: none;
   z-index: 20;
 }
+

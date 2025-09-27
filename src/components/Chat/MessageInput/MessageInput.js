@@ -13,6 +13,7 @@ import { ImageDropOverlay } from "../../ui/Inputs/ImageDropOverlay/ImageDropOver
 import { triggerAlert } from "../../../features/Alerts/alertsSlice";
 
 export const MessageInput = ({
+  id,
   value,
   setValue,
   setImage = () => {},
@@ -62,7 +63,7 @@ export const MessageInput = ({
       // 3️⃣ Update state
       setPreviews([...dataUrls]);
       setImage([...compressed]);
-      document.getElementById("chat-input")?.focus();
+      document.getElementById(`chat-input-${id}`)?.focus();
     } catch (err) {
       console.error("Image compression/reading failed:", err);
       dispatch(triggerAlert('An error occured while processing your files', 'error'))
@@ -73,7 +74,7 @@ export const MessageInput = ({
 
   // Focus the textarea when necessary
   useEffect(() => {
-    if (replyTo) document.getElementById("chat-input")?.focus();
+    if (replyTo) document.getElementById(`chat-input-${id}`)?.focus();
   }, [replyTo]);
 
   useEffect(() => {
@@ -107,7 +108,7 @@ export const MessageInput = ({
 
   return (
     <>
-      <div className={styles["message-input-container"]} data-context={JSON.stringify({ type: "input", id: "chat-input" })}>
+      <div className={styles["message-input-container"]} data-context={JSON.stringify({ type: "input", id: `chat-input-${id}` })}>
         {error && (
           <div className={styles.errorWrapper}>
             <TextLabelError error={error} />
@@ -138,11 +139,11 @@ export const MessageInput = ({
           />
 
           <div
-            onClick={() => document.getElementById("chat-input")?.focus()}
+            onClick={() => document.getElementById(`chat-input-${id}`)?.focus()}
             className={`${styles["input-wrapper"]} ${focused ? styles.focused : ""}`}
           >
             <textarea
-              id="chat-input"
+              id={`chat-input-${id}`}
               ref={textAreaRef}
               className={styles["message-input"]}
               placeholder={`${placeholder} use / to list commands`}

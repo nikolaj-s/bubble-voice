@@ -1,0 +1,157 @@
+.panel {
+  background: var(--card-background-color);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 16px;
+  color: var(--text-color);
+  font-family: var(--font-family);
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.titleGroup {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.version {
+  opacity: 0.8;
+  font-size: 12px;
+}
+
+.notesLink {
+  color: var(--link-color);
+  text-decoration: none;
+  font-size: 12px;
+}
+.notesLink:hover {
+  text-decoration: underline;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 720px) {
+  .grid { grid-template-columns: 1fr 1fr; }
+}
+
+.card {
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 12px;
+  background: color-mix(in oklab, var(--card-background-color), black 6%);
+  transition: border-color 160ms ease, transform 120ms ease, background 160ms ease;
+}
+.card:hover {
+  border-color: rgba(255,255,255,0.12);
+  background: color-mix(in oklab, var(--card-background-color), white 4%);
+}
+.recommended {
+  outline: 2px solid color-mix(in oklab, var(--button-background), white 8%);
+  outline-offset: 2px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--card-background-color), var(--button-background) 8%),
+    var(--card-background-color)
+  );
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.osIcon {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-color);
+}
+.osTitle { display: flex; flex-direction: column; gap: 2px; }
+.osName { font-weight: 600; }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-color);
+  background: color-mix(in oklab, var(--button-background), var(--card-background-color) 60%);
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 2px 6px;
+  border-radius: 999px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+/* Bubble squircle buttons */
+.btn,
+.btnAlt {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: var(--card-background-color);
+  color: var(--text-color);
+  cursor: pointer;
+  outline: none;
+  transition: background 160ms ease, border-color 160ms ease, transform 80ms ease, color 160ms ease;
+
+  /* squircle-ish: elliptical radius */
+  border-radius: var(--border-radius);
+}
+
+.btn:hover,
+.btnAlt:hover {
+  border-color: rgba(255,255,255,0.18);
+  background: var(--overlay-color);
+}
+
+.btn:active,
+.btnAlt:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+/* Primary vs Secondary tint */
+.btn {
+  color: var(--text-color);
+  background: linear-gradient(0deg, var(--button-background), var(--button-hover));
+  border-color: rgba(255,255,255,0.12);
+}
+.btn:hover {
+  filter: brightness(1.06);
+}
+
+.btnAlt {
+  background: color-mix(in oklab, var(--card-background-color), white 2%);
+}
+
+.helpText {
+  margin: 12px 2px 0;
+  font-size: 12px;
+  opacity: 0.8;
+}

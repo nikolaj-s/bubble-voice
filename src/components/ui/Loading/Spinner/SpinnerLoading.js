@@ -1,5 +1,6 @@
-import React from 'react';
+
 import styles from './SpinnerLoading.module.css';
+
 import { LoadingWheel } from '../LoadingWheel/LoadingWheel';
 
 const SpinnerLoading = () => {

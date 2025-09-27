@@ -28,7 +28,7 @@
 .popout {
     position: fixed;
     width: var(--sidebar-width, 250px) !important;
-    height: 220px !important;
+    height: calc(var(--sidebar-width, 250px) * 9 / 16) !important;
     right: 2px;
     margin-top: 0px;
     bottom: 0px;
@@ -36,6 +36,6 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
-    border-radius: var(--border-radius);
     overflow: hidden;
+    background-color: black;
 }

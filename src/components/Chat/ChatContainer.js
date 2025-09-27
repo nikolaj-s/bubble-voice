@@ -20,7 +20,7 @@ export const ChatContainer = ({
     returnPos = () => {}, position, replyTo, clearReplyTo, 
     placeholder = 'Type a message...',
     name, noMoreMessages,
-    disableInput, reply, id
+    disableInput, reply, id, type
 }) => {
 
     const [isDraggingImage, setIsDraggingImage] = React.useState();
@@ -33,6 +33,7 @@ export const ChatContainer = ({
         onKeyUp={(e) => {e.stopPropagation()}}
         >
             <MessageList 
+            type={type}
             id={id}
             reply={reply}
             position={position} returnPos={returnPos} 
@@ -47,6 +48,7 @@ export const ChatContainer = ({
             <PostDisabledPlaceholder channelName={name} />
             : 
             <MessageInput 
+            id={id}
             replyTo={replyTo} value={value} 
             setValue={setValue} send={send} error={error} 
             setImage={setImage} placeholder={placeholder} 

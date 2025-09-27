@@ -3,6 +3,7 @@ import { createContext, useContext, } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { toggleMicrophone, toggleAudioMute, toggleWebcam, toggleScreenShare } from "../features/Channel/MediaControl/mediaControlSlice"; 
+import { useBubbleSounds } from "../hooks/useBubbleSounds";
 
 const MediaControlsContext = createContext(null);
 
@@ -13,6 +14,8 @@ export const MediaControlsProvider = ({ children }) => {
     const {currentVoiceChannel} = useSelector(state => state.voiceChannelSlice);
 
     const details = useSelector(state => state.channelsSlice.channels[currentVoiceChannel]);
+
+    const {playEnable, playDisable} = useBubbleSounds();
 
     // Get state from Redux
     const { loading } = useSelector((state) => state.accountSlice);
@@ -27,21 +30,25 @@ export const MediaControlsProvider = ({ children }) => {
     const handleToggleMicrophone = () => {
         if (details?.disable_streams) return;
         if (!loading) dispatch(toggleMicrophone(!isMicrophoneMuted));
+        (isMicrophoneMuted ? playEnable : playDisable)();
     };
 
     const handleToggleAudio = () => {
         if (details?.disable_streams) return;
         if (!loading) dispatch(toggleAudioMute(!isAudioMuted));
+        (isAudioMuted ? playEnable : playDisable)()
     };
 
     const handleToggleWebcam = () => {
         if (details?.disable_streams) return;
         if (!loading) dispatch(toggleWebcam(!isWebcamOn));
+        (isWebcamOn ? playDisable : playEnable)();
     };
 
     const handleShareScreen = () => {
         if (details?.disable_streams) return;
-        if (!loading) dispatch(toggleScreenShare(!isScreenSharing))
+        if (!loading) dispatch(toggleScreenShare(!isScreenSharing));
+        (isScreenSharing ? playDisable : playEnable)();
     }
 
     return (

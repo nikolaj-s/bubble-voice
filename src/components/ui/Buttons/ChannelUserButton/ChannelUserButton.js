@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import styles from './ChannelUserButton.module.css';
 
@@ -8,11 +8,24 @@ import { ImageComponent } from '../../../ui/Image/Image';
 
 import MediaStatusIcons from '../../../MediaStatusIcons/MediaStatusIcons';
 import MiniStreamIndicator from '../../MiniStreamIndicator/MiniStreamIndicator';
+import { toggleDraggingState } from '../../../../features/Channel/Channels/channelsSlice';
 
 export const ChannelUserButton = ({user_id, active, action = () => {}}) => {
 
+    const dispatch = useDispatch();
+
     const onDragStart = (e) => {
-        
+        e.stopPropagation();
+      
+        e.dataTransfer.setData("application/user-id", user_id);
+
+        dispatch(toggleDraggingState({state: 'draggingUser', value: true}));
+    }
+
+    const onDragEnd = (e) => {
+        e.stopPropagation();
+
+        dispatch(toggleDraggingState({state: 'draggingUser', value: false}));
     }
 
     const user = useSelector(state => state.serverUsersSlice.users[user_id]) || {};
@@ -24,6 +37,7 @@ export const ChannelUserButton = ({user_id, active, action = () => {}}) => {
         return (
             <div 
             onDragStart={onDragStart}
+            onDragEnd={onDragEnd}
             draggable={true} 
             data-context={JSON.stringify({...user, channel_status: null, type: 'user'})} 
             onClick={() => {action(user_id)}} className={styles.container}>

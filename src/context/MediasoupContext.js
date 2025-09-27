@@ -6,6 +6,7 @@ import ConnectingIndicator from "../components/Indicators/ConnectingIndicator/Co
 import ErrorIndicator from "../components/Indicators/ErrorIndicator/ErrorIndicator";
 import { throwMicrophoneError } from "../features/Channel/MediaControl/mediaControlSlice";
 import { useUserAudio } from "./UserAudioContext";
+import { useRtcSummary } from "../hooks/useRtcSummary";
 
 const MediasoupContext = createContext(null);
 
@@ -202,6 +203,8 @@ export const MediasoupProvider = ({ children }) => {
 
     const producer = await producerTransportRef.current.produce(params);
 
+    console.log(await producerTransportRef.current?.getStats())
+
     producer.on("transportclose", () => closeProducer(type));
     producer.on("close", () => closeProducer(type));
     producer.on("trackended", () => closeProducer(type));
@@ -321,6 +324,8 @@ export const MediasoupProvider = ({ children }) => {
 
   const getProducers = () => new Map(producersRef.current);
   const getConsumers = () => new Map(consumersRef.current);
+
+  useRtcSummary(producersRef?.current?.get('microphone'), 10000);
 
   if (error) return <ErrorIndicator message={error} />
 
