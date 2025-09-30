@@ -1,5 +1,5 @@
 
-const URL = process.env.REACT_APP_DEV ? 'http://localhost:3016' : 'https://bubblechat.net';
+const URL = process.env.REACT_APP_DEV ? 'http://localhost:3016' : 'https://bubblevoice.net';
 
 export const INVITE_URL = `${URL}/bubble-invite`
 
