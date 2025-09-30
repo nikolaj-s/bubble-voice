@@ -1,5 +1,5 @@
 
-const URL = 'http://bubbleserverbackendcoms.net';
+const URL = 'https://bubblevoice.net';
 
 export const INVITE_URL = `${URL}/bubble-invite`
 
