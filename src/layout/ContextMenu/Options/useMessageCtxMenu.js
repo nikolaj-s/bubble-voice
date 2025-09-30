@@ -93,7 +93,10 @@ export const useMessageCtxMenu = () => {
         if (data.message.text) {
             options.push({
                 label: "Copy Text",
-                onClick: () => {copyToClipboard(data.message.text); dispatch(triggerAlert('Text Copied'))},
+                onClick: () => {
+                    copyToClipboard(data.message.text); 
+                    dispatch(triggerAlert('Text Copied'))
+                },
                 type: 'button',
                 icon: <Copy color="var(--text-color)" />
             })
@@ -131,7 +134,25 @@ export const useMessageCtxMenu = () => {
           
         }
 
-         if (data.message.user_id === user_id || permissions.user_can_delete_other_users_messages) {
+        // copy message link ctx button
+        if (data.message._id) {
+
+            options.push({
+                label: "Copy Message Link",
+                onClick: () => {
+                    const res = copyToClipboard(`${window.location.origin}/dashboard/server/${data.message.server_id}/channel/${data.message.channel_id}?message=${data.message._id}`);
+
+                    if (res?.error) return dispatch(triggerAlert("Error Copying To Clipboard", 'error'));
+
+                    dispatch(triggerAlert('Link Copied!'))
+                },
+                type: "button",
+                icon: <Link color='var(--text-color)' />,
+            })
+
+        }
+
+        if (data.message.user_id === user_id || permissions.user_can_delete_other_users_messages) {
             options.push({
                 label: "Delete Message",
                 onClick: () => {dispatch(deleteMessage({message_id: data.message.message_id}))},
