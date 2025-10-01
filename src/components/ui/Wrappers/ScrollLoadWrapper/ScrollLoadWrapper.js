@@ -32,8 +32,10 @@ const ScrollLoadWrapper = ({
     <div
       onMouseEnter={() => {toggleHover(true)}}
       onMouseLeave={() => {toggleHover(false)}}
+      onTouchStart={() => {toggleHover(true)}}
+      onTouchEnd={() => {toggleHover(false)}}
       className={`${styles.scrollContainer} ${className}`}
-      style={{...style, overflow: hover ? null : 'hidden'}}
+      style={{...style, overflow: null}}
       ref={containerRef}
       onScroll={handleScroll}
       tabIndex={0}

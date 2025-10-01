@@ -9,7 +9,6 @@
     gap: var(--gap);
     display: flex;
     flex-direction: column;
-    flex-shrink: 0;
     position: relative;
 }
 

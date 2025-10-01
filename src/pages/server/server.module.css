@@ -53,12 +53,7 @@
             /* Set starting transform for animation */
         transform: translateX(-100%);
         transition: 0.3s ease-in-out;
-        grid-template-rows: 105px minmax(0px, 1fr) auto;
         opacity: 0;
-    }
-
-    .inVoiceChannel {
-        grid-template-rows: 105px minmax(0px, 1fr) auto;
     }
 
     .sectionOneMobile {
@@ -67,9 +62,9 @@
     }
     .sectionTwo {
         height: calc(100svh - 55px) !important;
+        width: 100%;
     }
     .sectionThree {
-        display: flex;
         position: fixed;
         top: 0px;
         right: 0px;
@@ -80,6 +75,7 @@
         transform: translateX(100%);
         transition: 0.3s ease-in-out;
         opacity: 0;
+        overflow: hidden;
     }
 
     .sectionThreeMobile {

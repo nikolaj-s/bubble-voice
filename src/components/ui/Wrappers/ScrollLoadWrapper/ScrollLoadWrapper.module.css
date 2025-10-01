@@ -8,6 +8,7 @@
   scroll-behavior: smooth;
   /* Optional: nice rounded edges */
   border-radius: var(--border-radius);
+  overflow-x: hidden;
   padding: var(--gap);
   gap: var(--gap);
   display: flex;
