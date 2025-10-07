@@ -39,3 +39,10 @@
     overflow: hidden;
     background-color: black;
 }
+
+@media screen and (max-width: 730px) {
+    .container {
+        height: calc(100vh - var(--mobile-bottom-padding) - 55px);
+        padding-bottom: var(--mobile-bottom-padding);
+    }
+}

@@ -124,6 +124,9 @@ const mediaPlayerSlice = createSlice({
     setCurrentChannel: (state, action) => {
       state.currentChannel = action.payload;
     },
+    setMediaMuted: (state, action) => {
+      state.isMuted = action.payload
+    },
     setMediaPlayerLoadingState: (state, action) => {
       state.loading = action.payload;
     },
@@ -203,7 +206,8 @@ export const {
   setColor,
   toggleHideQueue,
   toggleShowInlineControls,
-  toggleShowMediaPlayerRoomStatus
+  toggleShowMediaPlayerRoomStatus,
+  setMediaMuted
 } = mediaPlayerSlice.actions;
 
 export default mediaPlayerSlice.reducer;

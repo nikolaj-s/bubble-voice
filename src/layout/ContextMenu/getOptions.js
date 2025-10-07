@@ -22,6 +22,7 @@ import { useServerCtxMenu } from "./Options/useServerCtxMenu";
 import { useMomentCtxMenu } from "./Options/useMomentCtxMenu";
 import { useConversationCtxMenu } from "./Options/ConversationOptions/useConversationCtxMenu";
 import { useConversationMessageCtxMenu } from "./Options/ConversationOptions/useConversationMessageCtxMenu";
+import { useSubscriptionCtxMenu } from "./Options/useSubscriptionCtxMenu";
 
 export const useContextMenuOptions = () => {
 
@@ -70,6 +71,8 @@ export const useContextMenuOptions = () => {
     const {getConversationOptions} = useConversationCtxMenu();
 
     const {getConversationMessageOptions} = useConversationMessageCtxMenu();
+
+    const getSubscriptionOptions = useSubscriptionCtxMenu();
 
     const getOptions = (e, permissions = {}) => {
         try {
@@ -142,6 +145,8 @@ export const useContextMenuOptions = () => {
             if (data.widget) getWidgetOptions(options, data.widget, permissions);
 
             if (data.channel || data.room || data.controlBar || data.appSubmenu) getConnectionOptions(options); 
+
+            if (data.subscription) getSubscriptionOptions(options, data.subscription);
 
             return options;
         } catch (error) {

@@ -1,10 +1,11 @@
 
-import { Keyboard, Settings, UserPen } from 'lucide-react'
+import { Bell, BellOff, Keyboard, Settings, UserPen } from 'lucide-react'
 import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setOverlay } from '../../../features/Overlay/overlaySlice';
 import { useSearchParams } from 'react-router-dom';
 import { setSoundEffectVolume } from '../../../features/SoundEffects/soundEffectsSlice';
+import { toggleMuteNotifications } from '../../../features/Notifications/notificationsSlice';
 
 export const useControlBarCtxMenu = () => {
 
@@ -13,6 +14,8 @@ export const useControlBarCtxMenu = () => {
     const dispatch = useDispatch();
 
     const {volume: soundEffectsVolume} = useSelector(state => state.soundEffectsSlice);
+
+    const {muteNotifications} = useSelector(state => state.notificationsSlice);
 
     const getControlBarOptions = useCallback((options) => {
         
@@ -23,6 +26,15 @@ export const useControlBarCtxMenu = () => {
             onClick: () => {
                 setSearchParams({section: 'account'});
                 dispatch(setOverlay("settings"));
+            }
+        })
+
+        options.push({
+            label: `${muteNotifications ? 'Unmute' : 'Mute'} Notifications`,
+            type: 'button',
+            icon: muteNotifications ? <BellOff color='var(--text-color)' /> : <Bell color='var(--text-color)' />,
+            onClick: () => {
+                dispatch(toggleMuteNotifications(!muteNotifications));
             }
         })
 
@@ -56,7 +68,7 @@ export const useControlBarCtxMenu = () => {
                 dispatch(setOverlay('settings'))
             }
         })
-    }, [dispatch, setSearchParams, soundEffectsVolume])
+    }, [dispatch, setSearchParams, soundEffectsVolume, muteNotifications])
   
     return {getControlBarOptions}
 }

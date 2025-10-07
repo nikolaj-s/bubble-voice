@@ -4,15 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import ReactPlayer from 'react-player';
 
-import { incrementCurrentTime, setMediaHasAudio, toggleIsMediaPlayerOpen } from '../../../features/MediaPlayer/mediaPlayerSlice';
+import { incrementCurrentTime, setMediaHasAudio, setMediaMuted, toggleIsMediaPlayerOpen } from '../../../features/MediaPlayer/mediaPlayerSlice';
 
 import SpinnerLoading from '../../ui/Loading/Spinner/SpinnerLoading';
 
 import { BoxLabel } from '../../ui/Titles/BoxLabel/BoxLabel';
 
 import DoubleTapWrapper from '../../ui/Wrappers/DoubleTapWrapper/DoubleTapWrapper';
-
-import RedditAudioSrc from '../../RedditAudioSrc/RedditAudioSrc';
 
 import PlayPauseFlash from '../../ui/PlayPauseFlash/PlayPauseFlash';
 
@@ -42,6 +40,8 @@ export const MediaPlayerStreamSource = ({expand, expanded}) => {
     const [localTime, setLocalTime] = React.useState(0);
 
     const hasSeekedInitially = React.useRef(false);
+
+    const isMobileRef = React.useRef();
 
     const {currentlyPlaying, currentTime, isPlaying, volume, loading, error, isMuted, hasAudio, hideMediaPlayer, color} = useSelector(state => state.mediaPlayerSlice);
 
@@ -78,6 +78,16 @@ export const MediaPlayerStreamSource = ({expand, expanded}) => {
 
     }, [currentlyPlaying])
 
+    React.useEffect(() => {
+
+        isMobileRef.current = /Mobi|Android/i.test(navigator.userAgent);
+
+        if (isMobileRef.current && !isMuted) {
+            dispatch(setMediaMuted(true));
+        }
+
+    }, []);
+
     const handleProgress = (value) => {
 
         setLocalTime(value);
@@ -107,6 +117,10 @@ export const MediaPlayerStreamSource = ({expand, expanded}) => {
     }, [currentTime]);
 
     useBlockGlobalPlayPauseKeys();
+
+    const handleUnmute = () => {
+        dispatch(setMediaMuted(false))
+    }
 
     if (!currentlyPlaying && !expanded) return null;
 
@@ -153,6 +167,12 @@ export const MediaPlayerStreamSource = ({expand, expanded}) => {
                 />
             }
             />
+            {/* Tap to unmute overlay — mobile only */}
+            {isMobileRef.current && isMuted && (
+                <div className={styles.tapToUnmuteOverlay} onClick={handleUnmute}>
+                🔈 Tap to Unmute
+                </div>
+            )}
         </div>
     )
 }

@@ -186,7 +186,7 @@ export const EditChannelForm = ({permissions}) => {
                 )}
                 <LineSpacer />
                 <Header level={3} text="Lock This Channel" />
-                <Description description={"You can lock channels to specific users by setting a whitelist. Only users on the whitelist can join or view the channel. However, users with the Manage Channels privilege can always view the channel’s contents — even if they aren’t on the whitelist — for moderation and administrative purposes.  Posting in locked channels will also not contribute to recommendations"} />
+                <Description description={"You can lock channels to specific users by setting a whitelist. Only users on the whitelist can join or view the channel. However, users with the Manage Channels privilege can always view the channel’s contents — even if they aren’t on the whitelist — for moderation and administrative purposes.  Posting in locked channels will also not contribute to recommendations and disable rich link previews for messages"} />
                 <ToggleSwitch initialState={privateChannel} onToggle={() => {togglePrivateChannel(!privateChannel)}} />
                 {privateChannel && (<AuthorizedUserSelector users={users} authorizedUsers={authUsers} onChange={setAuthUsers} />)}
                 {permissions?.user_can_delete_channels &&

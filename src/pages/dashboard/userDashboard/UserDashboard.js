@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux'
 import { Notices } from '../../../components/Notices/Notices'
 import { UserRecommendations } from './userRecommendations/UserRecommendations'
 import { CloseMobileMenu } from '../../../components/CloseMobileMenu/CloseMobileMenu'
+import { UserFeed } from './userFeed/UserFeed'
 
 export const UserDashboard = () => {
 
@@ -29,7 +30,7 @@ export const UserDashboard = () => {
             </section>
             <section className={styles.sectionTwo}>
                 <Routes>
-                    <Route path="/" element={<Notices />} />
+                    <Route path="/" element={<UserFeed />} />
                     <Route path="/your-recommendations" element={<UserRecommendations />} />
                 </Routes>
             </section>

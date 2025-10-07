@@ -1,8 +1,7 @@
 import React, { useRef } from "react";
-import { motion, useMotionValue, useAnimation } from "framer-motion";
+import { motion, useAnimation, useMotionValue } from "framer-motion";
 import styles from "./MobileSwipeToCloseWrapper.module.css";
 
-// Threshold in pixels before triggering close
 const SWIPE_CLOSE_THRESHOLD = 90;
 const MAX_DRAG = 120;
 
@@ -10,19 +9,32 @@ const MobileSwipeToCloseWrapper = ({ children, onClose }) => {
   const y = useMotionValue(0);
   const controls = useAnimation();
   const startYRef = useRef(0);
+  const dragAllowedRef = useRef(true);
 
-  // Only render on mobile (max-width: 730px)
   if (typeof window !== "undefined" && window.innerWidth > 730) return children;
 
-  const handleDragEnd = async (_, info) => {
-    // If pulled down past threshold, close
-    if (info.point.y - startYRef.current > SWIPE_CLOSE_THRESHOLD) {
+  const handleDragStart = (event, info) => {
+    startYRef.current = info.point.y;
+    const scrollableParent = findNearestScrollableParent(event.target);
+
+    // Only allow drag if the scrollable parent is at top or doesn't exist
+    dragAllowedRef.current = !scrollableParent || scrollableParent.scrollTop === 0;
+  };
+
+  const handleDragEnd = async (event, info) => {
+    const delta = info.point.y - startYRef.current;
+
+    if (!dragAllowedRef.current) {
+      // Snap back if drag was blocked
+      controls.start({ y: 0, transition: { type: "spring", stiffness: 400, damping: 28 } });
+      return;
+    }
+
+    if (delta > SWIPE_CLOSE_THRESHOLD) {
       await controls.start({ y: MAX_DRAG, opacity: 0, transition: { duration: 0.18 } });
-      const currentY = y.get();
-      onClose?.(currentY);
+      onClose?.(y.get());
       controls.set({ y: 0, opacity: 1 });
     } else {
-      // Snap back if not passed threshold
       controls.start({ y: 0, transition: { type: "spring", stiffness: 400, damping: 28 } });
     }
   };
@@ -33,15 +45,16 @@ const MobileSwipeToCloseWrapper = ({ children, onClose }) => {
         className={styles.wrapper}
         drag="y"
         dragConstraints={{ top: 0, bottom: MAX_DRAG }}
+        dragElastic={0.3}       // resistance effect
+        dragMomentum={false}    // disable momentum to prevent overshoot
         style={{ y }}
         animate={controls}
         initial={{ y: 0 }}
-        onDragStart={(_, info) => {
-          startYRef.current = info.point.y;
-        }}
+        onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
+        dragPropagation={false} // prevent interfering with scrollable children
+        dragListener={true}
       >
-        {/* Pill / Bar UI */}
         <div className={styles.pillContainer}>
           <div className={styles.pill} />
         </div>
@@ -50,5 +63,18 @@ const MobileSwipeToCloseWrapper = ({ children, onClose }) => {
     </div>
   );
 };
+
+// Only check the nearest scrollable parent
+function findNearestScrollableParent(el) {
+  while (el && el !== document.body) {
+    const style = window.getComputedStyle(el);
+    const overflowY = style.overflowY;
+    if ((overflowY === "auto" || overflowY === "scroll") && el.scrollHeight > el.clientHeight) {
+      return el;
+    }
+    el = el.parentElement;
+  }
+  return null;
+}
 
 export default MobileSwipeToCloseWrapper;

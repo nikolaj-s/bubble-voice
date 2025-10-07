@@ -48,13 +48,16 @@
         left: 0;
         max-width: 250px;
         width: 100%;
-        height: calc(100svh - 0px) !important;
+        height: calc(100svh - var(--mobile-bottom-padding)) !important;
         border-top-left-radius: 0px;
             /* Set starting transform for animation */
         transform: translateX(-100%);
         transition: 0.3s ease-in-out;
         opacity: 0;
+        padding-bottom: var(--mobile-bottom-padding);
     }
+    
+    
 
     .sectionOneMobile {
         transform: translateX(0%);
@@ -64,6 +67,11 @@
         height: calc(100svh - 55px) !important;
         width: 100%;
     }
+
+    .fullscreen {
+        height: 100vh !important;
+    }
+    
     .sectionThree {
         position: fixed;
         top: 0px;
@@ -71,11 +79,12 @@
         z-index: 20;
         width: 100%;
         max-width: 250px;
-        height: 100svh !important;
+        height: calc(100svh - var(--mobile-bottom-padding)) !important;
         transform: translateX(100%);
         transition: 0.3s ease-in-out;
         opacity: 0;
         overflow: hidden;
+        padding-bottom: var(--mobile-bottom-padding);
     }
 
     .sectionThreeMobile {

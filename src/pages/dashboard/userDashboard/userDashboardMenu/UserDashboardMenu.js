@@ -11,15 +11,15 @@ export const UserDashboardMenu = () => {
     const navOptions = [
         
         {
-            label: "Notices",
+            label: "Your Feed",
             path: `${basePath}/`,
             icon: <Megaphone color='var(--text-color)' />
         },
-        {
-            label: "Your Account",
-            path: `${basePath}/account`,
-            icon: <User color='var(--text-color)' />
-        },
+        // {
+        //     label: "Your Account",
+        //     path: `${basePath}/account`,
+        //     icon: <User color='var(--text-color)' />
+        // },
         {
             label: "Your Recommendations",
             path: `${basePath}/your-recommendations`,

@@ -16,8 +16,6 @@ import { Outlet } from 'react-router';
 
 import { ControlBar } from '../../components/ControlBar/ControlBar';
 
-import { Users } from './users/Users';
-
 import { ServerLayoutWrapper } from '../../components/ui/Wrappers/ServerlayoutWrapper/ServerLayoutWrapper';
 
 import { CloseMobileMenu } from '../../components/CloseMobileMenu/CloseMobileMenu';
@@ -93,7 +91,7 @@ export const Server = () => {
                     </section>
                     <section 
                     style={{
-                        height: window?.electron?.ipcRenderer ? 'calc(100svh - 70px)' : null
+                        height: fullscreen ? '100vh' : window?.electron?.ipcRenderer ? 'calc(100svh - 70px)' : null
                     }}
                     className={`${styles.sectionTwo} ${fullscreen ? styles.fullscreen : ''}`}>
                         <div className={styles.routeWrapper}>

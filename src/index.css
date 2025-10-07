@@ -42,6 +42,7 @@ html {
   --range-main-active: black;
   --range-main-thumb: black;
   --primary-color: black;
+  --mobile-bottom-padding: 30px;
 }
 
 body {

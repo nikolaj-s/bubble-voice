@@ -19,12 +19,13 @@
     position: fixed;
     background-color: var(--background-color);
     pointer-events: none;
-    height: calc(100svh - 16px);
+    height: calc(100svh - 10px - var(--mobile-bottom-padding));
     z-index: 20;
     width: 80px;
     /* Set starting transform for animation */
     transform: translateX(-100%);
     transition: transform 0.3s ease-in-out;
+    padding-bottom: var(--mobile-bottom-padding);
   }
 
   .sideNavVisible {

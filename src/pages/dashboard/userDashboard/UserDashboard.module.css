@@ -21,7 +21,8 @@
         left: 0;
         max-width: 250px;
         width: 100%;
-        height: calc(100svh - 0px) !important;
+        height: calc(100svh - var(--mobile-bottom-padding)) !important;
+        padding-bottom: var(--mobile-bottom-padding);
         border-top-left-radius: 0px;
             /* Set starting transform for animation */
         transform: translateX(-100%);
