@@ -10,6 +10,7 @@ import { setVoiceChannelFocused } from '../../../features/Channel/VoiceChannel/v
 import { setFilter } from '../../../features/Search/searchSlice'
 import { setOverlay } from '../../../features/Overlay/overlaySlice'
 import { usePermissions } from '../../../hooks/usePermissions'
+import { closeConversationPanel } from '../../../features/Conversations/conversationsSlice'
 
 export const ServerNav = () => {
 
@@ -35,6 +36,8 @@ export const ServerNav = () => {
         dispatch(toggleMobileMenu());
 
         dispatch(setVoiceChannelFocused(false));
+
+        dispatch(closeConversationPanel());
 
         navigate(`${basePath}${path}`);
     }

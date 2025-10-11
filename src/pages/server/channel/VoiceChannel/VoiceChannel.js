@@ -29,7 +29,10 @@ export const VoiceChannel = ({channel, focused}) => {
 
     return (
         
-        <div className={styles.container} style={{zIndex: focused ? 2 : null}}>  
+        <div className={styles.container} style={{
+            zIndex: focused ? 2 : 20,
+            left: focused ? null : '-300%'
+            }}>  
             <ChannelProvider overlay={true} channel_id_prop={channel}>
                 <UserAudioProvider>
                     <KeybindProvider>

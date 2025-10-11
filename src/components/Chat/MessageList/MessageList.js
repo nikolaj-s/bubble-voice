@@ -32,6 +32,7 @@ const MessageList = ({
     if (loading || loadingMore || messages.length === 0) return;
 
     const messageId = searchParams.get('message');
+   
     if (!messageId) return;
 
     const wrapper = document.getElementById('chat-scroll-wrapper');

@@ -46,7 +46,7 @@ export const CommandHint = ({ value = '', setValue }) => {
         if (options[selectedIndex]) {
           e.preventDefault();
           setValue(options[selectedIndex].command + ' ');
-          document.getElementById('chat-input').focus()
+          document.getElementById('chat-input')?.focus()
         }
       }
     };

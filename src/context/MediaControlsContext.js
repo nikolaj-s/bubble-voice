@@ -1,4 +1,4 @@
-import { createContext, useContext, } from "react";
+import { createContext, useContext, useEffect, useRef, } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -24,31 +24,50 @@ export const MediaControlsProvider = ({ children }) => {
         (state) => state.mediaControlSlice
     );
 
+    const prevState = useRef({})
+
+    useEffect(() => {
+
+        const currentState = {isMicrophoneMuted, isAudioMuted, isScreenSharing, isWebcamOn}
+
+        for (const [key, value] of Object.entries(currentState)) {
+
+            if (currentState[key] !== prevState[key]) {
+                (currentState[key] ? playEnable : playDisable)();
+                break;
+            }
+
+        }
+
+        prevState.current = {isMicrophoneMuted, isAudioMuted, isScreenSharing, isWebcamOn}
+
+    }, [isMicrophoneMuted, isAudioMuted, isScreenSharing, isWebcamOn])
+
     const {isSharing} = useSelector(state => state.screenShareSlice);
 
     // Actions
     const handleToggleMicrophone = () => {
         if (details?.disable_streams) return;
         if (!loading) dispatch(toggleMicrophone(!isMicrophoneMuted));
-        (isMicrophoneMuted ? playEnable : playDisable)();
+     //   (isMicrophoneMuted ? playEnable : playDisable)();
     };
 
     const handleToggleAudio = () => {
         if (details?.disable_streams) return;
         if (!loading) dispatch(toggleAudioMute(!isAudioMuted));
-        (isAudioMuted ? playEnable : playDisable)()
+    //    (isAudioMuted ? playEnable : playDisable)()
     };
 
     const handleToggleWebcam = () => {
         if (details?.disable_streams) return;
         if (!loading) dispatch(toggleWebcam(!isWebcamOn));
-        (isWebcamOn ? playDisable : playEnable)();
+    //    (isWebcamOn ? playDisable : playEnable)();
     };
 
     const handleShareScreen = () => {
         if (details?.disable_streams) return;
         if (!loading) dispatch(toggleScreenShare(!isScreenSharing));
-        (isScreenSharing ? playDisable : playEnable)();
+    //    (isScreenSharing ? playDisable : playEnable)();
     }
 
     return (

@@ -8,6 +8,11 @@ const ContextMenuButton = ({ label, onClick, icon, top, bottom, zIndex, color })
             style: zIndex,
             color
         }}
+        onKeyUp={(e) => {
+            if (e.key === 'Enter') {
+                onClick()
+            }
+        }}
         className={styles.contextButton} onClick={onClick}>
             <p>
             {label}

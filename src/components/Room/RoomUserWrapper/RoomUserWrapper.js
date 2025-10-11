@@ -4,15 +4,24 @@ import { RoomUserCard } from '../RoomUserCard/RoomUserCard';
 
 import styles from './RoomUserWrapper.module.css';
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { MediaPlayerStreamSource } from '../../MediaPlayer/MediaPlayerStreamSource/MediaPlayerStreamSource';
 
 import RoomPlaceholder from '../RoomPlaceholder/RoomPlaceholder';
 
 import UserStreamSource from '../UserStreamSource/UserStreamSource';
+import PipWrapper from '../../PipWrapper/PipWrapper';
+import { useNavigate } from 'react-router';
+import { setVoiceChannelFocused } from '../../../features/Channel/VoiceChannel/voiceChannelSlice';
 
 export const RoomUserWrapper = ({ users, disable_streams }) => {
+
+    const navigate = useNavigate();
+
+    const dispatch = useDispatch();
+
+    const server_id = useSelector(state => state.serverDetailsSlice.server_id);
 
     const [ambientColor, setAmbientColor] = useState(null);
 
@@ -156,6 +165,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
 
     React.useEffect(() => {
         let observer;
+        let sizeObserver;
         try {
             handleScaling();
             window.onresize = function () {
@@ -167,6 +177,9 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
 
             observer = new MutationObserver(handleScaling);
             observer.observe(el, config);
+
+            sizeObserver = new ResizeObserver(handleScaling);
+            sizeObserver.observe(el, config);
 
             return () => {
                 observer.disconnect();
@@ -181,6 +194,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
             window.removeEventListener('resize', handleScaling);
             window.onresize = null;
             observer?.disconnect();
+            sizeObserver?.disconnect();
         };
     // eslint-disable-next-line
     }, [focused]);
@@ -203,8 +217,6 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
 
     const handleScaling = useCallback((resize = false) => {
         try {
-
-            
 
             if (expanded && !resize) return;
 
@@ -278,8 +290,18 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
         }
     };
 
+    const returnToVoiceChannel = (e) => {
+
+        e.stopPropagation();
+
+        navigate(`/dashboard/server/${server_id}`);
+
+        dispatch(setVoiceChannelFocused(true));
+
+    }
+
     return (
-        <>
+        <PipWrapper isPip={!focused} title='Current Stream' onClose={returnToVoiceChannel} >
             <div
                 className={`${styles.container} ${expanded ? styles.expandedContainer : null} ${focused === false ? styles.popout : null}`}
                 id='user-streams-wrapper'
@@ -304,6 +326,6 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
                 <MediaPlayerStreamSource key='media-player-stream-source' expanded={expanded === 'media-player-stream-source'} expand={handleStreamExpansion} /> 
                 {disable_streams && (<RoomPlaceholder />)}
             </div>
-        </>
+        </PipWrapper>
     );
 };

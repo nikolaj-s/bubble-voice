@@ -20,11 +20,12 @@ const ConnectionDetails = ({
     bitrateUpMax: 6000,
     bitrateDownMax: 8000,
   },
+  samples = []
 }) => {
 
   return (
     <div className={styles.container}>
-      <ConnectionLineGraph width={250} sample={{ping, jitter, packetLossDown, packetLossUp, bitrateDown, bitrateUp}} showTabs={false} />
+      <ConnectionLineGraph width={250} samples={samples} sample={{ping, jitter, packetLossDown, packetLossUp, bitrateDown, bitrateUp}} showTabs={false} />
       <ul className={styles.list}>
         {codec && <li><span className={styles.k}>Codec</span><span className={styles.v}>{codec}</span></li>}
         {connection?.transport && <li><span className={styles.k}>Transport</span><span className={styles.v}>{connection.transport}</span></li>}

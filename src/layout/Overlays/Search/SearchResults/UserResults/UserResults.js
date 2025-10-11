@@ -10,7 +10,7 @@ export const UserResults = ({results = []}) => {
             {results.length === 0 ?
             <ContentPlaceholder icon={Users} title={'Start Searching By Username'} message={'Currently No Users Found'} />
             : 
-            results.map((user, key)=> (<UserButton key={key} {...user} user={user} onClick={(u, e) => {triggerContext(e, `${u}-search-result`); console.log(e,`${u}-search-result`)}} id='search-result' showContextButton={true} showUsername={true} />))
+            results.map((user, key)=> (<UserButton key={key} {...user} user={{...user, fromSearch: true}} onClick={(u, e) => {triggerContext(e, `${u}-search-result`); console.log(e,`${u}-search-result`)}} id='search-result' showContextButton={true} showUsername={true} />))
             }
         </div>
     )

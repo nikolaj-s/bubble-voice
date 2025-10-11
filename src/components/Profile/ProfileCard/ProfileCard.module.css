@@ -2,7 +2,6 @@
   background: var(--card-background-color);
   overflow: hidden;
   width: 100%;
-  max-width: 360px;
   position: relative;
   text-align: center;
 }

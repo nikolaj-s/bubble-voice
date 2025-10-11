@@ -16,7 +16,7 @@ export const TextChannelProvider = ({children, channel}) => {
 
     const { server_id } = useSelector(state => state.serverDetailsSlice);
 
-    const targetNotFound = useSelector(state => state.textChannelSlice);
+    const { targetNotFound }= useSelector(state => state.textChannelSlice);
 
     const dispatch = useDispatch();
 

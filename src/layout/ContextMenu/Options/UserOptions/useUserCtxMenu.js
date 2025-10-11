@@ -36,7 +36,7 @@ export const useUserCtxMenu = () => {
             })
         } 
 
-         if (user._id !== user_id && users[user._id]) {
+         if (user._id !== user_id && users[user._id] && !user.fromSearch) {
         
             const isWebcamDisabled = userStreamState[`${user.user_id}-webcam`]?.disabled || false;
 

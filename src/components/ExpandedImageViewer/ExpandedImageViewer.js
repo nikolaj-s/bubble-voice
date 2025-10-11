@@ -1,11 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { AlertTriangle, X } from "lucide-react"; // Or any icon for closing
 import styles from "./ExpandedImageViewer.module.css";
-import { getImageColor } from "../../lib/services/getImageColor";
-
-import IconButton from "../ui/Buttons/IconButton/IconButton";
-import { ToolBar } from "../ui/Wrappers/ToolBar/ToolBar";
-import { MediaInfo } from "../MediaInfo/MediaInfo";
 import { ExpandedMediaWrapper } from "../ui/Wrappers/ExpandedMediaWrapper/ExpandedMediaWrapper";
 import { Card } from "../ui/Wrappers/Card/Card";
 import { Text } from "../ui/Text/Text";

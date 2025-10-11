@@ -21,83 +21,52 @@ const DEFAULT_SCALES = {
 };
 
 const WINDOW_MS = 30_000; // 30s
-const STORAGE_PREFIX = 'bubble_conn_graph_v1:'; // bump version if schema changes
 
 export default function ConnectionLineGraph({
-  sample,
+  samples = [], // <-- expects an array of samples covering the last 30s
   width = 200,
   height = 92,
   metric = 'ping',
   scales = DEFAULT_SCALES,
   smooth = true,
   showTabs = true,
-  storageKey = 'default', // ← namespace for this graph (e.g., `${serverId}:${channelId}`)
 }) {
   const canvasRef = useRef(null);
 
-  // in-memory buffers used for rendering
-  const dataRef = useRef([]); // selected metric only (array of {ts, value})
+  // in-memory buffers used for rendering (selected metric only)
+  const dataRef = useRef([]); // array of {ts, value}
   const lastTsRef = useRef(0);
-
-  // persisted buffers for ALL metrics: { metricKey: Array<{ts,value}> }
-  const storeRef = useRef(initEmptyStore());
-  const lastSaveRef = useRef(0);
 
   const [selected, setSelected] = useState(metric);
 
   // keep external metric prop in sync if it changes
   useEffect(() => setSelected(metric), [metric]);
 
-  // Load from sessionStorage on mount / when storageKey changes
+  // Build the selected series from the passed-in samples whenever samples or selected changes
   useEffect(() => {
-    const key = makeKey(storageKey);
-    const loaded = safeLoad(key) || initEmptyStore();
-    // prune anything older than window (in case we re-open much later)
-    const cutoff = Date.now() - WINDOW_MS;
-    for (const m of METRICS) {
-      loaded[m.key] = (loaded[m.key] || []).filter(p => p.ts >= cutoff);
-    }
-    storeRef.current = loaded;
-    dataRef.current = loaded[selected] || [];
-    // eslint-disable-next-line
-  }, [storageKey, selected]);
-
-  // Push incoming sample: update ALL metric buffers, then render the selected
-  useEffect(() => {
-    if (!sample) return;
-    const ts = typeof sample.ts === 'number' ? sample.ts : Date.now();
-    lastTsRef.current = ts;
-
-    const cutoff = ts - WINDOW_MS;
-    const store = storeRef.current;
-
-    // update each metric if present
-    for (const m of METRICS) {
-      const val = sample[m.key];
-      if (typeof val === 'number' && !Number.isNaN(val)) {
-        const arr = store[m.key] || (store[m.key] = []);
-        arr.push({ ts, value: val });
-        // prune to window
-        while (arr.length && arr[0].ts < cutoff) arr.shift();
-      }
+    if (!Array.isArray(samples) || samples.length === 0) {
+      dataRef.current = [];
+      lastTsRef.current = Date.now();
+      draw();
+      return;
     }
 
-    // set the currently selected series for draw/stats
-    dataRef.current = store[selected] || [];
+    // Ensure we have numeric ts for ordering
+    const ordered = [...samples].filter(s => s && typeof s.ts === 'number').sort((a, b) => a.ts - b.ts);
 
-    // throttle persist (≤ 2 writes/sec)
-    const now = performance.now();
-    if (now - lastSaveRef.current > 500) {
-      safeSave(makeKey(storageKey), store);
-      lastSaveRef.current = now;
-    }
-  }, [sample, selected, storageKey]);
+    // If caller is responsible for slicing to last 30s, this still prunes any extras just in case.
+    const cutoff = (ordered.length ? ordered[ordered.length - 1].ts : Date.now()) - WINDOW_MS;
+    const series = ordered
+      .filter(s => s.ts >= cutoff)
+      .map(s => ({ ts: s.ts, value: s[selected] }))
+      .filter(p => typeof p.value === 'number' && !Number.isNaN(p.value));
 
-  // Redraw on changes
-  useEffect(() => {
+    dataRef.current = series;
+    lastTsRef.current = ordered.length ? ordered[ordered.length - 1].ts : Date.now();
+
     draw();
-    // eslint-disable-next-line
-  }, [width, height, scales, selected, sample, storageKey, smooth]);
+    // eslint-disable-next-line 
+  }, [samples, selected, smooth, width, height, scales]);
 
   const currentMetricMeta = useMemo(
     () => METRICS.find(m => m.key === selected) || METRICS[0],
@@ -119,7 +88,7 @@ export default function ConnectionLineGraph({
       if (p.value > max) max = p.value;
     }
     return { now: arr[arr.length - 1].value, min, max };
-  }, [sample, selected, storageKey]);
+  }, [samples, selected]);
 
   function draw() {
     const canvas = canvasRef.current;
@@ -250,8 +219,7 @@ export default function ConnectionLineGraph({
                 className={`${styles.tab} ${selected === m.key ? styles.active : ''}`}
                 onClick={() => {
                   setSelected(m.key);
-                  // switch to the already-persisted series for that metric
-                  dataRef.current = (storeRef.current[m.key] || []);
+                  // dataRef will be rebuilt by the useEffect watching [samples, selected]
                 }}
                 title={m.label}
               >
@@ -266,15 +234,18 @@ export default function ConnectionLineGraph({
 }
 
 ConnectionLineGraph.propTypes = {
-  sample: PropTypes.shape({
-    ping: PropTypes.number,
-    jitter: PropTypes.number,
-    packetLossUp: PropTypes.number,
-    packetLossDown: PropTypes.number,
-    bitrateUp: PropTypes.number,
-    bitrateDown: PropTypes.number,
-    ts: PropTypes.number,
-  }),
+  // samples: array of recent samples (caller should pass last ~30s)
+  samples: PropTypes.arrayOf(
+    PropTypes.shape({
+      ts: PropTypes.number.isRequired,
+      ping: PropTypes.number,
+      jitter: PropTypes.number,
+      packetLossUp: PropTypes.number,
+      packetLossDown: PropTypes.number,
+      bitrateUp: PropTypes.number,
+      bitrateDown: PropTypes.number,
+    })
+  ),
   width: PropTypes.number,
   height: PropTypes.number,
   metric: PropTypes.oneOf(METRICS.map(m => m.key)),
@@ -287,46 +258,9 @@ ConnectionLineGraph.propTypes = {
   }),
   smooth: PropTypes.bool,
   showTabs: PropTypes.bool,
-  storageKey: PropTypes.string,
 };
 
 // ---------------- helpers ----------------
-function initEmptyStore() {
-  const obj = {};
-  for (const m of METRICS) obj[m.key] = [];
-  return obj;
-}
-
-function makeKey(ns) {
-  return `${STORAGE_PREFIX}${ns}`;
-}
-
-function safeLoad(key) {
-  try {
-    const raw = sessionStorage.getItem(key);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    // light schema guard
-    if (typeof parsed !== 'object' || !parsed) return null;
-    for (const m of METRICS) {
-      if (!Array.isArray(parsed[m.key])) parsed[m.key] = [];
-      else parsed[m.key] = parsed[m.key]
-        .filter(p => p && typeof p.ts === 'number' && typeof p.value === 'number' && !Number.isNaN(p.value));
-    }
-    return parsed;
-  } catch {
-    return null;
-  }
-}
-
-function safeSave(key, storeObj) {
-  try {
-    sessionStorage.setItem(key, JSON.stringify(storeObj));
-  } catch {
-    // storage quota errors etc. — ignore
-  }
-}
-
 function roundRect(ctx, x, y, w, h, r) {
   const radius = Math.min(r, w / 2, h / 2);
   ctx.beginPath();
@@ -341,7 +275,8 @@ function roundRect(ctx, x, y, w, h, r) {
 function hexToRgba(hex, a = 1) {
   if (!hex) return `rgba(0,0,0,${a})`;
   const c = hex.replace('#', '');
-  const bigint = parseInt(c.length === 3 ? c.split('').map(ch => ch + ch).join('') : c, 16);
+  const normalized = c.length === 3 ? c.split('').map(ch => ch + ch).join('') : c;
+  const bigint = parseInt(normalized, 16);
   const r = (bigint >> 16) & 255;
   const g = (bigint >> 8) & 255;
   const b = bigint & 255;

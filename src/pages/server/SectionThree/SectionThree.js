@@ -31,8 +31,6 @@ export const SectionThree = () => {
 
     const {currentTextChannel} = useSelector(state => state.textChannelSlice);
 
-    const {currentVoiceChannel, focused} = useSelector(state => state.voiceChannelSlice);
-
     const setPage = (value) => {
       dispatch(setSideBarPage(value))
     } 
@@ -50,7 +48,7 @@ export const SectionThree = () => {
             <TextButton action={() => {setPage('moments')}} backgroundColor={page === 'moments' ? 'var(--button-hover)' : 'var(--primary-color)'} minHeight={30} height={30} title='Moments'  />
         </ToolBar>
         <LineSpacer height={1} opacity={1} backgroundColor={'var(--background-color)'} />
-        <div style={{height: currentVoiceChannel && !focused ? 'calc(100% - calc(var(--sidebar-width, 250px) * 9 / 16))' : 'calc(100% - 40px)', display: 'flex', width: '100%', flexDirection: 'column', position: 'relative'}}>
+        <div style={{height: 'calc(100% - 40px)', display: 'flex', width: '100%', flexDirection: 'column', position: 'relative'}}>
           <AnimatePresence mode='sync'>
               {page === 'users' ? (
                   <motion.div
@@ -81,9 +79,6 @@ export const SectionThree = () => {
               )}
           </AnimatePresence>
         </div>
-        {currentVoiceChannel && !focused && (
-          <div style={{width: 'var(--sidebar-width)', height: 'calc(var(--sidebar-width, 250px) * 9 / 16)', backgroundColor: 'black'}}></div>
-        )}
         </>
     )
 }

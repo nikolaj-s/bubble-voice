@@ -68,7 +68,7 @@ export const MessageScrollWrapper = ({
 
       // near the top? top = scrollTop <= 50px
       if (
-        el.scrollTop <= 50 &&
+        el.scrollTop <= 150 &&
         !loadingOlder &&
         !noMore
       ) {

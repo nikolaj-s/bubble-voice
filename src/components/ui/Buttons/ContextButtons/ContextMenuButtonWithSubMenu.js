@@ -3,6 +3,7 @@ import React, { useState, useRef, useLayoutEffect } from "react";
 import { createPortal } from "react-dom";
 import ContextMenuButton from "./ContextMenuButton";
 import TextInput from "../../Inputs/TextInput/TextInput";
+import { isDesktop } from "../../../../lib/handlers/isDesktop";
 
 const ContextMenuButtonWithSubmenu = ({
     label,
@@ -29,8 +30,7 @@ const ContextMenuButtonWithSubmenu = ({
         closeTimeout.current = setTimeout(() => setOpen(false), 100);
     };
 
-    useLayoutEffect(() => {
-        if (!open || !buttonRef.current || !submenuRef.current) return;
+    const handlePlaceMenu = () => {
         const btnRect = buttonRef.current.getBoundingClientRect();
         const submenuW = submenuRef.current.offsetWidth;
         const submenuH = submenuRef.current.offsetHeight;
@@ -44,7 +44,32 @@ const ContextMenuButtonWithSubmenu = ({
         if (btnRect.top + submenuH > window.innerHeight) {
             topPos = window.innerHeight - submenuH - 8;
         }
+
+        if (isDesktop()) {
+            document.getElementById('ctx-menu-filter-input')?.focus();
+        }
+
         setCoords({ top: topPos, left: leftPos });
+    }
+
+    useLayoutEffect(() => {
+
+        let observer;
+
+        if (!open || !buttonRef.current || !submenuRef.current) return;
+        
+        handlePlaceMenu();
+
+        observer = new ResizeObserver(handlePlaceMenu);
+
+        const config = { childList: true, subtree: false };
+
+        observer.observe(submenuRef.current, config)
+
+        return () => {
+            observer?.disconnect();
+        }
+
     }, [open, submenuOptions]);
 
     return (
@@ -94,7 +119,7 @@ const ContextMenuButtonWithSubmenu = ({
                         <div style={{flexShrink: 0, width: '100%'}} onKeyDown={(e) => {e.stopPropagation()}} 
                         onKeyUp={(e) => {e.stopPropagation()}} 
                         onClick={(e) => e.stopPropagation()}>
-                            <TextInput value={filter} placeholder={'Filter'} onChange={setFilter} />
+                            <TextInput value={filter} placeholder={'Filter'} onChange={setFilter} id={'ctx-menu-filter-input'} />
                         </div>)}
                         {submenuOptions.filter(o => o.label.toLowerCase().startsWith(filter.toLowerCase())).map((opt, i) => (
                             <div

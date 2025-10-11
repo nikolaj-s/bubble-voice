@@ -30,6 +30,9 @@ const conversationsSlice = createSlice({
         },
         toggleUnreadConversations: (state, action) => {
             state.unreadConversations = action.payload;
+        },
+        closeConversationPanel: (state, action) => {
+            state.isOpen = false;
         }
     },
     extraReducers: (builder) => {
@@ -84,6 +87,6 @@ const conversationsSlice = createSlice({
     }
 })
 
-export const {toggleConversationPanel, removeConversation, updateConversationTimeStamp, toggleUnreadConversations} = conversationsSlice.actions;
+export const {toggleConversationPanel, removeConversation, updateConversationTimeStamp, toggleUnreadConversations, closeConversationPanel} = conversationsSlice.actions;
 
 export default conversationsSlice.reducer;

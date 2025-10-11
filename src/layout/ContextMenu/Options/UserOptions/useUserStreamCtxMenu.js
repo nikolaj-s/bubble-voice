@@ -16,7 +16,7 @@ export const useUserStreamCtxMenu = () => {
 
     const getUserStreamOptions = useCallback((options, data) => {
 
-        if (data.user_id !== user_id) {
+        if (data.user_id !== user_id && !data.fromSearch) {
 
                 const volume_source_key = `streamAudio-${data.user_id}`;
 
@@ -25,8 +25,6 @@ export const useUserStreamCtxMenu = () => {
                 const stream_audio_source_key = `${data.user_id}-streamAudio`;
 
                 const isStreamDisabled = userStreamState[stream_source_key]?.disabled || false;
-
-               
 
                 options.push({
                     label: "Change Stream Volume",

@@ -25,6 +25,11 @@
   font-weight: 500;
   color: var(--text-color);
   letter-spacing: 0.2px;
+
+  /* Clamp to 1 line with ellipsis */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .button {

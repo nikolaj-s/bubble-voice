@@ -19,7 +19,7 @@ export const ReplyTo = ({replyTo, users = {}, clearReplyTo = () => {}}) => {
             <div 
             style={{borderLeft: `solid 4px ${user.color || 'var(--accent-color)'}`}}
             className={styles.container}>
-                <Label label={`Replying to ${user.display_name}`} />
+                <Label margin={0} label={`Replying to ${user.display_name}`} />
                 <IconButton 
                 Icon={<X color='var(--text-color)' />}
                 onClick={clearReplyTo}

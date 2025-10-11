@@ -8,10 +8,7 @@ export const ExpandedImage = () => {
 
   const dispatch = useDispatch();
 
-  const image = useSelector(state => state.expandedImageSlice.expandedImage);
-
-  const data = useSelector(state => state.expandedImageSlice.expandedImageData);
-
+  const { expandedImage: image, expandedImageData: data, images} = useSelector(state => state.expandedImageSlice);
 
   const close = () => {
     dispatch(clearExpandedImage());
@@ -22,5 +19,5 @@ export const ExpandedImage = () => {
     {image && (<ExpandedImageViewer onClose={close} src={image} open={true} context={data ? {...data, src: image, type: 'image'} : {src: image, image: image, type: 'image'}} />)}
     </>
   );
-  };
+};
   

@@ -13,7 +13,7 @@ export const Notices = () => {
 
     const handleToggleOpenSearchForServers = () => {
 
-        dispatch(setFilter('servers'));
+        dispatch(setFilter({path: 'servers'}));
 
         dispatch(setOverlay('search'));
     
@@ -27,7 +27,7 @@ export const Notices = () => {
 
     return (
         <>
-        {servers.length === 0 ?
+        {servers.length  ?
         <NoServersNotice createServer={handleToggleOpenCreateServerMenu} joinServer={handleToggleOpenSearchForServers} />
         : null}
         </>

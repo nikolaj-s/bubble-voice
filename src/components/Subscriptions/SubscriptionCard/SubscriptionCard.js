@@ -23,6 +23,7 @@ const SubscriptionCard = ({ subscription }) => {
   const channelName = channel_id?.channel_name || "Unknown Channel";
 
   const openChannel = () => {
+    console.log(messages[0]?._id)
     navigate(`/dashboard/server/${server_id?._id}/channel/${channel_id?._id}?message=${messages[0]?._id}`)
   }
 
