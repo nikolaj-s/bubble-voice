@@ -3,9 +3,12 @@ import React, {useCallback, useRef} from 'react'
 import { useDispatch } from 'react-redux';
 import { setScreenshot, setScreenshotPreview } from '../features/Screenshot/screenshotSlice';
 import { triggerAlert } from '../features/Alerts/alertsSlice';
+import { useBubbleSounds } from './useBubbleSounds';
 
 export const useScreenshot = () => {
   const dispatch = useDispatch();
+
+  const {playEnable} = useBubbleSounds();
 
   const isCapturingRef = useRef(false);
   const lastCaptureAtRef = useRef(0);
@@ -47,6 +50,10 @@ export const useScreenshot = () => {
 
       if (resp?.data) dispatch(setScreenshot(resp.data));
       if (resp?.preview) dispatch(setScreenshotPreview(resp.preview));
+
+      if (resp) {
+        playEnable();
+      }
     } catch (err) {
       console.error(err);
       dispatch(triggerAlert('Error Capturing Screenshot', 'error'));

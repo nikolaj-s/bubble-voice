@@ -1,0 +1,85 @@
+.electronContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.electronButton {
+  all: unset;
+  cursor: pointer;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  background-color: var(--button-background);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 280px;
+}
+
+.electronButton:hover {
+  background-color: var(--button-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+}
+
+.electronButton:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+}
+
+.electronButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Optional Google “G” icon if you decide to include one later */
+.googleIcon {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) invert(1);
+}
+
+.error {
+  color: var(--error-color);
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  text-align: center;
+  font-weight: 400;
+}
+
+.hint {
+  margin-top: 0.25rem;
+  color: rgba(209, 217, 230, 0.6);
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+/* Optional subtle pulse while loading */
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.loading {
+  animation: pulse 1.5s infinite;
+}
