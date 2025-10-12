@@ -192,7 +192,7 @@ export const MediasoupProvider = ({ children }) => {
 
     let encodings = []
 
-    if (type === 'stream') {
+    if (type === 'stream' || type === 'webcam') {
       encodings.push({
         maxBitrate: 2_000_000,
         maxFramerate: 30
@@ -203,10 +203,10 @@ export const MediasoupProvider = ({ children }) => {
 
     const producer = await producerTransportRef.current.produce(params);
 
-    console.log(await producerTransportRef.current?.getStats())
-
     producer.on("transportclose", () => closeProducer(type));
+
     producer.on("close", () => closeProducer(type));
+
     producer.on("trackended", () => closeProducer(type));
 
     producersRef.current.set(type, producer);
