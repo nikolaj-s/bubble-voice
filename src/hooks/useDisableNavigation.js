@@ -13,7 +13,7 @@ export const useDisableNavigation = () => {
       // Only block back (3) and forward (4) buttons
       if (event.button === 3 || event.button === 4) {
         event.preventDefault();
-        event.stopImmediatePropagation();
+      //  event.stopImmediatePropagation();
       }
     };
 
@@ -25,12 +25,14 @@ export const useDisableNavigation = () => {
 
     // Listen for mouse back/forward buttons
     window.addEventListener("mousedown", blockMouseBackForward);
+    window.addEventListener("mouseup", blockMouseBackForward);
     window.addEventListener("auxclick", blockMouseBackForward);
 
     return () => {
       window.removeEventListener("popstate", blockNavigation);
       window.removeEventListener("mousedown", blockMouseBackForward);
       window.removeEventListener("auxclick", blockMouseBackForward);
+      window.removeEventListener("mouseup", blockMouseBackForward)
     };
   }, []);
 };

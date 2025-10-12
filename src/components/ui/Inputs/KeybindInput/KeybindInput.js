@@ -24,6 +24,9 @@ const KeybindInput = ({ currentKeybind, onChange }) => {
     };
 
     const handleMouseDown = (event) => {
+      console.log(event)
+      event.preventDefault();
+      console.log(event.button)
       if (event.button < 3) return;
       const mouseButton =
         event.button === 3 ? "Mouse Button 4" : "Mouse Button 5";
@@ -32,13 +35,19 @@ const KeybindInput = ({ currentKeybind, onChange }) => {
       setListening(false);
     };
 
+    const handleMouseUp = (event) => {
+      event.preventDefault();
+    }
+
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("mousedown", handleMouseDown);
+    window.addEventListener("mouseup", handleMouseUp);
 
     // Clean up listeners on stop listening or unmount
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("mouseup", handleMouseUp);
     };
   }, [listening, onChange]);
 

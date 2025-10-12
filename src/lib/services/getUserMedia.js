@@ -42,8 +42,8 @@ export const getMicrophoneMedia = async (device_id, echoCancellation = false, au
     const buildConstraints = (id) => ({
       video: {
         deviceId: id ? { exact: id } : undefined,
-        width: { ideal: 960 },
-        height: { ideal: 540 },
+        width: { max: 640 },
+        height: { max: 480 },
         facingMode: "user",
       },
     });

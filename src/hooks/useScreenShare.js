@@ -11,7 +11,7 @@ import { useRef } from "react";
 import { stopSharingScreen } from "../features/Channel/MediaControl/mediaControlSlice";
 
 export const useScreenShare = ({produce, closeProducer}) => {
-  const isElectron = !!window?.electron?.ipcRenderer;
+  const isElectron = window?.electron?.ipcRenderer;
 
   const dispatch = useDispatch();
 
@@ -98,7 +98,7 @@ export const useScreenShare = ({produce, closeProducer}) => {
                 await produce("streamAudio", mediaStream.getAudioTracks()[0]);
               }
             }
-
+            console.log(source)
             dispatch(setScreenSharing(true));
 
             dispatch(setStreamDetails({name: source.name, ...videoTrack.getSettings()}));
