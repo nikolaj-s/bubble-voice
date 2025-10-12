@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { resetServerDetails } from '../../../../features/ServerDetails/serverDetailsSlice'
 import { toggleMobileMenu } from '../../../../features/Mobile/mobileSlice'
+import { closeConversationPanel } from '../../../../features/Conversations/conversationsSlice'
 
 export const DashboardNavButton = () => {
 
@@ -23,8 +24,13 @@ export const DashboardNavButton = () => {
     }
 
     const handleReturnToDashBoard = () => {
+        
         handleCloseMobileMenu();
-        dispatch(resetServerDetails())
+
+        dispatch(resetServerDetails());
+
+        dispatch(closeConversationPanel());
+
         navigate('/dashboard')
     }
 

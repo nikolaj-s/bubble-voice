@@ -171,3 +171,17 @@
     }
   }
 }
+
+.notificationText {
+  display: -webkit-box;         /* enables the line-clamp behavior */
+  -webkit-box-orient: vertical; /* vertical stacking of the box */
+  -webkit-line-clamp: 2;       /* number of lines to show */
+  overflow: hidden;            /* hide the rest */
+  text-overflow: ellipsis;     /* show ellipsis when clipped (best-effort) */
+
+  /* optional — control wrapping & line-height for more predictable clamping */
+  word-break: break-word;
+  line-height: 1.2;
+  max-height: calc(1.2em * 2); /* enforce exact height for 2 lines (safety) */
+  font-size: 0.7rem;
+}

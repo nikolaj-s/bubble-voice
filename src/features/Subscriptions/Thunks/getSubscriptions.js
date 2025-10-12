@@ -5,7 +5,7 @@ import { API_URL } from "../../../lib/Validation";
 
 // Cache key & TTL (12 hours)
 const CACHE_KEY = "subscriptions_cache";
-const CACHE_TTL = 12 * 60 * 60 * 1000; // 12 hours in ms
+const CACHE_TTL = 1 * 60 * 60 * 1000; // 12 hours in ms
 
 export const getSubscriptions = createAsyncThunk(
   "getSubscriptions/subscriptionsSlice",

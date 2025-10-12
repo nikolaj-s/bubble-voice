@@ -54,7 +54,7 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
                         <div className={`${styles.messageContent} ${loading ? styles.sending : ''}`}>
                             <UserBlock users={users} message={message} prevMessage={prevMessage} isDifferentDay={isDifferentDay} styles={styles} />
                         
-                            <TextBlock {...message} styles={styles} />
+                            <TextBlock {...message} notification={notification} styles={styles} />
                             {message.media_item && (<VideoPreview {...message.media_item} context={message.media_item} />)}
                             <ImageBlock {...message} styles={styles} loading={message.loading || loading} notification={notification} />
                             <VideoBlock {...message} styles={styles} />

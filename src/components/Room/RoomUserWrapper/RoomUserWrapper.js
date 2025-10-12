@@ -183,6 +183,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
 
             return () => {
                 observer.disconnect();
+                sizeObserver?.disconnect();
                 window.removeEventListener('resize', handleScaling);
                 window.onresize = null;
             };

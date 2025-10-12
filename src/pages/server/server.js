@@ -79,7 +79,7 @@ export const Server = () => {
                     }}
                     className={`${styles.sectionOne} ${isChannelMenuOpen ? styles.sectionOneMobile : ''} ${currentVoiceChannel ? styles.inVoiceChannel : ''}`}
                     >
-                        <ScrollLoadWrapper>
+                        <ScrollLoadWrapper context={{createChannel: true, createCategory: true, type: "channelList"}}>
                             <Banner image={banner} />
                             <StickyWrapper>
                                 <ServerNav />

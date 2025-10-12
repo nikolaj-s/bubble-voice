@@ -50,7 +50,6 @@ export const Conversations = () => {
       setMenuOpen(true);
     }
   }, [selectedConversation]);
-
   if (!isOpen) return null;
 
   return (

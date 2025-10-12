@@ -31,6 +31,8 @@ const conversationsSlice = createSlice({
         toggleUnreadConversations: (state, action) => {
             state.unreadConversations = action.payload;
         },
+        // note this is being called from Dashboard Nav Button
+        // plus from the Servers file that wraps server buttons
         closeConversationPanel: (state, action) => {
             state.isOpen = false;
         }

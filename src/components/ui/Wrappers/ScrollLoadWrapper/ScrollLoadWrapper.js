@@ -10,7 +10,8 @@ const ScrollLoadWrapper = ({
   style,
   threshold = 80,
   maxContentWidth = 1000,
-  contentGap
+  contentGap,
+  context = {}
 }) => {
   const [hover, toggleHover] = useState(false);
   const [scrolling, setScrolling] = useState(false);
@@ -47,6 +48,7 @@ const ScrollLoadWrapper = ({
       ref={containerRef}
       onScroll={handleScroll}
       tabIndex={0}
+      data-context={JSON.stringify(context)}
     >
       <div
         style={{

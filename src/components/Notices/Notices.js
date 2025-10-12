@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { NoServersNotice } from './NoServersNotice/NoServersNotice'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectServers } from '../../features/Servers/serversSlice'
@@ -27,7 +27,7 @@ export const Notices = () => {
 
     return (
         <>
-        {servers.length  ?
+        {servers.length === 0  ?
         <NoServersNotice createServer={handleToggleOpenCreateServerMenu} joinServer={handleToggleOpenSearchForServers} />
         : null}
         </>

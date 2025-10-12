@@ -1,5 +1,4 @@
 import { MessagesSquare } from 'lucide-react';
-import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toggleConversationPanel } from '../../../../../features/Conversations/conversationsSlice';
 import IconButton from '../../../../../components/ui/Buttons/IconButton/IconButton';

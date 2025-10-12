@@ -23,7 +23,6 @@ const StickyWrapper = ({
     const wrapper = wrapperRef.current;
 
     let scrollParent = getScrollParent(wrapper?.parentNode);
-    console.log(scrollParent)
     if (!scrollParent) scrollParent = window;
 
     const handleScroll = () => {

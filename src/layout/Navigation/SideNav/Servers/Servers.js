@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router';
 import { toggleMobileMenu } from '../../../../features/Mobile/mobileSlice';
 import { VerticalReorderWrapper } from '../../../../components/ui/Wrappers/VerticalReorderWrapper/VerticalReorderWrapper';
 import { reorderServers } from '../../../../features/Servers/Thunks/reorderServers';
+import { closeConversationPanel } from '../../../../features/Conversations/conversationsSlice';
 
 export const Servers = () => {
 
@@ -14,7 +15,7 @@ export const Servers = () => {
 
     const navigate = useNavigate();
 
-    const {servers }= useSelector(state => state.serversSlice);
+    const { servers }= useSelector(state => state.serversSlice);
 
     const [history, setHistory] = React.useState({});
 
@@ -31,7 +32,9 @@ export const Servers = () => {
     }
 
     const handleSwitchServer = (server_id) => {
-    
+        
+        dispatch(closeConversationPanel());
+
             if (currentServer) {
                 setHistory(prev => ({
                     ...prev,
