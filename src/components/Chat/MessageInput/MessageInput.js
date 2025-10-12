@@ -46,7 +46,7 @@ export const MessageInput = ({
       return;
     }
 
-    const options = { maxSizeMB: 0.6, maxWidthOrHeight: 1024, useWebWorker: true };
+    const options = { maxSizeMB: 0.5, maxWidthOrHeight: 1024, useWebWorker: true };
 
     try {
       // 1️⃣ Compress all selected files
