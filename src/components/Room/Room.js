@@ -76,33 +76,41 @@ export const Room = () => {
 
         const handleWebcam = async (state) => {
 
-            dispatch(throwWebcamError(false));
+            try {
+                dispatch(throwWebcamError(false));
 
-            dispatch(toggleMediaControlLoading(true));
+                dispatch(toggleMediaControlLoading(true));
 
-            if (state) {
-                const track = await getWebcamMedia(selectedWebcam?.deviceId);
+                if (state) {
+                    const track = await getWebcamMedia(selectedWebcam?.deviceId);
 
-                if (track.error) {
+                    if (track.error) {
 
-                    dispatch(throwWebcamError(track.errorMessage));
+                        dispatch(throwWebcamError(track.errorMessage));
 
-                    return dispatch(toggleMediaControlLoading(false));
+                        return dispatch(toggleMediaControlLoading(false));
 
+                    }
+
+                    track.onended = (isWebcamOn) => {
+                        if (isWebcamOn) {
+                            dispatch(toggleWebcam());
+                        }
+                    } 
+
+                    await produce('webcam', track);
+                } else {
+                    await closeProducer('webcam');
                 }
 
-                track.onended = (isWebcamOn) => {
-                    if (isWebcamOn) {
-                        dispatch(toggleWebcam());
-                    }
-                } 
+                dispatch(toggleMediaControlLoading(false));
+            } catch (error) {
+                console.log(error);
 
-                await produce('webcam', track);
-            } else {
-                await closeProducer('webcam');
+                dispatch(throwWebcamError(JSON.stringify(error)));
+
+                return dispatch(toggleMediaControlLoading(false));
             }
-
-            dispatch(toggleMediaControlLoading(false));
         }
 
         handleWebcam(isWebcamOn);

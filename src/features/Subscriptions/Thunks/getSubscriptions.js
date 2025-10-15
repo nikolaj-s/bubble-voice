@@ -4,13 +4,18 @@ import axios from "axios";
 import { API_URL } from "../../../lib/Validation";
 
 // Cache key & TTL (12 hours)
-const CACHE_KEY = "subscriptions_cache";
+
 const CACHE_TTL = 1 * 60 * 60 * 1000; // 12 hours in ms
 
 export const getSubscriptions = createAsyncThunk(
   "getSubscriptions/subscriptionsSlice",
   async (refresh = false, { rejectWithValue, getState }) => {
     try {
+
+      const {account} = getState().accountSlice;
+
+      const CACHE_KEY = `subscriptions_cache-${account?._id}`;
+
       const cached = localStorage.getItem(CACHE_KEY);
       const now = Date.now();
 
@@ -32,12 +37,14 @@ export const getSubscriptions = createAsyncThunk(
       });
 
       const data = response.data;
-      console.log(data)
       // Cache the result
-      localStorage.setItem(
-        CACHE_KEY,
-        JSON.stringify({ data, timestamp: now })
-      );
+      // only cache if subscriptions are greater than 0
+      if (data?.length > 0) {
+        localStorage.setItem(
+          CACHE_KEY,
+          JSON.stringify({ data, timestamp: now })
+        );
+      }
 
       return data;
     } catch (error) {

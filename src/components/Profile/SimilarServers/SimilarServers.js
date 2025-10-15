@@ -6,7 +6,7 @@ import styles from './SimilarServers.module.css'; // Optional CSS module for sty
 import { Subtitle } from '../../ui/Titles/Subtitle/Subtitle';
 
 
-export const SimilarServers = ({joined_servers}) => {
+export const SimilarServers = ({joined_servers = []}) => {
 
     const [similarServers, setSimilarServers] = React.useState([]);
 
@@ -14,7 +14,7 @@ export const SimilarServers = ({joined_servers}) => {
 
     React.useEffect(() => {
 
-        const l_servers = servers.filter(server => joined_servers.includes(server._id));
+        const l_servers = servers.filter(server => joined_servers?.includes(server._id));
 
         setSimilarServers(l_servers);
 

@@ -7,12 +7,16 @@ import { API_URL } from "../../../lib/Validation";
 export const signInWithGoogle = createAsyncThunk('signInWithGoogle/authSlice', async (credential, {rejectWithValue}) => {
     try {
 
+        const isDekstop = window?.electron?.ipcRenderer;
+
         clearToken();
 
         const response = await axios({
             method: "POST",
             url: `${API_URL}/auth/google-sign-in`,
-            data: {credential}
+            data: {credential},
+            params: isDekstop ? {desktop: true} : {},
+            
         })
 
         if (response.data) {

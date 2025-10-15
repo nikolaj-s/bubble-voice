@@ -1,0 +1,36 @@
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.2rem;
+  padding: 1.5rem;
+  background: var(--background-color);
+  perspective: 800px;
+}
+
+.card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  background-color: var(--card-background-color);
+  transform: skewY(-4deg);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+.card:hover {
+  transform: skewY(-4deg) scale(1.03);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+  z-index: 2;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: skewY(4deg) scale(1.1);
+  transition: transform 0.3s ease;
+}
+
+.card:hover .image {
+  transform: skewY(4deg) scale(1.15);
+}

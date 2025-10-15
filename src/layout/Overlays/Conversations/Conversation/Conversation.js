@@ -4,17 +4,15 @@ import { ChatContainer } from '../../../../components/Chat/ChatContainer';
 import { sendConversationMessage } from '../../../../features/Conversations/Thunks/sendConversationMessage';
 import { fetchConversationMessages } from '../../../../features/Conversations/Thunks/fetchConversationMessages';
 import { updateLastReadStatus } from '../../../../features/Notifications/Thunks/updateLastReadStatus';
-import { setConversationReply } from '../../../../features/Conversations/conversationSlice';
+import { setConversationReply, setConversationText } from '../../../../features/Conversations/conversationSlice';
 
 export const Conversation = () => {
 
     const dispatch = useDispatch();
 
-    const {selectedConversation, loading, error, sending, messages, noMoreMessages, conversationReply} = useSelector(state => state.conversationSlice);
+    const {selectedConversation, loading, error, sending, messages, noMoreMessages, conversationReply, text} = useSelector(state => state.conversationSlice);
 
     const [users, setUsers] = React.useState({});
-
-    const [text, setText] = React.useState("");
 
     const [images, setImages] = React.useState([]);
 
@@ -70,11 +68,11 @@ export const Conversation = () => {
 
         setImages([]);
 
-        setText("");
+        dispatch(setConversationText(""));
     }
 
     return (
-        <div style={{height: window?.electron ? 'calc(100svh - 91px)' : 'calc(100svh - 61px)', flexShrink: 0, display: 'flex', position: 'relative'}} >
+        <div style={{height: window?.electron ? 'calc(100svh - 91px)' : 'calc(100svh - 61px)', flexShrink: 0, display: 'flex', position: 'relative', backgroundColor: 'var(--primary-color)'}} >
             <ChatContainer 
             id={selectedConversation?._id} users={users}  
             loadingMore={loading}
@@ -82,7 +80,7 @@ export const Conversation = () => {
             sending={sending}
             send={handleSend}
             setImage={setImages}
-            setValue={setText}
+            setValue={(value) => {dispatch(setConversationText(value))}}
             error={error}   
             reply={(message) => {dispatch(setConversationReply(message))}}
 

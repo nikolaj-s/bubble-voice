@@ -33,7 +33,7 @@ const FetchAccountProvider = ({ children }) => {
 
             if (token) {
 
-                dispatch(fetchAccount());
+                dispatch(fetchAccount({navigate}));
             
             }
 

@@ -2,6 +2,7 @@
 import styles from './ConversationButton.module.css';
 import { AlertIndicator } from '../ui/AlertIndicator/AlertIndicator';
 import DateTimeDisplay from '../ui/DateTimeDisplay/DateTimeDisplay';
+import { ImageComponent } from '../ui/Image/Image';
 
 const ConversationButton = ({
   conversation,
@@ -29,12 +30,7 @@ const ConversationButton = ({
 
       <div className={styles.avatarWrapper}>
         {hasData ? (
-          <img
-            src={user_image}
-            alt={`${display_name} avatar`}
-            className={styles.avatar}
-            loading="lazy"
-          />
+          <ImageComponent className={styles.avatar} src={user_image} />
         ) : (
           <div className={styles.skeletonAvatar} />
         )}

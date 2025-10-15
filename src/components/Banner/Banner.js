@@ -8,7 +8,7 @@ export const Banner = ({image, height = 105, padding}) => {
     return (
         
         <div style={{height, padding}} className={styles.banner}>
-            <ImageComponent borderRadius={'var(--border-radius)'} alt='banner' src={image} />
+            <ImageComponent borderRadius={'var(--border-radius)'}  alt='banner' src={image} minHeight={0} />
         </div>
     )
 

@@ -47,28 +47,48 @@ export const MediasoupProvider = ({ children }) => {
     }
   };
 
+  const handleConsumerClosed = ({ consumer_id }) => {
+    consumersRef.current.delete(consumer_id);
+    forceUpdate();
+  };
+
+  const handleNewProducers = async (producers) => {
+    for (const { producer_id, user, appData } of producers) {
+      await consume(producer_id, user, appData).catch(console.log);
+    }
+    forceUpdate();
+  };
+
   useEffect(() => {
     if (!socket) return;
 
     const setupMediasoup = async () => {
-
       setError(false);
-
       toggleLoading(true);
 
-      const capabilities = await socket.request("getRouterRtpCapabilities").catch(setError);
-      if (!capabilities || capabilities.error) return;
+      try {
+        const capabilities = await socket.request("getRouterRtpCapabilities");
+        if (!capabilities || capabilities.error) {
+          throw capabilities?.error || new Error('Failed to get router rtp capabilities');
+        }
 
-      let device = await loadDevice(capabilities);
-      if (!device) return;
+        const device = await loadDevice(capabilities);
+        if (!device) throw new Error('Failed to load mediasoup device');
 
-      deviceRef.current = device;
-      await initTransports(deviceRef.current);
+        deviceRef.current = device;
+        await initTransports(deviceRef.current);
 
-      await socket.request('getProducers').then(handleNewProducers).catch(console.log);
-      toggleLoading(false);
-      
-      console.log('MediaSoup Mounted');
+        const initialProducers = await socket.request('getProducers');
+        if (initialProducers?.error) throw initialProducers.error;
+        await handleNewProducers(initialProducers);
+
+        console.log('MediaSoup Mounted');
+      } catch (err) {
+        console.error('Mediasoup setup error', err);
+        setError(err?.message || String(err));
+      } finally {
+        toggleLoading(false);
+      }
     };
 
     socket.on("newProducers", handleNewProducers);
@@ -117,18 +137,6 @@ export const MediasoupProvider = ({ children }) => {
     };
 
   }, [socket]);
-
-  const handleConsumerClosed = ({ consumer_id }) => {
-    consumersRef.current.delete(consumer_id);
-    forceUpdate();
-  };
-
-  const handleNewProducers = async (producers) => {
-    for (const { producer_id, user, appData } of producers) {
-      await consume(producer_id, user, appData).catch(console.log);
-    }
-    forceUpdate();
-  };
 
   const initTransports = async (device) => {
     const prodData = await socket.request("createWebRtcTransport", {
@@ -236,8 +244,8 @@ export const MediasoupProvider = ({ children }) => {
 
       document.getElementById(consumer.id)?.remove();
 
-      if (consumer.appData.type === 'microphone') {
-        removeTrack(consumer.user_id);
+      if (consumer.appData.kind === 'audio') {
+        removeTrack(`${consumer.appData.type}-${user}`);
       }
     });
 
@@ -245,8 +253,8 @@ export const MediasoupProvider = ({ children }) => {
 
       document.getElementById(consumer.id)?.remove();
 
-       if (consumer.appData.type === 'microphone') {
-        removeTrack(consumer.user_id);
+       if (consumer.appData.kind === 'audio') {
+        removeTrack(`${consumer.appData.type}-${user}`);
       }
 
     }); 
@@ -255,8 +263,8 @@ export const MediasoupProvider = ({ children }) => {
 
       document.getElementById(consumer.id)?.remove()
 
-      if (consumer.appData.type === 'microphone') {
-        removeTrack(consumer.user_id);
+      if (consumer.appData.kind === 'audio') {
+        removeTrack(`${consumer.appData.type}-${user}`);
       }
 
       closeConsumer(consumer.id)

@@ -25,7 +25,7 @@ export const globalSearch = createAsyncThunk(
             const { token }= getState().authSlice;
 
             if ((filter.path === 'videos' || filter.path === 'images') && query) {
-                const cached = await getCachedSearchResults(query);
+                const cached = await getCachedSearchResults(`${query}${filter.path}`);
 
                 if (cached?.results) {
                     console.log('using cached search results');
@@ -52,7 +52,7 @@ export const globalSearch = createAsyncThunk(
             })
       
             if (response.success) {
-                if (query) setCachedSearchResults({query, results: response.results})
+                if (query) setCachedSearchResults({query: `${query}${filter.path}`, results: response.results})
 
                 return {filter: filter.path, ...response};
             }

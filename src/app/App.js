@@ -67,7 +67,7 @@ function App() {
           <Route path="/account-error" element={<FatalErrorPage />} />
           <Route path="/bubble-invite" element={<InvitePage />} />
           <Route path="/verify-account" element={<VerifyAccount />} />
-          <Route path="/" element={<ProtectedRoute><Navigate to={'/dashboard'} /></ProtectedRoute>} />
+          <Route path="/" element={<ProtectedRoute useLandingPage={true} ><Navigate to={'/dashboard'} /></ProtectedRoute>} />
         </Routes>
       </BackSplash>
       </div>

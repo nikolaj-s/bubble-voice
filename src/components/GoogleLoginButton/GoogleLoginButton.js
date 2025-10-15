@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { signInWithGoogle } from '../../features/Auth/Thunks/signInWithGoogle';
 
 import styles from './GoogleLoginButton.module.css';
+import TextButton from '../ui/Buttons/TextButton/TextButton';
 
 export default function GoogleLoginButton() {
   const dispatch = useDispatch();
@@ -91,7 +92,9 @@ export default function GoogleLoginButton() {
   }, [hasElectronAuth, hasLegacyIpc, handleSuccessPayload, handleFailurePayload]);
 
   // Trigger the electron-auth flow
-  const startElectronSignin = useCallback(async () => {
+  const startElectronSignin = useCallback(async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
     setLoading(true);
     setError(null);
 
@@ -122,17 +125,11 @@ export default function GoogleLoginButton() {
 
   // UI: if an electron environment is present render a native button; otherwise render the GoogleLogin web component
   return (
-    <div style={{ borderRadius: 10, overflow: 'hidden' }}>
+    <div style={{ borderRadius: 10, overflow: 'hidden', width: '100%' }}>
       { (hasElectronAuth || hasLegacyIpc) ? (
         <div className={styles.electronContainer ?? ''}>
-          <button
-            className={styles.electronButton ?? ''}
-            onClick={startElectronSignin}
-            disabled={loading}
-            type="button"
-          >
-            {loading ? 'Signing in…' : 'Sign in with Google'}
-          </button>
+          <TextButton title='Sign in with Google' action={startElectronSignin} disabled={loading} />
+        
 
           {error && <div className={styles.error ?? ''} role="alert">{JSON.stringify(error)}</div>}
 

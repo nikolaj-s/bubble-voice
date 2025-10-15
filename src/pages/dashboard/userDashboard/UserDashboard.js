@@ -11,6 +11,7 @@ import { Notices } from '../../../components/Notices/Notices'
 import { UserRecommendations } from './userRecommendations/UserRecommendations'
 import { CloseMobileMenu } from '../../../components/CloseMobileMenu/CloseMobileMenu'
 import { UserFeed } from './userFeed/UserFeed'
+import { RecentConversations } from './RecentConversations/RecentConversations'
 
 export const UserDashboard = () => {
 
@@ -26,6 +27,7 @@ export const UserDashboard = () => {
             className={`${styles.sectionOne} ${isChannelMenuOpen ? styles.sectionOneMobile : ''}`}>
                 <Banner padding={5} image={user_banner} />
                 <UserDashboardMenu />
+                <RecentConversations />
                 <ControlBar key={'control-bar'} inChannel={false} />
             </section>
             <section className={styles.sectionTwo}>

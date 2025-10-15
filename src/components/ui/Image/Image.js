@@ -2,7 +2,7 @@ import React from 'react';
 
 import styles from './Image.module.css'
 import { ImageOff } from 'lucide-react';
-export const ImageComponent = ({src, altSrc, objectFit = 'cover', alt = "Image", borderRadius, aspectRatio, height, width}) => {
+export const ImageComponent = ({src, altSrc, objectFit = 'cover', alt = "Image", borderRadius, aspectRatio, height, width, minHeight, className}) => {
 
     const [imageError, setImageError] = React.useState(false);
 
@@ -11,7 +11,7 @@ export const ImageComponent = ({src, altSrc, objectFit = 'cover', alt = "Image",
     return (
         <div 
         style={{
-            minHeight: imageError ? 90 : loading ? 150 : null,
+            minHeight: minHeight ? imageError ? 90 : loading ? 150 : null : null,
             backgroundColor: imageError || loading ? 'black' : null,
             minWidth: loading ? 100 : null,
             borderRadius,
@@ -19,7 +19,7 @@ export const ImageComponent = ({src, altSrc, objectFit = 'cover', alt = "Image",
             height,
             width
         }}
-        className={`${styles.imageContainer} ${loading && src ? styles.loading : ''}`}>
+        className={`${styles.imageContainer} ${loading && src ? styles.loading : ''} ${className}`}>
             {imageError || !src ? (
                 <ImageOff color='var(--text-color)' />
             ) : (

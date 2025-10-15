@@ -1,5 +1,10 @@
 export const getClipboardText = async () => {
   try {
+
+    if (window?.electron) {
+      return await window?.electron?.readText();
+    }
+
     if (navigator.clipboard && typeof navigator.clipboard.readText === 'function') {
       return await navigator.clipboard.readText();
     }

@@ -13,9 +13,13 @@ const conversationSlice = createSlice({
         selectedConversation: null,
         sending: false,
         noMoreMessages: false,
-        conversationReply: null
+        conversationReply: null,
+        text: ""
     },
     reducers: {
+        setConversationText: (state, action) => {
+            state.text = action.payload;
+        },
         setConversationReply: (state, action) => {
             state.conversationReply = action.payload;
         },
@@ -123,6 +127,6 @@ const conversationSlice = createSlice({
     }
 })
 
-export const {setCurrentConversation, addConversationMessage, updateConversationMessage, setConversationReply, removeConversationMessage} = conversationSlice.actions;
+export const {setCurrentConversation, addConversationMessage, updateConversationMessage, setConversationReply, removeConversationMessage, setConversationText} = conversationSlice.actions;
 
 export default conversationSlice.reducer;

@@ -10,7 +10,7 @@ import { setPreferences } from "../../AccountPreferences/accountPreferencesSlice
 // Async thunk to fetch account details
 export const fetchAccount = createAsyncThunk(
     'account/fetchAccount',
-    async (_, { rejectWithValue, dispatch, getState }) => {
+    async ({navigate}, { rejectWithValue, dispatch, getState }) => {
       try {
   
           const {token} = getState().authSlice;
@@ -22,7 +22,7 @@ export const fetchAccount = createAsyncThunk(
 
           if (response.data.verification_required) {
 
-            window.location.assign(`/verify-account?email=${response.data.email}`);
+            navigate ? navigate(`/verify-account?email=${response.data.email}`) : window.location.assign(`/verify-account?email=${response.data.email}`);
 
             return {account: null};
           
