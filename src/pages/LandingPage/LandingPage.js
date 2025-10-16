@@ -9,32 +9,15 @@ import { useNavigate } from 'react-router';
 import TextButton from '../../components/ui/Buttons/TextButton/TextButton';
 import { ImageComponent } from '../../components/ui/Image/Image';
 import FeaturesSection from './FeatureSection/FeatureSection';
-import SkewedGallery from '../../components/SkewedGallery/SkewedGallery';
+import { DefaultHeader } from '../../components/DefaultHeader/DefaultHeader';
 
 export const LandingPage = () => {
 
     const navigate = useNavigate();
 
-
-
     return (
         <div className={styles.container}>
-        <header className={styles.header}>
-            <div className={styles.brand}>
-            <div className={styles.logo}><ImageComponent src={'https://bubble-media.net/uploads/36fb8578-4437-4349-97dc-03e6380f658a.png'} /></div>
-            <div>
-                <div className={styles.brandTitle}>Bubble</div>
-                <div className={styles.brandSubtitle}>Micro communities · voice · play</div>
-            </div>
-            </div>
-
-            <nav className={styles.nav}>
-                <TextButton action={() => {navigate('/login')}} title='Login' backgroundColor={'var(--background-color)'} />
-                <TextButton action={() => {navigate('/signup')}} title='Get Started' />
-            </nav>
-
-            <div className={styles.mobileMenu}>Menu</div>
-        </header>
+        <DefaultHeader />
         <ScrollLoadWrapper style={{
             maxHeight: 'calc(100svh - 80px)',
             backgroundColor: 'var(--overlay-color)'

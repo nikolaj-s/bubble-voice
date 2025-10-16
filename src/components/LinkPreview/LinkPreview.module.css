@@ -7,7 +7,6 @@
   box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
   min-width: 250px;
   max-width: 350px;
-  height: 400px; /* fixed height */
   display: flex;
   flex-direction: column;
 }
@@ -17,7 +16,6 @@
 }
 
 .previewMedia {
-  flex: 1 1 auto;
   overflow: hidden;
   background-color: black;
   display: flex;
@@ -77,4 +75,5 @@
   font-size: 0.9rem;
   color: var(--text-color);
   opacity: 0.8;
+  margin: 0px;
 }

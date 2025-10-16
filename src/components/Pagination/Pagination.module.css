@@ -1,0 +1,80 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-family, Inter, system-ui, -apple-system, 'Segoe UI', Roboto);
+  color: var(--text-color, #d1d9e6);
+}
+
+/* small plain control buttons */
+.control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.04);
+  color: var(--text-color);
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+  transition: background 0.12s ease, transform 0.12s ease;
+}
+.control:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.control:not(:disabled):hover {
+  background: rgba(255,255,255,0.03);
+  transform: translateY(-1px);
+}
+
+/* pages list */
+.pages {
+  display: flex;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  align-items: center;
+}
+
+.pageItem {}
+
+.pageBtn {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: 9px;
+  border: 1px solid rgba(255,255,255,0.03);
+  background: transparent;
+  color: var(--text-color);
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.12s ease, transform 0.12s ease;
+}
+.pageBtn:hover {
+  background: rgba(255,255,255,0.03);
+  transform: translateY(-1px);
+}
+.pageBtn:focus {
+  outline: 2px solid rgba(128,225,221,0.2);
+  outline-offset: 2px;
+}
+
+/* active page */
+.active {
+  background: var(--button-background, #5c9dbd);
+  color: var(--text-color);
+  border-color: rgba(0,0,0,0.12);
+}
+
+/* ellipsis */
+.ellipsis {
+  min-width: 12px;
+  text-align: center;
+  opacity: 0.7;
+  font-weight: 600;
+}

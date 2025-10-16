@@ -25,6 +25,8 @@ import { InvitePage } from '../pages/invitePage/InvitePage';
 import { AudioContextProvider } from '../context/AudioContext';
 import { ResetPassword } from '../pages/resetPassword/ResetPassword';
 import { VerifyAccount } from '../pages/verifyAccount/VerifyAccount';
+import { PatchNotes } from '../pages/patchNotes/PatchNotes';
+import { NotFound } from '../pages/NotFound/NotFound';
 
 function App() {
 
@@ -62,12 +64,15 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/patch-notes" element={<PatchNotes />} />
           <Route path='/reset-password' element={<ResetPassword />} />
           <Route path="/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/account-error" element={<FatalErrorPage />} />
           <Route path="/bubble-invite" element={<InvitePage />} />
           <Route path="/verify-account" element={<VerifyAccount />} />
           <Route path="/" element={<ProtectedRoute useLandingPage={true} ><Navigate to={'/dashboard'} /></ProtectedRoute>} />
+
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BackSplash>
       </div>

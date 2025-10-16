@@ -1,6 +1,5 @@
 
 import React from 'react'
-import FullScreenWrapper from '../../components/ui/Wrappers/FullScreenWrapper/FullScreenWrapper'
 import MenuWrapper from '../../components/ui/Wrappers/MenuWrapper/MenuWrapper'
 import { AccountSettingsForm } from '../../layout/Forms/Settings/AccountSettingsForm/AccountSettingsForm'
 import { AppearanceSettingsForm } from '../../layout/Forms/Settings/AppearanceSettingsForm/AppearanceSettingsForm'
@@ -54,7 +53,7 @@ export const Settings = ({close}) => {
     }, [dispatch])
         
     return (
-        <MenuWrapper navItems={navItems}>
+        <MenuWrapper navItems={navItems} showFooter={true}>
             {content}
         </MenuWrapper>
     )

@@ -3,7 +3,7 @@
   vertical-align: middle;
   display: flex;
   align-self: center;
-  border-radius: 15px;
+  border-radius: var(--border-radius);
   overflow: hidden;
   justify-content: center;
   align-items: center;
@@ -14,7 +14,11 @@
   min-width: 60px;
   min-height: 45px;
   background: var(--background-color, #121a22);
-  transition: background-color box-shadow 0.5s ease-in;
+  transition: 0.1s ease-in-out;
+}
+
+.container:active {
+  scale: 1.01;
 }
 
 /* Video stretches responsively inside the container */

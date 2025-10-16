@@ -3,7 +3,7 @@ import styles from  "./ControlBar.module.css";
 
 import IconButton from '../ui/Buttons/IconButton/IconButton';
 
-import { HeadphoneOff, Headphones, Mic, MicOff, MonitorOff, MonitorUp, Settings2, Unplug, Video, VideoOff } from 'lucide-react';
+import { HeadphoneOff, Headphones, Mic, MicOff, MonitorOff, MonitorUp, MonitorX, Settings2, Unplug, Video, VideoOff } from 'lucide-react';
 
 import UserButton from '../ui/Buttons/UserButton/UserButton';
 
@@ -23,7 +23,7 @@ export const ControlBar = () => {
 
     const dispatch = useDispatch();
 
-    const {isWebcamOn, isMicrophoneMuted, isAudioMuted, isScreenSharing, handleToggleAudio, handleToggleMicrophone, handleToggleWebcam, webcamError, microphoneError, audioError, isSharing, handleShareScreen } = useMediaControls();
+    const {isWebcamOn, isMicrophoneMuted, isAudioMuted, isScreenSharing, handleToggleAudio, handleToggleMicrophone, handleToggleWebcam, webcamError, microphoneError, audioError, isSharing, handleShareScreen, screenShareError } = useMediaControls();
 
     const {keybinds} = useSelector(state => state.keybindsSlice);
 
@@ -53,13 +53,13 @@ export const ControlBar = () => {
                 Icon={isWebcamOn || webcamError ? <VideoOff strokeWidth={2.5} color={'var(--text-color)'} /> : <Video strokeWidth={2.5} color={'var(--text-color)'} />}
                 />
                 <IconButton 
-                backgroundColor={isSharing ? 'var(--success-color)' : 'var(--primary-color)'}
+                backgroundColor={screenShareError ? "var(--error-color)" : isSharing ? 'var(--success-color)' : 'var(--primary-color)'}
                 width={50}
                 height={35}
                 padding={8}
                 onClick={handleShareScreen}
-                title={isSharing ? "Stop Stream" : "Start Streaming"}
-                Icon={isSharing ? <MonitorOff strokeWidth={2.5} color='var(--text-color)' /> : <MonitorUp strokeWidth={2.5} color='var(--text-color)' />}
+                title={screenShareError ? <ErrorToolTip error={screenShareError} /> : isSharing ? "Stop Stream" : "Start Streaming"}
+                Icon={screenShareError ? <MonitorX color="var(--text-color)" strokeWidth={2.5} /> : isSharing ? <MonitorOff strokeWidth={2.5} color='var(--text-color)' /> : <MonitorUp strokeWidth={2.5} color='var(--text-color)' />}
                 />
                 <ConnectionIndicator />
                 <IconButton 

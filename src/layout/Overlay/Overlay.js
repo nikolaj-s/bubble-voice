@@ -44,6 +44,7 @@ import { MomentOverlay } from "../Overlays/MomentOverlay/MomentOverlay";
 import { Conversations } from "../Overlays/Conversations/Conversations";
 import { DownloadOverlay } from "../Overlays/DownloadOverlay/DownloadOverlay";
 import { ScreenshotOverlay } from "../Overlays/ScreenshotOverlay/ScreenshotOverlay";
+import { EditMessage } from "../Overlays/EditMessage/EditMessage";
 
 const overlayComponents = {
   search: Search,
@@ -64,7 +65,8 @@ const overlayComponents = {
   mediaPlayerSaves: MediaPlayerSaves,
   leaveServer: LeaveServer,
   moment: MomentOverlay,
-  downloadApp: DownloadOverlay
+  downloadApp: DownloadOverlay,
+  editMessage: EditMessage
 };
 
 export const Overlay = ({ children }) => {

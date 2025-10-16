@@ -19,6 +19,7 @@ import ProcessingBlock from './ProcessingBlock/ProcessingBlock';
 import { VideoPreview } from '../../ui/Video/VideoPreview/VideoPreview';
 import { MessageToolBar } from './MessageToolBar/MessageToolBar';
 import { MessageSelectInput } from './MessageSelectInput/MessageSelectInput';
+import { EditedIndicator } from './EditedIndicator/EditedIndicator';
 
 export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inSearch = false, isReply, reply = () => {}, notification, type}) => {
 
@@ -53,7 +54,7 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
                         </div>
                         <div className={`${styles.messageContent} ${loading ? styles.sending : ''}`}>
                             <UserBlock users={users} message={message} prevMessage={prevMessage} isDifferentDay={isDifferentDay} styles={styles} />
-                        
+                          
                             <TextBlock {...message} notification={notification} styles={styles} />
                             {message.media_item && (<VideoPreview {...message.media_item} context={message.media_item} />)}
                             <ImageBlock {...message} styles={styles} loading={message.loading || loading} notification={notification} />
@@ -62,6 +63,7 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
                             <LinkPreview {...message} /> 
                             <ImagesBlock {...message} />
                             <ProcessingBlock {...message} />
+                            <EditedIndicator {...message} />
                         </div>
                     </div>
                 </div>

@@ -2,7 +2,11 @@
 .text {
     font-size: 14px;
     color: var(--text-color);
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
     text-align: start;
+
+    /* Allow breaking long words and wrapping */
+    word-break: break-word;
+    overflow-wrap: break-word;
 }

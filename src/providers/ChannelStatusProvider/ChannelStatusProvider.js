@@ -22,12 +22,16 @@ export const ChannelStatusProvider = ({children}) => {
 
     const streamColor = useSelector(state => state.streamPreviewSlice.color);
 
+    const {server_id} = useSelector(state => state.serverDetailsSlice);
+
+    const {currentVoiceChannel} = useSelector(state => state.voiceChannelSlice);
+
     // Emit user status when changes occur
     useEffect(() => {
         if (!socket) return;
 
         const updateStatus = () => {
-            socket.emit("user updates channel status", { isMicrophoneMuted, isAudioMuted, isWebcamOn, isScreenSharing: isSharing, streamDetails, streamPreview, streamColor});
+            socket.emit("user updates channel status", { isMicrophoneMuted, isAudioMuted, isWebcamOn, isScreenSharing: isSharing, streamDetails, streamPreview, streamColor, server_id, currentVoiceChannel});
         };
 
         updateStatus();
@@ -39,7 +43,7 @@ export const ChannelStatusProvider = ({children}) => {
             socket.off("connect", updateStatus);
         };
 
-    }, [isMicrophoneMuted, isAudioMuted, isWebcamOn, isSharing, socket, streamDetails, streamPreview, streamColor]);
+    }, [isMicrophoneMuted, isAudioMuted, isWebcamOn, isSharing, socket, streamDetails, streamPreview, streamColor, server_id, currentVoiceChannel]);
 
     useEffect(() => {
         return () => {

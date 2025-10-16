@@ -3,7 +3,7 @@ import React from 'react';
 
 import styles from '../Room.module.css';
 import IconButton from '../../ui/Buttons/IconButton/IconButton';
-import { Ellipsis, VideoOff, Mic, MicOff, Unplug, Video, HeadphoneOff, Headphones, Maximize, MonitorOff, MonitorUp, ChevronDown } from 'lucide-react';
+import { Ellipsis, VideoOff, Mic, MicOff, Unplug, Video, HeadphoneOff, Headphones, Maximize, MonitorOff, MonitorUp, ChevronDown, MonitorX } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PillSpacer } from '../../ui/Spacers/PillSpacer/PillSpacer';
 import { useMediaControls } from '../../../context/MediaControlsContext';
@@ -19,7 +19,7 @@ export const RoomOverlay = () => {
 
     const dispatch = useDispatch();
 
-    const {isWebcamOn, isMicrophoneMuted, isAudioMuted, isSharing, handleToggleAudio, handleToggleMicrophone, handleToggleWebcam, webcamError, microphoneError, audioError, handleShareScreen } = useMediaControls();
+    const {isWebcamOn, isMicrophoneMuted, isAudioMuted, isSharing, handleToggleAudio, handleToggleMicrophone, handleToggleWebcam, webcamError, microphoneError, audioError, handleShareScreen, screenShareError } = useMediaControls();
 
     const {fullscreen} = useSelector(state => state.uiSlice);
 
@@ -153,8 +153,8 @@ export const RoomOverlay = () => {
                     backgroundColor={isWebcamOn && !webcamError ? 'var(--success-color)' : 'var(--background-color)'}
                     />
                     <IconButton 
-                    title={isSharing ? "Stop Streaming" : "Start Streaming"}
-                    Icon={isSharing ? <MonitorOff color='var(--text-color)' /> : <MonitorUp color='var(--text-color)' />}
+                    title={screenShareError ? <ErrorToolTip error={screenShareError} /> : isSharing ? "Stop Streaming" : "Start Streaming"}
+                    Icon={screenShareError ? <MonitorX color='var(--error-color)' /> : isSharing ? <MonitorOff color='var(--text-color)' /> : <MonitorUp color='var(--text-color)' />}
                     backgroundColor={isSharing ? "var(--success-color)" : null}
                     onClick={handleShareScreen}
                     padding={15}

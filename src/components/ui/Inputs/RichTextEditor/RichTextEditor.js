@@ -77,11 +77,14 @@ const RichTextEditor = ({ value, onChange, placeholder = "Enter some text..." })
   }, []);
 
   useEffect(() => {
+
+   
     try {
             const editor = quillRef.current?.getEditor();
 
-            if (!editor || !editor?.getFormat()) return;
             const updateFormats = () => setFormats(editor?.getFormat());
+     
+            if (!editor || !editor?.getFormat()) return;
            
             editor.on('selection-change', updateFormats);
             editor.on('text-change', updateFormats);
@@ -160,7 +163,7 @@ const RichTextEditor = ({ value, onChange, placeholder = "Enter some text..." })
   ];
 
   return (
-    <div className={styles.editorWrapper}>
+    <div onKeyUp={(e) => {e.stopPropagation()}} onKeyDown={(e) => {e.stopPropagation()}} className={styles.editorWrapper}>
       <CustomToolbar
         formats={formats}
         applyFormat={applyFormat}

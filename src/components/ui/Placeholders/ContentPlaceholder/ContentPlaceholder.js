@@ -1,4 +1,4 @@
-import React from 'react';
+
 import PropTypes from 'prop-types';
 import styles from './ContentPlaceholder.module.css';
 import TextButton from '../../Buttons/TextButton/TextButton';

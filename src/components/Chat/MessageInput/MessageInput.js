@@ -106,6 +106,10 @@ export const MessageInput = ({
     el.style.height = `${el.scrollHeight}px`;
   }, [value]);
 
+  useLayoutEffect(() => {
+    document.getElementById(`chat-input-${id}`)?.focus();
+  }, [])
+
   return (
     <>
       <div className={styles["message-input-container"]} data-context={JSON.stringify({ type: "input", id: `chat-input-${id}` })}>

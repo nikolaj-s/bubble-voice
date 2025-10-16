@@ -1,0 +1,37 @@
+.header {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand { 
+    display:flex; 
+    gap:12px; 
+    align-items:center ;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+    border-radius: var(--border-radius);
+    padding: 8px;
+}
+
+.brand:hover {
+    background-color: var(--card-background-color);
+}
+
+.brand:active {
+    scale: 0.98;
+}
+
+.logo {
+  width:44px; height:44px; border-radius:10px; background:var(--primary-color); display:flex; align-items:center; justify-content:center; color:white; font-weight:700;
+}
+.brandTitle { font-weight:700; font-size:18px }
+.brandSubtitle { font-size:12px; color: rgba(223,247,245,0.8) }
+
+.nav { display:flex; gap:18px; align-items:center }
+.nav a { color: rgba(223,247,245,0.75); text-decoration:none }
+
+.mobileMenu { display:none }

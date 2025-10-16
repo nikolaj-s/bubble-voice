@@ -4,7 +4,7 @@
   padding: 60px 20px;
   color: var(--text-color);
   background-color: var(--card-background-color);
-  border-radius: 15px;
+  border-radius: var(--border-radius);
   overflow: hidden;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
   animation: fadeIn 0.4s ease;

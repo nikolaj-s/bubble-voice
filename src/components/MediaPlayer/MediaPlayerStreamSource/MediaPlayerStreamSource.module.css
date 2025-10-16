@@ -11,6 +11,11 @@
     cursor: pointer;
     background-color: black;
     z-index: 5;
+    transition: 0.1s ease-in-out;
+}
+
+.container:active {
+  scale: 1.01;
 }
 
 .overlay {

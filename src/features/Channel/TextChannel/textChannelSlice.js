@@ -82,9 +82,9 @@ const textChannelSlice = createSlice({
         }).catch(() => { /* ignore */ });
     },
     updateMessage(state, { payload }) {
-        if (!payload.message_id) return;
+        if (!payload._id) return;
         state.messages = state.messages.map(m =>
-            m.message_id === payload.message_id
+            m._id === payload._id
             ? { ...m, ...payload, media_ref: payload.media_ref }
             : m
         );

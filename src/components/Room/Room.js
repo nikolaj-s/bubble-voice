@@ -3,7 +3,7 @@ import React from 'react';
 import styles from './Room.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMediasoup } from '../../context/MediasoupContext';
-import { throwWebcamError, toggleMediaControlLoading, toggleWebcam } from '../../features/Channel/MediaControl/mediaControlSlice';
+import { throwScreenShareError, throwWebcamError, toggleMediaControlLoading, toggleWebcam } from '../../features/Channel/MediaControl/mediaControlSlice';
 import { getMicrophoneMedia, getWebcamMedia } from '../../lib/services/getUserMedia';
 import { RoomUserWrapper } from './RoomUserWrapper/RoomUserWrapper';
 import { useDetectSpeech } from '../../hooks/useDetectSpeech';
@@ -56,6 +56,8 @@ export const Room = () => {
     }, [isMicrophoneMuted, disable_streams, selectedMicrophone]);
 
     React.useEffect(() => {
+
+        if (disable_streams) dispatch(throwScreenShareError("Streams Are Disabled In This Channel"))
 
         handleScreenShare(disable_streams ? false : isScreenSharing);
 

@@ -4,8 +4,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import styles from "./MenuWrapper.module.css";
 import IconButton from "../../Buttons/IconButton/IconButton";
 import { Menu, X } from "lucide-react";
+import MicroFooter from "../../../MicroFooter/MicroFooter";
 
-const MenuWrapper = ({ navItems, children, permissions }) => {
+const MenuWrapper = ({ navItems, children, permissions, showFooter }) => {
 
   const [mobileMenuOpen, toggleMobileMenuOpen] = React.useState(false);
   
@@ -41,6 +42,7 @@ const MenuWrapper = ({ navItems, children, permissions }) => {
             {item.label}
           </motion.button>
         ))}
+        {showFooter && (<MicroFooter />)}
       </div>
 
       {/* Right Content Area with Animation */}

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router';
 import { setReplyTo } from '../../../features/Channel/TextChannel/textChannelSlice';
 import { closeOverlay, setOverlay } from '../../../features/Overlay/overlaySlice';
-import { BookmarkPlus, Copy, ImageDown, Link, Pin, PinOff, Reply, Trash2 } from 'lucide-react';
+import { BookmarkPlus, Copy, ImageDown, Link, Pencil, Pin, PinOff, Reply, Trash2 } from 'lucide-react';
 import { pinMessage } from '../../../features/Channel/TextChannel/Thunks/pinMessage';
 import { copyToClipboard, downloadImage } from '../../../lib/services/helperFunctions';
 import { triggerAlert } from '../../../features/Alerts/alertsSlice';
@@ -13,6 +13,7 @@ import { globalSearch } from '../../../features/Search/Thunks/globalSearch';
 import { deleteMessage } from '../../../features/Channel/TextChannel/Thunks/deleteMessage';
 import { addMessageToMoment, setIsSelecting } from '../../../features/Moments/momentsSlice';
 import { useSearchParams } from 'react-router-dom';
+import { setMessageToEdit } from '../../../features/EditMessage/editMessageSlice';
 
 export const useMessageCtxMenu = () => {
 
@@ -150,6 +151,19 @@ export const useMessageCtxMenu = () => {
                 icon: <Link color='var(--text-color)' />,
             })
 
+        }
+
+        if (data.message.user_id === user_id) {
+            options.push({
+                label: "Edit Message",
+                icon: <Pencil color='var(--text-color)' />,
+                type: 'button',
+                onClick: () => {
+                    dispatch(setOverlay('editMessage'));
+
+                    dispatch(setMessageToEdit(data.message));
+                }
+            })
         }
 
         if (data.message.user_id === user_id || permissions.user_can_delete_other_users_messages) {

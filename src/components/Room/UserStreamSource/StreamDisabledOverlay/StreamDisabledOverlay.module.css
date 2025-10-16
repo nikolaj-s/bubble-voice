@@ -7,7 +7,6 @@
   justify-content: center;
   background: var(--overlay-color); /* fallback if no preview */
   overflow: hidden;
-  border-radius: 1.1rem;
 }
 
 .previewBackground {
@@ -52,6 +51,6 @@
 .funMessage {
   margin-bottom: 1.5rem;
   font-size: 1.08rem;
-  color: var(--secondary-color, #4e8e8b);
+  color: var(--text-color);
 }
 

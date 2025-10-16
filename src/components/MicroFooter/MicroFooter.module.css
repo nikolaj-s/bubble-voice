@@ -1,0 +1,37 @@
+.microFooter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: calc(100% - 16px); /* Compact width */
+  padding: 16px 8px;
+  background: var(--background-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  font-size: 13px;
+}
+
+.linkColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.link {
+  color: var(--secondary-color);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  text-align: center;
+}
+
+.link:hover {
+  color: var(--accent-color);
+}
+
+.copy {
+  opacity: 0.7;
+  font-size: 12px;
+  text-align: center;
+}
