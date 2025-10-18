@@ -60,6 +60,7 @@ export const VerifyAccount = () => {
                 <CodeInput value={code} onChange={setCode} />
                 <TextButton title='Verify' disabled={code.length < 6} action={handleVerifyCode} />
                 <LineSpacer />
+                <Description description={"As Bubble is a new application your verification code may end up in your spam folder"}/>
                 {verifcation_re_sent && (<TextIndicator backgroundColor='var(--success-color)' title='Verifcation Email Sent' />)}
                 <TextButton action={resendVerifcationCode} title='Re-Send Verification Code' icon={Send} />
                 <TextButton title='Go Back' action={handleReturnToLogin} icon={Undo2} />

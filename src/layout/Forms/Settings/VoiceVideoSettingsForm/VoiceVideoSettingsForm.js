@@ -6,7 +6,7 @@ import Header from '../../../../components/ui/Titles/Header/Header'
 import { DeviceSelector } from '../../../../components/ui/Inputs/DeviceSelector/DeviceSelector'
 import Label from '../../../../components/ui/Titles/Label/Label'
 import { useDispatch, useSelector } from 'react-redux'
-import { setVoiceThreshold, toggleMicrophoneAttribute, toggleUsingPushToTalk } from '../../../../features/Channel/MediaControl/mediaControlSlice'
+import { setVoiceThreshold, toggleMicrophoneAttribute, toggleUseAdaptiveVoiceDetection, toggleUsingPushToTalk } from '../../../../features/Channel/MediaControl/mediaControlSlice'
 import { setKeybind } from '../../../../features/Settings/Keybinds/keybindsSlice'
 import KeybindInput from '../../../../components/ui/Inputs/KeybindInput/KeybindInput'
 import { TestMicrophone } from '../../../../components/TestMicrophone/TestMicrophone'
@@ -47,7 +47,7 @@ export const VoiceVideoSettingsForm = () => {
 
     const {disable_new_device_popup} = useSelector(state => state.accountPreferencesSlice);
     
-    const {echoCancellation, noiseSuppression, autoGainControl, captureDesktopAudio} = useSelector(state => state.mediaControlSlice);
+    const {echoCancellation, noiseSuppression, autoGainControl, captureDesktopAudio, useAdaptiveVoiceDetection} = useSelector(state => state.mediaControlSlice);
 
     const handleKeybindChange = (actionType, keybind) => {
         // Dispatch an action to update the keybind
@@ -84,8 +84,15 @@ export const VoiceVideoSettingsForm = () => {
         <TestMicrophone 
         setVoiceThreshold={(value) => {setThreshold(value)}}
         voiceThreshold={voiceThreshold}
-        usingPushToTalk={usingPushToTalk}
+        usingPushToTalk={usingPushToTalk || useAdaptiveVoiceDetection}
         />
+        {!usingPushToTalk && (
+        <>
+        <Label label='Use Adaptive Voice Detection' />
+        <Description description={`Bubble automatically listens for your voice and adjusts microphone sensitivity in real time to match your environment. It detects when you start and stop speaking — reducing background noise and ensuring your voice is picked up clearly without needing to manually adjust input levels.`} />
+        <ToggleSwitch initialState={useAdaptiveVoiceDetection} onToggle={() => {dispatch(toggleUseAdaptiveVoiceDetection())}} />
+        </>
+        )}
         <LineSpacer />
         <Label label='Voice Input Mode' />
         <TypeInput 

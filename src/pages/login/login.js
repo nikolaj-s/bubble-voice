@@ -45,7 +45,6 @@ const Login = () => {
 
   return (
     <IsAuthenticated>
-      <div className={styles.wrapper}>
         <FormWrapper error={altError} header="BUBBLE" onSubmit={handleLogin} loading={loading}>
             <Label label="Log in to your Bubble Account"/>
             <TextInput
@@ -71,7 +70,6 @@ const Login = () => {
             <LineSpacer />
             <TextButton title="Forgot Password" action={resetPassword} />
         </FormWrapper>
-      </div>
     </IsAuthenticated>
   );
 };

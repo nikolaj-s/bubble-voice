@@ -14,6 +14,7 @@ import { useMicrophoneToggle } from '../../hooks/useMicrophoneToggle';
 import { useScreenShare } from '../../hooks/useScreenShare';
 import { UserStreamStateProvider } from '../../providers/UserStreamStateProvider/UserStreamStateProvider';
 import { playSoundEffect } from '../../features/SoundEffects/soundEffectsSlice';
+import { useAdaptiveSpeechDetection } from '../../hooks/useAdaptiveSpeechDetection';
 
 export const Room = () => {
     
@@ -27,7 +28,7 @@ export const Room = () => {
 
     const { produce, resumeProducer, pauseProducer, closeProducer, getConsumers, getProducers } = useMediasoup();
 
-    const { isMicrophoneMuted, isWebcamOn, voiceThreshold, usingPushToTalk, isPushToTalkActive, echoCancellation, noiseSuppression, autoGainControl, isScreenSharing } = useSelector(state => state.mediaControlSlice);
+    const { isMicrophoneMuted, isWebcamOn, voiceThreshold, usingPushToTalk, isPushToTalkActive, echoCancellation, noiseSuppression, autoGainControl, isScreenSharing, useAdaptiveVoiceDetection } = useSelector(state => state.mediaControlSlice);
 
     const { user_id: account_id} = useSelector(state => state.accountSlice.account);
 
@@ -121,7 +122,19 @@ export const Room = () => {
     }, [isWebcamOn, selectedWebcam, disable_streams])
 
     // Hook for detecting speech
-    useDetectSpeech((disable_streams || isMicrophoneMuted), pauseProducer, resumeProducer, voiceThreshold, usingPushToTalk, selectedMicrophone?.deviceId, echoCancellation, noiseSuppression, autoGainControl);
+    useDetectSpeech((disable_streams || isMicrophoneMuted || useAdaptiveVoiceDetection), pauseProducer, resumeProducer, voiceThreshold, usingPushToTalk, selectedMicrophone?.deviceId, echoCancellation, noiseSuppression, autoGainControl);
+
+    // handle adaptive speech
+    useAdaptiveSpeechDetection({
+        enabled: (!disable_streams && !usingPushToTalk && useAdaptiveVoiceDetection),
+        isMicrophoneMuted,
+        deviceId: selectedMicrophone?.deviceId,
+        echoCancellation,
+        noiseSuppression,
+        autoGainControl,
+        onSpeechEnd: pauseProducer,
+        onSpeechStart: resumeProducer
+    })
 
     usePushToTalk((disable_streams || isMicrophoneMuted), usingPushToTalk, isPushToTalkActive, resumeProducer, pauseProducer);
 

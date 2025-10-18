@@ -15,6 +15,8 @@ const initialState = () => {
 
     const captureDesktopAudio = JSON.parse(localStorage.getItem('captureDesktopAudio')) || false;
 
+    const useAdaptiveVoiceDetection = JSON.parse(localStorage.getItem('useAdaptiveVoiceDetection')) || false;
+
     return {
         isAudioMuted: false,
         isWebcamOn: false,
@@ -30,7 +32,8 @@ const initialState = () => {
         echoCancellation,
         autoGainControl,
         noiseSuppression,
-        captureDesktopAudio
+        captureDesktopAudio,
+        useAdaptiveVoiceDetection
     }
 }
 
@@ -43,6 +46,11 @@ const mediaControlSlice = createSlice({
             state.voiceThreshold = action.payload;
 
             localStorage.setItem('voiceThreshold', state.voiceThreshold);
+        },
+        toggleUseAdaptiveVoiceDetection: (state, action) => {
+            state.useAdaptiveVoiceDetection = !state.useAdaptiveVoiceDetection;
+
+            localStorage.setItem('useAdaptiveVoiceDetection', state.useAdaptiveVoiceDetection);
         },
         toggleUsingPushToTalk: (state) => {
             state.usingPushToTalk = !state.usingPushToTalk;
@@ -132,7 +140,8 @@ export const {
     clearMediaControlError,
     toggleMicrophoneAttribute,
     stopSharingScreen,
-    throwScreenShareError
+    throwScreenShareError,
+    toggleUseAdaptiveVoiceDetection
 } = mediaControlSlice.actions;
 
 export default mediaControlSlice.reducer;

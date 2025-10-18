@@ -10,12 +10,13 @@ import styles from './Signup.module.css';
 
 import React from 'react'
 
-import {  selectAuthLoading, selectConfirmPasswordError, selectEmailError, selectGeneralAuthError, selectPasswordError, selectUsernameError } from '../../features/Auth/authSlice';
+import {  selectAuthLoading, selectConfirmPasswordError, selectEmailError, selectGeneralAuthError, selectPasswordError, selectUsernameError, toggleAcceptedTerms } from '../../features/Auth/authSlice';
 import { signupThunk } from '../../features/Auth/Thunks/SignupThunk';
 import { IsAuthenticated } from '../../components/Auth/IsAuthenticated/IsAuthenticated';
 import Label from '../../components/ui/Titles/Label/Label';
 import { useNavigate } from 'react-router';
 import PasswordRequirements from '../../components/ui/PasswordRequirements/PasswordRequirements';
+import IAgreeCheckbox from '../../components/IAgreeCheckbox/IAgreeCheckbox';
 
 const Signup = () => {
 
@@ -30,6 +31,8 @@ const Signup = () => {
     const [password, setPassword] = React.useState("");
 
     const [confirmPassword, setConfirmPassword] = React.useState("");
+
+    const {acceptedTerms} = useSelector(state => state.authSlice);
 
     const emailError = useSelector(selectEmailError);
 
@@ -55,7 +58,6 @@ const Signup = () => {
 
     return (
         <IsAuthenticated>
-            <div className={styles.wrapper}>
             <div className='application-drag-area-for-desktop'/>
                 <FormWrapper onSubmit={handleSignUp}  header="BUBBLE" loading={loading} error={error}>
                     <Label label="Create a Bubble Account" />
@@ -64,10 +66,10 @@ const Signup = () => {
                     <PasswordRequirements password={password} />
                     <TextInput autoComplete="new-password" error={passwordError} onChange={(v) => {setPassword(v)}} value={password} placeholder={"Password"} type='password' /> 
                     <TextInput autoComplete="new-password" error={confirmPasswordError} onChange={(v) => {setConfirmPassword(v)}} placeholder={"Confirm password"} value={confirmPassword} type='password' />
+                    <IAgreeCheckbox agreed={acceptedTerms} onChange={() => {dispatch(toggleAcceptedTerms())}} />
                     <TextButton title='Create Account' />
                     <TextButton action={redirect} title='Log In' />
                 </FormWrapper>
-            </div>
         </IsAuthenticated>
     )
 }

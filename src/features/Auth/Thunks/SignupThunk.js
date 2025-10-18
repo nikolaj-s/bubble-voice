@@ -7,7 +7,7 @@ import { APIErrorHandler } from "../../../lib/handlers/APIErrorHandler/APIErrorH
 
 export const signupThunk = createAsyncThunk(
     'auth/signUp',
-    async ({ username, email, password, confirmPassword }, { rejectWithValue }) => {
+    async ({ username, email, password, confirmPassword }, { rejectWithValue, getState }) => {
         try {
 
             if (!validateUsername(username)) {
@@ -23,9 +23,12 @@ export const signupThunk = createAsyncThunk(
                 return rejectWithValue({ errorMessage: 'Passwords do not match.', errorType: 'confirmPasswordError' });
             }
 
+            const {acceptedTerms} = getState().authSlice;
+
+            if (!acceptedTerms) return rejectWithValue("You must accept the terms of bubble");
+
             const response = await axios.post(`${API_URL}/sign-up`, { email, password, username, confirmPassword });
 
-            
             if (response.status >= 200 && response.status < 300) {
 
                 if (response?.data?.success) {

@@ -78,9 +78,6 @@
 .btnWhite { background:white; color:var(--primary-color); padding:10px 14px; border-radius:10px; font-weight:700; border:none }
 .btnOutline { background:transparent; color:white; padding:10px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.12) }
 
-.footer { max-width:1100px; margin:20px auto; padding:18px 24px; display:flex; align-items:center; justify-content:space-between; color: rgba(223,247,245,0.7); flex-direction: column; }
-.footerLinks { display:flex; gap:12px }
-.footerLinks a { color: rgba(223,247,245,0.7); text-decoration:none }
 
 /* responsive */
 @media (max-width: 900px) {

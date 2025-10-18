@@ -1,13 +1,8 @@
 import React from 'react';
 import styles from './DownloadPanel.module.css';
 import { Download, Apple, Laptop } from 'lucide-react';
+import { WindowsIcon } from '../Icons/WindowsIcon/WindowsIcon';
 
-/** tiny Windows logo (since lucide doesn't ship one) */
-const WindowsLogo = ({ size = 18 }) => (
-  <svg width={size} height={size} viewBox="0 0 256 256" aria-hidden focusable="false">
-    <path fill="currentColor" d="M0 36l116-16v100H0V36zm256-18v118H124V20l132-2zM0 136h116v100L0 220V136zm124 0h132v100l-132-18V136z"/>
-  </svg>
-);
 
 /** Detect platform in browser */
 function usePlatform() {
@@ -72,7 +67,7 @@ const DownloadPanel = ({
         {hasWin && (
           <div className={`${styles.card} ${os === 'windows' ? styles.recommended : ''}`}>
             <div className={styles.cardHeader}>
-              <span className={styles.osIcon}><WindowsLogo /></span>
+              <span className={styles.osIcon}><WindowsIcon /></span>
               <div className={styles.osTitle}>
                 <div className={styles.osName}>Windows</div>
                 {os === 'windows' && <div className={styles.badge}>Recommended</div>}
@@ -87,16 +82,6 @@ const DownloadPanel = ({
                 >
                   <Download size={18} />
                   <span>Download Installer</span>
-                </button>
-              )}
-              {windowsPortableUrl && (
-                <button
-                  type="button"
-                  className={styles.btnAlt}
-                  onClick={() => handleClick(windowsPortableUrl, 'windows-portable')}
-                >
-                  <Laptop size={18} />
-                  <span>Portable .zip</span>
                 </button>
               )}
             </div>

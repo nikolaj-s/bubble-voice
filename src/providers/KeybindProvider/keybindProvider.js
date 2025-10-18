@@ -119,30 +119,28 @@ const KeybindProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    const ipc = window?.electron?.ipcRenderer;
+    if (!ipc) return;
 
-    if (!window?.electron?.ipcRenderer) return;
-console.log('initializing keybinds')
-    const ipc = window.electron.ipcRenderer;
+    // First, ensure no duplicate listeners
+    Object.entries(handlers.current).forEach(([channel, fn]) => {
+      ipc.removeListener(channel, fn);
+    });
 
-    if (focused) {
-      Object.entries(handlers.current).forEach(([channel, fn]) => {
-        ipc.removeListener(channel, fn);
-      });
-    } else {
-      // Attach listeners
+    // Only attach when NOT focused
+    if (!focused) {
       Object.entries(handlers.current).forEach(([channel, fn]) => {
         ipc.on(channel, fn);
       });
     }
 
-    // Cleanup
+    // Cleanup on unmount or dependency change
     return () => {
       Object.entries(handlers.current).forEach(([channel, fn]) => {
         ipc.removeListener(channel, fn);
       });
     };
-  // eslint-disable-next-line
-  }, [dispatch, focused]);
+  }, [focused]);
 
 
   useEffect(() => {

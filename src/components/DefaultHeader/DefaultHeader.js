@@ -4,6 +4,7 @@ import TextButton from '../ui/Buttons/TextButton/TextButton';
 import { useNavigate } from 'react-router';
 
 import styles from './DefaultHeader.module.css';
+import { Logo } from '../Icons/Bubble/Logo';
 
 export const DefaultHeader = () => {
 
@@ -13,7 +14,7 @@ export const DefaultHeader = () => {
     return (
         <header className={styles.header}>
                 <div role='button' onClick={() => {navigate("/")}} className={styles.brand}>
-                    <div className={styles.logo}><ImageComponent src={'https://bubble-media.net/uploads/36fb8578-4437-4349-97dc-03e6380f658a.png'} /></div>
+                    <div className={styles.logo}><Logo /></div>
                     <div>
                         <div className={styles.brandTitle}>Bubble</div>
                         <div className={styles.brandSubtitle}>Micro communities · voice · play</div>

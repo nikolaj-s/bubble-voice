@@ -15,6 +15,7 @@ const initialState = {
   signinError: false,
   confirmPasswordError: false,
   error: false,
+  acceptedTerms: false,
   token: getToken()
 }
 
@@ -38,6 +39,9 @@ const authSlice = createSlice({
     },
     throwAuthInputError: (state, action) => {
       state[action.payload.state] = action.payload.error;
+    },
+    toggleAcceptedTerms: (state, action) => {
+      state.acceptedTerms = !state.acceptedTerms;
     }
   },
   extraReducers: (builder) => {
@@ -129,6 +133,6 @@ export const selectGeneralAuthError = state => state.authSlice.error;
 
 export const selectAuthenticated = state => state.authSlice.isAuthenticated;
 
-export const { login, logout, throwAuthInputError } = authSlice.actions;
+export const { login, logout, throwAuthInputError, toggleAcceptedTerms } = authSlice.actions;
 
 export default authSlice.reducer;

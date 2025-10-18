@@ -18,6 +18,15 @@ export const StreamDisabledOverlay = ({
   streamPreview,
   onWatch
 }) => {
+
+  const [randomMessage, setRandomMessage] = React.useState("");
+
+  React.useEffect(() => {
+
+    setRandomMessage(getRandomMessage());
+
+  }, [])
+
   return (
     <div className={styles.overlay}>
       {streamPreview && (
@@ -33,7 +42,7 @@ export const StreamDisabledOverlay = ({
           {displayName}
           {streamName && <span className={styles.streamName}> — {streamName}</span>}
         </h2>
-        <p className={styles.funMessage}>{getRandomMessage()}</p>
+        <p className={styles.funMessage}>{randomMessage}</p>
         <TextButton title="Watch Stream" action={onWatch} />
       </div>
     </div>

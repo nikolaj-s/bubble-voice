@@ -1,0 +1,33 @@
+
+.checkboxContainer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-color);
+  line-height: 1.4;
+  background-color: var(--card-background-color);
+  padding: 10px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.checkboxContainer:hover {
+  background-color: var(--button-hover);
+}
+
+.checkboxContainer input[type="checkbox"] {
+  accent-color: var(--primary-color);
+  margin-top: 2px;
+}
+
+.checkboxContainer a {
+  color: var(--link-color);
+  text-decoration: underline;
+}
+
+.checkboxContainer a:hover {
+  color: var(--accent-color);
+}

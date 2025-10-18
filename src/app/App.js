@@ -27,6 +27,9 @@ import { ResetPassword } from '../pages/resetPassword/ResetPassword';
 import { VerifyAccount } from '../pages/verifyAccount/VerifyAccount';
 import { PatchNotes } from '../pages/patchNotes/PatchNotes';
 import { NotFound } from '../pages/NotFound/NotFound';
+import { PrivacyPolicy } from '../pages/PrivacyPolicy/PrivacyPolicy';
+import { TermsAndConditions } from '../pages/TermsAndConditions/TermsAndConditions';
+import { DefaultLayout } from '../components/DefaultLayout/DefaultLayout';
 
 function App() {
 
@@ -62,17 +65,21 @@ function App() {
       <BackSplash>
         <AppTitleBar />
         <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/patch-notes" element={<PatchNotes />} />
-          <Route path='/reset-password' element={<ResetPassword />} />
           <Route path="/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/account-error" element={<FatalErrorPage />} />
-          <Route path="/bubble-invite" element={<InvitePage />} />
-          <Route path="/verify-account" element={<VerifyAccount />} />
-          <Route path="/" element={<ProtectedRoute useLandingPage={true} ><Navigate to={'/dashboard'} /></ProtectedRoute>} />
+          <Route element={<DefaultLayout />}>
+            <Route path="/patch-notes" element={<PatchNotes />} />
+            <Route path='/reset-password' element={<ResetPassword />} />
+            <Route path="/account-error" element={<FatalErrorPage />} />
+            <Route path="/bubble-invite" element={<InvitePage />} />
+            <Route path="/verify-account" element={<VerifyAccount />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/" element={<ProtectedRoute useLandingPage={true} ><Navigate to={'/dashboard'} /></ProtectedRoute>} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
 
-          <Route path="*" element={<NotFound />} />
         </Routes>
       </BackSplash>
       </div>

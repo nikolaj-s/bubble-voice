@@ -61,7 +61,7 @@ export const ResetPassword = () => {
     }
 
     return (
-        <div style={{height: '100svh', display: 'flex'}}>
+        <div style={{ display: 'flex'}}>
         <FormWrapper onSubmit={() => {validated ? handleResetPassword() : handleSendRecoveryEmail()}} header="Reset Password" error={error} loading={loading} >
             {passwordReset ?
             <>

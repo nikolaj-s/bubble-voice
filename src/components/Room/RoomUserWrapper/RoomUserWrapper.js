@@ -43,7 +43,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
 
     const ratio = 9 / 16;
 
-    React.useEffect(() => {
+    React.useLayoutEffect(() => {
             const parent = document.getElementById('user-streams-wrapper');
             if (!parent) return;
 
@@ -76,7 +76,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
                 const reservedHeight = nonExpandedChildren.length * 100; // 100px height if stacked (see below)
 
                 // We'll assume you want the others at the BOTTOM, so reserve height
-                const availableHeight = Math.max(parentHeight - (nonExpandedChildren.length > 0 ? 105 : 0), 0);
+                const availableHeight = Math.max(parentHeight - (nonExpandedChildren.length > 0 ? 125 : 0), 0);
                 const availableWidth = parentWidth;
 
                 // Aspect ratio logic
@@ -163,14 +163,12 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
     }, [expanded, hideNonVideoUsers, hideUsers, textChannelOpen, hideMediaPlayer, fullScreen, focused]);
 
 
-    React.useEffect(() => {
+    React.useLayoutEffect(() => {
         let observer;
         let sizeObserver;
         try {
             handleScaling();
-            window.onresize = function () {
-                handleScaling(true);
-            };
+            window.removeEventListener('resize', () => handleScaling(true));
 
             const el = document.getElementById('user-streams-wrapper');
             const config = { childList: true, subtree: false };
@@ -184,8 +182,8 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
             return () => {
                 observer.disconnect();
                 sizeObserver?.disconnect();
-                window.removeEventListener('resize', handleScaling);
-                window.onresize = null;
+                window.removeEventListener('resize', () => handleScaling(true));
+
             };
         } catch (error) {
             console.log(error);
@@ -314,15 +312,15 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
                     paddingBottom: fullScreen ? 0 : null
                 }}
             >   
-                {users.map(user => (
-                    <>
-                   {user.type === 'user' ?
-                    <RoomUserCard key={user.id} {...user} action={handleStreamExpansion} />
-                    : user.type === 'stream' ?
-                    <UserStreamSource setAmbientColor={setAmbientColor} action={handleStreamExpansion} key={user.id} {...user} isExpanded={expanded === user.id} /> :
-                    null
-                    }
-                    </>
+                {users.map((user, key) => (
+                    <React.Fragment key={user.id + key}>
+                    {user.type === 'user' ?
+                        <RoomUserCard key={user.id} {...user} action={handleStreamExpansion} />
+                        : user.type === 'stream' ?
+                        <UserStreamSource setAmbientColor={setAmbientColor} action={handleStreamExpansion} key={user.id} {...user} isExpanded={expanded === user.id} /> :
+                        null
+                        }
+                    </React.Fragment>
                 ))}
                 <MediaPlayerStreamSource key='media-player-stream-source' expanded={expanded === 'media-player-stream-source'} expand={handleStreamExpansion} /> 
                 {disable_streams && (<RoomPlaceholder />)}

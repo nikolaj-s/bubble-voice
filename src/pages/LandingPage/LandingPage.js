@@ -2,14 +2,11 @@
 // Single-file React component for a modern Bubble landing page using CSS Modules.
 // Save the JSX as `BubbleLanding.jsx` and the CSS below as `BubbleLanding.module.css` next to it.
 
-import React from 'react';
 import styles from './LandingPage.module.css';
-import ScrollLoadWrapper from '../../components/ui/Wrappers/ScrollLoadWrapper/ScrollLoadWrapper';
 import { useNavigate } from 'react-router';
 import TextButton from '../../components/ui/Buttons/TextButton/TextButton';
 import { ImageComponent } from '../../components/ui/Image/Image';
 import FeaturesSection from './FeatureSection/FeatureSection';
-import { DefaultHeader } from '../../components/DefaultHeader/DefaultHeader';
 
 export const LandingPage = () => {
 
@@ -17,11 +14,7 @@ export const LandingPage = () => {
 
     return (
         <div className={styles.container}>
-        <DefaultHeader />
-        <ScrollLoadWrapper style={{
-            maxHeight: 'calc(100svh - 80px)',
-            backgroundColor: 'var(--overlay-color)'
-        }} >
+      
 
         <main className={styles.main}>
         
@@ -74,11 +67,6 @@ export const LandingPage = () => {
             </div>
             </div>
         </section>
-        <footer className={styles.footer}>
-            <div>© {new Date().getFullYear()} Bubble — Built for small communities.</div>
-            <div className={styles.footerLinks}><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Contact</a></div>
-        </footer>
-        </ScrollLoadWrapper>
         
         </div>
     );

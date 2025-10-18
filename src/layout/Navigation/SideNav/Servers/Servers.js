@@ -8,6 +8,7 @@ import { toggleMobileMenu } from '../../../../features/Mobile/mobileSlice';
 import { VerticalReorderWrapper } from '../../../../components/ui/Wrappers/VerticalReorderWrapper/VerticalReorderWrapper';
 import { reorderServers } from '../../../../features/Servers/Thunks/reorderServers';
 import { closeConversationPanel } from '../../../../features/Conversations/conversationsSlice';
+import { setCurrentVoiceChannel } from '../../../../features/Channel/VoiceChannel/voiceChannelSlice';
 
 export const Servers = () => {
 
@@ -32,29 +33,31 @@ export const Servers = () => {
     }
 
     const handleSwitchServer = (server_id) => {
+
+        if (server_id !== currentServer) dispatch(setCurrentVoiceChannel(null));
         
         dispatch(closeConversationPanel());
 
-            if (currentServer) {
-                setHistory(prev => ({
-                    ...prev,
-                    [currentServer]: window.location.pathname
-                }))
+        if (currentServer) {
+            setHistory(prev => ({
+                ...prev,
+                [currentServer]: window.location.pathname
+            }))
+
+            console.log(window.location.pathname)
+        }
+
+        handleCloseMobileMenu();
     
-                console.log(window.location.pathname)
-            }
-    
-            handleCloseMobileMenu();
-      
-            if (history[server_id]) {
-             
-                navigate(history[server_id]);
-    
-            } else {
-                
-                navigate(`/dashboard/server/${server_id}`);
-    
-           }
+        if (history[server_id]) {
+            
+            navigate(history[server_id]);
+
+        } else {
+            
+            navigate(`/dashboard/server/${server_id}`);
+
+        }
     
     }
 

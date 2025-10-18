@@ -34,27 +34,24 @@ export const PatchNotes = () => {
 
     return (
         <>
-        <DefaultHeader />
-        <ScrollLoadWrapper style={{backgroundColor: 'transparent'}} >
-            <ContentHeader title={"Bubble Patch Notes"} Icon={Bandage} />
-            {error && (<TextLabelError error={error} />)}
+        <ContentHeader title={"Bubble Patch Notes"} Icon={Bandage} />
+        {error && (<TextLabelError error={error} />)}
 
-            {(patchNotes.length === 0 && !loading) && (
-                <ContentPlaceholder icon={X} title={'No Patch Notes'} message={'Currently no patch notes'} />
-            )}
-            {patchNotes.map(patchNote => {
-                return (
-                    <Card key={patchNote?._id}>
-                        <Header text={patchNote?.version} />
-                        <Markdown text={patchNote?.content} />
-                        <DateTimeDisplay date={patchNote?.createdAt} />
-                    </Card>
-                )
-            })}
-            
-            <Pagination pageCount={pages}  />
-            {loading && (<SpinnerLoading />)}
-        </ScrollLoadWrapper>
+        {(patchNotes.length === 0 && !loading) && (
+            <ContentPlaceholder icon={X} title={'No Patch Notes'} message={'Currently no patch notes'} />
+        )}
+        {patchNotes.map(patchNote => {
+            return (
+                <Card key={patchNote?._id}>
+                    <Header text={patchNote?.version} />
+                    <Markdown text={patchNote?.content} />
+                    <DateTimeDisplay date={patchNote?.createdAt} />
+                </Card>
+            )
+        })}
+        
+        <Pagination pageCount={pages}  />
+        {loading && (<SpinnerLoading />)}
         </>
     )
 }

@@ -143,5 +143,18 @@ export const themes = {
     '--error-color': '#d3766e',
     '--success-color': '#a9d4a0',
     '--overlay-color': 'rgba(17, 26, 18, 0.7)',
+  },
+  green: {
+  '--primary-color': '#4c5844',          // dark green-black background for headers
+  '--secondary-color': '#968732',        // slightly lighter dark green for cards/panels
+  '--accent-color': '#968732',           // bright neon green highlight
+  '--background-color': '#3f4738',       // main background dark green/black
+  '--card-background-color': '#4c5844',  // card backgrounds slightly lighter
+  '--text-color': '#eff6ee',             // pale green text
+  '--button-background': '#968732',      // green buttons
+  '--button-hover': '#c8b441ff',           // brighter green on hover
+  '--error-color': '#ff6666',            // red error messages
+  '--success-color': '#66ff66',          // green success
+  '--overlay-color': 'rgba(10, 26, 10, 0.7)', // semi-transparent overlay
   }
 };

@@ -22,7 +22,7 @@
     left: 0;
     width: calc(100% - 8px);
     height: calc(100% - 8px);
-    border-radius: 15px;
+    border-radius: var(--border-radius);
     z-index: 3;
     pointer-events: none;
     border: solid 4px transparent;

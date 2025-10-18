@@ -1,6 +1,6 @@
 
 
-import { FolderPlus, Plus } from 'lucide-react'
+import { FolderPlus, Plus, UserPlus } from 'lucide-react'
 import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
@@ -16,9 +16,22 @@ export const useChannelsCtxMenu = () => {
 
     const {hideCustomChannelIcons} = useSelector(state => state.appearanceSlice);
 
+    const {details} = useSelector(state => state.serverDetailsSlice);
+
     const getChannelsOptions = useCallback((options, permissions) => {
 
-        
+        if (permissions.user_can_invite_users) {
+
+            options.push({
+                label: "Invite User",
+                onClick: () => {
+
+                },
+                type: 'button',
+                icon: <UserPlus color='var(--text-color)' />
+            })
+
+        }
 
         if (permissions.user_can_create_channels) {
             options.push({
@@ -50,7 +63,7 @@ export const useChannelsCtxMenu = () => {
             }
         })
 
-    }, [dispatch, setSearchParams, hideCustomChannelIcons])
+    }, [dispatch, setSearchParams, hideCustomChannelIcons, details])
 
     return {getChannelsOptions};
 }
