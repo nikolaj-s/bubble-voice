@@ -91,6 +91,8 @@ export const useScreenShare = ({produce, closeProducer}) => {
 
             const videoTrack = mediaStream.getVideoTracks()[0]
 
+            // const audioStream = await navigator.mediaDevices.getDisplayMedia({audio: {echoCancellation: true}, video: false});
+
             if (typeof produce === "function") {
               await produce("stream", videoTrack);
 
@@ -98,7 +100,11 @@ export const useScreenShare = ({produce, closeProducer}) => {
                 await produce("streamAudio", mediaStream.getAudioTracks()[0]);
               }
             }
-            console.log(source)
+            
+            // if (audioStream?.getAudioTracks()) {
+            //   await produce("streamAudio", audioStream.getAudioTracks()[0]);
+            // }
+
             dispatch(setScreenSharing(true));
 
             dispatch(setStreamDetails({name: source.name, ...videoTrack.getSettings()}));
@@ -114,6 +120,12 @@ export const useScreenShare = ({produce, closeProducer}) => {
             mediaStream.getAudioTracks().forEach((track) => {
               track.onended = stopHandler;
             });
+
+            // if (audioStream) {
+            //   audioStream.getAudioTracks().forEach(track => {
+            //     track.onended = stopHandler;
+            //   })
+            // }
 
             resolve(mediaStream);
 

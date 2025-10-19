@@ -7,7 +7,7 @@
 
 /* normal keeps children in-flow and does not apply any sizing */
 .normal {
-  display: block;
+  display: inline;
 }
 
 /* pip switches to fixed overlay without remounting children */

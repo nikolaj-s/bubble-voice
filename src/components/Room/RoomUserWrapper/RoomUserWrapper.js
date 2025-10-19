@@ -76,7 +76,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
                 const reservedHeight = nonExpandedChildren.length * 100; // 100px height if stacked (see below)
 
                 // We'll assume you want the others at the BOTTOM, so reserve height
-                const availableHeight = Math.max(parentHeight - (nonExpandedChildren.length > 0 ? 125 : 0), 0);
+                const availableHeight = Math.max(parentHeight - (nonExpandedChildren.length > 0 ? 105 : 0), 0);
                 const availableWidth = parentWidth;
 
                 // Aspect ratio logic
