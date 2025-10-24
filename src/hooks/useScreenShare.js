@@ -9,6 +9,7 @@ import {
 import { setOverlay, closeOverlay } from "../features/Overlay/overlaySlice";
 import { useRef } from "react";
 import { stopSharingScreen } from "../features/Channel/MediaControl/mediaControlSlice";
+import { useNativeAudioCapture } from "./useNativeAudioCapture";
 
 export const useScreenShare = ({produce, closeProducer}) => {
   const isElectron = window?.electron?.ipcRenderer;
@@ -16,6 +17,8 @@ export const useScreenShare = ({produce, closeProducer}) => {
   const dispatch = useDispatch();
 
   const { isSharing, selecting } = useSelector(state => state.screenShareSlice);
+
+  const {startStream, stopStream, cleanupAll} = useNativeAudioCapture();
 
   // Track current stream in ref (do NOT put in Redux)
   const streamRef = useRef(null);
@@ -39,6 +42,8 @@ export const useScreenShare = ({produce, closeProducer}) => {
 
     }
 
+    try {cleanupAll()} catch {};
+
     dispatch(clearScreenState());
 
     dispatch(stopSharingScreen());
@@ -56,7 +61,7 @@ export const useScreenShare = ({produce, closeProducer}) => {
       dispatch(setScreenError(null));
 
       dispatch(setScreenSharing(false));
-
+console.log(isElectron)
       if (isElectron) {
 
         dispatch(setOverlay("screenPicker"));
@@ -66,7 +71,7 @@ export const useScreenShare = ({produce, closeProducer}) => {
           dispatch(closeOverlay());
 
           dispatch(setSelecting(false));
-          
+          console.log(source)
           if (!source) {
             await cleanupStream();
             return reject("No screen selected");
@@ -90,9 +95,7 @@ export const useScreenShare = ({produce, closeProducer}) => {
             streamRef.current = mediaStream;
 
             const videoTrack = mediaStream.getVideoTracks()[0]
-
-            // const audioStream = await navigator.mediaDevices.getDisplayMedia({audio: {echoCancellation: true}, video: false});
-
+           
             if (typeof produce === "function") {
               await produce("stream", videoTrack);
 
@@ -127,10 +130,16 @@ export const useScreenShare = ({produce, closeProducer}) => {
             //   })
             // }
 
+         //   const audioStream = await startStream(source.id);
+          //  console.log(audioStream.getAudioTracks()[0]);
+            // if (audioStream) {
+            //   await produce("streamAudio", audioStream.getAudioTracks()[0])
+            // }
+
             resolve(mediaStream);
 
           } catch (err) {
-
+            console.log(err)
             dispatch(setScreenError("Failed to get screen stream"));
 
             await cleanupStream();
