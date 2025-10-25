@@ -30,7 +30,7 @@ export const ServerDetailsProvider = ({children}) => {
     const [showLoading, toggleShowLoading] = React.useState(false);
 
     React.useEffect(() => {
-console.log(serverID, 'fetchserverDetailsProvider')
+
         let timeout;
 
         if (!serverID) return;

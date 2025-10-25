@@ -2,13 +2,12 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setScreenSharing,
   setSelecting,
-  setScreenError,
   clearScreenState,
   setStreamDetails,
 } from "../features/ScreenShare/screenShareSlice";
 import { setOverlay, closeOverlay } from "../features/Overlay/overlaySlice";
 import { useRef } from "react";
-import { stopSharingScreen } from "../features/Channel/MediaControl/mediaControlSlice";
+import { stopSharingScreen, throwScreenShareError } from "../features/Channel/MediaControl/mediaControlSlice";
 import { useNativeAudioCapture } from "./useNativeAudioCapture";
 
 export const useScreenShare = ({produce, closeProducer}) => {
@@ -58,7 +57,7 @@ export const useScreenShare = ({produce, closeProducer}) => {
       // Always cleanup before picking new one
       dispatch(setSelecting(true));
 
-      dispatch(setScreenError(null));
+      dispatch(throwScreenShareError(null));
 
       dispatch(setScreenSharing(false));
 console.log(isElectron)
@@ -140,7 +139,7 @@ console.log(isElectron)
 
           } catch (err) {
             console.log(err)
-            dispatch(setScreenError("Failed to get screen stream"));
+            dispatch(throwScreenShareError("Failed to get screen stream"));
 
             await cleanupStream();
 
@@ -200,8 +199,8 @@ console.log(isElectron)
           resolve(mediaStream);
 
         } catch (err) {
-
-          dispatch(setScreenError("Screen share cancelled or failed"));
+          console.log(err)
+          dispatch(throwScreenShareError("Screen share cancelled or failed"));
 
           await cleanupStream();
 

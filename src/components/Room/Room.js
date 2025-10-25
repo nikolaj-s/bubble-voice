@@ -131,7 +131,7 @@ export const Room = () => {
         deviceId: selectedMicrophone?.deviceId,
         echoCancellation,
         noiseSuppression,
-        autoGainControl,
+        autoGainControl: true,
         onSpeechEnd: pauseProducer,
         onSpeechStart: resumeProducer
     })

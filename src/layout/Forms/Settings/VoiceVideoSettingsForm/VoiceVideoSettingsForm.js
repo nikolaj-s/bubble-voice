@@ -121,7 +121,7 @@ export const VoiceVideoSettingsForm = () => {
         <Label label='Noise Supression' />
         <ToggleSwitch initialState={noiseSuppression} onToggle={() => {dispatch(toggleMicrophoneAttribute('noiseSuppression'))}} />
         <Label label='Auto Gain Control' />
-        <ToggleSwitch initialState={autoGainControl} onToggle={() => {dispatch(toggleMicrophoneAttribute('autoGainControl'))}} />
+        <ToggleSwitch initialState={useAdaptiveVoiceDetection || autoGainControl} disable={useAdaptiveVoiceDetection} onToggle={() => {dispatch(toggleMicrophoneAttribute('autoGainControl'))}} />
         <LineSpacer />
         {platform === 'win32' && (
         <>

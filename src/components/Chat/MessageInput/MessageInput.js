@@ -130,12 +130,8 @@ export const MessageInput = ({
           />
         )}
 
-        <div className={styles.inputButtonWrapper}>
+        <div className={`${styles.inputButtonWrapper} ${focused ? styles.focused : ""}`}>
           <IconButton
-            padding={12}
-            borderRadius="50%"
-            height={50}
-            width={50}
             title="Add"
             Icon={<Plus color="var(--text-color)" />}
             onClick={toggleMenu}
@@ -144,13 +140,13 @@ export const MessageInput = ({
 
           <div
             onClick={() => document.getElementById(`chat-input-${id}`)?.focus()}
-            className={`${styles["input-wrapper"]} ${focused ? styles.focused : ""}`}
+            className={`${styles["input-wrapper"]} `}
           >
             <textarea
               id={`chat-input-${id}`}
               ref={textAreaRef}
               className={styles["message-input"]}
-              placeholder={`${placeholder} use / to list commands`}
+              placeholder={`${placeholder}`}
               value={value}
               onFocus={() => setFocused(true)}
               onBlur={() => setFocused(false)}
@@ -160,8 +156,8 @@ export const MessageInput = ({
               rows={1}
             />
 
-            <div className={styles.sendButton}>
-              <IconButton
+          </div>
+          <IconButton
                 disabled={!value.trim() && !previews.length}
                 Icon={<Send color="var(--text-color)" />}
                 title="Send"
@@ -170,8 +166,6 @@ export const MessageInput = ({
                   setPreviews([]);
                 }}
               />
-            </div>
-          </div>
         </div>
 
         <AnimatePresence>

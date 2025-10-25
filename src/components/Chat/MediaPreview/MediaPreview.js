@@ -22,6 +22,7 @@ export const MediaPreview = ({ preview, clear }) => {
         title={'Clear Images'}
         onClick={clear}
         Icon={X}
+        backgroundColor="var(--error-color)"
         />
       </div>
     </div>

@@ -3,9 +3,9 @@ import styles from "./TextInput.module.css";
 import IconButton from "../../Buttons/IconButton/IconButton";
 import { X } from "lucide-react";
 
-const TextInput = ({ type = "text", placeholder = "", value, onChange, error, autoComplete, maxLength, onClear, id }) => {
+const TextInput = ({ type = "text", placeholder = "", value = "", onChange, error, autoComplete, maxLength, onClear, id }) => {
   return (
-    <div className={`${styles.inputContainer} ${error || (typeof maxLength === 'number' && value.length === maxLength) ? styles.error : ""}`}>
+    <div className={`${styles.inputContainer} ${error || (typeof maxLength === 'number' && value?.length === maxLength) ? styles.error : ""}`}>
       <input
         id={id}
         type={type}

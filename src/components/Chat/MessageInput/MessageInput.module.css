@@ -10,12 +10,16 @@
 
 .inputButtonWrapper {
     display: flex;
-    align-items: flex-start;
-    width: calc(100% - 20px);
+    align-items: center;
+    width: calc(100% - 44px);
     margin: 0px 10px 0px 10px;
     flex-shrink: 0;
     gap: 5px;
     position: relative;
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+    padding: 0px 10px;
+    border: 2px solid var(--background-color);
 }
 
 .error-message {
@@ -28,11 +32,10 @@
     display: flex;
     align-items: center;
     background: var(--background-color);
-    border-radius: 8px;
     border: 2px solid var(--background-color);
     padding: 15px;
     width: calc(100% - 4px);
-    border-radius: 20px;
+    border-radius: var(--border-radius);
     transition: 0.2s ease-in-out;
     cursor: text;
 }

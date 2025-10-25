@@ -23,6 +23,8 @@ export const useChannelCtxMenu = () => {
 
     const subscriptions = useSelector(state => state.subscriptionsSlice.subscriptions);
 
+    const {currentTextChannel} = useSelector(state => state.textChannelSlice);
+
     const getChannelOptions = useCallback((options, data, permissions) => {
 
         const channel = data.channel;
@@ -44,7 +46,7 @@ export const useChannelCtxMenu = () => {
 
         if (channel.channel_type === "voice") {
             
-        } else {
+        } else if (channel._id !== currentTextChannel && channel.channel_type === 'text') {
             options.push({
             label: "Open Channel",
             onClick: () => navigate(`${root}/channel/${channel.channel_id}`),
@@ -111,7 +113,7 @@ export const useChannelCtxMenu = () => {
 
         }
 
-    }, [dispatch, navigate, setSearchParams, account, subscriptions])
+    }, [dispatch, navigate, setSearchParams, account, subscriptions, currentTextChannel])
     
     return {getChannelOptions};
 }

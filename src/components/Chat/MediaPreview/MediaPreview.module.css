@@ -9,7 +9,10 @@
   gap: 8px;
   flex-wrap: wrap;
   padding: var(--padding); /* leave room on the right for the clear button */
-  width: calc(100% - 20px)
+  width: calc(100% - 40px);
+  margin: 10px;
+  background-color: var(--background-color);
+  border-radius: var(--border-radius);
 }
 
 .card {

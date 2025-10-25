@@ -114,14 +114,6 @@ export const useMediaPlayerCtxMenu = () => {
                 icon: <SkipForward  color="var(--text-color)" />,
                 onClick: () => {next()}
             })
-
-            options.push({
-                label: "Mute Media Player",
-                type: 'button',
-                icon: <BoolIndicator color={'var(--error-color)'} active={mediaPlayerState.isMuted} />,
-                onClick: () => {dispatch(toggleMediaPlayerMuted())},
-                color: 'var(--error-color)'
-            })
                 
             options.push({
                 type: 'range',
@@ -139,6 +131,14 @@ export const useMediaPlayerCtxMenu = () => {
                 label: "View Media Player Options",
                 icon: <ChevronRight color='var(--text-color)' />,
                 submenuOptions: sub_options
+            })
+
+             options.push({
+                label: "Mute Media Player",
+                type: 'button',
+                icon: <BoolIndicator color={'var(--error-color)'} active={mediaPlayerState.isMuted} />,
+                onClick: () => {dispatch(toggleMediaPlayerMuted())},
+                color: 'var(--error-color)'
             })
 
         } else {

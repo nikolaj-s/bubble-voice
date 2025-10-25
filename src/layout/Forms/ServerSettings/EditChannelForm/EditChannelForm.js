@@ -80,7 +80,7 @@ export const EditChannelForm = ({permissions}) => {
     React.useEffect(() => {
 
         if (!channel?.channel_id) {
-            setSearchParams({section: ""});
+            setSearchParams({section: "manageChannels"});
         }
 
         setDefaultState();

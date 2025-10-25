@@ -11,6 +11,7 @@ import ConversationButton from '../../../components/ConversationButton/Conversat
 import { setCurrentConversation } from '../../../features/Conversations/conversationSlice';
 import { useEffect, useState } from 'react';
 import IconButton from '../../../components/ui/Buttons/IconButton/IconButton';
+import FullScreenWrapper from '../../../components/ui/Wrappers/FullScreenWrapper/FullScreenWrapper';
 
 export const Conversations = () => {
   const dispatch = useDispatch();
@@ -50,9 +51,11 @@ export const Conversations = () => {
       setMenuOpen(true);
     }
   }, [selectedConversation]);
+
   if (!isOpen) return null;
 
   return (
+
     <div style={{ top: window?.electron ? 32 : 0 }} className={styles.container}>
       <div className={styles.mobileHeader}>
         <button className={styles.menuButton} onClick={() => setMenuOpen((prev) => !prev)}>

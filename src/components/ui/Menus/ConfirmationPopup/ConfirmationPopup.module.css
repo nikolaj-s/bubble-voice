@@ -1,64 +1,126 @@
-
+/* Overlay: simple dim, no blur */
 .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 2147483647;
+  background: var(--overlay-color, rgba(18, 26, 34, 0.7));
 }
 
+/* Card: solid color, subtle border + shadow */
 .popup {
-    background: var(--card-background-color);
-    color: var(--text-color);
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    min-width: 300px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  --card: var(--card-background-color, #1d2d44);
+  --text: var(--text-color, #d1d9e6);
+
+  width: min(92vw, 440px);
+  background: var(--card);
+  color: var(--text);
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 16px 36px rgba(0,0,0,0.45);
+  padding: 18px 18px 16px;
+
+  display: grid;
+  grid-template-rows: auto auto auto;
+  gap: 12px;
 }
 
+/* Minimal variant accent: slim top bar */
+.variantDefault { --accent: var(--accent-color, #3b7a6e); }
+.variantDanger  { --accent: var(--error-color, #e16b6b); }
+.variantSuccess { --accent: var(--success-color, #76c7a5); }
+
+.popup.variantDefault,
+.popup.variantDanger,
+.popup.variantSuccess {
+  box-shadow:
+    0 2px 0 0 color-mix(in oklab, var(--accent) 40%, transparent) inset,
+    0 16px 36px rgba(0,0,0,0.45);
+}
+
+/* Header: icon + title inline */
+.header {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 36px 1fr;
+  align-items: center;
+  gap: 10px;
+}
+
+.iconWrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  background: color-mix(in oklab, var(--accent) 16%, transparent);
+  color: var(--text);
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Message: clean text, no fancy effects */
 .message {
-    margin-bottom: 15px;
+  font-size: 14px;
+  line-height: 1.55;
+  opacity: 0.95;
+  margin: 2px 2px 0;
+  text-wrap: pretty;
 }
 
+/* Buttons: straightforward, crisp focus rings */
 .buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 5px;
-    width: 100%;
+  display: grid;
+  grid-auto-flow: column;
+  gap: 10px;
+  margin-top: 6px;
 }
 
-.confirm, .cancel {
-    padding: 10px 15px;
-    border: none;
-    cursor: pointer;
-    border-radius: 6px;
-    font-weight: bold;
-    transition: background 0.2s ease-in-out;
+.btn {
+  appearance: none;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 120ms ease, background 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
+  background: color-mix(in oklab, var(--background-color, #121a22) 30%, var(--card) 70%);
+  color: var(--text);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.35);
 }
 
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px rgba(255,255,255,0.12),
+    0 0 0 4px color-mix(in oklab, var(--accent) 55%, transparent);
+}
+
+/* Confirm and Cancel keep your brand colors, flat fill */
 .confirm {
-    background: var(--success-color);
-    color: #fff;
+  background: color-mix(in oklab, var(--success-color, #76c7a5) 18%, var(--card) 82%);
+  border-color: color-mix(in oklab, var(--success-color, #76c7a5) 35%, transparent);
 }
-
-.confirm:hover {
-    background: #5ca887;
-}
-
 .cancel {
-    background: var(--error-color);
-    color: #fff;
+  background: color-mix(in oklab, var(--error-color, #e16b6b) 18%, var(--card) 82%);
+  border-color: color-mix(in oklab, var(--error-color, #e16b6b) 35%, transparent);
 }
 
-.cancel:hover {
-    background: #c55b5b;
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Reduced motion respect */
+@media (prefers-reduced-motion: reduce) {
+  .btn { transition: none; }
 }

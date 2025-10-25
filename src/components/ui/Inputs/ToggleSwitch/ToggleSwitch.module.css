@@ -28,3 +28,7 @@
     transition: transform 0.2s ease-in-out;
   }
   
+  .disable {
+    cursor: not-allowed;
+    opacity: 0.25;
+  }

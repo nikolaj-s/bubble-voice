@@ -2,11 +2,12 @@
 /* UniversalVideoPlayer.module.css */
 .playerWrapper {
   position: relative;
-  height: 100%;
   width: 100%;
   background-color: var(--background-color);
   border-radius: 8px;
   overflow: hidden;
+  aspect-ratio: 16 / 9;
+
 }
 
 .playerWrapper.idle {
