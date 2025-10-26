@@ -1,8 +1,7 @@
 import React from 'react';
 import styles from './MediaPlayerWidget.module.css';
 import { FolderSearch, Bookmark, ImageOff, Play } from 'lucide-react';
-import { LineSpacer } from '../../ui/Spacers/LineSpacer/LineSpacer';
-import Header from '../../ui/Titles/Header/Header';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { setOverlay } from '../../../features/Overlay/overlaySlice';
 import { MediaItem } from '../../MediaPlayer/MediaItem/MediaItem';

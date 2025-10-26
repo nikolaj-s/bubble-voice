@@ -44,8 +44,6 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
 
     const ratio = 9 / 16;
 
-   
-
     const area = (increment, hD, wD, active_streams) => {
         let i = 0;
         let w = 0;
@@ -75,14 +73,12 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
 
             if (focused === false) {
                 for (const child of children) {
+
                     child.style.gridRow = 1;
                     child.style.gridColumn = 1;
                     child.style.width = '100%';
                     child.style.height = '100%';
 
-                    const video = child.querySelector('video');
-
-                    if (video) video.style.objectFit = 'contain'
                 }
 
                 return;
@@ -109,6 +105,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
 
             // Apply scaling to child components and prevent overflow
             for (const c of children) {
+
                 c.style.width = `${max}px`;
                 c.style.height = `${(max * ratio)}px`;
                 c.style.margin = '2px';
@@ -119,10 +116,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
                 c.style.gridRow = null;
                 c.style.maxWidth = `960px`;
                 c.style.maxHeight = '540px'
-                const v = c.querySelector('video');
-                if (v) {
-                    v.style.objectFit = null;
-                }
+                
             }
         } catch (error) {
             console.log(error);
@@ -150,7 +144,9 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
     const { call: debouncedScale, cancel: cancelDebounce } = useDebouncedCallback(handleScaling, 120);
 
     React.useLayoutEffect(() => {
+
             const parent = document.getElementById('user-streams-wrapper');
+
             if (!parent) return;
 
             const children = Array.from(parent.children).filter(c => !c.hidden);
@@ -165,9 +161,6 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
                     child.style.width = '100%';
                     child.style.height = '100%';
 
-                    const video = child.querySelector('video');
-
-                    if (video) video.style.objectFit = 'contain'
                 }
 
             } else if (expanded) {
@@ -187,32 +180,31 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
 
                 // Aspect ratio logic
                 if (expandedChild) {
-                const context = JSON.parse(expandedChild.getAttribute('data-context'));
-                let width = availableWidth;
-                let height = availableHeight;
+                    const context = JSON.parse(expandedChild.getAttribute('data-context'));
+                    let width = availableWidth;
+                    let height = availableHeight;
 
-                // Fit the aspect ratio box inside the available area
-                const wByAR = height * (context.aspectRatio || (16 / 9));
-                const hByAR = width / (context.aspectRatio || (16 / 9));
-                
-                if (wByAR <= width) {
-                    width = wByAR;
-                } else {
-                    height = hByAR;
-                }
-                
+                    // Fit the aspect ratio box inside the available area
+                    const wByAR = height * (context.aspectRatio || (16 / 9));
+                    const hByAR = width / (context.aspectRatio || (16 / 9));
+                    
+                    if (wByAR <= width) {
+                        width = wByAR;
+                    } else {
+                        height = hByAR;
+                    }
+                    
 
-                // Apply styles to expanded child
-                expandedChild.style.width = `100%`;
-                expandedChild.style.height = `${height}px`;
-                expandedChild.style.maxWidth = `100%`;
-                expandedChild.style.maxHeight = `100%`;
-                expandedChild.style.margin = '0px';
-                expandedChild.style.borderRadius = '0px';
-                expandedChild.style.gridColumn = '1 / -1';
-                expandedChild.style.gridRow = '1';
-                const v = expandedChild.querySelector('video');
-                    if (v) v.style.objectFit = 'contain';
+                    // Apply styles to expanded child
+                    expandedChild.style.width = `100%`;
+                    expandedChild.style.height = `${height}px`;
+                    expandedChild.style.maxWidth = `100%`;
+                    expandedChild.style.maxHeight = `100%`;
+                    expandedChild.style.margin = '0px';
+                    expandedChild.style.borderRadius = '0px';
+                    expandedChild.style.gridColumn = '1 / -1';
+                    expandedChild.style.gridRow = '1';
+              
                 }
 
                 // 1) Compute how many 100px columns fit (at least 1)
@@ -247,17 +239,15 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
 
                 // 3) Loop and assign each child to the next spot in that spiral
                 nonExpandedChildren.forEach((child, idx) => {
-                const col = columnOrder[idx % numberOfColumns];
+                    const col = columnOrder[idx % numberOfColumns];
 
-                child.style.gridRow    = 2;
-                child.style.gridColumn = col;
-                child.style.width      = `100px`;
-                child.style.height     = `100px`;
-                child.style.margin     = `0`;
-                child.style.borderRadius = `50%`;
+                    child.style.gridRow    = 2;
+                    child.style.gridColumn = col;
+                    child.style.width      = `100px`;
+                    child.style.height     = `100px`;
+                    child.style.margin     = `0`;
+                    child.style.borderRadius = `50%`;
 
-                const v = child.querySelector('video');
-                if (v) v.style.objectFit = 'cover';
                 });
             
 

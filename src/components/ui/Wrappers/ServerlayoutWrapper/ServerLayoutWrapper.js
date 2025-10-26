@@ -12,7 +12,7 @@ export const ServerLayoutWrapper = ({ children, hideUsers = false }) => {
 
   // On mount: initialize CSS vars & watch window size
   useEffect(() => {
-    const c = containerRef.current
+    const c = document.body;
 
     // Helper to set a var
     const setVar = (name, px) => c.style.setProperty(name, `${px}px`)
@@ -52,15 +52,17 @@ export const ServerLayoutWrapper = ({ children, hideUsers = false }) => {
 
   // Create a drag handler factory
   const makeDrag = (varName, isLeft) => (e) => {
-    if (!canResize) return
+
+    if (!canResize) return;
+
     e.preventDefault()
 
-    const c = containerRef.current
-    const startX = e.clientX
-    let initial = parseInt(
-      getComputedStyle(c).getPropertyValue(varName),
-      10
-    )
+    const c = document.body;
+
+    const startX = e.clientX;
+
+    let initial = parseInt(getComputedStyle(c).getPropertyValue(varName), 10);
+
     if (isNaN(initial)) initial = defaultSizes[varName]
 
     let newSize = initial

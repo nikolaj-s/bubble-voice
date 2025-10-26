@@ -7,243 +7,281 @@ import {
   setStreamIcon,
 } from "../features/ScreenShare/screenShareSlice";
 import { setOverlay, closeOverlay } from "../features/Overlay/overlaySlice";
-import { useRef } from "react";
-import { stopSharingScreen, throwScreenShareError } from "../features/Channel/MediaControl/mediaControlSlice";
+import { useRef, useCallback } from "react";
+import {
+  stopSharingScreen,
+  throwScreenShareError,
+} from "../features/Channel/MediaControl/mediaControlSlice";
 import { useNativeAudioCapture } from "./useNativeAudioCapture";
 import { triggerAlert } from "../features/Alerts/alertsSlice";
 
-export const useScreenShare = ({produce, closeProducer}) => {
-  const isElectron = window?.electron?.ipcRenderer;
-
+export const useScreenShare = ({ produce, closeProducer }) => {
+  const isElectron = !!window?.electron?.ipcRenderer;
   const dispatch = useDispatch();
 
-  const { isSharing, selecting } = useSelector(state => state.screenShareSlice);
+  const { isSharing, selecting } = useSelector(
+    (state) => state.screenShareSlice
+  );
+  const { isScreenSharing, captureDesktopAudio } = useSelector(
+    (state) => state.mediaControlSlice
+  );
 
-  const {startStream, stopStream, cleanupAll} = useNativeAudioCapture();
+  const { startStream, stopStream, cleanupAll } = useNativeAudioCapture({
+    disable: !isScreenSharing,
+  });
 
-  // Track current stream in ref (do NOT put in Redux)
+  // current stream (never store in Redux)
   const streamRef = useRef(null);
 
-  // Ensure only one stream active at a time
+  // --- helpers ---------------------------------------------------------------
+
+  const stopHandler = useCallback(async () => {
+    await cleanupStream(true);
+  }, []); // defined later; lint is okay because function is hoisted by declaration order below
+
+  const buildElectronConstraints = (sourceId) => ({
+    audio: false, // desktop audio handled by native module when enabled
+    video: {
+      mandatory: {
+        chromeMediaSource: "desktop",
+        chromeMediaSourceId: sourceId,
+        maxWidth: 960,
+        maxHeight: 540,
+        maxFrameRate: 30,
+        cursor: "never",
+      },
+    },
+  });
+
+  const buildWebConstraints = () => ({
+    video: {
+      cursor: "never",
+      width: { max: 960 },
+      height: { max: 540 },
+      frameRate: { max: 30 },
+    },
+    audio: true, // best-effort browser capture
+  });
+
+  const attachAndProduceTracks = useCallback(
+    async (mediaStream) => {
+      streamRef.current = mediaStream;
+
+      const videoTrack = mediaStream.getVideoTracks()[0];
+      if (typeof produce === "function" && videoTrack) {
+        await produce("stream", videoTrack);
+      }
+
+      const audioTrack = mediaStream.getAudioTracks()[0];
+      if (typeof produce === "function" && audioTrack) {
+        await produce("streamAudio", audioTrack);
+      }
+
+      // watch for manual end
+      const onEnded = () => stopHandler();
+      mediaStream.getVideoTracks().forEach((t) => (t.onended = onEnded));
+      mediaStream.getAudioTracks().forEach((t) => (t.onended = onEnded));
+
+      return videoTrack;
+    },
+    [produce]
+  );
+
+  // --- cleanup ---------------------------------------------------------------
+
   const cleanupStream = async (autoClean) => {
-
+    // stop tracks
     if (streamRef.current) {
-
-      streamRef.current.getTracks().forEach(t => t.stop());
-
+      try {
+        streamRef.current.getTracks().forEach((t) => t.stop());
+      } catch {}
       streamRef.current = null;
-
     }
 
+    // close producers
     if (typeof closeProducer === "function") {
-
-      await closeProducer("stream");
-
-      await closeProducer("streamAudio");
-
+      try {
+        await closeProducer("stream");
+      } catch {}
+      try {
+        await closeProducer("streamAudio");
+      } catch {}
     }
 
-    try {cleanupAll()} catch {};
+    // stop any native audio capture
+    try {
+      cleanupAll();
+    } catch {}
 
+    // reset UI state
     dispatch(clearScreenState());
 
-    if (autoClean) dispatch(stopSharingScreen());
-
+    if (autoClean) {
+      dispatch(stopSharingScreen());
+    }
   };
 
-  // Pick screen and produce
-  const pickScreen = () =>
-    new Promise(async (resolve, reject) => {
+  // --- NEW: start directly with a provided electron source object -----------
 
-      await cleanupStream(); 
-      // Always cleanup before picking new one
+  const startShareWithSource = useCallback(
+    async (source) => {
+      if (!source) throw new Error("No source provided");
+      // prevent competing picks
+      if (selecting) return;
+
       dispatch(setSelecting(true));
-
       dispatch(throwScreenShareError(null));
 
-  //    dispatch(setScreenSharing(false));
+      try {
+        if (source.icon) dispatch(setStreamIcon(source.icon));
 
-      if (isElectron) {
+        // 1) getUserMedia for the video
+        const mediaStream = await navigator.mediaDevices
+          .getUserMedia(buildElectronConstraints(source.id))
+          .catch(async (err) => {
+            console.error(err);
+            dispatch(triggerAlert("Fatal Error Initializing Screen Share"));
+            throw new Error("Error Capturing User Media");
+          });
 
+        // 2) attach / produce
+        const videoTrack = await attachAndProduceTracks(mediaStream);
+
+        // 3) set state
+        dispatch(setScreenSharing(true));
+        dispatch(
+          setStreamDetails({
+            name: source.name,
+            ...videoTrack?.getSettings(),
+          })
+        );
+
+        // 4) (Windows) optional: start PID-scoped audio and produce
+        if (captureDesktopAudio) {
+          try {
+            const audioStream = await startStream(source.id); // your native path; returns MediaStream
+            if (audioStream?.getAudioTracks()[0]) {
+              await produce("streamAudio", audioStream.getAudioTracks()[0]);
+              audioStream.getAudioTracks().forEach(
+                (t) => (t.onended = () => stopHandler())
+              );
+            }
+          } catch (error) {
+            console.error(error);
+            dispatch(
+              triggerAlert(
+                error?.message || "Unable to start audio capture",
+                "error"
+              )
+            );
+          }
+        }
+
+        return mediaStream;
+      } catch (err) {
+        console.error(err);
+        dispatch(throwScreenShareError("Failed to get screen stream"));
+        await cleanupStream(true);
+        throw err;
+      } finally {
+        dispatch(setSelecting(false));
+        dispatch(closeOverlay());
+      }
+    },
+    [attachAndProduceTracks, captureDesktopAudio, selecting]
+  );
+
+  // --- electron: pick screen flow -------------------------------------------
+
+  const pickScreen = useCallback(
+    () =>
+      new Promise(async (resolve, reject) => {
+        if (!isElectron) return reject(new Error("Not running in Electron"));
+
+        // always clean before picking
+        await cleanupStream();
+        if (selecting) return reject(new Error("Already selecting"));
+
+        dispatch(setSelecting(true));
+        dispatch(throwScreenShareError(null));
         dispatch(setOverlay("screenPicker"));
 
-        const handleSource = async (source) => {
-
-          dispatch(closeOverlay());
-
-          dispatch(setSelecting(false));
-          console.log(source)
-          // if no source is selected clean up, and toggle state to disable stream status
-          if (!source) {
-            await cleanupStream(true);
-            return reject("No screen selected");
-          }
-          if (source.icon) dispatch(setStreamIcon(source.icon))
-          
+        const onSelected = async (e) => {
+          const source = e.detail?.source;
           try {
-
-            const mediaStream = await navigator.mediaDevices.getUserMedia({
-              audio: false,
-              video: {
-                mandatory: {
-                  chromeMediaSource: "desktop",
-                  chromeMediaSourceId: source.id,
-                  maxWidth: 960,
-                  maxHeight: 540,
-                  maxFrameRate: 30,
-                  cursor: 'never'
-                },
-              },
-            }).catch(async err => {
-              console.log(err)
-              dispatch(triggerAlert("Fatal Error Initializing Screen Share"));
-
+            if (!source) {
               await cleanupStream(true);
-
-              return reject("Error Capturing User Media");
-
-            })
-
-            streamRef.current = mediaStream;
-
-            const videoTrack = mediaStream.getVideoTracks()[0]
-           
-            if (typeof produce === "function") {
-              await produce("stream", videoTrack);
-
-              if (mediaStream.getAudioTracks()[0]) {
-                await produce("streamAudio", mediaStream.getAudioTracks()[0]);
-              }
+              return reject("No screen selected");
             }
-            
-            dispatch(setScreenSharing(true));
-
-            dispatch(setStreamDetails({name: source.name, ...videoTrack.getSettings()}));
-            // Listen for manual stream end (user stops sharing)
-            const stopHandler = async () => {
-              await cleanupStream(true);
-            };
-            // Only add once
-            mediaStream.getVideoTracks().forEach((track) => {
-              track.onended = stopHandler;
-            });
-
-            mediaStream.getAudioTracks().forEach((track) => {
-              track.onended = stopHandler;
-            });
-
-          try {
-            const audioStream = await startStream(source.id);
-           
-            if (audioStream) {
-              await produce("streamAudio", audioStream.getAudioTracks()[0])
-            }
-
-             if (audioStream) {
-              audioStream.getAudioTracks().forEach(track => {
-                track.onended = stopHandler;
-              })
-            }
-
-          } catch (error) {
-            console.log(error);
-            dispatch(triggerAlert("This Stream Failed To Establish An Audio Source", "error"))
-          }
-
-            resolve(mediaStream);
-
+            const ms = await startShareWithSource(source);
+            resolve(ms);
           } catch (err) {
-            console.log(err)
-            dispatch(throwScreenShareError("Failed to get screen stream"));
-
-            await cleanupStream();
-
             reject(err);
           }
         };
 
-        window.addEventListener(
-          "bubble:screen-picker-selected",
-          (e) => {
-            handleSource(e.detail?.source);
-          },
-          { once: true }
-        );
-      } else {
-        try {
+        window.addEventListener("bubble:screen-picker-selected", onSelected, {
+          once: true,
+        });
+      }),
+    [isElectron, startShareWithSource, selecting]
+  );
 
-          const mediaStream = await navigator.mediaDevices.getDisplayMedia({
-            video: {
-              cursor: "never",
-              width: { max: 960 },
-              height: { max: 540 },
-              frameRate: { max: 30 },
-            },
-            audio: true,
-          });
-          
-          streamRef.current = mediaStream;
+  // --- web: direct getDisplayMedia ------------------------------------------
 
-          const videoTrack = mediaStream.getVideoTracks()[0]
+  const pickScreenWeb = useCallback(async () => {
+    await cleanupStream();
+    dispatch(setSelecting(true));
+    dispatch(throwScreenShareError(null));
 
-          if (typeof produce === "function") {
+    try {
+      const mediaStream = await navigator.mediaDevices.getDisplayMedia(
+        buildWebConstraints()
+      );
 
-            await produce("stream", videoTrack);
+      const videoTrack = await attachAndProduceTracks(mediaStream);
 
-            if (mediaStream.getAudioTracks()[0]) {
-              await produce("streamAudio", mediaStream.getAudioTracks()[0]);
-            }
-          }
+      dispatch(setScreenSharing(true));
+      dispatch(
+        setStreamDetails({ name: "Their Screen", ...videoTrack?.getSettings() })
+      );
 
-          dispatch(setScreenSharing(true));
+      return mediaStream;
+    } catch (err) {
+      console.log(err);
+      dispatch(throwScreenShareError("Screen share cancelled or failed"));
+      await cleanupStream();
+      throw err;
+    } finally {
+      dispatch(setSelecting(false));
+    }
+  }, [attachAndProduceTracks]);
 
-          dispatch(setStreamDetails({name: 'Their Screen', ...videoTrack.getSettings()}));
+  // --- public toggle ---------------------------------------------------------
 
-          dispatch(setSelecting(false));
-          // Listen for manual stream end (user stops sharing)
-          const stopHandler = async () => {
-            await cleanupStream();
-          };
-          mediaStream.getVideoTracks().forEach((track) => {
-            track.onended = stopHandler;
-          });
-          mediaStream.getAudioTracks().forEach(track => {
-            track.onended = stopHandler;
-          })
-
-          resolve(mediaStream);
-
-        } catch (err) {
-          console.log(err)
-          dispatch(throwScreenShareError("Screen share cancelled or failed"));
-
-          await cleanupStream();
-
-          reject(err);
-
-        }
-      }
-    });
-
-  // Main handler for toggling screen share
-  const handleScreenShare = async (isSharingScreen) => {
-    if (!isSharingScreen) {
+  const handleScreenShare = async (enable) => {
+    if (!enable) {
       await cleanupStream();
       return;
     }
     try {
-      await pickScreen();
-    } catch (err) {
-      // Already cleaned up on error
+      if (isElectron) {
+        await pickScreen();
+      } else {
+        await pickScreenWeb();
+      }
+    } catch {
+      // already handled
     }
   };
 
   return {
-    handleScreenShare,
+    handleScreenShare,   // toggle path (electron picker or web picker)
+    startShareWithSource, // NEW: call directly with { id, name, icon }
+    pickScreen,          // electron picker promise (still exposed)
     cleanupStream,
     isSharing,
     selecting,
-    // Expose the ref in case you want it (for preview, etc)
     streamRef,
   };
 };

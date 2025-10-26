@@ -15,19 +15,24 @@ export const ExpandedImage = () => {
 
   useEffect(() => {
 
-    if (!messages.length) return;
+    if (!messages.length) { 
+      
+      dispatch(setImages([]));
 
-    let l_images = [];
+    } else {
 
-    l_images = messages.slice().filter(message => message.image || message.images).flatMap(message => {
+      let l_images = [];
 
-      if (message.image) return message.image;
+      l_images = messages.slice().filter(message => message.image || message.images).flatMap(message => {
 
-      if (message.images) return message.images;
+        if (message.image) return message.image;
 
-    })
+        if (message.images) return message.images;
 
-    dispatch(setImages(l_images));
+      })
+
+      dispatch(setImages(l_images));
+    }
 
   }, [messages, image])
 

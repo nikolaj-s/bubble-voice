@@ -273,6 +273,9 @@ export default function ExpandedImageViewer({
         className={`${styles.imageContainer} ${expanded ? styles.expanded : ""}`}
         onClick={handleExpand}
         tabIndex={0}
+        style={{
+          marginBottom: !hasMulti ? 0 : null
+        }}
       >
         {error ? (
           <Card

@@ -5,7 +5,7 @@
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    padding: 15px;
+    padding: 11px 15px;
     transition: 0.1s ease-in-out;
     text-align: center;
     outline: none;
@@ -15,7 +15,7 @@
     align-items: center;
     gap: 10px;
     justify-content: space-between;
-    min-height: 40px;
+    min-height: 42px;
   }
   
   .button:hover {

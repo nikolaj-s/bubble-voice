@@ -63,7 +63,7 @@ export const MediaControlsProvider = ({ children }) => {
         if (!loading) dispatch(toggleWebcam(!isWebcamOn));
     //    (isWebcamOn ? playDisable : playEnable)();
     };
-console.log(isSharing)
+
     const handleShareScreen = () => {
 
         if (isSharing) return dispatch(stopSharingScreen());

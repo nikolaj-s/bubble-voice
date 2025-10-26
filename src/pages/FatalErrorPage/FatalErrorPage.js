@@ -5,6 +5,7 @@ import { selectAccountError } from "../../features/Account/accountSlice";
 import { useNavigate } from "react-router";
 import TextButton from "../../components/ui/Buttons/TextButton/TextButton";
 import { clearToken } from "../../lib/services/authService";
+import { Card } from "../../components/ui/Wrappers/Card/Card";
 
 const FatalErrorPage = ({ message = "An unexpected error occurred." }) => {
 
@@ -22,12 +23,12 @@ const FatalErrorPage = ({ message = "An unexpected error occurred." }) => {
 
     return (
         <div className={styles.container}>
-        <div className={styles.card}>
-            <AlertTriangle className={styles.icon} size={48} />
-            <h1 className={styles.title}>Fatal Error</h1>
-            <p className={styles.message}>{accountError || message}</p>
-            <TextButton title="Login" action={redirect} />
-        </div>
+            <Card className={styles.card}>
+                <AlertTriangle className={styles.icon} size={48} />
+                <h1 className={styles.title}>Fatal Error</h1>
+                <p className={styles.message}>{accountError || message}</p>
+                <TextButton title="Login" action={redirect} />
+            </Card>
         </div>
     );
 };

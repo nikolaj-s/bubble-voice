@@ -6,7 +6,6 @@ import { setExpandedImage } from "../../features/Media/ExpandedImage/expandedIma
 import { NsfwWrapper } from "../ui/Wrappers/NsfwWrapper/NsfwWrapper";
 import VideoPlayer from "../ui/Video/VideoPlayer/VideoPlayer";
 import { Description } from "../ui/Description/Description";
-import Label from "../ui/Titles/Label/Label";
 
 const LinkPreview = ({ link_preview: preview, nsfw }) => {
   const dispatch = useDispatch();
@@ -48,7 +47,7 @@ const LinkPreview = ({ link_preview: preview, nsfw }) => {
           <span className={styles.siteName}>{preview.siteName}</span>
         </div>
         <h3 className={styles.title}>{preview.title}</h3>
-        <Description description={preview.description} />
+        <Description description={preview.description} limit={2} />
       </div>
     </div>
   );

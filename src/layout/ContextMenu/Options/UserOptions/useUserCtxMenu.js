@@ -6,8 +6,9 @@ import { useGlobalVolume } from '../../../../context/GlobalVolumeContext';
 import { setStreamDisabled } from '../../../../features/UserStreamState/userStreamStateSlice';
 import { BoolIndicator } from '../../../../components/ui/BoolIndicator/BoolIndicator';
 import { sendServerInvite } from '../../../../features/Invites/ServerInvites/Thunks/sendServerInvite';
-import { Pointer } from 'lucide-react';
+import { MessageSquare, Pointer } from 'lucide-react';
 import { pokeUser } from '../../../../features/Social/Thunks/pokeUser';
+import { createConversation } from '../../../../features/Conversations/Thunks/createConversation';
 
 export const useUserCtxMenu = () => {
 
@@ -36,7 +37,21 @@ export const useUserCtxMenu = () => {
             })
         } 
 
-         if (user._id !== user_id && users[user._id] && !user.fromSearch) {
+        if (user._id !== user_id) {
+
+            options.push({
+                label: "Message",
+                icon: <MessageSquare color='var(--text-color)' />,
+                type: 'button',
+                onClick: () => {
+                    dispatch(createConversation(user._id))
+                }
+                
+            })
+
+        }
+
+        if (user._id !== user_id && users[user._id] && !user.fromSearch) {
         
             const isWebcamDisabled = userStreamState[`${user.user_id}-webcam`]?.disabled || false;
 

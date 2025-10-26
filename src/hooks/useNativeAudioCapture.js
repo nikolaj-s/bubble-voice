@@ -1,13 +1,17 @@
 // useNativeAudioCapture.js (renderer)
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 export function useNativeAudioCapture(opts = {}) {
+
+  const {platform} = useSelector(state => state.osSlice);
+
   const ipcRenderer = window?.electron?.ipcRenderer;
 
-  if (!ipcRenderer) {
+  if (!ipcRenderer || platform !== 'win32') {
     return {
       stream: null, id: null, sampleRate: null, channels: null, status: 'unsupported', error: 'Not in Electron',
-      startStream: async () => { throw new Error('Not in Electron'); },
+      startStream: async () => { throw new Error(platform !== 'win32' ? "Audio Capture Only Supprted on Windows 10, build october 2023+" : 'Not in Electron'); },
       stopStream: async () => {},
       cleanupAll: async () => {}
     };
@@ -170,6 +174,7 @@ export function useNativeAudioCapture(opts = {}) {
 
     // Kick off native capture (main will respond with webContents.postMessage that our preload relays)
     const res = await ipcRenderer.invoke('audio:getByPid', pid);
+
     if (!res || res.ok === false) {
       cleanup();
       const msg = res?.error || 'audio:getByPid failed';

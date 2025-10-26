@@ -44,6 +44,14 @@ export const Notifications = () => {
     const handleOpenNotification = (data) => {
 
         if (data.type === 'reply') {
+
+            if (!data.server_id?._id || !data.channel_id?._id) {
+
+                dispatch(triggerAlert("Channel or Server No Longer Exists", "error"));
+
+                return dispatch(deleteNotification(data._id));
+            }
+
             navigate(`/dashboard/server/${data.server_id._id}/channel/${data.channel_id._id}?message=${data.message_id}`);
 
             dispatch(deleteNotification(data._id));

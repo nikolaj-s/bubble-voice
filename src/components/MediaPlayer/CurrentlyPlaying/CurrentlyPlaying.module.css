@@ -9,7 +9,7 @@
     align-items: center;
     flex-direction: column;
     gap: 10px;
-    border-radius: 15px;
+    border-radius: var(--border-radius);
     padding: 10px;
     flex-grow: 2;
 }
@@ -28,7 +28,7 @@
 .thumbnail {
     width: 200px;
     height: 200px;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     overflow: hidden;
     box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.5);
     aspect-ratio: 1 / 1;
