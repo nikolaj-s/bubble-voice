@@ -76,7 +76,7 @@ export const ConnectionIndicator = () => {
 
     return (
         <IconButton 
-        width={50}
+        width={'calc((var(--users-width) - 45px) / 4)'}
         padding={10}
         height={35}
         backgroundColor='var(--primary-color)'

@@ -86,10 +86,9 @@ export const RoomOverlay = () => {
                 <div className={styles.wrapper}>
                     <MediaPlayerInlineControls />
                     <IconButton 
-                    padding={15}
-                    borderRadius={"50%"}
-                    width={50}
-                    height={50}
+                    padding={10}
+                    width={40}
+                    height={40}
                     onClick={handleToggleMicrophone}
                     position='top'
                     Icon={
@@ -112,10 +111,9 @@ export const RoomOverlay = () => {
                     }
                     />
                     <IconButton 
-                    padding={15}
-                    width={50}
-                    height={50}
-                    borderRadius={"50%"}
+                    padding={10}
+                    width={40}
+                    height={40}
                     onClick={handleToggleAudio}
                     position='top' title={
                         audioError ?
@@ -132,10 +130,10 @@ export const RoomOverlay = () => {
                     <Headphones color='var(--text-color)' />
                     } />
                     <IconButton 
-                    padding={15}
-                    width={50}
-                    height={50}
-                    borderRadius={"50%"}
+                    padding={10}
+                    width={40}
+                    height={40}
+                   
                     onClick={handleToggleWebcam}
                     position='top' title={
                         webcamError ?
@@ -157,18 +155,17 @@ export const RoomOverlay = () => {
                     Icon={screenShareError ? <MonitorX color='var(--error-color)' /> : isSharing ? <MonitorOff color='var(--text-color)' /> : <MonitorUp color='var(--text-color)' />}
                     backgroundColor={isSharing ? "var(--success-color)" : null}
                     onClick={handleShareScreen}
-                    padding={15}
-                    width={50}
-                    height={50}
-                    borderRadius={"50%"}
+                    padding={10}
+                    width={40}
+                    height={40}
                     />
                     <PillSpacer verticle={true} />
                     <IconButton 
                     onClick={handleDisconnect}
-                    padding={15}
-                    width={50}
-                    height={50}
-                    borderRadius={"50%"}
+                    padding={8}
+                    width={60}
+                    height={40}
+                    
                     title={keybinds['disconnect'] ? <KeybindToolTip label={'Disconnect'} binds={[keybinds['disconnect']?.key]} /> : "Disconnect"}
                     backgroundColor='var(--error-color)'
                     Icon={<Unplug color='var(--text-color)' />}

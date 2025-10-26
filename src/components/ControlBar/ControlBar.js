@@ -18,6 +18,7 @@ import { ErrorToolTip } from '../ui/ErrorToolTip/ErrorToolTip';
 import { ConnectionIndicator } from '../ConnectionIndicator/ConnectionIndicator';
 import { setCurrentVoiceChannel } from '../../features/Channel/VoiceChannel/voiceChannelSlice';
 import { triggerContext } from "../../lib/services/helperFunctions";
+import { StreamTitleIndicator } from "./StreamTitleIndicator/StreamTitleIndicator";
 
 export const ControlBar = () => {
 
@@ -41,11 +42,12 @@ export const ControlBar = () => {
         id="main-control-bar"
         data-context={JSON.stringify({type: 'controlBar'})}
         className={styles.wrapper}>
+            <StreamTitleIndicator />
             {inChannel ?
             <div className={styles.channelControlWrapper}>
                 <IconButton 
                 backgroundColor={webcamError ? 'var(--error-color)' : isWebcamOn ? 'var(--success-color)' : 'var(--primary-color)'}
-                width={50}
+                width={'calc((var(--users-width) - 45px) / 4)'}
                 height={35}
                 padding={8}
                 onClick={handleToggleWebcam}
@@ -54,7 +56,7 @@ export const ControlBar = () => {
                 />
                 <IconButton 
                 backgroundColor={screenShareError ? "var(--error-color)" : isSharing ? 'var(--success-color)' : 'var(--primary-color)'}
-                width={50}
+                width={'calc((var(--users-width) - 45px) / 4)'}
                 height={35}
                 padding={8}
                 onClick={handleShareScreen}
@@ -64,7 +66,7 @@ export const ControlBar = () => {
                 <ConnectionIndicator />
                 <IconButton 
                 onClick={handleDisconnect}
-                width={50}
+                width={'calc((var(--users-width) - 45px) / 4)'}
                 height={35}
                 padding={8}
                 title={keybinds['disconnect'] ? <KeybindToolTip label={'Disconnect'} binds={[keybinds['disconnect']?.key]} /> : "Disconnect"}

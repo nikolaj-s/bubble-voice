@@ -29,15 +29,14 @@ export const MediaPlayerInlineControls = () => {
     if (!enabled) return null;
 
     return (
-        <div id='room-media-player-overlay-button' data-context={JSON.stringify({type: 'mediaplayer'})} style={{display: 'flex', height: '100%', alignItems: 'center', gap: '5px'}}>
+        <div id='room-media-player-overlay-button' data-context={JSON.stringify({type: 'mediaplayer'})} style={{display: 'flex', height: '100%', alignItems: 'center',}}>
         
         <IconButton 
         
         key={'media-player-button'}
-        padding={15}
-        width={50}
-        height={50}
-        borderRadius={'50%'}
+        padding={8}
+        width={60}
+        height={40}
         title={'Media Player'}
         Icon={
         <>

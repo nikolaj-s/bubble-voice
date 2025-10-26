@@ -4,11 +4,13 @@ import {
   setSelecting,
   clearScreenState,
   setStreamDetails,
+  setStreamIcon,
 } from "../features/ScreenShare/screenShareSlice";
 import { setOverlay, closeOverlay } from "../features/Overlay/overlaySlice";
 import { useRef } from "react";
 import { stopSharingScreen, throwScreenShareError } from "../features/Channel/MediaControl/mediaControlSlice";
 import { useNativeAudioCapture } from "./useNativeAudioCapture";
+import { triggerAlert } from "../features/Alerts/alertsSlice";
 
 export const useScreenShare = ({produce, closeProducer}) => {
   const isElectron = window?.electron?.ipcRenderer;
@@ -23,7 +25,7 @@ export const useScreenShare = ({produce, closeProducer}) => {
   const streamRef = useRef(null);
 
   // Ensure only one stream active at a time
-  const cleanupStream = async () => {
+  const cleanupStream = async (autoClean) => {
 
     if (streamRef.current) {
 
@@ -45,7 +47,7 @@ export const useScreenShare = ({produce, closeProducer}) => {
 
     dispatch(clearScreenState());
 
-    dispatch(stopSharingScreen());
+    if (autoClean) dispatch(stopSharingScreen());
 
   };
 
@@ -59,8 +61,8 @@ export const useScreenShare = ({produce, closeProducer}) => {
 
       dispatch(throwScreenShareError(null));
 
-      dispatch(setScreenSharing(false));
-console.log(isElectron)
+  //    dispatch(setScreenSharing(false));
+
       if (isElectron) {
 
         dispatch(setOverlay("screenPicker"));
@@ -71,10 +73,13 @@ console.log(isElectron)
 
           dispatch(setSelecting(false));
           console.log(source)
+          // if no source is selected clean up, and toggle state to disable stream status
           if (!source) {
-            await cleanupStream();
+            await cleanupStream(true);
             return reject("No screen selected");
           }
+          if (source.icon) dispatch(setStreamIcon(source.icon))
+          
           try {
 
             const mediaStream = await navigator.mediaDevices.getUserMedia({
@@ -89,7 +94,15 @@ console.log(isElectron)
                   cursor: 'never'
                 },
               },
-            }).catch(err => {console.log(err)})
+            }).catch(async err => {
+              console.log(err)
+              dispatch(triggerAlert("Fatal Error Initializing Screen Share"));
+
+              await cleanupStream(true);
+
+              return reject("Error Capturing User Media");
+
+            })
 
             streamRef.current = mediaStream;
 
@@ -103,16 +116,12 @@ console.log(isElectron)
               }
             }
             
-            // if (audioStream?.getAudioTracks()) {
-            //   await produce("streamAudio", audioStream.getAudioTracks()[0]);
-            // }
-
             dispatch(setScreenSharing(true));
 
             dispatch(setStreamDetails({name: source.name, ...videoTrack.getSettings()}));
             // Listen for manual stream end (user stops sharing)
             const stopHandler = async () => {
-              await cleanupStream();
+              await cleanupStream(true);
             };
             // Only add once
             mediaStream.getVideoTracks().forEach((track) => {
@@ -123,17 +132,23 @@ console.log(isElectron)
               track.onended = stopHandler;
             });
 
-            // if (audioStream) {
-            //   audioStream.getAudioTracks().forEach(track => {
-            //     track.onended = stopHandler;
-            //   })
-            // }
+          try {
+            const audioStream = await startStream(source.id);
+           
+            if (audioStream) {
+              await produce("streamAudio", audioStream.getAudioTracks()[0])
+            }
 
-         //   const audioStream = await startStream(source.id);
-          //  console.log(audioStream.getAudioTracks()[0]);
-            // if (audioStream) {
-            //   await produce("streamAudio", audioStream.getAudioTracks()[0])
-            // }
+             if (audioStream) {
+              audioStream.getAudioTracks().forEach(track => {
+                track.onended = stopHandler;
+              })
+            }
+
+          } catch (error) {
+            console.log(error);
+            dispatch(triggerAlert("This Stream Failed To Establish An Audio Source", "error"))
+          }
 
             resolve(mediaStream);
 

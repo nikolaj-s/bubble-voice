@@ -122,6 +122,7 @@ const mediaControlSlice = createSlice({
         },
         stopSharingScreen: (state, action) => {
             state.isScreenSharing = false;
+            console.log(state.isScreenSharing)
         }
     }
 })

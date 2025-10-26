@@ -59,7 +59,6 @@
 .wrapper {
     display: flex;
     align-items: center;
-    height: 50px;
     gap: 5px;
 }
 

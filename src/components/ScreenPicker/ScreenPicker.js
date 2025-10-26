@@ -4,6 +4,8 @@ import { useDispatch } from "react-redux";
 import { stopSharingScreen } from "../../features/Channel/MediaControl/mediaControlSlice";
 import SpinnerLoading from "../ui/Loading/Spinner/SpinnerLoading";
 import TextButton from "../ui/Buttons/TextButton/TextButton";
+import { ToolBar } from "../ui/Wrappers/ToolBar/ToolBar";
+import { AppWindow, Monitor } from "lucide-react";
 
 const ScreenPicker = () => {
 
@@ -16,6 +18,8 @@ const ScreenPicker = () => {
   const picked = useRef(false);
 
   const dispatch = useDispatch();
+
+  const [filter, setFilter] = useState('window');
  
   const fetchSources = async () => {
     setLoading(true);
@@ -52,9 +56,13 @@ const ScreenPicker = () => {
     );
     dispatch(stopSharingScreen());
   };
-
+ 
   return (
     <div className={styles.modal}>
+      <ToolBar style={{width: '100%', display: 'inline-flex', justifyContent: 'space-evenly'}}>
+        <TextButton action={() => {setFilter('window')}} width={'calc(50% - 5px)'} title="Application's" icon={AppWindow} backgroundColor={filter === 'window' ? null : 'transparent'} />
+        <TextButton action={() => {setFilter('screen')}} width={'calc(50% - 5px)'} title="Screen's" icon={Monitor} backgroundColor={filter === 'screen' ? null : 'transparent'} />
+      </ToolBar>
       {loading ? (
         <SpinnerLoading />
       ) : error ? (
@@ -64,7 +72,7 @@ const ScreenPicker = () => {
         </div>
       ) : (
         <div className={styles.sourcesGrid}>
-          {sources.map((src) => (
+          {sources.filter(src => src?.id?.includes(filter)).map((src) => (
             <button
               key={src.id}
               className={styles.sourceCard}

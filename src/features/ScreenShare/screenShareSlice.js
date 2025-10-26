@@ -7,7 +7,8 @@ const screenShareSlice = createSlice({
     isSharing: false,
     selecting: false,     // If picker is open
     error: null,
-    streamDetails: null,         // Optionally store MediaStream here (or ref)
+    streamDetails: null,  
+    streamIcon: null,       // Optionally store MediaStream here (or ref)
   },
   reducers: {
     setScreenSharing: (state, action) => {
@@ -20,6 +21,7 @@ const screenShareSlice = createSlice({
       state.error = action.payload;
     },
     setStreamDetails: (state, action) => {
+      console.log(action.payload)
       state.streamDetails = action.payload;
     },
     clearScreenState: (state) => {
@@ -27,7 +29,11 @@ const screenShareSlice = createSlice({
       state.selecting = false;
       state.error = null;
       state.streamDetails = null;
+      state.streamIcon = null;
     },
+    setStreamIcon: (state, action) => {
+      state.streamIcon = action.payload;
+    }
   },
 });
 
@@ -37,5 +43,6 @@ export const {
   setScreenError,
   setStreamDetails,
   clearScreenState,
+  setStreamIcon
 } = screenShareSlice.actions;
 export default screenShareSlice.reducer;

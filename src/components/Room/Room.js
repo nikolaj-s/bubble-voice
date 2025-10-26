@@ -57,9 +57,9 @@ export const Room = () => {
     }, [isMicrophoneMuted, disable_streams, selectedMicrophone]);
 
     React.useEffect(() => {
-
+        console.log(isScreenSharing)
         if (disable_streams) dispatch(throwScreenShareError("Streams Are Disabled In This Channel"))
-
+      
         handleScreenShare(disable_streams ? false : isScreenSharing);
 
     //eslint-disable-next-line

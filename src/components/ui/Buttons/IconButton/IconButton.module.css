@@ -9,9 +9,9 @@
   border: none;
   outline: none;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: var(--border-radius);
   -webkit-app-region: no-drag;
-  transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out background-color, 0.2s ease-in-out scale, 0.2s ease-in-out translate;
   flex-shrink: 0;
   position: relative;
 }

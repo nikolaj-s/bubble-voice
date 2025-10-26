@@ -3,6 +3,6 @@
     display: flex;
     align-items: center;
     background-color: var(--card-background-color);
-    padding: var(--gap);
+
     border-radius: var(--border-radius);
 }

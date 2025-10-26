@@ -1,14 +1,14 @@
-import React from 'react';
+
 import PropTypes from 'prop-types';
 import styles from './ChannelHeader.module.css';
-import { Hash, Volume1 } from 'lucide-react';
+import { Hash, Volume2 } from 'lucide-react';
 import { PillSpacer } from '../../ui/Spacers/PillSpacer/PillSpacer';
 
 const ChannelHeader = ({ channel_name, channel_description, channel_type, channel_icon, channel_id, expandDescription = () => {} }) => {
   // Determine which icon to display if no custom channel_icon is provided.
   const renderDefaultIcon = () => {
     if (channel_type === 'voice') {
-      return <Volume1 className={styles.defaultIcon} />;
+      return <Volume2 className={styles.defaultIcon} />;
     } else if (channel_type === 'text') {
       return <Hash className={styles.defaultIcon} />;
     }

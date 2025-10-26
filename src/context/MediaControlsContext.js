@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useRef, } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { toggleMicrophone, toggleAudioMute, toggleWebcam, toggleScreenShare } from "../features/Channel/MediaControl/mediaControlSlice"; 
+import { toggleMicrophone, toggleAudioMute, toggleWebcam, toggleScreenShare, stopSharingScreen } from "../features/Channel/MediaControl/mediaControlSlice"; 
 import { useBubbleSounds } from "../hooks/useBubbleSounds";
 
 const MediaControlsContext = createContext(null);
@@ -63,9 +63,13 @@ export const MediaControlsProvider = ({ children }) => {
         if (!loading) dispatch(toggleWebcam(!isWebcamOn));
     //    (isWebcamOn ? playDisable : playEnable)();
     };
-
+console.log(isSharing)
     const handleShareScreen = () => {
+
+        if (isSharing) return dispatch(stopSharingScreen());
+
         if (details?.disable_streams) return;
+
         if (!loading) dispatch(toggleScreenShare(!isScreenSharing));
     //    (isScreenSharing ? playDisable : playEnable)();
     }

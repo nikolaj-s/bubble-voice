@@ -14,6 +14,7 @@ import UserStreamSource from '../UserStreamSource/UserStreamSource';
 import PipWrapper from '../../PipWrapper/PipWrapper';
 import { useNavigate } from 'react-router';
 import { setVoiceChannelFocused } from '../../../features/Channel/VoiceChannel/voiceChannelSlice';
+import { useDebouncedCallback } from '../../../hooks/useDebouncedCallback';
 
 export const RoomUserWrapper = ({ users, disable_streams }) => {
 
@@ -38,10 +39,115 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
     const hideMediaPlayer = useSelector(state => state.mediaPlayerSlice.hideMediaPlayer);
 
     const fullScreen = useSelector(state => state.uiSlice.fullscreen)
-   
+
     let margin = 8;
 
     const ratio = 9 / 16;
+
+   
+
+    const area = (increment, hD, wD, active_streams) => {
+        let i = 0;
+        let w = 0;
+        let h = increment * ratio + (margin * 2);
+        while (i < active_streams.length) {
+            if ((w + increment) > wD) {
+                w = 0;
+                h = h + (increment * ratio) + (margin * 2);
+            }
+            w = w + increment + (margin);
+            i++;
+        }
+        if (h > hD || increment > wD) return false;
+        else return increment;
+    };
+
+    const handleScaling = useCallback((resize = false) => {
+        try {
+
+            if (expanded && !resize) return;
+
+            if (resize) setExpanded(null);
+
+            const parent = document.getElementById('user-streams-wrapper');
+
+            const children = parent.children;
+
+            if (focused === false) {
+                for (const child of children) {
+                    child.style.gridRow = 1;
+                    child.style.gridColumn = 1;
+                    child.style.width = '100%';
+                    child.style.height = '100%';
+
+                    const video = child.querySelector('video');
+
+                    if (video) video.style.objectFit = 'contain'
+                }
+
+                return;
+            }
+
+            const c_count = Array.from(children).filter(c => !c.hidden);
+      
+            let wDimension = parent.offsetWidth;
+            let hDimension = parent.offsetHeight;
+
+            let max = 0;
+            let i = 1;
+
+            while (i < 8000) {
+                let a = area(i, hDimension, wDimension, c_count);
+                if (a === false) {
+                    max = i - 1;
+                    break;
+                }
+                i++;
+            }
+
+            max = max - (margin * 2);
+
+            // Apply scaling to child components and prevent overflow
+            for (const c of children) {
+                c.style.width = `${max}px`;
+                c.style.height = `${(max * ratio)}px`;
+                c.style.margin = '2px';
+                c.style.position = null;
+                c.style.objectFit = 'contain';
+                c.style.borderRadius = null;
+                c.style.gridRow = null;
+                c.style.gridRow = null;
+                c.style.maxWidth = `960px`;
+                c.style.maxHeight = '540px'
+                const v = c.querySelector('video');
+                if (v) {
+                    v.style.objectFit = null;
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }, [expanded, focused]);
+
+    const handleStreamExpansion = (id) => {
+        if (id === expanded) {
+            setExpanded(null);
+        } else {
+            setExpanded(id);
+        }
+    };
+
+    const returnToVoiceChannel = (e) => {
+
+        e.stopPropagation();
+
+        navigate(`/dashboard/server/${server_id}`);
+
+        dispatch(setVoiceChannelFocused(true));
+
+    }
+
+    const { call: debouncedScale, cancel: cancelDebounce } = useDebouncedCallback(handleScaling, 120);
 
     React.useLayoutEffect(() => {
             const parent = document.getElementById('user-streams-wrapper');
@@ -163,141 +269,40 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
     }, [expanded, hideNonVideoUsers, hideUsers, textChannelOpen, hideMediaPlayer, fullScreen, focused]);
 
 
-    React.useLayoutEffect(() => {
-        let observer;
-        let sizeObserver;
-        try {
-            handleScaling();
-            window.removeEventListener('resize', () => handleScaling(true));
+     React.useLayoutEffect(() => {
 
-            const el = document.getElementById('user-streams-wrapper');
-            const config = { childList: true, subtree: false };
+        const el = document.getElementById("user-streams-wrapper");
 
-            observer = new MutationObserver(handleScaling);
-            observer.observe(el, config);
-
-            sizeObserver = new ResizeObserver(handleScaling);
-            sizeObserver.observe(el, config);
-
-            return () => {
-                observer.disconnect();
-                sizeObserver?.disconnect();
-                window.removeEventListener('resize', () => handleScaling(true));
-
-            };
-        } catch (error) {
-            console.log(error);
+        if (!el) {
+            // Fall back to at least run once
+            debouncedScale();
+            return () => cancelDebounce();
         }
+
+        // Run once initially
+        debouncedScale();
+
+        // Stable handlers
+        const onResize = () => debouncedScale(true);
+
+        // Window resize (debounced)
+        window.addEventListener("resize", onResize);
+
+        // MutationObserver (debounced)
+        const mutationObserver = new MutationObserver(() => debouncedScale());
+        mutationObserver.observe(el, { childList: true, subtree: false });
+
+        // ResizeObserver (debounced)
+        const resizeObserver = new ResizeObserver(() => debouncedScale());
+        resizeObserver.observe(el);
 
         return () => {
-            window.removeEventListener('resize', handleScaling);
-            window.onresize = null;
-            observer?.disconnect();
-            sizeObserver?.disconnect();
+            window.removeEventListener("resize", onResize);
+            mutationObserver.disconnect();
+            resizeObserver.disconnect();
+            cancelDebounce();
         };
-    // eslint-disable-next-line
-    }, [focused]);
-
-    const area = (increment, hD, wD, active_streams) => {
-        let i = 0;
-        let w = 0;
-        let h = increment * ratio + (margin * 2);
-        while (i < active_streams.length) {
-            if ((w + increment) > wD) {
-                w = 0;
-                h = h + (increment * ratio) + (margin * 2);
-            }
-            w = w + increment + (margin);
-            i++;
-        }
-        if (h > hD || increment > wD) return false;
-        else return increment;
-    };
-
-    const handleScaling = useCallback((resize = false) => {
-        try {
-
-            if (expanded && !resize) return;
-
-            if (resize) setExpanded(null);
-
-            const parent = document.getElementById('user-streams-wrapper');
-
-            const children = parent.children;
-
-            if (focused === false) {
-                for (const child of children) {
-                    child.style.gridRow = 1;
-                    child.style.gridColumn = 1;
-                    child.style.width = '100%';
-                    child.style.height = '100%';
-
-                    const video = child.querySelector('video');
-
-                    if (video) video.style.objectFit = 'contain'
-                }
-
-                return;
-            }
-
-            const c_count = Array.from(children).filter(c => !c.hidden);
-      
-            let wDimension = parent.offsetWidth;
-            let hDimension = parent.offsetHeight;
-
-            let max = 0;
-            let i = 1;
-
-            while (i < 8000) {
-                let a = area(i, hDimension, wDimension, c_count);
-                if (a === false) {
-                    max = i - 1;
-                    break;
-                }
-                i++;
-            }
-
-            max = max - (margin * 2);
-
-            // Apply scaling to child components and prevent overflow
-            for (const c of children) {
-                c.style.width = `${max}px`;
-                c.style.height = `${(max * ratio)}px`;
-                c.style.margin = '2px';
-                c.style.position = null;
-                c.style.objectFit = 'contain';
-                c.style.borderRadius = null;
-                c.style.gridRow = null;
-                c.style.gridRow = null;
-                c.style.maxWidth = `960px`;
-                c.style.maxHeight = '540px'
-                const v = c.querySelector('video');
-                if (v) {
-                    v.style.objectFit = null;
-                }
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }, [expanded, focused]);
-
-    const handleStreamExpansion = (id) => {
-        if (id === expanded) {
-            setExpanded(null);
-        } else {
-            setExpanded(id);
-        }
-    };
-
-    const returnToVoiceChannel = (e) => {
-
-        e.stopPropagation();
-
-        navigate(`/dashboard/server/${server_id}`);
-
-        dispatch(setVoiceChannelFocused(true));
-
-    }
+    }, [focused, debouncedScale, cancelDebounce]);
 
     return (
         <PipWrapper isPip={!focused} title='Current Stream' onClose={returnToVoiceChannel} >

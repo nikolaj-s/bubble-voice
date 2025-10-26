@@ -6,26 +6,27 @@ export const themes = {
     '--background-color': '#12181d',
     '--card-background-color': '#1c2329',
     '--text-color': '#dff7f5',
-    '--button-background': '#5dd9d4',
-    '--button-hover': '#4fb8b4',    // darker for clarity
-    '--error-color': '#ee9090',
-    '--success-color': '#a3e7cb',
+    '--button-background': '#0f4164ff',    // darker teal for strong contrast vs light text
+    '--button-hover': '#176196ff',
+    '--error-color': '#e51212ff',
+    '--success-color': '#30c113ff',
     '--overlay-color': 'rgba(18, 24, 29, 0.7)',
   },
 
   black: {
-    '--primary-color':         '#000000',        // pure black base
-    '--secondary-color':       '#1a1a1a',        // very dark grey for subtle UI elements
-    '--accent-color':          '#1e90ff',        // electric blue accent
-    '--background-color':      '#000000',        // screen‐off blacks
-    '--card-background-color': '#121212',        // slightly lifted cards
-    '--text-color':            '#e0e0e0',        // soft white for legibility
-    '--button-background':     '#1e90ff',        // same as accent
-    '--button-hover':          '#187bcd',        // darker blue hover
-    '--error-color':           '#ff4c4c',        // vivid red
-    '--success-color':         '#4caf50',        // bright green
-    '--overlay-color':         'rgba(0, 0, 0, 0.85)', // deep overlay
+    '--primary-color':         '#000000',
+    '--secondary-color':       '#1a1a1a',
+    '--accent-color':          '#1e90ff',
+    '--background-color':      '#000000',
+    '--card-background-color': '#121212',
+    '--text-color':            '#e0e0e0',
+    '--button-background':     '#0b4ea2', // deeper blue for light text
+    '--button-hover':          '#093f84',
+    '--error-color':           '#ff4c4c',
+    '--success-color':         '#4caf50',
+    '--overlay-color':         'rgba(0, 0, 0, 0.85)',
   },
+
   carbon: {
     '--primary-color': '#1a1a1a',
     '--secondary-color': '#2b2b2b',
@@ -33,12 +34,13 @@ export const themes = {
     '--background-color': '#0e0e0f',
     '--card-background-color': '#1c1d1f',
     '--text-color': '#d4d4d4',
-    '--button-background': '#3a75a3',
-    '--button-hover': '#31638a',    // darker accent
+    '--button-background': '#1e4f77',   // darker steel blue for light text
+    '--button-hover': '#183f5f',
     '--error-color': '#d04f4f',
     '--success-color': '#5fa88d',
     '--overlay-color': 'rgba(14, 14, 15, 0.7)',
   },
+
   charcoal: {
     '--primary-color': '#474d56',
     '--secondary-color': '#40444b',
@@ -48,11 +50,12 @@ export const themes = {
     '--link-color': '#aeb7f5',
     '--overlay-color': 'rgba(44,47,51,0.85)',
     '--accent-color': '#99a9f9',
-    '--button-background': '#6a75f8',
-    '--button-hover': '#5a63d3',    // darker for contrast
+    '--button-background': '#3942c5',   // deeper indigo for white text
+    '--button-hover': '#2f36a2',
     '--error-color': '#ff7b7b',
     '--success-color': '#69f292',
   },
+
   solarizedNight: {
     '--primary-color': '#073642',
     '--secondary-color': '#268bd2',
@@ -60,12 +63,13 @@ export const themes = {
     '--background-color': '#00212b',
     '--card-background-color': '#083040',
     '--text-color': '#fdf6e3',
-    '--button-background': '#268bd2',
-    '--button-hover': '#2076b2',    // darker for visibility
+    '--button-background': '#0f4d78',   // deep cyan-blue for light text
+    '--button-hover': '#0c3f62',
     '--error-color': '#dc322f',
     '--success-color': '#859900',
     '--overlay-color': 'rgba(7, 54, 66, 0.87)',
   },
+
   obsidianPetal: {
     '--primary-color': '#18171d',
     '--secondary-color': '#312c3f',
@@ -73,12 +77,13 @@ export const themes = {
     '--background-color': '#0e0d11',
     '--card-background-color': '#201c29',
     '--text-color': '#e8e1f2',
-    '--button-background': '#b37edf',
-    '--button-hover': '#986bbd',    // darker accent
+    '--button-background': '#5c3a8d',   // deep violet for light text
+    '--button-hover': '#4b2f73',
     '--error-color': '#f59bb3',
     '--success-color': '#b4edcc',
     '--overlay-color': 'rgba(14, 13, 17, 0.7)',
   },
+
   sunsetSerotonin: {
     '--primary-color': '#2e1b1f',
     '--secondary-color': '#523434',
@@ -86,12 +91,13 @@ export const themes = {
     '--background-color': '#1a1214',
     '--card-background-color': '#2a1c1f',
     '--text-color': '#fce9e9',
-    '--button-background': '#ff7171',
-    '--button-hover': '#d86060',    // darker for readability
+    '--button-background': '#a13636',   // darker red for light text
+    '--button-hover': '#852c2c',
     '--error-color': '#ff4c4c',
     '--success-color': '#f5b97f',
     '--overlay-color': 'rgba(26, 18, 20, 0.7)',
   },
+
   velvetAsh: {
     '--primary-color': '#1a1715',
     '--secondary-color': '#2f2926',
@@ -99,12 +105,13 @@ export const themes = {
     '--background-color': '#0e0c0b',
     '--card-background-color': '#221d1a',
     '--text-color': '#e7deda',
-    '--button-background': '#b36050',
-    '--button-hover': '#985244',    // darker for strong contrast
+    '--button-background': '#6b3227',   // deeper terracotta for light text
+    '--button-hover': '#55281f',
     '--error-color': '#c96363',
     '--success-color': '#c6a779',
     '--overlay-color': 'rgba(14, 12, 11, 0.7)',
   },
+
   porcelainBloom: {
     '--primary-color': '#f1f0f2',
     '--secondary-color': '#dedcdf',
@@ -112,12 +119,13 @@ export const themes = {
     '--background-color': '#eae8ee',
     '--card-background-color': '#f6f5f8',
     '--text-color': '#3a3544',
-    '--button-background': '#c7afe9',
-    '--button-hover': '#a995c6',    // darker for clarity
+    '--button-background': '#d6c8f2',   // lighter lavender for dark text
+    '--button-hover': '#b9a6e3',        // slightly darker for hover
     '--error-color': '#e57b91',
     '--success-color': '#a6d6bb',
     '--overlay-color': 'rgba(255, 255, 255, 0.65)',
   },
+
   neonRitual: {
     '--primary-color': '#120011',
     '--secondary-color': '#3a003a',
@@ -125,12 +133,13 @@ export const themes = {
     '--background-color': '#0a000b',
     '--card-background-color': '#1a0022',
     '--text-color': '#fef3fc',
-    '--button-background': '#d800a6',
-    '--button-hover': '#b7008d',    // darker vibrant hover
+    '--button-background': '#7a0066',   // deep magenta for light text
+    '--button-hover': '#630052',
     '--error-color': '#ff6a6a',
     '--success-color': '#58e0d6',
     '--overlay-color': 'rgba(10, 0, 11, 0.7)',
   },
+
   mossCircuit: {
     '--primary-color': '#1c2a20',
     '--secondary-color': '#3c4d3c',
@@ -138,23 +147,24 @@ export const themes = {
     '--background-color': '#111a12',
     '--card-background-color': '#1d2c1b',
     '--text-color': '#e5f0dd',
-    '--button-background': '#7cb072',
-    '--button-hover': '#699561',    // darker accent hover
+    '--button-background': '#3e6a37',   // darker moss for light text
+    '--button-hover': '#32562d',
     '--error-color': '#d3766e',
     '--success-color': '#a9d4a0',
     '--overlay-color': 'rgba(17, 26, 18, 0.7)',
   },
+
   green: {
-  '--primary-color': '#4c5844',          // dark green-black background for headers
-  '--secondary-color': '#968732',        // slightly lighter dark green for cards/panels
-  '--accent-color': '#968732',           // bright neon green highlight
-  '--background-color': '#3f4738',       // main background dark green/black
-  '--card-background-color': '#4c5844',  // card backgrounds slightly lighter
-  '--text-color': '#eff6ee',             // pale green text
-  '--button-background': '#968732',      // green buttons
-  '--button-hover': '#c8b441ff',           // brighter green on hover
-  '--error-color': '#ff6666',            // red error messages
-  '--success-color': '#66ff66',          // green success
-  '--overlay-color': 'rgba(10, 26, 10, 0.7)', // semi-transparent overlay
+    '--primary-color': '#4c5844',
+    '--secondary-color': '#968732',
+    '--accent-color': '#968732',
+    '--background-color': '#3f4738',
+    '--card-background-color': '#4c5844',
+    '--text-color': '#eff6ee',
+    '--button-background': '#4d4a18',   // dark olive for light text
+    '--button-hover': '#3f3c13',
+    '--error-color': '#ff6666',
+    '--success-color': '#66ff66',
+    '--overlay-color': 'rgba(10, 26, 10, 0.7)',
   }
 };
