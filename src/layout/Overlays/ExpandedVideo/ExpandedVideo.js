@@ -17,7 +17,7 @@ export const ExpandedVideo = () => {
 
     return (
         <ExpandedMediaWrapper context={{...video, type: 'video'}} onClose={close} >
-            <UniversalVideoPlayer autoplay={true} src={video.url || video.src} />
+            <UniversalVideoPlayer maxWidth={800} autoplay={true} src={video.url || video.src} />
         </ExpandedMediaWrapper>
     )
 }

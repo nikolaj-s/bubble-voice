@@ -14,17 +14,17 @@ export const themes = {
   },
 
   black: {
-    '--primary-color':         '#000000',
-    '--secondary-color':       '#1a1a1a',
-    '--accent-color':          '#1e90ff',
-    '--background-color':      '#000000',
-    '--card-background-color': '#121212',
-    '--text-color':            '#e0e0e0',
-    '--button-background':     '#0b4ea2', // deeper blue for light text
-    '--button-hover':          '#093f84',
-    '--error-color':           '#ff4c4c',
-    '--success-color':         '#4caf50',
-    '--overlay-color':         'rgba(0, 0, 0, 0.85)',
+    '--primary-color':         '#0f0f0f',   // deep near-black
+    '--secondary-color':       '#181818',   // Spotify-style panel shade
+    '--accent-color':          '#3b82f6',   // blue accent (kept blue, not green)
+    '--background-color':      '#000000ff',   // classic Spotify background
+    '--card-background-color': '#181818',   // cards/rows
+    '--text-color':            '#e5e5e5',   // soft off-white for contrast
+    '--button-background':     '#2f6fe4',   // blue button base
+    '--button-hover':          '#245dd0',   // darker blue on hover
+    '--error-color':           '#ff4c4c',   // readable red on dark UI
+    '--success-color':         '#1db954',   // Spotify green for success only
+    '--overlay-color':         'rgba(0, 0, 0, 0.88)', // richer modal/backdrop
   },
 
   carbon: {

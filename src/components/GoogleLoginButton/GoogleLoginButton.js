@@ -5,10 +5,17 @@ import { signInWithGoogle } from '../../features/Auth/Thunks/signInWithGoogle';
 
 import styles from './GoogleLoginButton.module.css';
 import TextButton from '../ui/Buttons/TextButton/TextButton';
+import { useNavigate } from 'react-router';
+import { safeRedirect } from '../../lib/handlers/safeRedirect';
 
 export default function GoogleLoginButton() {
+
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
+
   const [loading, setLoading] = useState(false);
+
   const [error, setError] = useState(null);
 
   // Helpers to detect electron API surface that you might have exposed in preload.js
@@ -42,7 +49,7 @@ export default function GoogleLoginButton() {
   }, [dispatch]);
 
   const handleFailurePayload = useCallback((payload) => {
-    console.log(payload)
+
     setLoading(false);
     const message = (payload && (payload.error || payload.message)) ? (payload.error || payload.message) : 'OAuth failed';
     setError(typeof message === 'string' ? message : JSON.stringify(message));
@@ -123,6 +130,26 @@ export default function GoogleLoginButton() {
     }
   }, [hasElectronAuth, hasLegacyIpc]);
 
+  const handleWebOauthSignIn = (credential) => {
+
+    dispatch(signInWithGoogle(credential)).unwrap()
+    .catch(error => false)
+    .then(() => {
+
+      const redirect = sessionStorage.getItem('redirectURL');
+            
+      if (!redirect) return;
+
+      const url = safeRedirect(redirect);
+
+      navigate(url);
+
+      sessionStorage.removeItem('redirectURL');
+
+    })
+
+  } 
+
   // UI: if an electron environment is present render a native button; otherwise render the GoogleLogin web component
   return (
     <div style={{ borderRadius: 10, overflow: 'hidden', width: '100%' }}>
@@ -143,7 +170,7 @@ export default function GoogleLoginButton() {
           onSuccess={credentialResponse => {
             // credentialResponse.credential is an ID token
             if (credentialResponse && credentialResponse.credential) {
-              dispatch(signInWithGoogle(credentialResponse.credential));
+              handleWebOauthSignIn(credentialResponse.credential);
             } else {
               console.error('Google Login: no credential in response', credentialResponse);
             }

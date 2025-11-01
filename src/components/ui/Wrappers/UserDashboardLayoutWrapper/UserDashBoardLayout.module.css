@@ -2,18 +2,21 @@
     display: grid;
     border-top-left-radius: 20px;
     grid-template-columns: 250px minmax(200px, 1fr);
-    gap: 1px;
+    gap: 5px;
     border-top-left-radius: 15px;
+    margin-right: 5px;
 }
 
 .container section {
     width: 100%;
     background-color: var(--primary-color);
-    height: calc(100svh - 40px);
+    height: calc(100svh - 48px);
+    border-radius: var(--border-radius);
 }
 
 @media screen and (max-width: 730px) {
     .container {
         grid-template-columns: 1fr;
+        margin-right: 0px;
     }
 }

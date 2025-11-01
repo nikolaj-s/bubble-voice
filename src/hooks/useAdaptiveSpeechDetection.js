@@ -16,13 +16,13 @@ export function useAdaptiveSpeechDetection({
   noiseSuppression = true,
   autoGainControl = false,
   // initial multiplier applied to noiseFloor to form start threshold
-  initialFactor = 1.6,
+  initialFactor = 1,
   // smoothing for noiseFloor EMA (0..1). Closer to 1 => slower change.
   noiseSmoothing = 0.96,
   // minimum time energy must remain above startThreshold to consider "start"
   minActiveMs = 120,
   // time in ms to keep considered "speaking" after energy drops (hangover)
-  endHoldMs = 200,
+  endHoldMs = 500,
   // how often to adapt factor heuristically (in checks)
   adaptRate = 0.02,
   // bounds for adaptive factor

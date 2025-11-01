@@ -18,7 +18,7 @@
 }
 
 .button:active {
-    scale: 0.98;
+    scale: 0.99;
     translate: 0px 2px;
 }
 
@@ -27,7 +27,7 @@
 }
 
 .active {
-    background-color: var(--secondary-color);
+    background-color: var(--button-hover);
     cursor: default;
 }
 

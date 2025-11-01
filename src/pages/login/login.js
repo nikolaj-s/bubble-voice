@@ -12,6 +12,7 @@ import Label from "../../components/ui/Titles/Label/Label";
 import { useNavigate } from "react-router";
 import { LineSpacer } from "../../components/ui/Spacers/LineSpacer/LineSpacer";
 import GoogleLoginButton from "../../components/GoogleLoginButton/GoogleLoginButton";
+import { safeRedirect } from "../../lib/handlers/safeRedirect";
 
 const Login = () => {
 
@@ -32,7 +33,20 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     
-    dispatch(signinThunk({email, password}));
+    dispatch(signinThunk({email, password})).unwrap()
+    .catch(err => false)
+    .then(() => {
+      const redirect = sessionStorage.getItem('redirectURL');
+      
+      if (!redirect) return;
+
+      const url = safeRedirect(redirect);
+
+      navigate(url);
+
+      sessionStorage.removeItem('redirectURL');
+    })
+
   };
 
   const redirect = () => {

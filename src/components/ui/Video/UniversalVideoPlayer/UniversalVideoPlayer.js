@@ -36,7 +36,7 @@ const getFormattedEmbedURL = (src) => {
   }
 };
 
-export const UniversalVideoPlayer = ({ src, autoplay = false }) => {
+export const UniversalVideoPlayer = ({ src, autoplay = false, maxWidth }) => {
 
   const dispatch = useDispatch();
 
@@ -136,6 +136,7 @@ export const UniversalVideoPlayer = ({ src, autoplay = false }) => {
 
   return (
     <div
+    style={{maxWidth}}
     className={`${styles.playerWrapper} ${isIdle ? styles.idle : ''}`}
       onMouseMove={resetHideTimeout}
       onMouseEnter={() => setHovering(true)}
