@@ -28,7 +28,7 @@ const ContextRangeInput = ({ label, value = 0, onChange, min = 0, max = 100 }) =
     }, []);
 
     return (
-        <div className={styles.rangeContainer}>
+        <div onClick={(e) => {e.stopPropagation()}} onMouseUp={(e) => {e.stopPropagation()}} className={styles.rangeContainer}>
             <p>{label}</p>
             <VolumeSlider width={'100%'} value={localValue} onChange={(value) => {setLocalValue(value)}} label={localValue * 100} min={min} max={max} />
         </div>

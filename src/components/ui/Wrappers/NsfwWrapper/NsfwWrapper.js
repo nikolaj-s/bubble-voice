@@ -3,6 +3,7 @@ import React from 'react';
 import styles from './NsfwWrapper.module.css';
 import { TriangleAlert } from 'lucide-react';
 import { useSelector } from 'react-redux';
+import { Subtitle } from '../../Titles/Subtitle/Subtitle';
 
 export const NsfwWrapper = ({children, nsfw: obj = {}}) => {
 
@@ -21,7 +22,7 @@ export const NsfwWrapper = ({children, nsfw: obj = {}}) => {
             <div onClick={(e) => {e.stopPropagation(); toggleFilter(false)}} className={styles.filter}>
                 <TriangleAlert size={30} color='var(--error-color)' />
                 <h4>18+</h4>
-                <p>Click To Reveal</p>
+                <Subtitle>Click to reveal</Subtitle>
             </div>
             : null}
         </div>

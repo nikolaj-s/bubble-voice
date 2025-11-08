@@ -7,11 +7,11 @@
   
   .input {
     padding: 10px;
-    border: 2px solid var(--background-color); /* Using Bubble Blue for the border */
+    border: 2px solid var(--input-background-color); /* Using Bubble Blue for the border */
     border-radius: 10px;
     font-size: 16px;
     color: var(--text-color); /* Light grayish text color */
-    background-color: var(--background-color); /* Dark Slate background */
+    background-color: var(--input-background-color); /* Dark Slate background */
     transition: border-color 0.3s ease-in-out;
     outline: none;
   }

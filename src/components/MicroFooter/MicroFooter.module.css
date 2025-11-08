@@ -5,7 +5,6 @@
   justify-content: center;
   width: calc(100% - 16px); /* Compact width */
   padding: 16px 8px;
-  background: var(--background-color);
   color: var(--text-color);
   font-family: var(--font-family);
   font-size: 13px;
@@ -17,10 +16,11 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 10px;
+  opacity: 0.75;
 }
 
 .link {
-  color: var(--secondary-color);
+  color: var(--text-color);
   text-decoration: none;
   transition: color 0.2s ease;
   text-align: center;

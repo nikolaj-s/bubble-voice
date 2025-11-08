@@ -10,6 +10,7 @@ import PlayPauseFlash from '../../PlayPauseFlash/PlayPauseFlash';
 import RedditAudioSrc from '../../../RedditAudioSrc/RedditAudioSrc';
 import { useDispatch, useSelector } from 'react-redux';
 import { setVideoVolume } from '../../../../features/Settings/Sound/soundSlice';
+import VideoTimeDisplay from '../../../VideoTimeDisplay/VideoTimeDisplay';
 
 const getFormattedEmbedURL = (src) => {
   try {
@@ -195,6 +196,7 @@ export const UniversalVideoPlayer = ({ src, autoplay = false, maxWidth }) => {
                   onChange={handleVolumeChange}
                   />
                 </div>
+                <VideoTimeDisplay currentTime={progress} duration={playerRef?.current?.getDuration()} />
               </div>
             </div>
           )}

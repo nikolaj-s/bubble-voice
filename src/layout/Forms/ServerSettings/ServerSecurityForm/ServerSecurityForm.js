@@ -9,8 +9,14 @@ import ToggleSwitch from '../../../../components/ui/Inputs/ToggleSwitch/ToggleSw
 import TextInput from '../../../../components/ui/Inputs/TextInput/TextInput'
 import PasswordRequirements from '../../../../components/ui/PasswordRequirements/PasswordRequirements'
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { triggerAlert } from '../../../../features/Alerts/alertsSlice'
+import { ApplyChangesPopup } from '../../../../components/ApplyChangesPopup/ApplyChangesPopup'
+import { resetServerPassword } from '../../../../features/ServerSecurity/thunks/resetServerPassword'
 
 export const ServerSecurityForm = ({permissions}) => {
+
+    const dispatch = useDispatch();
 
     const [currentPassword, setCurrentPassword] = useState("");
 
@@ -18,10 +24,34 @@ export const ServerSecurityForm = ({permissions}) => {
 
     const [confirmPassword, setConfirmPassword] = useState("");
 
+    const [isValid, setIsValid] = useState(false);
+
+    const handleResetPassword = async () => {
+
+        if (!isValid) return dispatch(triggerAlert("New password is invalid", 'error'));
+
+        if (newPassword !== confirmPassword) return dispatch(triggerAlert("New password and password confirmation do not match", 'error'));
+
+        if (newPassword === currentPassword) return dispatch(triggerAlert("New password cannot be the same as the current password", 'error'))
+
+        await dispatch(resetServerPassword({newPassword, currentPassword, confirmPassword})).unwrap().catch(() => true).finally((data) => {
+            console.log(data);
+
+
+            // setCurrentPassword("");
+
+            // setNewPassword("");
+
+            // setConfirmPassword("");
+
+            // dispatch(triggerAlert("Password Updated", 'success'));
+        })
+
+    }
 
     return (
         <NotAuthorized permission={permissions?.user_can_manage_security_settings}>
-            <LoadingErrorFormWrapper sliceName='serverSettingsSlice'>
+            <LoadingErrorFormWrapper sliceName='serverSecuritySlice'>
                 <Header text='Security' />
                 <LineSpacer />
                 <Label label='Make Invite Only' />
@@ -31,10 +61,15 @@ export const ServerSecurityForm = ({permissions}) => {
                 {permissions?.user_can_change_password &&
                 <>
                 <Label label='Change Bubble Password' />
-                <TextInput value={currentPassword} onChange={setCurrentPassword} type='password' placeholder={'password'} />
-                <PasswordRequirements newPassword={newPassword} />
+                <TextInput value={currentPassword} onChange={setCurrentPassword} type='password' placeholder={'current password'} />
+                <PasswordRequirements password={newPassword} isValid={setIsValid} />
                 <TextInput value={newPassword} onChange={setNewPassword} placeholder='new password' />
+             
                 <TextInput value={confirmPassword} onChange={setConfirmPassword} placeholder='confirm new password' />
+                {currentPassword && isValid && (newPassword === confirmPassword) && (<ApplyChangesPopup onApply={handleResetPassword} onClearChanges={() => {
+                    setNewPassword("")
+                    setConfirmPassword("")
+                }} />)}
                 </>
                 }
             </LoadingErrorFormWrapper>

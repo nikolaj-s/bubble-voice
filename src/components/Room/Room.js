@@ -15,6 +15,7 @@ import { useScreenShare } from '../../hooks/useScreenShare';
 import { UserStreamStateProvider } from '../../providers/UserStreamStateProvider/UserStreamStateProvider';
 import { playSoundEffect } from '../../features/SoundEffects/soundEffectsSlice';
 import { useAdaptiveSpeechDetection } from '../../hooks/useAdaptiveSpeechDetection';
+import { clearScreenState } from '../../features/ScreenShare/screenShareSlice';
 
 export const Room = () => {
     
@@ -61,6 +62,10 @@ export const Room = () => {
         if (disable_streams) dispatch(throwScreenShareError("Streams Are Disabled In This Channel"))
       
         handleScreenShare(disable_streams ? false : isScreenSharing);
+
+        return () => {
+            dispatch(clearScreenState())
+        }
 
     //eslint-disable-next-line
     }, [disable_streams, isScreenSharing])

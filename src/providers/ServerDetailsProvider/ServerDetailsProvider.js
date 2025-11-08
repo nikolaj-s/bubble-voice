@@ -14,6 +14,9 @@ import { useNavigate, useParams } from 'react-router';
 import { deletePermission, setPermissions, updatePermissions } from '../../features/ServerPermissions/serverPermissionsSlice';
 
 import { removeServerGroupFromUsers } from '../../features/ServerUsers/serverUsersSlice';
+import { triggerAlert } from '../../features/Alerts/alertsSlice';
+import { setJoinServerError, setSelectedServerToJoin } from '../../features/JoinServer/joinServerSlice';
+import { setOverlay } from '../../features/Overlay/overlaySlice';
 
 export const ServerDetailsProvider = ({children}) => {
 
@@ -53,6 +56,22 @@ export const ServerDetailsProvider = ({children}) => {
 
                 return {error: true}
             });
+
+            if (data.not_a_member) {
+
+                if (data.server) {
+
+                    dispatch(setJoinServerError(`You’re not part of ${data.server.server_name} — yet. Join now to connect, chat, and see what’s happening inside.`))
+
+                    dispatch(setSelectedServerToJoin(data.server));
+
+                    dispatch(setOverlay('joinServer'));
+                } else {
+                    dispatch(triggerAlert("Unexpected Error Occurred", 'error'))
+                }
+
+                return navigate(`/dashboard`)
+            }
           
             if (data.details) {
 

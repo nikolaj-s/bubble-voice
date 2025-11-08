@@ -24,7 +24,7 @@
   }
 
   .themeButton:hover {
-    background-color: var(--background-color);
+    background-color: var(--button-hover);
   }
   
   .active {

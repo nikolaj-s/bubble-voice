@@ -75,7 +75,7 @@ export const Server = () => {
                     <CloseMobileMenu />
                     <section 
                     style={{
-                        height: window?.electron?.ipcRenderer ? 'calc(100svh - 70px)' : null
+                        height: window?.electron?.ipcRenderer ? 'calc(100svh - 75px)' : null
                     }}
                     className={`${styles.sectionOne} ${isChannelMenuOpen ? styles.sectionOneMobile : ''} ${currentVoiceChannel ? styles.inVoiceChannel : ''}`}
                     >
@@ -91,10 +91,12 @@ export const Server = () => {
                     </section>
                     <section 
                     style={{
-                        height: fullscreen ? '100vh' : window?.electron?.ipcRenderer ? 'calc(100svh - 70px)' : null
+                        height: fullscreen ? '100vh' : window?.electron?.ipcRenderer ? 'calc(100svh - 75px)' : null
                     }}
                     className={`${styles.sectionTwo} ${fullscreen ? styles.fullscreen : ''}`}>
-                        <div className={styles.routeWrapper}>
+                        <div style={{
+                            opacity: focused && currentVoiceChannel ? 0 : null
+                        }} className={styles.routeWrapper}>
                             <Outlet  />
                         </div>
                         {currentVoiceChannel && (
@@ -103,7 +105,7 @@ export const Server = () => {
                     </section>
                     <section 
                     style={{
-                        height: window?.electron?.ipcRenderer ? 'calc(100svh - 70px)' : null
+                        height: window?.electron?.ipcRenderer ? 'calc(100svh - 75px)' : null
                     }}
                     className={`${styles.sectionThree} ${isUserMenuOpen ? styles.sectionThreeMobile : ''} ${hideUsers ? styles.hideUsers : ''}`}>
                         <ServerUsersProvider>

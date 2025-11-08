@@ -76,6 +76,7 @@ const ContextMenuButtonWithSubmenu = ({
         <>
             {/* trigger */}
             <div
+                onClick={(e) => {e.stopPropagation()}}
                 ref={buttonRef}
                 onMouseEnter={openMenu}
                 onMouseLeave={closeMenu}

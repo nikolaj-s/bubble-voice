@@ -3,7 +3,6 @@
   position: relative;
   height: calc(100% - 20px);
   width:calc(100% - 20px);
-  background: var(--primary-color);
   color: var(--text-color);
   scroll-behavior: smooth;
   /* Optional: nice rounded edges */

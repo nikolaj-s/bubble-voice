@@ -11,7 +11,7 @@ export const ConversationProvider = () => {
 
     const dispatch = useDispatch();
 
-    const conversations = useSelector(state => state.conversationsSlice.conversations);
+    const {conversations, isOpen} = useSelector(state => state.conversationsSlice);
 
     const currentConversation = useSelector(state => state.conversationSlice.selectedConversation);
 
@@ -25,9 +25,13 @@ export const ConversationProvider = () => {
 
     const notificationsMutedRef = useRef(muteNotifications);
 
+    const conversationsOpenRef = useRef();
+
     React.useEffect(() => {notificationsMutedRef.current = muteNotifications}, [muteNotifications]);
 
     React.useEffect(() => {currentConversationRef.current = currentConversation}, [currentConversation]);
+
+    React.useEffect(() => {conversationsOpenRef.current = isOpen}, [isOpen]);
 
     React.useEffect(() => {
         conversationRef.current = conversations;
@@ -47,7 +51,7 @@ export const ConversationProvider = () => {
 
             dispatch(updateConversationTimeStamp(message));
 
-            if (currentConversationRef?.current?._id !== message.conversation_id) {
+            if (currentConversationRef?.current?._id !== message.conversation_id || !conversationsOpenRef.current) {
 
                 if (!notificationsMutedRef.current) dispatch(playSoundEffect('newMessage'));
            

@@ -16,6 +16,7 @@
     --border-radius: 8px;
     --gap: 10px;
     --padding: 10px;
+    --input-background-color: #223037;
 }
 
 .App {
@@ -24,7 +25,7 @@
     height: var(--app-height);
     position: relative;
     box-sizing: border-box;
-    background-color: var(--background-color);
+    background: var(--background-color);
     color: var(--text-color);
     font-family: var(--font-family);
     max-height: 100svh !important;

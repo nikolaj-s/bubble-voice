@@ -146,7 +146,7 @@ export const useScreenShare = ({ produce, closeProducer }) => {
 
         // 2) attach / produce
         const videoTrack = await attachAndProduceTracks(mediaStream);
-
+      
         // 3) set state
         dispatch(setScreenSharing(true));
         dispatch(

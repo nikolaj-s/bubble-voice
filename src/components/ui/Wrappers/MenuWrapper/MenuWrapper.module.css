@@ -42,7 +42,7 @@
   }
   
   .activeNavButton {
-    background-color: var(--secondary-color);
+    background-color: var(--button-hover);
     cursor: default;
   }
   

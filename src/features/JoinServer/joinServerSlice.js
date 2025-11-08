@@ -19,6 +19,9 @@ const joinServerSlice = createSlice({
         },
         setServerToJoinPassword: (state, action) => {
             state.password = action.payload;
+        },
+        setJoinServerError: (state, action) => {
+            state.error = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -39,6 +42,6 @@ const joinServerSlice = createSlice({
     }
 })
 
-export const {setSelectedServerToJoin, setServerToJoinPassword} = joinServerSlice.actions;
+export const {setSelectedServerToJoin, setServerToJoinPassword, setJoinServerError} = joinServerSlice.actions;
 
 export default joinServerSlice.reducer;

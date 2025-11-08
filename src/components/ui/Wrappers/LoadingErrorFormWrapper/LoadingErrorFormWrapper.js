@@ -8,6 +8,7 @@ import ErrorPopup from '../../../Error/ErrorPopup/ErrorPopup'
 
 import { AnimatePresence } from 'framer-motion'
 import { SettingsSkeletonLoader } from '../../Loading/SettingsSkeletonLoader/SettingsSkeletonLoader'
+import Portal from '../../../Portal/Portal'
 
 export const LoadingErrorFormWrapper = ({children, sliceName = "", initialLoading}) => {
 
@@ -34,11 +35,14 @@ export const LoadingErrorFormWrapper = ({children, sliceName = "", initialLoadin
             <AnimatePresence>
             {loading ? <SpinnerLoading key={'loading-spinner'} /> : null}
             {displayError ? 
-            <ErrorPopup 
-            key={'error-pop-up'}
-            errorMessage={displayError}
-            onClose={() => setDisplayError(null)}
-            />: null}
+            <Portal>
+                <ErrorPopup 
+                key={'error-pop-up'}
+                errorMessage={displayError}
+                onClose={() => setDisplayError(null)}
+                />
+            </Portal>
+            : null}
             </AnimatePresence>
             </>
         )

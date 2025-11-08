@@ -16,10 +16,10 @@
     flex-shrink: 0;
     gap: 5px;
     position: relative;
-    background-color: var(--background-color);
+    background: var(--input-background-color);
     border-radius: var(--border-radius);
     padding: 0px 10px;
-    border: 2px solid var(--background-color);
+    border: 2px solid var(--input-background-color);
 }
 
 .error-message {
@@ -31,8 +31,6 @@
 .input-wrapper {
     display: flex;
     align-items: center;
-    background: var(--background-color);
-    border: 2px solid var(--background-color);
     padding: 15px;
     width: calc(100% - 4px);
     border-radius: var(--border-radius);
@@ -60,7 +58,9 @@
     box-sizing: content-box;
     padding: 0;
     margin: 0;
+    outline: none;
     display: block; /* Fix inline behavior affecting height */
+    border: none;
 }
 
 

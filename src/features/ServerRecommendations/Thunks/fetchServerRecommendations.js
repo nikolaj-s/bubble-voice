@@ -20,7 +20,7 @@ export const fetchServerRecommendations = createAsyncThunk(
 
         const now = Date.now();
         const ageMs = now - cachedAt;
-        const isStale = ageMs > 1000 * 60 * 60 * 12; // 3 hours
+        const isStale = ageMs > 1000 * 60 * 60 * 3; // 3 hours
         const mediaOfTheDayAge = mediaOfTheDayDate
           ? now - new Date(mediaOfTheDayDate).getTime()
           : Infinity;

@@ -35,6 +35,7 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
             {isDifferentDay && !inSearch && (<Spacer date={message.formattedDate} />)}
             <LongPressGestureWrapper onTouchContext={openCtx}>
                 <div 
+             
                 id={`message-id-${message._id}`}
                 data-context={JSON.stringify({...message, type: type ? `${type}-message` : isReply ? 'reply-message' : 'message', inSearch})}
                 style={{

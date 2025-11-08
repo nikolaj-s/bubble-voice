@@ -15,6 +15,7 @@ import { ToolBar } from '../../../components/ui/Wrappers/ToolBar/ToolBar';
 
 import ContentHeader from '../../../components/Headers/ContentHeader/ContentHeader';
 import ScrollLoadWrapper from '../../../components/ui/Wrappers/ScrollLoadWrapper/ScrollLoadWrapper';
+import { ChannelBackground } from '../../../components/ChannelBackground/ChannelBackground';
 
 export const WidgetsOverlay = ({close}) => {
 
@@ -70,9 +71,16 @@ export const WidgetsOverlay = ({close}) => {
     }
 
     const channelDetails = useSelector(state => state.channelsSlice.channels[channel])
-
+console.log(channelDetails)
     return (
-        <ScrollLoadWrapper noMoreItems={true} >
+        <ScrollLoadWrapper 
+        style={{
+            background: channelDetails?.channel_background ? `URL(${channelDetails?.channel_background})` : null,
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
+            backgroundColor: 'var(--primary-color)'
+        }}
+        noMoreItems={true} >
             <ContentHeader Icon={LayoutDashboard} title={`${channelDetails?.channel_name} / Widgets`} subTitle={subtitles[Math.floor(Math.random() * subtitles.length)]} />
             <ToolBar id={'widgets-overlay-nav'} data-context={JSON.stringify({type: 'widgetsOverlay', channel_id: channel})}>
                 <IconButton 

@@ -78,7 +78,7 @@
   width: 44px;
   height: 44px;
   border: none;
-  border-radius: 999px;
+  border-radius: var(--border-radius);
   background: var(--overlay-color, rgba(18,26,34,0.7));
   color: var(--text-color);
   display: grid;
@@ -86,6 +86,7 @@
   cursor: pointer;
   transition: transform 120ms ease, opacity 120ms ease;
   box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  z-index: 10;
 }
 .navBtn:hover { transform: translateY(-50%) scale(1.05); }
 .leftNav { left: 12px; }

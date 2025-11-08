@@ -13,6 +13,8 @@ export const MomentOverlay = () => {
 
     const dispatch = useDispatch();
 
+    const [color, setColor] = React.useState('var(--primary-color)');
+
     const {loading, error, messages, selectedMoment} = useSelector(state => state.momentSlice);
 
     const users = useSelector(state => state.serverUsersSlice.users);
@@ -25,10 +27,24 @@ export const MomentOverlay = () => {
 
     }, [selectedMoment])
 
+    React.useEffect(() => {
+
+        if (!messages) return;
+
+        for (const message of messages) {
+            if (message.color) {
+                setColor(message.color);
+                break;
+            }
+        }
+
+    }, [messages])
+
     if (!selectedMoment) return <ContentPlaceholder title={'No Moment Selected'} icon={X} />
 
     return (
-        <ScrollLoadWrapper contentGap={0} loading={loading}  >
+        <ScrollLoadWrapper style={{background: `linear-gradient(${color}, var(--primary-color))`
+        }} loading={loading}  >
             <ContentHeader Icon={BookmarkPlus} title={selectedMoment?.name} subTitle={selectedMoment?.description} />
             {error && (<TextLabelError error={error} />)}
             {messages.map((message, key) => {

@@ -1,34 +1,101 @@
-.toggleContainer {
-    cursor: pointer;
-    max-width: 50px;
-  }
-  
-  .toggleBackground {
-    width: 50px;
-    height: 24px;
-    border-radius: 50px;
-    background-color: var(--secondary-color);
-    display: flex;
-    align-items: center;
-    padding: 3px;
-    transition: background-color 0.3s ease-in-out;
-    justify-content: flex-start;
-  }
+:root {
+ --toggle-w: 48px;   /* size presets below adjust these */
+  --toggle-h: 28px;
+  --thumb:    20px;
+  --pad:      4px;
+}
 
-  .activeToggle {
-    background-color: var(--accent-color);
+.toggle {
+ 
+  flex-shrink: 0;
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 28px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+}
+
+.track {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--input-background-color);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.07),
+    inset 0 -1px 0 rgba(0,0,0,0.28);
+  transition: background-color 160ms ease, box-shadow 160ms ease;
+}
+
+.thumb {
+  position: absolute;
+  width: var(--thumb);
+  height: var(--thumb);
+  left: var(--pad);
+  border-radius: 50%;
+  background: var(--accent-color);
+  box-shadow:
+    0 6px 14px rgba(0,0,0,0.4),
+    inset 0 0 0 1px rgba(255,255,255,0.06);
+  will-change: transform, background-color;
+}
+
+/* ON state colors */
+.on .track {
+  background:
+    linear-gradient(0deg, rgba(255,255,255,0.06), rgba(255,255,255,0.06)),
+    color-mix(in srgb, var(--accent-color) 70%, #000 30%);
+}
+.on .thumb {
+  background: color-mix(in srgb, var(--accent-color) 18%, var(--card-background-color) 82%);
+}
+
+/* OFF state */
+.off .track { background: var(--input-background-color); }
+
+/* Focus ring */
+.toggle:focus-visible {
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--accent-color) 60%, transparent),
+    0 0 0 5px color-mix(in srgb, var(--accent-color) 20%, transparent);
+}
+
+/* Hover feedback (not on touch) */
+@media (hover: hover) {
+  .toggle:not(.disabled):hover .thumb {
+    box-shadow:
+      0 8px 18px rgba(0,0,0,0.5),
+      inset 0 0 0 1px rgba(255,255,255,0.08);
   }
-  
-  .toggleButton {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background-color: var(--background-color);
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
-    transition: transform 0.2s ease-in-out;
-  }
-  
-  .disable {
-    cursor: not-allowed;
-    opacity: 0.25;
-  }
+}
+
+/* Disabled */
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Hidden checkbox for semantics */
+.visuallyHidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  white-space: nowrap; clip-path: inset(50%); clip: rect(0 0 0 0); overflow: hidden;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .track, .thumb { transition: none; }
+}
+
+/* RTL support */
+:root:dir(rtl) .thumb {
+  left: auto;
+  right: var(--pad);
+}
+:root:dir(rtl) .on .thumb {
+  /* framer sets transform; this ensures initial position aligns */
+}

@@ -21,15 +21,15 @@ const ThemePicker = () => {
           <div className={styles.previewBox}>
             <div
               className={styles.colorBlock}
-              style={{ backgroundColor: themeValues['--background-color'] }}
+              style={{ background: themeValues['--background-color'] }}
             />
             <div
               className={styles.colorBlock}
-              style={{ backgroundColor: themeValues['--primary-color'] }}
+              style={{ background: themeValues['--primary-color'] }}
             />
             <div
               className={styles.colorBlock}
-              style={{ backgroundColor: themeValues['--accent-color'] }}
+              style={{ background: themeValues['--accent-color'] }}
             />
           </div>
           <span className={styles.themeName}>{themeKey}</span>

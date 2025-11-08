@@ -11,17 +11,41 @@ export const ExpandedImage = () => {
 
   const { expandedImage: image, expandedImageData: data, images} = useSelector(state => state.expandedImageSlice);
 
+  const {currentOverlay} = useSelector(state => state.overlaySlice);
+
+  const {filter, results} = useSelector(state => state.searchSlice);
+
+  const {recommendations} = useSelector(state => state.userRecommendationsSlice);
+
   const {messages} = useSelector(state => state.textChannelSlice);
 
   useEffect(() => {
 
-    if (!messages.length) { 
+    let l_images = [];
+
+    if (currentOverlay) {
+
+      if (currentOverlay === 'search') {
+
+        if (filter.path === 'images') {
+
+          if (results[filter.path]?.length) {
+            console.log(results[filter.path])
+            l_images = results[filter.path]?.slice()?.map(img => img.src);
+          } else {
+            console.log(recommendations)
+            l_images = recommendations?.slice()?.filter(i => i.type === 'image')?.map(i => i.src)
+          }
+
+        }
+
+      }
+
+    } else if (!messages.length) { 
       
       dispatch(setImages([]));
 
     } else {
-
-      let l_images = [];
 
       l_images = messages.slice().filter(message => message.image || message.images).flatMap(message => {
 
@@ -30,11 +54,16 @@ export const ExpandedImage = () => {
         if (message.images) return message.images;
 
       })
-
-      dispatch(setImages(l_images));
+      
     }
 
-  }, [messages, image])
+    dispatch(setImages(l_images));
+
+    return () => {
+      dispatch(setImages([]))
+    }
+
+  }, [messages, image, recommendations, filter, results, currentOverlay])
 
   const close = () => {
     dispatch(clearExpandedImage());

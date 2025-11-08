@@ -13,7 +13,7 @@ export const MomentsItem = ({ moment = {}, onClick }) => {
   
   return (
     <button
-      className={styles.item}
+      className={`${styles.item} ${thumbnail && (styles.hasThumbnail)}`}
       onClick={() => onClick(moment)}
       aria-label={`Open moment ${name}`}
       data-context={JSON.stringify({type: 'moment', _id, name, description, createdAt})}

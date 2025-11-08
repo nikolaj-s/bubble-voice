@@ -31,7 +31,10 @@ export const TextChannel = ({ channel }) => {
   } = useSelector(state => state.textChannelSlice);
 
   const [showBackground, toggleShowBackground] = React.useState(false);
+
   const [images, setImages] = React.useState([]);          // ← multiple files
+
+  const [color, setColor] = React.useState(null);
 
   const { user_id } = useSelector(state => state.accountSlice.account);
   const users = useSelector(state => state.serverUsersSlice.users);
@@ -41,25 +44,30 @@ export const TextChannel = ({ channel }) => {
   const position = useSelector(state => state.textChannelSlice.textChannelPos[channel]);
   const channelDetails = useSelector(state => state.channelsSlice.channels[channel]);
 
-  const handleSetImages = files => {
+  const handleSetImages = (files, color) => {
 
     if (files.length > 6) dispatch(triggerAlert('Cannot upload more than 6 images at a time', 'error'));
-console.log(files)
+
     setImages(files.slice(0, 6));
+
+    setColor(color);
 
   }
 
   // ─── Sending ─────────────────────────────────────────────────────────────────
   const handleSend = () => {
-    if (sending) return;
-    if (!text.trim().length && images.length === 0) return;
 
+    if (sending) return;
+
+    if (!text.trim().length && images.length === 0) return;
+    console.log(color)
     // build payload
     const payload = {
       user_id,
       channel_id: channel,
       reply_to: replyTo,
-      text: text.trim()
+      text: text.trim(),
+      color
     };
 
     // attach single vs multiple
@@ -73,7 +81,10 @@ console.log(files)
 
     // clear local state
     setImages([]);
+
     dispatch(setTextForTextChannel(''));
+
+    setColor(null);
   };
 
   // ─── Pagination ───────────────────────────────────────────────────────────────

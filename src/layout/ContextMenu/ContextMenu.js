@@ -80,6 +80,7 @@ const ContextMenu = ({ children }) => {
                 <>
                     <div className={styles.mobileContainer} />
                     <div
+                        onClick={(e) => {e.stopPropagation()}}
                         className={styles.container}
                         ref={menuRef}
                         style={{

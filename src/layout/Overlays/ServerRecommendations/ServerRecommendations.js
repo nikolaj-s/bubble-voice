@@ -31,7 +31,7 @@ export const ServerRecommendations = ({close}) => {
     const media = mediaByServer[server_id];
    
     return (
-    <ScrollLoadWrapper noMoreItems={true} loading={loading} >
+    <ScrollLoadWrapper noMoreItems={true} style={{background: 'var(--primary-color)'}} loading={loading} >
         <ContentHeader Icon={Images} title={`Media Recommendations For ${name}`} subTitle={galleryHeaders[Math.floor(Math.random() * galleryHeaders.length)]} />
         <TextLabelError error={error} />
         <ImageMasonryWrapper>

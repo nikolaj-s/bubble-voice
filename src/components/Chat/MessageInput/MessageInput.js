@@ -11,6 +11,7 @@ import { setOverlay } from "../../../features/Overlay/overlaySlice";
 import TextLabelError from "../../Error/TextLabelError/TextLabelError";
 import { ImageDropOverlay } from "../../ui/Inputs/ImageDropOverlay/ImageDropOverlay";
 import { triggerAlert } from "../../../features/Alerts/alertsSlice";
+import { getImageColorFromFile } from "../../../lib/services/getImageColorFromFile";
 
 export const MessageInput = ({
   id,
@@ -30,14 +31,15 @@ export const MessageInput = ({
 
   const [menuOpen, setMenuOpen]   = useState(false);
   const [focused, setFocused]     = useState(false);
-  const [previews, setPreviews]   = useState([]);       // ← array of DataURLs
+  const [previews, setPreviews]   = useState([]);    
+
   const MAX_IMAGES = 6;
 
   const toggleMenu = () => setMenuOpen((v) => !v);
 
   const handleFileUpload = async (e) => {
     const filesList = Array.from(e.target.files || []);
-   console.log(filesList)
+ 
     const slotsLeft = MAX_IMAGES - previews.length;
     const toProcess = filesList.slice(0, slotsLeft);
 
@@ -61,9 +63,15 @@ export const MessageInput = ({
         }))
       );
       // 3️⃣ Update state
+
+      const color = await getImageColorFromFile(compressed[0]);
+
       setPreviews([...dataUrls]);
-      setImage([...compressed]);
+
+      setImage([...compressed], color);
+
       document.getElementById(`chat-input-${id}`)?.focus();
+
     } catch (err) {
       console.error("Image compression/reading failed:", err);
       dispatch(triggerAlert('An error occured while processing your files', 'error'))
@@ -108,6 +116,10 @@ export const MessageInput = ({
 
   useLayoutEffect(() => {
     document.getElementById(`chat-input-${id}`)?.focus();
+
+    return () => {
+      setPreviews([]);
+    }
   }, [])
 
   return (
@@ -135,7 +147,7 @@ export const MessageInput = ({
             title="Add"
             Icon={<Plus color="var(--text-color)" />}
             onClick={toggleMenu}
-            backgroundColor="var(--background-color)"
+            backgroundColor="var(--input-background-color)"
           />
 
           <div

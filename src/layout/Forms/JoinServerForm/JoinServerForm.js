@@ -10,6 +10,10 @@ import TextLabelError from '../../../components/Error/TextLabelError/TextLabelEr
 import SpinnerLoading from '../../../components/ui/Loading/Spinner/SpinnerLoading';
 import { useNavigate } from 'react-router';
 import { JoinServer } from '../../../features/JoinServer/Thunks/JoinServer';
+import { Description } from '../../../components/ui/Description/Description';
+import { Text } from '../../../components/ui/Text/Text';
+import ContentPlaceholder from '../../../components/ui/Placeholders/ContentPlaceholder/ContentPlaceholder';
+import { AlertCircle } from 'lucide-react';
 
 export const JoinServerForm = () => {
 
@@ -26,10 +30,13 @@ export const JoinServerForm = () => {
     dispatch(JoinServer({navigate}));
 
   }
+ 
 
   return (
     <>
-    <Header text={`Join ${selectedServer?.server_name || 'Bubble'}`} />
+    {error ? <TextLabelError error={error} /> : null}
+    <h1 style={{color: 'var(--text-color)'}}><span style={{color: 'var(--accent-color)'}}>Join</span> {selectedServer?.server_name}</h1>
+    {selectedServer?.welcome_message && (<Description description={selectedServer?.welcome_message} />)}
     <div style={{
       width: '100%',
       height: 200,
@@ -38,11 +45,19 @@ export const JoinServerForm = () => {
     }}>
     <ImageComponent src={selectedServer?.server_banner} />
     </div>
+    {selectedServer?.invite_only ?
+    <>
+    <ContentPlaceholder icon={AlertCircle} title={'Invite Only'} message={'Whoops looks like this exlusive bubble is invite only'} />
+    </>
+    :
+    <>
     <Label label='Enter Server Password' />
     <TextInput value={password} onChange={(value) => {dispatch(setServerToJoinPassword(value))}} type='password' placeholder='password'  />
-    {error ? <TextLabelError label='Error:' error={error} /> : null}
-    {loading ? <SpinnerLoading /> : null}
     <TextButton action={handleJoinServer} title='Join' />
+    </>
+    }
+  
+    {loading ? <SpinnerLoading /> : null}
     </>
   )
 }
