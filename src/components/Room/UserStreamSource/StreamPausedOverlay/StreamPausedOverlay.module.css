@@ -37,6 +37,7 @@
   color: var(--accent-color, #3b7a6e);
   margin-bottom: 4px;
   letter-spacing: 0.01em;
+  text-align: center;
 }
 
 .message {

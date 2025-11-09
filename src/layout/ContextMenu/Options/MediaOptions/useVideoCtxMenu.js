@@ -25,7 +25,7 @@ export const useVideoCtxMenu = () => {
     const { currentVoiceChannel }= useSelector(state => state.voiceChannelSlice);
 
     const getVideoOptions = useCallback((options, data) => {
-        if (data.video.duration && mediaPlayerState.enabled) {
+        if (data.video && mediaPlayerState.enabled) {
         
             if (!data.video.inQueue) {
                 options.push({

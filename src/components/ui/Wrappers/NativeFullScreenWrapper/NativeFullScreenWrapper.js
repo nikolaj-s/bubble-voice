@@ -52,7 +52,7 @@ const NativeFullScreenWrapper = ({ children }) => {
   }, [fullscreen, dispatch])
 
   return (
-    <div ref={wrapperRef} style={{ width: '100%', height: '100%' }}>
+    <div ref={wrapperRef} style={{ width: '100%', height: '100%' }} className='fullScreenWrapper'>
       {children}
     </div>
   )

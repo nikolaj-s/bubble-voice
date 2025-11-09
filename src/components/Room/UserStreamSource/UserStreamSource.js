@@ -57,7 +57,7 @@ const UserStreamSource = ({ user_id, stream, action, id, isExpanded, setAmbientC
             video.addEventListener("loadedmetadata", handleLoaded);
 
             video.play().catch(() => {}); // Some browsers may need play() to start
-
+           
             return () => {
                 video.pause();
 
@@ -113,7 +113,7 @@ const UserStreamSource = ({ user_id, stream, action, id, isExpanded, setAmbientC
         <div 
         hidden={hideNonVideoUsers && isStreamDisabled}
         style={{display: hideNonVideoUsers && isStreamDisabled ? 'none' : null, backgroundColor: isExpanded ? 'transparent' : backgroundColor,}}
-        data-context={JSON.stringify({type: 'userStreamSource', user_id, consumer_id: stream.id, ...trackSettings, ...channel_status?.streamDetails})}
+        data-context={JSON.stringify({type: 'userStreamSource', user_id, consumer_id: stream.id, ...trackSettings, ...channel_status?.streamDetails, aspectRatio: videoRef?.current?.videoWidth / videoRef?.current?.videoHeight})}
         onClick={() => {action(id)}}
         id={id}
         className={styles.container} 

@@ -3,7 +3,7 @@ import styles from  "./ControlBar.module.css";
 
 import IconButton from '../ui/Buttons/IconButton/IconButton';
 
-import { HeadphoneOff, Headphones, Mic, MicOff, MonitorOff, MonitorUp, MonitorX, Settings2, Unplug, Video, VideoOff } from 'lucide-react';
+import { HeadphoneOff, Headphones, Mic, MicOff, Monitor, MonitorOff, MonitorUp, MonitorX, Settings2, Unplug, Video, VideoOff } from 'lucide-react';
 
 import UserButton from '../ui/Buttons/UserButton/UserButton';
 
@@ -61,7 +61,7 @@ export const ControlBar = () => {
                 padding={8}
                 onClick={handleShareScreen}
                 title={screenShareError ? <ErrorToolTip error={screenShareError} /> : isSharing ? "Stop Stream" : "Start Streaming"}
-                Icon={screenShareError ? <MonitorX color="var(--text-color)" strokeWidth={2.5} /> : isSharing ? <MonitorOff strokeWidth={2.5} color='var(--text-color)' /> : <MonitorUp strokeWidth={2.5} color='var(--text-color)' />}
+                Icon={screenShareError ? <MonitorX color="var(--text-color)" strokeWidth={2.5} /> : isSharing ? <Monitor strokeWidth={2.5} color='var(--text-color)' /> : <MonitorUp strokeWidth={2.5} color='var(--text-color)' />}
                 />
                 <ConnectionIndicator />
                 <IconButton 

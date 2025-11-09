@@ -8,7 +8,7 @@ const StreamPausedOverlay = () => (
     <div className={styles.card}>
       <PauseCircle size={44} className={styles.icon} />
       <div className={styles.title}>Stream Paused</div>
-      <Description description={"Your stream preview is paused to save resources."} />
+      <Description textAlign={'center'} description={"Your stream preview is paused to save resources."} />
     </div>
   </div>
 );

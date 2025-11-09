@@ -22,6 +22,12 @@
     gap: 5px;
     height: calc(100% - 10px);
     overflow-y: auto;
+    scrollbar-color: transparent transparent;
+    transition: 0.2s scrollbar-color;
+  }
+
+  .sidebar:hover {
+    scrollbar-color: var(--button-background) transparent;
   }
   
   .navButton {
@@ -69,6 +75,12 @@
     overflow-x: hidden;
     flex-shrink: 0;
     height: auto;
+    scrollbar-color: transparent transparent;
+    transition: 0.2s scrollbar-color;
+  }
+
+  .contentWrapper:hover {
+    scrollbar-color: var(--button-background) transparent;
   }
 
   .mobileMenuButton {

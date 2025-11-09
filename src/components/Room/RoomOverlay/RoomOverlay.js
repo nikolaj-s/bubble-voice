@@ -3,7 +3,7 @@ import React from 'react';
 
 import styles from '../Room.module.css';
 import IconButton from '../../ui/Buttons/IconButton/IconButton';
-import { Ellipsis, VideoOff, Mic, MicOff, Unplug, Video, HeadphoneOff, Headphones, Maximize, MonitorOff, MonitorUp, ChevronDown, MonitorX } from 'lucide-react';
+import { Ellipsis, VideoOff, Mic, MicOff, Unplug, Video, HeadphoneOff, Headphones, Maximize, MonitorUp, MonitorX, Monitor, PanelRightClose } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PillSpacer } from '../../ui/Spacers/PillSpacer/PillSpacer';
 import { useMediaControls } from '../../../context/MediaControlsContext';
@@ -14,6 +14,7 @@ import { setFullscreen } from '../../../features/Ui/uiSlice';
 import { ErrorToolTip } from '../../ui/ErrorToolTip/ErrorToolTip';
 import { setCurrentVoiceChannel } from '../../../features/Channel/VoiceChannel/voiceChannelSlice';
 import { MediaPlayerRoomStatus } from './MediaPlayerRoomStatus/MediaPlayerRoomStatus';
+import { toggleAppearanceSetting } from '../../../features/Settings/Appearance/appearanceSlice';
 
 export const RoomOverlay = () => {
 
@@ -79,6 +80,13 @@ export const RoomOverlay = () => {
                 Icon={<Maximize color='var(--text-color)' />}
                 position='bottom'
                 onClick={() => {dispatch(setFullscreen(!fullscreen))}}
+                />
+                <PillSpacer verticle={true} />
+                <IconButton 
+                title={"Toggle Side Bar"}
+                position='bottom'
+                Icon={PanelRightClose}
+                onClick={() => {dispatch(toggleAppearanceSetting('hideUsers'))}}
                 />
             </div>
             <div id='room-control-bar' data-context={JSON.stringify({type: 'roomControl'})} className={styles.bottomButtons}>
@@ -152,7 +160,7 @@ export const RoomOverlay = () => {
                     />
                     <IconButton 
                     title={screenShareError ? <ErrorToolTip error={screenShareError} /> : isSharing ? "Stop Streaming" : "Start Streaming"}
-                    Icon={screenShareError ? <MonitorX color='var(--error-color)' /> : isSharing ? <MonitorOff color='var(--text-color)' /> : <MonitorUp color='var(--text-color)' />}
+                    Icon={screenShareError ? <MonitorX color='var(--error-color)' /> : isSharing ? <Monitor color='var(--text-color)' /> : <MonitorUp color='var(--text-color)' />}
                     backgroundColor={isSharing ? "var(--success-color)" : null}
                     onClick={handleShareScreen}
                     padding={10}

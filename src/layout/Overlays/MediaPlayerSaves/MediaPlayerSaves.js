@@ -41,7 +41,7 @@ export const MediaPlayerSaves = () => {
     }, [saves, dispatch, channel]);
 
     return (
-        <ScrollLoadWrapper loading={loading}>
+        <ScrollLoadWrapper style={{background: 'var(--primary-color)'}} loading={loading}>
             <ContentHeader Icon={Bookmark} title={`Saved Media For: ${channelDetails?.channel_name}`} />
             <SavedMedia savedItemAction={playMediaInChannel} media={saves} loading={loading} error={error} />
         </ScrollLoadWrapper>

@@ -1,101 +1,73 @@
-:root {
- --toggle-w: 48px;   /* size presets below adjust these */
-  --toggle-h: 28px;
-  --thumb:    20px;
-  --pad:      4px;
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.toggle {
- 
-  flex-shrink: 0;
+.label {
+  color: var(--text-color);
+  font: 500 14px/1.2 var(--font-family, Inter, system-ui, sans-serif);
+}
+
+.switch {
+  --track-w: 44px;
+  --track-h: 26px;
+  --thumb: 18px;
+  padding: 5px;
   position: relative;
-  display: inline-grid;
-  place-items: center;
-  width: 48px;
-  height: 28px;
-  border-radius: var(--border-radius);
+  width: var(--track-w);
+  height: var(--track-h);
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: var(--card-background-color, #1d2d44);
+  transition: background 160ms ease, box-shadow 160ms ease;
   cursor: pointer;
-  user-select: none;
   outline: none;
 }
 
-.track {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: var(--input-background-color);
+.switch:focus-visible {
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.07),
-    inset 0 -1px 0 rgba(0,0,0,0.28);
-  transition: background-color 160ms ease, box-shadow 160ms ease;
+    0 0 0 2px var(--overlay-color, rgba(18,26,34,0.7)),
+    0 0 0 4px var(--link-color, #11ffff);
 }
 
 .thumb {
   position: absolute;
+  top: 50%;
+  left: 3px;
   width: var(--thumb);
   height: var(--thumb);
-  left: var(--pad);
   border-radius: 50%;
-  background: var(--accent-color);
-  box-shadow:
-    0 6px 14px rgba(0,0,0,0.4),
-    inset 0 0 0 1px rgba(255,255,255,0.06);
-  will-change: transform, background-color;
+  transform: translate(0, -50%);
+  background: var(--text-color, #d1d9e6);
+  transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.4);
 }
 
-/* ON state colors */
-.on .track {
-  background:
-    linear-gradient(0deg, rgba(255,255,255,0.06), rgba(255,255,255,0.06)),
-    color-mix(in srgb, var(--accent-color) 70%, #000 30%);
+/* ON */
+.on {
+  background: linear-gradient(
+    to bottom,
+    var(--button-background, #5c9dbd),
+    var(--secondary-color, #4e8e8b)
+  );
+  border-color: transparent;
 }
 .on .thumb {
-  background: color-mix(in srgb, var(--accent-color) 18%, var(--card-background-color) 82%);
+  transform: translate(calc(var(--track-w) - var(--thumb) - 6px), -50%);
+  background: #fff;
 }
 
-/* OFF state */
-.off .track { background: var(--input-background-color); }
-
-/* Focus ring */
-.toggle:focus-visible {
-  box-shadow:
-    0 0 0 2px color-mix(in srgb, var(--accent-color) 60%, transparent),
-    0 0 0 5px color-mix(in srgb, var(--accent-color) 20%, transparent);
+/* OFF */
+.off {
+  background: var(--card-background-color, #1d2d44);
 }
-
-/* Hover feedback (not on touch) */
-@media (hover: hover) {
-  .toggle:not(.disabled):hover .thumb {
-    box-shadow:
-      0 8px 18px rgba(0,0,0,0.5),
-      inset 0 0 0 1px rgba(255,255,255,0.08);
-  }
+.off .thumb {
+  background: var(--text-color, #d1d9e6);
 }
 
 /* Disabled */
 .disabled {
-  cursor: not-allowed;
   opacity: 0.5;
-}
-
-/* Hidden checkbox for semantics */
-.visuallyHidden {
-  position: absolute !important;
-  width: 1px; height: 1px;
-  margin: -1px; padding: 0; border: 0;
-  white-space: nowrap; clip-path: inset(50%); clip: rect(0 0 0 0); overflow: hidden;
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .track, .thumb { transition: none; }
-}
-
-/* RTL support */
-:root:dir(rtl) .thumb {
-  left: auto;
-  right: var(--pad);
-}
-:root:dir(rtl) .on .thumb {
-  /* framer sets transform; this ensures initial position aligns */
+  cursor: not-allowed;
 }

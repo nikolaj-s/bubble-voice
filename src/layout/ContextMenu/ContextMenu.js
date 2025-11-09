@@ -74,7 +74,7 @@ const ContextMenu = ({ children }) => {
     ]);
 
     return (
-        <div>
+        <div className="context">
             {children}
             {contextMenu?.visible && (
                 <>

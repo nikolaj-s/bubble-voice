@@ -5,6 +5,12 @@
   overflow-x: hidden;
   display: flex;
   flex-direction: column; /* normal order */
+  scrollbar-color: transparent transparent;
+  transition: 0.2s scrollbar-color;
+}
+
+.container:hover {
+  scrollbar-color: var(--button-background) transparent;
 }
 
 .spinnerWrapper {

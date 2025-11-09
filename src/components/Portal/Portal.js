@@ -3,14 +3,18 @@ import { createPortal } from "react-dom";
 
 export default function Portal({ id = "bubble-portal", children }) {
   const el = useMemo(() => {
+
+    const app = document.getElementsByClassName('fullScreenWrapper')[0];
+
     if (typeof document === "undefined") return null; // SSR guard
     const existing = document.getElementById(id);
     if (existing) return existing;
     const node = document.createElement("div");
     node.id = id;
     node.style.position = "relative";
-    node.style.zIndex = "2147483647"; // top-most layer
-    document.body.appendChild(node);
+    node.style.zIndex = "100"; // top-most layer
+    app.appendChild(node);
+    
     return node;
   }, [id]);
 

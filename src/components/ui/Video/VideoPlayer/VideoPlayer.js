@@ -93,7 +93,7 @@ const VideoPlayer = ({ src, title, thumbnail }) => {
       data-context={JSON.stringify({ type: 'video', src, title: title || src, duration: Math.floor(duration), query: title || src })}
     >
       <ReactPlayer
-   
+        light={isPlaying ? false : thumbnail}
         ref={playerRef}
         url={src}
         playing={isPlaying}

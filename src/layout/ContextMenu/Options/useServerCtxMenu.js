@@ -36,7 +36,7 @@ export const useServerCtxMenu = () => {
             },
             label: "Mute Notifications"
         })
-console.log(server)
+
         if (server.server_owner !== user_id) {
             options.push({
                 type: 'button',
