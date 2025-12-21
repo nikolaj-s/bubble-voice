@@ -1,14 +1,12 @@
 import React from 'react'
 import Header from '../../../../components/ui/Titles/Header/Header'
 import Label from '../../../../components/ui/Titles/Label/Label'
-import TextInput from '../../../../components/ui/Inputs/TextInput/TextInput'
 import { useDispatch, useSelector } from 'react-redux'
 import TextButton from '../../../../components/ui/Buttons/TextButton/TextButton'
-import ToggleSwitch from '../../../../components/ui/Inputs/ToggleSwitch/ToggleSwitch'
 import { LoadingErrorFormWrapper } from '../../../../components/ui/Wrappers/LoadingErrorFormWrapper/LoadingErrorFormWrapper'
-import PasswordRequirements from '../../../../components/ui/PasswordRequirements/PasswordRequirements'
 import { updatePassword } from '../../../../features/Settings/Security/Thunks/updatePassword'
-import { ApplyChangesPopup } from '../../../../components/ApplyChangesPopup/ApplyChangesPopup'
+import { triggerAlert } from '../../../../features/Alerts/alertsSlice'
+import { PasswordResetMenu } from '../../../../components/PasswordResetMenu/PasswordResetMenu'
 
 export const SecuritySettingsForm = () => {
 
@@ -22,41 +20,38 @@ export const SecuritySettingsForm = () => {
 
     const [confirmPassword, setConfirmPassword] = React.useState("");
 
+    const [showPasswordResetMenu, setShowPasswordResetMenu] = React.useState("");
+
     const {loading} = useSelector(state => state.securitySlice);
 
     const handleUpdatePassword = () => {
-        if (!valid || loading) return;
+        if (!valid || loading) return dispatch(triggerAlert("Invalid Input", "error"));
 
-        dispatch(updatePassword({currentPassword, newPassword, confirmPassword}))
-    }
-
-    const clearChanges = () => {
-        setCurrentPassword("");
-
-        setNewPassword("");
-
-        setConfirmPassword("");
-    }
-
-    const handleUpdate2FA = () => {
-        
+        dispatch(updatePassword({currentPassword, newPassword, confirmPassword})).unwrap().catch(() => true)
+        .then(() => {
+            setCurrentPassword("");
+            setNewPassword("");
+            setConfirmPassword("");
+            setShowPasswordResetMenu(false);
+        })
     }
 
     return (
         <LoadingErrorFormWrapper sliceName='securitySlice'>
             <Header text='Security' />
-            <Label label='Change Your Password:' />
-            <TextInput type='password' placeholder={"Enter Your Password"} onChange={setCurrentPassword} value={currentPassword} />
-            <PasswordRequirements password={newPassword} isValid={setValid} />
-            <TextInput type='password' placeholder={"New Password"} onChange={setNewPassword} value={newPassword} />
-            <TextInput type='password' placeholder={"Confirm New Password"} onChange={setConfirmPassword} value={confirmPassword} />
-            <Label label='Enable Email 2FA On Each Login:' />
-            <ToggleSwitch />
-            <ApplyChangesPopup 
-            disabled={!valid}
-            onApply={handleUpdatePassword}
-            onClearChanges={clearChanges}
+            <Label label='Change Your Password' />
+            <TextButton title='Update Password' action={() => {setShowPasswordResetMenu(true)}} />
+            <PasswordResetMenu active={showPasswordResetMenu}
+            currentPassword={currentPassword}
+            onCurrentPasswordChange={setCurrentPassword}
+            newPassword={newPassword} onNewPasswordChange={setNewPassword}
+            confirmPassword={confirmPassword} onConfirmPasswordChange={setConfirmPassword}
+            onClose={() => {setShowPasswordResetMenu(false)}}
+            confirm={handleUpdatePassword} isValid={valid} setIsValid={setValid}
             />
+          
+            {/* <Label label='Enable Email 2FA On Each Login:' />
+            <ToggleSwitch /> */}
         </LoadingErrorFormWrapper>
     )
 }

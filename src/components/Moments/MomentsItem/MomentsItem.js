@@ -4,12 +4,17 @@ import { Bookmark } from 'lucide-react';
 import { Text } from '../../ui/Text/Text';
 import { Description } from '../../ui/Description/Description';
 import { TextIndicator } from '../../ui/TextIndicator/TextIndicator';
+import Label from '../../ui/Titles/Label/Label';
+import { useSelector } from 'react-redux';
+import MicroInfo from '../../MicroInfo/MicroInfo';
 
 export const MomentsItem = ({ moment = {}, onClick }) => {
-  
-  const { name, description, createdAt, thumbnail, _id } = moment;
 
-  // pick the first message with an image
+  const { name, description, createdAt, thumbnail, _id, created_by, channel_id, messages, server_id } = moment;
+
+  const channel = useSelector(state => state.channelsSlice.channels?.[channel_id]);
+
+  const user = useSelector(state => state.serverUsersSlice.users?.[created_by]);
   
   return (
     <button
@@ -36,6 +41,7 @@ export const MomentsItem = ({ moment = {}, onClick }) => {
         {description && (
           <Description textAlign={'start'}  description={moment.description} />
         )}
+        <MicroInfo channelId={channel_id} channelName={channel?.channel_name} createdBy={user} messageId={messages[0]} serverId={server_id}  />
         <div className={styles.date}>
           {new Date(createdAt).toLocaleDateString(undefined, {
             month: 'short',

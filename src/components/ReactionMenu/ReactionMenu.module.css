@@ -1,0 +1,101 @@
+.root {
+  width: 100%;
+  padding: 8px 10px;
+  box-sizing: border-box;
+
+  border-bottom: 1px solid rgba(209, 217, 230, 0.08);
+  background: transparent;
+}
+
+.strip {
+  display: flex;
+  align-items: center;
+  gap: var(--gap);
+}
+
+/* base buttons */
+.reactionBtn,
+.plusBtn {
+  border: 1px solid rgba(209, 217, 230, 0.12);
+  background: var(--card-background-color);
+  color: var(--text-color);
+
+  border-radius: 999px;
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: var(--font-family);
+  user-select: none;
+
+  transition:
+    transform 120ms ease,
+    background 120ms ease,
+    border-color 120ms ease;
+}
+
+/* hover */
+.reactionBtn:hover,
+.plusBtn:hover {
+  background: var(--input-background-color);
+  border-color: var(--secondary-color);
+  transform: translateY(-1px);
+}
+
+/* active */
+.reactionBtn:active,
+.plusBtn:active {
+  transform: translateY(0px) scale(0.98);
+}
+
+/* keyboard focus */
+.reactionBtn:focus-visible,
+.plusBtn:focus-visible {
+  outline: 2px solid var(--button-background);
+  outline-offset: 2px;
+}
+
+/* emoji */
+.emoji {
+  line-height: 1;
+  display: inline-block;
+  transform: translateY(1px);
+}
+
+/* sizing */
+.sm .reactionBtn,
+.sm .plusBtn {
+  height: 32px;
+  min-width: 32px;
+  padding: 0 10px;
+  font-size: 16px;
+}
+
+.md .reactionBtn,
+.md .plusBtn {
+  height: 36px;
+  min-width: 36px;
+  padding: 0 12px;
+  font-size: 18px;
+}
+
+.lg .reactionBtn,
+.lg .plusBtn {
+  height: 40px;
+  min-width: 40px;
+  padding: 0 14px;
+  font-size: 20px;
+}
+
+/* plus button */
+.plusBtn {
+  padding: 0 10px;
+  background: var(--background-color);
+  border-color: rgba(209, 217, 230, 0.14);
+}
+
+.plusBtn:hover {
+  background: var(--input-background-color);
+}

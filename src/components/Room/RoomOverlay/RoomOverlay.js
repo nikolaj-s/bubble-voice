@@ -81,7 +81,7 @@ export const RoomOverlay = () => {
                 position='bottom'
                 onClick={() => {dispatch(setFullscreen(!fullscreen))}}
                 />
-                <PillSpacer verticle={true} />
+                <PillSpacer verticle={true} height={'100%'} />
                 <IconButton 
                 title={"Toggle Side Bar"}
                 position='bottom'

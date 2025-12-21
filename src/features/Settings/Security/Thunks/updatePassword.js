@@ -27,7 +27,7 @@ export const updatePassword = createAsyncThunk('updatePassword/securitySlice', a
             dispatch(triggerAlert("Password Updated"))
         }
 
-        return;
+        return {success: true};
     } catch (error) {
         console.log(error);
         return APIErrorHandler(rejectWithValue, error);

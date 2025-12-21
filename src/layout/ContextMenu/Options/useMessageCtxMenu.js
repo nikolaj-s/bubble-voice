@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router';
 import { setReplyTo } from '../../../features/Channel/TextChannel/textChannelSlice';
 import { closeOverlay, setOverlay } from '../../../features/Overlay/overlaySlice';
-import { BookmarkPlus, Copy, ImageDown, Link, Pencil, Pin, PinOff, Reply, Trash2 } from 'lucide-react';
+import { BookmarkPlus, Copy, ImageDown, Link, Pencil, Pin, PinOff, Reply, ScanSearch, Trash2 } from 'lucide-react';
 import { pinMessage } from '../../../features/Channel/TextChannel/Thunks/pinMessage';
 import { copyToClipboard, downloadImage } from '../../../lib/services/helperFunctions';
 import { triggerAlert } from '../../../features/Alerts/alertsSlice';
@@ -14,6 +14,7 @@ import { deleteMessage } from '../../../features/Channel/TextChannel/Thunks/dele
 import { addMessageToMoment, setIsSelecting } from '../../../features/Moments/momentsSlice';
 import { useSearchParams } from 'react-router-dom';
 import { setMessageToEdit } from '../../../features/EditMessage/editMessageSlice';
+import { reactToMessage } from '../../../features/Channel/TextChannel/Thunks/reactToMessage';
 
 export const useMessageCtxMenu = () => {
 
@@ -23,13 +24,28 @@ export const useMessageCtxMenu = () => {
 
     const [,setSearchParams] = useSearchParams();
 
-    const {currentTextChannel} = useSelector(state => state.textChannelSlice);
+    const {currentTextChannel, reacting} = useSelector(state => state.textChannelSlice);
 
     const {isSelecting, selectedMessages} = useSelector(state => state.momentsSlice);
 
     const {_id: user_id} = useSelector(state => state.accountSlice.account) || {};
 
     const getMessageOptions = useCallback((options, data, permissions) => {
+
+        options.push({
+            type: 'reactions',
+            action: (reaction) => {
+                if (reacting) return;
+
+                const currentReactions = data.message.reactions || {};
+
+                if (currentReactions[user_id] === reaction) return;
+
+                dispatch(reactToMessage({reaction, message_id: data.message._id}))
+                
+            },
+            reactions: ["👍", "❤️", "😂", "🔥", "😮"]
+        })
 
         options.push({
             label: "Reply",
@@ -129,7 +145,8 @@ export const useMessageCtxMenu = () => {
                         dispatch(setOverlay('search'));
 
                     },
-                    type: "button"
+                    type: "button",
+                    icon: <ScanSearch color='var(--text-color)' />
                 })
             }
           
@@ -176,7 +193,7 @@ export const useMessageCtxMenu = () => {
             })
         }
 
-    }, [currentTextChannel, dispatch, navigate, user_id, isSelecting, selectedMessages]) 
+    }, [currentTextChannel, dispatch, navigate, user_id, isSelecting, selectedMessages, reacting]) 
     
     return {getMessageOptions};
 }

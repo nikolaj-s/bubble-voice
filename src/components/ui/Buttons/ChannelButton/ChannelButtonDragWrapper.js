@@ -92,7 +92,7 @@ export const ChannelButtonDragWrapper = ({
         backgroundColor: draggingOver ? 'var(--success-color)' : null
       }}
     >
-      <AlertIndicator active={unread} />
+      <AlertIndicator active={currentTextChannel === channel?.channel_id ? false : unread} />
       {children}
       <div
       onDragOver={(e) => e.preventDefault()}

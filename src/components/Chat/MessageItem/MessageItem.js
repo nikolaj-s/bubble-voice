@@ -20,6 +20,7 @@ import { VideoPreview } from '../../ui/Video/VideoPreview/VideoPreview';
 import { MessageToolBar } from './MessageToolBar/MessageToolBar';
 import { MessageSelectInput } from './MessageSelectInput/MessageSelectInput';
 import { EditedIndicator } from './EditedIndicator/EditedIndicator';
+import MessageReactionsBar from './MessageReactionsBar/MessageReactionsBar';
 
 export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inSearch = false, isReply, reply = () => {}, notification, type}) => {
 
@@ -64,6 +65,7 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
                             <LinkPreview {...message} /> 
                             <ImagesBlock {...message} />
                             <ProcessingBlock {...message} />
+                            <MessageReactionsBar {...message} />
                             <EditedIndicator {...message} />
                         </div>
                     </div>

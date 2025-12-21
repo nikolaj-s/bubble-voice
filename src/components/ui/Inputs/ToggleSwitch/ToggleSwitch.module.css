@@ -19,7 +19,7 @@
   height: var(--track-h);
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.06);
-  background: var(--card-background-color, #1d2d44);
+  background: var(--input-background-color, #1d2d44);
   transition: background 160ms ease, box-shadow 160ms ease;
   cursor: pointer;
   outline: none;

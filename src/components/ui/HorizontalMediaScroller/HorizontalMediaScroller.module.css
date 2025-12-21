@@ -24,6 +24,7 @@
     cursor: pointer;
     border-radius: 6px;
     overflow: hidden;
+    max-width: 300px;
   }
   
   .seeMore {

@@ -18,7 +18,7 @@ export const UserFeed = () => {
     }, [])
    
     return (
-        <ScrollLoadWrapper loading={loading}  >
+        <ScrollLoadWrapper maxContentWidth={'100%'} loading={loading}  >
             <Notices />
             <Subscriptions subscriptions={subscriptions} error={error} />
         </ScrollLoadWrapper>

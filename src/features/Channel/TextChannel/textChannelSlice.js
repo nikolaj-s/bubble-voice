@@ -6,6 +6,7 @@ import { deleteMessage } from "./Thunks/deleteMessage";
 import { pinMessage }    from "./Thunks/pinMessage";
 import { getFormattedDate } from "../../../lib/services/helperFunctions";
 import { setCachedMessages } from "../../../lib/indexedDBCache";
+import { reactToMessage } from "./Thunks/reactToMessage";
 
 const initialState = {
   page: 0,
@@ -20,7 +21,8 @@ const initialState = {
   textChannelPos: {},
   replyTo: null,
   text: "",
-  targetNotFound: false
+  targetNotFound: false,
+  reacting: false
 };
 
 const textChannelSlice = createSlice({
@@ -205,6 +207,17 @@ const textChannelSlice = createSlice({
       .addCase(pinMessage.rejected, (state, action) => {
         state.error = action.payload;
       });
+
+      // reacting to message
+      builder.addCase(reactToMessage.pending, (state) => {
+        state.reacting = true;
+      })
+      .addCase(reactToMessage.rejected, (state) => {
+        state.reacting = false;
+      })
+      .addCase(reactToMessage.fulfilled, (state) => {
+        state.reacting = false;
+      })
   }
 });
 

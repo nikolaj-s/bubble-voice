@@ -59,6 +59,7 @@ export const UserBar = () => {
 
     return (
         <div className={styles.container}>
+            <div style={{height: 60, flexShrink: 0}} />
             {sortedGroups.map(([groupId, group]) => groupedUsers[groupId]?.length > 0 && (
                 <div key={groupId} className={styles.groupContainer}>
                     {/* Group Name */}

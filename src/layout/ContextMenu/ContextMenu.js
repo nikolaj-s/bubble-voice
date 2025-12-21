@@ -9,6 +9,7 @@ import { LineSpacer } from "../../components/ui/Spacers/LineSpacer/LineSpacer";
 import styles from "./ContextMenuWrapper.module.css";
 import IconButton from "../../components/ui/Buttons/IconButton/IconButton";
 import { X } from "lucide-react";
+import ReactionMenu from "../../components/ReactionMenu/ReactionMenu";
 
 const ContextMenu = ({ children }) => {
     const account = useSelector(s => s.accountSlice.account);
@@ -114,6 +115,16 @@ const ContextMenu = ({ children }) => {
                                 }
 
                                 switch (opt.type) {
+                                    case "reactions":
+                                        return (
+                                            <div {...commonProps}key={idx}>
+                                                <ReactionMenu 
+                                                {...opt}
+                                                top={idx === 0}
+                                                bottom={isLast}
+                                                />
+                                            </div>
+                                        )
                                     case "button":
                                         return (
                                             <div {...commonProps}key={idx}>

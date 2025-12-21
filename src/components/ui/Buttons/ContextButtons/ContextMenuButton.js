@@ -1,4 +1,4 @@
-import React from "react";
+
 import styles from "./ContextMenuButton.module.css";
 
 const ContextMenuButton = ({ label, onClick, icon, top, bottom, zIndex, color }) => {

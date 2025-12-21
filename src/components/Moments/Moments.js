@@ -70,7 +70,8 @@ export const Moments = () => {
       loading={loading}
       noMoreItems={noMoreMoments}
     >
-      <StickyWrapper>
+      <div style={{height: 60, flexShrink: 0}} />
+      <StickyWrapper style={{top: 65}}>
         <TextInput
           placeholder="Search Moments…"
           value={query}

@@ -20,6 +20,7 @@ import { Card } from '../../../../components/ui/Wrappers/Card/Card'
 import { ToolBar } from '../../../../components/ui/Wrappers/ToolBar/ToolBar'
 import IconButton from '../../../../components/ui/Buttons/IconButton/IconButton'
 import { X } from 'lucide-react'
+import { PasswordResetMenu } from '../../../../components/PasswordResetMenu/PasswordResetMenu'
 
 export const ServerSecurityForm = ({permissions}) => {
 
@@ -71,36 +72,18 @@ export const ServerSecurityForm = ({permissions}) => {
                     <>
                     <Label label='Change Bubble Password' />
                     <TextButton title='Reset Password' action={() => {toggleShowResetPasswordForm(true)}} />
-                    {showResetPasswordForm &&
-                    (
-                    <Portal>
-                        <FullScreenWrapper onClose={() => {toggleShowResetPasswordForm(false)}} maxContentWidth={500}>
-                        <Card>
-                            <ToolBar style={{alignItems: 'center', justifyContent: 'space-between', background: 'transparent'}} >
-                                <Header level={4} text='Change Password' />
-                                <IconButton 
-                                Icon={X}
-                                title={'Close'}
-                                onClick={() => {
-                                    toggleShowResetPasswordForm(false)
-                                }}
-                                />
-                            </ToolBar>
-                            <TextInput value={currentPassword} onChange={setCurrentPassword} type='password' placeholder={'current password'} />
-                            <PasswordRequirements password={newPassword} isValid={setIsValid} />
-                            <TextInput type='password' value={newPassword} onChange={setNewPassword} placeholder='new password' />
-                        
-                            <TextInput type='password' value={confirmPassword} onChange={setConfirmPassword} placeholder='confirm new password' />
-                            <ApplyChangesPopup 
-                            disabled={!currentPassword || !isValid || (newPassword !== confirmPassword)}
-                            onApply={handleResetPassword} onClearChanges={() => {
-                                setNewPassword("")
-                                setConfirmPassword("")
-                            }} />
-                        </Card>
-                        </FullScreenWrapper>
-                    </Portal>
-                    )}
+                    <PasswordResetMenu 
+                    active={showResetPasswordForm}
+                    currentPassword={currentPassword}
+                    newPassword={newPassword}
+                    confirmPassword={confirmPassword}
+                    onCurrentPasswordChange={setCurrentPassword}
+                    onNewPasswordChange={setNewPassword}
+                    onConfirmPasswordChange={setConfirmPassword}
+                    isValid={isValid}
+                    setIsValid={setIsValid}
+                    onClose={() => {toggleShowResetPasswordForm(false)}}
+                    />
                     </>
                 }
             </LoadingErrorFormWrapper>
