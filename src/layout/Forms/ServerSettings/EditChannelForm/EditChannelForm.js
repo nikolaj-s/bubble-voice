@@ -22,6 +22,7 @@ import { setManageWidgetsForChannel } from "../../../../features/Widgets/manageW
 import { Description } from "../../../../components/ui/Description/Description"
 import ToggleSwitch from "../../../../components/ui/Inputs/ToggleSwitch/ToggleSwitch"
 import { AuthorizedUserSelector } from "../../../../components/AuthorizedUserSelector/AuthorizedUserSelector"
+import BackButton from "../../../../components/ui/Buttons/BackButton/BackButton"
 
 export const EditChannelForm = ({permissions}) => {
 
@@ -124,7 +125,9 @@ export const EditChannelForm = ({permissions}) => {
     return (
         <NotAuthorized permission={permissions.user_can_edit_channels}>
             <LoadingErrorFormWrapper sliceName="editChannelSlice">
-                <div style={{width: 'auto', alignSelf: 'flex-start'}}>
+                
+                <div style={{width: '100%', alignSelf: 'flex-start', display: 'flex', gap: 10, top: 0, position: 'sticky', backgroundColor: 'var(--primary-color)', zIndex: 10}}>
+                    <BackButton />
                     <BoxLabel label={`Channel Type: ${channel.channel_type}`} />
                 </div>
                 <Header text={`Edit The ${channel.channel_name} Channel`} />

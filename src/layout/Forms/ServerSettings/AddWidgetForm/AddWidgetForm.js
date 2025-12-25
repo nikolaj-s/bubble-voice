@@ -14,6 +14,7 @@ import { AddRichTextWidget } from './AddRichTextWidget/AddRichTextWidget'
 import { AddDynamicMediaGallery } from './AddDynamicMediaGalleryWidgetForm/AddDynamicMediaGallery'
 import { AddMediaPlayerWidgetForm } from './AddMediaPlayerWidgetForm/AddMediaPlayerWidgetForm'
 import { SubPageWrapper } from '../../../../components/ui/Wrappers/SubPageWrapper/SubPageWrapper'
+import BackButton from '../../../../components/ui/Buttons/BackButton/BackButton'
 
 export const AddWidgetForm = ({permissions}) => {
 
@@ -47,6 +48,7 @@ export const AddWidgetForm = ({permissions}) => {
     return (
         <NotAuthorized permission={permissions.user_can_edit_channels}>
             <LoadingErrorFormWrapper sliceName='manageWidgetsSlice'>
+                <BackButton />
                 <Header text={`Add a Widget To ${channel.channel_name}`} />
                 <LineSpacer />
                 <SubPageWrapper page={activeSection}>

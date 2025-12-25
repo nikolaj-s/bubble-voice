@@ -2,12 +2,13 @@ import React from "react";
 import styles from "./LinkPreview.module.css";
 import { ImageComponent } from "../ui/Image/Image";
 import { useDispatch } from "react-redux";
-import { setExpandedImage } from "../../features/Media/ExpandedImage/expandedImageSlice";
+import { setExpandedImage, setImages } from "../../features/Media/ExpandedImage/expandedImageSlice";
 import { NsfwWrapper } from "../ui/Wrappers/NsfwWrapper/NsfwWrapper";
 import VideoPlayer from "../ui/Video/VideoPlayer/VideoPlayer";
 import { Description } from "../ui/Description/Description";
 import { VideoPreview } from "../ui/Video/VideoPreview/VideoPreview";
 import { PlayCircle, PlayIcon } from "lucide-react";
+import ImageCarousel from "../ImageCarousel/ImageCarousel";
 
 const LinkPreview = ({ link_preview: preview, nsfw }) => {
 
@@ -18,6 +19,7 @@ const LinkPreview = ({ link_preview: preview, nsfw }) => {
 
     if (preview.image && !preview.video) dispatch(setExpandedImage(preview));
 
+    if (preview.images) dispatch(setImages(preview.images));
   
   };
 
@@ -32,7 +34,10 @@ const LinkPreview = ({ link_preview: preview, nsfw }) => {
     onClick={openLink} className={styles.linkPreview}>
       <div onClick={openPreview} className={styles.previewMedia}>
         <NsfwWrapper nsfw={nsfw ? { nsfw } : preview}>
-          {preview.url.includes('youtu') || preview.video ?
+          {preview?.images ?
+          <ImageCarousel images={preview?.images} />
+          :
+          preview.url.includes('youtu') || preview.video ?
           
           <VideoPlayer src={preview.video || preview.url} thumbnail={preview.image} title={preview.title} />
           :

@@ -1,0 +1,157 @@
+.badge {
+  width: calc(100% - 10px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 auto;
+    box-sizing: border-box;
+  background: var(--card-background-color);
+  color: var(--text-color);
+  padding: 10px 12px;
+  border-radius: var(--border-radius);
+    border: none;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
+  transition: border-color 0.15s ease, background 0.2s ease;
+}
+
+
+.compact {
+  padding: 8px 10px;
+  border-radius: 12px;
+}
+
+.iconWrap {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+
+  display: grid;
+  place-items: center;
+
+  background: rgba(18, 26, 34, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+}
+
+.icon {
+  color: var(--link-color);
+  opacity: 0.95;
+}
+
+.bubble,
+.bubble2 {
+  position: absolute;
+  bottom: -8px;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(17, 255, 255, 0.22);
+  filter: blur(0.2px);
+  animation: rise 2.6s ease-in-out infinite;
+}
+
+.bubble {
+  left: 6px;
+}
+
+.bubble2 {
+  left: 18px;
+  width: 7px;
+  height: 7px;
+  opacity: 0.75;
+  animation-duration: 3.2s;
+  animation-delay: 0.4s;
+}
+
+@keyframes rise {
+  0% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  35% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-22px);
+    opacity: 0;
+  }
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.label {
+  font-size: 12px;
+  letter-spacing: 0.2px;
+  opacity: 0.85;
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.value {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.level {
+  font-size: 12px;
+  opacity: 0.85;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(18, 26, 34, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.subRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.stage {
+  font-size: 12px;
+  opacity: 0.78;
+  white-space: nowrap;
+}
+
+.progressWrap {
+  height: 8px;
+  flex: 1;
+  border-radius: 999px;
+  background: rgba(18, 26, 34, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(17, 255, 255, 0.35),
+    rgba(92, 157, 189, 0.55)
+  );
+  transition: width 0.25s ease;
+}
+
+.action {
+  opacity: 0.55;
+  display: grid;
+  place-items: center;
+}
+
+.badge:hover .action {
+  opacity: 0.9;
+}

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import UserPermissionsEditor from '../../../../components/Permissions/UserPermissionsEditor/UserPermissionsEditor';
 import { useSearchParams } from 'react-router-dom';
 import { updatePermissionGroup } from '../../../../features/ServerPermissions/Thunks/updatePermissionGroup';
+import BackButton from '../../../../components/ui/Buttons/BackButton/BackButton';
 
 export const EditPermissionGroupForm = ({permissions}) => {
 
@@ -24,6 +25,7 @@ export const EditPermissionGroupForm = ({permissions}) => {
 
     return (
         <NotAuthorized permission={permissions.user_can_manage_server_groups}>
+            <BackButton />
             <UserPermissionsEditor onUpdate={handleUpdate} permissions={permissionGroup} />
         </NotAuthorized>
     )

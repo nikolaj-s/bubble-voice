@@ -1,7 +1,5 @@
 import React from 'react';
 
-import ResponsiveGrid from '../../../components/ui/Wrappers/ResponsiveGrid/ResponsiveGrid';
-
 import ServerWelcomeMessage from '../../../components/Headers/ServerWelcomeMessage/ServerWelcomeMessage';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,6 +10,7 @@ import { Widgets } from '../../../components/Widgets/Widgets';
 
 import { fetchPinnedWidgets } from '../../../features/Widgets/Thunks/fetchPinnedWIdgets';
 import ScrollLoadWrapper from '../../../components/ui/Wrappers/ScrollLoadWrapper/ScrollLoadWrapper';
+import { RecentPostsFeed } from './RecentPostsFeed/RecentPostsFeed';
 
 export const ServerDashboard = () => {
 
@@ -37,6 +36,7 @@ export const ServerDashboard = () => {
         <ScrollLoadWrapper>
             <ServerWelcomeMessage {...details} display_name={display_name} />
             {recommendations}
+            <RecentPostsFeed />
             {widgets?.length > 0 && (<Widgets widgets={widgets} editing={false} />)}
         </ScrollLoadWrapper>
     )

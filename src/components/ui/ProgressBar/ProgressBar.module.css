@@ -9,7 +9,7 @@
   .progressTrack {
     width: 100%;
     height: 10px;
-    background: var(--background-color);
+    background: var(--input-background-color);
     border-radius: 4px;
     overflow: hidden;
   }

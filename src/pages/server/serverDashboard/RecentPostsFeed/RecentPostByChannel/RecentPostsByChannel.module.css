@@ -1,0 +1,82 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.channelCard {
+  background: var(--card-background-color);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.channelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  padding: 10px;
+
+  background: var(--background-color);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.channelPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  max-width: 100%;
+
+  padding: 6px 10px;
+  border-radius: 999px;
+
+  background: var(--overlay-color);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  color: var(--text-color);
+}
+
+.hashIcon {
+  color: var(--link-color);
+  opacity: 0.95;
+}
+
+.channelName {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-color);
+  opacity: 0.92;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 260px;
+}
+
+.count {
+  font-size: 12px;
+  color: var(--text-color);
+  opacity: 0.8;
+
+  padding: 4px 8px;
+  border-radius: 999px;
+
+  background: var(--overlay-color);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.messages {
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  pointer-events: none;
+  max-height: 500px;
+
+  background: var(--card-background-color);
+}

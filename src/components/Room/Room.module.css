@@ -28,7 +28,7 @@
     display: flex;
     align-items: center;
     gap: 0px;
-    background-color: var(--background-color);
+    background-color: var(--input-background-color);
     box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.5);
     padding: 5px;
     margin: 5px;

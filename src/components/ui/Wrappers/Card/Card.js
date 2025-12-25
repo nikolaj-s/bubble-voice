@@ -4,9 +4,9 @@ import styles from './Card.module.css';
 
 import { motion } from 'framer-motion';
 
-export const Card = ({className, children, ...props}) => {
+export const Card = ({className, children, ...props}, ref) => {
     return (
-        <motion.div className={`${styles.container} ${className}`} {...props}>
+        <motion.div ref={ref} className={`${styles.container} ${className}`} {...props}>
             {children}
         </motion.div>
     )

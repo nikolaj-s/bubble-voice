@@ -1,0 +1,36 @@
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+    flex-shrink: 0;
+  padding: 6px 10px;
+  border-radius: 10px;
+
+  background: rgba(18, 26, 34, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  color: var(--text-color);
+  font-size: 13px;
+  font-weight: 500;
+
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.backButton:hover {
+  transform: translateY(-1px);
+  background: rgba(18, 26, 34, 0.6);
+  border-color: rgba(17, 255, 255, 0.2);
+}
+
+.backButton:active {
+  transform: translateY(0);
+}
+
+.label {
+  white-space: nowrap;
+  opacity: 0.95;
+}

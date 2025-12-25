@@ -1,57 +1,86 @@
 .card {
-  background-color: var(--card-background-color);
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  transition: 0.2s ease;
+  background: var(--card-background-color);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 10px 12px;
+
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+
   width: calc(100% - 32px);
   cursor: pointer;
   position: relative;
+
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
 }
 
 .card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  background-color: var(--primary-color);
+  transform: translateY(-1px);
+  border-color: var(--link-color);
+  background: var(--card-background-color);
 }
 
 .card:hover .channelName,
 .card:hover .serverName {
-    text-decoration: underline;
+  text-decoration: none;
 }
 
 .header {
-  border-bottom: 1px solid var(--accent-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
   padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .more {
-    position: absolute;
-    top: 5px;
-    right: 5px;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+
+}
+
+.card:hover .more {
+  border-color: var(--link-color);
+  transform: scale(1.03);
 }
 
 .serverName {
-  color: var(--accent-color);
+  color: var(--text-color);
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 13px;
+  opacity: 0.92;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60%;
 }
 
 .channelName {
   color: var(--text-color);
-  opacity: 0.8;
-  font-size: 0.95rem;
+  font-size: 12px;
+  opacity: 0.78;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 40%;
 }
 
 .messages {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  scrollbar-color: var(--accent-color) transparent;
+
   pointer-events: none;
+  max-height: 540px;
+  overflow-y: auto;
+
+  scrollbar-color: var(--link-color) transparent;
 }
 
 .messages::-webkit-scrollbar {
@@ -59,27 +88,34 @@
 }
 
 .messages::-webkit-scrollbar-thumb {
-  background-color: var(--accent-color);
-  border-radius: 3px;
+  background-color: var(--link-color);
+  border-radius: 999px;
 }
 
 .noMessages {
   color: var(--text-color);
-  opacity: 0.6;
+  opacity: 0.65;
   font-style: italic;
   text-align: center;
-  padding: 16px 0;
+  padding: 10px 0;
 }
 
 .footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
   padding-top: 8px;
+
   display: flex;
   justify-content: flex-end;
 }
 
 .date {
   color: var(--text-color);
-  opacity: 0.5;
-  font-size: 0.8rem;
+  opacity: 0.65;
+  font-size: 12px;
+
+  padding: 4px 8px;
+  border-radius: 999px;
+
+  background: var(--overlay-color);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }

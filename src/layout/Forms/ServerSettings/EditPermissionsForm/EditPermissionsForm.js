@@ -48,7 +48,9 @@ export const EditPermissionsForm = ({permissions}) => {
 
     return (
         <NotAuthorized permission={permissions?.user_can_manage_server_groups}>
+           
             <LoadingErrorFormWrapper sliceName='serverPermissionsSlice'>
+          
                 <Header text='Create User Permission Group' />
                 <Label label='Enter a permission group name:' />
                 <TextInput value={name} onChange={setName} placeholder={'Name'} action={setName} />

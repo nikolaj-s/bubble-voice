@@ -4,7 +4,7 @@ import { sendMessage } from '../../../../features/Channel/TextChannel/Thunks/sen
 import { closeOverlay, setOverlay } from '../../../../features/Overlay/overlaySlice';
 import { setVoiceChannelFocused } from '../../../../features/Channel/VoiceChannel/voiceChannelSlice';
 import { clearExpandedImage } from '../../../../features/Media/ExpandedImage/expandedImageSlice';
-import { ChevronRight, Hash, ImageDown, Link, Send } from 'lucide-react';
+import { ChevronRight, Hash, ImageDown, Link, ScanSearch, Send } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { copyToClipboard, downloadImage } from '../../../../lib/services/helperFunctions';
 import { setFilter, setQuery, setSimilarImageSrc } from '../../../../features/Search/searchSlice';
@@ -95,7 +95,8 @@ export const useImageCtxMenu = () => {
                     dispatch(clearExpandedImage())
 
                 },
-                type: "button"
+                type: "button",
+                icon: <ScanSearch color='var(--text-color)' />
             })
         }
 
