@@ -12,8 +12,9 @@ import NoMediaHistoryPlaceholder from './NoMediaHistoryPlaceholder/NoMediaHistor
 import TextLabelError from '../../../components/Error/TextLabelError/TextLabelError';
 import ContentHeader from '../../../components/Headers/ContentHeader/ContentHeader';
 import { HistoryIcon } from 'lucide-react';
+import { MenuCloseHeader } from '../../../components/Headers/MenuCloseHeader/MenuCloseHeader';
 
-export const MediaPlayerHistory = () => {
+export const MediaPlayerHistory = ({close}) => {
     const dispatch = useDispatch();
 
     const [page, setPage] = React.useState(1);
@@ -68,7 +69,10 @@ export const MediaPlayerHistory = () => {
     };
 
     return (
+        <div style={{backgroundColor: 'var(--primary-color)', display: 'grid', gridTemplateRows: '45px auto', borderRadius: 'var(--border-radius)', overflow: 'hidden'}}>
+        <MenuCloseHeader />
         <ScrollLoadWrapper
+            style={{backgroundColor: 'var(--primary-color)'}}
             noMoreItems={no_more}
             loadMore={() => loadMoreRef.current()}
             loading={loading || localLoading}
@@ -86,5 +90,6 @@ export const MediaPlayerHistory = () => {
                     ))}
             </div>
         </ScrollLoadWrapper>
+        </div>
     )
 }

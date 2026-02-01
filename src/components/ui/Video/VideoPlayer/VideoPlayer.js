@@ -1,7 +1,8 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { Fullscreen, Maximize, PlayCircle, Volume2, VolumeX } from 'lucide-react';
+import { Maximize, PlayCircle, Volume2, VolumeX } from 'lucide-react';
 import styles from './VideoPlayer.module.css';
+
 import VolumeSlider from '../../Inputs/VolumeSlider/VolumeSlider';
 import { useDispatch, useSelector } from 'react-redux';
 import ProgressBar from '../../ProgressBar/ProgressBar';
@@ -13,87 +14,133 @@ import { setOverlay } from '../../../../features/Overlay/overlaySlice';
 
 const INACTIVITY_TIMEOUT = 2500;
 
-const VideoPlayer = ({ src, title, thumbnail }) => {
-
+const VideoPlayer = ({ src, title, thumbnail, DURATION, color }) => {
   const dispatch = useDispatch();
+  const { muteVideo } = useSelector((state) => state.contentSettingsSlice);
 
+  const containerRef = useRef(null);
   const playerRef = useRef(null);
 
   const hideControlsTimeoutRef = useRef(null);
-
-  const [interacted, toggleInteracted] = useState(false);
+  const wasPlayingRef = useRef(false);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+
   const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
+  const [duration, setDuration] = useState(DURATION || 0);
+
   const [volume, setVolume] = useState(100);
-  const [volumeHover, toggleVolumeHover] = useState(false);
   const [showControls, setShowControls] = useState(true);
 
-  const { muteVideo } = useSelector(state => state.contentSettingsSlice);
+  // --- basic controls ---
+  const togglePlay = useCallback(() => {
+    setIsPlaying((prev) => !prev);
+  }, []);
 
-  const togglePlay = () => {
-    setIsPlaying(prev => !prev);
-  };
-
-  const handleProgress = (state) => {
+  const handleProgress = useCallback((state) => {
     setCurrentTime(state.playedSeconds);
-  };
+  }, []);
 
-  const handleDuration = (dur) => {
+  const handleDuration = useCallback((dur) => {
     setDuration(dur);
-  };
+  }, []);
 
-  const handleSeek = (value) => {
+  const handleSeek = useCallback((value) => {
     playerRef.current?.seekTo(value, 'seconds');
     setCurrentTime(value);
-  };
+  }, []);
 
-  const handleVolumeChange = (newVolume) => {
+  const handleVolumeChange = useCallback((newVolume) => {
     setVolume(newVolume);
     setIsMuted(newVolume === 0);
-  };
+  }, []);
 
-  const toggleMute = () => {
-    const newMuted = !isMuted;
-    setIsMuted(newMuted);
-    if (!newMuted && volume === 0) {
-      setVolume(50);
-    }
-  };
+  const toggleMute = useCallback(() => {
+    setIsMuted((prev) => {
+      const next = !prev;
+      if (!next && volume === 0) setVolume(50);
+      return next;
+    });
+  }, [volume]);
 
+  // --- global mute setting ---
   useEffect(() => {
-    if (muteVideo) {
-      setIsMuted(true);
-    }
+    if (muteVideo) setIsMuted(true);
   }, [muteVideo]);
 
+  // --- cleanup ---
   useEffect(() => {
     return () => clearTimeout(hideControlsTimeoutRef.current);
   }, []);
 
-  const handleMouseMove = () => {
+  // --- hide controls after inactivity ---
+  const scheduleHideControls = useCallback(() => {
     setShowControls(true);
     clearTimeout(hideControlsTimeoutRef.current);
     hideControlsTimeoutRef.current = setTimeout(() => {
       setShowControls(false);
     }, INACTIVITY_TIMEOUT);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setShowControls(false);
+    clearTimeout(hideControlsTimeoutRef.current);
+  }, []);
+
+  // --- auto pause when not in view ---
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        const inView = entry?.isIntersecting;
+
+        if (!inView) {
+          // remember if it was playing so we can resume only in that case
+          wasPlayingRef.current = isPlaying;
+          if (isPlaying) setIsPlaying(false);
+          return;
+        }
+
+        // back in view: resume only if it was playing before leaving view
+        if (wasPlayingRef.current) {
+          setIsPlaying(true);
+          wasPlayingRef.current = false;
+        }
+      },
+      {
+        // tweak to taste: 0.25 means it pauses when less than 25% visible
+        threshold: 0.25,
+      }
+    );
+
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [isPlaying]);
+
+  const contextPayload = {
+    type: 'video',
+    src,
+    title: title || src,
+    duration: Math.floor(duration),
+    query: title || src,
+    thumbnail,
+    color,
   };
 
   return (
     <div
-      onClick={(e) => {e.stopPropagation()}}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={() => {
-        setShowControls(false);
-        clearTimeout(hideControlsTimeoutRef.current);
-      }}
+      ref={containerRef}
+      onClick={(e) => e.stopPropagation()}
+      onMouseMove={scheduleHideControls}
+      onMouseLeave={handleMouseLeave}
       className={`${styles.customVideoContainer} ${!showControls ? styles.hideCursor : ''}`}
-      data-context={JSON.stringify({ type: 'video', src, title: title || src, duration: Math.floor(duration), query: title || src })}
+      data-context={JSON.stringify(contextPayload)}
     >
       <ReactPlayer
-        light={isPlaying ? false : thumbnail}
         ref={playerRef}
         url={src}
         playing={isPlaying}
@@ -101,43 +148,76 @@ const VideoPlayer = ({ src, title, thumbnail }) => {
         volume={volume / 100}
         width="100%"
         height="100%"
+        light={isPlaying ? false : thumbnail}
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
         onProgress={handleProgress}
         onDuration={handleDuration}
-        onError={(e) => {console.log(e)}}
+        onError={(e) => console.log(e)}
         controls={false}
         playsinline
       />
-      <RedditAudioSrc autoPlay={false} currentTime={currentTime} isPlaying={isPlaying} muted={isMuted} url={src} volume={volume / 100} />
-      <div className={styles.overlay} style={{opacity: isPlaying ? 0 : null}} onClick={() => {togglePlay(); toggleInteracted(true)}}>
-          {!isPlaying && (<PlayCircle size={64} className={styles.overlayPlayIcon} />)}
+
+      <RedditAudioSrc
+        autoPlay={false}
+        currentTime={currentTime}
+        isPlaying={isPlaying}
+        muted={isMuted}
+        url={src}
+        volume={volume / 100}
+      />
+
+      {/* big play overlay */}
+      <div
+        className={styles.overlay}
+        style={{ opacity: isPlaying ? 0 : undefined }}
+        onClick={() => {
+          togglePlay();
+          scheduleHideControls();
+        }}
+      >
+        {!isPlaying && <PlayCircle size={64} className={styles.overlayPlayIcon} />}
       </div>
+
+      {/* controls */}
       <div className={styles.videoControls}>
         <div className={styles.controlWrapper}>
-          <ProgressBar width="100%" duration={duration} currentTime={currentTime} onSeek={handleSeek} />
+          <ProgressBar
+            width="100%"
+            duration={duration}
+            currentTime={currentTime}
+            onSeek={handleSeek}
+          />
+
           <div className={styles.volumeControl}>
-            
-            <div onMouseEnter={() => toggleVolumeHover(true)} className={styles.volumeWrapper}>
-              <IconButton 
-              Icon={isMuted ? VolumeX : Volume2}
-              onClick={toggleMute}
-              title={isMuted ? 'Unmute' : 'Mute'}
+            <div className={styles.volumeWrapper}>
+              <IconButton
+                Icon={isMuted ? VolumeX : Volume2}
+                onClick={toggleMute}
+                title={isMuted ? 'Unmute' : 'Mute'}
               />
-                <div
-                  className={styles.volumeSlider}
-                >
-                  <VolumeSlider
-                    min={0}
-                    max={100}
-                    step={1}
-                    value={volume}
-                    onChange={handleVolumeChange}
-                    label={volume}
-                  />
-                </div>
+
+              <div className={styles.volumeSlider}>
+                <VolumeSlider
+                  min={0}
+                  max={100}
+                  step={1}
+                  value={volume}
+                  onChange={handleVolumeChange}
+                  label={volume}
+                />
+              </div>
             </div>
-            <IconButton Icon={Maximize} title={'Expand'} onClick={() => {dispatch(expandVideo({src})); dispatch(setOverlay('expandVideo')); setIsPlaying(false)}} />
+
+            <IconButton
+              Icon={<Maximize color='var(--text-color)' strokeWidth={2.5} />}
+              title="Expand"
+              onClick={() => {
+                dispatch(expandVideo({ src }));
+                dispatch(setOverlay('expandVideo'));
+                setIsPlaying(false);
+              }}
+            />
           </div>
         </div>
       </div>
@@ -147,7 +227,10 @@ const VideoPlayer = ({ src, title, thumbnail }) => {
 
 VideoPlayer.propTypes = {
   src: PropTypes.string.isRequired,
-  title: PropTypes.string
+  title: PropTypes.string,
+  thumbnail: PropTypes.string,
+  DURATION: PropTypes.number,
+  color: PropTypes.string,
 };
 
 export default VideoPlayer;

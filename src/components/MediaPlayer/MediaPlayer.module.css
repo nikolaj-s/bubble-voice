@@ -3,12 +3,20 @@
   border-radius: var(--border-radius);
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  width: calc(100% - 20px);
-  padding: 10px;
+  
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.wrapper {
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: calc(100% - 20px);
+  padding: 10px;
 }
 
 .searchMediaButton {

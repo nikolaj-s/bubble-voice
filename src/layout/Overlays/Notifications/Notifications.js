@@ -20,6 +20,7 @@ import { JoinServer } from '../../../features/JoinServer/Thunks/JoinServer';
 import { isValidObjectId } from '../../../lib/services/helperFunctions';
 import { triggerAlert } from '../../../features/Alerts/alertsSlice';
 import { createConversation } from '../../../features/Conversations/Thunks/createConversation';
+import { MenuCloseHeader } from '../../../components/Headers/MenuCloseHeader/MenuCloseHeader';
 
 export const Notifications = () => {
 
@@ -114,13 +115,10 @@ export const Notifications = () => {
     if (!open) return null;
 
     return (
-    <QuickMenuWrapper close={() => {dispatch(toggleNotificationPanel())}} top={window?.electron ? 80 : 40} right={20} bottom={0} left={null}>
+    <QuickMenuWrapper title="Notifications" close={() => {dispatch(toggleNotificationPanel())}} top={window?.electron ? 80 : 45} right={10} bottom={10} left={null}>
         <ScrollLoadWrapper>
             {error && (<TextLabelError error={error} />)}
-            <StickyWrapper className={styles.header}>
-                <Label label='Your Notifications' />
-                <IconButton Icon={<X color='var(--text-color)' />} title={'Close'} onClick={() => {dispatch(toggleNotificationPanel())}} />
-            </StickyWrapper>
+           
             {notifications?.length === 0 && (<ContentPlaceholder icon={Bell} title={"No Notifications"} message={'You are all caught up'} />)}
             {notifications.map(notifcation => (<NotificationItem notification={notifcation} onClick={handleOpenNotification} onDelete={onDelete} />))}
         </ScrollLoadWrapper>

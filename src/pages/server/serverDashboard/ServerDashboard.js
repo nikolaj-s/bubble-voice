@@ -33,11 +33,11 @@ export const ServerDashboard = () => {
     }, [server_id, dispatch])
    
     return (
-        <ScrollLoadWrapper>
+        <ScrollLoadWrapper maxContentWidth={'100%'} style={{backgroundColor: details?.color}}>
             <ServerWelcomeMessage {...details} display_name={display_name} />
             {recommendations}
-            <RecentPostsFeed />
             {widgets?.length > 0 && (<Widgets widgets={widgets} editing={false} />)}
+            <RecentPostsFeed />
         </ScrollLoadWrapper>
     )
 }

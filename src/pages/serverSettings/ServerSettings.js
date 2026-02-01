@@ -16,6 +16,7 @@ import { ManageChannelsForm } from '../../layout/Forms/ServerSettings/ManageChan
 import { InvitesForm } from '../../layout/Forms/ServerSettings/InvitesForm/InvitesForm'
 import { ServerSecurityForm } from '../../layout/Forms/ServerSettings/ServerSecurityForm/ServerSecurityForm'
 import { CreateMomentForm } from '../../layout/Forms/ServerSettings/CreateMomentForm/CreateMomentForm'
+import { ModerationForm } from '../../layout/Forms/ServerSettings/ModerationForm/ModerationForm'
 
 export const ServerSettings = ({close}) => {
 
@@ -27,6 +28,7 @@ export const ServerSettings = ({close}) => {
         {key: "permissions", label: "Edit Permissions"},
         {key: "manageUsers", label: "Manage Users"},
         {key: "manageChannels", label: "Manage Channels"},
+        {key: "moderation", label: "Moderation"},
         {key: "security", label: "Security"},
         {key: "contentData", label: "Content & Data"},
     ]
@@ -46,12 +48,13 @@ export const ServerSettings = ({close}) => {
         addWidget: <AddWidgetForm />,
         manageWidgets: <ManageWidgetsForm />,
         manageChannels: <ManageChannelsForm />,
-        createMoment: <CreateMomentForm />
+        createMoment: <CreateMomentForm />,
+        moderation: <ModerationForm />
     }
 
     return (
         <ProtectedFormWrapper>
-            <MenuWrapper navItems={navItems}>
+            <MenuWrapper onClose={close} navItems={navItems}>
                     {content}
             </MenuWrapper>
         </ProtectedFormWrapper>

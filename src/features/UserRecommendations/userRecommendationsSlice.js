@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchUserRecommendations } from "./Thunks/fetchUserRecommendations";
+import { deleteUserRecommendations } from "./Thunks/deleteUserRecommendations";
 
 
 const userRecommendationsSlice = createSlice({
@@ -26,6 +27,21 @@ const userRecommendationsSlice = createSlice({
             state.error = false;
             state.status = 'complete';
             state.recommendations = action.payload;
+        })
+
+        // delete user recommendations 
+        builder.addCase(deleteUserRecommendations.pending, (state) => {
+            state.loading = true;
+            state.error = false;
+        })
+        .addCase(deleteUserRecommendations.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        })
+        .addCase(deleteUserRecommendations.fulfilled, (state, action) => {
+            state.loading = false;
+            state.error = false;
+            state.recommendations = [];
         })
     }
 })

@@ -21,7 +21,6 @@ const recentPostsFeedSlice = createSlice({
             state.loading = false;
         })
         .addCase(fetchRecentPosts.fulfilled, (state, action) => {
-            console.log(action.payload)
             state.error = false;
             state.loading = false;
 

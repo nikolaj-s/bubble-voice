@@ -1,7 +1,7 @@
 
 .navbar {
     display: grid;
-    grid-template-columns: var(--users-width, 250px) minmax(1px, 1fr) 250px;
+    grid-template-columns: var(--users-width, 250px) minmax(1px, 1fr) auto;
     grid-template-rows: 1fr;
     align-items: center;
     justify-content: center;
@@ -87,7 +87,7 @@
   }
 
 .navButtons {
-  padding: 0px 8px;
+  padding: 0px 8px 0px 2.5px;
   width: calc(100% - 16px);
   justify-content: flex-end;
   gap: 5px;

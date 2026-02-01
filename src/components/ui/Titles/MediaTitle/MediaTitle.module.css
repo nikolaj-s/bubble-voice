@@ -1,5 +1,5 @@
 .mediaTitle {
-    position: absolute;
+    position: relative;
     top: 0;
     left: 0;
     background: var(--overlay-color); /* semi-transparent overlay */
@@ -10,7 +10,6 @@
     display: flex;
     align-items: center;
     backdrop-filter: blur(6px);
-    border-bottom-right-radius: 12px;
-    border-top-left-radius: 12px;
+    border-radius: var(--border-radius);
     z-index: 3;
   }

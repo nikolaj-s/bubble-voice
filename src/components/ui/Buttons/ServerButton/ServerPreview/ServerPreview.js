@@ -3,9 +3,9 @@ import { MiniUserPreview } from '../../../MiniUserPreview/MiniUserPreview';
 import { Subtitle } from '../../../Titles/Subtitle/Subtitle';
 import styles from './ServerPreview.module.css';
 
-export const ServerPreview = ({server_name, active_users, recent_message, server_banner}) => {
+export const ServerPreview = ({server_name, active_users, recent_message, server_banner, color}) => {
     return (
-        <div className={styles.container}>
+        <div className={styles.container} style={{backgroundColor: color}}>
             <div className={styles.banner}>
                 <ImageComponent src={server_banner} />
             </div>

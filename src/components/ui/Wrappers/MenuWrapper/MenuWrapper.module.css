@@ -54,13 +54,15 @@
   
   .contentArea {
     flex: 1;
-    padding: 10px;
+    padding: 0px;
     background-color: var(--primary-color);
-    display: grid;
-    height: calc(100% - 20px);
+    height: calc(100% - 5px);
     overflow-x: hidden;
     overflow: hidden;
     position: relative;
+    padding-bottom: 20px;
+    display: grid;
+    grid-template-rows: 50px auto;
   }
 
   .contentWrapper {

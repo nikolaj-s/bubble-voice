@@ -131,3 +131,24 @@
     display: none;
   }
 }
+
+/* Arrow X offset used by top/bottom arrows */
+.tooltipTop::after,
+.tooltipTop::before,
+.tooltipBottom::after,
+.tooltipBottom::before {
+  left: var(--tip-arrow-x, 50%);
+  transform: translateX(-50%);
+}
+
+/* Arrow Y offset used by left/right arrows */
+.tooltipRight::after,
+.tooltipRight::before,
+.tooltipLeft::after,
+.tooltipLeft::before {
+  top: var(--tip-arrow-y, 50%);
+  transform: translateY(-50%);
+}
+
+/* your existing rules can keep their defaults;
+   these lines just override left/top + transform cleanly */

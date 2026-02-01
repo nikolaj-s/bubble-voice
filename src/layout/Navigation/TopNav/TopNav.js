@@ -15,9 +15,8 @@ import { toggleMobileMenu } from "../../../features/Mobile/mobileSlice";
 import { Logo } from "../../../components/Icons/Bubble/Logo";
 import { triggerContext } from "../../../lib/services/helperFunctions";
 import MetaTags from "../../../components/MetaTags/MetaTags";
-import { setChannelDescription } from "../../../features/Channel/ChannelDescription/channelDescriptionSlice";
-import { setChannelToViewWidgetsOf } from "../../../features/Widgets/widgetsSlice";
 import { NotificationButton } from "./NotificationButton/NotificationButton";
+import { useChannelMethods } from "../../../hooks/useChannelMethods";
 
 const TopNav = () => {
   
@@ -36,6 +35,8 @@ const TopNav = () => {
   const {currentTextChannel} = useSelector(state => state.textChannelSlice);
 
   const channelDetails = useSelector(state => state.channelsSlice.channels[currentTextChannel || currentVoiceChannel]);
+
+  const {viewChannelDescription, viewWidgets} = useChannelMethods();
 
   const handleOpenSearch = () => {
 
@@ -60,19 +61,13 @@ const TopNav = () => {
   }
 
   const expandChannelDescription = () => {
-    if (channelDetails) {
-
-      dispatch(setChannelDescription(channelDetails));
-
-      dispatch(setOverlay('channelDescription'));
-    }
+    viewChannelDescription(channelDetails);
   }
 
   const openWidgets = () => {
 
-    dispatch(setChannelToViewWidgetsOf(currentTextChannel || currentVoiceChannel))
+    viewWidgets(currentTextChannel || currentVoiceChannel);
 
-    dispatch(setOverlay('widgets'));
   }
 
   return (

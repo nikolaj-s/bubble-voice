@@ -53,7 +53,7 @@ export const Settings = ({close}) => {
     }, [dispatch])
         
     return (
-        <MenuWrapper navItems={navItems} showFooter={true}>
+        <MenuWrapper onClose={close} navItems={navItems} showFooter={true}>
             {content}
         </MenuWrapper>
     )

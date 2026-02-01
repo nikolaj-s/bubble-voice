@@ -1,5 +1,4 @@
 import React from 'react';
-import { Card } from '../../../../components/ui/Wrappers/Card/Card';
 import ContentHeader from '../../../../components/Headers/ContentHeader/ContentHeader';
 import { MessageSquareText, MessageSquareX } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -67,8 +66,8 @@ export const RecentPostsFeed = () => {
   }, [server_id, dispatch]);
 
   return (
-    <div ref={cardRef}>
-      <ContentHeader Icon={MessageSquareText} title="Recent Posts" />
+    <div style={{position: 'relative'}} ref={cardRef}>
+      <ContentHeader style={{marginBottom: 10}} Icon={MessageSquareText} title="Recent Posts" />
 
       {error && <TextLabelError error={error} />}
 

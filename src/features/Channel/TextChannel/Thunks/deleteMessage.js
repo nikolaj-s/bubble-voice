@@ -4,6 +4,7 @@ import { generateFormData } from "../../../../lib/services/generateFormData";
 import axios from "axios";
 import { API_URL } from "../../../../lib/Validation";
 import { triggerAlert } from "../../../Alerts/alertsSlice";
+import { removeMessageFromSearchResults } from "../../../Search/searchSlice";
 
 
 export const deleteMessage = createAsyncThunk(
@@ -30,6 +31,8 @@ export const deleteMessage = createAsyncThunk(
             if (response.data.deleted) {
                 
                 dispatch(triggerAlert("Message Deleted"));
+
+                dispatch(removeMessageFromSearchResults(params.message_id));
 
                 return response.data;
             }

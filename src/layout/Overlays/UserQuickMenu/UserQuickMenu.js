@@ -34,7 +34,7 @@ export const UserQuickMenu = ({close}) => {
     }
 
     return (
-        <QuickMenuWrapper close={close}>
+        <QuickMenuWrapper title={'User Quick Access Menu'} left={75} bottom={80} close={close}>
             <Profile account={account} options={true} />
             <Label label='Status:' margin={'5px 0px 0px 5px'} />
             <StatusSwitcher onChange={handleUpdateStatus} {...account} />

@@ -8,6 +8,7 @@ import { MediaPlayerQueue } from './MediaPlayerQueue/MediaPlayerQueue';
 import { CurrentlyPlaying } from './CurrentlyPlaying/CurrentlyPlaying';
 import { MediaPlayerControls } from './MediaPlayerControls/MediaPlayerControls';
 import { useEffect, useState } from 'react';
+import { MenuCloseHeader } from '../Headers/MenuCloseHeader/MenuCloseHeader';
 
 export const MediaPlayer = ({
   queue = [],
@@ -30,6 +31,7 @@ export const MediaPlayer = ({
   openSaves = () => {},
   onReorder = () => {},
   viewHistory = () => {},
+  onClose = () => {}
 }) => {
 
   const [showLoading, toggleShowLoading] = useState(false);
@@ -66,35 +68,38 @@ export const MediaPlayer = ({
   }, [loading])
 
   return (
-    <div id={'media-player-overlay'} data-context={JSON.stringify({currentlyPlaying, type: 'mediaplayer'})} className={styles.mediaPlayer}>
-        <button onClick={openSearchMedia} className={styles.searchMediaButton}>
-            <span className={styles.searchMediaTitle}>What do you want to play?</span>
-            <span className={styles.searchMediaWrapper}>
-                <Search style={{marginRight: 10}} color='var(--text-color)' />
-                <PillSpacer height={'calc(100% - 20px)'}  verticle={true} />
-                <div onClick={(e) => {e.stopPropagation(); openSaves()}} className={styles.saves}>
-                    <Bookmark color='var(--text-color)' />
-                </div>
-            </span>
-        </button>
-        {error && (<TextLabelError error={error} label='Error:' />)}
-        <CurrentlyPlaying currentlyPlaying={currentlyPlaying} color={color} />
-        <MediaPlayerControls 
-        currentlyPlaying={currentlyPlaying}
-        queue={queue}
-        hideQueue={hideQueue}
-        toggleHideQueue={toggleHideQueue}
-        currentTime={currentTime} duration={duration} 
-        handleSeek={handleSeek} onSkip={onSkip} 
-        onTogglePlay={onTogglePlay} playing={playing} 
-        onVolumeChange={onVolumeChange}
-        volume={volume}
-        muted={muted}
-        toggleMuted={toggleMuted}
-        viewHistory={viewHistory}
-        />
-        {!hideQueue && (<MediaPlayerQueue queue={queue} onReorder={onReorder} />)}
-        {showLoading && (<SpinnerLoading />)}
+    <div id={'media-player-overlay'} style={{backgroundColor: color}} data-context={JSON.stringify({currentlyPlaying, type: 'mediaplayer'})} className={styles.mediaPlayer}>
+        <MenuCloseHeader title={'Media Player'} onClose={onClose} />
+        <div className={styles.wrapper}>
+          <button onClick={openSearchMedia} className={styles.searchMediaButton}>
+              <span className={styles.searchMediaTitle}>What do you want to play?</span>
+              <span className={styles.searchMediaWrapper}>
+                  <Search style={{marginRight: 10}} color='var(--text-color)' />
+                  <PillSpacer height={'calc(100% - 20px)'}  verticle={true} />
+                  <div onClick={(e) => {e.stopPropagation(); openSaves()}} className={styles.saves}>
+                      <Bookmark color='var(--text-color)' />
+                  </div>
+              </span>
+          </button>
+          {error && (<TextLabelError error={error} label='Error:' />)}
+          <CurrentlyPlaying currentlyPlaying={currentlyPlaying} color={color} />
+          <MediaPlayerControls 
+          currentlyPlaying={currentlyPlaying}
+          queue={queue}
+          hideQueue={hideQueue}
+          toggleHideQueue={toggleHideQueue}
+          currentTime={currentTime} duration={duration} 
+          handleSeek={handleSeek} onSkip={onSkip} 
+          onTogglePlay={onTogglePlay} playing={playing} 
+          onVolumeChange={onVolumeChange}
+          volume={volume}
+          muted={muted}
+          toggleMuted={toggleMuted}
+          viewHistory={viewHistory}
+          />
+          {!hideQueue && (<MediaPlayerQueue queue={queue} onReorder={onReorder} />)}
+          {showLoading && (<SpinnerLoading />)}
+        </div>
     </div>
   );
 };

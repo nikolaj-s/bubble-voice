@@ -21,7 +21,7 @@ export const ImageComponent = ({src, altSrc, objectFit = 'cover', alt = "Image",
         }}
         className={`${styles.imageContainer} ${loading && src ? styles.loading : ''} ${className}`}>
             {imageError || !src ? (
-                <ImageOff color='var(--text-color)' />
+                <ImageOff />
             ) : (
                 <img
                //     ref={ref}

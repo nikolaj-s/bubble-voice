@@ -1,15 +1,12 @@
 import { FilePenLine, LayoutDashboard } from "lucide-react";
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setChannelToViewWidgetsOf } from "../../../../features/Widgets/widgetsSlice";
-import { setOverlay } from "../../../../features/Overlay/overlaySlice";
 import { useNavigate } from "react-router";
-import { setChannelToEdit } from "../../../../features/Channel/editChannel/editChannelSlice";
 import { useSearchParams } from "react-router-dom";
 import { BoolIndicator } from "../../../../components/ui/BoolIndicator/BoolIndicator";
 import { unSubscribe } from "../../../../features/Subscriptions/Thunks/unSubscribe";
 import { subscribe } from "../../../../features/Subscriptions/Thunks/subscribe";
-
+import { useChannelMethods } from "../../../../hooks/useChannelMethods";
 
 export const useChannelCtxMenu = () => {
 
@@ -25,6 +22,8 @@ export const useChannelCtxMenu = () => {
 
     const {currentTextChannel} = useSelector(state => state.textChannelSlice);
 
+    const {viewWidgets, editSelectedChannel} = useChannelMethods();
+
     const getChannelOptions = useCallback((options, data, permissions) => {
 
         const channel = data.channel;
@@ -36,9 +35,7 @@ export const useChannelCtxMenu = () => {
             icon: <LayoutDashboard color="var(--text-color)" />,
             onClick: () => {
 
-                dispatch(setChannelToViewWidgetsOf(channel._id));
-
-                dispatch(setOverlay('widgets'));
+                viewWidgets(channel);
 
             },
             type: 'button'
@@ -60,11 +57,8 @@ export const useChannelCtxMenu = () => {
                 label: "Edit Channel",
                 onClick: () => {
 
-                    dispatch(setChannelToEdit(channel));
+                    editSelectedChannel(channel);
 
-                    setSearchParams({section: 'editChannel', channel: channel._id});
-                    
-                    dispatch(setOverlay('serverSettings'));
                 },
                 type: "button",
                 icon: <FilePenLine color="var(--text-color)" />

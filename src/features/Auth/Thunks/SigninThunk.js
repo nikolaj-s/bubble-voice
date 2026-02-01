@@ -18,7 +18,7 @@ export const signinThunk = createAsyncThunk(
         }
 
         const response = await axios.post(`${API_URL}/sign-in`, { email, password });
-        
+        console.log(response)
         if (response.status >= 200 && response.status < 300) {
 
           if (response?.data?.success) {

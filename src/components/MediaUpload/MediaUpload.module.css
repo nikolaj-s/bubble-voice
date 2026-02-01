@@ -1,0 +1,267 @@
+/* MediaUpload.module.css */
+
+.wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  padding: 12px;
+  border-radius: var(--border-radius);
+  background: var(--card-background-color);
+  box-sizing: border-box;
+}
+
+.headerRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.icon {
+  color: var(--link-color);
+  opacity: 0.95;
+  flex: 0 0 auto;
+}
+
+.titleText {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  color: var(--text-color);
+  font-size: 14px;
+  font-weight: 800;
+  opacity: 0.95;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.subTitle {
+  color: var(--text-color);
+  opacity: 0.7;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.primaryBtn {
+  border: none;
+  border-radius: var(--border-radius);
+  background: var(--button-background);
+  color: var(--text-color);
+  padding: 8px 10px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 12px;
+
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.primaryBtn:hover {
+  transform: translateY(-1px);
+}
+
+.primaryBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.ghostBtn {
+  border: none;
+  border-radius: var(--border-radius);
+  background: var(--overlay-color);
+  color: var(--text-color);
+  padding: 8px 10px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 12px;
+  opacity: 0.9;
+
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.ghostBtn:hover {
+  transform: translateY(-1px);
+  opacity: 1;
+}
+
+.ghostBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.playerPanel {
+  width: 100%;
+  border-radius: var(--border-radius);
+  background: var(--primary-color);
+  padding: 12px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.video {
+  width: 100%;
+  max-height: 340px;
+  border-radius: var(--border-radius);
+  background: #000;
+  object-fit: contain;
+}
+
+.controlsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.playBtn {
+  border: none;
+  border-radius: var(--border-radius);
+  background: var(--overlay-color);
+  color: var(--text-color);
+
+  padding: 8px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 12px;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.playBtn:hover {
+  transform: translateY(-1px);
+}
+
+.playBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.timePill {
+  border-radius: var(--border-radius);
+  background: var(--overlay-color);
+  padding: 6px 10px;
+  color: var(--text-color);
+  opacity: 0.85;
+  font-size: 12px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.timeSep {
+  opacity: 0.6;
+}
+
+.scrubRow {
+  width: 100%;
+}
+
+.range {
+  width: 100%;
+  accent-color: var(--link-color);
+}
+
+.progressWrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.progressTrack {
+  flex: 1;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--overlay-color);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--button-background);
+  transition: width 0.12s linear;
+}
+
+.progressText {
+  color: var(--text-color);
+  opacity: 0.8;
+  font-size: 12px;
+  font-weight: 800;
+  min-width: 42px;
+  text-align: right;
+}
+
+.bottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.status {
+  color: var(--text-color);
+  opacity: 0.8;
+  font-size: 12px;
+  font-weight: 700;
+  min-height: 16px;
+}
+
+.metaPill {
+  border-radius: var(--border-radius);
+  background: var(--overlay-color);
+  color: var(--text-color);
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 800;
+  opacity: 0.9;
+  white-space: nowrap;
+}
+
+.hint {
+  color: var(--text-color);
+  opacity: 0.65;
+  font-size: 12px;
+  line-height: 1.35;
+}

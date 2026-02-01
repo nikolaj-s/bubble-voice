@@ -18,7 +18,7 @@ export const sendMessage = createAsyncThunk(
      
             if (!params.channel_id) return rejectWithValue("Invalid Channel");
 
-            if (params.text?.trim().length === 0 && !params.image && !params.images) return rejectWithValue("Cannot send an empty message")
+            if (params.text?.trim().length === 0 && !params.image && !params.images && !params.media) return rejectWithValue("Cannot send an empty message")
 
             if (params?.text?.length > 1024) return rejectWithValue("Message exceeds the character limit");
 

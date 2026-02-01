@@ -30,6 +30,7 @@ export const ServerButton = ({ action, server_banner, server_name, server_id, ac
         <div data-context={JSON.stringify({...server, type: 'server'})} style={{position: 'relative'}}>
             <AlertIndicator active={unread_message} />
             <IconButton 
+            toolTipBackground={server?.color}
             backgroundColor={isActive ? 'var(--accent-color)' : 'var(--background-color)'}
             onClick={handleAction}
             width={50}
@@ -37,7 +38,7 @@ export const ServerButton = ({ action, server_banner, server_name, server_id, ac
             padding={2}
             position='right'
             title={
-                <ServerPreview server_banner={server_banner} server_name={server_name} active_users={active_users} />
+                <ServerPreview server_banner={server_banner} server_name={server_name} active_users={active_users} color={server?.color} />
             }
             Icon={
             <div 

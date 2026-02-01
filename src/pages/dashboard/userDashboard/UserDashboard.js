@@ -25,7 +25,6 @@ export const UserDashboard = () => {
             <section 
             style={{height: window?.electron?.ipcRenderer ? 'calc(100svh - 75px)' : null}}
             className={`${styles.sectionOne} ${isChannelMenuOpen ? styles.sectionOneMobile : ''}`}>
-                <Banner padding={5} image={user_banner} />
                 <UserDashboardMenu />
                 <RecentConversations />
                 <ControlBar key={'control-bar'} inChannel={false} />

@@ -3,4 +3,6 @@
   flex-direction: column;
   gap: 5px;
   max-height: 500px;
+  background-color: var(--card-background-color);
+  border-radius: var(--border-radius);
 }

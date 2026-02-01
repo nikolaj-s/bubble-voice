@@ -17,7 +17,7 @@ const ServerWelcomeMessage = ({
   return (
     <Card>
       {server_banner && (
-        <Banner image={server_banner} height={150} />
+        <Banner image={server_banner} height={250} />
       )}
       <div className={styles.welcomeMessageText}>
         <h3>{welcomeMessage}</h3>

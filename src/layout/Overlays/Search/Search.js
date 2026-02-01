@@ -11,6 +11,7 @@ import SpinnerLoading from '../../../components/ui/Loading/Spinner/SpinnerLoadin
 import SocialFilter from './SocialFilter/SocialFilter'
 
 import styles from './Search.module.css'
+import { MenuCloseHeader } from '../../../components/Headers/MenuCloseHeader/MenuCloseHeader'
 
 export const Search = ({close}) => {
 
@@ -82,6 +83,7 @@ export const Search = ({close}) => {
 
     return (
        <div key='search' className={styles.container}>
+        <MenuCloseHeader title={'Search'} onClose={close} />
         <FloatingSearch 
         value={query}
         setValue={handleSetQuery}

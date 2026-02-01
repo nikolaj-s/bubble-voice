@@ -57,6 +57,7 @@ export const MediaPlayerOverlay = ({close}) => {
 
     return (
         <MediaPlayer 
+        onClose={close}
         queue={queue}
         currentlyPlaying={currentlyPlaying}
         playing={isPlaying}

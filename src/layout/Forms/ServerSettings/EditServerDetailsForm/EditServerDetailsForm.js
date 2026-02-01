@@ -20,6 +20,7 @@ import TextArea from '../../../../components/ui/Inputs/TextArea/TextArea';
 import { LineSpacer } from '../../../../components/ui/Spacers/LineSpacer/LineSpacer';
 import { ApplyChangesPopup } from '../../../../components/ApplyChangesPopup/ApplyChangesPopup';
 import MarkdownHelp from '../../../../components/MarkdownHelp/MarkdownHelp';
+import { getImageColorFromFile } from '../../../../lib/services/getImageColorFromFile';
 
 export const EditServerDetailsForm = ({permissions}) => {
 
@@ -33,13 +34,31 @@ export const EditServerDetailsForm = ({permissions}) => {
 
   const [serverNameError, setServerNameError] = React.useState(null);
 
-  const {server_name, server_banner, welcome_message} = useSelector(state => state.serverDetailsSlice.details);
+  const [newColor, setNewColor] = React.useState(null);
+
+  const {server_name, server_banner, welcome_message, color} = useSelector(state => state.serverDetailsSlice.details);
 
   React.useEffect(() => {
 
     setDefaults();
 
   }, [])
+
+  const handleServerColor = async file => {
+    const l_color = await getImageColorFromFile(file);
+    console.log(l_color)
+    setNewColor(l_color);
+  }
+
+  React.useEffect(() => {
+
+    if (serverBanner) {
+
+      handleServerColor(serverBanner);
+
+    }
+
+  }, [serverBanner])
   
   const handleUpdate = () => {
 
@@ -49,7 +68,7 @@ export const EditServerDetailsForm = ({permissions}) => {
 
     if (serverName === server_name && !serverBanner && welcomeMessage === welcome_message) return;
 
-    dispatch(updateServerDetails({serverName, serverBanner, welcomeMessage}));
+    dispatch(updateServerDetails({serverName, serverBanner, welcomeMessage, color: newColor}));
 
     setServerBanner(null);
     
@@ -62,6 +81,8 @@ export const EditServerDetailsForm = ({permissions}) => {
     setWelcomeMessage(welcome_message);
 
     setServerBanner(null);
+
+    setNewColor(null);
 
   }
 

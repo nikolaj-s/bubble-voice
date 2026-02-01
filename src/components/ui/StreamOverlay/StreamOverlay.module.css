@@ -30,6 +30,16 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.altName {
+  font-size: 0.65rem;
+  font-weight: 400;
+  color: var(--text-color);
+  opacity: 0.75;
 }
 
 .button {

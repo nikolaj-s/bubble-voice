@@ -43,6 +43,8 @@ export const MediaPlayerStreamSource = ({expand, expanded}) => {
 
     const isMobileRef = React.useRef();
 
+    const users = useSelector(state => state.serverUsersSlice.users);
+
     const {currentlyPlaying, currentTime, isPlaying, volume, loading, error, isMuted, hasAudio, hideMediaPlayer, color} = useSelector(state => state.mediaPlayerSlice);
 
     React.useEffect(() => {
@@ -157,7 +159,7 @@ export const MediaPlayerStreamSource = ({expand, expanded}) => {
                     <PlayPauseFlash isPlaying={isPlaying} />
                 </DoubleTapWrapper>
             </LongPressGestureWrapper>
-            <StreamOverlay name={currentlyPlaying?.title || "Media Player"}
+            <StreamOverlay altName={`added by: ${users[currentlyPlaying?.added_by]?.display_name}`} name={currentlyPlaying?.title || "Media Player"}
             button={
                 <IconButton 
                 Icon={<Ellipsis color='var(--text-color)' />}

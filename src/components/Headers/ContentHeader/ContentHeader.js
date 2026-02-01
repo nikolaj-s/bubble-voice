@@ -1,7 +1,7 @@
 import styles from "./ContentHeader.module.css";
 
-const ContentHeader = ({Icon, title, subTitle}) => (
-  <div className={styles.header}>
+const ContentHeader = ({Icon, title, subTitle, style}) => (
+  <div className={styles.header} style={style}>
     <div className={styles.iconWrap}>
       {Icon && (<Icon size={38} strokeWidth={2.2} className={styles.icon} />)}
     </div>

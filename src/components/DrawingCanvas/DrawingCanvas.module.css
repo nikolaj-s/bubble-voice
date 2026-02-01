@@ -5,9 +5,10 @@
     gap: 10px;
     font-family: var(--font-family);
     max-width: 100%;
-    padding: 10px 0px;
+    padding: 0px 0px;
     background-color: var(--primary-color);
     border-radius: var(--border-radius);
+    overflow: hidden;
   }
   
   .toolbar {

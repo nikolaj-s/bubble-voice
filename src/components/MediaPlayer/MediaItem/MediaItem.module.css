@@ -8,7 +8,7 @@
 .mediaItem {
   display: flex;
   flex-direction: column;
-  padding: 5px var(--gap);
+  padding: 10px var(--gap);
   background-color: transparent;
   border-radius: var(--border-radius);
   transition: background-color 0.2s ease, box-shadow 0.2s ease, scale 0.2s ease;

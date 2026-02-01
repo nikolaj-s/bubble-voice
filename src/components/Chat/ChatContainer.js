@@ -24,7 +24,7 @@ export const ChatContainer = ({
 }) => {
 
     const [isDraggingImage, setIsDraggingImage] = React.useState();
-
+console.log(loadingMore)
     return (
         <div 
         className={styles.container} 

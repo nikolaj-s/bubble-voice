@@ -1,30 +1,50 @@
+/* MiniStreamIndicator.module.css */
+
 .card {
-  background: var(--background-color, #1d2d44);
-  border-radius: var(--border-radius);
-  box-shadow: 0 3px 24px 0 rgba(18,26,34,0.10);
+  width: 100%;
+  max-width: calc(100%);
+  padding: 8px;
+
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: calc(100% - 10px);
-  padding: 5px;
-  transition: box-shadow 0.2s, transform 0.16s;
+  gap: 8px;
+
+  border-radius: var(--border-radius);
+  background: var(--card-background-color);
+  cursor: pointer;
   outline: none;
-  position: relative;
+  border: none;
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
 }
 
+.card:hover {
+  border-color: rgba(17, 255, 255, 0.22);
+}
+
+.card:active {
+  transform: translateY(0px);
+}
+
+.card:focus-visible {
+  box-shadow: 0 0 0 3px rgba(17, 255, 255, 0.12);
+  border-color: var(--link-color);
+}
 
 .thumbWrapper {
   width: 100%;
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  min-height: 80px;
-  max-height: 130px;
+
   border-radius: var(--border-radius);
   overflow: hidden;
+
+  /* stable sizing */
+  aspect-ratio: 16 / 9;
+  min-height: 90px;
+
+  background: var(--background-color);
+
+  display: grid;
+  place-items: center;
 }
 
 .thumbnail {
@@ -32,36 +52,68 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  border-radius: var(--border-radius);
-  overflow: hidden;
 }
 
 .placeholder {
-  width: 60px;
-  height: 60px;
-  background: var(--background-color, #121a22);
-  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+
+  display: grid;
+  place-items: center;
+
+  background: var(--overlay-color);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.placeholderIcon {
+  width: 28px;
+  height: 28px;
+  color: var(--link-color);
+  opacity: 0.95;
+}
+
+.hud {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin: auto;
-  opacity: 0.5;
-}
-.placeholderIcon {
-  width: 32px;
-  height: 32px;
-  color: var(--secondary-color, #4e8e8b);
+  gap: 6px;
 }
 
-.liveIndicator {
+.livePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px 8px;
+  border-radius: 999px;
+
+  background: var(--overlay-color);
+}
+
+.liveIcon {
+  color: var(--success-color);
+}
+
+.sheen {
   position: absolute;
-  bottom: 5px;
-  right: 5px;
+  inset: 0;
+  pointer-events: none;
+
+  /* subtle Bubble sheen, not glassy */
+  background: radial-gradient(
+    600px 220px at 20% 10%,
+    rgba(17, 255, 255, 0.08),
+    rgba(0, 0, 0, 0)
+  );
+  opacity: 0.9;
 }
 
-.streamInfo {
+.footer {
   width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
+  min-width: 0;
 }

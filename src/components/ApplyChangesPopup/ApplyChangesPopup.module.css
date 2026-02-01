@@ -1,7 +1,7 @@
 /* components/ApplyChangesPopup/ApplyChangesPopup.module.css */
 
 .popup {
-    position: absolute;
+    position: sticky;
     bottom: 20px;
     right: 20px;
     background: var(--card-background-color);

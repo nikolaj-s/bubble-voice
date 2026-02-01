@@ -1,5 +1,4 @@
-// components/ApplyChangesPopup/ApplyChangesPopup.jsx
-import React from "react";
+
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./ApplyChangesPopup.module.css";
 import TextButton from "../ui/Buttons/TextButton/TextButton";

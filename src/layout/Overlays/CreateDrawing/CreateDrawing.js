@@ -1,7 +1,6 @@
 
 import DrawingCanvas from '../../../components/DrawingCanvas/DrawingCanvas'
 import { useDispatch, useSelector } from 'react-redux'
-import Header from '../../../components/ui/Titles/Header/Header'
 import { triggerAlert } from '../../../features/Alerts/alertsSlice'
 import { sendMessage } from '../../../features/Channel/TextChannel/Thunks/sendMessage'
 
@@ -30,7 +29,7 @@ export const CreateDrawing = ({close}) => {
 
     return (
        <>
-        <DrawingCanvas onSubmit={handleSend} />
+        <DrawingCanvas onClose={close} onSubmit={handleSend} />
        </>
     )
 }

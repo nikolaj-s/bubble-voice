@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './DownloadPanel.module.css';
 import { Download, Apple, Laptop } from 'lucide-react';
 import { WindowsIcon } from '../Icons/WindowsIcon/WindowsIcon';
+import TextButton from '../ui/Buttons/TextButton/TextButton';
 
 
 /** Detect platform in browser */
@@ -75,14 +76,7 @@ const DownloadPanel = ({
             </div>
             <div className={styles.actions}>
               {windowsUrl && (
-                <button
-                  type="button"
-                  className={styles.btn}
-                  onClick={() => handleClick(windowsUrl, 'windows')}
-                >
-                  <Download size={18} />
-                  <span>Download Installer</span>
-                </button>
+                <TextButton title='Download Installer' icon={Download} />
               )}
             </div>
           </div>
@@ -106,16 +100,6 @@ const DownloadPanel = ({
                 >
                   <Download size={18} />
                   <span>Apple Silicon (M-series)</span>
-                </button>
-              )}
-              {macIntelUrl && (
-                <button
-                  type="button"
-                  className={styles.btnAlt}
-                  onClick={() => handleClick(macIntelUrl, 'mac-intel')}
-                >
-                  <Download size={18} />
-                  <span>Intel (x64)</span>
                 </button>
               )}
             </div>

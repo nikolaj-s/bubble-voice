@@ -279,7 +279,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
         window.addEventListener("resize", onResize);
 
         // MutationObserver (debounced)
-        const mutationObserver = new MutationObserver(() => debouncedScale());
+        const mutationObserver = new MutationObserver(() => {debouncedScale(); setExpanded(null); setAmbientColor(null)});
         mutationObserver.observe(el, { childList: true, subtree: false });
 
         // ResizeObserver (debounced)
@@ -307,6 +307,8 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
                     paddingBottom: fullScreen ? 0 : null
                 }}
             >   
+                <MediaPlayerStreamSource key='media-player-stream-source' expanded={expanded === 'media-player-stream-source'} expand={handleStreamExpansion} /> 
+                
                 {users.map((user, key) => (
                     <React.Fragment key={user.id + key}>
                     {user.type === 'user' ?
@@ -317,8 +319,7 @@ export const RoomUserWrapper = ({ users, disable_streams }) => {
                         }
                     </React.Fragment>
                 ))}
-                <MediaPlayerStreamSource key='media-player-stream-source' expanded={expanded === 'media-player-stream-source'} expand={handleStreamExpansion} /> 
-                {disable_streams && (<RoomPlaceholder />)}
+               {disable_streams && (<RoomPlaceholder />)}
             </div>
         </PipWrapper>
     );

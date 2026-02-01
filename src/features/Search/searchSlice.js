@@ -64,7 +64,19 @@ const searchSlice = createSlice({
         },
         setSelectedChannelToFilter: (state, action) => {
             state.selectedChannel = action.payload;
+        },
+        removeMessageFromSearchResults: (state, action) => {
+            const messageId = action.payload;
+
+            if (state.results['text-channel']) {
+                state.results['text-channel'] =
+                state.results['text-channel'].filter(m => m._id !== messageId);
+            }
+        },
+        clearSearchHistory: (state, action) => {
+            state.searchHistory = [];
         }
+
     },
     extraReducers: (builder) => {
         // search
@@ -135,7 +147,9 @@ export const {
     setTextChannelFilter,
     setSelectedChannelToFilter,
     setFromDate,
-    setPrevSearch
+    setPrevSearch,
+    removeMessageFromSearchResults,
+    clearSearchHistory
 } = searchSlice.actions;
 
 export default searchSlice.reducer;

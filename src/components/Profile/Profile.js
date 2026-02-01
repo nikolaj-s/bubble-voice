@@ -14,9 +14,10 @@ export const Profile = ({account = {}, options = false}) => {
     const {_id: user_id} = useSelector(state => state.accountSlice.account);
     
     const channelStatus = account?.channel_status || {};
-    console.log(account)
+
     return (
         <div 
+        data-context={JSON.stringify({...account, type: 'user'})}
         style={{
             backgroundColor: account.color
         }}

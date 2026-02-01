@@ -39,7 +39,7 @@ const RandomMediaGallery = ({ media = [], title = "", action = () => {} }) => {
                   <button
                     type="button"
                     className={styles.tileButton}
-                    onClick={() => action(item, idx)}
+                 //   onClick={() => action(item, idx)}
                     aria-label="Open media"
                   >
                     {item.type === "video" ? (

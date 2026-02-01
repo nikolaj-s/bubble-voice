@@ -1,11 +1,15 @@
 .banner {
-    width: 100%;
+    width: calc(100% + 20px);
+    margin-left: -10px;
+    margin-top: -10px;
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
-    border-radius: var(--border-radius);
+    height: 300px;
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
 
 }
 

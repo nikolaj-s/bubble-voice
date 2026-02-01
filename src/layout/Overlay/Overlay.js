@@ -45,6 +45,8 @@ import { Conversations } from "../Overlays/Conversations/Conversations";
 import { DownloadOverlay } from "../Overlays/DownloadOverlay/DownloadOverlay";
 import { ScreenshotOverlay } from "../Overlays/ScreenshotOverlay/ScreenshotOverlay";
 import { EditMessage } from "../Overlays/EditMessage/EditMessage";
+import { MessagingTimeout } from "../Overlays/Moderation/MessagingTimeout/MessagingTimeout";
+import { AddMedia } from "../Overlays/AddMedia/AddMedia";
 
 const overlayComponents = {
   search: Search,
@@ -66,7 +68,9 @@ const overlayComponents = {
   leaveServer: LeaveServer,
   moment: MomentOverlay,
   downloadApp: DownloadOverlay,
-  editMessage: EditMessage
+  editMessage: EditMessage,
+  messagingTimeout: MessagingTimeout,
+  AddMedia
 };
 
 export const Overlay = ({ children }) => {
@@ -97,7 +101,7 @@ export const Overlay = ({ children }) => {
         </MobileSwipeToCloseWrapper>
         :
         <>
-        {(!image && !video) && <OverlayCloseButton action={() => {dispatch(closeOverlay())}} />}
+        {/* {(!image && !video) && <OverlayCloseButton action={() => {dispatch(closeOverlay())}} />} */}
         <FullScreenWrapper maxContentWidth={activeOverlay === 'expandImage' ? '100%' : null} key={activeOverlay} exitFromY={currentY} onClose={() => {dispatch(closeOverlay())}}>
           <MobileSwipeToCloseWrapper onClose={(y) => {setCurrentY(y); dispatch(closeOverlay())}}>
             <ActiveComponent close={() => dispatch(closeOverlay())}  /> 

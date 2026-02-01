@@ -16,7 +16,8 @@ const IconButton = ({
   padding = 5,
   borderRadius,
   margin,
-  disabled = false
+  disabled = false,
+  toolTipBackground
 }) => {
 
   const handleClick = (e) => {
@@ -28,7 +29,7 @@ const IconButton = ({
 
   return (
   <div style={{width, height}} className={className}>
-    <Tooltip content={title} position={position} disabled={disabled}>
+    <Tooltip toolTipBackground={toolTipBackground} content={title} position={position} disabled={disabled}>
         <button
         
           type="button"

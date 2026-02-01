@@ -1,9 +1,9 @@
-import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
+import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import imageCompression from "browser-image-compression";
 import styles from "./MessageInput.module.css";
 import IconButton from "../../ui/Buttons/IconButton/IconButton";
-import { ImageUp, Pencil, Plus, SearchIcon, Send } from "lucide-react";
+import { Clapperboard, ImageUp, Pencil, Plus, SearchIcon, Send } from "lucide-react";
 import { MediaPreview } from "../MediaPreview/MediaPreview";
 import { useDispatch } from "react-redux";
 import { setFilter } from "../../../features/Search/searchSlice";
@@ -12,6 +12,7 @@ import TextLabelError from "../../Error/TextLabelError/TextLabelError";
 import { ImageDropOverlay } from "../../ui/Inputs/ImageDropOverlay/ImageDropOverlay";
 import { triggerAlert } from "../../../features/Alerts/alertsSlice";
 import { getImageColorFromFile } from "../../../lib/services/getImageColorFromFile";
+import { PillSpacer } from "../../ui/Spacers/PillSpacer/PillSpacer";
 
 export const MessageInput = ({
   id,
@@ -169,6 +170,7 @@ export const MessageInput = ({
             />
 
           </div>
+          <PillSpacer verticle={true} height={'60%'} />
           <IconButton
                 disabled={!value.trim() && !previews.length}
                 Icon={<Send color="var(--text-color)" />}
@@ -194,6 +196,9 @@ export const MessageInput = ({
               <button onClick={() => fileInputRef.current.click()}>
                 Upload <ImageUp color="var(--text-color)" size={20} />
               </button>
+              {window?.electron && (<button onClick={() => {dispatch(setOverlay("AddMedia"))}}>
+                Add Media <Clapperboard size={20} color="var(--text-color)" />
+              </button>)}
               <button onClick={handleOpenSearchMedia}>
                 Search <SearchIcon color="var(--text-color)" size={20} />
               </button>

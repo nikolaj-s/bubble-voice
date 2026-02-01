@@ -5,7 +5,7 @@
     width: 100%;
     position: relative;
     flex-shrink: 0;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .inputButtonWrapper {
@@ -18,7 +18,7 @@
     position: relative;
     background: var(--input-background-color);
     border-radius: var(--border-radius);
-    padding: 0px 10px;
+    padding: 5px 10px;
     border: 2px solid var(--input-background-color);
 }
 
@@ -89,13 +89,14 @@
     flex-direction: column;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     z-index: 5;
+    min-width: 150px;
 }
 
 .menu button {
     background: transparent;
     color: var(--text-color);
     border: none;
-    padding: 6px;
+    padding: 8px 6px;
     justify-content: space-between;
     cursor: pointer;
     transition: 0.2s;
@@ -133,6 +134,11 @@
 }
 
 @media screen and (max-width: 730px) {
+
+    .message-input-container {
+        margin-bottom: 30px;
+    }
+
     .menu button {
         width: 160px;
         font-size: 1rem;

@@ -11,6 +11,8 @@ import Header from '../../../../components/ui/Titles/Header/Header'
 import { LineSpacer } from '../../../../components/ui/Spacers/LineSpacer/LineSpacer'
 import Label from '../../../../components/ui/Titles/Label/Label'
 import TextInput from '../../../../components/ui/Inputs/TextInput/TextInput'
+import { Description } from '../../../../components/ui/Description/Description'
+import Dropdown from '../../../../components/ui/Inputs/DropDown/DropDown'
 
 export const ManageChannelsForm = ({permissions}) => {
 
@@ -32,6 +34,10 @@ export const ManageChannelsForm = ({permissions}) => {
         <NotAuthorized permission={permissions.user_can_edit_channels}>
             <LoadingErrorFormWrapper sliceName='channelsSlice'>
                 <Header text='Manage Channels' />
+                <Label label='Set An AFK Timeout Channel' />
+                <Description description={"The AFK channel is a voice channel with streams disabled. Users who remain inactive for 30 minutes will be moved here automatically to keep active channels clear."} />
+                <Dropdown />
+                <LineSpacer />
                 <Label label='Filter Channels By Name:' />
                 <TextInput value={filter} onChange={setFilter} placeholder={'filter'} />
                 <LineSpacer />

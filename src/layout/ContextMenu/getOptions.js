@@ -23,6 +23,7 @@ import { useMomentCtxMenu } from "./Options/useMomentCtxMenu";
 import { useConversationCtxMenu } from "./Options/ConversationOptions/useConversationCtxMenu";
 import { useConversationMessageCtxMenu } from "./Options/ConversationOptions/useConversationMessageCtxMenu";
 import { useSubscriptionCtxMenu } from "./Options/useSubscriptionCtxMenu";
+import { useModerationCtxMenu } from "./Options/useModerationCtxMenu";
 
 export const useContextMenuOptions = () => {
 
@@ -74,6 +75,8 @@ export const useContextMenuOptions = () => {
 
     const getSubscriptionOptions = useSubscriptionCtxMenu();
 
+    const getModerationOptions = useModerationCtxMenu();
+
     const getOptions = (e, permissions = {}) => {
         try {
             const options = [];
@@ -114,6 +117,8 @@ export const useContextMenuOptions = () => {
 
             if (data.user) getUserStreamOptions(options, data.user);
 
+            if (data.user) getModerationOptions(options, data.user, permissions);
+
             if (data.widgetsOverlay) getWidgetsOptions(options, data, permissions);
 
             if (data.channel) getChannelOptions(options, data, permissions);
@@ -122,11 +127,11 @@ export const useContextMenuOptions = () => {
 
             if (data.channelList || data.mobileMenu) getChannelsOptions(options, permissions);
         
+            if (data.message) getMessageOptions(options, data, permissions);
+
             if (data.image || data.imageSearchResult) getImageOptions(options, data, permissions);
 
             if (data.video) getVideoOptions(options, data);
-
-            if (data.message) getMessageOptions(options, data, permissions);
 
             if (data.moment) getMomentOptions(options, permissions, data.moment);
 

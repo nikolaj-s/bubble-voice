@@ -7,6 +7,9 @@ import { toggleContentState } from '../../../../features/Settings/Content/conten
 import { LineSpacer } from '../../../../components/ui/Spacers/LineSpacer/LineSpacer'
 import { Description } from '../../../../components/ui/Description/Description'
 import { togglePreference } from '../../../../features/AccountPreferences/accountPreferencesSlice'
+import TextButton from '../../../../components/ui/Buttons/TextButton/TextButton'
+import { Trash2 } from 'lucide-react'
+import { deleteUserRecommendations } from '../../../../features/UserRecommendations/Thunks/deleteUserRecommendations'
 
 export const ContentSettingsForm = () => {
 
@@ -15,6 +18,14 @@ export const ContentSettingsForm = () => {
     const { disableNsfwBlur, muteVideo }= useSelector(state => state.contentSettingsSlice);
 
     const { disable_content_filter_for_recommendations, disable_sensitive_content_warning } = useSelector(state => state.accountPreferencesSlice);
+
+    const {loading, error} = useSelector(state => state.userRecommendationsSlice);
+
+    const deleteRecommendationData = () => {
+        if (loading) return;
+
+        dispatch(deleteUserRecommendations());
+    }
 
     return (
         <>
@@ -35,6 +46,9 @@ export const ContentSettingsForm = () => {
         <Label label='Disable Content Filter For Your Recommendations' />
         <Description description={'Turning off the content filter may expose you to unmoderated or sensitive material in your recommendations. This setting is intended for advanced users—proceed only if you understand the risks.'} />
         <ToggleSwitch initialState={disable_content_filter_for_recommendations} onToggle={() => {dispatch(togglePreference('disable_content_filter_for_recommendations'))}} />
+        <Label label='Delete Recommendation Data' />
+        <Description description={"This will permanently delete all recommendation history and signals associated with this server. Future recommendations will be rebuilt from new activity."} />
+        <TextButton title='Delete' backgroundColor={'var(--error-color)'} action={deleteRecommendationData} maxWidth={120} icon={Trash2} />
        </>
     )
 }

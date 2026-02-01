@@ -1,0 +1,19 @@
+
+.container {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--background-color);
+    background-color: var(--input-background-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    height: 45px;
+    z-index: 10;
+}
+
+.title {
+    font-size: .75rem;
+}

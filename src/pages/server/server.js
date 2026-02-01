@@ -90,6 +90,7 @@ export const Server = () => {
                         <ControlBar key={'control-bar'} />
                     </section>
                     <section 
+                    id='sectionTwo'
                     style={{
                         height: fullscreen ? '100vh' : window?.electron?.ipcRenderer ? 'calc(100svh - 75px)' : null
                     }}

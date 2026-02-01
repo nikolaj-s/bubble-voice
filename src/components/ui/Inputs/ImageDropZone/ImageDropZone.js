@@ -20,7 +20,7 @@ const ImageDropZone = ({
 
   const dispatch = useDispatch();
   
-  const [preview, setPreview] = useState(existingImage || "");
+  const [preview, setPreview] = useState("");
 
   const [imageFile, setImageFile] = useState(null);
 

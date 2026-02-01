@@ -35,10 +35,11 @@ const Login = () => {
     
     dispatch(signinThunk({email, password})).unwrap()
     .catch(err => false)
-    .then(() => {
-      const redirect = sessionStorage.getItem('redirectURL');
+    .then((data) => {
       
-      if (!redirect) return;
+      const redirect = sessionStorage.getItem('redirectURL');
+    
+      if (!redirect || !data) return;
 
       const url = safeRedirect(redirect);
 

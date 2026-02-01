@@ -20,13 +20,12 @@
 .container {
     position: fixed;
     width: 300px;
-    border-radius: 15px;
-    border: solid 1px var(--accent-color);
+    border-radius: var(--border-radius);
     background-color: var(--card-background-color);
     display: flex;
     flex-direction: column;
     min-height: 150px;
-    max-height: calc(100svh - 100px);
+    max-height: calc(100svh - 55px);
     z-index: 99;
     overflow-y: auto;
     box-shadow: 10px 10px 35px rgba(0, 0, 0, 0.5);

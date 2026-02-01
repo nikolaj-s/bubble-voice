@@ -1,10 +1,9 @@
-import React from 'react';
+
 import styles from './MomentsItem.module.css';
 import { Bookmark } from 'lucide-react';
 import { Text } from '../../ui/Text/Text';
 import { Description } from '../../ui/Description/Description';
 import { TextIndicator } from '../../ui/TextIndicator/TextIndicator';
-import Label from '../../ui/Titles/Label/Label';
 import { useSelector } from 'react-redux';
 import MicroInfo from '../../MicroInfo/MicroInfo';
 
