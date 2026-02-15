@@ -47,6 +47,7 @@ import { ScreenshotOverlay } from "../Overlays/ScreenshotOverlay/ScreenshotOverl
 import { EditMessage } from "../Overlays/EditMessage/EditMessage";
 import { MessagingTimeout } from "../Overlays/Moderation/MessagingTimeout/MessagingTimeout";
 import { AddMedia } from "../Overlays/AddMedia/AddMedia";
+import { MenuCloseHeader } from "../../components/Headers/MenuCloseHeader/MenuCloseHeader";
 
 const overlayComponents = {
   search: Search,
@@ -73,6 +74,28 @@ const overlayComponents = {
   AddMedia
 };
 
+const overlayTitles = {
+  search: "Search",
+  createServer: "Create Server",
+  settings: "Settings",
+  joinServer: "Join Server",
+  webcamOverlay: "Preview Webcam",
+  moment: "Moment",
+  serverSettings: "Bubble Settings",
+  widgets: "Widgets",
+  serverRecommendations: "Bubble Recommendations",
+  mediaPlayerHistory: "Media Player History",
+  mediaPlayerSaves: "Media Player Saves",
+  mediaPlayer: "Media Player",
+  screenPicker: "Pick A Stream",
+  leaveServer: "Leave Server",
+  downloadApp: "Download The App",
+  editMessage: "Edit Message",
+  messagingTimeout: "Timeout Messaging",
+  AddMedia: "Add Media",
+  channelDescription: "Channel Details"
+}
+
 export const Overlay = ({ children }) => {
 
   const dispatch = useDispatch();
@@ -83,18 +106,13 @@ export const Overlay = ({ children }) => {
 
   const [currentY, setCurrentY] = React.useState(null);
 
-  const image = useSelector(state => state.expandedImageSlice.expandedImage);
-
-  const video = useSelector(state => state.expandedVideoSlice.video)
-
   useKeyupListener(() => {dispatch(closeOverlay())}, 27, false);
 
   useKeyupListener(() => {dispatch(setOverlay('search'))}, 191, true);
 
   return (
     <>
-      <AnimatePresence>
-        {ActiveComponent ? 
+        {ActiveComponent && activeOverlay ? 
         activeOverlay === 'userQuickMenu' ?
         <MobileSwipeToCloseWrapper onClose={() => {dispatch(closeOverlay())}}>
           <ActiveComponent close={() => {dispatch(closeOverlay())}} />
@@ -102,14 +120,24 @@ export const Overlay = ({ children }) => {
         :
         <>
         {/* {(!image && !video) && <OverlayCloseButton action={() => {dispatch(closeOverlay())}} />} */}
-        <FullScreenWrapper maxContentWidth={activeOverlay === 'expandImage' ? '100%' : null} key={activeOverlay} exitFromY={currentY} onClose={() => {dispatch(closeOverlay())}}>
-          <MobileSwipeToCloseWrapper onClose={(y) => {setCurrentY(y); dispatch(closeOverlay())}}>
-            <ActiveComponent close={() => dispatch(closeOverlay())}  /> 
-          </MobileSwipeToCloseWrapper>  
+        <FullScreenWrapper 
+        maxContentWidth={activeOverlay === 'expandImage' ? '100%' : null} 
+        key={activeOverlay} exitFromY={0} onClose={() => {dispatch(closeOverlay())}}>
+          {/*<MobileSwipeToCloseWrapper onClose={(y) => {setCurrentY(y); dispatch(closeOverlay())}}> */}
+            <div style={{
+              display: 'grid',
+              gridTemplateRows: '40px auto',
+              backgroundColor: 'var(--primary-color)',
+              borderRadius: 'var(--border-radius)',
+              overflow: 'hidden'
+            }}>
+              <MenuCloseHeader title={overlayTitles[activeOverlay]} onClose={() => {dispatch(closeOverlay())}} />
+              <ActiveComponent close={() => dispatch(closeOverlay())}  /> 
+            </div>
+        {/*  </MobileSwipeToCloseWrapper>  */}
         </FullScreenWrapper>
         </>
         : null}
-      </AnimatePresence>
       {children}
       <UserProfile />
       <ExpandedImage />

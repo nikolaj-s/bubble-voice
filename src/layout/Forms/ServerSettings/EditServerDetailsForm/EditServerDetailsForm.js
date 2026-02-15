@@ -21,6 +21,7 @@ import { LineSpacer } from '../../../../components/ui/Spacers/LineSpacer/LineSpa
 import { ApplyChangesPopup } from '../../../../components/ApplyChangesPopup/ApplyChangesPopup';
 import MarkdownHelp from '../../../../components/MarkdownHelp/MarkdownHelp';
 import { getImageColorFromFile } from '../../../../lib/services/getImageColorFromFile';
+import ToggleSwitch from '../../../../components/ui/Inputs/ToggleSwitch/ToggleSwitch';
 
 export const EditServerDetailsForm = ({permissions}) => {
 
@@ -36,17 +37,19 @@ export const EditServerDetailsForm = ({permissions}) => {
 
   const [newColor, setNewColor] = React.useState(null);
 
-  const {server_name, server_banner, welcome_message, color} = useSelector(state => state.serverDetailsSlice.details);
+  const [disablePinningWidgets, toggleDisablePinningWidgets] = React.useState(false);
+
+  const {server_name, server_banner, welcome_message, color, disable_pinning_widgets} = useSelector(state => state.serverDetailsSlice.details);
 
   React.useEffect(() => {
 
     setDefaults();
 
   }, [])
-
+console.log(disable_pinning_widgets, disablePinningWidgets)
   const handleServerColor = async file => {
     const l_color = await getImageColorFromFile(file);
-    console.log(l_color)
+
     setNewColor(l_color);
   }
 
@@ -66,9 +69,9 @@ export const EditServerDetailsForm = ({permissions}) => {
 
     if (serverName.length > 84) return setServerNameError("Bubble name cannot be longer than 84 characters long");
 
-    if (serverName === server_name && !serverBanner && welcomeMessage === welcome_message) return;
+    if (serverName === server_name && !serverBanner && welcomeMessage === welcome_message && disablePinningWidgets === disable_pinning_widgets) return;
 
-    dispatch(updateServerDetails({serverName, serverBanner, welcomeMessage, color: newColor}));
+    dispatch(updateServerDetails({serverName, serverBanner, welcomeMessage, color: newColor, disablePinningWidgets}));
 
     setServerBanner(null);
     
@@ -83,6 +86,8 @@ export const EditServerDetailsForm = ({permissions}) => {
     setServerBanner(null);
 
     setNewColor(null);
+
+    toggleDisablePinningWidgets(typeof disable_pinning_widgets === 'boolean' ? disable_pinning_widgets : false);
 
   }
 
@@ -113,13 +118,19 @@ export const EditServerDetailsForm = ({permissions}) => {
         />
         </>
         )}
-         <LineSpacer />
+         <LineSpacer margin={'30px 0px'} />
+         {permissions?.user_can_manage_dashboard_settings && (
+        <>
          <Header text='Dashboard' />
+         <Label label='Disable Pinning Widgets To Dashboard' />
+         <ToggleSwitch initialState={disablePinningWidgets} onToggle={() => {toggleDisablePinningWidgets(!disablePinningWidgets)}} />
          <ApplyChangesPopup 
          onApply={handleUpdate}
          onClearChanges={setDefaults}
-         disabled={(serverName === server_name || serverName.trim().length < 3) && welcomeMessage === welcome_message && !serverBanner} />
-        
+         disabled={(serverName === server_name || serverName.trim().length < 3) && welcomeMessage === welcome_message && !serverBanner && disablePinningWidgets === disable_pinning_widgets} />
+         </>
+         )
+         }
       </LoadingErrorFormWrapper>
     </NotAuthorized>
   )

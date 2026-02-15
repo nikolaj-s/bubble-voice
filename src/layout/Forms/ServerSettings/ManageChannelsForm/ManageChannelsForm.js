@@ -22,6 +22,8 @@ export const ManageChannelsForm = ({permissions}) => {
 
     const [searchParams, setSearchParams] = useSearchParams();
 
+    const [afkChannelOptions, setAfkChannelOptions] = React.useState([]);
+
     const {channels} = useSelector(state => state.channelsSlice);
 
     const handleOpenChannelToManage = (channel) => {
@@ -29,6 +31,20 @@ export const ManageChannelsForm = ({permissions}) => {
 
         setSearchParams({section: 'editChannel', channel: channel._id});
     }
+
+    React.useEffect(() => {
+
+        let afk_channels = []
+
+        for (const channel of Object.values(channels)) {
+            if (channel.disable_streams) {
+                afk_channels.push(channel);
+            }
+        }
+
+        setAfkChannelOptions(afk_channels);
+
+    }, [channels])
 
     return (
         <NotAuthorized permission={permissions.user_can_edit_channels}>

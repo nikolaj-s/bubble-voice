@@ -40,6 +40,7 @@ const ProgressBar = ({ currentTime, duration, onSeek, width }) => {
 
   return (
     <div
+      data-nodrag
       ref={wrapperRef}
       className={styles.progressBarWrapper}
       onClick={handleSeek}

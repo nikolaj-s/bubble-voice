@@ -32,6 +32,7 @@ export const MessageItem = ({message, prevMessage = {}, loading, users = {}, inS
 
     return (
         <div
+        key={message._id}
         data-msgid={message._id}
         >
             {isDifferentDay && !inSearch && (<Spacer date={message.formattedDate} />)}

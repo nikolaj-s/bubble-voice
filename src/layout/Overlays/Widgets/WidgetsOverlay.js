@@ -71,7 +71,7 @@ export const WidgetsOverlay = ({close}) => {
     }
 
     const channelDetails = useSelector(state => state.channelsSlice.channels[channel])
-console.log(channelDetails)
+
     return (
         <ScrollLoadWrapper 
         style={{

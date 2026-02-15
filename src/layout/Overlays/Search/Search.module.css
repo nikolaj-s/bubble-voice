@@ -1,6 +1,5 @@
 .container {
     background-color: var(--card-background-color);
-    border-radius: var(--border-radius);
     position: relative;
     max-height: calc(100svh - 25px);
     overflow: hidden;

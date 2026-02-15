@@ -29,7 +29,7 @@ export const CreateDrawing = ({close}) => {
 
     return (
        <>
-        <DrawingCanvas onClose={close} onSubmit={handleSend} />
+        <DrawingCanvas onSubmit={handleSend} />
        </>
     )
 }

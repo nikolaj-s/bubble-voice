@@ -3,41 +3,58 @@ import PropTypes from "prop-types";
 import styles from "./MessageScrollWrapper.module.css";
 import { LoadingWheel } from "../../ui/Loading/LoadingWheel/LoadingWheel";
 
-const TOP_RESET_PX = 260; // must scroll away from top to re-arm
+const TOP_RESET_PX = 260;
+const SETTLE_MS = 250;      // short window to re-apply restore if height keeps changing
+const MAX_REAPPLY = 6;      // safety cap
 
-function getFirstVisibleAnchor(el) {
+function getFirstVisibleAnchorOffset(el) {
   if (!el) return null;
 
-  const items = el.querySelectorAll("[data-msgid]");
-  const containerTop = el.getBoundingClientRect().top;
+  const scrollTop = el.scrollTop;
+  const nodes = el.querySelectorAll("[data-msgid]");
+  if (!nodes?.length) return null;
 
-  for (const node of items) {
-    const r = node.getBoundingClientRect();
-    if (r.bottom > containerTop + 1) {
-      return {
-        id: node.getAttribute("data-msgid"),
-        top: r.top - containerTop, // offset inside container viewport
-      };
+  for (const node of nodes) {
+    const top = node.offsetTop;
+    const bottom = top + node.offsetHeight;
+    if (bottom > scrollTop + 1) {
+      return { id: node.getAttribute("data-msgid"), offset: top - scrollTop };
     }
   }
 
-  const first = items[0];
-  if (!first) return null;
-  const r = first.getBoundingClientRect();
-  return { id: first.getAttribute("data-msgid"), top: r.top - containerTop };
+  const first = nodes[0];
+  return { id: first.getAttribute("data-msgid"), offset: first.offsetTop - scrollTop };
 }
 
-function restoreAnchor(el, anchor) {
+function restoreAnchorOffset(el, anchor) {
   if (!el || !anchor?.id) return false;
 
   const node = el.querySelector(`[data-msgid="${CSS.escape(anchor.id)}"]`);
   if (!node) return false;
 
-  const containerTop = el.getBoundingClientRect().top;
-  const newTop = node.getBoundingClientRect().top - containerTop;
-
-  el.scrollTop += (newTop - anchor.top);
+  const targetTop = node.offsetTop - (anchor.offset ?? 0);
+  el.scrollTop = Math.max(0, targetTop);
   return true;
+}
+
+function withNoSmoothNoAnchor(el, fn) {
+  if (!el) return;
+
+  const prevBehavior = el.style.scrollBehavior;
+  const prevOverflowAnchor = el.style.overflowAnchor;
+
+  el.style.scrollBehavior = "auto";
+  el.style.overflowAnchor = "none";
+
+  try {
+    fn();
+  } finally {
+    // restore next frame so the scrollTop write commits first
+    requestAnimationFrame(() => {
+      el.style.scrollBehavior = prevBehavior;
+      el.style.overflowAnchor = prevOverflowAnchor;
+    });
+  }
 }
 
 export const MessageScrollWrapper = ({
@@ -51,29 +68,33 @@ export const MessageScrollWrapper = ({
 }) => {
   const scrollerRef = useRef(null);
   const topSentinelRef = useRef(null);
+  const contentRef = useRef(null);
 
   const didInit = useRef(false);
 
-  // top-zone arming + immediate lock (independent of React state timing)
+  // top-zone arming + lock
   const topArmedRef = useRef(true);
   const fetchLockRef = useRef(false);
 
-  // anchor restore for prepend
-  const pendingAnchor = useRef(null);
-  const pendingRestore = useRef(false);
+  // pending restore
+  const pendingRestoreRef = useRef(false);
+  const pendingAnchorRef = useRef(null);
 
-  // 1) Init: restore saved scroll or go bottom
+  // settle mode: temporarily lock scroll + re-apply on height changes
+  const settlingRef = useRef(false);
+  const settleEndAtRef = useRef(0);
+  const lastHeightRef = useRef(0);
+  const reapplyCountRef = useRef(0);
+
+  // 1) Init scroll position
   useEffect(() => {
     const raf = requestAnimationFrame(() => {
       const el = scrollerRef.current;
       if (!el || didInit.current || loading) return;
 
       const saved = sessionStorage.getItem(`scroll-pos-${persistKey}`);
-      if (saved !== null) {
-        el.scrollTop = Number(saved);
-      } else {
-        el.scrollTop = el.scrollHeight - el.clientHeight;
-      }
+      if (saved !== null) el.scrollTop = Number(saved);
+      else el.scrollTop = el.scrollHeight - el.clientHeight;
 
       didInit.current = true;
     });
@@ -81,15 +102,22 @@ export const MessageScrollWrapper = ({
     return () => cancelAnimationFrame(raf);
   }, [persistKey, loading]);
 
-  // 2) Persist scroll + re-arm logic
+  // Persist scroll + re-arm
   const handleScroll = useCallback(
     (e) => {
       const el = e.target;
       if (!el || loading) return;
 
+      // If we are in settle mode, block user scroll to avoid fighting/jumps
+      if (settlingRef.current) {
+        // immediately undo user scroll attempt by snapping back to stored pos
+        // (we don't store per-event; we just prevent changes)
+        e.preventDefault?.();
+        return;
+      }
+
       sessionStorage.setItem(`scroll-pos-${persistKey}`, String(el.scrollTop));
 
-      // Rearm once user scrolls down away from top
       if (el.scrollTop > TOP_RESET_PX) {
         topArmedRef.current = true;
       }
@@ -97,112 +125,170 @@ export const MessageScrollWrapper = ({
     [persistKey, loading]
   );
 
-  // 3) Trigger loadMore when top sentinel becomes visible (with arming + lock)
+  // 3) Trigger loadMore when top sentinel is visible
   useEffect(() => {
     const root = scrollerRef.current;
     const sentinel = topSentinelRef.current;
     if (!root || !sentinel) return;
 
-    // If you want it to trigger a bit before true top, expand top margin.
-    // Example: "150px 0px 0px 0px" means it triggers when sentinel is within 150px of top.
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
         if (!entry?.isIntersecting) return;
 
-        // Hard gates
         if (loading) return;
         if (loadingOlder) return;
         if (noMore) return;
 
-        // Arming + lock gates (prevents repeated fetches while staying at top)
         if (!topArmedRef.current) return;
         if (fetchLockRef.current) return;
 
         const el = scrollerRef.current;
         if (!el) return;
 
-        // Disarm + lock immediately (prevents multiple calls in same frame)
         topArmedRef.current = false;
         fetchLockRef.current = true;
 
-        // Capture anchor BEFORE loading prepends
-        pendingAnchor.current = getFirstVisibleAnchor(el);
-        pendingRestore.current = true;
+        pendingAnchorRef.current = getFirstVisibleAnchorOffset(el);
+        pendingRestoreRef.current = true;
 
         loadMore();
       },
-      {
-        root,
-        threshold: 0.01,
-        rootMargin: "150px 0px 0px 0px",
-      }
+      { root, threshold: 0.01, rootMargin: "150px 0px 0px 0px" }
     );
 
     observer.observe(sentinel);
     return () => observer.disconnect();
   }, [loadMore, loadingOlder, noMore, loading]);
 
-  // 4) Unlock fetch lock when loadingOlder completes (or never starts)
+  // unlock fetch lock when loadingOlder completes
   useEffect(() => {
-    if (!loadingOlder) {
-      fetchLockRef.current = false;
-    }
+    if (!loadingOlder) fetchLockRef.current = false;
   }, [loadingOlder]);
 
-  // 5) Restore anchor after children changes (prepend), before paint
+  // Helper: start settle mode
+  const startSettle = useCallback((el) => {
+    settlingRef.current = true;
+    settleEndAtRef.current = performance.now() + SETTLE_MS;
+    lastHeightRef.current = el.scrollHeight;
+    reapplyCountRef.current = 0;
+
+    // prevent wheel/touch scroll during settle window
+    el.style.pointerEvents = "none";
+
+    // end settle
+    const t = setTimeout(() => {
+      const node = scrollerRef.current;
+      if (node) node.style.pointerEvents = "";
+      settlingRef.current = false;
+    }, SETTLE_MS);
+
+    return () => clearTimeout(t);
+  }, []);
+
+  // 5) Apply restore immediately when loadingOlder becomes false (no arbitrary delay)
   useLayoutEffect(() => {
     const el = scrollerRef.current;
     if (!el) return;
 
-    if (pendingRestore.current && pendingAnchor.current) {
-      // pass 1: commit-time
-      restoreAnchor(el, pendingAnchor.current);
+    // only restore at the end of a load-more cycle
+    if (!pendingRestoreRef.current) return;
+    if (loadingOlder) return;
 
-      // pass 2: next frame (helps with spinner mount/unmount or quick layout shifts)
-      const raf = requestAnimationFrame(() => {
-        restoreAnchor(el, pendingAnchor.current);
-        sessionStorage.setItem(`scroll-pos-${persistKey}`, String(el.scrollTop));
+    const anchor = pendingAnchorRef.current;
+    if (!anchor?.id) {
+      pendingRestoreRef.current = false;
+      pendingAnchorRef.current = null;
+      return;
+    }
 
-        pendingRestore.current = false;
-        pendingAnchor.current = null;
+    // apply restore immediately
+    withNoSmoothNoAnchor(el, () => {
+      restoreAnchorOffset(el, anchor);
+    });
+
+    sessionStorage.setItem(`scroll-pos-${persistKey}`, String(el.scrollTop));
+
+    // begin settle mode: any subsequent height changes in next ~250ms get a re-apply
+    const cleanup = startSettle(el);
+
+    // clear pending
+    pendingRestoreRef.current = false;
+    pendingAnchorRef.current = anchor; // keep it for settle reapply
+
+    return cleanup;
+  }, [loadingOlder, persistKey, startSettle]);
+
+  // 5.5) ResizeObserver: during settle window, if scrollHeight changes, re-apply restore
+  useEffect(() => {
+    const el = scrollerRef.current;
+    const contentEl = contentRef.current;
+    if (!el || !contentEl) return;
+
+    const ro = new ResizeObserver(() => {
+      if (!settlingRef.current) return;
+
+      const now = performance.now();
+      if (now > settleEndAtRef.current) return;
+
+      const h = el.scrollHeight;
+      if (h === lastHeightRef.current) return;
+
+      lastHeightRef.current = h;
+
+      // safety cap
+      reapplyCountRef.current += 1;
+      if (reapplyCountRef.current > MAX_REAPPLY) return;
+
+      const anchor = pendingAnchorRef.current;
+      if (!anchor?.id) return;
+
+      withNoSmoothNoAnchor(el, () => {
+        restoreAnchorOffset(el, anchor);
       });
 
-      return () => cancelAnimationFrame(raf);
-    }
-  }, [children, persistKey]);
+      sessionStorage.setItem(`scroll-pos-${persistKey}`, String(el.scrollTop));
+    });
 
-  // 6) Scroll to bottom when flag increments
+    ro.observe(contentEl);
+    return () => ro.disconnect();
+  }, [persistKey]);
+
+  // 6) Scroll to bottom when sending
   useEffect(() => {
     if (scrollToBottomFlag > 0) {
       const el = scrollerRef.current;
       if (!el) return;
 
-      el.scrollTop = el.scrollHeight - el.clientHeight;
-      sessionStorage.setItem(`scroll-pos-${persistKey}`, String(el.scrollTop));
+      withNoSmoothNoAnchor(el, () => {
+        el.scrollTop = el.scrollHeight - el.clientHeight;
+      });
 
-      // Since we just jumped to bottom, we can re-arm top fetching for later
+      sessionStorage.setItem(`scroll-pos-${persistKey}`, String(el.scrollTop));
       topArmedRef.current = true;
     }
   }, [scrollToBottomFlag, persistKey]);
 
   return (
-    <div
-      className={styles.container}
-      ref={scrollerRef}
-      onScroll={handleScroll}
-      id="chat-scroll-wrapper"
-    >
-      {/* Sentinel must be INSIDE scroller content at the top */}
-      <div ref={topSentinelRef} style={{ height: 1 }} />
-
+    <div className={styles.containerOuter}>
       {loadingOlder && (
-        <div className={styles.spinnerWrapper}>
+        <div className={styles.spinnerOverlay}>
           <LoadingWheel />
         </div>
       )}
 
-      {children}
+      <div
+        className={styles.container}
+        ref={scrollerRef}
+        onScroll={handleScroll}
+        id="chat-scroll-wrapper"
+      >
+        <div ref={topSentinelRef} style={{ height: 1 }} />
+        {/* content wrapper is what ResizeObserver watches */}
+        <div ref={contentRef} className={styles.content}>
+          {children}
+        </div>
+      </div>
     </div>
   );
 };

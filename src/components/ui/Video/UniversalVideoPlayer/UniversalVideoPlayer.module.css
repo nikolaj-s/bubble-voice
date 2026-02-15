@@ -2,7 +2,7 @@
 /* UniversalVideoPlayer.module.css */
 .playerWrapper {
   position: relative;
-  width: calc(100% - 20px);
+  width: calc(100%);
   background-color: var(--background-color);
   border-radius: 8px;
   overflow: hidden;

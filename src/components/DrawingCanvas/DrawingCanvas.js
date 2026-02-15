@@ -1,14 +1,13 @@
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import styles from './DrawingCanvas.module.css';
 import { Pencil, Eraser, Download, Upload, PaintBucket, Trash2 } from 'lucide-react';
 import IconButton from '../ui/Buttons/IconButton/IconButton';
 import VolumeSlider from '../ui/Inputs/VolumeSlider/VolumeSlider';
 import { ToolBar } from '../ui/Wrappers/ToolBar/ToolBar';
-import { MenuCloseHeader } from '../Headers/MenuCloseHeader/MenuCloseHeader';
 
 const PREDEFINED_COLORS = ['#000000', '#ff4747', '#ffb347', '#ffe347', '#76c7a5', '#4e8e8b', '#3b7a6e'];
 
-const DrawingCanvas = ({ onSubmit, onClose }) => {
+const DrawingCanvas = ({ onSubmit }) => {
   const canvasRef = useRef(null);
   const ctxRef = useRef(null);
 
@@ -117,7 +116,6 @@ const DrawingCanvas = ({ onSubmit, onClose }) => {
 
   return (
     <div className={styles.wrapper}>
-      <MenuCloseHeader onClose={onClose} title={'Start Drawing'} />
       <ToolBar style={{alignItems: 'center'}}>
         
         <IconButton position='bottom' Icon={Pencil} onClick={() => setTool('brush')} backgroundColor={tool === 'brush' && 'var(--button-hover)'} title={"Brush"} />

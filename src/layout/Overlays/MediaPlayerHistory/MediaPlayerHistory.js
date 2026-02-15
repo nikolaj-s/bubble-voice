@@ -69,8 +69,6 @@ export const MediaPlayerHistory = ({close}) => {
     };
 
     return (
-        <div style={{backgroundColor: 'var(--primary-color)', display: 'grid', gridTemplateRows: '45px auto', borderRadius: 'var(--border-radius)', overflow: 'hidden'}}>
-        <MenuCloseHeader />
         <ScrollLoadWrapper
             style={{backgroundColor: 'var(--primary-color)'}}
             noMoreItems={no_more}
@@ -90,6 +88,5 @@ export const MediaPlayerHistory = ({close}) => {
                     ))}
             </div>
         </ScrollLoadWrapper>
-        </div>
     )
 }

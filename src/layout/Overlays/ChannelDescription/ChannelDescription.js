@@ -26,22 +26,8 @@ export const ChannelDescription = ({close}) => {
 
     return (
         <>
-            <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '10px',
-                alignItems: 'flex-start',
-                position: 'relative',
-                backgroundColor: 'var(--card-background-color)',
-                borderRadius: 10,
-                margin: '0 auto',
-                maxWidth: '600px',
-                minWidth: 300,
-                overflow: 'hidden',
-                width: '100%'
-            }}>
-                <MenuCloseHeader title={'Channel Details'} onClose={close} />
-                <div style={{
+           
+        <div style={{
                     display: 'flex',
                     display: 'flex',
                     flexDirection: 'column',
@@ -88,7 +74,7 @@ export const ChannelDescription = ({close}) => {
                     </ToolBar>
                 </div>
                 <ChannelBackground {...channel} />
-            </div>
+    
         </>
     )
 }

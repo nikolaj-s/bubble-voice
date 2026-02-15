@@ -28,7 +28,7 @@ const IconButton = ({
   };
 
   return (
-  <div style={{width, height}} className={className}>
+  <div data-nodrag style={{width, height}} className={className}>
     <Tooltip toolTipBackground={toolTipBackground} content={title} position={position} disabled={disabled}>
         <button
         

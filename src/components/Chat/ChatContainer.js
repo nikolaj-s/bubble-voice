@@ -24,7 +24,7 @@ export const ChatContainer = ({
 }) => {
 
     const [isDraggingImage, setIsDraggingImage] = React.useState();
-console.log(loadingMore)
+
     return (
         <div 
         className={styles.container} 
@@ -32,16 +32,18 @@ console.log(loadingMore)
         onKeyDown={(e) => {e.stopPropagation();}}
         onKeyUp={(e) => {e.stopPropagation()}}
         >
-            <MessageList 
-            type={type}
-            id={id}
-            reply={reply}
-            position={position} returnPos={returnPos} 
-            users={users} loading={loading}  
-            messages={messages} sending={sending} 
-            loadingMore={loadingMore} loadMoreMessages={loadMoreMessages} 
-            noMoreMessages={noMoreMessages} name={name}
-            />
+            <div className={styles.messageArea}>
+                <MessageList 
+                type={type}
+                id={id}
+                reply={reply}
+                position={position} returnPos={returnPos} 
+                users={users} loading={loading}  
+                messages={messages} sending={sending} 
+                loadingMore={loadingMore} loadMoreMessages={loadMoreMessages} 
+                noMoreMessages={noMoreMessages} name={name}
+                />
+            </div>
             <CommandHint value={value} setValue={setValue} />
             <ReplyTo replyTo={replyTo} users={users} clearReplyTo={clearReplyTo} />
             {disableInput ? 

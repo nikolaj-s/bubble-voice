@@ -7,6 +7,7 @@ import { triggerContext } from '../../../../lib/services/helperFunctions';
 import { TextIndicator } from '../../TextIndicator/TextIndicator';
 import { useDispatch } from 'react-redux';
 import { expandVideo } from '../../../../features/Media/ExpandedVideo/expandedVideoSlice';
+import { Description } from '../../Description/Description';
 
 export const VideoPreview = ({ title, src, thumbnail, query, tags, nsfw, width, height, duration, snippet, url, action }) => {
 
@@ -59,7 +60,7 @@ export const VideoPreview = ({ title, src, thumbnail, query, tags, nsfw, width, 
       </div>
       <div className={styles.info}>
         <h5 className={styles.title}>{title}</h5>
-        <p className={styles.snippet}>{tags || snippet}</p>
+        <Description description={tags || snippet} />
         <div className={styles.meta}>
           <span className={styles.query}>{siteName}</span>
           {nsfw && <TextIndicator title='18+' backgroundColor='var(--error-color)' />}

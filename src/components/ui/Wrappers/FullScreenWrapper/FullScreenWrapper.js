@@ -6,7 +6,6 @@ const FullScreenWrapper = ({
   children,
   onClose,
   maxContentWidth = 800,
-  backgroundColor = 'var(--background-color)',
   width,
   exitFromY = 0
 }) => {
@@ -14,11 +13,7 @@ const FullScreenWrapper = ({
     onClose();
   };
 
-  const isMobile = useIsMobile(730);
-
-  const exitAnimation = isMobile
-  ? { opacity: 0, y: 0 } // No pop-down effect on mobile
-  : { opacity: 0, y: "100%" };
+  const exitAnimation =  { opacity: 0, y: "100%" };
 
   return (
     <motion.div

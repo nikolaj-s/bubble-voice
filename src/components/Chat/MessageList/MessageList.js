@@ -55,7 +55,7 @@ const MessageList = ({
       // scroll the wrapper
       wrapper.scrollTo({
         top: Math.max(0, targetScrollTop),
-        behavior: 'instant'
+        behavior: 'auto'
       });
 
       // highlight it briefly
@@ -145,17 +145,15 @@ const MessageList = ({
           ))}
 
       {sending && (
-        <AnimatePresence>
-          <motion.div
-            key="sending"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ duration: 0.1 }}
-          >
-            <MessageItem users={users} message={sending} loading={true} />
-          </motion.div>
-        </AnimatePresence>
+        <motion.div
+          key="sending"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          transition={{ duration: 0.1 }}
+        >
+          <MessageItem users={users} message={sending} loading={true} />
+        </motion.div>
       )}
       {/* You already get a spinner from MessageScrollWrapper when loadingMore */}
       {/* But if you want a second indicator here, you can add it */}

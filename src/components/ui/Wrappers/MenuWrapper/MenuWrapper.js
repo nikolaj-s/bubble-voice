@@ -5,9 +5,8 @@ import styles from "./MenuWrapper.module.css";
 import IconButton from "../../Buttons/IconButton/IconButton";
 import { Menu, X } from "lucide-react";
 import MicroFooter from "../../../MicroFooter/MicroFooter";
-import { MenuCloseHeader } from "../../../Headers/MenuCloseHeader/MenuCloseHeader";
 
-const MenuWrapper = ({ navItems, children, permissions, showFooter, onClose }) => {
+const MenuWrapper = ({ navItems, children, permissions, showFooter, }) => {
 
   const [mobileMenuOpen, toggleMobileMenuOpen] = React.useState(false);
   
@@ -48,8 +47,7 @@ const MenuWrapper = ({ navItems, children, permissions, showFooter, onClose }) =
 
       {/* Right Content Area with Animation */}
       <div onClick={() => {toggleMobileMenuOpen(false)}} className={styles.contentArea}>
-        <MenuCloseHeader onClose={onClose} title={navItems.find(item => item.key === activeSection)?.label} />
-        <AnimatePresence mode="wait">
+       <AnimatePresence mode="wait">
           <motion.div
             key={activeSection}
             initial={{ opacity: 0, x: 20 }}

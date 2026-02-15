@@ -69,7 +69,6 @@ export const MediaPlayer = ({
 
   return (
     <div id={'media-player-overlay'} style={{backgroundColor: color}} data-context={JSON.stringify({currentlyPlaying, type: 'mediaplayer'})} className={styles.mediaPlayer}>
-        <MenuCloseHeader title={'Media Player'} onClose={onClose} />
         <div className={styles.wrapper}>
           <button onClick={openSearchMedia} className={styles.searchMediaButton}>
               <span className={styles.searchMediaTitle}>What do you want to play?</span>

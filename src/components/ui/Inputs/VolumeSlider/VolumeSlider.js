@@ -62,6 +62,7 @@ const VolumeSlider = ({
   return (
     <>
       <div
+        data-nodrag
         className={`${styles.volumeSlider} ${className || ""}`}
         style={{ "--slider-percent": percent, width, maxWidth }}
         ref={wrapperRef}
